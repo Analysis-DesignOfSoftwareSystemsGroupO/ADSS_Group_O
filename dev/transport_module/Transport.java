@@ -14,19 +14,19 @@ public class Transport {
     private Employee driver; // the driver taht will drive in the truck
     private Site source; // the source site the transport is start
     private Map<Site, List<Product>> destinations_products_map; // a list of all destinations
+    private boolean isOutOfZone;
 
     /**
      * a constructor for Transport
      */
-    public Transport(Date d, int h, int m, Truck t, Employee e, Site s) {
+    public Transport(Date d, int h, int m, Truck t, Employee e, Site s) throws Exception {
         // input check
         if (d == null || h < 1 || h > 24 || m < 0 || m > 59 || t == null || e == null || s == null) {
-            return;
+            throw new Exception("Invalid Error");
         }
         // check for match between the driver's license and the truck license
         if (t.confirm_driver(e) == false) {
-            // todo - throw exeption? need to know?
-            return;
+            throw new Exception("The driver does not have an appropriate license for the type of truck");
         }
 
         date = new Date(d.getTime()); // set the date as a new date.
@@ -35,6 +35,7 @@ public class Transport {
         driver = e; // save the driver as the original employee - not a copy of the employee
         source = new Site(s); // save the source site as a copy of the site
         destinations_products_map = new HashMap<>(); // a map for all destinations. the key is destination and value is product's list
+        isOutOfZone = false;
     }
 
     /**
@@ -43,7 +44,8 @@ public class Transport {
     public void add_destination(Site d) {
         if (null == d) return; // input check
         if (d.getArea() != source.getArea()) { // if the new destination is from a different area (not as the source's area)
-            // todo - need to inform that the boundaries of the source area have been exceeded
+            isOutOfZone = true;
+            System.out.println("A destination outside the distribution area was entered.");
         }
         // if the destination is not in the map
         destinations_products_map.computeIfAbsent(d, k -> new ArrayList<>());
@@ -74,7 +76,7 @@ public class Transport {
 
         truck.addWeight(p.getWeight()); // update the total weight of the truck
         if (truck.overWeight()) { // if the truck has over weight - need a decision
-          // todo - need to take decision
+            // todo - dropitem()
         }
 
 
