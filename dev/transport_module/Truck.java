@@ -13,7 +13,6 @@ public class Truck {
         this.available =true; // inited as true
         this.plateNumber = pn;
     }
-
     /**
      * @return weight of the truck
      */
@@ -34,28 +33,11 @@ public class Truck {
      *               weight of the truck but the sum.
      * @return if the adding is legal (not over weight) , return True, nither return false.
      */
-    public boolean setWeight(int add_w){
+    public boolean addWeight(int add_w){
         if(weight + add_w > maxWeight){return false;}
         weight = weight - add_w;
         if(weight < 0){ weight =0; } //todo : Think if it os better to set the value to 0 or to provoke an Error
         return true;
-    }
-
-    /**
-     *  after importing the Item Class from the inventory module
-     * @param i the item to add to the truck
-     * @return true if the item added validly.
-     */
-    public boolean addItem(Item i){
-        return setWeight(i.getWieght());
-    }
-    /**
-     *  after importing the Item Class from the inventory module
-     * @param i the item to drop from the trcuk
-     * @return true if the item drop successfuly.
-     */
-    public boolean dropItem(Item i){
-        return setWeight(-i.getWeight());
     }
 
     /**
