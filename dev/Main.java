@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import transport_module.*;
 
+import javax.print.Doc;
+
 public class Main {
     public static void menu_message() {
         System.out.println("Welcome to the Transportation Department!");
@@ -12,6 +14,8 @@ public class Main {
         System.out.println("2. Print all Trucks");
         System.out.println("3. Print all Drivers");
         System.out.println("4. Print Transport details");
+        System.out.println("5. Report on completion of transport");
+        System.out.println("6. Print all available trucks ");
         System.out.println("Press any Key to Exit.");
 
 
@@ -24,6 +28,7 @@ public class Main {
         Truck[] trucks = new Truck[9];
         ArrayList<Driver> drivers = new ArrayList<>();
         ArrayList<Transport> transports = new ArrayList<>();
+        ArrayList<Document> documents = new ArrayList<>();
 
         while (running) {
             menu_message();
@@ -32,6 +37,16 @@ public class Main {
             switch (input) {
                 /** Add new transport*/
                 case "1": {
+                    boolean allTrucksUnAvailabl = true;
+                    for(Truck truck: trucks) // check if there is an available truck.
+                        if(truck.getAvailablity()) {
+                            allTrucksUnAvailabl = false;
+                            break;
+                        }
+                    if(allTrucksUnAvailabl){
+                        System.out.println("There is no available truck please check later");
+                        break;
+                    }
                     break;
 
                 }
@@ -57,6 +72,32 @@ public class Main {
                     }
                         break;
 
+                }
+                case "5":
+                {
+                    /** Report on completion of transport */
+                    System.out.println("please enter a number between 1-9");
+                    int number = scanner.nextInt();
+                    if(number<1 || number>9) break;
+                    number--;
+                    trucks[number].clear();
+
+                    break;
+                }
+                case "6":{
+                    /** print all available trucks*/
+                    int count = 0;
+                    for(Truck truck : trucks){
+                        if(truck.getAvailablity()){
+                            truck.toString();
+                            count++;
+                        }
+                    }
+                    if (count == 0)
+                        System.out.println("There is no available truck in system.");
+
+
+                    break;
                 }
                 default: {
                     System.out.println("Thank you! have a nice day.");

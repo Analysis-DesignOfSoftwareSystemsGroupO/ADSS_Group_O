@@ -67,6 +67,10 @@ public class Truck {
         str.append("Current weight: ").append(weight).append("\n");
         return str.toString();
     }
+    public void clear(){
+        weight = 0;
+        available = true;
+    }
 
 }
 
