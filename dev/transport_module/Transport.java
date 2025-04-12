@@ -1,11 +1,7 @@
 package transport_module;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class Transport {
     private static int staticTransportID = 0;
@@ -123,11 +119,12 @@ public class Transport {
     /**
      * a function that creates a Form to destination
      */
-    public String createDestinationForm(Site destination) {
-        if (destination == null) return ""; // for wrong input return ""
+    public String createDestinationForm(String d) {
+        if (Objects.equals(d, "")) return ""; // for wrong input return ""
+        Site destination = new Site(d);
         StringBuilder str = new StringBuilder();
         for (Site site : destinations_products_map.keySet()) {//search for the destination in the transport
-            if (destination.equals(site)) { // if the site is in the destination list
+            if (site.equals(destination)) { // if the site is in the destination list
                 str.append(site.toString()).append(" \nProducts list: "); //add all the products in transport into the string
                 for (Product product : destinations_products_map.get(destination)) {
                     str.append(product.toString()).append("\n");
