@@ -54,6 +54,9 @@ public class Transport {
         destinations_products_map.computeIfAbsent(d, k -> new ArrayList<>());
     }
 
+    /**
+     * function that adds a product to load on track
+     */
     public void add_product(Site d, Product p) {
 
         if (null == d || null == p) { // input check
@@ -86,36 +89,47 @@ public class Transport {
 
 
     }
-    private String destinations_string(){
+
+    /**
+     * private function that returns all destination details
+     */
+    private String destinations_string() {
         StringBuilder str = new StringBuilder();
-        for (Site site : destinations_products_map.keySet()){
+        for (Site site : destinations_products_map.keySet()) {
             str.append(site.toString()).append(" ");
         }
         return str.toString();
     }
 
+    /**
+     * a print function that prints all the details about the transport.
+     */
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("Transport num: ").append(id).append("\n");
-        str.append("Date:  ").append(date).append(" ").append(departure_time).append("\n");
-        str.append("Truck details: ").append(truck.toString()).append("\n");
-        str.append("Driver details: ").append(driver.toString()).append("\n");
-        str.append("From: ").append(source.toString()).append("\n");
-        str.append("To: ").append(destinations_string()).append("\n");
-        if (isOutOfZone){
-            str.append("This Transport has a destination out of Area Zone!");
+        StringBuilder str = new StringBuilder(); // build new string
+        str.append("Transport num: ").append(id).append("\n"); // start with the transport id
+        str.append("Date:  ").append(date).append(" ").append(departure_time).append("\n"); // print the date and hour
+        str.append("Truck details: ").append(truck.toString()).append("\n"); // print all truck details
+        str.append("Driver details: ").append(driver.toString()).append("\n"); // print all driver details
+        str.append("From: ").append(source.toString()).append("\n"); // print the source site details
+        str.append("To: ").append(destinations_string()).append("\n"); // print all destination details
+        if (isOutOfZone) { // if transport has a destination out of area zone, it will show it.
+            str.append("This Transport has a destination out of Area Zone!\n");
         }
         return str.toString();
     }
-    /**a function that create a Form to destination*/
-    public String createDestinationForm(Site destination){
-        if(destination == null) return ""; // for wrong input return ""
+
+
+    /**
+     * a function that creates a Form to destination
+     */
+    public String createDestinationForm(Site destination) {
+        if (destination == null) return ""; // for wrong input return ""
         StringBuilder str = new StringBuilder();
-        for (Site site : destinations_products_map.keySet()){//search for the destination in the transport
-            if (destination.equals(site)){ // if the site is in the destination list
+        for (Site site : destinations_products_map.keySet()) {//search for the destination in the transport
+            if (destination.equals(site)) { // if the site is in the destination list
                 str.append(site.toString()).append(" \nProducts list: "); //add all the products in transport into the string
-                for (Product product : destinations_products_map.get(destination)){
+                for (Product product : destinations_products_map.get(destination)) {
                     str.append(product.toString()).append("\n");
                 }
 
