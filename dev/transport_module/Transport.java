@@ -1,5 +1,6 @@
 package transport_module;
 
+import javax.swing.text.Document;
 import java.util.*;
 import java.time.LocalTime;
 
@@ -76,11 +77,15 @@ public class Transport {
             destinations_products_map.get(d).add(new Product(p)); // add the product to the destination list if its not in the list
         }
         if (truck.getMaxWeight() < truck.getWeight() + p.getWeight()) {// if the truck has over weight - need a decision
-            System.out.println("The truck is overweight - the item was not loaded onto the truck.");
+            System.out.print("The truck is overweight - the item ");
+            System.out.print(p.getName());
+            System.out.println(" was not loaded onto the truck.");
 
         } else {
             truck.addWeight(p.getWeight()); // update the total weight of the truck
-            System.out.println("The item was inserted successfully.");
+            System.out.print("The item ");
+            System.out.print(p.getName());
+            System.out.println(" was inserted successfully.");
         }
 
 
@@ -133,6 +138,14 @@ public class Transport {
             }
         }
         return str.toString();
+    }
+    public void addPruductsByList(ProductListDocument document) throws Exception{
+        if (document == null) throw new Exception("invalid Document");
+        ArrayList<Product> currList = document.getProductsList();
+        for (Product product : currList){
+            add_product(document.getDestination(),product);
+        }
+
     }
 
 
