@@ -108,6 +108,21 @@ public class Transport {
         }
         return str.toString();
     }
+    /**a function that create a Form to destination*/
+    public String createDestinationForm(Site destination){
+        if(destination == null) return ""; // for wrong input return ""
+        StringBuilder str = new StringBuilder();
+        for (Site site : destinations_products_map.keySet()){//search for the destination in the transport
+            if (destination.equals(site)){ // if the site is in the destination list
+                str.append(site.toString()).append(" \nProducts list: "); //add all the products in transport into the string
+                for (Product product : destinations_products_map.get(destination)){
+                    str.append(product.toString()).append("\n");
+                }
+
+            }
+        }
+        return str.toString();
+    }
 
 
 }
