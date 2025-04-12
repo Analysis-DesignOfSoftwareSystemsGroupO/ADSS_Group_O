@@ -73,12 +73,15 @@ public class Transport {
         if (!is_update) {
             destinations_products_map.get(d).add(new Product(p)); // add the product to the destination list if its not in the list
         }
+        if(truck.getMaxWeight() < truck.getWeight() + p.getWeight()){// if the truck has over weight - need a decision
+            System.out.println("The truck is overweight - the item was not loaded onto the truck.");
 
-        truck.addWeight(p.getWeight()); // update the total weight of the truck
-        if (truck.overWeight()) { // if the truck has over weight - need a decision
-            System.out.println("Truck has Over load - item was");
-            // todo - dropitem()
         }
+        else {
+            truck.addWeight(p.getWeight()); // update the total weight of the truck
+            System.out.println("The item was inserted successfully.");
+        }
+
 
 
     }
