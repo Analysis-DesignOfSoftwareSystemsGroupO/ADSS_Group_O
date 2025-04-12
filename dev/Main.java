@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 import transport_module.*;
 
-import javax.print.Doc;
-
 public class Main {
     public static void menu_message() {
         System.out.println("Welcome to the Transportation Department!");
@@ -28,7 +26,7 @@ public class Main {
         Truck[] trucks = new Truck[9];
         ArrayList<Driver> drivers = new ArrayList<>();
         ArrayList<Transport> transports = new ArrayList<>();
-        ArrayList<Document> documents = new ArrayList<>();
+        ArrayList<ProductListDocument> documents = new ArrayList<>();
 
         while (running) {
             menu_message();

@@ -2,13 +2,13 @@ package transport_module;
 
 import java.util.ArrayList;
 
-public class Document {
+public class ProductListDocument {
     public static int documentID = 0;
     private int id;
     private Site destination;
     private ArrayList<Product> productsList;
 
-    public Document(Site site) throws Exception{
+    public ProductListDocument(Site site) throws Exception{
         if (site ==null) throw new Exception("InValid Input");
         id=++documentID;
         destination = new Site(site);
