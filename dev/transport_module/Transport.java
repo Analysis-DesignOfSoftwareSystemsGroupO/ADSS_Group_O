@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Transport {
+    private static int staticTransportID = 0;
+    private int id;
     private Date date; // field for date of the transport
     private LocalTime departure_time; // the hour of departure time
     private Truck truck; // the truck which connect to the transport
@@ -30,6 +32,7 @@ public class Transport {
         }
 
         date = new Date(d.getTime()); // set the date as a new date.
+        id = ++staticTransportID; // give index to transport
         departure_time = LocalTime.of(h, m); // set the hour
         truck = t; // save the truck as the original truck - not a copy of the truck.
         driver = e; // save the driver as the original employee - not a copy of the employee
@@ -73,17 +76,37 @@ public class Transport {
         if (!is_update) {
             destinations_products_map.get(d).add(new Product(p)); // add the product to the destination list if its not in the list
         }
-        if(truck.getMaxWeight() < truck.getWeight() + p.getWeight()){// if the truck has over weight - need a decision
+        if (truck.getMaxWeight() < truck.getWeight() + p.getWeight()) {// if the truck has over weight - need a decision
             System.out.println("The truck is overweight - the item was not loaded onto the truck.");
 
-        }
-        else {
+        } else {
             truck.addWeight(p.getWeight()); // update the total weight of the truck
             System.out.println("The item was inserted successfully.");
         }
 
 
+    }
+    private String destinations_string(){
+        StringBuilder str = new StringBuilder();
+        for (Site site : destinations_products_map.keySet()){
+            str.append(site.toString()).append(" ");
+        }
+        return str.toString();
+    }
 
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Transport num: ").append(id).append("\n");
+        str.append("Date:  ").append(date).append(" ").append(departure_time).append("\n");
+        str.append("Truck details: ").append(truck.toString()).append("\n");
+        str.append("Driver details: ").append(driver.toString()).append("\n");
+        str.append("From: ").append(source.toString()).append("\n");
+        str.append("To: ").append(destinations_string()).append("\n");
+        if (isOutOfZone){
+            str.append("This Transport has a destination out of Area Zone!");
+        }
+        return str.toString();
     }
 
 
