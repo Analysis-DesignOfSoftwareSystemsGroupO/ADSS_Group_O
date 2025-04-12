@@ -20,5 +20,10 @@ public class Driver extends Employee{
         }
         return cpy;
     }
+    @Override
+    public String toString(){
+        //todo - write this with details.
+        StringBuilder str = new StringBuilder(); // build new string
+        return str.toString();    }
 
 }

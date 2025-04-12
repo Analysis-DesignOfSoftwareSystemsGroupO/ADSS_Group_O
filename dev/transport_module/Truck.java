@@ -54,6 +54,19 @@ public class Truck {
         }
         return false;
     }
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder(); // build new string
+        str.append("Truck num: ").append(plateNumber).append("\n");
+        str.append("Licence: ").append(liceenceReq.toString()).append("\n");
+        if(!available)
+            str.append("currently not available, truck in transit\n");
+        else
+            str.append("truck is available to transit\n");
+        str.append("Maximum weight: ").append(maxWeight).append("\n");
+        str.append("Current weight: ").append(weight).append("\n");
+        return str.toString();
+    }
 
 }
 

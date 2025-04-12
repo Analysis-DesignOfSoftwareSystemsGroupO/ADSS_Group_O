@@ -9,7 +9,7 @@ public class Transport {
     private Date date; // field for date of the transport
     private LocalTime departure_time; // the hour of departure time
     private Truck truck; // the truck which connect to the transport
-    private Employee driver; // the driver taht will drive in the truck
+    private Driver driver; // the driver taht will drive in the truck
     private Site source; // the source site the transport is start
     private Map<Site, List<Product>> destinations_products_map; // a list of all destinations
     private boolean isOutOfZone;
@@ -17,7 +17,7 @@ public class Transport {
     /**
      * a constructor for Transport
      */
-    public Transport(Date d, int h, int m, Truck t, Employee e, Site s) throws Exception {
+    public Transport(Date d, int h, int m, Truck t, Driver e, Site s) throws Exception {
         // input check
         if (d == null || h < 1 || h > 24 || m < 0 || m > 59 || t == null || e == null || s == null) {
             throw new Exception("Invalid Error");
