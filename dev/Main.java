@@ -16,7 +16,7 @@ public class Main {
         System.out.println("4. Print Transport details");
         System.out.println("5. Report on completion of transport");
         System.out.println("6. Print all available trucks ");
-        System.out.println("Press any Key to Exit.");
+        System.out.println("Press E to Exit.");
 
 
     }
@@ -99,9 +99,13 @@ public class Main {
 
                     break;
                 }
-                default: {
+                case  "E":{
                     System.out.println("Thank you! have a nice day.");
                     running = false;
+                    break;
+                }
+                default: {
+                    System.out.println("Wrong input! Please try again.");
                     break;
                 }
 
