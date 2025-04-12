@@ -64,7 +64,7 @@ public class Transport {
         for (Product product : products_list) {
 
             if (product.getName() == p.getName()) { // if the product is already in the list
-                product.setWeight(product.getWeight() + p.getWeight()); // raise the total weight of the product on truck
+                product.addWeight(p.getWeight()); // raise the total weight of the product on truck
                 is_update = true;
                 break;
             }
@@ -76,6 +76,7 @@ public class Transport {
 
         truck.addWeight(p.getWeight()); // update the total weight of the truck
         if (truck.overWeight()) { // if the truck has over weight - need a decision
+            System.out.println("Truck has Over load - item was");
             // todo - dropitem()
         }
 
