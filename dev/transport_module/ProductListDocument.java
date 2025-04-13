@@ -7,17 +7,17 @@ public class ProductListDocument {
     private int id;
     private Site destination;
     private ArrayList<Product> productsList;
+    private int totalWeight;
 
     public ProductListDocument(Site site) throws Exception{
         if (site ==null) throw new Exception("InValid Input");
         id=++documentID;
         destination = new Site(site);
         productsList = new ArrayList<>();
+        totalWeight = 0;
     }
-    public void add_product(Product p) throws Exception{
-        if (p == null) throw new Exception("Invalid Product");
-        productsList.add(new Product (p));
-    }
+
+    public int getTotalWeight(){return totalWeight;}
 
     public int getId() {
         return id;
@@ -29,5 +29,40 @@ public class ProductListDocument {
 
     public ArrayList<Product> getProductsList() {
         return productsList;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder(); // build new string
+        str.append("Document num ").append(id).append("\n");
+        str.append("To destination: ").append(destination.getName()).append("\n");
+        str.append("Products: \n");
+        for (Product product : productsList)
+            str.append(product.toString()).append("\n");
+        str.append("Total weight: ").append(totalWeight);
+
+        return str.toString();
+
+
+    }
+
+    public void addProduct(Product p){
+        if(p == null) return;
+        boolean is_update = false;
+
+        for (Product product : productsList) {
+
+            if (product.getName().equals(p.getName())) { // if the product is already in the list
+                product.addWeight(p.getWeight()); // raise the total weight of the product on truck
+                is_update = true;
+                break;
+            }
+
+        }
+        if(!is_update){
+            productsList.add(new Product(p));
+        }
+        totalWeight+=p.getWeight();
+
     }
 }
