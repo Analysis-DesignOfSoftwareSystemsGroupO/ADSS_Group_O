@@ -4,6 +4,11 @@ public class Product {
     private String name;
     private int weight;
 
+
+    public Product(){
+        name = "";
+        weight = 0;
+    }
     public Product(String n, int w){
         name = n;
         weight = w;
