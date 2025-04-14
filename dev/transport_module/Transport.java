@@ -20,25 +20,56 @@ public class Transport {
     /**
      * a constructor for Transport
      */
-    public Transport(Date d, int h, int m, Truck t, Driver e, Site s) throws Exception {
+    public Transport(Date d, int h, int m, Truck t, Site s) throws Exception {
         // input check
-        if (d == null || h < 1 || h > 24 || m < 0 || m > 59 || t == null || e == null || s == null) {
+        if (d == null || h < 1 || h > 24 || m < 0 || m > 59 || t == null ||  s == null) {
             throw new Exception("Invalid Error");
         }
-        // check for match between the driver's license and the truck license
-        if (!t.confirmDriver(e)) {
-            throw new Exception("The driver does not have an appropriate license for the type of truck");
-        }
-
+        driver = null;
         date = new Date(d.getTime()); // set the date as a new date.
         id = ++staticTransportID; // give index to transport
         departure_time = LocalTime.of(h, m); // set the hour
         truck = t; // save the truck as the original truck - not a copy of the truck.
-        driver = e; // save the driver as the original employee - not a copy of the employee
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
+        System.out.println("Transport has successfully created."); // Can't load the truck
+
     }
+
+    /** a function that adds a driver to a transport*/
+    public void addDriver(Driver d){
+        if(d == null) return;
+        if(!truck.confirmDriver(d)){
+            System.out.println("Driver's licence doesn't match to truck's licence. please Assign another driver ");
+            return;
+        }
+        if(!driver.isavailable())
+        {
+            System.out.println("Driver is not available - please assign another driver ");
+            return;
+        }
+        driver = d;
+        driver.assignToMission();
+
+
+    }
+
+    /** a function that sends a transport to its mission*/
+    public void sendTransport(){
+        if(driver == null){
+            System.out.println("transport has no driver - please add driver first.");
+            return;
+        }
+        if(truck.isOverWeight()){
+            System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
+            return;
+        }
+        truck.clear();
+        driver.release();
+    }
+
+
 
 
 
@@ -72,6 +103,7 @@ public class Transport {
         return str.toString();
     }
 
+    /** a function that gets a document and load the products' list to the truck*/
     public void loadByDocument(ProductListDocument document){
         if(document == null) return;
         if (truck.getMaxWeight()<truck.getWeight() + document.getTotalWeight()){ // if truck is in Over Weight
@@ -82,6 +114,12 @@ public class Transport {
         else{
             destinations_document_map.put(document.getDestination(),document);
             truck.addWeight(document.getTotalWeight());
+            System.out.println("Truck has successfully loaded."); // Can't load the truck
+
+            if(!source.getArea().equals(document.getDestination().getArea())){
+                System.out.println("This destination is out of Area Zone, this is a special Transport");
+                isOutOfZone = true;
+            }
         }
     }
 

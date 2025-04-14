@@ -1,12 +1,15 @@
 package transport_module;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductListDocument {
     public static int documentID = 0;
     private int id;
     private Site destination;
     private ArrayList<Product> productsList;
+    private Map<Product, Integer> productHashMap;
     private int totalWeight;
 
     public ProductListDocument(Site site) throws Exception{
@@ -14,6 +17,7 @@ public class ProductListDocument {
         id=++documentID;
         destination = new Site(site);
         productsList = new ArrayList<>();
+        productHashMap = new HashMap<>();
         totalWeight = 0;
     }
 
@@ -37,12 +41,16 @@ public class ProductListDocument {
         str.append("Document num ").append(id).append("\n");
         str.append("To destination: ").append(destination.getName()).append("\n");
         str.append("Products: \n");
+        int i=1;
         for (Product product : productsList)
-            str.append(product.toString()).append("\n");
+            str.append(++i).append(product.toString()).append("\n");
         str.append("Total weight: ").append(totalWeight);
 
         return str.toString();
 
+
+    }
+    public void addProductWithAmount(Product p, int ammount){
 
     }
 
@@ -63,6 +71,19 @@ public class ProductListDocument {
             productsList.add(new Product(p));
         }
         totalWeight+=p.getWeight();
+        System.out.println("Item has successfully added to document ");
+
+    }
+    public void removeProduct(int index){
+        if(index<1 || index>productsList.size())
+        {
+            System.out.println("index out of range - please choose another product to remove");
+            return;
+        }
+        Product p = productsList.get(index-1);
+        productsList.remove(index-1);
+        totalWeight-=p.getWeight();
+        System.out.println("Product has successfully removed from list.");
 
     }
 }

@@ -20,6 +20,15 @@ public class Driver extends Employee{
         }
         return cpy;
     }
+    public void assignToMission(){
+
+    }
+    public void release(){
+
+    }
+    public boolean isavailable(){
+        return true;
+    }
     @Override
     public String toString(){
         //todo - write this with details.

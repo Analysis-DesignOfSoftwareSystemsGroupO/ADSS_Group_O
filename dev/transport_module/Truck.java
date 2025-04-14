@@ -71,6 +71,9 @@ public class Truck {
         weight = 0;
         available = true;
     }
+    public boolean isOverWeight(){
+        return maxWeight>weight;
+    }
 
 }
 
