@@ -4,19 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductListDocument {
-    public static int documentID = 0;
-    private int id;
-    private Site destination;
-    private Map<Product, Integer> productHashMap;
-    private int totalWeight;
+    public static int documentID = 0; // global variable for indexing documents.
+    private int id; // document id
+    private Site destination; // document destination
+    private Map<Product, Integer> productHashMap; // a map of products and amount of each product
+    private int totalWeight; // total weight of the products in document
 
     /** a constructor - create new document*/
     public ProductListDocument(Site site) throws Exception{
-        if (site ==null) throw new Exception("InValid Input");
-        id=++documentID;
-        destination = new Site(site);
-        productHashMap = new HashMap<>();
-        totalWeight = 0;
+        if (site ==null) throw new Exception("InValid Input"); // if the site is null - don't create a document
+        id=++documentID; // give index to document
+        destination = new Site(site); // set the destination of the document
+        productHashMap = new HashMap<>(); // create a map for the document
+        totalWeight = 0; // set the total weight to document
     }
 
     /** get the total weight of the products in document*/

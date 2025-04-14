@@ -61,8 +61,14 @@ public class Transport {
             System.out.println("transport has no driver - please add driver first.");
             return;
         }
-        if(truck.isOverWeight()){
+        int calcWeight =0;
+        for (Site site: destinations_document_map.keySet()){
+            calcWeight+=destinations_document_map.get(site).getTotalWeight();
+        }
+        if(truck.getMaxWeight()<calcWeight) {
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
+            int difference = calcWeight- truck.getMaxWeight();
+            System.out.println("Weight excess by "+ difference +" kg");
             return;
         }
         truck.clear();
