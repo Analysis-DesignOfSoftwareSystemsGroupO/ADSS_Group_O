@@ -5,11 +5,11 @@ import java.time.LocalTime;
 
 public class Transport {
     private static int staticTransportID = 0;
-    private int id;
-    private Date date; // field for date of the transport
-    private LocalTime departure_time; // the hour of departure time
-    private Truck truck; // the truck which connect to the transport
-    private Driver driver; // the driver taht will drive in the truck
+    private final int id;
+    private final Date date; // field for date of the transport
+    private final LocalTime departure_time; // the hour of departure time
+    private Truck truck; // the truck that connects to the transport
+    private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
     private Map<Site,ProductListDocument> destinations_document_map; // a map for each destination.
 
