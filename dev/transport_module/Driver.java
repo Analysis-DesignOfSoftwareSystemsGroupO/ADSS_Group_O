@@ -6,7 +6,7 @@ public class Driver extends Employee{
     private ArrayList<DrivingLicence> licencs;
 
     //todo : constructor
-    //public Diver(args){
+    //public Driver(args){
       //  super();
    // }
 
@@ -20,5 +20,19 @@ public class Driver extends Employee{
         }
         return cpy;
     }
+    public void assignToMission(){
+
+    }
+    public void release(){
+
+    }
+    public boolean isavailable(){
+        return true;
+    }
+    @Override
+    public String toString(){
+        //todo - write this with details.
+        StringBuilder str = new StringBuilder(); // build new string
+        return str.toString();    }
 
 }
