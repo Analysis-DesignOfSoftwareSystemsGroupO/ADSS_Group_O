@@ -1,17 +1,19 @@
 package transport_module;
 
-import java.util.*;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.time.LocalDate;
 
 public class Transport {
     private static int staticTransportID = 0;
     private final int id;
-    private final Date date; // field for date of the transport
+    private final LocalDate date; // field for date of the transport
     private final LocalTime departure_time; // the hour of departure time
     private Truck truck; // the truck that connects to the transport
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
-    private Map<Site,ProductListDocument> destinations_document_map; // a map for each destination.
+    private Map<Site, ProductListDocument> destinations_document_map; // a map for each destination.
 
     private boolean isOutOfZone;
 
@@ -19,15 +21,23 @@ public class Transport {
     /**
      * a constructor for Transport
      */
-    public Transport(Date d, int h, int m, Truck t, Site s) throws Exception {
+    public Transport(String d, String time, Truck t, Site s) throws Exception {
         // input check
-        if (d == null || h < 1 || h > 24 || m < 0 || m > 59 || t == null ||  s == null) {
+        if (time == "" || d == "" || t == null || s == null) {
             throw new Exception("Invalid Error");
         }
         driver = null;
-        date = new Date(d.getTime()); // set the date as a new date.
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        date =  LocalDate.parse(d, formatter);
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        if (hour < 1 || hour > 24) hour = 7;
+        int minute = Integer.parseInt(parts[1]);
+        if (minute < 0 || minute > 59) minute = 0;
+
         id = ++staticTransportID; // give index to transport
-        departure_time = LocalTime.of(h, m); // set the hour
+        departure_time = LocalTime.of(hour, minute); // set the hour
         truck = t; // save the truck as the original truck - not a copy of the truck.
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
@@ -36,15 +46,16 @@ public class Transport {
 
     }
 
-    /** a function that adds a driver to a transport*/
-    public void addDriver(Driver d){
-        if(d == null) return;
-        if(!truck.confirmDriver(d)){
+    /**
+     * a function that adds a driver to a transport
+     */
+    public void addDriver(Driver d) {
+        if (d == null) return;
+        if (!truck.confirmDriver(d)) {
             System.out.println("Driver's licence doesn't match to truck's licence. please Assign another driver ");
             return;
         }
-        if(!driver.isavailable())
-        {
+        if (!driver.isavailable()) {
             System.out.println("Driver is not available - please assign another driver ");
             return;
         }
@@ -54,30 +65,31 @@ public class Transport {
 
     }
 
-    /** a function that sends a transport to its mission*/
-    public void sendTransport(){
-        if(driver == null){
+    /**
+     * a function that sends a transport to its mission
+     */
+    public void sendTransport() {
+        if (driver == null) {
             System.out.println("transport has no driver - please add driver first.");
             return;
         }
-        int calcWeight =0;
-        for (Site site: destinations_document_map.keySet()){
-            calcWeight+=destinations_document_map.get(site).getTotalWeight();
+        int calcWeight = 0;
+        for (Site site : destinations_document_map.keySet()) {
+            calcWeight += destinations_document_map.get(site).getTotalWeight();
         }
-        if(truck.getMaxWeight()<calcWeight) {
+        if (truck.getMaxWeight() < calcWeight) {
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
-            int difference = calcWeight- truck.getMaxWeight();
-            System.out.println("Weight excess by "+ difference +" kg");
+            int difference = calcWeight - truck.getMaxWeight();
+            System.out.println("Weight excess by " + difference + " kg");
             return;
         }
         truck.clear();
         driver.release();
     }
 
-
-
-
-
+    public int getId() {
+        return id;
+    }
 
     /**
      * private function that returns all destination details
@@ -108,27 +120,29 @@ public class Transport {
         return str.toString();
     }
 
-    /** a function that gets a document and load the products' list to the truck*/
-    public void loadByDocument(ProductListDocument document){
-        if(document == null) return;
-        if (truck.getMaxWeight()<truck.getWeight() + document.getTotalWeight()){ // if truck is in Over Weight
+    /**
+     * a function that gets a document and load the products' list to the truck
+     */
+    public void loadByDocument(ProductListDocument document) {
+        if (document == null) return;
+        if (truck.getMaxWeight() < truck.getWeight() + document.getTotalWeight()) { // if truck is in Over Weight
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
-            int difference = (truck.getWeight() + document.getTotalWeight()) - truck.getMaxWeight() ;
-            System.out.println("Weight excess by "+ difference +" kg");
-        }
-        else{
-            destinations_document_map.put(document.getDestination(),document);
+            int difference = (truck.getWeight() + document.getTotalWeight()) - truck.getMaxWeight();
+            System.out.println("Weight excess by " + difference + " kg");
+        } else {
+            destinations_document_map.put(document.getDestination(), document);
             truck.addWeight(document.getTotalWeight());
             System.out.println("Truck has successfully loaded."); // Can't load the truck
 
-            if(!source.getArea().equals(document.getDestination().getArea())){
+            if (!source.getArea().equals(document.getDestination().getArea())) {
                 System.out.println("This destination is out of Area Zone, this is a special Transport");
                 isOutOfZone = true;
             }
         }
     }
-
-
+    public boolean isSiteInDestinations(Site s){
+        return true;
+    }
 
 
 }
