@@ -10,69 +10,92 @@ public class ProductListDocument {
     private Map<Product, Integer> productHashMap; // a map of products and amount of each product
     private int totalWeight; // total weight of the products in document
 
-    /** a constructor - create new document*/
-    public ProductListDocument(Site site) throws Exception{
-        if (site ==null) throw new Exception("InValid Input"); // if the site is null - don't create a document
-        id=++documentID; // give index to document
+    /**
+     * a constructor - create new document
+     */
+    public ProductListDocument(Site site) throws Exception {
+        if (site == null) throw new Exception("InValid Input"); // if the site is null - don't create a document
+        id = ++documentID; // give index to document
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
     }
 
-    /** get the total weight of the products in document*/
-    public int getTotalWeight(){return totalWeight;}
+    /**
+     * get the total weight of the products in document
+     */
+    public int getTotalWeight() {
+        return totalWeight;
+    }
 
-    /** get the document id*/
+    /**
+     * get the document id
+     */
     public int getId() {
         return id;
     }
 
-    /** get the destination*/
+    /**
+     * get the destination
+     */
     public Site getDestination() {
         return destination;
     }
 
-    /**a function that prints the document details*/
+    /**
+     * a function that prints the document details
+     */
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder str = new StringBuilder(); // build new string
         str.append("Document num ").append(id).append("\n");
         str.append("To destination: ").append(destination.getName()).append("\n");
         str.append("Products: \n");
         for (Product product : productHashMap.keySet())
             // print all products with columns: product name , amount, total weight of product
-            str.append(product.getName()).append(productHashMap.get(product)).append(productHashMap.get(product)*product.getWeight()).append("\n");
+            str.append(product.getName()).append(productHashMap.get(product)).append(productHashMap.get(product) * product.getWeight()).append("\n");
         str.append("Total weight: ").append(totalWeight);
 
         return str.toString();
 
 
     }
-    /** a function that adds product to document, if*/
-    public void addProduct(Product p, int amount){
-        if(p == null || amount<1) return;
-        Integer newAmount =  productHashMap.get(p);
-        if(newAmount!=null)
-            newAmount+=amount;
+
+    /**
+     * a function that adds product to document, if
+     */
+    public void addProduct(Product p, int amount) {
+        if (p == null || amount < 1) return;
+        Integer newAmount = productHashMap.get(p);
+        if (newAmount != null)
+            newAmount += amount;
         else
             newAmount = amount;
-        productHashMap.put(p,newAmount);
-        totalWeight+=amount*p.getWeight();
+        productHashMap.put(p, newAmount);
+        totalWeight += amount * p.getWeight();
         System.out.println("Item has successfully added to document ");
 
 
     }
 
-    /** a function that reduces the amount of product from the list - if remove all amounts of product, product will be deleted  */
-    public void reduceAmountFromProduct(Product p, int amount){
-        if(p == null || amount<1 || productHashMap.get(p)==null || amount>productHashMap.get(p)) return;
-        if(amount == productHashMap.get(p)){
+    /**
+     * a function that reduces the amount of product from the list - if remove all amounts of product, product will be deleted
+     */
+    public void reduceAmountFromProduct(Product p, int amount) {
+        if (p == null || amount < 1 || productHashMap.get(p) == null || amount > productHashMap.get(p)) {
+            System.out.println("Invalid input");
+            return;
+        }
+        if (amount == productHashMap.get(p)) {
+            System.out.println("Product has removed");
             productHashMap.remove(p);
             return;
         }
         int newAmount = productHashMap.get(p) - amount;
-        productHashMap.put(p,newAmount);
-        totalWeight-=amount*p.getWeight();
+        productHashMap.put(p, newAmount);
+        totalWeight -= amount * p.getWeight();
+        System.out.println("Product has reduced by "+amount+" parts");
+
     }
 
 

@@ -20,7 +20,9 @@ public class Main {
         System.out.println("6. Print all Trucks");
         System.out.println("7. Print all Drivers");
         System.out.println("8. Print Transport details");
-        System.out.println("9. Print all available trucks ");
+        System.out.println("9. Print all available trucks");
+        System.out.println("10. Add new driver to system");
+
         System.out.println("Press E to Exit.");
 
 
@@ -60,25 +62,97 @@ public class Main {
             Transport transport = new Transport(dateStr,timeStr,t,site);
             transports.put(transport.getId(),transport);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("please try again");
         }
         scanner.close();
 
 
     }
-    public void AddDriverToTransport(   Map<String,Driver> drivers ,ArrayList<Transport> transports){
+    /** add driver to transport*/
+    public static void AddDriverToTransport(   Map<String,Driver> drivers ,  Map<Integer,Transport> transports){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter driver's id");
         String id = scanner.nextLine();
         Driver driver = drivers.get(id);
         if(driver == null){
             System.out.println("Driver is not in system - please try again");
+            scanner.close();
             return;
         }
+        System.out.println("Please enter Transport number");
+        Integer transport_id = scanner.nextInt();
+        Transport transport = transports.get(transport_id);
+        if(transport == null){
+            System.out.println("Transport number is not in system - please try again");
+            scanner.close();
+            return;
+        }
+        transport.addDriver((transport_module.Driver) driver);
+        scanner.close();
+
 
 
 
     }
+    public static void AddProductToTransport(Map<Integer,Transport> transports,  Map<Integer,Product> products){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter Transport number");
+        Integer transport_id = scanner.nextInt();
+        Transport transport = transports.get(transport_id);
+        if(transport == null){
+            System.out.println("Transport number is not in system - please try again");
+            scanner.close();
+            return;
+        }
+        System.out.println("Please enter Destination name");
+        String destination_name = scanner.nextLine();
+        ProductListDocument document = transport.getDocument(destination_name);
+        if(document == null){ // need to create document
+            Site site = new Site(destination_name,destination_name);
+            try{
+            document = new ProductListDocument(site);
+            }
+            catch (Exception e){
+                System.out.println("please try again");
+            }
+        }
+        System.out.println("Please enter Product Catalog Number: ");
+        int id = scanner.nextInt();
+        if(products.get(id)==null){
+            System.out.println("Product not in System - please try again.");
+            scanner.close();
+            return;
+        }
+        System.out.println("enter the amount you want to load: ");
+        int amount = scanner.nextInt();
+        document.addProduct(products.get(id),amount);
+        try {
+            transport.loadByDocument(document);
+            }
+        catch (Exception e){
+                System.out.println("please try again");
+
+            }
+        scanner.close();
+        }
+
+        public static void RemoveProductFromTransport(Map<Integer,Transport> transports){
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Please enter Transport number");
+            Integer transport_id = scanner.nextInt();
+            Transport transport = transports.get(transport_id);
+            if(transport == null){
+                System.out.println("Transport number is not in system - please try again");
+                scanner.close();
+                return;
+            }
+
+        }
+
+
+
+
+
 
     public static void main(String[] args) {
 
@@ -89,6 +163,7 @@ public class Main {
         Map<Integer,Transport> transports = new HashMap<>();
 //        ArrayList<Transport> transports = new ArrayList<>();
         ArrayList<ProductListDocument> documents = new ArrayList<>();
+        Map<Integer,Product> products = new HashMap<>();
 
 
         while (running) {
@@ -103,18 +178,14 @@ public class Main {
 
                 }
                 case "2": {
-                    /** Print all trucks*/
-                    for (int i = 0; i < 9; i++) {
-                        trucks[i].toString();
-                    }
+                    /** add driver to transport*/
+                    AddDriverToTransport(drivers,transports);
                     break;
 
                 }
                 case "3": {
-                    /**print all Drivers*/
-                    for (Driver driver : drivers) {
-                        driver.toString();
-                    }
+                    /** add product to transport*/
+                    AddProductToTransport( transports,products);
                     break;
                 }
                 case "4": {

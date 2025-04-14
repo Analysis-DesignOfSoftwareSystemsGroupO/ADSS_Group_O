@@ -1,5 +1,6 @@
 package transport_module;
 
+import java.security.spec.ECField;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -13,7 +14,7 @@ public class Transport {
     private Truck truck; // the truck that connects to the transport
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
-    private Map<Site, ProductListDocument> destinations_document_map; // a map for each destination.
+    private Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
 
     private boolean isOutOfZone;
 
@@ -42,7 +43,7 @@ public class Transport {
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
-        System.out.println("Transport has successfully created."); // Can't load the truck
+        System.out.println("Transport number " +id+" has successfully created."); // Can't load the truck
 
     }
 
@@ -74,7 +75,7 @@ public class Transport {
             return;
         }
         int calcWeight = 0;
-        for (Site site : destinations_document_map.keySet()) {
+        for (String site : destinations_document_map.keySet()) {
             calcWeight += destinations_document_map.get(site).getTotalWeight();
         }
         if (truck.getMaxWeight() < calcWeight) {
@@ -96,8 +97,8 @@ public class Transport {
      */
     private String destinations_string() {
         StringBuilder str = new StringBuilder();
-        for (Site site : destinations_document_map.keySet()) {
-            str.append(site.toString()).append(" ");
+        for (String site : destinations_document_map.keySet()) {
+            str.append(site).append(" ");
         }
         return str.toString();
     }
@@ -123,14 +124,15 @@ public class Transport {
     /**
      * a function that gets a document and load the products' list to the truck
      */
-    public void loadByDocument(ProductListDocument document) {
-        if (document == null) return;
+    public boolean loadByDocument(ProductListDocument document) throws Exception {
+        if (document == null) throw new Exception("Invalid input");
         if (truck.getMaxWeight() < truck.getWeight() + document.getTotalWeight()) { // if truck is in Over Weight
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
             int difference = (truck.getWeight() + document.getTotalWeight()) - truck.getMaxWeight();
             System.out.println("Weight excess by " + difference + " kg");
+            return false;
         } else {
-            destinations_document_map.put(document.getDestination(), document);
+            destinations_document_map.put(document.getDestination().getName(), document);
             truck.addWeight(document.getTotalWeight());
             System.out.println("Truck has successfully loaded."); // Can't load the truck
 
@@ -139,10 +141,20 @@ public class Transport {
                 isOutOfZone = true;
             }
         }
-    }
-    public boolean isSiteInDestinations(Site s){
         return true;
     }
+
+    public ProductListDocument getDocument(String site_name){
+
+        return destinations_document_map.get(site_name);
+
+    }
+    public void reduceAmountFromProduct(String destination, Product p, int amount){
+        if(destinations_document_map.get(destination)!=null){
+            destinations_document_map.get(destination).reduceAmountFromProduct(p,amount);
+        }
+    }
+
 
 
 }
