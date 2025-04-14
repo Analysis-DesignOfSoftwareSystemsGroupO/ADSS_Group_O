@@ -15,6 +15,7 @@ public class Transport {
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
     private Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
+    private boolean isSent;
 
     private boolean isOutOfZone;
 
@@ -44,6 +45,7 @@ public class Transport {
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
         System.out.println("Transport number " +id+" has successfully created."); // Can't load the truck
+        isSent = false;
 
     }
 
@@ -70,8 +72,13 @@ public class Transport {
      * a function that sends a transport to its mission
      */
     public void sendTransport() {
+        if(isSent)
+        {
+            System.out.println("Transport has already sent.");
+            return;
+        }
         if (driver == null) {
-            System.out.println("transport has no driver - please add driver first.");
+            System.out.println("Transport has no driver - please add driver first.");
             return;
         }
         int calcWeight = 0;
@@ -85,6 +92,7 @@ public class Transport {
             return;
         }
         truck.clear();
+        isSent = true;
         driver.release();
     }
 
@@ -153,6 +161,10 @@ public class Transport {
         if(destinations_document_map.get(destination)!=null){
             destinations_document_map.get(destination).reduceAmountFromProduct(p,amount);
         }
+    }
+    public boolean isSiteIsDestination(String site){
+        return destinations_document_map.get(site)!=null;
+
     }
 
 

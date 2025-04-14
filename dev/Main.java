@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import transport_module.*;
 
 public class Main {
@@ -27,17 +28,21 @@ public class Main {
 
 
     }
-    /** Add new Transport function*/
-    public static void AddNewTransport(Truck[] trucks,  Map<Integer,Transport> transports){
+//********************************************************************************************************************** Case 1
+
+    /**
+     * Add new Transport function
+     */
+    public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports) {
         boolean allTrucksUnAvailabl = true;
-        Truck t =null;
-        for(Truck truck: trucks) // check if there is an available truck.
-            if(truck.getAvailablity()) {
+        Truck t = null;
+        for (Truck truck : trucks) // check if there is an available truck.
+            if (truck.getAvailablity()) {
                 allTrucksUnAvailabl = false;
                 t = truck;
                 break;
             }
-        if(allTrucksUnAvailabl){
+        if (allTrucksUnAvailabl) {
             System.out.println("There is no available truck please check later");
             return;
         }
@@ -57,10 +62,10 @@ public class Main {
         System.out.println("Please enter source site area");
         String area_name = scanner.nextLine();
 
-        Site site = new Site(site_name,area_name);
+        Site site = new Site(site_name, area_name);
         try {
-            Transport transport = new Transport(dateStr,timeStr,t,site);
-            transports.put(transport.getId(),transport);
+            Transport transport = new Transport(dateStr, timeStr, t, site);
+            transports.put(transport.getId(), transport);
         } catch (Exception e) {
             System.out.println("please try again");
         }
@@ -68,13 +73,18 @@ public class Main {
 
 
     }
-    /** add driver to transport*/
-    public static void AddDriverToTransport(   Map<String,Driver> drivers ,  Map<Integer,Transport> transports){
+
+//********************************************************************************************************************** Case 2
+
+    /**
+     * add driver to transport
+     */
+    public static void AddDriverToTransport(Map<String, Driver> drivers, Map<Integer, Transport> transports) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter driver's id");
         String id = scanner.nextLine();
         Driver driver = drivers.get(id);
-        if(driver == null){
+        if (driver == null) {
             System.out.println("Driver is not in system - please try again");
             scanner.close();
             return;
@@ -82,7 +92,7 @@ public class Main {
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
         Transport transport = transports.get(transport_id);
-        if(transport == null){
+        if (transport == null) {
             System.out.println("Transport number is not in system - please try again");
             scanner.close();
             return;
@@ -91,15 +101,15 @@ public class Main {
         scanner.close();
 
 
-
-
     }
-    public static void AddProductToTransport(Map<Integer,Transport> transports,  Map<Integer,Product> products){
+//********************************************************************************************************************** Case 3
+
+    public static void AddProductToTransport(Map<Integer, Transport> transports, Map<Integer, Product> products) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
         Transport transport = transports.get(transport_id);
-        if(transport == null){
+        if (transport == null) {
             System.out.println("Transport number is not in system - please try again");
             scanner.close();
             return;
@@ -107,63 +117,140 @@ public class Main {
         System.out.println("Please enter Destination name");
         String destination_name = scanner.nextLine();
         ProductListDocument document = transport.getDocument(destination_name);
-        if(document == null){ // need to create document
-            Site site = new Site(destination_name,destination_name);
-            try{
-            document = new ProductListDocument(site);
-            }
-            catch (Exception e){
+        if (document == null) { // need to create document
+            Site site = new Site(destination_name, destination_name);
+            try {
+                document = new ProductListDocument(site);
+            } catch (Exception e) {
                 System.out.println("please try again");
             }
         }
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
-        if(products.get(id)==null){
+        if (products.get(id) == null) {
             System.out.println("Product not in System - please try again.");
             scanner.close();
             return;
         }
         System.out.println("enter the amount you want to load: ");
         int amount = scanner.nextInt();
-        document.addProduct(products.get(id),amount);
+        document.addProduct(products.get(id), amount);
         try {
             transport.loadByDocument(document);
-            }
-        catch (Exception e){
-                System.out.println("please try again");
+        } catch (Exception e) {
+            System.out.println("please try again");
 
-            }
+        }
         scanner.close();
+    }
+
+    //********************************************************************************************************************** Case 4
+    public static void RemoveProductFromTransport(Map<Integer, Transport> transports, Map<Integer, Product> products) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter Transport number");
+        Integer transport_id = scanner.nextInt();
+        Transport transport = transports.get(transport_id);
+        if (transport == null) {
+            System.out.println("Transport number is not in system - please try again");
+            scanner.close();
+            return;
+        }
+        System.out.println("Please enter Product Catalog Number: ");
+        String destination = scanner.nextLine();
+        if (!transport.isSiteIsDestination(destination)) {
+            System.out.println("Destination is not in transport - please try again");
+            scanner.close();
+            return;
+        }
+        System.out.println("Please enter Product Catalog Number: ");
+        int id = scanner.nextInt();
+        if (products.get(id) == null) {
+            System.out.println("Product not in System - please try again.");
+            scanner.close();
+            return;
+        }
+        System.out.println("enter the amount you want to remove: ");
+        int amount = scanner.nextInt();
+        scanner.close();
+        transport.reduceAmountFromProduct(destination, products.get(id), amount);
+
+
+    }
+
+    //****************************************************************************************************************** Case 5
+    public static void sendTransport(Map<Integer, Transport> transports) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter Transport number");
+        Integer transport_id = scanner.nextInt();
+        Transport transport = transports.get(transport_id);
+        scanner.close();
+        if (transport == null) {
+            System.out.println("Transport number is not in system - please try again");
+            return;
+        }
+        transports.get(transport_id).sendTransport();
+    }
+
+    //****************************************************************************************************************** Case 6
+    public static void printAllTrucks(Truck[] trucks) {
+        for (Truck truck : trucks) {
+            System.out.println(truck);
+
         }
 
-        public static void RemoveProductFromTransport(Map<Integer,Transport> transports){
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Please enter Transport number");
-            Integer transport_id = scanner.nextInt();
-            Transport transport = transports.get(transport_id);
-            if(transport == null){
-                System.out.println("Transport number is not in system - please try again");
-                scanner.close();
-                return;
+    }
+//********************************************************************************************************************** Case 7
+public static void printAllDrivers(Map<String, Driver> drivers) {
+    for (String driver : drivers.keySet()) {
+        System.out.println(drivers.get(driver));
+    }
+
+}
+
+    //********************************************************************************************************************** Case 8
+public static void printTransport(Map<Integer,Transport>transports){
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Please enter Transport number");
+    Integer transport_id = scanner.nextInt();
+    Transport transport = transports.get(transport_id);
+    scanner.close();
+    if (transport == null) {
+        System.out.println("Transport number is not in system - please try again");
+        return;
+    }
+    System.out.println(transports.get(transport_id));
+
+}
+//********************************************************************************************************************** Case 9
+
+    public static void printAllAvailableTrukcs(Truck[] trucks) {
+        int count = 0;
+        for (Truck truck : trucks) {
+            if (truck.getAvailablity()) {
+                System.out.println(truck);
+
+                count++;
             }
-
         }
+        if (count == 0)
+            System.out.println("There is no available truck in system.");
 
 
+    }
+    //********************************************************************************************************************** Case 9
+public static void addNewDriverToSystem(){
 
-
-
+}
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         Truck[] trucks = new Truck[9];
-        Map<String,Driver> drivers = new HashMap<>();
-        Map<Integer,Transport> transports = new HashMap<>();
-//        ArrayList<Transport> transports = new ArrayList<>();
+        Map<String, Driver> drivers = new HashMap<>();
+        Map<Integer, Transport> transports = new HashMap<>();
         ArrayList<ProductListDocument> documents = new ArrayList<>();
-        Map<Integer,Product> products = new HashMap<>();
+        Map<Integer, Product> products = new HashMap<>();
 
 
         while (running) {
@@ -173,56 +260,68 @@ public class Main {
             switch (input) {
                 /** Add new transport*/
                 case "1": {
-                    AddNewTransport(trucks,transports);
+                    AddNewTransport(trucks, transports);
                     break;
 
                 }
                 case "2": {
                     /** add driver to transport*/
-                    AddDriverToTransport(drivers,transports);
+                    AddDriverToTransport(drivers, transports);
                     break;
 
                 }
                 case "3": {
                     /** add product to transport*/
-                    AddProductToTransport( transports,products);
+                    AddProductToTransport(transports, products);
                     break;
                 }
                 case "4": {
-                    /** print Transport details*/
-                    for (Transport transport : transports){
-                        transport.toString();
-                    }
-                        break;
-
+                    /** Remove Product From Transport */
+                    RemoveProductFromTransport(transports, products);
+                    break;
                 }
-                case "5":
-                {
-                    /** Report on completion of transport */
-                    System.out.println("please enter a number between 1-9");
-                    int number = scanner.nextInt();
-                    if(number<1 || number>9) break;
-                    number--;
-                    trucks[number].clear();
+                case "5": {
+                    /** send transport */
+                    sendTransport(transports);
 
                     break;
                 }
-                case "6":{
+                case "6": {
+                    /** print all trucks*/
+
+                    printAllTrucks(trucks);
+                    break;
+
+                }
+                case "7": {
+                    /** print all drivers*/
+
+                    printAllDrivers(drivers);
+                    break;
+
+                }
+                case "8": {
+                    /** print trasport details*/
+
+                    printTransport(transports);
+                    break;
+
+                }
+                case "9": {
                     /** print all available trucks*/
-                    int count = 0;
-                    for(Truck truck : trucks){
-                        if(truck.getAvailablity()){
-                            truck.toString();
-                            count++;
-                        }
-                    }
-                    if (count == 0)
-                        System.out.println("There is no available truck in system.");
 
-
+                    printAllAvailableTrukcs(trucks);
                     break;
+
                 }
-                case  "E":{
+                case "10": {
+                    /** add new driver*/
+
+                    addNewDriverToSystem();
+                    break;
+
+                }
+                case "E": {
                     System.out.println("Thank you! have a nice day.");
                     running = false;
                     break;
