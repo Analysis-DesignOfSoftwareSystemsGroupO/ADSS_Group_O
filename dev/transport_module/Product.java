@@ -32,4 +32,18 @@ public class Product {
         if(w>0)
             weight+=w;
     }
+    @Override
+    public String toString(){
+        return name + " " + weight ;
+
+    }
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Product other = (Product) obj;
+        return this.name.equals(other.name);
+    }
 }
