@@ -29,4 +29,20 @@ public class Constraint {
     public void setType(ShiftType type) {
         this.type = type;
     }
+
+    public enum DayOfWeek {
+        SUNDAY,
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY
+    }
+
+    public enum Level {
+        HRManager,
+        shiftManager,
+        regularEmp
+    }
 }

@@ -1,48 +1,97 @@
 package HR_Mudol;
-import HR_Mudol.AbstractEmployee;
-public class Employee extends AbstractEmployee{
-    private int minDayShift;
-    private int minEveninigShift;
-    private int sickDays;
-    private int daysOff;
 
-    public Employee(int empNum, String empName, int empId, String empPassword, String empBankAccount, int empSalary, String empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
-        super(empNum, empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
-        this.minDayShift = minDayShift;
-        this.minEveninigShift = minEveninigShift;
-        this.sickDays = sickDays;
-        this.daysOff = daysOff;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.util.Collections.copy;
+
+public class Employee extends AbstractEmployee {
+
+    private List<Role> relevantRoles;
+    private EmploymentContract Contract;
+
+    public Employee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, String empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
+
+        super(caller, empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
+        this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff);
+        this.relevantRoles = new LinkedList<>();
     }
 
-    public int getMinDayShift() {
-        return minDayShift;
+    public void addNewRole(User caller,Role role){
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        this.relevantRoles.addLast(role);
+    }
+    public void removeRole(User caller,Role role){
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        this.relevantRoles.remove(role);
     }
 
-    public void setMinDayShift(int minDayShift) {
-        this.minDayShift = minDayShift;
+    //only of the HR manager
+    public List<Role> getRelevantRoles(User caller){
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        return this.relevantRoles;
     }
 
-    public int getMinEveninigShift() {
-        return minEveninigShift;
+    //for everybody
+    public void printRrelevantRoles(){
+        //need to add
     }
 
-    public void setMinEveninigShift(int minEveninigShift) {
-        this.minEveninigShift = minEveninigShift;
+    public int getMinDayShift(User caller) {
+
+        return this.Contract.getMinDayShift(caller, this);
     }
 
-    public int getSickDays() {
-        return sickDays;
+    public void setMinDayShift(User caller, int minDayShift) {
+
+        this.Contract.setMinDayShift(caller,minDayShift);
     }
 
-    public void setSickDays(int sickDays) {
-        this.sickDays = sickDays;
+    public int getMinEveninigShift(User caller) {
+
+        return this.Contract.getMinEveninigShift(caller, this);
     }
 
-    public int getDaysOff() {
-        return daysOff;
+    public void setMinEveninigShift(User caller, int minEveninigShift) {
+
+        this.Contract.setMinEveninigShift(caller,minEveninigShift);
     }
 
-    public void setDaysOff(int daysOff) {
-        this.daysOff = daysOff;
+    public int getSickDays(User caller) {
+
+        return this.Contract.getSickDays(caller, this);
     }
+
+    public void setSickDays(User caller, int sickDays) {
+
+        this.Contract.setSickDays(caller,sickDays);
+    }
+    public int getDaysOff(User caller) {
+
+        return this.Contract.getDaysOff(caller, this);
+    }
+
+    public void setDaysOff(User caller, int daysOff) {
+
+        this.Contract.setDaysOff(caller,daysOff);
+    }
+
+    @Override
+    public String toString() {
+        //add print format
+    }
+
+
+
+
+
+
+
 }
