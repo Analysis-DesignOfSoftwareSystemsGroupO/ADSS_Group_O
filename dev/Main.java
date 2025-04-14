@@ -1,5 +1,6 @@
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        Truck[] trucks = new Truck[9];
+        HashMap<String, Truck> trucks = Truck.getTrucks();
         ArrayList<Driver> drivers = new ArrayList<>();
         ArrayList<Transport> transports = new ArrayList<>();
         ArrayList<ProductListDocument> documents = new ArrayList<>();
@@ -38,7 +39,7 @@ public class Main {
                 /** Add new transport*/
                 case "1": { //todo : Init a transport
                     boolean allTrucksUnAvailabl = true;
-                    for(Truck truck: trucks) // check if there is an available truck.
+                    for(Truck truck: trucks.values()) // check if there is an available truck.
                         if(truck.getAvailablity()) {
                             allTrucksUnAvailabl = false;
                             break;
@@ -52,8 +53,8 @@ public class Main {
                 }
                 case "2": {
                     /** Print all trucks*/
-                    for (int i = 0; i < 9; i++) {
-                        trucks[i].toString();
+                    for (Truck t : trucks.values()) {
+                        t.toString();
                     }
                     break;
 
@@ -78,15 +79,14 @@ public class Main {
                     //todo: change it to support more than 9 trucks.
                     /** Report on completion of transport */
                     System.out.println("please enter a plate number of the truck");
-                    String pn = scanner.nextInt();
-                    trucks[number].clear(); //clear the truck out of products and set as avilable
-
+                    String pn = scanner.nextLine();
+                    trucks.get(pn).clear(); //clear the truck out of products and set as avilable
                     break;
                 }
                 case "6":{
                     /** print all available trucks*/
                     int count = 0;
-                    for(Truck truck : trucks){
+                    for(Truck truck : trucks.values()){
                         if(truck.getAvailablity()){
                             truck.toString();
                             count++;
@@ -94,8 +94,6 @@ public class Main {
                     }
                     if (count == 0)
                         System.out.println("There is no available truck in system.");
-
-
                     break;
                 }
                 case  "E":{
