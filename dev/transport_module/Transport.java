@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class Transport {
     private static int staticTransportID = 0;
     private final int id;
-    private final LocalDate date; // field for date of the transport
-    private final LocalTime departure_time; // the hour of departure time
+    private LocalDate date; // field for date of the transport
+    private LocalTime departure_time; // the hour of departure time
     private Truck truck; // the truck that connects to the transport
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
@@ -31,21 +31,36 @@ public class Transport {
         driver = null;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        date =  LocalDate.parse(d, formatter);
+        LocalDate parsedDate = LocalDate.parse(d, formatter);
+
+        if (parsedDate.isAfter(LocalDate.now())) {
+            date = parsedDate;
+        } else {
+          throw new Exception("Invalid date");
+        }
+
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
-        if (hour < 1 || hour > 24) hour = 7;
         int minute = Integer.parseInt(parts[1]);
-        if (minute < 0 || minute > 59) minute = 0;
+        if (hour < 1 || hour > 24){
+            System.out.println("Hour is wrong - changed to default hour - 7");
+            hour = 7;
+        }
+        if (minute < 0 || minute > 59) {
+            System.out.println("Minutes is wrong - changed to default minutes - 00");
+
+            minute = 0;
+        }
+        departure_time = LocalTime.of(hour, minute); // set the hour
+
 
         id = ++staticTransportID; // give index to transport
-        departure_time = LocalTime.of(hour, minute); // set the hour
         truck = t; // save the truck as the original truck - not a copy of the truck.
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
-        System.out.println("Transport number " +id+" has successfully created."); // Can't load the truck
         isSent = false;
+        System.out.println("Transport number " +id+" has successfully created."); // Can't load the truck
 
     }
 
@@ -166,6 +181,48 @@ public class Transport {
     public boolean isSiteIsDestination(String site){
         return destinations_document_map.get(site)!=null;
 
+    }
+    public void changeDate(String d){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate parsedDate = LocalDate.parse(d, formatter);
+
+        if (parsedDate.isAfter(LocalDate.now())) {
+            date = parsedDate;
+            System.out.println("Date has been updated to: "+ date);
+        } else {
+            System.out.println("wrong date - please enter new one");
+        }
+
+
+    }
+    public void changeHour(String time){
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        if (hour < 1 || hour > 24){
+            System.out.println("Hour is wrong - changed to default hour - 7");
+            hour = 7;
+        }
+        if (minute < 0 || minute > 59) {
+            System.out.println("Minutes is wrong - changed to default minutes - 00");
+
+            minute = 0;
+        }
+        departure_time = LocalTime.of(hour, minute); // set the hour
+        System.out.println("Changed delivery time to: "+departure_time);
+
+    }
+    public void changeTruck(Truck t){
+        if(t!= truck){
+            truck = t;
+            System.out.println("Truck has ben changed successfully");
+        }
+
+    }
+    public void changeSourceSite(Site s){
+        if (!s.equals(source)){
+            source = new Site(s);
+        }
     }
 
 

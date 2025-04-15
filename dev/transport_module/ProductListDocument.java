@@ -21,6 +21,7 @@ public class ProductListDocument {
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
         transportId = -1;
+        System.out.println("Document number "+id+" has successfully created!");
     }
 
     public void attachTransportToDocument(int id){

@@ -11,23 +11,22 @@ public class Main {
         System.out.println("Welcome to the Transportation Department!");
         System.out.println("Please choose your next");
         System.out.println("1. Add new transport");
-        System.out.println("2. Add driver to transport");
-        System.out.println("3. Add product to transport");
-        System.out.println("4. Remove product from transport");
-        System.out.println("5. Send transport");
-        System.out.println("6. Print all Trucks");
-        System.out.println("7. Print all Drivers");
+        System.out.println("2. Create new delivery document");
+        System.out.println("3. Add product to document");
+        System.out.println("4. Remove product from document");
+        System.out.println("5. Add driver to transport");
+        System.out.println("6. Attach document to transport");
+        System.out.println("7. Send transport");
         System.out.println("8. Print Transport details");
         System.out.println("9. Print all available trucks");
-        System.out.println("10. Add new driver to system");
-        System.out.println("10. Create new delivery document ");
+        System.out.println("10. Print document details");
 
 
         System.out.println("Press E to Exit.");
 
 
     }
-//********************************************************************************************************************** Case 1
+//********************************************************************************************************************** Case 1 - Add new transport
 
     /**
      * Add new Transport function
@@ -73,8 +72,89 @@ public class Main {
 
     }
 
-//********************************************************************************************************************** Case 2
+//********************************************************************************************************************** Case 2 - Create new delivery document
 
+
+public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<String,Site> sites,Map<Integer, Product> products){
+    System.out.println("Please enter destination name:");
+    Scanner scanner = new Scanner(System.in);
+    String siteName = scanner.nextLine();
+
+    if(sites.get(siteName)== null){
+        System.out.println("Site is not in System - please try again:");
+        scanner.close();
+
+        return;
+    }
+    ProductListDocument document = null;
+    try {
+        document = new ProductListDocument(sites.get(siteName));
+
+    }
+    catch (Exception e){
+        System.out.println("Invalid Input");
+        scanner.close();
+
+        return;
+    }
+    documents.put(document.getId(),document);
+
+
+}
+//********************************************************************************************************************** Case 3 - Add product to document
+
+
+    public static void AddProductToDocument( Map<Integer, Product> products, Map<Integer,ProductListDocument> documents) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter document number");
+        Integer documentId = scanner.nextInt();
+        if(documents.get(documentId) == null){
+            System.out.println("There is no document "+ documentId +" Please try again");
+            scanner.close();
+            return;
+        }
+        ProductListDocument document = documents.get(documentId);
+        System.out.println("Please enter Product Catalog Number: ");
+        int id = scanner.nextInt();
+        if (products.get(id) == null) {
+            System.out.println("Product not in System - please try again.");
+            scanner.close();
+            return;
+        }
+        System.out.println("enter the amount you want to load: ");
+        int amount = scanner.nextInt();
+        document.addProduct(products.get(id), amount);
+        scanner.close();
+    }
+    //********************************************************************************************************************** Case 4 - Remove product from document
+
+    public static void RemoveProductFromDocument( Map<Integer, Product> products, Map<Integer,ProductListDocument> documents) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter document number");
+        Integer documentId = scanner.nextInt();
+        if(documents.get(documentId) == null){
+            System.out.println("There is no document "+ documentId +" Please try again");
+            scanner.close();
+            return;
+        }
+        ProductListDocument document = documents.get(documentId);
+
+        System.out.println("Please enter Product Catalog Number: ");
+        int id = scanner.nextInt();
+        if (products.get(id) == null) {
+            System.out.println("Product not in System - please try again.");
+            scanner.close();
+            return;
+        }
+        System.out.println("enter the amount you want to remove: ");
+        int amount = scanner.nextInt();
+        scanner.close();
+        document.reduceAmountFromProduct(products.get(id),amount);
+
+
+    }
+
+    //****************************************************************************************************************** Case 5 - Add driver to transport
     /**
      * add driver to transport
      */
@@ -101,85 +181,36 @@ public class Main {
 
 
     }
-//********************************************************************************************************************** Case 3
+    //****************************************************************************************************************** Case 6 -  Attach document to transport
 
-    public static void AddProductToTransport(Map<Integer, Transport> transports, Map<Integer, Product> products, Map<Integer,ProductListDocument> documents) {
+    public static void AttachDocumentToTransport(Map<Integer,ProductListDocument>documents, Map<Integer,Transport> transports){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
         Transport transport = transports.get(transport_id);
+        scanner.close();
         if (transport == null) {
             System.out.println("Transport number is not in system - please try again");
             scanner.close();
             return;
         }
-        System.out.println("Please enter Destination name");
-        String destination_name = scanner.nextLine();
-        ProductListDocument document = transport.getDocument(destination_name);
-        if (document == null) { // need to create document
-            Site site = new Site(destination_name, destination_name);
-            try {
-                document = new ProductListDocument(site);
-            } catch (Exception e) {
-                System.out.println("please try again");
-                scanner.close();
-                return;
-            }
-            documents.put(document.getId(),document);
-        }
-        System.out.println("Please enter Product Catalog Number: ");
-        int id = scanner.nextInt();
-        if (products.get(id) == null) {
-            System.out.println("Product not in System - please try again.");
+        System.out.println("Please enter document number");
+        Integer documentId = scanner.nextInt();
+        if(documents.get(documentId) == null){
+            System.out.println("There is no document "+ documentId +" Please try again");
             scanner.close();
             return;
         }
-        System.out.println("enter the amount you want to load: ");
-        int amount = scanner.nextInt();
-        document.addProduct(products.get(id), amount);
-        try {
-            transport.loadByDocument(document);
-        } catch (Exception e) {
-            System.out.println("please try again");
-
+        try{
+        transport.loadByDocument(documents.get(documentId));}
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        scanner.close();
-    }
-
-    //********************************************************************************************************************** Case 4
-    public static void RemoveProductFromTransport(Map<Integer, Transport> transports, Map<Integer, Product> products) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter Transport number");
-        Integer transport_id = scanner.nextInt();
-        Transport transport = transports.get(transport_id);
-        if (transport == null) {
-            System.out.println("Transport number is not in system - please try again");
-            scanner.close();
-            return;
-        }
-        System.out.println("Please enter Product Catalog Number: ");
-        String destination = scanner.nextLine();
-        if (!transport.isSiteIsDestination(destination)) {
-            System.out.println("Destination is not in transport - please try again");
-            scanner.close();
-            return;
-        }
-        System.out.println("Please enter Product Catalog Number: ");
-        int id = scanner.nextInt();
-        if (products.get(id) == null) {
-            System.out.println("Product not in System - please try again.");
-            scanner.close();
-            return;
-        }
-        System.out.println("enter the amount you want to remove: ");
-        int amount = scanner.nextInt();
-        scanner.close();
-        transport.reduceAmountFromProduct(destination, products.get(id), amount);
-
 
     }
 
-    //****************************************************************************************************************** Case 5
+    //********************************************************************************************************************** Case 7 - Send transport
+
     public static void sendTransport(Map<Integer, Transport> transports) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter Transport number");
@@ -193,37 +224,25 @@ public class Main {
         transports.get(transport_id).sendTransport();
     }
 
-    //****************************************************************************************************************** Case 6
-    public static void printAllTrucks(Truck[] trucks) {
-        for (Truck truck : trucks) {
-            System.out.println(truck);
 
+//********************************************************************************************************************** Case 8 - Print Transport details
+
+    public static void printTransport(Map<Integer,Transport>transports){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter Transport number");
+        Integer transport_id = scanner.nextInt();
+        Transport transport = transports.get(transport_id);
+        scanner.close();
+        if (transport == null) {
+            System.out.println("Transport number is not in system - please try again");
+            return;
         }
+        System.out.println(transports.get(transport_id));
 
     }
-//********************************************************************************************************************** Case 7
-public static void printAllDrivers(Map<String, Driver> drivers) {
-    for (String driver : drivers.keySet()) {
-        System.out.println(drivers.get(driver));
-    }
 
-}
 
-    //********************************************************************************************************************** Case 8
-public static void printTransport(Map<Integer,Transport>transports){
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Please enter Transport number");
-    Integer transport_id = scanner.nextInt();
-    Transport transport = transports.get(transport_id);
-    scanner.close();
-    if (transport == null) {
-        System.out.println("Transport number is not in system - please try again");
-        return;
-    }
-    System.out.println(transports.get(transport_id));
-
-}
-//********************************************************************************************************************** Case 9
+//********************************************************************************************************************** Case 9 - Print all available trucks
 
     public static void printAllAvailableTrukcs(Truck[] trucks) {
         int count = 0;
@@ -239,83 +258,23 @@ public static void printTransport(Map<Integer,Transport>transports){
 
 
     }
-    //********************************************************************************************************************** Case 9
-public static void addNewDriverToSystem(){
 
-}
-    //********************************************************************************************************************** Case 9
-    public static void documentMessage(){
-        System.out.println("Welcome to the Transportation Department!");
-        System.out.println("Please choose your next");
-        System.out.println("1. Add new product");
-        System.out.println("2. Remove Product");
-        System.out.println("3. Print Document");
-        System.out.println("4. Return to main menu");
-          }
-    public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<String,Site> sites,Map<Integer, Product> products){
-        System.out.println("Please enter destination name:");
+    //********************************************************************************************************************** Case 10 - Print document details
+    public static void PrintDocumentDetails(Map<Integer,ProductListDocument> documents){
         Scanner scanner = new Scanner(System.in);
-        String siteName = scanner.nextLine();
-
-        if(sites.get(siteName)== null){
-            System.out.println("Site is not in System - please try again:");
+        System.out.println("Please enter document number");
+        Integer documentId = scanner.nextInt();
+        if(documents.get(documentId) == null){
+            System.out.println("There is no document "+ documentId +" Please try again");
             scanner.close();
-
             return;
         }
-        ProductListDocument document = null;
-        try {
-             document = new ProductListDocument(sites.get(siteName));
 
-        }
-        catch (Exception e){
-            System.out.println("Invalid Input");
-            scanner.close();
-
-            return;
-        }
-        documents.put(document.getId(),document);
-        boolean running = true;
-
-        while(running){
-            documentMessage();
-            String input = scanner.nextLine();
-            switch (input){
-                case "1":{
-                    System.out.println("Please enter Product id");
-                    int productId = scanner.nextInt();
-                    if(products.get(productId) == null){
-                        System.out.println("Product is not in System - please try again");
-                        break;
-                    }
-                    System.out.println("enter the amount you want to load: ");
-                    int amount = scanner.nextInt();
-                    document.addProduct(products.get(productId), amount);
-                    break;
-                }
-                case "2":{
-                    break;
-                }
-                case "3":{
-                    break;
-
-                }
-                case "4":{
-                    System.out.println("Thank you - returning back to menu");
-                    return;
-
-                }
-                deafult:{
-                    System.out.println("Wrong input! Please try again.");
-                    break;
-
-                }
-
-
-            }
-        }
+        System.out.println(documents.get(documentId));
 
     }
+
+
 
     public static void main(String[] args) {
 
@@ -341,38 +300,39 @@ public static void addNewDriverToSystem(){
 
                 }
                 case "2": {
-                    /** add driver to transport*/
-                    AddDriverToTransport(drivers, transports);
+                    /** create a new document*/
+                    createNewDoc( documents, sites, products);
                     break;
 
                 }
                 case "3": {
-                    /** add product to transport*/
-                    AddProductToTransport(transports, products,documents);
+                    /** add product to document*/
+                    AddProductToDocument( products,documents);
                     break;
                 }
                 case "4": {
-                    /** Remove Product From Transport */
-                    RemoveProductFromTransport(transports, products);
+                    /** Remove Product From document */
+                    RemoveProductFromDocument( products,documents);
                     break;
                 }
                 case "5": {
-                    /** send transport */
-                    sendTransport(transports);
+                    /** add driver to transport*/
+                    AddDriverToTransport(drivers, transports);
+
 
                     break;
                 }
                 case "6": {
-                    /** print all trucks*/
+                    /** attach document to delivery */
 
-                    printAllTrucks(trucks);
                     break;
 
                 }
                 case "7": {
-                    /** print all drivers*/
+                    /** send transport*/
 
-                    printAllDrivers(drivers);
+                    sendTransport(transports);
+
                     break;
 
                 }
@@ -391,10 +351,10 @@ public static void addNewDriverToSystem(){
 
                 }
                 case "10": {
-                    /** add new driver*/
+                    /** print document details*/
+                    PrintDocumentDetails(documents);
 
-                    addNewDriverToSystem();
-                    break;
+
 
                 }
                 case "E": {
