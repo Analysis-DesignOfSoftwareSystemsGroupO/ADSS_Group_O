@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class ProductListDocument {
     public static int documentID = 0; // global variable for indexing documents.
-    private int id; // document id
+    private final int id; // document id
     private Site destination; // document destination
-    private Map<Product, Integer> productHashMap; // a map of products and amount of each product
+    private final Map<Product, Integer> productHashMap; // a map of products and amount of each product
     private int totalWeight; // total weight of the products in document
     private int transportId;
 
     /**
-     * a constructor - create new document
+     * a constructor - create a new document
      */
     public ProductListDocument(Site site) throws Exception {
         if (site == null) throw new Exception("InValid Input"); // if the site is null - don't create a document
@@ -28,6 +28,9 @@ public class ProductListDocument {
         if(id>-1){
             transportId = id;
         }
+    }
+    public int getTransportId(){
+        return transportId;
     }
 
     /**
@@ -108,6 +111,9 @@ public class ProductListDocument {
         totalWeight -= amount * p.getWeight();
         System.out.println("Product has reduced by "+amount+" parts");
 
+    }
+    public void changeDestination(Site site){
+        destination = new Site(site);
     }
 
 

@@ -1,6 +1,5 @@
 package transport_module;
 
-import java.security.spec.ECField;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -14,7 +13,7 @@ public class Transport {
     private Truck truck; // the truck that connects to the transport
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
-    private Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
+    private final Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
     private boolean isSent;
 
     private boolean isOutOfZone;
@@ -25,7 +24,7 @@ public class Transport {
      */
     public Transport(String d, String time, Truck t, Site s) throws Exception {
         // input check
-        if (time == "" || d == "" || t == null || s == null) {
+        if (time.isEmpty() || d.isEmpty() || t == null || s == null) {
             throw new Exception("Invalid Error");
         }
         driver = null;
@@ -84,7 +83,7 @@ public class Transport {
     }
 
     /**
-     * a function that sends a transport to its mission
+     * a function that sends transport to its mission
      */
     public void sendTransport() {
         if(isSent)
@@ -147,13 +146,12 @@ public class Transport {
     /**
      * a function that gets a document and load the products' list to the truck
      */
-    public boolean loadByDocument(ProductListDocument document) throws Exception {
+    public void loadByDocument(ProductListDocument document) throws Exception {
         if (document == null) throw new Exception("Invalid input");
         if (truck.getMaxWeight() < truck.getWeight() + document.getTotalWeight()) { // if truck is in Over Weight
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
             int difference = (truck.getWeight() + document.getTotalWeight()) - truck.getMaxWeight();
             System.out.println("Weight excess by " + difference + " kg");
-            return false;
         } else {
             document.attachTransportToDocument(id);
             destinations_document_map.put(document.getDestination().getName(), document);
@@ -165,7 +163,7 @@ public class Transport {
                 isOutOfZone = true;
             }
         }
-        return true;
+
     }
 
     public ProductListDocument getDocument(String site_name){

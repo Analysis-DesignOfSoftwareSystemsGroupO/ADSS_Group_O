@@ -1,8 +1,6 @@
 import java.sql.Driver;
 import java.util.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import transport_module.*;
 
@@ -31,7 +29,7 @@ public class Main {
     /**
      * Add new Transport function
      */
-    public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports) {
+    public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports,  Map<String,Site> sites ) {
         boolean allTrucksUnAvailabl = true;
         Truck t = null;
         for (Truck truck : trucks) // check if there is an available truck.
@@ -56,16 +54,18 @@ public class Main {
 
         System.out.println("Please enter source site name");
         String site_name = scanner.nextLine();
+        if(sites.get(site_name) == null){
+            System.out.println("There is no site "+site_name+" please try again");
+            scanner.close();
+            return;
+        }
 
-        System.out.println("Please enter source site area");
-        String area_name = scanner.nextLine();
 
-        Site site = new Site(site_name, area_name);
         try {
-            Transport transport = new Transport(dateStr, timeStr, t, site);
+            Transport transport = new Transport(dateStr, timeStr, t, sites.get(site_name));
             transports.put(transport.getId(), transport);
         } catch (Exception e) {
-            System.out.println("please try again");
+            System.out.println(e.getMessage() + "please try again");
         }
         scanner.close();
 
@@ -75,7 +75,7 @@ public class Main {
 //********************************************************************************************************************** Case 2 - Create new delivery document
 
 
-public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<String,Site> sites,Map<Integer, Product> products){
+public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<String,Site> sites){
     System.out.println("Please enter destination name:");
     Scanner scanner = new Scanner(System.in);
     String siteName = scanner.nextLine();
@@ -86,13 +86,13 @@ public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<S
 
         return;
     }
-    ProductListDocument document = null;
+    ProductListDocument document;
     try {
         document = new ProductListDocument(sites.get(siteName));
 
     }
     catch (Exception e){
-        System.out.println("Invalid Input");
+        System.out.println(e.getMessage());
         scanner.close();
 
         return;
@@ -293,43 +293,43 @@ public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<S
             String input = scanner.nextLine();
 
             switch (input) {
-                /** Add new transport*/
+                /// Add new transport
                 case "1": {
-                    AddNewTransport(trucks, transports);
+                    AddNewTransport(trucks, transports,sites);
                     break;
 
                 }
                 case "2": {
-                    /** create a new document*/
-                    createNewDoc( documents, sites, products);
+                    /// create a new document
+                    createNewDoc( documents, sites);
                     break;
 
                 }
                 case "3": {
-                    /** add product to document*/
+                    /// add product to document
                     AddProductToDocument( products,documents);
                     break;
                 }
                 case "4": {
-                    /** Remove Product From document */
+                    /// Remove Product From document
                     RemoveProductFromDocument( products,documents);
                     break;
                 }
                 case "5": {
-                    /** add driver to transport*/
+                   /// add driver to transport
                     AddDriverToTransport(drivers, transports);
 
 
                     break;
                 }
                 case "6": {
-                    /** attach document to delivery */
-
+                    /// attach document to delivery
+                    AttachDocumentToTransport(documents,transports);
                     break;
 
                 }
                 case "7": {
-                    /** send transport*/
+                    /// send transport
 
                     sendTransport(transports);
 
@@ -337,21 +337,21 @@ public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<S
 
                 }
                 case "8": {
-                    /** print trasport details*/
+                    /// print transport details
 
                     printTransport(transports);
                     break;
 
                 }
                 case "9": {
-                    /** print all available trucks*/
+                    /// print all available trucks
 
                     printAllAvailableTrukcs(trucks);
                     break;
 
                 }
                 case "10": {
-                    /** print document details*/
+                    /// print document details
                     PrintDocumentDetails(documents);
 
 
