@@ -9,6 +9,7 @@ public class ProductListDocument {
     private Site destination; // document destination
     private Map<Product, Integer> productHashMap; // a map of products and amount of each product
     private int totalWeight; // total weight of the products in document
+    private int transportId;
 
     /**
      * a constructor - create new document
@@ -19,6 +20,13 @@ public class ProductListDocument {
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
+        transportId = -1;
+    }
+
+    public void attachTransportToDocument(int id){
+        if(id>-1){
+            transportId = id;
+        }
     }
 
     /**
@@ -65,7 +73,10 @@ public class ProductListDocument {
      * a function that adds product to document, if
      */
     public void addProduct(Product p, int amount) {
-        if (p == null || amount < 1) return;
+        if (p == null || amount < 1) {
+            System.out.println("Invalid input");
+            return;
+        }
         Integer newAmount = productHashMap.get(p);
         if (newAmount != null)
             newAmount += amount;

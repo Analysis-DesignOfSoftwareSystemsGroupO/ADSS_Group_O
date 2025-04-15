@@ -1,9 +1,6 @@
 import java.sql.Driver;
-import java.util.ArrayList;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -23,6 +20,8 @@ public class Main {
         System.out.println("8. Print Transport details");
         System.out.println("9. Print all available trucks");
         System.out.println("10. Add new driver to system");
+        System.out.println("10. Create new delivery document ");
+
 
         System.out.println("Press E to Exit.");
 
@@ -104,7 +103,7 @@ public class Main {
     }
 //********************************************************************************************************************** Case 3
 
-    public static void AddProductToTransport(Map<Integer, Transport> transports, Map<Integer, Product> products) {
+    public static void AddProductToTransport(Map<Integer, Transport> transports, Map<Integer, Product> products, Map<Integer,ProductListDocument> documents) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
@@ -123,7 +122,10 @@ public class Main {
                 document = new ProductListDocument(site);
             } catch (Exception e) {
                 System.out.println("please try again");
+                scanner.close();
+                return;
             }
+            documents.put(document.getId(),document);
         }
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
@@ -241,6 +243,79 @@ public static void printTransport(Map<Integer,Transport>transports){
 public static void addNewDriverToSystem(){
 
 }
+    //********************************************************************************************************************** Case 9
+    public static void documentMessage(){
+        System.out.println("Welcome to the Transportation Department!");
+        System.out.println("Please choose your next");
+        System.out.println("1. Add new product");
+        System.out.println("2. Remove Product");
+        System.out.println("3. Print Document");
+        System.out.println("4. Return to main menu");
+          }
+    public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<String,Site> sites,Map<Integer, Product> products){
+        System.out.println("Please enter destination name:");
+        Scanner scanner = new Scanner(System.in);
+        String siteName = scanner.nextLine();
+
+        if(sites.get(siteName)== null){
+            System.out.println("Site is not in System - please try again:");
+            scanner.close();
+
+            return;
+        }
+        ProductListDocument document = null;
+        try {
+             document = new ProductListDocument(sites.get(siteName));
+
+        }
+        catch (Exception e){
+            System.out.println("Invalid Input");
+            scanner.close();
+
+            return;
+        }
+        documents.put(document.getId(),document);
+        boolean running = true;
+
+        while(running){
+            documentMessage();
+            String input = scanner.nextLine();
+            switch (input){
+                case "1":{
+                    System.out.println("Please enter Product id");
+                    int productId = scanner.nextInt();
+                    if(products.get(productId) == null){
+                        System.out.println("Product is not in System - please try again");
+                        break;
+                    }
+                    System.out.println("enter the amount you want to load: ");
+                    int amount = scanner.nextInt();
+                    document.addProduct(products.get(productId), amount);
+                    break;
+                }
+                case "2":{
+                    break;
+                }
+                case "3":{
+                    break;
+
+                }
+                case "4":{
+                    System.out.println("Thank you - returning back to menu");
+                    return;
+
+                }
+                deafult:{
+                    System.out.println("Wrong input! Please try again.");
+                    break;
+
+                }
+
+
+            }
+        }
+
+    }
 
     public static void main(String[] args) {
 
@@ -249,8 +324,9 @@ public static void addNewDriverToSystem(){
         Truck[] trucks = new Truck[9];
         Map<String, Driver> drivers = new HashMap<>();
         Map<Integer, Transport> transports = new HashMap<>();
-        ArrayList<ProductListDocument> documents = new ArrayList<>();
+        Map<Integer,ProductListDocument>documents = new HashMap<>();
         Map<Integer, Product> products = new HashMap<>();
+        Map<String,Site> sites = new HashMap<>();
 
 
         while (running) {
@@ -272,7 +348,7 @@ public static void addNewDriverToSystem(){
                 }
                 case "3": {
                     /** add product to transport*/
-                    AddProductToTransport(transports, products);
+                    AddProductToTransport(transports, products,documents);
                     break;
                 }
                 case "4": {

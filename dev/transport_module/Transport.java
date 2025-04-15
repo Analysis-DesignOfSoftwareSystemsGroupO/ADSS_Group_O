@@ -140,6 +140,7 @@ public class Transport {
             System.out.println("Weight excess by " + difference + " kg");
             return false;
         } else {
+            document.attachTransportToDocument(id);
             destinations_document_map.put(document.getDestination().getName(), document);
             truck.addWeight(document.getTotalWeight());
             System.out.println("Truck has successfully loaded."); // Can't load the truck
