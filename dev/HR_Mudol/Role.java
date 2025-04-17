@@ -1,6 +1,7 @@
 package HR_Mudol;
 import java.util.LinkedList;
 import java.util.List;
+
 public class Role {
     static int RoleCounter = 0;
     private int roleNumber;
@@ -43,11 +44,6 @@ public class Role {
         return relevantEmployees;
     }
 
-    //for everybody
-    public void printRelevantEmployees() {
-        //need to add
-    }
-
     public void addNewEmployee(User caller, Employee employee) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
@@ -55,7 +51,7 @@ public class Role {
         this.relevantEmployees.addLast(employee);
     }
 
-    public void removeNewEmployee(User caller, Employee employee) {
+    public void removeEmployee(User caller, Employee employee) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
@@ -64,7 +60,8 @@ public class Role {
 
     @Override
     public String toString() {
-        //add print format
+        return "Role" + this.getRoleNumber() + " " + this.getDescription()+
+                "\n  RelevantEmployees: " + this.relevantEmployees.toString();
 
     }
 }

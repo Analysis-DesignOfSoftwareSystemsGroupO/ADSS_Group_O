@@ -55,12 +55,6 @@ public abstract class AbstractEmployee {
         return empId;
     }
 
-    /*no need
-    public String getEmpPassword() {
-
-       return empPassword;
-    }
-    */
 
     //everybody can access
     public String getEmpBankAccount() {
@@ -81,11 +75,7 @@ public abstract class AbstractEmployee {
         return empStartDate;
     }
 
-    /*no need
-    public void setEmpNum(int empNum) {
-        this.empNum = empNum;
-    }
-    */
+
 
     //only the man himself
     public void setEmpName(String empName,User caller) {
@@ -95,11 +85,6 @@ public abstract class AbstractEmployee {
         this.empName = empName;
     }
 
-    /* no need
-    public void setEmpId(int empId) {
-        this.empId = empId;
-    }
-     */
 
     //can use just by the employee
     public void setEmpPassword(String empPassword,User caller) {
@@ -125,11 +110,5 @@ public abstract class AbstractEmployee {
         }
         this.empSalary = empSalary;
     }
-
-    /* no need
-    public void setEmpStartDate(String empStartDate) {
-        this.empStartDate = empStartDate;
-    }
-    */
 
 }

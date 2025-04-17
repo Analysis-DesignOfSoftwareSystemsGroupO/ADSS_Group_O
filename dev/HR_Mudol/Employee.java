@@ -1,6 +1,5 @@
 package HR_Mudol;
 
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,15 +82,14 @@ public class Employee extends AbstractEmployee {
         this.Contract.setDaysOff(caller,daysOff);
     }
 
-    @Override
-    public String toString() {
-        //add print format
+    public String toString(User caller) {
+            return "Employee" + this.getEmpNum() +
+                    "\n   Full Name: '" + this.getEmpName() + '\'' +
+                    "\n  ID: " + this.getEmpId() +
+                    "\n  Bank Account: '" + this.getEmpBankAccount() + '\'' +
+                    "\n  Salary: " + this.getEmpSalary(caller) + '\'' +
+                    "\n  Start Date: " + this.getEmpBankAccount() + '\'' +
+                    "\n" + this.Contract.toString();
+        }
     }
 
-
-
-
-
-
-
-}

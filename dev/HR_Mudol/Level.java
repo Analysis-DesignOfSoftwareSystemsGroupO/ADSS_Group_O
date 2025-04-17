@@ -1,6 +1,6 @@
 package HR_Mudol;
 
-public enum EnumRole {
+public enum Level {
     HRManager,
     shiftManager,
     regularEmp
