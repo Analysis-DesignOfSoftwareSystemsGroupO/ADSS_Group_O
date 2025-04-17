@@ -45,4 +45,10 @@ public class InMemoryProductRepository implements ProductRepository {
         // Code to delete the product from the database
         products.removeIf(product -> product.getId().equals(id));
     }
+
+    public void printAllProducts() {
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }
 }

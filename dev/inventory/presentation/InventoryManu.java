@@ -1,22 +1,29 @@
 package inventory.presentation;
-import inventory.domain.Product;
+
+//import inventory.domain.Product;
+
+import inventory.domain.StockItemStatus;
 import inventory.service.UserApplication;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 public class InventoryManu {
 
     private final Scanner scanner;
-    private final UserApplication userApplication = new UserApplication();
+    private final UserApplication service;
 
 
     public InventoryManu() {
         this.scanner = new Scanner(System.in);
+        this.service = new UserApplication();
     }
 
 
-    public void run(){
-        System.out.println("\nWelcome to the inventory Management Manu!");;
+    public void run() {
+        System.out.println("\nWelcome to the inventory Management Manu!");
+        ;
         int choice = 0;
         do {
             displayMenu();
@@ -31,17 +38,17 @@ public class InventoryManu {
         System.out.println("\n---- Inventory Management Menu: ----");
         System.out.println("1.  List Products");
         System.out.println("2.  List Categories");
-        System.out.println("3.  Add Product");
-        System.out.println("4.  Update Product");
-        System.out.println("5.  Delete Product");
-        System.out.println("6.  Receive Stock");
-        System.out.println("7.  Update Stock");
-        System.out.println("8.  Delete Stock");
-        System.out.println("9.  Print Stock Report (Category Based)");
-        System.out.println("10. Print Order List (Stock Based)");
-        System.out.println("11. Print Defect List (Product Based)");
-        System.out.println("12. Delete Product");
-        System.out.println("13. Delete Product");
+        System.out.println("3.  List Current Stock");
+        System.out.println("4.  Add Product");
+        System.out.println("5.  Update Product");
+        System.out.println("6.  Delete Product");
+        System.out.println("7.  Add Stock");
+        System.out.println("8.  Update Stock");
+        System.out.println("9.  Delete Stock");
+        System.out.println("10. Print Stock Report (Category Based)");
+        System.out.println("11. Print Order List (Stock Based)");
+        System.out.println("12. Print Defect List (Product Based)");
+        System.out.println("13. Upload Test Data");
         System.out.println("0.  Exit");
     }
 
@@ -51,15 +58,20 @@ public class InventoryManu {
                 case 1:
                     // List Products
                     System.out.println("Listing all products...");
-                    List<Product> products = userApplication.getAllProductsDefinitions();
-                    for (Product product : products) {
-                        System.out.println(product);
-                    }
+                    service.printAllProducts();
                     break;
                 case 2:
                     // List Categories
+                    System.out.println("Listing all categories...");
+                    service.printAllCategories();
                     break;
                 case 3:
+                    // List Current Stock
+                    System.out.println("Listing current stock...");
+                    service.printCurrentStock();
+                    //TODO: implement better format for the output
+                    break;
+                case 4:
                     // Add Product
                     System.out.print("Enter product ID: ");
                     String id = scanner.nextLine();
@@ -67,35 +79,53 @@ public class InventoryManu {
                     String name = scanner.nextLine();
                     int minimumStock = readIntInput("Enter minimum stock: ");
                     // Assuming InventoryController is a class that handles product operations
-                    userApplication.addProduct(id, name, minimumStock);
+                    service.saveProduct(id, name, minimumStock);
                     System.out.println("Product added successfully!");
                     break;
-                case 4:
-                    // Update Product
-                    break;
                 case 5:
-                    // Delete Product
-                    break;
+                    // Update Product
+//                    TODO: choose weather the update will be specific field or all fields
+
                 case 6:
-                    // Receive Stock
+                    // Delete Product
+                    System.out.print("Enter product ID to delete: ");
+                    String productIdToDelete = scanner.nextLine();
+                    service.removeProduct(productIdToDelete);
                     break;
                 case 7:
-                    // Update Stock
+                    // Create Stock
+                    // TODO: make the creation of stock more user friendly (make it use name instead of id)
+                    System.out.print("Enter product ID for stock: ");
+                    String stockProductId = scanner.nextLine();
+                    int stockQuantity = readIntInput("Enter stock quantity: ");
+                    System.out.print("Enter stock date (YYYY-MM-DD): ");
+                    LocalDate stockDate = LocalDate.parse(scanner.nextLine());
+                    System.out.print("Enter stock location: ");
+                    String stockLocation = scanner.nextLine();
+                    System.out.print("Enter stock condition (OK, DEFECT, EXPIRED): ");
+                    StockItemStatus stockStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
+                    service.saveStockItem(stockProductId, stockQuantity, stockLocation, stockStatus, stockDate);
+                    System.out.println("Stock added successfully!");
                     break;
                 case 8:
-                    // Delete Stock
+                    // Update Stock
                     break;
                 case 9:
-                    // Print Stock Report (Category-Based)
+                    // Delete Stock
                     break;
                 case 10:
-                    // Print Order List (Stock-Based)
+                    // Print Stock Report (Category-Based)
                     break;
                 case 11:
-                    // Print Defect List (Product-Based)
+                    // Print Order List (Stock-Based)
                     break;
                 case 12:
-                    // Delete Product
+                    // Print Defect List (Product-Based)
+                    break;
+                case 13:
+                    // Upload Test Data
+                    System.out.println("Uploading test data...");
+                    service.uploadTestData();
                     break;
                 case 0:
                     // Exit
@@ -124,10 +154,6 @@ public class InventoryManu {
         System.out.println("Hello, Inventory!");
         InventoryManu inventoryManu = new InventoryManu();
         inventoryManu.run();
-
-
-
-
 
 
     }
