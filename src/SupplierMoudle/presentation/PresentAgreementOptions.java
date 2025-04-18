@@ -2,22 +2,19 @@ package SupplierMoudle.presentation;
 
 import java.util.Scanner;
 
-public class AgreementOptions {
-    private MenuMain menuMain;
-    public AgreementOptions(MenuMain menu) {
-        this.menuMain = menu;
-    }
+public class PresentAgreementOptions {
     public void runAgreementMenu() {
-        System.out.println("Pick Agreement Options:\n");
-        System.out.println("1.View all Agreements");
-        System.out.println("2.Add new agreement");
-        System.out.println("3.Remove agreement");
-        System.out.println("4.Edit agreement");
-        System.out.println("5.Return to main menu");
         Scanner scanner = new Scanner(System.in);
-        try {
-            int option = scanner.nextInt();
-            switch (option) {
+        while (true) {
+            System.out.println("Pick Agreement Options:\n");
+            System.out.println("1.View all Agreements");
+            System.out.println("2.Add new agreement");
+            System.out.println("3.Remove agreement");
+            System.out.println("4.Edit agreement");
+            System.out.println("5.Return to main menu");
+            try {
+                int option = scanner.nextInt();
+                switch (option) {
                     case 1:
                         //TODO: domain function: view all agreements
                         break;
@@ -39,15 +36,15 @@ public class AgreementOptions {
                         //possible to add a for loop that edits each items discount
                         break;
                     case 5:
-                        menuMain.runMainPresentation();
-                        break;
+                        return;
                     default:
                         throw new Exception();
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Invalid option !\n");
             }
         }
-        catch (Exception e) {
-            System.out.println("Invalid option !\n");
-            this.runAgreementMenu();
-        }
+
     }
 }
