@@ -28,6 +28,7 @@ public class UserApplication {
 
     public void uploadTestData() {
         inventoryController.saveCategory("1234", "Nice Category", "");
+        inventoryController.saveCategory("12345", "Nicer Category", "1234");
         Category parentCategory = inventoryController.getCategoryById("1234");
 
         inventoryController.addProduct("1", "Test Product 1", 10, "1234");
@@ -35,6 +36,7 @@ public class UserApplication {
         inventoryController.addProduct("3", "Test Product 3", 30, "1234");
         inventoryController.addProduct("4", "Test Product 4", 40, "1234");
         inventoryController.addProduct("5", "Test Product 5", 50, "1234");
+        inventoryController.addProduct("6", "Test Product 6", 50, "12345");
     }
 
     public List<Product> getAllProductsDefinitions() {
@@ -67,5 +69,9 @@ public class UserApplication {
 
     public void saveCategory(String catId, String catName, String parentCategory) {
         inventoryController.saveCategory(catId, catName, parentCategory);
+    }
+
+    public void deleteCategory(String toRemoveCatId) {
+        inventoryController.deleteCategory(toRemoveCatId);
     }
 }

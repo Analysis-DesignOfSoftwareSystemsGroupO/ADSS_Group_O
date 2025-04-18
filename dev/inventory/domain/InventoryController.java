@@ -22,4 +22,6 @@ public interface InventoryController {
     Category getCategoryById(String catId);
 
     void saveCategory(String catId, String catName, String parentCategory);
+
+    void deleteCategory(String toRemoveCatId);
 }

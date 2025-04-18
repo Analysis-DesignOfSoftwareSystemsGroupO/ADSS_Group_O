@@ -36,12 +36,12 @@ public class Category {
         return parentCategory;
     }
 
-    public Category[] getSubCategories() {
-        return (Category[]) subCategories.toArray();
+    public ArrayList<Category> getSubCategories() {
+        return subCategories;
     }
 
-    public Product[] getProducts() {
-        return (Product[]) products.toArray();
+    public ArrayList<Product> getProducts() {
+        return products;
     }
 
     public void setId(String id) {

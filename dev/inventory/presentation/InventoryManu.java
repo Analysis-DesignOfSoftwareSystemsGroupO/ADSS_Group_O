@@ -144,6 +144,10 @@ public class InventoryManu {
                     break;
                 case 15:
                     // Delete Category
+                    System.out.print("Enter category ID: ");
+                    String toRemoveCatId = scanner.nextLine();
+                    service.deleteCategory(toRemoveCatId);
+                    System.out.println("Category added successfully!");
                 case 0:
                     // Exit
                     break;

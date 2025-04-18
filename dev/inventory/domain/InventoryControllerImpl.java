@@ -80,6 +80,22 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
+    public void deleteCategory(String toRemoveCatId) {
+        System.out.println("Removing category with ID: " + toRemoveCatId);
+        Category categoryToRemove = getCategoryById(toRemoveCatId);
+        Objects.requireNonNull(categoryToRemove, "Category not found");
+
+        if (!categoryToRemove.getProducts().isEmpty() || !categoryToRemove.getSubCategories().isEmpty()) {
+            throw new IllegalArgumentException("Category has products or subcategories. " +
+                "Cannot delete non empty category.");
+        }
+
+        if (categoryToRemove.getParentCategory() != null) {
+            categoryToRemove.getParentCategory().removeSubCategory(categoryToRemove);
+        }
+        InMemoryCategoryRepository.deleteCategory(toRemoveCatId);
+    }
+
     public void printProductById(String id) {
         Product product = productRepository.getProductById(id);
         if (product != null) {
