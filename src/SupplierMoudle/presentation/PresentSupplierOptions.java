@@ -36,12 +36,12 @@ public class PresentSupplierOptions {
         }
     }
 
-    public void addSupplierPresentation() {
+    private void addSupplierPresentation() {
         //todo: get all the required info from the user and use a domain func to create the supplier domain func
         // to create the supplier
     }
 
-    public void editSupplierPresentation() {
+    private void editSupplierPresentation() {
         Scanner scanner = new Scanner(System.in);
         //todo print all id's
         System.out.println("Enter Supplier ID: ");
@@ -60,7 +60,7 @@ public class PresentSupplierOptions {
                         break;
                     case 2:
                         this.editSupplierDetails(id);
-                        break;
+                        return;
                     case 3:
                         return;
                     default:
@@ -73,7 +73,7 @@ public class PresentSupplierOptions {
         }
 
     }
-
+    // helper method to add a product
     private void addNewProduct(String id){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter product name: ");
@@ -83,11 +83,46 @@ public class PresentSupplierOptions {
         //todo: add to database
         return;
     }
+
+    //helper method to edit detail
     private void editSupplierDetails(String id){
         Scanner scanner = new Scanner(System.in);
         //todo print detail
+        while (true){
+            System.out.println("1.Edit supplier phone\n");
+            System.out.println("2.Edit supplier name\n");
+            System.out.println("3.Edit bank account number\n");
+            System.out.println("4.Return to Main Menu\n");
+            System.out.println("Please enter your option: ");
+            try {
+                int option = scanner.nextInt();
+                switch (option) {
+                    case 1:
+                        System.out.println("Enter new phone number: ");
+                        String newPhone = scanner.nextLine();
+                        //todo update data
+                        break;
+                    case 2:
+                        System.out.println("Enter new name : ");
+                        String newName = scanner.nextLine();
+                        //todo update data
+                        break;
+                    case 3:
+                        System.out.println("Enter new bank account number: ");
+                        String newBankAccount = scanner.nextLine();
+                        //todo update data
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        throw new Exception();
+                }
+            }
+            catch (Exception e){
+                System.out.println("Invalid option ! \n");
+            }
+        }
 
-        System.out.println("1.");
 
     }
 }
