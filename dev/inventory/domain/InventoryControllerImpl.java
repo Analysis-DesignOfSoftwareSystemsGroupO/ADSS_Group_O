@@ -7,7 +7,6 @@ import java.util.List;
 public class InventoryControllerImpl implements InventoryController {
     // Assuming ProductRepository is a class that provides access to product data
     private final ProductRepository productRepository = new InMemoryProductRepository();
-    private final CategoryRepository categoryRepository = new InMemoryCategoryRepository();
     private final StockItemRepository stockItemRepository = new InMemoryStockItemRepository();
 
     public InventoryControllerImpl() {
@@ -41,7 +40,24 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void printAllCategories() {
-        categoryRepository.printAllCategories();
+        InMemoryCategoryRepository.printAllCategories();
+    }
+
+    public Category getCategoryById(String id) {
+        return InMemoryCategoryRepository.getCategoryById(id);
+    }
+
+    public void saveCategory(String catId, String catName, Category parentCategory) {
+        Category newCategory = new Category(catId, catName);
+        newCategory.setParentCategory(parentCategory);
+        if (parentCategory != null) {
+            Category parent = this.getCategoryById(parentCategory.getId());
+            if (parent != null) {
+                parent.addSubCategory(newCategory);
+            } else {
+                throw new IllegalArgumentException("Parent category not found");
+            }
+        }
     }
 
     public void printProductById(String id) {
@@ -60,6 +76,4 @@ public class InventoryControllerImpl implements InventoryController {
             System.out.println(stockItem);
         }
     }
-
-
 }

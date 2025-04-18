@@ -11,7 +11,6 @@ public class UserApplication {
 
     public UserApplication() {
         this.inventoryController = new InventoryControllerImpl();
-
     }
 
     public void saveProduct(String id, String name, int minimumStock) {
@@ -34,6 +33,8 @@ public class UserApplication {
         inventoryController.addProduct("3", "Test Product 3", 30);
         inventoryController.addProduct("4", "Test Product 4", 40);
         inventoryController.addProduct("5", "Test Product 5", 50);
+
+        inventoryController.saveCategory("1234", "Nice Category", null);
     }
 
     public List<Product> getAllProductsDefinitions() {
@@ -55,7 +56,16 @@ public class UserApplication {
     public void printStockItemByProductId(String id) {
         inventoryController.printProductById(id);
     }
+
     public void printCurrentStock(){
         inventoryController.printCurrentStock();
+    }
+
+    public Category getCategoryById(String catId) {
+        return inventoryController.getCategoryById(catId);
+    }
+
+    public void saveCategory(String catId, String catName, Category parentCategory) {
+        inventoryController.saveCategory(catId, catName, parentCategory);
     }
 }

@@ -5,10 +5,13 @@ import inventory.domain.Category;
 import java.util.List;
 
 public interface CategoryRepository {
-    void saveCategory(Category category);
-    void updateCategory(Category category);
-    void deleteCategory(String id);
-    Category getCategoryById(String id);
-    List<Category> getAllCategories();
-    void printAllCategories();
+    static void saveCategory(Category category) {}
+
+    static void updateCategory(Category category) {}
+
+    static void deleteCategory(String id) {}
+
+    static Category getCategoryById(String id) { return null; }
+
+    static List<Category> getAllCategories() { return null; }
 }

@@ -2,6 +2,8 @@ package inventory.presentation;
 
 //import inventory.domain.Product;
 
+import inventory.data.InMemoryCategoryRepository;
+import inventory.domain.Category;
 import inventory.domain.StockItemStatus;
 import inventory.service.UserApplication;
 
@@ -14,12 +16,10 @@ public class InventoryManu {
     private final Scanner scanner;
     private final UserApplication service;
 
-
     public InventoryManu() {
         this.scanner = new Scanner(System.in);
         this.service = new UserApplication();
     }
-
 
     public void run() {
         System.out.println("\nWelcome to the inventory Management Manu!");
@@ -49,6 +49,8 @@ public class InventoryManu {
         System.out.println("11. Print Order List (Stock Based)");
         System.out.println("12. Print Defect List (Product Based)");
         System.out.println("13. Upload Test Data");
+        System.out.println("14. Add Category");
+        System.out.println("15. Delete Category");
         System.out.println("0.  Exit");
     }
 
@@ -127,6 +129,24 @@ public class InventoryManu {
                     System.out.println("Uploading test data...");
                     service.uploadTestData();
                     break;
+                case 14:
+                    // Add Category
+                    System.out.print("Enter category ID: ");
+                    String catId = scanner.nextLine();
+                    System.out.print("Enter category name: ");
+                    String catName = scanner.nextLine();
+                    System.out.print("Enter category's parent category ID (don't enter enything for no parent category): ");
+                    String parentCatId = scanner.nextLine();
+                    Category parentCategory = service.getCategoryById(parentCatId);
+                    if (!parentCatId.isEmpty() && parentCategory == null) {
+                        System.out.println("Parent category not found. Aborting category add operation.");
+                        break;
+                    }
+                    service.saveCategory(catId, catName, parentCategory);
+                    System.out.println("Category added successfully!");
+                    break;
+
+                case 15:
                 case 0:
                     // Exit
                     break;
@@ -154,7 +174,5 @@ public class InventoryManu {
         System.out.println("Hello, Inventory!");
         InventoryManu inventoryManu = new InventoryManu();
         inventoryManu.run();
-
-
     }
 }

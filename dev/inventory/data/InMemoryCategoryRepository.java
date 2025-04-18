@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryCategoryRepository implements CategoryRepository{
-    private final List<Category> categories = new ArrayList<>();
+    private static final List<Category> categories = new ArrayList<>();
 
-    public void saveCategory(Category category) {
+    public static void saveCategory(Category category) {
         categories.add(category);
     }
-    public void updateCategory(Category category) {
+
+    public static void updateCategory(Category category) {
         for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).getId().equals(category.getId())) {
                 categories.set(i, category);
@@ -19,10 +20,12 @@ public class InMemoryCategoryRepository implements CategoryRepository{
             }
         }
     }
-    public void deleteCategory(String id) {
+
+    public static void deleteCategory(String id) {
         categories.removeIf(category -> category.getId().equals(id));
     }
-    public Category getCategoryById(String id) {
+
+    public static Category getCategoryById(String id) {
         for (Category category : categories) {
             if (category.getId().equals(id)) {
                 return category;
@@ -30,14 +33,14 @@ public class InMemoryCategoryRepository implements CategoryRepository{
         }
         return null;
     }
-    public List<Category> getAllCategories() {
+
+    public static List<Category> getAllCategories() {
         return new ArrayList<>(categories);
     }
-    public void printAllCategories() {
-        for (Category category : categories) {
+
+    public static void printAllCategories() {
+        for (Category category : getAllCategories()) {
             System.out.println(category);
         }
     }
-
-
 }
