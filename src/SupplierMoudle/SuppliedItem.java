@@ -1,8 +1,8 @@
 package SupplierMoudle;
 
 public class SuppliedItem {
-    private String suppliedItemID;
-    private int suppliedItemPrice;
+    public String suppliedItemID;
+    public int suppliedItemPrice;
     private Product product;
 
     public SuppliedItem(String suppliedItemID, int suppliedItemPrice, String productID, String productName) {
