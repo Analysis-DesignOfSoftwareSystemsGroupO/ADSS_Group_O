@@ -4,11 +4,13 @@ public class Supplier {
     private String ID;
     private String accountNumber;
     private String supplierName;
+    private Bank bank;
 
-    public Supplier(String ID, String accountNumber, String supplierName) {
+    public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch, String ownerID) {
         if (ID == null || accountNumber == null || supplierName == null) {
             throw new NullPointerException();
         }
+        this.bank = new Bank(bankAccount, bankNumber, bankBranch, ownerID);
         this.ID = ID;
         this.accountNumber = accountNumber;
         this.supplierName = supplierName;

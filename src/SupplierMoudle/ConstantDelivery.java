@@ -1,7 +1,8 @@
 package SupplierMoudle;
 
-public class temporaryDelivery extends Delivery {
+public class ConstantDelivery extends Delivery {
     private String deliveryDays;
+
     public String getNextDeliveryDate() {
         return deliveryDays;
     }

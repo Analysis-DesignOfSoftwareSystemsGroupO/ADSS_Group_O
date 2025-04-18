@@ -1,6 +1,6 @@
 package SupplierMoudle;
 
-public class informationContact {
+public class InformationContact {
     private String contactName;
     private String contactPhone;
     private String title;
