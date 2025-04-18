@@ -1,4 +1,7 @@
-package HR_Mudol;
+package HR_Mudol.presentation;
+
+import HR_Mudol.domain.Employee;
+import HR_Mudol.domain.User;
 
 public interface IShiftManager {
 

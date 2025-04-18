@@ -1,4 +1,4 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 
 public class User {
     private AbstractEmployee user;
@@ -7,6 +7,15 @@ public class User {
     public User(AbstractEmployee user,  Level level) {
         this.user = user;
         this.level = level;
+    }
+
+    public void setLevel(User caller, Level level) {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+        this.level = level;
+    }
+
+    public AbstractEmployee getUser() {
+        return user;
     }
 
     public boolean isManager() {

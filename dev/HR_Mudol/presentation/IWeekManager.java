@@ -1,4 +1,8 @@
-package HR_Mudol;
+package HR_Mudol.presentation;
+
+import HR_Mudol.domain.Shift;
+import HR_Mudol.domain.User;
+import HR_Mudol.domain.Week;
 
 public interface IWeekManager {
 

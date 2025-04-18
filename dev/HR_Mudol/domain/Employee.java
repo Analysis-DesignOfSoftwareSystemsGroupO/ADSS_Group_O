@@ -1,16 +1,15 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-
-import static java.util.Collections.copy;
 
 public class Employee extends AbstractEmployee {
 
     private List<Role> relevantRoles;
     private EmploymentContract Contract;
 
-    public Employee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, String empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
+    public Employee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
 
         super(caller, empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
         this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff);

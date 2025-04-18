@@ -1,4 +1,4 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 
 import java.util.Date;
 import java.util.List;

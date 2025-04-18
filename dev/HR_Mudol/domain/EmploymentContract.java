@@ -1,4 +1,4 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 
 public class EmploymentContract{
         private int minDayShift; //Minimum Number of Day Shifts per Week

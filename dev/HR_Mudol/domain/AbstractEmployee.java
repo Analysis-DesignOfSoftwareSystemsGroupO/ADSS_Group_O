@@ -1,5 +1,7 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 
+
+import java.time.LocalDate;
 
 public abstract class AbstractEmployee {
 
@@ -11,10 +13,10 @@ public abstract class AbstractEmployee {
     private String empPassword;
     private String empBankAccount;
     private int empSalary;
-    private final String empStartDate;
+    private final LocalDate empStartDate;
 
     //Constructor
-    public AbstractEmployee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, String empStartDate) {
+    public AbstractEmployee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
 
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
@@ -71,7 +73,7 @@ public abstract class AbstractEmployee {
     }
 
     //everybody can access
-    public String getEmpStartDate() {
+    public LocalDate getEmpStartDate() {
         return empStartDate;
     }
 
@@ -95,7 +97,7 @@ public abstract class AbstractEmployee {
     }
 
     //can use just by the employee
-    public void setEmpBankAccount(String empBankAccount, User caller) {
+    public void setEmpBankAccount(User caller, String empBankAccount) {
         if (!caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
@@ -103,7 +105,7 @@ public abstract class AbstractEmployee {
     }
 
     //can use just by the HR manager
-    public void setEmpSalary(int empSalary, User caller) {
+    public void setEmpSalary( User caller, int empSalary) {
 
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");

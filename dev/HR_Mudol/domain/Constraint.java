@@ -1,4 +1,4 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 
 public class Constraint {
     private String explanation;

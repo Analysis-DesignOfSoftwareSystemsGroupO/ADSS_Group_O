@@ -1,10 +1,10 @@
-package HR_Mudol;
+package HR_Mudol.domain;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Role {
     static int RoleCounter = 0;
-    private int roleNumber;
+    private final int roleNumber;
     private String description;
     private List<Employee> relevantEmployees;
 
