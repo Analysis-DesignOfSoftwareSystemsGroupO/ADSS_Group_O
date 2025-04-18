@@ -3,7 +3,7 @@ package HR_Mudol;
 import java.util.Date;
 import java.util.List;
 
-public class HR_Branch_ManagementSystem {
+public class Branch {
 
     //for managing the branch
     static int counter=0; //branches counter
