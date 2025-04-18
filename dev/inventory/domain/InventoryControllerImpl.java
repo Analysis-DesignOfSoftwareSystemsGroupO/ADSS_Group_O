@@ -14,10 +14,15 @@ public class InventoryControllerImpl implements InventoryController {
         // Constructor can be used for dependency injection if needed
     }
 
-    public void addProduct(String id, String name, int minimumStock, Category parentCategory) {
+    public void addProduct(String id, String name, int minimumStock, String parentCategory) {
         System.out.println("Adding product: " + name);
+        Category prodParentCategory = getCategoryById(parentCategory);
+        if (prodParentCategory == null) {
+            throw new IllegalArgumentException("Parent category not found. Aborting product add operation.");
+        }
+
         Product productToAdd = new Product(id, name, minimumStock);
-        productToAdd.setCategory(parentCategory);
+        productToAdd.setCategory(prodParentCategory);
         productRepository.saveProduct(productToAdd);
     }
 
@@ -55,8 +60,15 @@ public class InventoryControllerImpl implements InventoryController {
         return InMemoryCategoryRepository.getCategoryById(id);
     }
 
-    public void saveCategory(String catId, String catName, Category parentCategory) {
+    public void saveCategory(String catId, String catName, String parentCategoryId) {
+        System.out.println("Adding category: " + catName);
+
+        Category parentCategory = getCategoryById(parentCategoryId);
+        if (!parentCategoryId.isEmpty() && parentCategory == null) {
+            throw new IllegalArgumentException("Parent category not found. Aborting category add operation.");
+        }
         Category newCategory = new Category(catId, catName);
+
         newCategory.setParentCategory(parentCategory);
         if (parentCategory != null) {
             Category parent = this.getCategoryById(parentCategory.getId());

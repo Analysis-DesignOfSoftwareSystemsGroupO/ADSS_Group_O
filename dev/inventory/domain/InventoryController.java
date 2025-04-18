@@ -3,7 +3,7 @@ package inventory.domain;
 import java.util.List;
 
 public interface InventoryController {
-    void addProduct(String id, String name, int minimumStock, Category parentCategory);
+    void addProduct(String id, String name, int minimumStock, String parentCategory);
 
     List<Product> getAllProductsDefinitions();
 
@@ -21,5 +21,5 @@ public interface InventoryController {
 
     Category getCategoryById(String catId);
 
-    void saveCategory(String catId, String catName, Category parentCategory);
+    void saveCategory(String catId, String catName, String parentCategory);
 }

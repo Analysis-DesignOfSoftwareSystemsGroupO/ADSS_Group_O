@@ -81,14 +81,9 @@ public class InventoryManu {
                     String name = scanner.nextLine();
                     System.out.print("Enter product's parent category ID: ");
                     String prodParentCatId = scanner.nextLine();
-                    Category prodParentCategory = service.getCategoryById(prodParentCatId);
-                    if (prodParentCategory == null) {
-                        System.out.println("Parent category not found. Aborting product add operation.");
-                        break;
-                    }
                     int minimumStock = readIntInput("Enter minimum stock: ");
                     // Assuming InventoryController is a class that handles product operations
-                    service.saveProduct(id, name, minimumStock, prodParentCategory);
+                    service.saveProduct(id, name, minimumStock, prodParentCatId);
                     System.out.println("Product added successfully!");
                     break;
                 case 5:
@@ -144,16 +139,11 @@ public class InventoryManu {
                     String catName = scanner.nextLine();
                     System.out.print("Enter category's parent category ID (don't enter enything for no parent category): ");
                     String parentCatId = scanner.nextLine();
-                    Category parentCategory = service.getCategoryById(parentCatId);
-                    if (!parentCatId.isEmpty() && parentCategory == null) {
-                        System.out.println("Parent category not found. Aborting category add operation.");
-                        break;
-                    }
-                    service.saveCategory(catId, catName, parentCategory);
+                    service.saveCategory(catId, catName, parentCatId);
                     System.out.println("Category added successfully!");
                     break;
-
                 case 15:
+                    // Delete Category
                 case 0:
                     // Exit
                     break;
