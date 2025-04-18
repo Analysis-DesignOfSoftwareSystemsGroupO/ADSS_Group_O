@@ -4,9 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Shift {
-    /*
-    -Day: enum (friday...) -Type: enum (morning/evening) -Status: enum (empty, problem, full)
-     */
+
     static int counter=0; //Counter
 
     private int shiftID;
@@ -14,6 +12,7 @@ public class Shift {
     private ShiftType type;
     private Status status;
     private List<Employee> employees; //The employees who work at that shift
+    private List<Role> necessaryRoles;
 
     public Shift(DayOfWeek day,ShiftType type){
         counter++;
@@ -41,6 +40,10 @@ public class Shift {
         return status;
     }
 
+    public void updateStatus() {
+        //for each
+    }
+
     public List<Employee> getEmployees() {
         return employees;
     }
@@ -66,7 +69,7 @@ public class Shift {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
-        this.employees.add(employee);
+        this.employees.addLast(employee);
     }
 
     public void removeEmployee(User caller,Employee employee) {
