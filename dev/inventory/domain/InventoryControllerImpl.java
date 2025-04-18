@@ -3,6 +3,7 @@ package inventory.domain;
 import inventory.data.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class InventoryControllerImpl implements InventoryController {
     // Assuming ProductRepository is a class that provides access to product data
@@ -13,14 +14,21 @@ public class InventoryControllerImpl implements InventoryController {
         // Constructor can be used for dependency injection if needed
     }
 
-    public void addProduct(String id, String name, int minimumStock) {
+    public void addProduct(String id, String name, int minimumStock, Category parentCategory) {
         System.out.println("Adding product: " + name);
         Product productToAdd = new Product(id, name, minimumStock);
+        productToAdd.setCategory(parentCategory);
         productRepository.saveProduct(productToAdd);
     }
 
     public void removeProduct(String id) {
         System.out.println("Removing product with ID: " + id);
+        Product productToRemove = productRepository.getProductById(id);
+        Objects.requireNonNull(productToRemove, "Product not found");
+        Category parentCategory = productToRemove.getCategory();
+        if (parentCategory != null) {
+            parentCategory.removeProduct(productToRemove);
+        }
         productRepository.deleteProduct(id);
     }
 

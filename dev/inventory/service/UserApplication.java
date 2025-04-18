@@ -3,7 +3,6 @@ package inventory.service;
 import inventory.domain.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 public class UserApplication {
@@ -13,8 +12,8 @@ public class UserApplication {
         this.inventoryController = new InventoryControllerImpl();
     }
 
-    public void saveProduct(String id, String name, int minimumStock) {
-        inventoryController.addProduct(id, name, minimumStock);
+    public void saveProduct(String id, String name, int minimumStock, Category parentCategory) {
+        inventoryController.addProduct(id, name, minimumStock, parentCategory);
     }
 
     public void saveStockItem(String productId, int quantity, String location, StockItemStatus status, LocalDate stockDate) {
@@ -28,13 +27,14 @@ public class UserApplication {
     }
 
     public void uploadTestData() {
-        inventoryController.addProduct("1", "Test Product 1", 10);
-        inventoryController.addProduct("2", "Test Product 2", 20);
-        inventoryController.addProduct("3", "Test Product 3", 30);
-        inventoryController.addProduct("4", "Test Product 4", 40);
-        inventoryController.addProduct("5", "Test Product 5", 50);
-
         inventoryController.saveCategory("1234", "Nice Category", null);
+        Category parentCategory = inventoryController.getCategoryById("1234");
+
+        inventoryController.addProduct("1", "Test Product 1", 10, parentCategory);
+        inventoryController.addProduct("2", "Test Product 2", 20, parentCategory);
+        inventoryController.addProduct("3", "Test Product 3", 30, parentCategory);
+        inventoryController.addProduct("4", "Test Product 4", 40, parentCategory);
+        inventoryController.addProduct("5", "Test Product 5", 50, parentCategory);
     }
 
     public List<Product> getAllProductsDefinitions() {

@@ -79,9 +79,16 @@ public class InventoryManu {
                     String id = scanner.nextLine();
                     System.out.print("Enter product name: ");
                     String name = scanner.nextLine();
+                    System.out.print("Enter product's parent category ID: ");
+                    String prodParentCatId = scanner.nextLine();
+                    Category prodParentCategory = service.getCategoryById(prodParentCatId);
+                    if (prodParentCategory == null) {
+                        System.out.println("Parent category not found. Aborting product add operation.");
+                        break;
+                    }
                     int minimumStock = readIntInput("Enter minimum stock: ");
                     // Assuming InventoryController is a class that handles product operations
-                    service.saveProduct(id, name, minimumStock);
+                    service.saveProduct(id, name, minimumStock, prodParentCategory);
                     System.out.println("Product added successfully!");
                     break;
                 case 5:

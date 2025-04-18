@@ -63,17 +63,16 @@ public class Product {
         return category;
     }
 
-
     @Override
     public String toString() {
-        return "Product: " +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", costPrice=" + costPrice +
-                ", sellingPrice=" + sellingPrice +
-                ", minimumStockLevel=" + minimumStockLevel +
-                ", category=" + category +
+        return "Product {" +
+                "\n\tid = '" + id + "'," +
+                "\n\tname= '" + name + "'," +
+                "\n\tmanufacturer = '" + manufacturer + "'," +
+                "\n\tcostPrice = " + costPrice + "'," +
+                "\n\tsellingPrice = " + sellingPrice + "'," +
+                "\n\tminimumStockLevel = " + minimumStockLevel + "'," +
+                "\n\tcategory = '" + category.getName() + "'" +
                 '}';
     }
 
@@ -85,4 +84,9 @@ public class Product {
         return id.equals(product.id);
     }
 
+    public void setCategory(Category parentCategory) {
+        Objects.requireNonNull(parentCategory, "Parent category cannot be null");
+        this.category = parentCategory;
+        parentCategory.addProduct(this);
+    }
 }
