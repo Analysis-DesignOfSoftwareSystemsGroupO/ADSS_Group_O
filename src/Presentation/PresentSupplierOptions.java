@@ -1,4 +1,4 @@
-package SupplierMoudle.presentation;
+package Presentation;
 
 import java.util.Scanner;
 
@@ -10,8 +10,7 @@ public class PresentSupplierOptions {
             System.out.println("Supplier Menu:\n");
             System.out.println("1.Add Supplier\n");
             System.out.println("2.Edit Supplier Details\n");
-            System.out.println("3.Remove Supplier\n");
-            System.out.println("4.Return to Main Menu\n");
+            System.out.println("3.Return to Main Menu\n");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
@@ -23,8 +22,6 @@ public class PresentSupplierOptions {
                         editSupplierPresentation();
                         break;
                     case 3:
-                        break;
-                    case 4:
                         return;
                     default:
                         throw new Exception();
@@ -87,7 +84,7 @@ public class PresentSupplierOptions {
     //helper method to edit detail
     private void editSupplierDetails(String id){
         Scanner scanner = new Scanner(System.in);
-        //todo print detail
+        //todo print suppliers details
         while (true){
             System.out.println("1.Edit supplier phone\n");
             System.out.println("2.Edit supplier name\n");

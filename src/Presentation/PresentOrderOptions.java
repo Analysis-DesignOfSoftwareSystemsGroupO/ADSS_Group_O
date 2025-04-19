@@ -1,4 +1,4 @@
-package SupplierMoudle.presentation;
+package Presentation;
 
 import java.util.Scanner;
 
@@ -53,9 +53,9 @@ public class PresentOrderOptions {
         //todo: domain func to print all supplier id's
         System.out.println("Enter supplier ID: ");
         int supplierID = scanner.nextInt();
-        //todo: check for valid supplier Id
+        //todo: check for existing agreement
         while (true){
-            //todo:domain func to print all items from this supplier
+            //todo:domain func to print all items from this suppliers agreement with the branch
             System.out.println("To add product Enter the product ID\n");
             System.out.println("To finalize order enter '*'\n");
             System.out.println("To cancel the Order press '-'\n");

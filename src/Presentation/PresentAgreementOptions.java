@@ -1,4 +1,4 @@
-package SupplierMoudle.presentation;
+package Presentation;
 
 import java.util.Scanner;
 
