@@ -22,6 +22,14 @@ public class Order {
         this.orderID = String.valueOf(generateOrderID());
     }
 
+    public Order(Order other) {
+        this.orderID = other.orderID;
+        this.orderDate = other.orderDate;
+        this.totalPrice = other.totalPrice;
+        this.agreement = other.agreement;
+        this.suppliedItems = other.suppliedItems;
+    }
+
     private static int generateOrderID() {
         return ++idCounter;
     }

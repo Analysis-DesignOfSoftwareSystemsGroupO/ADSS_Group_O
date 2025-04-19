@@ -1,5 +1,47 @@
 package DataBase;
 
-public class OrderDataBase {
+import SupplierMoudle.Order;
+import SupplierMoudle.Supplier;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class OrderDataBase {
+    public Map<String, List<Order>> orders;
+
+    public OrderDataBase() {
+        orders = new HashMap<>();
+    }
+
+    public void addOrder(String supplierID, Order order) {
+        if (supplierID == null || order == null){
+            return;
+        }
+        if (!orders.containsKey(supplierID)) {
+            List<Order> orderList = new ArrayList<>();
+            orderList.add(order);
+            orders.put(supplierID, orderList);
+        }
+        else {
+            List<Order> orderList = orders.get(supplierID);
+            orderList.add(order);
+            orders.put(supplierID, orderList);
+        }
+    }
+
+    public List<Order> getAllOrdersBySupplier(String supplierID) {
+        if (supplierID == null){
+            throw new NullPointerException();
+        }
+        if (!orders.containsKey(supplierID)) {
+            return null;
+        }
+        List<Order> copyOrders = orders.get(supplierID);
+        for (Order order : copyOrders) {
+            copyOrders.add(new Order(order));
+        }
+        return copyOrders;
+    }
 }

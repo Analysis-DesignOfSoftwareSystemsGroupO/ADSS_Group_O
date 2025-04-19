@@ -13,6 +13,13 @@ public class Bank {
         this.ownerID = ownerID;
     }
 
+    public Bank(Bank other) {
+        this.bankAccount = other.bankAccount;
+        this.bankNumber = other.bankNumber;
+        this.bankBranch = other.bankBranch;
+        this.ownerID = other.ownerID;
+    }
+
     public String getBankInfo() {
         return bankAccount + " " + bankNumber + " " + bankBranch + " " + ownerID;
     }
