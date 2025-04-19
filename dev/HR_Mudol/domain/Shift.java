@@ -21,6 +21,7 @@ public class Shift {
         this.type=type;
         this.employees=new LinkedList<>();
         this.status=Status.Empty;
+        this.necessaryRoles=new LinkedList<>();
     }
 
     // Getters
@@ -40,8 +41,22 @@ public class Shift {
         return status;
     }
 
-    public void updateStatus() {
-        //for each
+    public void updateStatus(User caller, Status status) {
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        this.status=status;
+    }
+
+    public List<Role> getNecessaryRoles(){
+        return necessaryRoles;
+    }
+
+    public void addNecessaryRoles(User caller,Role r){
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        this.necessaryRoles.add(r);
     }
 
     public List<Employee> getEmployees() {

@@ -10,13 +10,16 @@ public interface IWeekManager {
     void createNewWeek(User caller);
 
     //Canceling shift at the current week
-    void cancelShift(User caller, int weekId, Shift shift);
+    void cancelShift(User caller,Week week);
 
-    //Get previousW week
-    Week getPreviousWeek(User caller, int weekId);
+    //choose relevant roles for each shift at the week
+    void manageTheWeekRelevantRoles (User caller,Week week);
+
+    //Assigning employees to shifts
+    void assigningEmployToShifts (User caller,Week week);
 
     //Printing method
-    void printWeek(User caller, int weekId);
+    void printWeek(Week week);
 
 
 }

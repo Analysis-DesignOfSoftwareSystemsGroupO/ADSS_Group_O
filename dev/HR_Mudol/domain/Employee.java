@@ -1,5 +1,6 @@
 package HR_Mudol.domain;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,11 +9,12 @@ public class Employee extends AbstractEmployee {
 
     private List<Role> relevantRoles;
     private EmploymentContract Contract;
-
+    private List<Constraint> weeklyConstraints;
     public Employee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
 
         super(caller, empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
         this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff);
+        this.weeklyConstraints = new LinkedList<>();
         this.relevantRoles = new LinkedList<>();
     }
 
@@ -35,6 +37,36 @@ public class Employee extends AbstractEmployee {
             throw new SecurityException("Access denied");
         }
         return this.relevantRoles;
+    }
+
+    //only of the HR manager OR the emp himself
+    public List<Constraint> getWeeklyConstraints(User caller){
+        if (!caller.isManager()||!caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        return this.weeklyConstraints;
+    }
+
+    //only by the emp himself
+    public void addNewConstraints(User caller,Constraint constraint){
+        if (!caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        weeklyConstraints.add(constraint);
+    }
+
+    //searching for constraints
+    public Constraint searchingForRelevantconstraint(User caller, DayOfWeek day, ShiftType type){
+        if (!caller.isManager()||!caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        for (Constraint c : this.weeklyConstraints){
+
+            if (c.getDay()==day&&c.getType()==type){
+                return c;
+            }
+        }
+        return null;
     }
 
     //for everybody
