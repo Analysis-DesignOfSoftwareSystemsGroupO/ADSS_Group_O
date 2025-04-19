@@ -2,6 +2,7 @@ package inventory.domain;
 
 import inventory.data.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ public class InventoryControllerImpl implements InventoryController {
     // Assuming ProductRepository is a class that provides access to product data
     private final ProductRepository productRepository = new InMemoryProductRepository();
     private final StockItemRepository stockItemRepository = new InMemoryStockItemRepository();
+    private final DiscountRepository discountRepository = new InMemoryDiscountRepository();
 
     public InventoryControllerImpl() {
         // Constructor can be used for dependency injection if needed
@@ -111,5 +113,67 @@ public class InventoryControllerImpl implements InventoryController {
         for (StockItem stockItem : stockItems) {
             System.out.println(stockItem);
         }
+    }
+
+    public void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
+                            DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate) {
+        System.out.println("Adding discount: " + discountDescription);
+        if(discountPercentage < 0 || discountPercentage > 100) {
+            throw new IllegalArgumentException("Discount percentage must be between 0 and 100.");
+        }
+        if(discountEndDate.isBefore(discountStartDate)) {
+            throw new IllegalArgumentException("Discount end date cannot be before start date.");
+        }
+        if(type == DiscountTargetType.PRODUCT) {
+            Product product = productRepository.getProductById(discountTargetId);
+            if (product == null) {
+                throw new IllegalArgumentException("Product not found. Aborting discount add operation.");
+            }
+        } else if(type == DiscountTargetType.CATEGORY) {
+            Category category = getCategoryById(discountTargetId);
+            if (category == null) {
+                throw new IllegalArgumentException("Category not found. Aborting discount add operation.");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid discount target type. Aborting discount add operation.");
+        }
+        Discount discount = new Discount(discountDescription, type, discountTargetId, discountPercentage,
+                                          discountStartDate, discountEndDate);
+        discountRepository.saveDiscount(discount);
+    }
+
+    public void listDiscounts() {
+        discountRepository.printAllDiscounts();
+    }
+
+    public double getDiscountByProductId(String productId) {
+        Product product = productRepository.getProductById(productId);
+        Objects.requireNonNull(product, "Product not found");
+        List<Discount> discounts = discountRepository.getAllDiscounts();
+
+        double currentPricePercentage = 1; // Will be reverted before returned
+        for (Discount discount : discounts) {
+            if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
+                if(discount.getTargetId().equals(productId)) {
+                    currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
+                    break;
+                }
+            }
+        }
+
+        Category currCategory = product.getCategory();
+        while (currCategory != null) {
+            for (Discount discount : discounts) {
+                if (discount.getTargetType() == DiscountTargetType.CATEGORY) {
+                    if(discount.getTargetId().equals(currCategory.getId())) {
+                        currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
+                        break;
+                    }
+                }
+            }
+            currCategory = currCategory.getParentCategory();
+        }
+
+        return 100 * (1 - currentPricePercentage);
     }
 }

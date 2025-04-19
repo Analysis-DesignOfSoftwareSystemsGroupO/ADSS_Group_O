@@ -1,38 +1,35 @@
 package inventory.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Discount {
     private String id;
     private String description;
     private DiscountTargetType targetType;
     private String targetId; // Product ID or Category ID
-    private BigDecimal discountPercentage;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private boolean isActive;
+    private double discountPercentage;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-
-    public Discount(String id, String description, DiscountTargetType targetType, String targetId, BigDecimal discountPercentage) {
-        Objects.requireNonNull(id, "Discount ID cannot be null");
+    public Discount(String description, DiscountTargetType targetType,
+                    String targetId, double discountPercentage, LocalDate startDate, LocalDate endDate) {
         Objects.requireNonNull(description, "Description cannot be null");
         Objects.requireNonNull(targetType, "Target type cannot be null");
         Objects.requireNonNull(targetId, "Target ID cannot be null");
-        Objects.requireNonNull(discountPercentage, "Discount percentage cannot be null");
 
-        if (discountPercentage.compareTo(BigDecimal.ZERO) < 0 || discountPercentage.compareTo(new BigDecimal(100)) > 0) {
+        if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100");
         }
 
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.description = description;
         this.targetType = targetType;
         this.targetId = targetId;
         this.discountPercentage = discountPercentage;
-        this.isActive = true; // Default to active
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public String getId() {
@@ -67,37 +64,58 @@ public class Discount {
         this.targetId = targetId;
     }
 
-    public BigDecimal getDiscountPercentage() {
+    public double getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDiscountPercentage(BigDecimal discountPercentage) {
+    public void setDiscountPercentage(double discountPercentage) {
+        if(discountPercentage < 0 || discountPercentage > 100) {
+            throw new IllegalArgumentException("Discount percentage must be between 0 and 100");
+        }
         this.discountPercentage = discountPercentage;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
+    public static String typeToString(DiscountTargetType type) {
+        switch (type) {
+            case PRODUCT:
+                return "Product";
+            case CATEGORY:
+                return "Category";
+            default:
+                throw new IllegalArgumentException("Unknown discount target type: " + type);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Discount{" +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
+                ", targetType=" + targetType +
+                ", targetId='" + targetId + '\'' +
+                ", discountPercentage=" + discountPercentage +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
+    }
+
     public boolean isActive() {
-        return isActive;
+        return startDate != null && endDate != null && startDate.isBefore(endDate);
     }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-
 }

@@ -1,5 +1,6 @@
 package inventory.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface InventoryController {
@@ -24,4 +25,11 @@ public interface InventoryController {
     void saveCategory(String catId, String catName, String parentCategory);
 
     void deleteCategory(String toRemoveCatId);
+
+    void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
+                     DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate);
+
+    void listDiscounts();
+
+    double getDiscountByProductId(String productId);
 }

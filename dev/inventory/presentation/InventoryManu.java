@@ -4,6 +4,8 @@ package inventory.presentation;
 
 import inventory.data.InMemoryCategoryRepository;
 import inventory.domain.Category;
+import inventory.domain.Discount;
+import inventory.domain.DiscountTargetType;
 import inventory.domain.StockItemStatus;
 import inventory.service.UserApplication;
 
@@ -51,6 +53,9 @@ public class InventoryManu {
         System.out.println("13. Upload Test Data");
         System.out.println("14. Add Category");
         System.out.println("15. Delete Category");
+        System.out.println("16. Add Discount");
+        System.out.println("17. List Discounts");
+        System.out.println("18. Show discount for a product");
         System.out.println("0.  Exit");
     }
 
@@ -148,6 +153,42 @@ public class InventoryManu {
                     String toRemoveCatId = scanner.nextLine();
                     service.deleteCategory(toRemoveCatId);
                     System.out.println("Category added successfully!");
+                case 16:
+                    // Add Discount
+                    System.out.print("Enter 1 for a product discount and 2 for a category discount: ");
+                    DiscountTargetType type;
+                    String discountChoiceInput = scanner.nextLine();
+                    if(discountChoiceInput.equals("1")) {
+                        type = DiscountTargetType.PRODUCT;
+                    } else if(discountChoiceInput.equals("2")) {
+                        type = DiscountTargetType.CATEGORY;
+                    } else {
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                    }
+                    System.out.print("Enter " + Discount.typeToString(type) + " ID: ");
+                    String discountTargetId = scanner.nextLine();
+                    System.out.print("Enter discount percentage: ");
+                    double discountPercentage = readDoubleInput("Enter discount percentage: ");
+                    System.out.print("Enter discount description: ");
+                    String discountDescription = scanner.nextLine();
+                    System.out.print("Enter discount start date (in the format of YYYY-MM-DD): ");
+                    LocalDate discountStartDate = LocalDate.parse(scanner.nextLine());
+                    System.out.print("Enter discount end date (in the format of YYYY-MM-DD): ");
+                    LocalDate discountEndDate = LocalDate.parse(scanner.nextLine());
+                    service.addDiscount(discountTargetId, discountPercentage, discountDescription, type,
+                                        discountStartDate, discountEndDate);
+                    System.out.println("Discount added successfully!");
+                    break;
+                case 17:
+                    service.listDiscounts();
+                case 18:
+                    // Show discount for a product
+                    System.out.print("Enter product ID: ");
+                    String productId = scanner.nextLine();
+                    double discountPercentageForProduct = service.getDiscountByProductId(productId);
+                    System.out.println("Discount percentage for product " + productId + ": " + Math.round(discountPercentageForProduct) + "%");
+                    break;
                 case 0:
                     // Exit
                     break;
@@ -166,6 +207,17 @@ public class InventoryManu {
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a whole number.");
+            }
+        }
+    }
+
+    public double readDoubleInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Double.parseDouble(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
             }
         }
     }

@@ -37,6 +37,14 @@ public class UserApplication {
         inventoryController.addProduct("4", "Test Product 4", 40, "1234");
         inventoryController.addProduct("5", "Test Product 5", 50, "1234");
         inventoryController.addProduct("6", "Test Product 6", 50, "12345");
+
+        inventoryController.addDiscount("6", 20, "Test Discount 1",
+                DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10));
+        inventoryController.addDiscount("12345", 20, "Test Discount 2",
+                DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
+        inventoryController.addDiscount("1234", 20, "Test Discount 3",
+                DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
+
     }
 
     public List<Product> getAllProductsDefinitions() {
@@ -73,5 +81,19 @@ public class UserApplication {
 
     public void deleteCategory(String toRemoveCatId) {
         inventoryController.deleteCategory(toRemoveCatId);
+    }
+
+    public void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
+                            DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate) {
+        inventoryController.addDiscount(discountTargetId, discountPercentage, discountDescription, type,
+                                        discountStartDate, discountEndDate);
+    }
+
+    public void listDiscounts() {
+        inventoryController.listDiscounts();
+    }
+
+    public double getDiscountByProductId(String productId) {
+        return inventoryController.getDiscountByProductId(productId);
     }
 }
