@@ -10,9 +10,9 @@ public class Employee extends AbstractEmployee {
     private List<Role> relevantRoles;
     private EmploymentContract Contract;
     private List<Constraint> weeklyConstraints;
-    public Employee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
+    public Employee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
 
-        super(caller, empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
+        super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
         this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff);
         this.weeklyConstraints = new LinkedList<>();
         this.relevantRoles = new LinkedList<>();

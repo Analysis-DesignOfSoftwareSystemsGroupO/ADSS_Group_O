@@ -3,6 +3,7 @@ package HR_Mudol;
 import HR_Mudol.domain.*;
 import HR_Mudol.presentation.HRSystemManager;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -10,7 +11,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         HRSystemManager hrSystemManager = new HRSystemManager();
-        User admin = new User("admin"); // אפשר לשנות לפי סוגי משתמשים
+        HR_Manger manager=new HR_Manger("Rami Levi", 111111111, "111111111", "111111111", 30000, LocalDate.now());
+        User admin = new User(manager,Level.HRManager);
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");

@@ -7,7 +7,7 @@ import HR_Mudol.domain.Week;
 public interface IWeekManager {
 
     //It creates instances of new shifts (Sunday - Friday)
-    void createNewWeek(User caller);
+    Week createNewWeek(User caller);
 
     //Canceling shift at the current week
     void cancelShift(User caller,Week week);

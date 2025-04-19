@@ -16,11 +16,8 @@ public abstract class AbstractEmployee {
     private final LocalDate empStartDate;
 
     //Constructor
-    public AbstractEmployee(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
+    public AbstractEmployee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
 
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
 
         //Checking the ID
         if (empId <= 0) {
@@ -66,7 +63,7 @@ public abstract class AbstractEmployee {
 
     //only manager or the man himself can access
     public int getEmpSalary(User caller) {
-        if (!caller.isSameEmployee(this)||!caller.isManager()) {
+        if (!caller.isSameEmployee(this)&&!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
         return empSalary;

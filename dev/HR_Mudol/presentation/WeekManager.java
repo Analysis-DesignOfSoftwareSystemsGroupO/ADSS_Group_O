@@ -11,8 +11,9 @@ public class WeekManager implements IWeekManager{
     }
 
     @Override
-    public void createNewWeek(User caller) {
-
+    public Week createNewWeek(User caller) {
+        Week newWeek=new Week();
+        return newWeek;
     }
     //choose relevant role for each shift
     public void manageTheWeekRelevantRoles (User caller,Week week){

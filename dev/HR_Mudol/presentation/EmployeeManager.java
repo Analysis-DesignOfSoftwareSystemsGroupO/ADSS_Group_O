@@ -68,7 +68,7 @@ public class EmployeeManager implements IEmployeeManager {
 
         // Create the employee
         Employee employee = new Employee(
-                caller, empName, empID, empPassword, empBankAccount, empSalary,
+                empName, empID, empPassword, empBankAccount, empSalary,
                 empStartDate, minDay, minEvening, sicks, daysOff
         );
 

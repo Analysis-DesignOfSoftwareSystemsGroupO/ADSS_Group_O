@@ -4,9 +4,10 @@ import java.time.LocalDate;
 
 public class HR_Manger extends AbstractEmployee{
 
-    public HR_Manger(User caller, String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
-        super(caller, empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
+    public HR_Manger(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
+        super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
     }
+
 
     public String toString(User caller) {
         return "HR Manager:"+

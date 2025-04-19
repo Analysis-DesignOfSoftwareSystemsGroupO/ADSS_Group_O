@@ -2,10 +2,13 @@ package HR_Mudol.presentation;
 
 import HR_Mudol.domain.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class HRSystemManager implements IHRSystemManager {
 
+
+    private List<Week> weeksHistory;
     private RoleManager roleManager;
     private EmployeeManager employeeManager;
     private ShiftManager shiftManager;
@@ -13,6 +16,8 @@ public class HRSystemManager implements IHRSystemManager {
     private ReportGenerator reportGenerator;
 
     public HRSystemManager(){
+
+        this.weeksHistory= new LinkedList<Week>();
         this.roleManager = new RoleManager();
         this.employeeManager = new EmployeeManager();
         this.shiftManager=new ShiftManager(this.roleManager);
@@ -178,8 +183,10 @@ public class HRSystemManager implements IHRSystemManager {
     }
 
     @Override
-    public void createNewWeek(User caller) {
-        weekManager.createNewWeek(caller);
+    public Week createNewWeek(User caller) {
+        Week week=weekManager.createNewWeek(caller);
+        weeksHistory.addLast(weekManager.createNewWeek(caller));
+        return week;
     }
 
     @Override
