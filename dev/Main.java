@@ -1,5 +1,7 @@
+import SupplierMoudle.presentation.PresentMainMenu;
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        PresentMainMenu menu = new PresentMainMenu();
+        menu.runMainPresentation();
     }
 }
