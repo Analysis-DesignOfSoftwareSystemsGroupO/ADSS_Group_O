@@ -33,4 +33,6 @@ public interface IRoleManager {
 
     //printing method:
     void printAllRoles(User caller);
+
+    Role getRoleByNumber(int roleNumber);
 }

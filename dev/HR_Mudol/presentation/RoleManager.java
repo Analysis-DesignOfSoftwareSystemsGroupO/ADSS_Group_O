@@ -180,7 +180,7 @@ public class RoleManager implements IRoleManager {
         }
     }
 
-    private Role getRoleByNumber(int roleNumber) {
+    public Role getRoleByNumber(int roleNumber) {
         for (Role r : allRoles) {
             if (r.getRoleNumber() == roleNumber) return r;
         }

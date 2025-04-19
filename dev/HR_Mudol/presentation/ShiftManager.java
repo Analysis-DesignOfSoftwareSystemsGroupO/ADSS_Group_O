@@ -7,6 +7,12 @@ import java.util.Scanner;
 
 public class ShiftManager implements IShiftManager {
 
+    private IRoleManager dependency;
+
+    public ShiftManager(IRoleManager dependency){
+        this.dependency = dependency;
+    }
+
     @Override
     public void assignEmployeeToShift(User caller, Shift shift, Employee employee) {
         if (!caller.isManager()) {
@@ -32,7 +38,7 @@ public class ShiftManager implements IShiftManager {
             throw new SecurityException("Access denied.");
         }
 
-        RoleManager.printAllRoles(caller);
+        dependency.printAllRoles(caller);
         System.out.print("Enter role number to add: ");
         Scanner scanner = new Scanner(System.in);
         int roleNumber = scanner.nextInt();
@@ -41,7 +47,7 @@ public class ShiftManager implements IShiftManager {
 
         while (!done) {
 
-            Role role = RoleManager.getRoleByNumber(roleNumber);
+            Role role = dependency.getRoleByNumber(roleNumber);
             shift.addNecessaryRoles(caller, role);
             System.out.print(role.getDescription() +"was added to the shift \n");
 
@@ -51,7 +57,7 @@ public class ShiftManager implements IShiftManager {
                 done = true;
                 break;
             }
-            RoleManager.printAllRoles(caller);
+            dependency.printAllRoles(caller);
             System.out.print("Enter role number to add: ");
             roleNumber = scanner.nextInt();
 
