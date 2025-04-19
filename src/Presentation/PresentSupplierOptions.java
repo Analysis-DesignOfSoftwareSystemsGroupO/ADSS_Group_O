@@ -10,10 +10,10 @@ public class PresentSupplierOptions {
     public void runSupplierMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true){
-            System.out.println("Supplier Menu:\n");
-            System.out.println("1.Add Supplier\n");
-            System.out.println("2.Edit Supplier Details\n");
-            System.out.println("3.Return to Main Menu\n");
+            System.out.println("Supplier Menu:");
+            System.out.println("1.Add Supplier");
+            System.out.println("2.Edit Supplier Details");
+            System.out.println("3.Return to Main Menu");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
@@ -31,7 +31,7 @@ public class PresentSupplierOptions {
                 }
             }
             catch (Exception e) {
-                System.out.println("Invalid option ! \n");
+                System.out.println("Invalid option ! ");
             }
         }
     }
@@ -73,15 +73,15 @@ public class PresentSupplierOptions {
         System.out.println("Enter Supplier ID: ");
         String id = scanner.nextLine();
         if (!supplierController.validIdSupplier(id)){
-            System.out.println("Invalid Supplier ID ! \n");
+            System.out.println("Invalid Supplier ID ! ");
             return;
         }
         while (true)
         {
-            System.out.println("1.Add new product\n");
-            System.out.println("2.Edit supplier details\n");
-            System.out.println("3.Add Contact number\n");
-            System.out.println("3.Return to menu\n");
+            System.out.println("1.Add new product");
+            System.out.println("2.Edit supplier details");
+            System.out.println("3.Add Contact number");
+            System.out.println("3.Return to menu");
             try {
                 int option = scanner.nextInt();
                 switch (option) {
@@ -98,7 +98,7 @@ public class PresentSupplierOptions {
                 }
             }
             catch (Exception e) {
-                System.out.println("Invalid option ! \n");
+                System.out.println("Invalid option ! ");
             }
         }
 
@@ -130,10 +130,10 @@ public class PresentSupplierOptions {
             return;
         }
         while (true){
-            System.out.println("1.Edit supplier phone\n");
-            System.out.println("2.Edit supplier name\n");
-            System.out.println("3.Edit bank account number\n");
-            System.out.println("4.Return to Main Menu\n");
+            System.out.println("1.Edit supplier phone");
+            System.out.println("2.Edit supplier name");
+            System.out.println("3.Edit bank account number");
+            System.out.println("4.Return to Main Menu");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
@@ -172,7 +172,7 @@ public class PresentSupplierOptions {
                 }
             }
             catch (Exception e){
-                System.out.println("Invalid option ! \n");
+                System.out.println("Invalid option ! ");
             }
         }
     }

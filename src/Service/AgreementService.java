@@ -31,12 +31,21 @@ public class AgreementService {
         return false;
         //todo
     }
-
+    //view agreement given agreement id's (used for editing existing agreement)
     public void viewAgreement(String agreementID) {
+        //todo
+    }
+    //views an agreement given branch id and supplier id (ued for creating a new order)
+    public void viewAgreement(String branchId, String supplierID) {
         //todo
     }
 
     public void removeProductFromAgreement(String agreementID, String productID) {
         //todo
     }
+
+    public void editProductDiscount(String agreementID, String productId, int quantity, int discount){
+        //todo
+    }
+
 }

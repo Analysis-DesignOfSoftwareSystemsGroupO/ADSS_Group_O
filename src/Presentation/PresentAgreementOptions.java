@@ -12,12 +12,12 @@ public class PresentAgreementOptions {
     public void runAgreementMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Pick Agreement Options:\n");
-            System.out.println("1.View all Agreements\n");
-            System.out.println("2.Add new agreement\n");
-            System.out.println("3.Remove agreement\n");
-            System.out.println("4.Edit agreement\n");
-            System.out.println("5.Return to main menu\n");
+            System.out.println("Pick Agreement Options:");
+            System.out.println("1.View all Agreements");
+            System.out.println("2.Add new agreement");
+            System.out.println("3.Remove agreement");
+            System.out.println("4.Edit agreement");
+            System.out.println("5.Return to main menu");
             try {
                 int option = scanner.nextInt();
                 switch (option) {
@@ -40,7 +40,7 @@ public class PresentAgreementOptions {
                 }
             }
             catch (Exception e) {
-                System.out.println("Invalid option !\n");
+                System.out.println("Invalid option !");
             }
         }
    }

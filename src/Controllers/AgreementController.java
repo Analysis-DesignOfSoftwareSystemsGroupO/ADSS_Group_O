@@ -28,21 +28,24 @@ public class AgreementController {
     public boolean agreementExists(String supplierID, String branchId) {
         return agreementService.agreementExists(supplierID, branchId);
     }
-    //check if an item exists in an Agreement
-    public boolean productExistsInAgreement(String supplierID, String branchId, String productID) {
-        return productExistsInAgreement(supplierID, branchId, productID);
-    }
-
+    //views an agreement given agreement id
     public void viewAgreement(String agreementID) {
         agreementService.viewAgreement(agreementID);
     }
 
-    public void editProductDiscount(String agreementID, String productId, int quantity, int discount){
+    //view an agreement given branch id and supplier id
+    public void viewAgreement(String branchId, String supplierID) {
+        agreementService.viewAgreement(branchId, supplierID);
+    }
 
+    public void editProductDiscount(String agreementID, String productId, int quantity, int discount){
+        agreementService.editProductDiscount(agreementID, productId, quantity, discount);
     }
 
     public void removeProductFromAgreement(String agreementID, String productID) {
-
+        agreementService.removeProductFromAgreement(agreementID, productID);
     }
+
+
 
 }
