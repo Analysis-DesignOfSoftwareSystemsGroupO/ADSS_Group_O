@@ -1,4 +1,4 @@
-package SupplierMoudle;
+package Domain;
 
 public class InformationContact {
     private String contactName;

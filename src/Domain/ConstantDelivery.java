@@ -1,4 +1,4 @@
-package SupplierMoudle;
+package Domain;
 
 public class ConstantDelivery extends Delivery {
     private String deliveryDays;

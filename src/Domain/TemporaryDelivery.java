@@ -1,4 +1,4 @@
-package SupplierMoudle;
+package Domain;
 
 public class TemporaryDelivery extends Delivery {
     private String deliveryDays;
