@@ -18,7 +18,7 @@ public class SupplierService {
     }
 
     //checks validity of the id of the supplier
-    public boolean validIdSupplier(String ID) {
+    public boolean validIdSupplier(String supplierId) {
         return false;
         //todo
     }
@@ -32,17 +32,18 @@ public class SupplierService {
     public void printSupplier(String supplierId) {
         //todo
     }
-
-    public void updateSupplierPhoneNumber(String ID, String phoneNumber) {
+    //updates supplier phone number given supplierId
+    public void updateSupplierPhoneNumber(String supplierId, String newPhoneNumber) {
         //todo
     }
-
-    public void updateSupplierBankAccount(String ID, String bankAccount, String bankNumber, String bankBranch
+    //updates supplier phone number given supplierId
+    public void updateSupplierBankAccount(String supplierId, String newBankAccount, String newBankNumber,
+                                          String newBankBranch
             , String ownerID) {
         //todo
     }
-
-    public void updateName(String ID, String name) {
+    //updates a supplier name given a supplier id
+    public void updateName(String supplierId, String newName) {
         //todo
     }
 }

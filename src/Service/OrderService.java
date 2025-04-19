@@ -41,6 +41,7 @@ public class OrderService {
         //todo
     }
 
+    //getters of branch id and supplier id given an order id
     public String getBranchId(String orderId){
         return null;
         //todo

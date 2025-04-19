@@ -3,10 +3,11 @@ package Service;
 import Domain.Branch;
 
 public class AgreementService {
+    //removes an agreement
     public void removeAgreement(String agreementID) {
         //todo
     }
-
+    //creates new agreement
     public void createNewAgreement(String supplierID, String branchId) {
         //todo
     }
@@ -39,11 +40,11 @@ public class AgreementService {
     public void viewAgreement(String branchId, String supplierID) {
         //todo
     }
-
+    //removes a product from an existing agreement
     public void removeProductFromAgreement(String agreementID, String productID) {
         //todo
     }
-
+    //edits a product discount from an existing agreement
     public void editProductDiscount(String agreementID, String productId, int quantity, int discount){
         //todo
     }
