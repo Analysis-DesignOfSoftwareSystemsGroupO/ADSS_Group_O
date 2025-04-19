@@ -1,0 +1,11 @@
+package SupplierMoudle;
+
+public class Product {
+    private String productID;
+    private String productName;
+
+    public Product(String productID, String productName) {
+        this.productID = productID;
+        this.productName = productName;
+    }
+}
