@@ -75,11 +75,11 @@ public class EmploymentContract{
         }
         @Override
         public String toString() {
-            return "Contract details:" +
-                    "\n   Minimum evening shifts at week: " + this.minEveninigShift + '\'' +
-                    ",\n  Minimum day shifts at week: " + this.minDayShift +
-                    ",\n  sick Days that remained: '" + this.sickDays + '\'' +
-                    ",\n  Days off that remained: " + this.daysOff;
+            return "  Contract details:" +
+                    "\n  Minimum evening shifts at week: " + this.minEveninigShift +
+                    "\n  Minimum day shifts at week: " + this.minDayShift +
+                    "\n  sick Days that remained: " + this.sickDays +
+                    "\n  Days off that remained: " + this.daysOff;
         }
     }
 

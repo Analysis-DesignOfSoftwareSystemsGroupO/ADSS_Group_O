@@ -215,7 +215,7 @@ public class EmployeeManager implements IEmployeeManager {
         int empId = scanner.nextInt();
 
         Employee e = getEmployeeById(caller, empId);
-        System.out.println(e.toString(caller));
+        System.out.println(e.toString());
     }
 
     @Override
@@ -223,7 +223,7 @@ public class EmployeeManager implements IEmployeeManager {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         for (Employee e : employees) {
-            System.out.println(e.toString(caller));
+            System.out.println(e.toString());
         }
     }
 }

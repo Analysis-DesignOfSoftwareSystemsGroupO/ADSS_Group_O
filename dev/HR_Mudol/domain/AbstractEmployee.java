@@ -62,10 +62,8 @@ public abstract class AbstractEmployee {
     }
 
     //only manager or the man himself can access
-    public int getEmpSalary(User caller) {
-        if (!caller.isSameEmployee(this)&&!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public int getEmpSalary() {
+
         return empSalary;
     }
 
@@ -93,9 +91,9 @@ public abstract class AbstractEmployee {
         this.empPassword = empPassword;
     }
 
-    //can use just by the employee
+
     public void setEmpBankAccount(User caller, String empBankAccount) {
-        if (!caller.isSameEmployee(this)) {
+        if (!caller.isSameEmployee(this)&&!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
         this.empBankAccount = empBankAccount;

@@ -96,7 +96,8 @@ public class Shift {
 
     @Override
     public String toString(){
-        return "Shift "+ type + " number: "+ shiftID + " at "+ day + " — " + status
+        return "Shift "+ type + " number: "+ shiftID + " at "+ day + " — status: " + status
+                +"\n Roles: "+ necessaryRoles
                 +"\n Workers: "+ employees;
         }
 

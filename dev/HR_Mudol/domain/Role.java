@@ -60,8 +60,18 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Role" + this.getRoleNumber() + " " + this.getDescription()+
-                "\n  RelevantEmployees: " + this.relevantEmployees.toString();
+        StringBuilder string = new StringBuilder("Role number " + this.getRoleNumber() + " - " + this.getDescription());
+
+        if (relevantEmployees.isEmpty()) {
+            string.append("\n  No employees assigned to this role.");
+        } else {
+            string.append("\n  Relevant employees:");
+            for (Employee e : this.relevantEmployees) {
+                string.append("\n    - ").append(e.getEmpName() + " - "+ e.getEmpId());
+            }
+        }
+
+        return string.toString();
 
     }
 }

@@ -113,14 +113,14 @@ public class Employee extends AbstractEmployee {
         this.Contract.setDaysOff(caller,daysOff);
     }
 
-    public String toString(User caller) {
-            return "Employee" + this.getEmpNum() +
-                    "\n   Full Name: '" + this.getEmpName() + '\'' +
-                    "\n  ID: " + this.getEmpId() +
-                    "\n  Bank Account: '" + this.getEmpBankAccount() + '\'' +
-                    "\n  Salary: " + this.getEmpSalary(caller) + '\'' +
-                    "\n  Start Date: " + this.getEmpBankAccount() + '\'' +
-                    "\n" + this.Contract.toString();
-        }
+    public String toString() {
+        return "Employee " + this.getEmpNum() +
+                "\n  Full Name: " + this.getEmpName() +
+                "\n  ID: " + this.getEmpId() +
+                "\n  Bank Account: " + this.getEmpBankAccount() +
+                "\n  Salary: " + this.getEmpSalary() +
+                "\n  Start Date: " + this.getEmpBankAccount() +
+                "\n" + this.Contract.toString();
     }
+}
 

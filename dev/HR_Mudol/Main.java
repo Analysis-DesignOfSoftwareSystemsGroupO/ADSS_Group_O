@@ -11,8 +11,10 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         HRSystemManager hrSystemManager = new HRSystemManager();
-        HR_Manger manager=new HR_Manger("Rami Levi", 111111111, "111111111", "111111111", 30000, LocalDate.now());
-        User admin = new User(manager,Level.HRManager);
+        HR_Manger manager = new HR_Manger("Rami Levi", 111111111, "111111111", "111111111", 30000, LocalDate.now());
+        User admin = new User(manager, Level.HRManager);
+
+        Week curWeek = hrSystemManager.createNewWeek(admin);
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");
@@ -27,70 +29,118 @@ public class Main {
             System.out.print("Choose an option: ");
             String choice = scanner.nextLine();
 
-            switch (choice) {
-                case "1":
-                    hrSystemManager.printWeek(null); // אפשר לעבור על כמה שבועות אם יש היסטוריה
-                    break;
+            try {
+                switch (choice) {
+                    case "1":
+                        hrSystemManager.printWeek(null);
+                        break;
+                    case "2":
+                        manageEmployees(hrSystemManager, admin, scanner);
+                        break;
+                    case "3":
+                        generateReports(hrSystemManager, admin, scanner);
+                        break;
+                    case "4":
+                        manageShift(hrSystemManager, curWeek,admin, scanner);
+                        break;
+                    case "5":
+                        manageRoles(hrSystemManager, admin, scanner);
+                        break;
+                    case "6":
+                        try {
+                            hrSystemManager.displayDashboard(admin);
+                        } catch (Exception e) {
+                            System.out.println("Failed to display dashboard.");
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case "0":
+                        System.out.println("Goodbye!");
+                        return;
+                    default:
+                        System.out.println("Invalid option. Try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("\nError occurred while processing the option: " + choice);
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
-                case "2":
-                    manageEmployees(hrSystemManager, admin, scanner);
-                    break;
+    private static void manageShift(HRSystemManager hr, Week curWeek, User caller, Scanner sc) {
+        while (true) {
+            System.out.println("\n--- Shift Management ---");
+            System.out.println("1. Assigning roles to weekly shifts");
+            System.out.println("2. Assigning employees to weekly shifts");
 
-                case "3":
-                    generateReports(hrSystemManager, admin, scanner);
-                    break;
+            String choice = sc.nextLine();
+            try {
+                switch (choice) {
+                    case "1":
+                        try {
+                            hr.manageTheWeekRelevantRoles(caller, curWeek);
 
-                case "4":
-                    hrSystemManager.createNewWeek(admin);
-                    hrSystemManager.manageTheWeekRelevantRoles(admin, null); // week לפי לוגיקה שלך
-                    hrSystemManager.assigningEmployToShifts(admin, null);
-                    break;
-
-                case "5":
-                    manageRoles(hrSystemManager, admin, scanner);
-                    break;
-
-                case "6":
-                    hrSystemManager.displayDashboard(admin);
-                    break;
-
-                case "0":
-                    System.out.println("Goodbye!");
-                    return;
-
-                default:
-                    System.out.println("Invalid option. Try again.");
+                        } catch (Exception e) {
+                            System.out.println("Failed to manage weekly shifts.");
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case "2":
+                        try {
+                            hr.assigningEmployToShifts(caller, curWeek);
+                        } catch (Exception e) {
+                            System.out.println("Failed to manage weekly shifts.");
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("The request was failed.");
+                System.out.println(e.getMessage());
             }
         }
     }
 
     private static void manageEmployees(HRSystemManager hr, User caller, Scanner sc) {
-        System.out.println("\n--- Employee Management ---");
-        System.out.println("1. Add Employee");
-        System.out.println("2. Remove Employee");
-        System.out.println("3. Update Bank Account");
-        System.out.println("4. Update Salary");
-        System.out.println("5. Print All Employees");
+        while (true) {
+            System.out.println("\n--- Employee Management ---");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Remove Employee");
+            System.out.println("3. Update Bank Account");
+            System.out.println("4. Update Salary");
+            System.out.println("5. Print All Employees");
+            System.out.println("0. Back to Main Menu");
 
-        String choice = sc.nextLine();
-        switch (choice) {
-            case "1":
-                hr.addEmployee(caller);
-                break;
-            case "2":
-                hr.removeEmployee(caller);
-                break;
-            case "3":
-                hr.updateBankAccount(caller);
-                break;
-            case "4":
-                hr.updateSalary(caller);
-                break;
-            case "5":
-                hr.printAllEmployees(caller);
-                break;
-            default:
-                System.out.println("Invalid option.");
+            String choice = sc.nextLine();
+            try {
+                switch (choice) {
+                    case "1":
+                        hr.addEmployee(caller);
+                        break;
+                    case "2":
+                        hr.removeEmployee(caller);
+                        break;
+                    case "3":
+                        hr.updateBankAccount(caller);
+                        break;
+                    case "4":
+                        hr.updateSalary(caller);
+                        break;
+                    case "5":
+
+                        hr.printAllEmployees(caller);
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("The request was failed.");
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -102,29 +152,34 @@ public class Main {
         System.out.println("4. Custom Report");
 
         String choice = sc.nextLine();
-        switch (choice) {
-            case "1":
-                System.out.print("Enter Week ID: ");
-                int weekId = Integer.parseInt(sc.nextLine());
-                hr.generateWeeklyReport(caller, weekId);
-                break;
-            case "2":
-                System.out.print("Enter Employee ID: ");
-                int empId = Integer.parseInt(sc.nextLine());
-                hr.generateEmployeeReport(caller, empId);
-                break;
-            case "3":
-                System.out.print("Enter Shift ID: ");
-                int shiftId = Integer.parseInt(sc.nextLine());
-                hr.generateShiftReport(caller, shiftId);
-                break;
-            case "4":
-                System.out.print("Enter filter: ");
-                String filter = sc.nextLine();
-                hr.generateCustomReport(caller, filter);
-                break;
-            default:
-                System.out.println("Invalid option.");
+        try {
+            switch (choice) {
+                case "1":
+                    System.out.print("Enter Week ID: ");
+                    int weekId = Integer.parseInt(sc.nextLine());
+                    hr.generateWeeklyReport(caller, weekId);
+                    break;
+                case "2":
+                    System.out.print("Enter Employee ID: ");
+                    int empId = Integer.parseInt(sc.nextLine());
+                    hr.generateEmployeeReport(caller, empId);
+                    break;
+                case "3":
+                    System.out.print("Enter Shift ID: ");
+                    int shiftId = Integer.parseInt(sc.nextLine());
+                    hr.generateShiftReport(caller, shiftId);
+                    break;
+                case "4":
+                    System.out.print("Enter filter: ");
+                    String filter = sc.nextLine();
+                    hr.generateCustomReport(caller, filter);
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to generate report.");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -136,21 +191,26 @@ public class Main {
         System.out.println("4. Print All Roles");
 
         String choice = sc.nextLine();
-        switch (choice) {
-            case "1":
-                hr.createRole(caller);
-                break;
-            case "2":
-                hr.assignEmployeeToRole(caller);
-                break;
-            case "3":
-                hr.removeEmployeeFromRole(caller);
-                break;
-            case "4":
-                hr.printAllRoles(caller);
-                break;
-            default:
-                System.out.println("Invalid option.");
+        try {
+            switch (choice) {
+                case "1":
+                    hr.createRole(caller);
+                    break;
+                case "2":
+                    hr.assignEmployeeToRole(caller);
+                    break;
+                case "3":
+                    hr.removeEmployeeFromRole(caller);
+                    break;
+                case "4":
+                    hr.printAllRoles(caller);
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to manage roles.");
+            System.out.println(e.getMessage());
         }
     }
 }

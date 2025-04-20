@@ -58,11 +58,9 @@ public class RoleManager implements IRoleManager {
         printAllRoles(caller);
         System.out.print("Enter role number: ");
         int roleNumber = scanner.nextInt();
-        scanner.nextLine();
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
-        scanner.nextLine();
 
         Employee employee = employeeManager.getEmployeeById(caller, empId);
 

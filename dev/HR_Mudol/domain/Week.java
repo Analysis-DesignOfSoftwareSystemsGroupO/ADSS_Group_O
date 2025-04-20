@@ -52,6 +52,17 @@ public class Week {
 
     @Override
     public String toString() {
-       return shifts.toString();
+        StringBuilder sb = new StringBuilder("Shifts:\n");
+
+        if (shifts.isEmpty()) {
+            sb.append("No shifts available.");
+        } else {
+            for (Shift shift : shifts) {
+                sb.append("- ").append(shift.toString()).append("\n");
+            }
+        }
+
+        return sb.toString();
     }
+
 }

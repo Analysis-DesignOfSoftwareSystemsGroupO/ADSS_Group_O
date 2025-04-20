@@ -20,6 +20,7 @@ public class WeekManager implements IWeekManager{
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
+
         for (Shift shift : week.getShifts()){
             dependency.chooseRelevantRoleForShift(caller,shift);
         }
@@ -29,55 +30,58 @@ public class WeekManager implements IWeekManager{
     @Override
     public void assigningEmployToShifts(User caller, Week week) {
 
-        Constraint constraint;
-        Scanner scanner = new Scanner(System.in);
+            Constraint constraint;
+            Scanner scanner = new Scanner(System.in);
 
-        //loop for all the week's shifts
-        for (Shift shift : week.getShifts()) { //example: Sunday morning
+            //loop for all the week's shifts
+            for (Shift shift : week.getShifts()) { //example: Sunday morning
 
-            //loop for all the necessary roles at specific shift
-            for (Role role : shift.getNecessaryRoles()) { //example: Sunday morning
+                if (!shift.getNecessaryRoles().isEmpty()) {
+                    //loop for all the necessary roles at specific shift
+                    for (Role role : shift.getNecessaryRoles()) { //example: Sunday morning
 
-                //print all the relevant employee:
-                System.out.println(role.getRelevantEmployees(caller));
-                boolean flag = false;
+                        //print all the relevant employee:
+                        System.out.println(role.getRelevantEmployees(caller));
+                        boolean flag = false;
 
-                //loop for choosing an emp for that role
-                while (!flag) {
-                    System.out.println("Choose by employee by his place number on the list:");
-                    int index = scanner.nextInt();
+                        //loop for choosing an emp for that role
+                        while (!flag) {
+                            System.out.println("Choose by employee by his place number on the list:");
+                            int index = scanner.nextInt();
 
-                    Employee employee = role.getRelevantEmployees(caller).get(index);
-                    constraint = employee.searchingForRelevantconstraint(caller, shift.getDay(), shift.getType());
-                    if (constraint == null) {
-                        //there no constraint for that shift
-                        System.out.println("The employee can work at that shift, \n Do you want to choose him? IF so write - Y, else write N");
-                        String choosing = scanner.nextLine();
-                        if (choosing == "Y") {
-                            dependency.assignEmployeeToShift(caller, shift, employee);
-                            flag = true;
-                            break; //move to the next role
+                            Employee employee = role.getRelevantEmployees(caller).get(index);
+                            constraint = employee.searchingForRelevantconstraint(caller, shift.getDay(), shift.getType());
+                            if (constraint == null) {
+                                //there no constraint for that shift
+                                System.out.println("The employee can work at that shift, \n Do you want to choose him? IF so write - Y, else write N");
+                                String choosing = scanner.nextLine();
+                                if (choosing == "Y") {
+                                    dependency.assignEmployeeToShift(caller, shift, employee);
+                                    flag = true;
+                                    break; //move to the next role
+                                }
+                                //else moving the next employee on the list
+                            }
+                            //there is constraint for that shift
+                            else {
+                                System.out.println(employee.getEmpName() + "can't work at that shift because: " + constraint.getExplanation());
+                            }
+
                         }
-                        //else moving the next employee on the list
+                        System.out.println("Next role");
                     }
-                    //there is constraint for that shift
-                    else {
-                        System.out.println(employee.getEmpName() + "can't work at that shift because: " + constraint.getExplanation());
-                    }
-
+                    System.out.println("Next Shift");
                 }
-                System.out.println("Next role");
-            }
-            System.out.println("Next Shift");
+                else{
+                    System.out.println("First you have to assigning roles to weekly shifts.");
+                    break;
+                }
 
-
-            if (shift.getNecessaryRoles().size() == shift.getEmployees().size()) {
+            if (shift.getNecessaryRoles().size() == shift.getEmployees().size() && !shift.getNecessaryRoles().isEmpty()) {
                 shift.updateStatus(caller, Status.Full);
             } else shift.updateStatus(caller, Status.Problem);
-
-            //print result
+        }            //print result
             printWeek(week);
-        }
     }
     //Remove a shift - for holidays case use
     @Override

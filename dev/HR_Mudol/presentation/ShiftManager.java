@@ -3,6 +3,7 @@ package HR_Mudol.presentation;
 import HR_Mudol.domain.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ShiftManager implements IShiftManager {
@@ -37,30 +38,48 @@ public class ShiftManager implements IShiftManager {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
+        if (dependency.getAllRoles(caller).isEmpty()){
+            throw new IllegalArgumentException("No roles at the system.");
+        }
 
-        dependency.printAllRoles(caller);
-        System.out.print("Enter role number to add: ");
+        printRolesList(caller);
+        System.out.print("Enter relevant role number to add to te shift "+ shift.getDay() + " - "+ shift.getType()+ ":");
         Scanner scanner = new Scanner(System.in);
         int roleNumber = scanner.nextInt();
-        scanner.nextLine();
-        boolean done=false;
+
+        boolean done = false;
 
         while (!done) {
-
             Role role = dependency.getRoleByNumber(roleNumber);
             shift.addNecessaryRoles(caller, role);
-            System.out.print(role.getDescription() +"was added to the shift \n");
+            System.out.print(role.getDescription() + " was added to the shift\n");
 
-            System.out.print("If you done write D, else write N \n");
-            String isDone = scanner.nextLine();
-            if (isDone == "D") {
-                done = true;
-                break;
+            while (true) {
+                System.out.print("If you're done write D, else write N: ");
+                String isDone = scanner.nextLine().trim();
+
+                if (isDone.equalsIgnoreCase("D")) {
+                    done = true;
+                    break; // יוצא מהלולאת קלט וממשיך בלולאה הראשית
+                } else if (isDone.equalsIgnoreCase("N")) {
+                    break; // ממשיך להוספת תפקיד נוסף
+                } else {
+                    System.out.println("Invalid input. Please enter 'D' or 'N'.");
+                }
             }
-            dependency.printAllRoles(caller);
-            System.out.print("Enter role number to add: ");
-            roleNumber = scanner.nextInt();
 
+            if (!done) {
+                printRolesList(caller);
+                System.out.print("Enter role number to add: ");
+
+                // ניקוי שאריות מה־buffer (אם צריך)
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Please enter a valid number.");
+                    scanner.nextLine();
+                }
+                roleNumber = scanner.nextInt();
+                scanner.nextLine();
+            }
         }
 
     }
@@ -73,4 +92,12 @@ public class ShiftManager implements IShiftManager {
 
         System.out.println(shift.toString());
     }
+
+    private void printRolesList(User caller){
+
+        for (Role r :dependency.getAllRoles(caller) ) {
+            System.out.print(r.getRoleNumber() +" - " + r.getDescription()+ "\n");
+        }
+    }
 }
+
