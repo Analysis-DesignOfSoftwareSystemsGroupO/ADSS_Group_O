@@ -112,13 +112,15 @@ public class PresentOrderOptions {
                         break;
                     default:
                         try {
-                            orderController.addProductToOrder(orderID, choice );
+                            System.out.println("Enter quantity:");
+                            int quantity = scanner.nextInt();
+                            orderController.addProductToOrder(supplierID, branchId, orderID, choice, quantity);
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
                             break;
                         }
-                        System.out.println("Order added Successfully !");
+                        System.out.println("Product added successfully !");
                         break;
                 }
                 break;

@@ -1,7 +1,10 @@
 package DataBase;
 
 import Domain.Order;
+<<<<<<< HEAD
 import Domain.Supplier;
+=======
+>>>>>>> shay
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderDataBase {
-    public Map<String, List<Order>> orders;
+    private Map<String, List<Order>> orders;
 
-    public OrderDataBase() {
+    //singleton database
+    private static OrderDataBase orderDataBase = null;
+    public static OrderDataBase getInstance() {
+        if (orderDataBase == null) {
+            orderDataBase = new OrderDataBase();
+        }
+        return orderDataBase;
+    }
+    private OrderDataBase(){
         orders = new HashMap<>();
     }
+
 
     public void addOrder(String supplierID, Order order) {
         if (supplierID == null || order == null){

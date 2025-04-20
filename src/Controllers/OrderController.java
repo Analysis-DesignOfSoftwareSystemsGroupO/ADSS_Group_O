@@ -25,12 +25,10 @@ public class OrderController {
     }
 
     //adds a product to the order
-    public void addProductToOrder(String orderId, String productId) throws Exception {
-        String supplierId = orderService.getSupplierId(orderId);
-        String branchId = orderService.getBranchId(orderId);
+    public void addProductToOrder(String supplierID, String branchId, String orderId, String productId, int quantity) throws Exception {
         //check if the product exists in the agreement
-        if (agreementService.productExistsInAgreement(supplierId, branchId, productId)) {
-                orderService.addProductToOrder(orderId, productId);
+        if (agreementService.productExistsInAgreement(supplierID, branchId, productId)) {
+                orderService.addProductToOrder(supplierID, orderId, productId, quantity);
         }
         else {
             throw new Exception("Invalid product id");

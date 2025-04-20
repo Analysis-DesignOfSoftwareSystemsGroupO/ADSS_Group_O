@@ -120,6 +120,7 @@ public class PresentAgreementOptions {
     ///edit agreement functions
     // adds a product to an existing agreement
     private void addProductToAgreementP(String agreementID) {
+        //todo print all product from
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productName = editAgreement.nextLine();
