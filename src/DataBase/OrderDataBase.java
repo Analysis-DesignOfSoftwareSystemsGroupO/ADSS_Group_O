@@ -1,7 +1,7 @@
 package DataBase;
 
-import SupplierMoudle.Order;
-import SupplierMoudle.Supplier;
+import Domain.Order;
+import Domain.Supplier;
 
 import java.util.ArrayList;
 import java.util.HashMap;

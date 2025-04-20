@@ -1,4 +1,4 @@
-package SupplierMoudle;
+package Domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,11 +12,13 @@ public class Order {
     private final Agreement agreement;
     private List<SuppliedItem> suppliedItems;
     private Boolean orderClosed = false;
+    private Branch branch;
 
     public Order(Agreement agreement, Branch branch) {
         if (agreement == null || branch == null) {
             throw new NullPointerException("Agreement or branch is null");
         }
+        this.branch = branch;
         this.agreement = agreement;
         this.suppliedItems = new ArrayList<>();
         this.orderDate = new Date();
@@ -84,10 +86,12 @@ public class Order {
 
     public void closeOrder() {
         if (totalPrice <= 0) {
-            System.out.println("Add Products to your cart");
-            return;
+            throw new NullPointerException("Add Products to your cart");
         }
         orderClosed = true;
-        System.out.println("Order Closed");
+    }
+
+    public Branch getBranch() {
+        return branch;
     }
 }

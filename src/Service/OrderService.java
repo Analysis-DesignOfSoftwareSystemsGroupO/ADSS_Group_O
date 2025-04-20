@@ -1,53 +1,121 @@
 package Service;
 
+import DataBase.BranchesDataBase;
 import DataBase.OrderDataBase;
+import DataBase.SuppliersDataBase;
+import Domain.Agreement;
+import Domain.Branch;
+import Domain.Order;
+
+import java.util.List;
 
 public class OrderService {
     private static OrderDataBase orderDataBase = new OrderDataBase();
-    private int orderId = 2000;
+    private static SuppliersDataBase suppliersDataBase = new SuppliersDataBase();
+    private static BranchesDataBase branchesDataBase = new BranchesDataBase();
     //creates a new order, returns orderId as a string
     public String createOrder(String branchId, String supplierId) {
-        //todo
+        try {
+            Branch branch = branchesDataBase.getBranch(branchId);
+            Agreement agreement = suppliersDataBase.getAgreement(branch.getBranchID(), supplierId);
+            if (agreement == null) {
+                throw new Exception("Agreement not found");
+            }
+            Order newOrder = new Order(agreement, branch);
+            orderDataBase.addOrder(agreement.getSupplierID(), newOrder);
+            return newOrder.getOrderID();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public boolean isOrderEmpty(String OrderID) {
-        //todo
-        return false;
+    public boolean isOrderEmpty(String supplierID,String OrderID) {
+        List<Order> orders = orderDataBase.orders.get(supplierID);
+        for (Order order : orders) {
+            if (order.getOrderID().equals(OrderID)) {
+                return (order.getTotalPrice() == 0);
+            }
+        }
+        return true;
     }
 
     //deletes an order if the user decides to cancel order while in the making
-    public void deleteOrder(String OrderID) {
-        //todo
+    public void deleteOrder(String supplierID, String OrderID) {
+        List<Order> orders = orderDataBase.orders.get(supplierID);
+        for (Order order : orders) {
+            if (order.getOrderID().equals(OrderID)) {
+                if (!order.isOrderClosed()) {
+                    orderDataBase.orders.remove(order.getOrderID());
+                }
+                else{
+                    System.out.println("Order is already closed");
+                }
+            }
+        }
     }
 
     //prints the order for the user to view while making the order
-    public void viewOrder(String OrderID) {
-        //todo
+    public void viewOrder(String supplierID, String OrderID) {
+        List<Order> order = orderDataBase.orders.get(supplierID);
+        for (Order o : order) {
+            if (o.getOrderID().equals(OrderID)) {
+                o.displayOrder();
+                break;
+            }
+        }
     }
 
     //adds a product to the order, use doesProductExistsInAgreementFunc in AgreementService
-    public void addProductToOrder(String ID, String productId) {
-        //todo
+    public void addProductToOrder(String supplierID, String orderID, String productId, int quantity) {
+        List<Order> orders = orderDataBase.orders.get(supplierID);
+        for (Order order : orders) {
+            if (order.getOrderID().equals(orderID)) {
+                try {
+                    order.addItemToOrder(productId, quantity);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     //function that receives supplier id and prints all the past orders
     public void viewPastOrders(String supplierId){
-        //todo
+        if (supplierId == null) {
+            throw new NullPointerException("Supplier ID is null");
+        }
+        List<Order> orders = orderDataBase.orders.get(supplierId);
+        for (Order order : orders) {
+            order.displayOrder();
+        }
     }
 
     //method that finishes an orders (its point is to check if the order is empty, if it is throw an exception)
-    public void finishOrder(String orderID) {
-        //todo
+    public void finishOrder(String supplierID, String orderID) {
+        if (orderID == null || supplierID == null) {
+            throw new NullPointerException("Order ID is null");
+        }
+        for (Order order : orderDataBase.orders.get(supplierID)) {
+            if (order.getOrderID().equals(orderID)) {
+                order.closeOrder();
+            }
+        }
     }
 
     //getters of branch id and supplier id given an order id
-    public String getBranchId(String orderId){
+    public String getBranchId(String supplierID, String orderId){
+        if (supplierID == null || supplierID.isEmpty() || orderId == null || orderId.isEmpty()) {
+            throw new NullPointerException("Supplier ID and Order ID is null");
+        }
+        List<Order> orders = orderDataBase.orders.get(supplierID);
+        for (Order order : orders) {
+            if (order.getOrderID().equals(orderId)) {
+                return order.getBranch().getBranchID();
+            }
+        }
         return null;
-        //todo
     }
-    public String getSupplierId(String orderId){
-        //todo
-        return null;
-    }
+
+
 }

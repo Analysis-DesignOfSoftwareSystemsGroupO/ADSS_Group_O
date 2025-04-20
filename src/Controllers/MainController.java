@@ -1,6 +1,6 @@
 package Controllers;
 import Presentation.*;
-import SupplierMoudle.*;
+import Domain.*;
 import DataBase.*;
 
 import javax.crypto.spec.PSource;
@@ -29,7 +29,7 @@ public class MainController {
     }
 
     //adds a new product to an existing supplier
-    public static void addNewProductToSupplier(String ID, Product product, int price) {
+    public static void addNewProductToSupplier(String supplierID, Product product, int price) {
         //todo
     }
 
@@ -56,6 +56,8 @@ public class MainController {
         //todo
     }
 
+    //*******************
+    //force owner id to be supplier id
     public static void updateSupplierBankAccount(String supplierID, String bankAccount, String bankNumber, String bankBranch
             , String ownerID) {
         if(suppliersDataBase.suppliers.containsKey(supplierID)) {
@@ -160,6 +162,7 @@ public class MainController {
     }
 
     public static void createNewAgreement(String supplierID, String branchId) {
+        // Branch branch = bring the branch from Data Base
         Supplier supplier = suppliersDataBase.suppliers.get(supplierID);
 
     }

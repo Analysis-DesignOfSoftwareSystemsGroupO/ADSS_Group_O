@@ -1,4 +1,4 @@
-package SupplierMoudle;
+package Domain;
 
 import DataBase.SuppliersDataBase;
 
@@ -10,7 +10,8 @@ public class Supplier {
     private String supplierAccountNumber;
     private String supplierName;
     private Bank bank;
-    public List<InformationContact> InformationContacts;
+    private List<InformationContact> InformationContacts;
+    private List<Product> supplyProducts;
 
 
     public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch, String ownerID) {
@@ -22,6 +23,7 @@ public class Supplier {
         this.supplierAccountNumber = accountNumber;
         this.supplierName = supplierName;
         this.InformationContacts = new ArrayList<InformationContact>();
+        this.supplyProducts = new ArrayList<Product>();
     }
 
     public Supplier(Supplier other) {
@@ -30,6 +32,7 @@ public class Supplier {
         this.supplierName = other.supplierName;
         this.bank = new Bank(this.getBank());
         this.InformationContacts = other.InformationContacts;
+        this.supplyProducts = other.supplyProducts;
     }
 
     public String getID() {

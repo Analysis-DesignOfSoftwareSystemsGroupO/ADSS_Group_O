@@ -1,7 +1,7 @@
 package DataBase;
 
-import SupplierMoudle.Branch;
-import SupplierMoudle.Supplier;
+import Domain.Branch;
+import Domain.Supplier;
 
 import java.util.Map;
 
