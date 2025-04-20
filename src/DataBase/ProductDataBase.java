@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ProductDataBase {
     private Map<String, Product> products;
-    private int productID = 3000;
+
     //singleton database
     private static ProductDataBase productDataBase = null;
     public static ProductDataBase getInstance() {
@@ -24,14 +24,12 @@ public class ProductDataBase {
         products = new HashMap<>();
     }
 
-public void addProduct(String productName) {
-        if (productName == null){
-            return;
+public void addProduct(Product product) {
+        if (product == null){
+            throw new IllegalArgumentException("Product cannot be null");
         }
-        if (!products.containsKey(productName)) {
-            Product p = new Product(Integer.toString(productID), productName);
-            products.put(Integer.toString(productID), p);
-            productID++;
+        if (!products.containsKey(product.getProductName())) {
+            products.put(product.getProductName(), product);
         }
     }
 

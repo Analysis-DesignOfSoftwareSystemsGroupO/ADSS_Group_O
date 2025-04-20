@@ -39,9 +39,8 @@ public class SupplierController {
         supplierService.updateSupplierPhoneNumber(ID, phoneNumber);
     }
 
-    public void updateSupplierBankAccount(String ID, String bankAccount, String bankNumber, String bankBranch
-            , String ownerID) {
-        supplierService.updateSupplierBankAccount(ID, bankAccount, bankNumber, bankBranch, ownerID);
+    public void updateSupplierBankAccount(String ID, String bankAccount, String bankNumber, String bankBranch) {
+        supplierService.updateSupplierBankAccount(ID, bankAccount, bankNumber, bankBranch);
     }
 
     public void updateSupplierName(String ID, String name) {

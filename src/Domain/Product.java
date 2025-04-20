@@ -8,4 +8,11 @@ public class Product {
         this.productID = productID;
         this.productName = productName;
     }
+
+    public String getProductID() {
+        return productID;
+    }
+    public String getProductName() {
+        return productName;
+    }
 }

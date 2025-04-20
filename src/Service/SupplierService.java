@@ -38,8 +38,7 @@ public class SupplierService {
     }
     //updates supplier phone number given supplierId
     public void updateSupplierBankAccount(String supplierId, String newBankAccount, String newBankNumber,
-                                          String newBankBranch
-            , String ownerID) {
+                                          String newBankBranch) {
         //todo
     }
     //updates a supplier name given a supplier id

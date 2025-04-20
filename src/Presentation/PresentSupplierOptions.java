@@ -155,11 +155,9 @@ public class PresentSupplierOptions {
                         String newBankBranch = scanner.nextLine();
                         System.out.println("Enter new bank account number: ");
                         String newBankAccountNumber = scanner.nextLine();
-                        System.out.println("Enter new owner ID: ");
-                        String newOwnerID = scanner.nextLine();
                         try {
                             supplierController.updateSupplierBankAccount(id, newBankNumber, newBankBranch,
-                                    newBankAccountNumber, newOwnerID);
+                                    newBankAccountNumber);
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());

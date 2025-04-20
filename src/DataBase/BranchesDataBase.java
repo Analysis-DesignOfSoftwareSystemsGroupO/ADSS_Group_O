@@ -25,6 +25,11 @@ public class BranchesDataBase {
         branches.put(branch.getBranchID(), branch);
     }
 
+    public boolean existsBranch(String branchID) {
+        return branches.containsKey(branchID);
+    }
+
+
     public Branch getBranch(String branchID) {
         return branches.get(branchID);
     }
