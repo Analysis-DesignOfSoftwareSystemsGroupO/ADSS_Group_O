@@ -15,4 +15,8 @@ public class SupplierBranchKey{
     public String getBranchID() {
         return branchID;
     }
+
+    public boolean equalsKey(String supplierID, String branchID) {
+        return this.supplierID.equals(supplierID) && this.branchID.equals(branchID);
+    }
 }

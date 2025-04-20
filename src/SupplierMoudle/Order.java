@@ -11,10 +11,11 @@ public class Order {
     private int totalPrice;
     private final Agreement agreement;
     private List<SuppliedItem> suppliedItems;
+    private Boolean orderClosed = false;
 
     public Order(Agreement agreement, Branch branch) {
         if (agreement == null || branch == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("Agreement or branch is null");
         }
         this.agreement = agreement;
         this.suppliedItems = new ArrayList<>();
@@ -36,8 +37,8 @@ public class Order {
 
 
     public Boolean addItemToOrder(String itemID, int quantity) {
-        if (itemID == null || itemID.isEmpty() || orderID == null) {
-            throw new NullPointerException();
+        if (itemID == null || itemID.isEmpty() || orderID == null || quantity <= 0) {
+            throw new NullPointerException("Product ID cannot be null or empty || Quantity cannot be less than 1");
         }
         for (SuppliedItem item : agreement.supplierItemsList){
             int discountPercentage = 0;
@@ -63,16 +64,30 @@ public class Order {
         return totalPrice;
     }
 
-    public void displayOrder(Order order) {
-        if (order == null) {
-            throw new NullPointerException();
-        }
-        System.out.println("Order Number: " + order.orderID);
-        System.out.println("Order Date: " + order.orderDate);
-        System.out.println("Total Price: " + order.totalPrice);
+    public void displayOrder() {
+        System.out.println("Order Number: " + this.orderID);
+        System.out.println("Order Date: " + this.orderDate);
+        System.out.println("Total Price: " + this.totalPrice);
         System.out.println("Items: ");
         for (SuppliedItem item : suppliedItems) {
             System.out.println(item.suppliedItemID + ": " + item.suppliedItemPrice);
         }
+    }
+
+    public Boolean isOrderClosed() {
+        return orderClosed;
+    }
+
+    public String getOrderID() {
+        return orderID;
+    }
+
+    public void closeOrder() {
+        if (totalPrice <= 0) {
+            System.out.println("Add Products to your cart");
+            return;
+        }
+        orderClosed = true;
+        System.out.println("Order Closed");
     }
 }

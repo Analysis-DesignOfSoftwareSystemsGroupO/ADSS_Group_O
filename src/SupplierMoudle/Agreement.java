@@ -40,5 +40,8 @@ public class Agreement {
         supplierItemsList.add(suppliedItem);
     }
 
+    public String getSupplierID(){
+        return this.supplier.getID();
+    }
 
 }
