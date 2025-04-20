@@ -4,14 +4,11 @@ import Domain.Agreement;
 import Domain.Branch;
 import Domain.Supplier;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class SuppliersDataBase {
     private Map<String, Supplier> suppliers;
     private Map<SupplierBranchKey, Agreement> suppliersAgreements;
-
     //singleton database
     private static SuppliersDataBase suppliersDataBase = null;
     public static SuppliersDataBase getInstance() {
@@ -26,9 +23,14 @@ public class SuppliersDataBase {
     }
 
 
+    /**
+     *Supplier Data Base Functions:
+     */
+
     public void addSupplier(Supplier supplier) {
         suppliers.put(supplier.getSupplierName(), supplier);
     }
+
     public Supplier getSupplier(String supplierID) {
         if (supplierID == null){
             throw new NullPointerException();
@@ -38,6 +40,12 @@ public class SuppliersDataBase {
         }
         return new Supplier(suppliers.get(supplierID));
     }
+
+    public List<Supplier> getAllSuppliers() {
+        return new ArrayList<>(suppliers.values());
+    }
+
+
 
     public void addAgreement(String supplierID, Branch branch, Agreement agreement) {
         Supplier supplier = suppliers.get(supplierID);

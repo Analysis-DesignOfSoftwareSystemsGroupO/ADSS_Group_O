@@ -3,10 +3,11 @@ package Service;
 import DataBase.SuppliersDataBase;
 import Domain.*;
 
+import java.util.List;
 
 
 public class SupplierService {
-    private static SuppliersDataBase suppliersDataBase = new SuppliersDataBase();
+    private static final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
     private int supplierId = 100;
     private int productId = 1000;
 
@@ -30,40 +31,43 @@ public class SupplierService {
 
     //checks validity of the id of the supplier
     public boolean validIdSupplier(String supplierId) {
-        return suppliersDataBase.suppliers.containsKey(supplierId);
+        return (suppliersDataBase.getSupplier(supplierId) != null);
     }
 
     //prints all existing suppliers
     public void printAllSuppliers() {
-        for (Supplier supplier : suppliersDataBase.suppliers.values()) {
+        List<Supplier> suppliers = suppliersDataBase.getAllSuppliers();
+        for (Supplier supplier : suppliers) {
             System.out.println(supplier);
         }
     }
 
     //prints the details of a specific supplier
     public void printSupplier(String supplierId) {
-        if (suppliersDataBase.suppliers.containsKey(supplierId)) {
-            System.out.println(suppliersDataBase.suppliers.get(supplierId));
+        if (suppliersDataBase.getSupplier(supplierId) != null) {
+            System.out.println(suppliersDataBase.getSupplier(supplierId));
         }
     }
+
     //updates supplier phone number given supplierId
-    public void updateSupplierInfoContactPhoneNumber(String supplierId, String contactName, String newPhoneNumber) {
-        Supplier supplier = suppliersDataBase.suppliers.get(supplierId);
+    public void updateSupplierInfoContactPhoneNumber(String supplierId, String contactName, String newTitle, String newPhoneNumber) {
+        Supplier supplier = suppliersDataBase.getSupplier(supplierId);
         if (supplier != null) {
-            for (InformationContact infoContact : supplier.InformationContacts){
+            for (InformationContact infoContact : supplier.getInformationContacts()){
                 if (infoContact.getContactName().equals(contactName)) {
                     infoContact.setContactPhone(newPhoneNumber);
+                    infoContact.setTitle(newTitle);
+                    break;
                 }
             }
         }
     }
+
     //updates supplier phone number given supplierId
-    public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber,
-                                          String newBankBranch
-            , String ownerID) {
-        if(suppliersDataBase.suppliers.containsKey(supplierID)) {
+    public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber, String newBankBranch, String ownerID) {
+        if(suppliersDataBase.getSupplier(supplierID) != null) {
             try {
-                Supplier supplier = suppliersDataBase.suppliers.get(supplierID);
+                Supplier supplier = suppliersDataBase.getSupplier(supplierID);
                 supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, ownerID);
             }catch (Exception e) {
                 e.printStackTrace();
@@ -72,10 +76,11 @@ public class SupplierService {
     }
 
     //updates a supplier name given a supplier id
-    public void updateSupplierName(String supplierId, String newName) {
-        Supplier supplier = suppliersDataBase.suppliers.get(supplierId);
+    public void updateSupplierName(String supplierID, String newName) {
+        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
         if (supplier != null) {
             supplier.setSupplierName(newName);
         }
-   }
+    }
+    
 }

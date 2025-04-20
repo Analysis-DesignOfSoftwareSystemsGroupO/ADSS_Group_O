@@ -87,4 +87,8 @@ public class Supplier {
         return "Supplier ID: " + supplierID + System.lineSeparator() + "Supplier Name: " +
                 supplierName + System.lineSeparator() + "Account Number: " + supplierAccountNumber + System.lineSeparator();
     }
+
+    public void addProduct(Product product) {} //Todo
+
+
 }
