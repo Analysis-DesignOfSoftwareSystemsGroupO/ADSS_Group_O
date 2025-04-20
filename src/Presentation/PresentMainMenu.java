@@ -16,11 +16,11 @@ public class PresentMainMenu {
 
     public void runMainPresentation(){
         while (true){
-            System.out.println("Welcome to SupplierMoudle !\n");
-            System.out.println("1.Supplier options\n");
-            System.out.println("2.Order options\n");
-            System.out.println("3.Agreement options\n");
-            System.out.println("4.Exit\n");
+            System.out.println("Welcome to SupplierMoudle !");
+            System.out.println("1.Supplier options");
+            System.out.println("2.Order options");
+            System.out.println("3.Agreement options");
+            System.out.println("4.Exit");
             System.out.println("Please select an option: ");
             Scanner input = new Scanner(System.in);
             try{

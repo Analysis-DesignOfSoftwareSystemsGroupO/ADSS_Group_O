@@ -1,11 +1,10 @@
 package DataBase;
 
-import SupplierMoudle.Agreement;
-import SupplierMoudle.Branch;
-import SupplierMoudle.Supplier;
+import Domain.Agreement;
+import Domain.Branch;
+import Domain.Supplier;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
