@@ -9,13 +9,22 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SuppliersDataBase {
-    public Map<String, Supplier> suppliers;
-    public Map<SupplierBranchKey, Agreement> suppliersAgreements;
+    private Map<String, Supplier> suppliers;
+    private Map<SupplierBranchKey, Agreement> suppliersAgreements;
 
-    public SuppliersDataBase() {
-        suppliers = new HashMap<>();
-        suppliersAgreements = new HashMap<>();
+    //singleton database
+    private static SuppliersDataBase suppliersDataBase = null;
+    public static SuppliersDataBase getInstance() {
+        if (suppliersDataBase == null) {
+            suppliersDataBase = new SuppliersDataBase();
+        }
+        return suppliersDataBase;
     }
+    private SuppliersDataBase(){
+        suppliersAgreements = new HashMap<>();
+        suppliers = new HashMap<>();
+    }
+
 
     public void addSupplier(Supplier supplier) {
         suppliers.put(supplier.getSupplierName(), supplier);

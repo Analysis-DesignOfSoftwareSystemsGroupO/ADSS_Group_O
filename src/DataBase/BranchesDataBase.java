@@ -1,12 +1,25 @@
 package DataBase;
 
-import SupplierMoudle.Branch;
-import SupplierMoudle.Supplier;
+import Domain.Branch;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class BranchesDataBase {
-    public Map<String, Branch> branches;
+    private Map<String, Branch> branches;
+
+    //singleton database
+    private static BranchesDataBase branchesDataBase = null;
+    public static BranchesDataBase getInstance() {
+        if (branchesDataBase == null) {
+            branchesDataBase = new BranchesDataBase();
+        }
+        return branchesDataBase;
+    }
+    private BranchesDataBase(){
+        branches = new HashMap<>();
+    }
+
 
     public void addBranch(Branch branch) {
         branches.put(branch.getBranchID(), branch);

@@ -1,4 +1,4 @@
-package SupplierMoudle;
+package Domain;
 
 import DataBase.SuppliersDataBase;
 
