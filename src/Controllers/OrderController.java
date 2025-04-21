@@ -12,16 +12,16 @@ public class OrderController {
     public String createOrder(String branchId, String supplierId) {
         return orderService.createOrder(branchId, supplierId);
     }
-    public boolean isOrderEmpty(String OrderID) {
-        return orderService.isOrderEmpty(OrderID);
+    public boolean isOrderEmpty(String OrderID, String supplierId) {
+        return orderService.isOrderEmpty(OrderID, supplierId);
     }
     //deletes an order if the user decides to cancel order while in the making
-    public void deleteConcurrentOrder(String OrderID) {
-        orderService.deleteOrder(OrderID);
+    public void deleteConcurrentOrder(String OrderID, String supplierId) {
+        orderService.deleteOrder(OrderID, supplierId);
     }
     //prints the order for the user to view while making the order
-    public void viewConcurrentOrder(String OrderID) {
-        orderService.viewOrder(OrderID);
+    public void viewConcurrentOrder(String OrderID, String supplierId) {
+        orderService.viewOrder(OrderID, supplierId);
     }
 
     //adds a product to the order
@@ -45,7 +45,7 @@ public class OrderController {
     }
 
     //method that finishes an orders (its point is to check if the order is empty, if it is throw an exception )
-    public void finishOrder(String orderID) {
-        orderService.finishOrder(orderID);
+    public void finishOrder(String orderID, String supplierID){
+        orderService.finishOrder(orderID, supplierID);
     }
 }

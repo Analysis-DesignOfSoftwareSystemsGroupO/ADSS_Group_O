@@ -87,7 +87,7 @@ public class PresentOrderOptions {
                 switch (choice) {
                     case "*": // finish order choice
                         try {
-                            orderController.finishOrder(orderID);
+                            orderController.finishOrder(orderID, supplierID);
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
@@ -100,7 +100,7 @@ public class PresentOrderOptions {
                             System.out.println("Are you sure you want to cancel ? y/n");
                             scanner.nextLine();
                             if (scanner.nextLine().equals("y")) {
-                                orderController.deleteConcurrentOrder(orderID);
+                                orderController.deleteConcurrentOrder(orderID, supplierID);
                                 return;
                             } else if (scanner.nextLine().equals("n")) {
                                 break;

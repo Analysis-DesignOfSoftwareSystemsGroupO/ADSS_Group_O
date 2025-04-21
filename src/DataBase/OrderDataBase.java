@@ -3,8 +3,6 @@ package DataBase;
 import Domain.Order;
 <<<<<<< HEAD
 import Domain.Supplier;
-=======
->>>>>>> shay
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,5 +53,19 @@ public class OrderDataBase {
             copyOrders.add(new Order(order));
         }
         return copyOrders;
+    }
+    public List<Order> getOrdersBySupplier(String supplierID) {
+        if (supplierID == null){
+            throw new NullPointerException();
+        }
+        if (!orders.containsKey(supplierID)) {
+            return null;
+        }
+        List<Order> copyOrders = orders.get(supplierID);
+        return copyOrders;
+    }
+
+    public void removeOrder(String supplierId, Order order) {
+        orders.get(supplierId).remove(order);
     }
 }
