@@ -131,12 +131,26 @@ public class PresentAgreementOptions {
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productName = editAgreement.nextLine();
-        System.out.println("Enter product quantity for discount:");
-        int productQuantity = editAgreement.nextInt();
-        System.out.println("Enter product discount:");
-        int productDiscount = editAgreement.nextInt();
+        System.out.println("Enter product price:");
+        int price = editAgreement.nextInt();
+        int productDiscount = -1;
+        int productQuantity = -1;
+        while (true) {
+            System.out.println("Discount ? y/n");
+            editAgreement.nextLine();
+            if (editAgreement.nextLine().equals("y")) {
+                System.out.println("Enter product quantity for discount:");
+                productQuantity = editAgreement.nextInt();
+                System.out.println("Enter product discount:");
+                productDiscount = editAgreement.nextInt();
+                break;
+            } else if (editAgreement.nextLine().equals("n")) {
+                break;
+            }
+            System.out.println("Invalid option !\n");
+        }
         try {
-            agreementController.addProductToAgreement(supplierID, branchId , productName, productQuantity, productDiscount);
+            agreementController.addProductToAgreement(supplierID, branchId , productName, price, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -156,16 +170,31 @@ public class PresentAgreementOptions {
         }
     }
 
+    //check if available to combine with addproduct
     private void editProductDiscount(String supplierID, String branchId) {
         Scanner editAgreement = new Scanner(System.in);
-        System.out.println("Enter product Id:");
-        String productId = editAgreement.nextLine();
-        System.out.println("Enter new quantity for discount");
-        int newQuantity = editAgreement.nextInt();
-        System.out.println("Enter new discount:");
-        int newDiscount = editAgreement.nextInt();
+        System.out.println("Enter product name:");
+        String productName = editAgreement.nextLine();
+        System.out.println("Enter product price:");
+        int price = editAgreement.nextInt();
+        int productDiscount = -1;
+        int productQuantity = -1;
+        while (true) {
+            System.out.println("Discount ? y/n");
+            editAgreement.nextLine();
+            if (editAgreement.nextLine().equals("y")) {
+                System.out.println("Enter new product quantity for discount:");
+                productQuantity = editAgreement.nextInt();
+                System.out.println("Enter new product discount:");
+                productDiscount = editAgreement.nextInt();
+                break;
+            } else if (editAgreement.nextLine().equals("n")) {
+                break;
+            }
+            System.out.println("Invalid option !\n");
+        }
         try {
-            agreementController.editProductDiscount(supplierID, branchId, productId, newQuantity, newDiscount);
+            agreementController.addProductToAgreement(supplierID, branchId , productName, price, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

@@ -20,8 +20,8 @@ public class AgreementController {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String branchid, String supplierID, String productName, int quantity, int discount) {
-        agreementService.addProductToAgreement(branchid, supplierID, productName, quantity, discount);
+    public void addProductToAgreement(String branchid, String supplierID, String productName, int price, int quantity, int discount) throws Exception {
+        agreementService.addProductToAgreement(branchid, supplierID, productName, price, quantity, discount);
     }
 
     //checks if an agreement exists

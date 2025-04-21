@@ -3,9 +3,7 @@ package Service;
 import DataBase.BranchesDataBase;
 import DataBase.ProductDataBase;
 import DataBase.SuppliersDataBase;
-import Domain.Agreement;
-import Domain.Branch;
-import Domain.Supplier;
+import Domain.*;
 
 import java.util.Objects;
 
@@ -43,8 +41,20 @@ public void removeAgreement(String branchId, String supplierId) {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String branchid, String  supplierID, String productName, int quantity, int discount) {
-       //todo
+    public void addProductToAgreement(String branchid, String  supplierID, String productName, int price,
+                                      int quantity, int discount) throws Exception {
+        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null){
+            throw new Exception("supplier does not exist");
+        }
+
+        Product product = productDataBase.getProduct(productName);
+        if (product == null){
+            throw new Exception("product does not exist");
+        }
+
+        supplier.addProduct(product);
+
     }
 
     //checks if an agreement exists
@@ -65,7 +75,7 @@ public void removeAgreement(String branchId, String supplierId) {
     }
     //removes a product from an existing agreement
     public void removeProductFromAgreement(String supplierID, String branchId, String productname) {
-
+        //todo
     }
     //edits a product discount from an existing agreement
     public void editProductDiscount(String supplierID, String branchId, String productId, int quantity, int discount){

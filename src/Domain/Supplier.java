@@ -14,6 +14,7 @@ public class Supplier {
     private Bank bank;
     private List<InformationContact> InformationContacts;
     private HashMap<String, Product> supplyProducts;
+    private int supplied_product_id = 0;
 
 
     public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch, String ownerID) {
@@ -51,6 +52,10 @@ public class Supplier {
 
     public void setAccountNumber(String accountNumber) {
         this.supplierAccountNumber = accountNumber;
+    }
+
+    public int getSupplied_product_id() {
+        return supplied_product_id++;
     }
 
     public void setSupplierName(String supplierName) {
@@ -94,6 +99,10 @@ public class Supplier {
         if (!supplyProducts.containsKey(product.getProductName())){
             this.supplyProducts.put(product.getProductName(), product);
         }
+    }
+
+    public Product getProduct(String pname){
+        return this.supplyProducts.get(pname);
     }
 
 

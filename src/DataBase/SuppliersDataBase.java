@@ -1,9 +1,6 @@
 package DataBase;
 
-import Domain.Agreement;
-import Domain.Branch;
-import Domain.SuppliedItem;
-import Domain.Supplier;
+import Domain.*;
 
 import java.util.*;
 
@@ -40,7 +37,7 @@ public class SuppliersDataBase {
         if (!suppliers.containsKey(supplierID)) {
             return null;
         }
-        return new Supplier(suppliers.get(supplierID));
+        return suppliers.get(supplierID);
     }
 
     public List<Supplier> getAllSuppliers() {
@@ -72,10 +69,23 @@ public class SuppliersDataBase {
         }
         for(SupplierBranchKey key : suppliersAgreements.keySet()){
             if (Objects.equals(key.getBranchID(), branchID) && Objects.equals(key.getSupplierID(), supplierID)) {
-                return new Agreement(suppliersAgreements.get(key));
+                return suppliersAgreements.get(key);
             }
         }
         return null;
+}
+
+    //add product to agreement
+    public void addProductToAgreement(SuppliedItem product, String branchID, String supplierID){
+        Agreement agreement = this.getAgreement(branchID, supplierID);
+        if (agreement == null){
+            throw new NullPointerException("agreement does not exist");
+        }
+        agreement.addItem(product);
+    }
+
+    public void addDiscountToAgreement(SuppliedItem suppliedItem, int quantity, int discount){
+
     }
 
 

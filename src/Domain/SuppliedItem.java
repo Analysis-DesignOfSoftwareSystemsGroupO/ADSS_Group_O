@@ -5,13 +5,13 @@ public class SuppliedItem {
     public int suppliedItemPrice;
     private Product product;
 
-    public SuppliedItem(String suppliedItemID, int suppliedItemPrice, String productID, String productName) {
-        if (suppliedItemID == null || suppliedItemPrice == 0 || productID == null) {
+    public SuppliedItem(String suppliedItemID, int suppliedItemPrice, Product product) {
+        if (suppliedItemID == null || suppliedItemPrice == 0 || product == null) {
             throw new IllegalArgumentException("Supplied item ID and product ID cannot be null");
         }
         this.suppliedItemID = suppliedItemID;
         this.suppliedItemPrice = suppliedItemPrice;
-        this.product = new Product(productID, productName);
+        this.product = product;
     }
 
     public Product getProduct() {
