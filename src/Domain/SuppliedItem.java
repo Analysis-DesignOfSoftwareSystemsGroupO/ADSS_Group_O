@@ -13,4 +13,8 @@ public class SuppliedItem {
         this.suppliedItemPrice = suppliedItemPrice;
         this.product = new Product(productID, productName);
     }
+
+    public Product getProduct() {
+        return product;
+    }
 }

@@ -78,7 +78,7 @@ public class PresentOrderOptions {
                 System.out.println(e.getMessage());
             }
 
-            System.out.println("To add product Enter the product ID");
+            System.out.println("To add product Enter the product name");
             System.out.println("To finalize order enter '*'");
             System.out.println("To cancel the order press '-'");
             System.out.println("Choice: ");

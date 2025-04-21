@@ -2,6 +2,7 @@ package Domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Agreement {
     public String agreementID;
@@ -40,8 +41,18 @@ public class Agreement {
         supplierItemsList.add(suppliedItem);
     }
 
+    public boolean productInAgreement(Product product){
+        for (SuppliedItem supplierItem : supplierItemsList){
+            if (Objects.equals(product.getProductID(), supplierItem.getProduct().getProductID())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getSupplierID(){
         return this.supplier.getID();
     }
+    public String getBranchID(){ return this.Branch.getBranchID();}
 
 }

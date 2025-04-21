@@ -1,7 +1,6 @@
 package DataBase;
 
 import Domain.Order;
-<<<<<<< HEAD
 import Domain.Supplier;
 
 import java.util.ArrayList;

@@ -2,6 +2,7 @@ package DataBase;
 
 import Domain.Agreement;
 import Domain.Branch;
+import Domain.SuppliedItem;
 import Domain.Supplier;
 
 import java.util.*;
@@ -9,6 +10,8 @@ import java.util.*;
 public class SuppliersDataBase {
     private Map<String, Supplier> suppliers;
     private Map<SupplierBranchKey, Agreement> suppliersAgreements;
+
+
     //singleton database
     private static SuppliersDataBase suppliersDataBase = null;
     public static SuppliersDataBase getInstance() {
@@ -26,14 +29,13 @@ public class SuppliersDataBase {
     /**
      *Supplier Data Base Functions:
      */
-
     public void addSupplier(Supplier supplier) {
         suppliers.put(supplier.getSupplierName(), supplier);
     }
 
     public Supplier getSupplier(String supplierID) {
         if (supplierID == null){
-            throw new NullPointerException();
+            throw new NullPointerException("supplier does not exist");
         }
         if (!suppliers.containsKey(supplierID)) {
             return null;
@@ -45,17 +47,25 @@ public class SuppliersDataBase {
         return new ArrayList<>(suppliers.values());
     }
 
+    /*
+        agreement functions
+     */
 
-
-    public void addAgreement(String supplierID, Branch branch, Agreement agreement) {
-        Supplier supplier = suppliers.get(supplierID);
-        if (supplier == null || branch == null) {
-            return;
+    public void removeAgreement(String branchId, String supplierID){
+        for (SupplierBranchKey branchKey : suppliersAgreements.keySet()){
+            if (Objects.equals(branchKey.branchID, branchId) && Objects.equals(branchKey.supplierID, supplierID)){
+                suppliersAgreements.remove(branchKey);
+            }
         }
+        throw new NullPointerException("agreement does not exist");
+    }
+
+    public void addAgreement(Supplier supplier, Branch branch, Agreement agreement) {
         SupplierBranchKey supBKey = new SupplierBranchKey(supplier.getID(), branch.getBranchID());
         suppliersAgreements.put(supBKey, agreement);
     }
 
+    //return a copy of agreement
     public Agreement getAgreement(String branchID, String supplierID) {
         if (supplierID == null || branchID == null) {
             throw new NullPointerException();
@@ -67,6 +77,13 @@ public class SuppliersDataBase {
         }
         return null;
     }
+
+
+    //return a copy of all agreement
+    public List<Agreement> getAllAgreement(){
+        return new ArrayList<>(suppliersAgreements.values());
+    }
+
 
     public static class SupplierBranchKey{
         private final String supplierID;

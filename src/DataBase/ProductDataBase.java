@@ -32,6 +32,9 @@ public void addProduct(Product product) {
             products.put(product.getProductName(), product);
         }
     }
+    public Product getProduct(String productname){
+        return products.get(productname);
+    }
 
 
 

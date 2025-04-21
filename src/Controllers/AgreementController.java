@@ -6,11 +6,11 @@ public class AgreementController {
     private AgreementService agreementService = new AgreementService();
     private BranchService branchService = new BranchService();
 
-    public void removeAgreement(String agreementId) {
-        agreementService.removeAgreement(agreementId);
+    public void removeAgreement(String branchId, String supplierId) {
+        agreementService.removeAgreement(branchId, supplierId);
     }
 
-    public void createNewAgreement(String supplierID, String branchId) {
+    public void createNewAgreement(String supplierID, String branchId) throws Exception {
         agreementService.createNewAgreement(supplierID, branchId);
     }
 
@@ -20,30 +20,25 @@ public class AgreementController {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String agreementId, String productName, int quantity, int discount) {
-        agreementService.addProductToAgreement(agreementId, productName, quantity, discount);
+    public void addProductToAgreement(String branchid, String supplierID, String productName, int quantity, int discount) {
+        agreementService.addProductToAgreement(branchid, supplierID, productName, quantity, discount);
     }
 
     //checks if an agreement exists
     public boolean agreementExists(String supplierID, String branchId) {
         return agreementService.agreementExists(supplierID, branchId);
     }
-    //views an agreement given agreement id
-    public void viewAgreement(String agreementID) {
-        agreementService.viewAgreement(agreementID);
-    }
-
     //view an agreement given branch id and supplier id
     public void viewAgreement(String branchId, String supplierID) {
         agreementService.viewAgreement(branchId, supplierID);
     }
 
-    public void editProductDiscount(String agreementID, String productId, int quantity, int discount){
-        agreementService.editProductDiscount(agreementID, productId, quantity, discount);
+    public void editProductDiscount(String branchId, String supplierID, String productId, int quantity, int discount){
+        agreementService.editProductDiscount(supplierID, branchId, productId, quantity, discount);
     }
 
-    public void removeProductFromAgreement(String agreementID, String productID) {
-        agreementService.removeProductFromAgreement(agreementID, productID);
+    public void removeProductFromAgreement(String supplierID, String branchId, String productID) {
+        agreementService.removeProductFromAgreement(supplierID, branchId, productID);
     }
 
 
