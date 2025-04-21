@@ -17,11 +17,11 @@ public class Supplier {
     private int supplied_product_id = 0;
 
 
-    public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch, String ownerID) {
-        if (ID == null || accountNumber == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null || ownerID == null) {
+    public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch) {
+        if (ID == null || accountNumber == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null) {
             throw new NullPointerException();
         }
-        this.bank = new Bank(bankAccount, bankNumber, bankBranch, ownerID);
+        this.bank = new Bank(bankAccount, bankNumber, bankBranch, ID);
         this.supplierID = ID;
         this.supplierAccountNumber = accountNumber;
         this.supplierName = supplierName;
@@ -36,6 +36,7 @@ public class Supplier {
         this.bank = new Bank(this.getBank());
         this.InformationContacts = other.InformationContacts;
         this.supplyProducts = other.supplyProducts;
+        this.supplied_product_id = other.supplied_product_id;
     }
 
     public String getID() {

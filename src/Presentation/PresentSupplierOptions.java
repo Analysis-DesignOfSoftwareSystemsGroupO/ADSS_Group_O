@@ -130,7 +130,7 @@ public class PresentSupplierOptions {
             return;
         }
         while (true){
-            System.out.println("1.Edit supplier phone");
+            System.out.println("1.Edit information contact details");
             System.out.println("2.Edit supplier name");
             System.out.println("3.Edit bank account number");
             System.out.println("4.Return to Main Menu");
@@ -139,9 +139,13 @@ public class PresentSupplierOptions {
                 int option = scanner.nextInt();
                 switch (option) {
                     case 1:
-                        System.out.println("Enter new phone number: ");
+                        System.out.println("Enter information contact name: ");
+                        String contactName = scanner.nextLine();
+                        System.out.println("Enter new title for " + contactName + " : ");
+                        String newTitle = scanner.nextLine();
+                        System.out.println("Enter new phone number for " + contactName + " : ");
                         String newPhone = scanner.nextLine();
-                        supplierController.updateSupplierInformationContact(id, newPhone);
+                        supplierController.updateSupplierInformationContact(id, contactName, newTitle, newPhone);
                         break;
                     case 2:
                         System.out.println("Enter new name : ");
@@ -156,8 +160,8 @@ public class PresentSupplierOptions {
                         System.out.println("Enter new bank account number: ");
                         String newBankAccountNumber = scanner.nextLine();
                         try {
-                            supplierController.updateSupplierBankAccount(id, newBankNumber, newBankBranch,
-                                    newBankAccountNumber);
+                            //String supplierId, String bankAccount, String bankNumber, String bankBranch, String  ownerID
+                            supplierController.updateSupplierBankAccount(id, newBankAccountNumber, newBankNumber, newBankBranch);
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());

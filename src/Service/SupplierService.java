@@ -18,7 +18,7 @@ public class SupplierService {
                                String contactName, String contactPhoneNumber, String contactTitle) {
         try {
             String ID = String.valueOf(supplierId++);
-            Supplier newSupplier = new Supplier(ID, accountNumber, supplierName, bankAccount, bankNumber, bankBranch, ownerID);
+            Supplier newSupplier = new Supplier(ID, accountNumber, supplierName, bankAccount, bankNumber, bankBranch);
             suppliersDataBase.addSupplier(newSupplier);
         }
         catch (Exception e) {
@@ -28,7 +28,7 @@ public class SupplierService {
 
     //adds a new product to an existing supplier
     public void addNewProductToSupplier(String supplierId, String productName, int price) {
-        //add product to product data base handles multiple products in the db
+        //add product to product database handles multiple products in the db
         Product p = new Product(Integer.toString(productId),productName);
         productId++;
         productDataBase.addProduct(p);
@@ -71,11 +71,11 @@ public class SupplierService {
     }
 
     //updates supplier phone number given supplierId
-    public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber, String newBankBranch, String ownerID) {
+    public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber, String newBankBranch) {
         if(suppliersDataBase.getSupplier(supplierID) != null) {
             try {
                 Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-                supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, ownerID);
+                supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, supplierID);
             }catch (Exception e) {
                 e.printStackTrace();
             }
