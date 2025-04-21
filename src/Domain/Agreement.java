@@ -41,6 +41,7 @@ public class Agreement {
         supplierItemsList.add(suppliedItem);
     }
 
+    //return true if a product in an agreement
     public boolean productInAgreement(Product product){
         for (SuppliedItem supplierItem : supplierItemsList){
             if (Objects.equals(product.getProductID(), supplierItem.getProduct().getProductID())){
@@ -50,9 +51,36 @@ public class Agreement {
         return false;
     }
 
+    public void addDiscount(Discount discount){
+        if (discount == null){
+            throw new NullPointerException();
+        }
+        discounts.add(discount);
+
+    }
+
     public String getSupplierID(){
         return this.supplier.getID();
     }
     public String getBranchID(){ return this.Branch.getBranchID();}
 
+    public void removeProduct(Product product){
+        for (SuppliedItem supplierItem : supplierItemsList){
+            if (Objects.equals(product.getProductName(), supplierItem.getProduct().getProductName())){
+                supplierItemsList.remove(supplierItem);
+                break;
+            }
+        }
+
+       this.removeDiscount(product);
+    }
+
+    public void removeDiscount(Product product){
+        for (Discount discount : discounts){
+            if (Objects.equals(discount.getproductname(), product.getProductName())){
+                discounts.remove(discount);
+                break;
+            }
+        }
+    }
 }

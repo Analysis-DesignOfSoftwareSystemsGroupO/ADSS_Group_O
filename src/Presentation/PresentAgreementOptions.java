@@ -177,8 +177,8 @@ public class PresentAgreementOptions {
         String productName = editAgreement.nextLine();
         System.out.println("Enter product price:");
         int price = editAgreement.nextInt();
-        int productDiscount = -1;
-        int productQuantity = -1;
+        Integer productDiscount = null;
+        Integer productQuantity = null;
         while (true) {
             System.out.println("Discount ? y/n");
             editAgreement.nextLine();

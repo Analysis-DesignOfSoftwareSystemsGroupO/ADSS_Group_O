@@ -1,20 +1,29 @@
 package Domain;
 
 public class SuppliedItem {
-    public String suppliedItemID;
+    private static int gsuppliedItemID = 0;
     public int suppliedItemPrice;
     private Product product;
+    private int suppliedItemID;
 
-    public SuppliedItem(String suppliedItemID, int suppliedItemPrice, Product product) {
-        if (suppliedItemID == null || suppliedItemPrice == 0 || product == null) {
+    public SuppliedItem(int suppliedItemPrice, Product product) {
+        if (product == null) {
             throw new IllegalArgumentException("Supplied item ID and product ID cannot be null");
         }
-        this.suppliedItemID = suppliedItemID;
+        if (suppliedItemPrice <= 0){
+            throw new IllegalArgumentException("price cant be negative");
+        }
+        this.suppliedItemID = gsuppliedItemID;
+        suppliedItemID++;
         this.suppliedItemPrice = suppliedItemPrice;
         this.product = product;
     }
 
     public Product getProduct() {
         return product;
+    }
+
+    public int getSuppliedItemID() {
+        return suppliedItemID;
     }
 }

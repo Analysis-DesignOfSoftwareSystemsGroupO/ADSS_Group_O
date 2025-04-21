@@ -41,19 +41,30 @@ public void removeAgreement(String branchId, String supplierId) {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String branchid, String  supplierID, String productName, int price,
-                                      int quantity, int discount) throws Exception {
+    public void addProductToAgreement(String branchid, String supplierID, String productName, int price,
+                                      Integer quantity, Integer discount) throws Exception {
+        if (quantity != null && quantity <= 0){
+            throw new Exception("quantity have to be positive");
+        }
+        if (discount != null && discount <= 0){
+            throw new Exception("discount have to be positive");
+        }
         Supplier supplier = suppliersDataBase.getSupplier(supplierID);
         if (supplier == null){
             throw new Exception("supplier does not exist");
         }
 
-        Product product = productDataBase.getProduct(productName);
+        Product product = supplier.getProduct(productName);;
         if (product == null){
             throw new Exception("product does not exist");
         }
 
-        supplier.addProduct(product);
+        SuppliedItem suppliedItem = new SuppliedItem(price, product);
+        suppliersDataBase.addProductToAgreement(suppliedItem, branchid, supplierID);
+        if (quantity != null && discount != null){ //add discount if needed
+            Discount discount1 = new Discount(suppliedItem, quantity, discount);
+            suppliersDataBase.addDiscountToAgreement(branchid, supplierID, discount1);
+        }
 
     }
 
@@ -74,12 +85,50 @@ public void removeAgreement(String branchId, String supplierId) {
         System.out.println(suppliersDataBase.getAgreement(branchId, supplierID));
     }
     //removes a product from an existing agreement
-    public void removeProductFromAgreement(String supplierID, String branchId, String productname) {
-        //todo
+    public void removeProductFromAgreement(String supplierID, String branchId, String productname) throws Exception {
+        Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
+        if (agreement == null) {
+            throw new Exception("agreement does not exist");
+        }
+        Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null){
+            throw new Exception("supplier does not exist");
+        }
+        Product product = supplier.getProduct(productname);
+        if (product == null){
+            throw new Exception("supplier does not have this product");
+        }
+
+        if (!agreement.productInAgreement(product)){
+            throw new Exception("agreement does not have this product");
+        }
+
+
+        agreement.removeProduct(product);
     }
+
     //edits a product discount from an existing agreement
-    public void editProductDiscount(String supplierID, String branchId, String productId, int quantity, int discount){
-        //todo
+    public void editProductDiscount(String supplierID, String branchId, String productname, int quantity, int discount) throws Exception {
+
+        Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
+        if (agreement == null) {
+            throw new Exception("agreement does not exist");
+        }
+        Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null){
+            throw new Exception("supplier does not exist");
+        }
+        Product product = supplier.getProduct(productname);
+        if (product == null){
+            throw new Exception("supplier does not have this product");
+        }
+
+        if (!agreement.productInAgreement(product)){
+            throw new Exception("agreement does not have this product");
+        }
+        agreement.removeDiscount(product);
+
+
     }
 
 }

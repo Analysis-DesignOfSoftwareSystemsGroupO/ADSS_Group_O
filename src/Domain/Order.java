@@ -44,7 +44,7 @@ public class Order {
         }
         for (SuppliedItem item : agreement.supplierItemsList){
             int discountPercentage = 0;
-            if (item.suppliedItemID.equals(itemID)) {
+            if (Integer.toString(item.getSuppliedItemID()).equals(itemID)) {
                 for (Discount discount : agreement.getDiscounts()) {
                     if (discount.suppliedItem.equals(item) && quantity >= discount.quantity) {
                         discountPercentage = discount.getDiscount();
@@ -72,7 +72,7 @@ public class Order {
         System.out.println("Total Price: " + this.totalPrice);
         System.out.println("Items: ");
         for (SuppliedItem item : suppliedItems) {
-            System.out.println(item.suppliedItemID + ": " + item.suppliedItemPrice);
+            System.out.println(item.getSuppliedItemID() + ": " + item.suppliedItemPrice);
         }
     }
 

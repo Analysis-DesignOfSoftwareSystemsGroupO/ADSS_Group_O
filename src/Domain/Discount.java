@@ -13,4 +13,8 @@ public class Discount {
     public int getDiscount() {
         return discount;
     }
+
+    public String getproductname(){
+        return this.suppliedItem.getProduct().getProductName();
+    }
 }

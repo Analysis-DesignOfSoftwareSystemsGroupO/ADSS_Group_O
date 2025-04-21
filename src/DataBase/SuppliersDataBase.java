@@ -84,8 +84,12 @@ public class SuppliersDataBase {
         agreement.addItem(product);
     }
 
-    public void addDiscountToAgreement(SuppliedItem suppliedItem, int quantity, int discount){
-
+    public void addDiscountToAgreement(String branchID, String supplierID, Discount discount){
+        Agreement agreement = this.getAgreement(branchID, supplierID);
+        if (agreement == null){
+            throw new NullPointerException("agreement does not exist");
+        }
+        agreement.addDiscount(discount);
     }
 
 

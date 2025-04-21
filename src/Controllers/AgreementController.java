@@ -20,7 +20,7 @@ public class AgreementController {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String branchid, String supplierID, String productName, int price, int quantity, int discount) throws Exception {
+    public void addProductToAgreement(String branchid, String supplierID, String productName, int price, Integer quantity, Integer discount) throws Exception {
         agreementService.addProductToAgreement(branchid, supplierID, productName, price, quantity, discount);
     }
 
@@ -33,11 +33,11 @@ public class AgreementController {
         agreementService.viewAgreement(branchId, supplierID);
     }
 
-    public void editProductDiscount(String branchId, String supplierID, String productId, int quantity, int discount){
+    public void editProductDiscount(String branchId, String supplierID, String productId, int quantity, int discount) throws Exception {
         agreementService.editProductDiscount(supplierID, branchId, productId, quantity, discount);
     }
 
-    public void removeProductFromAgreement(String supplierID, String branchId, String productID) {
+    public void removeProductFromAgreement(String supplierID, String branchId, String productID) throws Exception {
         agreementService.removeProductFromAgreement(supplierID, branchId, productID);
     }
 
