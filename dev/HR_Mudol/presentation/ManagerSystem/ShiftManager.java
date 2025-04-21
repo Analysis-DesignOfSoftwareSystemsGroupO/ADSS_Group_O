@@ -1,9 +1,7 @@
-package HR_Mudol.presentation;
+package HR_Mudol.presentation.ManagerSystem;
 
 import HR_Mudol.domain.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+
 import java.util.Scanner;
 
 public class ShiftManager implements IShiftManager {

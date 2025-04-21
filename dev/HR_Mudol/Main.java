@@ -1,7 +1,7 @@
 package HR_Mudol;
 
 import HR_Mudol.domain.*;
-import HR_Mudol.presentation.HRSystemManager;
+import HR_Mudol.presentation.ManagerSystem.HRSystemManager;
 
 import java.time.LocalDate;
 import java.util.Scanner;

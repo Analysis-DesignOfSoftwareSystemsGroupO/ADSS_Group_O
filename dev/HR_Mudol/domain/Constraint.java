@@ -15,13 +15,13 @@ public class Constraint {
         return explanation;
     }
 
-    //just by the employee himself
-    public void setExplanation(User caller,Employee employee, String explanation) {
-        if (!caller.isSameEmployee(employee)) {
-            throw new SecurityException("Access denied");
+    public void setExplanation(User caller, Employee owner, String explanation) {
+        if (!caller.isSameEmployee(owner) && !caller.isManager()) {
+            throw new SecurityException("Access denied.");
         }
         this.explanation = explanation;
     }
+
 
     public DayOfWeek getDay() {
         return day;

@@ -10,12 +10,17 @@ public class Employee extends AbstractEmployee {
     private List<Role> relevantRoles;
     private EmploymentContract Contract;
     private List<Constraint> weeklyConstraints;
+    private List<Constraint> morningConstraints;
+    private List<Constraint> eveningConstraints;
+
     public Employee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
 
         super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
-        this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff);
+        this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff,this);
         this.weeklyConstraints = new LinkedList<>();
         this.relevantRoles = new LinkedList<>();
+        this.morningConstraints = new LinkedList<>();
+        this.eveningConstraints = new LinkedList<>();
     }
 
     public void addNewRole(User caller,Role role){
@@ -41,23 +46,51 @@ public class Employee extends AbstractEmployee {
 
     //only of the HR manager OR the emp himself
     public List<Constraint> getWeeklyConstraints(User caller){
-        if (!caller.isManager()||!caller.isSameEmployee(this)) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         return this.weeklyConstraints;
     }
 
+    public List<Constraint> getMorningConstraints(User caller) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        return morningConstraints;
+    }
+
+    public List<Constraint> getEveningConstraints(User caller) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        return eveningConstraints;
+    }
+
+
+    public void addNewMorningConstraints(User caller,Constraint constraint){
+        if (!caller.isSameEmployee(this) && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        morningConstraints.add(constraint);
+    }
+    public void addNewEveningConstraints(User caller,Constraint constraint){
+        if (!caller.isSameEmployee(this) && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        eveningConstraints.add(constraint);
+    }
     //only by the emp himself
     public void addNewConstraints(User caller,Constraint constraint){
-        if (!caller.isSameEmployee(this)) {
+        if (!caller.isSameEmployee(this) && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         weeklyConstraints.add(constraint);
     }
 
+
     //searching for constraints
     public Constraint searchingForRelevantconstraint(User caller, DayOfWeek day, ShiftType type){
-        if (!caller.isManager()||!caller.isSameEmployee(this)) {
+        if (!caller.isManager()&&!caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         for (Constraint c : this.weeklyConstraints){
@@ -69,10 +102,18 @@ public class Employee extends AbstractEmployee {
         return null;
     }
 
-    //for everybody
-    public void printRrelevantRoles(){
-        //need to add
+    // This method assumes that access control has already been verified externally
+    public void printRelevantRoles() {
+        System.out.println("\n--- Relevant Roles ---");
+        if (relevantRoles.isEmpty()) {
+            System.out.println("No roles assigned.");
+        } else {
+            for (int i = 0; i < relevantRoles.size(); i++) {
+                System.out.println((i + 1) + ". " + relevantRoles.get(i));
+            }
+        }
     }
+
 
     public int getMinDayShift(User caller) {
 
@@ -107,6 +148,14 @@ public class Employee extends AbstractEmployee {
 
         return this.Contract.getDaysOff(caller, this);
     }
+    public EmploymentContract getContract(User caller) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied");
+        }
+        return this.Contract;
+    }
+
+
 
     public void setDaysOff(User caller, int daysOff) {
 
@@ -119,8 +168,8 @@ public class Employee extends AbstractEmployee {
                 "\n  ID: " + this.getEmpId() +
                 "\n  Bank Account: " + this.getEmpBankAccount() +
                 "\n  Salary: " + this.getEmpSalary() +
-                "\n  Start Date: " + this.getEmpBankAccount() +
-                "\n" + this.Contract.toString();
+                "\n  Start Date: " + this.getEmpStartDate();
+
     }
 }
 

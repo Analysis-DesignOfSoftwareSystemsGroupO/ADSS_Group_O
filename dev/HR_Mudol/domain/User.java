@@ -28,8 +28,9 @@ public class User {
 
     //is the user the same person as the employee whose data is being accessed?
     public boolean isSameEmployee(AbstractEmployee employee) {
-        return this.user != null && this.user.equals(employee);
+        return this.user != null && this.user.getEmpId() == employee.getEmpId();
     }
+
 
 
 }

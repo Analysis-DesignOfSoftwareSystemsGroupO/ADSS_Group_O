@@ -1,6 +1,5 @@
-package HR_Mudol.presentation;
+package HR_Mudol.presentation.ManagerSystem;
 
-import HR_Mudol.domain.Shift;
 import HR_Mudol.domain.User;
 import HR_Mudol.domain.Week;
 
