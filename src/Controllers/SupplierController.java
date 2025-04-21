@@ -35,12 +35,13 @@ public class SupplierController {
         supplierService.printSupplier(supplierId);
     }
 
-    public void updateSupplierPhoneNumber(String ID, String phoneNumber) {
-        supplierService.updateSupplierInfoContactPhoneNumber(ID, phoneNumber);
+    public void updateSupplierInformationContact(String supplierId,String contactname, String title, String phoneNumber ) {
+        supplierService.updateSupplierInfoContactPhoneNumber(supplierId,contactname, title, phoneNumber);
     }
 
-    public void updateSupplierBankAccount(String ID, String bankAccount, String bankNumber, String bankBranch) {
-        supplierService.updateSupplierBankAccount(ID, bankAccount, bankNumber, bankBranch);
+    public void updateSupplierBankAccount(String supplierId, String bankAccount, String bankNumber, String bankBranch,
+                                          String  ownerID) {
+        supplierService.updateSupplierBankAccount(supplierId, bankAccount, bankNumber, bankBranch, ownerID);
     }
 
     public void updateSupplierName(String ID, String name) {

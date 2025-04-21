@@ -141,7 +141,7 @@ public class PresentSupplierOptions {
                     case 1:
                         System.out.println("Enter new phone number: ");
                         String newPhone = scanner.nextLine();
-                        supplierController.updateSupplierPhoneNumber(id, newPhone);
+                        supplierController.updateSupplierInformationContact(id, newPhone);
                         break;
                     case 2:
                         System.out.println("Enter new name : ");
