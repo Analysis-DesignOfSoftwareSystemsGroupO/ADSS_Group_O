@@ -3,7 +3,9 @@ package Domain;
 import DataBase.SuppliersDataBase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Supplier {
     private final String supplierID;
@@ -11,7 +13,7 @@ public class Supplier {
     private String supplierName;
     private Bank bank;
     private List<InformationContact> InformationContacts;
-    private List<Product> supplyProducts;
+    private HashMap<String, Product> supplyProducts;
 
 
     public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch, String ownerID) {
@@ -23,7 +25,7 @@ public class Supplier {
         this.supplierAccountNumber = accountNumber;
         this.supplierName = supplierName;
         this.InformationContacts = new ArrayList<InformationContact>();
-        this.supplyProducts = new ArrayList<Product>();
+        this.supplyProducts = new HashMap<String,Product>();
     }
 
     public Supplier(Supplier other) {
@@ -88,7 +90,11 @@ public class Supplier {
                 supplierName + System.lineSeparator() + "Account Number: " + supplierAccountNumber + System.lineSeparator();
     }
 
-    public void addProduct(Product product) {} //Todo
+    public void addProduct(Product product) {
+        if (!supplyProducts.containsKey(product.getProductName())){
+            this.supplyProducts.put(product.getProductName(), product);
+        }
+    }
 
 
 }

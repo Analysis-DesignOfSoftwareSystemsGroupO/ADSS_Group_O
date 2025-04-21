@@ -16,8 +16,8 @@ public class SupplierController {
     }
 
     //adds a new product to an existing supplier
-    public void addNewProductToSupplier(String productName, int price) {
-        supplierService.addNewProductToSupplier(productName, price);
+    public void addNewProductToSupplier(String supplierId, String productName, int price) {
+        supplierService.addNewProductToSupplier(supplierId, productName, price);
     }
 
     //checks validity of the id of the supplier

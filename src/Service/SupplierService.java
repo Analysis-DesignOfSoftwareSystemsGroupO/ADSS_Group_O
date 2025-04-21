@@ -1,5 +1,6 @@
 package Service;
 
+import DataBase.ProductDataBase;
 import DataBase.SuppliersDataBase;
 import Domain.*;
 
@@ -7,7 +8,8 @@ import java.util.List;
 
 
 public class SupplierService {
-    private static final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
+    private final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
+    private ProductDataBase productDataBase = ProductDataBase.getInstance();
     private int supplierId = 100;
     private int productId = 1000;
 
@@ -25,8 +27,13 @@ public class SupplierService {
     }
 
     //adds a new product to an existing supplier
-    public void addNewProductToSupplier(String productName, int price) {
-        //todo check if the product already exist if it doesnt create a new product id
+    public void addNewProductToSupplier(String supplierId, String productName, int price) {
+        //add product to product data base handles multiple products in the db
+        Product p = new Product(Integer.toString(productId),productName);
+        productId++;
+        productDataBase.addProduct(p);
+        //add product to supplier
+        suppliersDataBase.getSupplier(supplierId).addProduct(p);
     }
 
     //checks validity of the id of the supplier

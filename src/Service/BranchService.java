@@ -1,13 +1,21 @@
 package Service;
 
+import DataBase.BranchesDataBase;
+import Domain.Branch;
+
+import java.util.ArrayList;
+
 public class BranchService {
+    private BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
     //method that checks if a branch id is valid
-    public boolean isValidBranch(String branch) {
-        return true;
-        //todo
+    public boolean isValidBranch(String branchId) {
+        return branchesDataBase.existsBranch(branchId);
     }
     //method that prints all branches
     public void printAllBranchIds(){
-        //todo
+        ArrayList<Branch> branches = branchesDataBase.getCopyBranches();
+        for (Branch branch : branches){
+            System.out.println(branch.toString());
+        }
     }
 }

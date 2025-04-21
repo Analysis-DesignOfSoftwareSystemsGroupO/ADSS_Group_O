@@ -86,7 +86,7 @@ public class PresentSupplierOptions {
                 int option = scanner.nextInt();
                 switch (option) {
                     case 1:
-                        this.addNewProduct(id);
+                        this.addNewProductToSupplier(id);
                         break;
                     case 2:
                         this.editSupplierDetails(id);
@@ -104,14 +104,14 @@ public class PresentSupplierOptions {
 
     }
     // helper method to add a product
-    private void addNewProduct(String id){
+    private void addNewProductToSupplier(String supplierId){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter product name: ");
         String productName = scanner.nextLine();
         System.out.println("Enter product price: ");
         int productPrice = scanner.nextInt();
         try {
-            supplierController.addNewProductToSupplier(productName, productPrice);
+            supplierController.addNewProductToSupplier(supplierId, productName, productPrice);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

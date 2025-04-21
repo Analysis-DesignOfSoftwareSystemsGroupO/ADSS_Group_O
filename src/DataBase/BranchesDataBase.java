@@ -1,11 +1,8 @@
 package DataBase;
 
 import Domain.Branch;
-<<<<<<< HEAD
-import Domain.Supplier;
-=======
->>>>>>> shay
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +30,10 @@ public class BranchesDataBase {
         return branches.containsKey(branchID);
     }
 
+    //returns a copy of all the existing branches
+    public ArrayList<Branch> getCopyBranches(){
+        return new ArrayList<>(branches.values());
+    }
 
     public Branch getBranch(String branchID) {
         return branches.get(branchID);
