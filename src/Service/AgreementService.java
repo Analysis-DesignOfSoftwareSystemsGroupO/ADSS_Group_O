@@ -5,8 +5,6 @@ import DataBase.ProductDataBase;
 import DataBase.SuppliersDataBase;
 import Domain.*;
 
-import java.util.Objects;
-
 public class AgreementService {
     SuppliersDataBase suppliersDataBase= SuppliersDataBase.getInstance();
     BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
@@ -49,16 +47,7 @@ public void removeAgreement(String branchId, String supplierId) {
         if (discount != null && discount <= 0){
             throw new Exception("discount have to be positive");
         }
-        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-        if (supplier == null){
-            throw new Exception("supplier does not exist");
-        }
-
-        Product product = supplier.getProduct(productName);;
-        if (product == null){
-            throw new Exception("product does not exist");
-        }
-
+        Product product = getProductfromSupplier(productName, supplierID);
         SuppliedItem suppliedItem = new SuppliedItem(price, product);
         suppliersDataBase.addProductToAgreement(suppliedItem, branchid, supplierID);
         if (quantity != null && discount != null){ //add discount if needed
@@ -86,30 +75,28 @@ public void removeAgreement(String branchId, String supplierId) {
     }
     //removes a product from an existing agreement
     public void removeProductFromAgreement(String supplierID, String branchId, String productname) throws Exception {
-        Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
-        if (agreement == null) {
-            throw new Exception("agreement does not exist");
-        }
-        Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
-        if (supplier == null){
-            throw new Exception("supplier does not exist");
-        }
-        Product product = supplier.getProduct(productname);
-        if (product == null){
-            throw new Exception("supplier does not have this product");
-        }
-
+        Agreement agreement = getAgreement(branchId, supplierID);
+        Product product = getProductfromSupplier(productname, supplierID);
         if (!agreement.productInAgreement(product)){
             throw new Exception("agreement does not have this product");
         }
-
-
         agreement.removeProduct(product);
     }
 
     //edits a product discount from an existing agreement
     public void editProductDiscount(String supplierID, String branchId, String productname, int quantity, int discount) throws Exception {
 
+        Agreement agreement = getAgreement(branchId, supplierID);
+        Product product = getProductfromSupplier(productname, supplierID);
+        if (!agreement.productInAgreement(product)){
+            throw new Exception("agreement does not have this product");
+        }
+        agreement.removeDiscount(product);
+        //add the Discount
+        agreement.addDiscount(new Discount(agreement.getSupplierItem(productname), quantity, discount));
+    }
+
+    private Agreement getAgreement(String branchId, String supplierID) throws Exception {
         Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
         if (agreement == null) {
             throw new Exception("agreement does not exist");
@@ -118,17 +105,22 @@ public void removeAgreement(String branchId, String supplierId) {
         if (supplier == null){
             throw new Exception("supplier does not exist");
         }
-        Product product = supplier.getProduct(productname);
+        if (!branchesDataBase.existsBranch(branchId)){
+            throw new Exception("branch does not exist");
+        }
+        return agreement;
+    }
+
+    private Product getProductfromSupplier(String productName, String supplierID) throws Exception {
+        Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null){
+            throw new Exception("supplier does not exist");
+        }
+        Product product = supplier.getProduct(productName);
         if (product == null){
             throw new Exception("supplier does not have this product");
         }
-
-        if (!agreement.productInAgreement(product)){
-            throw new Exception("agreement does not have this product");
-        }
-        agreement.removeDiscount(product);
-
-
+        return product;
     }
 
 }

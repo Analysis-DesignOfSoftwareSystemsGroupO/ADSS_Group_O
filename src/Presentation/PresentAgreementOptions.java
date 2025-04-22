@@ -31,7 +31,7 @@ public class PresentAgreementOptions {
                         this.removeAgreementP();
                         break;
                     case 4:
-
+                        this.editAgreementP();
                         break;
                     case 5:
                         return;
@@ -170,31 +170,19 @@ public class PresentAgreementOptions {
         }
     }
 
-    //check if available to combine with addproduct
+    //check if available to combine with add product
     private void editProductDiscount(String supplierID, String branchId) {
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productName = editAgreement.nextLine();
-        System.out.println("Enter product price:");
-        int price = editAgreement.nextInt();
         Integer productDiscount = null;
         Integer productQuantity = null;
-        while (true) {
-            System.out.println("Discount ? y/n");
-            editAgreement.nextLine();
-            if (editAgreement.nextLine().equals("y")) {
-                System.out.println("Enter new product quantity for discount:");
-                productQuantity = editAgreement.nextInt();
-                System.out.println("Enter new product discount:");
-                productDiscount = editAgreement.nextInt();
-                break;
-            } else if (editAgreement.nextLine().equals("n")) {
-                break;
-            }
-            System.out.println("Invalid option !\n");
-        }
+        System.out.println("Enter new product quantity for discount:");
+        productQuantity = editAgreement.nextInt();
+        System.out.println("Enter new product discount:");
+        productDiscount = editAgreement.nextInt();
         try {
-            agreementController.addProductToAgreement(supplierID, branchId , productName, price, productQuantity, productDiscount);
+            agreementController.editProductDiscount(branchId, supplierID, productName, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

@@ -4,7 +4,6 @@ import Service.BranchService;
 
 public class AgreementController {
     private AgreementService agreementService = new AgreementService();
-    private BranchService branchService = new BranchService();
 
     public void removeAgreement(String branchId, String supplierId) {
         agreementService.removeAgreement(branchId, supplierId);
@@ -20,7 +19,8 @@ public class AgreementController {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String branchid, String supplierID, String productName, int price, Integer quantity, Integer discount) throws Exception {
+    public void addProductToAgreement(String branchid, String supplierID, String productName, int price, Integer quantity,
+                                      Integer discount) throws Exception {
         agreementService.addProductToAgreement(branchid, supplierID, productName, price, quantity, discount);
     }
 

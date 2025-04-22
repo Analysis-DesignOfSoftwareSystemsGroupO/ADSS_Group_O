@@ -77,7 +77,7 @@ public class Agreement {
 
     public void removeDiscount(Product product){
         for (Discount discount : discounts){
-            if (Objects.equals(discount.getproductname(), product.getProductName())){
+            if (Objects.equals(discount.getProductName(), product.getProductName())){
                 discounts.remove(discount);
                 break;
             }
@@ -89,5 +89,13 @@ public class Agreement {
 
     public List<Discount> getDiscountsList() {
         return discounts;
+    }
+    public SuppliedItem getSupplierItem(String productName){
+        for (SuppliedItem supplierItem : supplierItemsList){
+            if (Objects.equals(productName, supplierItem.getProduct().getProductName())){
+                return supplierItem;
+            }
+        }
+        return null;
     }
 }
