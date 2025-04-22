@@ -27,7 +27,7 @@ public class SuppliersDataBase {
      *Supplier Data Base Functions:
      */
     public void addSupplier(Supplier supplier) {
-        suppliers.put(supplier.getSupplierName(), supplier);
+        suppliers.put(supplier.getID(), supplier);
     }
 
     public Supplier getSupplier(String supplierID) {

@@ -8,33 +8,39 @@ import java.util.List;
 import java.util.Map;
 
 public class Supplier {
-    private final String supplierID;
-    private String supplierAccountNumber;
+    private String supplierID;
     private String supplierName;
     private Bank bank;
-    private List<InformationContact> InformationContacts;
+    private PaymentMethod paymentMethod;
+    private List<InformationContact> informationContacts;
     private HashMap<String, Product> supplyProducts;
     private int supplied_product_id = 0;
 
 
-    public Supplier(String ID, String accountNumber, String supplierName, String bankAccount, String bankNumber, String bankBranch) {
-        if (ID == null || accountNumber == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null) {
-            throw new NullPointerException();
+    public Supplier(String ID, String supplierName, String paymentMethod, String bankAccount, String bankNumber, String bankBranch, String infoContactName, String infoContactPhoneNumber, String infoContactTitle) {
+        if (ID == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null || paymentMethod == null) {
+            throw new NullPointerException("Invalid Details");
         }
         this.bank = new Bank(bankAccount, bankNumber, bankBranch, ID);
+        PaymentMethod payMethod = new PaymentMethod(paymentMethod);
+        if(payMethod.getPaymentMethodName() == null){
+            throw new NullPointerException("Invalid Payment Method");
+        }
+        this.paymentMethod = payMethod;
+        this.informationContacts = new ArrayList<InformationContact>();
+        InformationContact newInfoContact = new InformationContact(infoContactName, infoContactPhoneNumber, infoContactTitle);
+        this.informationContacts.add(newInfoContact);
         this.supplierID = ID;
-        this.supplierAccountNumber = accountNumber;
         this.supplierName = supplierName;
-        this.InformationContacts = new ArrayList<InformationContact>();
-        this.supplyProducts = new HashMap<String,Product>();
+        this.supplyProducts = new HashMap<String, Product>();
     }
 
     public Supplier(Supplier other) {
         this.supplierID = other.supplierID;
-        this.supplierAccountNumber = other.supplierAccountNumber;
         this.supplierName = other.supplierName;
+        this.paymentMethod = other.paymentMethod;
         this.bank = new Bank(this.getBank());
-        this.InformationContacts = other.InformationContacts;
+        this.informationContacts = other.informationContacts;
         this.supplyProducts = other.supplyProducts;
         this.supplied_product_id = other.supplied_product_id;
     }
@@ -43,16 +49,9 @@ public class Supplier {
         return supplierID;
     }
 
-    public String getAccountNumber() {
-        return supplierAccountNumber;
-    }
 
     public String getSupplierName() {
         return supplierName;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.supplierAccountNumber = accountNumber;
     }
 
     public int getSupplied_product_id() {
@@ -72,10 +71,10 @@ public class Supplier {
 
     public void addInformationContact(InformationContact informationContact) {
         if (informationContact == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("informationContact cannot be null");
         }
-        if (!InformationContacts.contains(informationContact)) {
-            InformationContacts.add(informationContact);
+        if (!informationContacts.contains(informationContact)) {
+            informationContacts.add(informationContact);
         }
     }
 
@@ -87,13 +86,13 @@ public class Supplier {
     }
 
     public List<InformationContact> getInformationContacts() {
-        return InformationContacts;
+        return informationContacts;
     }
 
     @Override
     public String toString() {
         return "Supplier ID: " + supplierID + System.lineSeparator() + "Supplier Name: " +
-                supplierName + System.lineSeparator() + "Account Number: " + supplierAccountNumber + System.lineSeparator();
+                supplierName + System.lineSeparator() + System.lineSeparator();
     }
 
     public void addProduct(Product product) {
@@ -106,5 +105,20 @@ public class Supplier {
         return this.supplyProducts.get(pname);
     }
 
+    public String getPaymentMethod(){
+        return this.paymentMethod.getPaymentMethodName();
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        if (paymentMethod == null || paymentMethod.isEmpty()) {
+            throw new NullPointerException("Payment Method cannot be null or empty");
+        }
+        try{
+            this.paymentMethod = new PaymentMethod(paymentMethod);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

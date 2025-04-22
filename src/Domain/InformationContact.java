@@ -46,4 +46,8 @@ public class InformationContact {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return "InformationContact [contactName=" + contactName + ", contactPhone=" + contactPhone + ", title=" + title + "]";
+    }
 }

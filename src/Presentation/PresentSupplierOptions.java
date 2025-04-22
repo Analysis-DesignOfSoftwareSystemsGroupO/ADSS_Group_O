@@ -13,7 +13,8 @@ public class PresentSupplierOptions {
             System.out.println("Supplier Menu:");
             System.out.println("1.Add Supplier");
             System.out.println("2.Edit Supplier Details");
-            System.out.println("3.Return to Main Menu");
+            System.out.println("3.Get Supplier Information Contacts");
+            System.out.println("4.Return to Main Menu");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
@@ -25,6 +26,9 @@ public class PresentSupplierOptions {
                         editSupplierPresentation();
                         break;
                     case 3:
+                        getAllInformationContacts();
+                        break;
+                    case 4:
                         return;
                     default:
                         throw new Exception();
@@ -38,28 +42,31 @@ public class PresentSupplierOptions {
 
     private void addSupplierPresentation() {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Starting Define New Supplier, Please Follow the Next Steps");
+        System.out.println("Enter Supplier ID: ");
+        String supplierID = scanner.nextLine();
         System.out.println("Enter Supplier Name: ");
         String supplierName = scanner.nextLine();
-        System.out.println("Enter Supplier bank number: ");
+        System.out.println("Enter Supplier Payment Method (CreditCard / Cash / Bank Transfer / Check): ");
+        String supplierPaymentMethod = scanner.nextLine();
+        System.out.println("Define Supplier's Bank");
+        System.out.println("Enter Supplier Bank Number: ");
         String supplierBankNumber = scanner.nextLine();
-        System.out.println("Enter Supplier bank branch number: ");
+        System.out.println("Enter Supplier Bank Branch Number: ");
         String supplierBankBranchNumber = scanner.nextLine();
-        System.out.println("Enter Supplier bank account number: ");
+        System.out.println("Enter Supplier Bank Account Number: ");
         String supplierBankAccountNumber = scanner.nextLine();
-        System.out.println("Enter Supplier account number: ");
-        String supplierAccountNumber = scanner.nextLine();
-        System.out.println("Enter Owner ID: ");
-        String ownerID = scanner.nextLine();
-        System.out.println("Enter contact name: ");
+        System.out.println("Define Supplier's Information Contact");
+        System.out.println("** Supplier must have at least one information contact **");
+        System.out.println("Enter Contact Name: ");
         String contactName = scanner.nextLine();
-        System.out.println("Enter contact phone number: ");
+        System.out.println("Enter contact Phone Number: ");
         String contactPhoneNumber = scanner.nextLine();
-        System.out.println("Enter contact title: ");
+        System.out.println("Enter Contact Title: ");
         String contactTitle = scanner.nextLine();
-
         try {
-            supplierController.createSupplier(supplierName,
-                    supplierBankAccountNumber, supplierBankNumber, supplierBankBranchNumber, ownerID, contactName,
+            supplierController.createSupplier(supplierID, supplierName, supplierPaymentMethod,
+                    supplierBankAccountNumber, supplierBankNumber, supplierBankBranchNumber, contactName,
                     contactPhoneNumber, contactTitle);
         }
         catch (Exception e){
@@ -80,7 +87,7 @@ public class PresentSupplierOptions {
         {
             System.out.println("1.Add new product");
             System.out.println("2.Edit supplier details");
-            System.out.println("3.Add Contact number");
+            System.out.println("3.Add Information Contact");
             System.out.println("3.Return to menu");
             try {
                 int option = scanner.nextInt();
@@ -92,13 +99,14 @@ public class PresentSupplierOptions {
                         this.editSupplierDetails(id);
                         return;
                     case 3:
+                        this.addInformationContact(id);
                         return;
                     default:
                         throw new Exception();
                 }
             }
             catch (Exception e) {
-                System.out.println("Invalid option ! ");
+                System.out.println("Invalid option !");
             }
         }
 
@@ -112,6 +120,7 @@ public class PresentSupplierOptions {
         int productPrice = scanner.nextInt();
         try {
             supplierController.addNewProductToSupplier(supplierId, productName, productPrice);
+            System.out.println("Product added successfully");
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -175,6 +184,34 @@ public class PresentSupplierOptions {
             catch (Exception e){
                 System.out.println("Invalid option ! ");
             }
+        }
+    }
+
+    private void addInformationContact(String supID) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter new Information Contact name: ");
+        String contactName = scanner.nextLine();
+        System.out.println("Enter contact phone number: ");
+        String contactPhoneNumber = scanner.nextLine();
+        System.out.println("Enter contact title: ");
+        String contactTitle = scanner.nextLine();
+        try{
+            supplierController.addNewInformationContact(supID, contactName, contactPhoneNumber, contactTitle);{
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void getAllInformationContacts() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Supplier ID: ");
+        String supplierID = scanner.nextLine();
+        try {
+            supplierController.printAllInformationContacts(supplierID);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 

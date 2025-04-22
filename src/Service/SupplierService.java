@@ -10,16 +10,21 @@ import java.util.List;
 public class SupplierService {
     private final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
     private ProductDataBase productDataBase = ProductDataBase.getInstance();
-    private int supplierId = 100;
     private int productId = 1000;
 
-    public void createSupplier(String accountNumber, String supplierName,
-                               String bankAccount, String bankNumber, String bankBranch, String ownerID,
+    public void createSupplier(String supplierID, String supplierName, String supplierPaymentMethod,
+                               String bankAccount, String bankNumber, String bankBranch,
                                String contactName, String contactPhoneNumber, String contactTitle) {
         try {
-            String ID = String.valueOf(supplierId++);
-            Supplier newSupplier = new Supplier(ID, accountNumber, supplierName, bankAccount, bankNumber, bankBranch);
-            suppliersDataBase.addSupplier(newSupplier);
+            if (suppliersDataBase.getSupplier(supplierID) == null) {
+                Supplier newSupplier = new Supplier(supplierID, supplierName, supplierPaymentMethod, bankAccount, bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle);
+                if (newSupplier.getID() != null) {
+                    suppliersDataBase.addSupplier(newSupplier);
+                }
+            }
+            else{
+                throw new Exception("Supplier already exists");
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -89,5 +94,20 @@ public class SupplierService {
             supplier.setSupplierName(newName);
         }
     }
-    
+
+    public void addNewInfoContact(String supplierID, String contactName, String newPhoneNumber, String newTitle) {
+        InformationContact infoContact = new InformationContact(contactName, newPhoneNumber, newTitle);
+        if (infoContact.getContactName() != null) {
+            Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+            supplier.addInformationContact(infoContact);
+        }
+    }
+
+    public void getAllSupplierInformationContacts(String supplierID){
+        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+        List<InformationContact> infoContacts = supplier.getInformationContacts();
+        for (InformationContact infoContact : infoContacts) {
+            System.out.println(infoContact);
+        }
+    }
 }

@@ -77,7 +77,7 @@ public class Agreement {
 
     public void removeDiscount(Product product){
         for (Discount discount : discounts){
-            if (Objects.equals(discount.getproductname(), product.getProductName())){
+            if (Objects.equals(discount.getProductName(), product.getProductName())){
                 discounts.remove(discount);
                 break;
             }

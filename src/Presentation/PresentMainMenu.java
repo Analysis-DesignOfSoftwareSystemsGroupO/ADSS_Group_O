@@ -16,7 +16,7 @@ public class PresentMainMenu {
 
     public void runMainPresentation(){
         while (true){
-            System.out.println("Welcome to SupplierMoudle !");
+            System.out.println("Welcome to Supplier Module !");
             System.out.println("1.Supplier options");
             System.out.println("2.Order options");
             System.out.println("3.Agreement options");

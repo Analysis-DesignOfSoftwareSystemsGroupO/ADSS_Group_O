@@ -7,11 +7,10 @@ public class SupplierController {
 
     /// Supplier functions
     //creates a supplier and saves it in the database
-    //todo check if accountNumber field is necessary
-    public void createSupplier( String supplierName,
-                                      String bankAccount, String bankNumber, String bankBranch, String ownerID,
+    public void createSupplier(String supplierID, String supplierName, String paymentMethod,
+                                      String bankAccount, String bankNumber, String bankBranch,
                                         String contactName, String contactPhoneNumber, String contactTitle) {
-        supplierService.createSupplier("", supplierName, bankAccount, bankNumber, bankBranch, ownerID,
+        supplierService.createSupplier(supplierID, supplierName, paymentMethod, bankAccount, bankNumber, bankBranch,
                 contactName, contactPhoneNumber, contactTitle);
     }
 
@@ -47,4 +46,11 @@ public class SupplierController {
         supplierService.updateSupplierName(ID, name);
     }
 
+    public void addNewInformationContact(String supplierID, String contactName, String newPhoneNumber, String newTitle) {
+        supplierService.addNewInfoContact(supplierID, contactName, newPhoneNumber, newTitle);
+    }
+
+    public void printAllInformationContacts(String supplierID) {
+        supplierService.getAllSupplierInformationContacts(supplierID);
+    }
 }
