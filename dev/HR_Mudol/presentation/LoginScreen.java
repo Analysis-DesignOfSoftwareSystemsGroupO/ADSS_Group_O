@@ -1,0 +1,56 @@
+package HR_Mudol.presentation;
+
+import HR_Mudol.Service.EmployeeSystem.EmployeeSystem;
+import HR_Mudol.Service.ManagerSystem.HRSystemManager;
+import HR_Mudol.domain.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
+
+public class LoginScreen {
+
+    private final Scanner scanner = new Scanner(System.in);
+    private final EmployeeSystem employeeSystem = new EmployeeSystem();
+    private final HRSystemManager hrSystemManager = new HRSystemManager();
+
+    // Dummy data - שמכיל את הרמה כבר בפנים
+    private final List<User> users = List.of(
+            new User(new Employee("Dana", 123456789, "pass", "123456", 5000,
+                    LocalDate.now(), 2, 2, 5, 10), Level.regularEmp),
+            new User(new HRManager("Rami Levi", 111111111, "admin", "111111",
+                    30000, LocalDate.now()), Level.HRManager)
+    );
+
+    public void start(Week currentWeek) {
+        while (true) {
+            System.out.print("Enter employee ID: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            System.out.print("Enter password: ");
+            String password = scanner.nextLine();
+
+            User matched = findUser(id, password);
+
+            if (matched != null) {
+                if (matched.isManager()) {
+                    HRManagerMenu.runMenu(matched, hrSystemManager, currentWeek);
+                } else {
+                    EmployeeMenu menu = new EmployeeMenu();
+                    menu.start(matched, (Employee) matched.getUser(), currentWeek);
+                }
+                break;
+            } else {
+                System.out.println("Invalid ID or password. Please try again.\n");
+            }
+        }
+    }
+
+    private User findUser(int id, String password) {
+        for (User u : users) {
+            if (u.getUser().getEmpId() == id && u.getUser().getEmpPassword().equals(password)) {
+                return u;
+            }
+        }
+        return null;
+    }
+}

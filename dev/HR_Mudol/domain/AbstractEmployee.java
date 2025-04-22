@@ -108,4 +108,9 @@ public abstract class AbstractEmployee {
         this.empSalary = empSalary;
     }
 
+    public String getEmpPassword() {
+        return this.empPassword;
+    }
+
+
 }
