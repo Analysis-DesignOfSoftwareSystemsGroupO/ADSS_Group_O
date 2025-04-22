@@ -402,6 +402,14 @@ public class EmployeeSystem implements IEmployeeSystem {
                 throw new SecurityException("Access denied: You may only change your own password.");
             }
 
+            System.out.print("Enter current password: ");
+            String currentPassword = scanner.nextLine().trim();
+
+            if (!self.verifyPassword(currentPassword,caller)) {
+                System.out.println("Incorrect current password. Password change aborted.");
+                return;
+            }
+
             String newPassword;
             while (true) {
                 System.out.print("Enter new password: ");
@@ -413,7 +421,7 @@ public class EmployeeSystem implements IEmployeeSystem {
                 }
             }
 
-            self.setEmpPassword(newPassword,caller);
+            self.setEmpPassword(newPassword, caller);
             System.out.println("Password updated successfully.");
 
         } catch (SecurityException se) {
@@ -422,6 +430,7 @@ public class EmployeeSystem implements IEmployeeSystem {
             System.out.println("An unexpected error occurred: " + ex.getMessage());
         }
     }
+
 
 
     @Override

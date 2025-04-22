@@ -33,17 +33,19 @@ public class LoginScreen {
 
             if (matched != null) {
                 if (matched.isManager()) {
-                    HRManagerMenu.runMenu(matched, hrSystemManager, currentWeek);
+                    boolean logout = HRManagerMenu.runMenu(matched, hrSystemManager, currentWeek);
+                    if (logout) continue; // חזרה למסך התחברות
                 } else {
                     EmployeeMenu menu = new EmployeeMenu();
-                    menu.start(matched, (Employee) matched.getUser(), currentWeek);
+                    boolean logout = menu.start(matched, (Employee) matched.getUser(), currentWeek);
+                    if (logout) continue; // חזרה למסך התחברות
                 }
-                break;
             } else {
                 System.out.println("Invalid ID or password. Please try again.\n");
             }
         }
     }
+
 
     private User findUser(int id, String password) {
         for (User u : users) {

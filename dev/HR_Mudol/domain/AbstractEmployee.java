@@ -112,5 +112,13 @@ public abstract class AbstractEmployee {
         return this.empPassword;
     }
 
+    public boolean verifyPassword(String inputPassword, User caller) {
+        if (!caller.isSameEmployee(this) && !caller.isManager()) {
+            throw new SecurityException("Access denied: Only the employee or a manager can verify the password.");
+        }
+        return this.empPassword.equals(inputPassword);
+    }
+
+
 
 }
