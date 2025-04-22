@@ -13,7 +13,7 @@ public interface IEmployeeSystem {
     /**
      * Allow the employee to submit a new constraint.
      */
-    void submitConstraint(User caller, Employee self);
+    void submitConstraint(User caller, Employee self, Week currentWeek);
 
     /**
      * Allow the employee to update an existing constraint.

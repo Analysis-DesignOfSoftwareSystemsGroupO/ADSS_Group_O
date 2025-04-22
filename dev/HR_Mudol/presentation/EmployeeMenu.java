@@ -34,7 +34,7 @@ public class EmployeeMenu {
 
             switch (choice) {
                 case "1": employeeSystem.viewMyShifts(caller, self, currentWeek); break;
-                case "2": employeeSystem.submitConstraint(caller, self); break;
+                case "2": employeeSystem.submitConstraint(caller, self,currentWeek); break;
                 case "3": employeeSystem.updateConstraint(caller, self, currentWeek); break;
                 case "4": employeeSystem.viewMyConstraints(caller, self); break;
                 case "5": employeeSystem.viewContractDetails(caller, self); break;

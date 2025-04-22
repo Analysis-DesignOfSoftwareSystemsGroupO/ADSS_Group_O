@@ -3,7 +3,7 @@ package HR_Mudol.Service.EmployeeSystem;
 import HR_Mudol.domain.Employee;
 import HR_Mudol.domain.User;
 import HR_Mudol.domain.Constraint;
-import HR_Mudol.domain.DayOfWeek;
+import HR_Mudol.domain.WeekDay;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.Week;
 import HR_Mudol.domain.Shift;
@@ -56,10 +56,16 @@ public class EmployeeSystem implements IEmployeeSystem {
 
 
     @Override
-    public void submitConstraint(User caller, Employee self) {
+    public void submitConstraint(User caller, Employee self, Week currentWeek) {
         try {
             if (!caller.isSameEmployee(self)) {
                 throw new SecurityException("Employees may only submit constraints for themselves.");
+            }
+
+            // בדיקת דדליין
+            if (!currentWeek.isConstraintSubmissionOpen()) {
+                System.out.println("Constraint submission is closed. Deadline was: " + currentWeek.getConstraintDeadline());
+                return;
             }
 
             int dayShiftLimit = self.getMinDayShift(caller);
@@ -87,12 +93,12 @@ public class EmployeeSystem implements IEmployeeSystem {
         }
     }
 
+
     private int handleShiftTypeConstraints(User caller, Employee self, ShiftType type, int shiftLimit, List<Constraint> submittedConstraints) {
         int shiftCount = 0;
-        List<Constraint> localList = (type == ShiftType.MORNING) ? self.getMorningConstraints(caller): self.getEveningConstraints(caller);
 
-        for (DayOfWeek day : DayOfWeek.values()) {
-            if (day == DayOfWeek.FRIDAY && type == ShiftType.EVENING) continue;
+        for (WeekDay day : WeekDay.values()) {
+            if (day == WeekDay.FRIDAY && type == ShiftType.EVENING) continue;
 
             int remaining = Math.max(0, shiftLimit - shiftCount);
             System.out.println("You can still submit " + remaining + " constraint(s) for " + type + " shifts.");
@@ -149,6 +155,10 @@ public class EmployeeSystem implements IEmployeeSystem {
                                 continue;
                             }
                         case "cancel":
+                            List<Constraint> localList = (type == ShiftType.MORNING)
+                                    ? self.getMorningConstraints(caller)
+                                    : self.getEveningConstraints(caller);
+
                             System.out.println("Constraint cancelled. Please choose a constraint to remove from the submitted ones:");
                             for (int i = 0; i < localList.size(); i++) {
                                 Constraint c = localList.get(i);
@@ -193,14 +203,19 @@ public class EmployeeSystem implements IEmployeeSystem {
             }
 
             Constraint constraint = new Constraint(explanation, day, type);
-            self.addNewConstraints(caller, constraint);
+            self.addNewConstraints(caller, constraint); // תמיד מוסיף ל-weekly
+            if (type == ShiftType.MORNING) {
+                self.addNewMorningConstraints(caller, constraint);
+            } else {
+                self.addNewEveningConstraints(caller, constraint);
+            }
             submittedConstraints.add(constraint);
-            localList.add(constraint);
             System.out.println("Constraint submitted for " + day + " (" + type + ").");
         }
 
         return shiftCount;
     }
+
 
 
 

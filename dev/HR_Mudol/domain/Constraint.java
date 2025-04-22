@@ -2,10 +2,10 @@ package HR_Mudol.domain;
 
 public class Constraint {
     private String explanation;
-    private DayOfWeek day;
+    private WeekDay day;
     private ShiftType type;
 
-    public Constraint(String explanation,DayOfWeek day, ShiftType type){
+    public Constraint(String explanation, WeekDay day, ShiftType type){
         this.explanation=explanation;
         this.day=day;
         this.type=type;
@@ -23,12 +23,12 @@ public class Constraint {
     }
 
 
-    public DayOfWeek getDay() {
+    public WeekDay getDay() {
         return day;
     }
 
     //just by the employee himself
-    public void setDay(User caller,Employee employee,DayOfWeek day) {
+    public void setDay(User caller, Employee employee, WeekDay day) {
         if (!caller.isSameEmployee(employee)) {
             throw new SecurityException("Access denied");
         }

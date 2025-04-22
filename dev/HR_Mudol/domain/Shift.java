@@ -8,13 +8,13 @@ public class Shift {
     static int counter=0; //Counter
 
     private int shiftID;
-    private DayOfWeek day;
+    private WeekDay day;
     private ShiftType type;
     private Status status;
     private List<Employee> employees; //The employees who work at that shift
     private List<Role> necessaryRoles;
 
-    public Shift(DayOfWeek day,ShiftType type){
+    public Shift(WeekDay day, ShiftType type){
         counter++;
         this.shiftID=counter;
         this.day=day;
@@ -29,7 +29,7 @@ public class Shift {
         return shiftID;
     }
 
-    public DayOfWeek getDay() {
+    public WeekDay getDay() {
         return day;
     }
 

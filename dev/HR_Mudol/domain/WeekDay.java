@@ -1,6 +1,6 @@
 package HR_Mudol.domain;
 
-public enum DayOfWeek {
+public enum WeekDay {
     SUNDAY,
     MONDAY,
     TUESDAY,

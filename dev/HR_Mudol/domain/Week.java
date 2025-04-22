@@ -1,34 +1,38 @@
 package HR_Mudol.domain;
-
+import java.time.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.time.temporal.TemporalAdjusters;
 
 public class Week {
 
     private List<Shift> shifts; // The shifts of the week
+
+    private LocalDateTime constraintDeadline;
 
     public Week() {
         this.shifts = new LinkedList<>();
 
         //creates the shifts of the week
         Shift newShift;
-        DayOfWeek day=DayOfWeek.SUNDAY;
+        this.constraintDeadline = LocalDate.now().with(TemporalAdjusters.nextOrSame(java.time.DayOfWeek.THURSDAY)).atTime(12, 0);
+        WeekDay day= WeekDay.SUNDAY;
         ShiftType type=ShiftType.MORNING;
         for (int i=1; i<12; i++){
 
             if (i<=2){
-                day=DayOfWeek.SUNDAY;
+                day= WeekDay.SUNDAY;
             } else if (i<=4) {
-                day=DayOfWeek.MONDAY;
+                day= WeekDay.MONDAY;
             } else if (i<=6) {
-                day=DayOfWeek.TUESDAY;
+                day= WeekDay.TUESDAY;
             } else if (i<=8) {
-                day=DayOfWeek.WEDNESDAY;
+                day= WeekDay.WEDNESDAY;
             } else if (i<=10) {
-                day=DayOfWeek.THURSDAY;
+                day= WeekDay.THURSDAY;
             }
             else{
-                day=DayOfWeek.FRIDAY;
+                day= WeekDay.FRIDAY;
             }
             //create the right type
             if (i%2==0){
@@ -46,6 +50,14 @@ public class Week {
         return shifts;
     }
 
+    public boolean isConstraintSubmissionOpen() {
+        return LocalDateTime.now().isBefore(constraintDeadline);
+    }
+
+    public LocalDateTime getConstraintDeadline() {
+        return constraintDeadline;
+    }
+
     public void removeShift(Shift shift){
         this.shifts.remove(shift);
     }
@@ -53,16 +65,9 @@ public class Week {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Shifts:\n");
-
-        if (shifts.isEmpty()) {
-            sb.append("No shifts available.");
-        } else {
-            for (Shift shift : shifts) {
-                sb.append("- ").append(shift.toString()).append("\n");
-            }
+        for (Shift shift : shifts) {
+            sb.append("- ").append(shift.toString()).append("\n");
         }
-
         return sb.toString();
     }
-
 }

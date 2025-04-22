@@ -1,8 +1,8 @@
 package HR_Mudol.domain;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Employee extends AbstractEmployee {
@@ -12,6 +12,8 @@ public class Employee extends AbstractEmployee {
     private List<Constraint> weeklyConstraints;
     private List<Constraint> morningConstraints;
     private List<Constraint> eveningConstraints;
+    private List<Constraint> lockedConstraints;
+
 
     public Employee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
 
@@ -21,6 +23,7 @@ public class Employee extends AbstractEmployee {
         this.relevantRoles = new LinkedList<>();
         this.morningConstraints = new LinkedList<>();
         this.eveningConstraints = new LinkedList<>();
+        this.lockedConstraints = new LinkedList<>();
     }
 
     public void addNewRole(User caller,Role role){
@@ -68,20 +71,20 @@ public class Employee extends AbstractEmployee {
 
 
     public void addNewMorningConstraints(User caller,Constraint constraint){
-        if (!caller.isSameEmployee(this) && !caller.isSameEmployee(this)) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         morningConstraints.add(constraint);
     }
     public void addNewEveningConstraints(User caller,Constraint constraint){
-        if (!caller.isSameEmployee(this) && !caller.isSameEmployee(this)) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         eveningConstraints.add(constraint);
     }
     //only by the emp himself
     public void addNewConstraints(User caller,Constraint constraint){
-        if (!caller.isSameEmployee(this) && !caller.isSameEmployee(this)) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         weeklyConstraints.add(constraint);
@@ -89,7 +92,7 @@ public class Employee extends AbstractEmployee {
 
 
     //searching for constraints
-    public Constraint searchingForRelevantconstraint(User caller, DayOfWeek day, ShiftType type){
+    public Constraint searchingForRelevantconstraint(User caller, WeekDay day, ShiftType type){
         if (!caller.isManager()&&!caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
@@ -154,6 +157,25 @@ public class Employee extends AbstractEmployee {
         }
         return this.Contract;
     }
+
+    public void lockWeeklyConstraints(User caller) {
+        if (!caller.isManager()) {
+            throw new SecurityException("Only manager can lock constraints.");
+        }
+
+        this.lockedConstraints = new ArrayList<>(this.getWeeklyConstraints(caller)); // שומר את האילוצים
+        this.getWeeklyConstraints(caller).clear();
+        this.getMorningConstraints(caller).clear();
+        this.getEveningConstraints(caller).clear();
+    }
+    public List<Constraint> getLockedConstraints(User caller) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied.");
+        }
+        return this.lockedConstraints;
+    }
+
+
 
 
 

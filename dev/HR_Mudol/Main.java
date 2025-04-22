@@ -9,5 +9,4 @@ public class Main {
         LoginScreen login = new LoginScreen();
         login.start(currentWeek); // שלח את השבוע למסך ההתחברות
     }
-
 }

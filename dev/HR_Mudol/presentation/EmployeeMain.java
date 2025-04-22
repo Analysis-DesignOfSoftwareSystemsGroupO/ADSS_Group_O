@@ -40,7 +40,7 @@ public class EmployeeMain {
         system.viewMyShifts(user, emp, week);
 
         // Demonstrate submitConstraint
-        system.submitConstraint(user, emp);
+        system.submitConstraint(user, emp, week);
         // Demonstrate updateConstraint (with week to check shift assignment)
         system.updateConstraint(user, emp, week);
 
