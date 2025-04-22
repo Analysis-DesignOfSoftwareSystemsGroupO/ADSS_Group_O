@@ -40,19 +40,6 @@ public class OrderDataBase {
         }
     }
 
-    public List<Order> getAllOrdersBySupplier(String supplierID) {
-        if (supplierID == null){
-            throw new NullPointerException();
-        }
-        if (!orders.containsKey(supplierID)) {
-            return null;
-        }
-        List<Order> copyOrders = orders.get(supplierID);
-        for (Order order : copyOrders) {
-            copyOrders.add(new Order(order));
-        }
-        return copyOrders;
-    }
     public List<Order> getOrdersBySupplier(String supplierID) {
         if (supplierID == null){
             throw new NullPointerException();

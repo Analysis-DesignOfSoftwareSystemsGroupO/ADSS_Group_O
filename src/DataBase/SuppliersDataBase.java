@@ -57,12 +57,12 @@ public class SuppliersDataBase {
         throw new NullPointerException("agreement does not exist");
     }
 
-    public void addAgreement(Supplier supplier, Branch branch, Agreement agreement) {
-        SupplierBranchKey supBKey = new SupplierBranchKey(supplier.getID(), branch.getBranchID());
+    public void addAgreement(Agreement agreement) {
+        SupplierBranchKey supBKey = new SupplierBranchKey(agreement.getSupplierID(), agreement.getBranchID());
         suppliersAgreements.put(supBKey, agreement);
     }
 
-    //return a copy of agreement
+    //return an agreement
     public Agreement getAgreement(String branchID, String supplierID) {
         if (supplierID == null || branchID == null) {
             throw new NullPointerException();

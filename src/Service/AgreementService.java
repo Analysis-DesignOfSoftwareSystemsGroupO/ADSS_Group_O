@@ -28,7 +28,7 @@ public void removeAgreement(String branchId, String supplierId) {
             throw new Exception("supplier does not exist");
         }
         Agreement agreement = new  Agreement(branch, supplier);
-        suppliersDataBase.addAgreement(supplier, branch, agreement);
+        suppliersDataBase.addAgreement(agreement);
 }
 
     //print all agreement
