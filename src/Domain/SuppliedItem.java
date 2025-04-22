@@ -2,7 +2,7 @@ package Domain;
 
 public class SuppliedItem {
     private static int gsuppliedItemID = 0;
-    public int suppliedItemPrice;
+    private int suppliedItemPrice;
     private Product product;
     private int suppliedItemID;
 
@@ -25,5 +25,9 @@ public class SuppliedItem {
 
     public int getSuppliedItemID() {
         return suppliedItemID;
+    }
+
+    public int getSuppliedItemPrice() {
+        return suppliedItemPrice;
     }
 }

@@ -42,16 +42,16 @@ public class Order {
         if (itemID == null || itemID.isEmpty() || orderID == null || quantity <= 0) {
             throw new NullPointerException("Product ID cannot be null or empty || Quantity cannot be less than 1");
         }
-        for (SuppliedItem item : agreement.supplierItemsList){
+        for (SuppliedItem item : agreement.getSupplierItemsList()){
             int discountPercentage = 0;
             if (Integer.toString(item.getSuppliedItemID()).equals(itemID)) {
                 for (Discount discount : agreement.getDiscounts()) {
-                    if (discount.suppliedItem.equals(item) && quantity >= discount.quantity) {
+                    if (discount.getSuppliedItem().equals(item) && quantity >= discount.getQuantity()) {
                         discountPercentage = discount.getDiscount();
                         break;
                     }
                 }
-                int discountedPrice = item.suppliedItemPrice - (item.suppliedItemPrice * discountPercentage / 100);
+                int discountedPrice = item.getSuppliedItemPrice() - (item.getSuppliedItemPrice() * discountPercentage / 100);
                 for (int i = 0; i < quantity; i++) {
                     suppliedItems.add(item);
                     totalPrice += discountedPrice;
@@ -72,7 +72,7 @@ public class Order {
         System.out.println("Total Price: " + this.totalPrice);
         System.out.println("Items: ");
         for (SuppliedItem item : suppliedItems) {
-            System.out.println(item.getSuppliedItemID() + ": " + item.suppliedItemPrice);
+            System.out.println(item.getSuppliedItemID() + ": " + item.getSuppliedItemPrice());
         }
     }
 

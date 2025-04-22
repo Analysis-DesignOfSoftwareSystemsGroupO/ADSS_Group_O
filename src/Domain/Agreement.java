@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Agreement {
-    public String agreementID;
+    private String agreementID;
     private final Supplier supplier;
     private final Branch Branch;
-    public List<SuppliedItem> supplierItemsList;
-    public List<Discount> discounts;
+    private List<SuppliedItem> supplierItemsList;
+    private List<Discount> discounts;
 
     public Agreement(Branch branch, Supplier supplier) {
         if (branch == null || supplier == null) {
@@ -82,5 +82,12 @@ public class Agreement {
                 break;
             }
         }
+    }
+    public List<SuppliedItem> getSupplierItemsList() {
+        return supplierItemsList;
+    }
+
+    public List<Discount> getDiscountsList() {
+        return discounts;
     }
 }

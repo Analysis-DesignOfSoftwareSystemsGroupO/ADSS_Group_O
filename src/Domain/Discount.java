@@ -1,9 +1,9 @@
 package Domain;
 
 public class Discount {
-    public SuppliedItem suppliedItem;
-    public int quantity;
-    public int discount;
+    private SuppliedItem suppliedItem;
+    private int quantity;
+    private int discount;
 
     public Discount(SuppliedItem suppliedItem, int quantity, int discount) {
         this.suppliedItem = suppliedItem;
@@ -14,7 +14,22 @@ public class Discount {
         return discount;
     }
 
-    public String getproductname(){
+    public SuppliedItem getSuppliedItem() {
+        return suppliedItem;
+    }
+
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void updateDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public String getProductName(){
         return this.suppliedItem.getProduct().getProductName();
+    }
+    public int getQuantity() {
+        return quantity;
     }
 }
