@@ -31,7 +31,7 @@ public class HRManagerMenu {
             switch (choice) {
                 case "1": manageEmployees(hrSystemManager, admin, scanner); break;
                 case "2": viewShiftsHistory(hrSystemManager,curBranch.getWeeks()); break;
-                case "3": generateReports(hrSystemManager, admin, scanner); break;
+                case "3": generateReports(hrSystemManager, admin, scanner,curBranch); break;
                 case "4": manageShift(hrSystemManager, curBranch.getWeeks(), admin, scanner); break;
                 case "5": manageRoles(hrSystemManager, admin, scanner); break;
                 case "6": hrSystemManager.displayDashboard(admin); break;
@@ -170,7 +170,7 @@ public class HRManagerMenu {
         }
     }
 
-    private static void generateReports(HRSystemManager hr, User caller, Scanner sc) {
+    private static void generateReports(HRSystemManager hr, User caller, Scanner sc,Branch curBranch) {
         System.out.println("\n--- Report Generation ---");
         System.out.println("1. Weekly Report");
         System.out.println("2. Employee Report");
@@ -182,19 +182,15 @@ public class HRManagerMenu {
         try {
             switch (choice) {
                 case "1":
-                    System.out.print("Enter Week ID: ");
-                    int weekId = Integer.parseInt(sc.nextLine());
-                    hr.generateWeeklyReport(caller, weekId);
+                    hr.generateWeeklyReport(caller, curBranch.getWeeks());
                     break;
                 case "2":
                     System.out.print("Enter Employee ID: ");
                     int empId = Integer.parseInt(sc.nextLine());
-                    hr.generateEmployeeReport(caller, empId);
+                    hr.generateEmployeeReport(caller, empId,curBranch.getWeeks().getLast());
                     break;
                 case "3":
-                    System.out.print("Enter Shift ID: ");
-                    int shiftId = Integer.parseInt(sc.nextLine());
-                    hr.generateShiftReport(caller, shiftId);
+                    hr.generateShiftReport(caller, curBranch.getWeeks().getLast());
                     break;
                 case "4":
                     System.out.print("Enter filter: ");
@@ -232,4 +228,6 @@ public class HRManagerMenu {
             default: System.out.println("Invalid option.");
         }
     }
+
+
 }

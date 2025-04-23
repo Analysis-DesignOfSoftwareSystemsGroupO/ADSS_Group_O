@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 public class WeekManager implements IWeekManager {
 
     private IShiftManager dependency;
-    //private List<Week> weeks = new LinkedList<>();
 
     public WeekManager(IShiftManager dependency) {
         this.dependency = dependency;
@@ -19,6 +18,7 @@ public class WeekManager implements IWeekManager {
     @Override
     public Week createNewWeek(User caller) {
         Week newWeek = new Week();
+
         return newWeek;
     }
 
@@ -156,6 +156,20 @@ public class WeekManager implements IWeekManager {
             }
         }
     }
+
+    @Override
+    public List<Shift> getShiftsForEmployee(Employee employee, Week curWeek) {
+        List<Shift> result = new ArrayList<>();
+
+        for (Shift shift : curWeek.getShifts()) {
+                if (shift.getEmployees().contains(employee)) {
+                    result.add(shift);
+                }
+        }
+
+        return result;
+    }
+
 
     @Override
     public void printWeek(Week week) {

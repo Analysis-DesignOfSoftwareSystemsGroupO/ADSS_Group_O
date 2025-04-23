@@ -50,6 +50,15 @@ public class Week {
         return shifts;
     }
 
+    public Shift getAShift(WeekDay day,ShiftType type){
+        for (Shift s:this.shifts){
+            if (s.getDay()==day&&s.getType()==type){
+                return s;
+            }
+        }
+        return null;
+    }
+
     public boolean isConstraintSubmissionOpen() {
         return LocalDateTime.now().isBefore(constraintDeadline);
     }

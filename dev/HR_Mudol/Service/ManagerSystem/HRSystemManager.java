@@ -20,7 +20,7 @@ public class HRSystemManager implements IHRSystemManager {
         this.employeeManager = new EmployeeManager(curBranch);
         this.shiftManager=new ShiftManager(this.roleManager);
         this.weekManager=new WeekManager(shiftManager);
-        this.reportGenerator=new ReportGenerator();
+        this.reportGenerator=new ReportGenerator(weekManager,employeeManager);
         roleManager.setEmployeeManager(employeeManager);
         employeeManager.setRoleManager(roleManager);
     }
@@ -91,18 +91,18 @@ public class HRSystemManager implements IHRSystemManager {
     }
 
     @Override
-    public void generateWeeklyReport(User caller, int weekId) {
-
+    public void generateWeeklyReport(User caller, List<Week> weeks) {
+        reportGenerator.generateWeeklyReport(caller,weeks);
     }
 
     @Override
-    public void generateEmployeeReport(User caller, int empId) {
-
+    public void generateEmployeeReport(User caller, int empId, Week curWeek) {
+        reportGenerator.generateEmployeeReport(caller, empId, curWeek);
     }
 
     @Override
-    public void generateShiftReport(User caller, int shiftId) {
-
+    public void generateShiftReport(User caller, Week curWeek)  {
+        reportGenerator.generateShiftReport(caller,curWeek);
     }
 
     @Override
@@ -205,5 +205,10 @@ public class HRSystemManager implements IHRSystemManager {
     @Override
     public void printWeek(Week week) {
         weekManager.printWeek(week);
+    }
+
+    @Override
+    public List<Shift> getShiftsForEmployee(Employee employee, Week curWeek) {
+        return List.of();
     }
 }

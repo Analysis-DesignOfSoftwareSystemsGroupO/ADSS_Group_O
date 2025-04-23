@@ -2,6 +2,7 @@ package HR_Mudol.Service.ManagerSystem;
 
 import HR_Mudol.domain.Employee;
 import HR_Mudol.domain.User;
+import HR_Mudol.domain.Week;
 
 import java.util.List;
 
@@ -36,4 +37,5 @@ public interface IEmployeeManager {
     void printAllEmployees(User caller);
 
     List<User> getAllUsers(User caller);
+
 }
