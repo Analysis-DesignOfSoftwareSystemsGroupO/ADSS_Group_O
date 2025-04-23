@@ -53,4 +53,8 @@ public class SupplierController {
     public void printAllInformationContacts(String supplierID) {
         supplierService.getAllSupplierInformationContacts(supplierID);
     }
+
+    public void printSupplierProducts(String supplierID) {
+        supplierService.printSupplier(supplierID);
+    }
 }
