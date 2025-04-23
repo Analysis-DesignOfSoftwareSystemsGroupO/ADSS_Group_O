@@ -4,11 +4,12 @@ import HR_Mudol.Service.ManagerSystem.*;
 import HR_Mudol.domain.*;
 import HR_Mudol.Service.ManagerSystem.HRSystemManager;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class HRManagerMenu {
 
-    public static boolean runMenu(User admin, HRSystemManager hrSystemManager, Week curWeek) {
+    public static boolean runMenu(User admin, HRSystemManager hrSystemManager, Branch curBranch) {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -28,7 +29,7 @@ public class HRManagerMenu {
                 case "1": manageEmployees(hrSystemManager, admin, scanner); break;
                 //case "2": WeekManager.shiftsHistory(); break;
                 case "3": generateReports(hrSystemManager, admin, scanner); break;
-                case "4": manageShift(hrSystemManager, curWeek, admin, scanner); break;
+                case "4": manageShift(hrSystemManager, curBranch.getWeeks(), admin, scanner); break;
                 case "5": manageRoles(hrSystemManager, admin, scanner); break;
                 case "6": hrSystemManager.displayDashboard(admin); break;
                 case "0":
@@ -41,20 +42,21 @@ public class HRManagerMenu {
     }
 
 
-    private static void manageShift(HRSystemManager hr, Week curWeek, User caller, Scanner sc) {
+    private static void manageShift(HRSystemManager hr,List<Week> weeks, User caller, Scanner sc) {
         while (true) {
             System.out.println("\n--- Shift Management ---");
             System.out.println("1. Assigning roles to weekly shifts");
             System.out.println("2. Assigning employees to weekly shifts");
             System.out.println("0. Back to Main Menu");
 
+
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":
-                    hr.manageTheWeekRelevantRoles(caller, curWeek);
+                    hr.manageTheWeekRelevantRoles(caller, weeks.getLast());
                     break;
                 case "2":
-                    hr.assigningEmployToShifts(caller, curWeek);
+                    hr.assigningEmployToShifts(caller, weeks.getLast());
                     break;
                 case "0":
                     return;

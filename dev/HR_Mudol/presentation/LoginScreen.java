@@ -12,32 +12,28 @@ public class LoginScreen {
 
     private final Scanner scanner = new Scanner(System.in);
     private final EmployeeSystem employeeSystem = new EmployeeSystem();
-    private final HRSystemManager hrSystemManager = new HRSystemManager();
+    private HRSystemManager hrSystemManager;
 
-    // Dummy data - שמכיל את הרמה כבר בפנים
-    private final List<User> users = List.of(
-            new User(new Employee("Dana", 123456789, "pass", "123456", 5000,
-                    LocalDate.now(), 2, 2, 5, 10), Level.regularEmp),
-            new User(new HRManager("Rami Levi", 111111111, "admin", "111111",
-                    30000, LocalDate.now()), Level.HRManager)
-    );
 
-    public void start(Week currentWeek) {
+    public void start(Branch curBranch) {
+
+        this.hrSystemManager = new HRSystemManager(curBranch);
+
         while (true) {
             System.out.print("Enter employee ID: ");
             int id = Integer.parseInt(scanner.nextLine());
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            User matched = findUser(id, password);
+            User matched = findUser(id, password,curBranch.getUsers());
 
             if (matched != null) {
                 if (matched.isManager()) {
-                    boolean logout = HRManagerMenu.runMenu(matched, hrSystemManager, currentWeek);
+                    boolean logout = HRManagerMenu.runMenu(matched, hrSystemManager, curBranch);
                     if (logout) continue; // חזרה למסך התחברות
                 } else {
                     EmployeeMenu menu = new EmployeeMenu();
-                    boolean logout = menu.start(matched, (Employee) matched.getUser(), currentWeek);
+                    boolean logout = menu.start(matched, (Employee) matched.getUser(), curBranch);
                     if (logout) continue; // חזרה למסך התחברות
                 }
             } else {
@@ -47,7 +43,7 @@ public class LoginScreen {
     }
 
 
-    private User findUser(int id, String password) {
+    private User findUser(int id, String password,List<User> users) {
         for (User u : users) {
             if (u.getUser().getEmpId() == id && u.getUser().getEmpPassword().equals(password)) {
                 return u;

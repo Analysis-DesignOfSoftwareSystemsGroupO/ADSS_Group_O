@@ -7,19 +7,17 @@ import java.util.List;
 
 public class HRSystemManager implements IHRSystemManager {
 
-
-    private List<Week> weeksHistory;
+    //private List<Week> weeksHistory;
     private RoleManager roleManager;
     private EmployeeManager employeeManager;
     private ShiftManager shiftManager;
     private WeekManager weekManager;
     private ReportGenerator reportGenerator;
 
-    public HRSystemManager(){
+    public HRSystemManager(Branch curBranch){
 
-        this.weeksHistory= new LinkedList<Week>();
-        this.roleManager = new RoleManager();
-        this.employeeManager = new EmployeeManager();
+        this.roleManager = new RoleManager(curBranch);
+        this.employeeManager = new EmployeeManager(curBranch);
         this.shiftManager=new ShiftManager(this.roleManager);
         this.weekManager=new WeekManager(shiftManager);
         this.reportGenerator=new ReportGenerator();
@@ -185,7 +183,6 @@ public class HRSystemManager implements IHRSystemManager {
     @Override
     public Week createNewWeek(User caller) {
         Week week=weekManager.createNewWeek(caller);
-        weeksHistory.addLast(weekManager.createNewWeek(caller));
         return week;
     }
 

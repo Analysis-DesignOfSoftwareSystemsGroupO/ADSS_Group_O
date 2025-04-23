@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RoleManager implements IRoleManager {
-    private List<Role> allRoles; //The role at the branch
+    private Branch curBranch; //The role at the branch
     private final Scanner scanner;
     private IEmployeeManager employeeManager;
 
-    public RoleManager() {
-        this.allRoles = new LinkedList<>();
+    public RoleManager(Branch curBranch) {
+        this.curBranch=curBranch;
         Role Shift_Manager=new Role("Shift Manager");
-        allRoles.add(Shift_Manager);
+        this.curBranch.getRoles().add(Shift_Manager);
         this.scanner = new Scanner(System.in);
     }
     public void setEmployeeManager(IEmployeeManager employeeManager) {
@@ -29,14 +29,14 @@ public class RoleManager implements IRoleManager {
         System.out.print("Enter role description: ");
         String description = scanner.nextLine();
 
-        for (Role r: allRoles){
+        for (Role r: curBranch.getRoles()){
             if (r.getDescription().equalsIgnoreCase(description)){
                 System.out.println("This role already exist.");
                 return;
             }
         }
         Role role = new Role(description);
-        allRoles.add(role);
+        curBranch.getRoles().add(role);
 
         System.out.println("Role created successfully");
 
@@ -91,6 +91,7 @@ public class RoleManager implements IRoleManager {
             Role role = getRoleByNumber(roleNumber);
 
             role.addNewEmployee(caller, employee);
+            employee.addNewRole(caller,role);
 
             System.out.println(employee.getEmpName()+" assigned to "+role.getDescription()+".");
         }
@@ -121,7 +122,7 @@ public class RoleManager implements IRoleManager {
 
         //if already exist "Shift Manager" role
         Role shiftManagerRole = null;
-        for (Role role : allRoles) {
+        for (Role role : curBranch.getRoles()) {
             if (role.getDescription().equalsIgnoreCase("Shift Manager")) {
                 shiftManagerRole = role;
                 break;
@@ -131,6 +132,7 @@ public class RoleManager implements IRoleManager {
         // checks if the emp already shift manager
         if (!shiftManagerRole.getRelevantEmployees(caller).contains(employee)) {
             shiftManagerRole.addNewEmployee(caller, employee);
+            employee.addNewRole(caller,shiftManagerRole);
             System.out.println(employee.getEmpName() + " assigned to 'Shift Manager' role.");
         } else {
             System.out.println("Employee is already assigned to 'Shift Manager' role.");
@@ -197,19 +199,19 @@ public class RoleManager implements IRoleManager {
     public List<Role> getAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
-        return new LinkedList<>(allRoles);
+        return new LinkedList<>(curBranch.getRoles());
     }
 
     @Override
     public void printAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
-        for (Role role : allRoles) {
+        for (Role role : curBranch.getRoles()) {
             System.out.println(role);
         }
     }
 
     public Role getRoleByNumber(int roleNumber) {
-        for (Role r : allRoles) {
+        for (Role r : curBranch.getRoles()) {
             if (r.getRoleNumber() == roleNumber) return r;
         }
         return null;

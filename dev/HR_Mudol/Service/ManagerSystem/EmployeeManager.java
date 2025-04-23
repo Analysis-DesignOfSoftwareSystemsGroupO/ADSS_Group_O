@@ -1,9 +1,6 @@
 package HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.Employee;
-import HR_Mudol.domain.Level;
-import HR_Mudol.domain.Role;
-import HR_Mudol.domain.User;
+import HR_Mudol.domain.*;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -13,14 +10,11 @@ import java.util.Scanner;
 public class EmployeeManager implements IEmployeeManager {
 
     Scanner scanner = new Scanner(System.in);
-    private List<User> users; //All the employees of the branch
-    private List<Employee> employees; //All the employees of the branch
     private IRoleManager roleManager; // Reference to RoleManager to access all roles
+    private Branch curBranch;
 
-    public EmployeeManager() {
-        this.employees = new LinkedList<>();
-        this.users = new LinkedList<>();
-        //this.roleManager = roleManager;
+    public EmployeeManager(Branch curBranch) {
+        this.curBranch = curBranch;
     }
 
     public void setRoleManager(IRoleManager roleManager) {
@@ -28,7 +22,7 @@ public class EmployeeManager implements IEmployeeManager {
     }
 
     public List<User> getAllUsers(User caller) {
-        return this.users;
+        return this.curBranch.getUsers();
     }
 
     @Override
@@ -76,16 +70,16 @@ public class EmployeeManager implements IEmployeeManager {
                 empName, empID, empPassword, empBankAccount, empSalary,
                 empStartDate, minDay, minEvening, sicks, daysOff
         );
-        employees.add(employee);
+        curBranch.getEmployees().add(employee);
 
         User newUser = new User(employee, Level.regularEmp);
-        users.add(newUser);
+        curBranch.getUsers().add(newUser);
 
         System.out.println("Employee and user created successfully!");
     }
 
     private boolean checkIfAlreadyExist(int ID){
-        for (Employee emp: this.employees){
+        for (Employee emp: this.curBranch.getEmployees()){
             if (emp.getEmpId()==ID){
                 return true;
             }
@@ -111,7 +105,7 @@ public class EmployeeManager implements IEmployeeManager {
             roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
         }
 
-        employees.remove(toRemove);
+        curBranch.getUsers().remove(toRemove);
         System.out.println("Employee removed successfully from system.");
     }
 
@@ -211,7 +205,7 @@ public class EmployeeManager implements IEmployeeManager {
     public Employee getEmployeeById(User caller, int empId) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
-        for (Employee e : employees) {
+        for (Employee e : curBranch.getEmployees()) {
             if (e.getEmpId() == empId) return e;
         }
 
@@ -233,7 +227,7 @@ public class EmployeeManager implements IEmployeeManager {
     public void printAllEmployees(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
-        for (Employee e : employees) {
+        for (Employee e : curBranch.getEmployees()) {
             System.out.println(e.toString());
         }
     }
