@@ -116,5 +116,18 @@ public class ProductListDocument {
         destination = new Site(site);
     }
 
+    @Override
+    public final boolean equals(Object other){
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        ProductListDocument that = (ProductListDocument) other;
+        return this.getId()==that.getId();
+    }
+
+    @Override
+    public final int hashCode(){
+        return this.getId();
+    }
+
 
 }

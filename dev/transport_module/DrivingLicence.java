@@ -27,7 +27,11 @@ public class DrivingLicence {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DrivingLicence d = (DrivingLicence) o;
-        if(code == d.code){return true;}
-        return false;
+        return code.equals(d.code);
+    }
+
+    @Override
+    public final int hashCode() {
+        return this.code!=null ? this.code.hashCode() : 0;
     }
 }

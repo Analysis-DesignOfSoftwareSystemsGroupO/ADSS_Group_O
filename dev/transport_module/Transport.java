@@ -15,6 +15,8 @@ public class Transport {
     private Site source; // the source site the transport is start
     private final Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
     private boolean isSent;
+    private int currWeight;
+    private int maxWeight;
 
     private boolean isOutOfZone;
 
@@ -54,7 +56,12 @@ public class Transport {
 
 
         id = ++staticTransportID; // give index to transport
+        if(!t.getAvailablity(date))
+            throw new Exception("Truck is not available at this date");
         truck = t; // save the truck as the original truck - not a copy of the truck.
+        truck.setDate(date); // set date at truck schedule
+        currWeight =0;
+        maxWeight = t.getMaxWeight();
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
@@ -80,6 +87,18 @@ public class Transport {
         driver.assignToMission();
 
 
+    }
+
+    public void changeTruck(Truck t){
+        if (t!=this.truck && t!= null){
+            truck.releaseTruck(date); // release the previous truck from transport
+            truck = t; // save new truck to this transport
+            truck.setDate(date); // save the new date in new truck
+            maxWeight = t.getMaxWeight(); // change the maximum weight of transport
+            System.out.println("Truck has ben changed successfully");
+            if(maxWeight<currWeight)
+                System.out.println("Truck has Over Weight");
+        }
     }
 
     /**
@@ -148,15 +167,15 @@ public class Transport {
      */
     public void loadByDocument(ProductListDocument document) throws Exception {
         if (document == null) throw new Exception("Invalid input");
-        if (truck.getMaxWeight() < truck.getWeight() + document.getTotalWeight()) { // if truck is in Over Weight
+        if (maxWeight < currWeight + document.getTotalWeight()) { // if truck is in Over Weight
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
-            int difference = (truck.getWeight() + document.getTotalWeight()) - truck.getMaxWeight();
+            int difference = (currWeight + document.getTotalWeight()) - maxWeight;
             System.out.println("Weight excess by " + difference + " kg");
         } else {
             document.attachTransportToDocument(id);
             destinations_document_map.put(document.getDestination().getName(), document);
-            truck.addWeight(document.getTotalWeight());
-            System.out.println("Truck has successfully loaded."); // Can't load the truck
+            currWeight+=document.getTotalWeight();
+            System.out.println("Truck has successfully loaded.");
 
             if (!source.getArea().equals(document.getDestination().getArea())) {
                 System.out.println("This destination is out of Area Zone, this is a special Transport");
@@ -210,17 +229,23 @@ public class Transport {
         System.out.println("Changed delivery time to: "+departure_time);
 
     }
-    public void changeTruck(Truck t){
-        if(t!= truck){
-            truck = t;
-            System.out.println("Truck has ben changed successfully");
-        }
 
-    }
     public void changeSourceSite(Site s){
         if (!s.equals(source)){
             source = new Site(s);
         }
+    }
+    @Override
+    public final boolean equals(Object other){
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Transport that = (Transport) other;
+        return this.getId()==that.getId();
+    }
+
+    @Override
+    public final int hashCode(){
+        return this.getId();
     }
 
 

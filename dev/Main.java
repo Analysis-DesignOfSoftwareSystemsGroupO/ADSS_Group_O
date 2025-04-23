@@ -1,4 +1,6 @@
 import java.sql.Driver;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -32,8 +34,15 @@ public class Main {
     public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports,  Map<String,Site> sites ) {
         boolean allTrucksUnAvailabl = true;
         Truck t = null;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Please enter date by format: DD/MM/YEAR");
+        String dateStr = scanner.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate parsedDate = LocalDate.parse(dateStr, formatter);
+
         for (Truck truck : trucks) // check if there is an available truck.
-            if (truck.getAvailablity()) {
+            if (truck.getAvailablity(parsedDate)) {
                 allTrucksUnAvailabl = false;
                 t = truck;
                 break;
@@ -42,11 +51,6 @@ public class Main {
             System.out.println("There is no available truck please check later");
             return;
         }
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Please enter date by format: DD/MM/YEAR");
-        String dateStr = scanner.nextLine();
-
 
         System.out.println("Please enter date by format: HH:MM");
         String timeStr = scanner.nextLine();
@@ -245,9 +249,15 @@ public static void createNewDoc(Map<Integer,ProductListDocument> documents,Map<S
 //********************************************************************************************************************** Case 9 - Print all available trucks
 
     public static void printAllAvailableTrukcs(Truck[] trucks) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Please enter date by format: DD/MM/YEAR");
+        String dateStr = scanner.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate parsedDate = LocalDate.parse(dateStr, formatter);
         int count = 0;
         for (Truck truck : trucks) {
-            if (truck.getAvailablity()) {
+            if (truck.getAvailablity(parsedDate)) {
                 System.out.println(truck);
 
                 count++;

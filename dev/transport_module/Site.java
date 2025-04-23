@@ -26,4 +26,13 @@ public class Site {
     public String getArea() {
         return area;
     }
+
+    @Override
+    public final boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Site that = (Site) other;
+        return that.area.equals(area) && that.name.equals(name);
+
+    }
 }
