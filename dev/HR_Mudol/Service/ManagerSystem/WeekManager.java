@@ -1,32 +1,36 @@
 package HR_Mudol.Service.ManagerSystem;
 import HR_Mudol.domain.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class WeekManager implements IWeekManager{
+
+public class WeekManager implements IWeekManager {
 
     private IShiftManager dependency;
+    private List<Week> weeks = new LinkedList<>();
 
-    public WeekManager(IShiftManager dependency){
+    public WeekManager(IShiftManager dependency) {
         this.dependency = dependency;
     }
 
     @Override
     public Week createNewWeek(User caller) {
-        Week newWeek=new Week();
+        Week newWeek = new Week();
+        weeks.add(newWeek);
         return newWeek;
     }
+
     //choose relevant role for each shift
-    public void manageTheWeekRelevantRoles (User caller,Week week){
+    public void manageTheWeekRelevantRoles(User caller, Week week) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
 
-        for (Shift shift : week.getShifts()){
-            dependency.chooseRelevantRoleForShift(caller,shift);
+        for (Shift shift : week.getShifts()) {
+            dependency.chooseRelevantRoleForShift(caller, shift);
         }
     }
 
@@ -85,12 +89,11 @@ public class WeekManager implements IWeekManager{
 
                             if (choosing.equalsIgnoreCase("Y")) {
 
-                                if (!shift.getEmployees().contains(employee)){
+                                if (!shift.getEmployees().contains(employee)) {
                                     dependency.assignEmployeeToShift(caller, shift, employee);
                                     assigned = true;
                                     System.out.println(employee.getEmpName() + " was assigned to the shift.");
-                                }
-                                else{
+                                } else {
                                     System.out.println(employee.getEmpName() + " was already assigned to  other role at that shift, try someone else.");
                                 }
                             } else {
@@ -122,10 +125,10 @@ public class WeekManager implements IWeekManager{
         }
     }
 
-    private void printRelevantEmp(User caller,Role role){
-        int index=1;
-        for (Employee emp :role.getRelevantEmployees(caller)){
-            System.out.println(index + ". " +emp.getEmpName() );
+    private void printRelevantEmp(User caller, Role role) {
+        int index = 1;
+        for (Employee emp : role.getRelevantEmployees(caller)) {
+            System.out.println(index + ". " + emp.getEmpName());
             index++;
 
         }
@@ -133,30 +136,85 @@ public class WeekManager implements IWeekManager{
 
     //Remove a shift - for holidays case use
     @Override
-    public void cancelShift (User caller, Week week){
+    public void cancelShift(User caller, Week week) {
 
-            if (!caller.isManager()) {
-                throw new SecurityException("Access denied.");
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied.");
+        }
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Choose day (Capital letters only)\n");
+        String day = scanner.nextLine();
+
+        System.out.print("Choose type (Capital letters only)\n");
+        String type = scanner.nextLine();
+
+        for (Shift shift : week.getShifts()) {
+            if (shift.getType().name().equals(type) && shift.getDay().name().equals(day)) {
+                week.removeShift(shift);
+                System.out.println(shift + " was deleted");
+                break;
             }
-            Scanner scanner = new Scanner(System.in);
-
-            System.out.print("Choose day (Capital letters only)\n");
-            String day = scanner.nextLine();
-
-            System.out.print("Choose type (Capital letters only)\n");
-            String type = scanner.nextLine();
-
-            for (Shift shift : week.getShifts()) {
-                if (shift.getType().name().equals(type) && shift.getDay().name().equals(day)) {
-                    week.removeShift(shift);
-                    System.out.println(shift + " was deleted");
-                    break;
-                }
-            }
-    }
-    @Override
-    public void printWeek (Week week){
-            System.out.println(week);
         }
     }
 
+    @Override
+    public void printWeek(Week week) {
+        System.out.println(week);
+    }
+
+    public List<Week> getWeeks() {
+        return weeks;
+    }
+
+/*
+    public static void shiftsHistory() {
+        Scanner scanner = new Scanner(System.in);
+
+        if (weeks.isEmpty()) {
+            System.out.println("No weeks available.");
+            return;
+        }
+
+        System.out.print("Do you want to see the last week only? (Y/N): ");
+        String choice = scanner.nextLine().trim();
+
+        if (choice.equalsIgnoreCase("Y")) {
+            Week lastWeek = Collections.max(weeks, Comparator.comparing(Week::getConstraintDeadline));
+            System.out.println("Last week:\n" + lastWeek);
+            return;
+        }
+
+        LocalDate fromDate = readDate(scanner, "Enter start date (yyyy-MM-dd): ");
+        LocalDate toDate = readDate(scanner, "Enter end date (yyyy-MM-dd): ");
+
+        List<Week> filteredWeeks = weeks.stream()
+                .filter(w -> !w.getConstraintDeadline().isBefore(fromDate.atStartOfDay()) &&
+                        !w.getConstraintDeadline().isAfter(toDate.atStartOfDay()))
+                .sorted(Comparator.comparing(Week::getConstraintDeadline))
+                .collect(Collectors.toList());
+
+        if (filteredWeeks.isEmpty()) {
+            System.out.println("No weeks found in the given date range.");
+        } else {
+            System.out.println("Weeks in the selected range:");
+            filteredWeeks.forEach(System.out::println);
+        }
+    }
+
+    // פונקציה עזר לקריאת תאריכים עם ולידציה
+    private LocalDate readDate(Scanner scanner, String prompt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                return LocalDate.parse(input, formatter);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+            }
+        }
+    }
+*/
+}

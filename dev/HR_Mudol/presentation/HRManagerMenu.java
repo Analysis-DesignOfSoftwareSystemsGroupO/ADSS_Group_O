@@ -1,5 +1,6 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.Service.ManagerSystem.*;
 import HR_Mudol.domain.*;
 import HR_Mudol.Service.ManagerSystem.HRSystemManager;
 
@@ -12,8 +13,9 @@ public class HRManagerMenu {
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");
-            System.out.println("1. View Shift History");
-            System.out.println("2. Manage Employees");
+
+            System.out.println("1. Manage Employees");
+            System.out.println("2. View Shifts History");
             System.out.println("3. Generate Reports");
             System.out.println("4. Manage Weekly Shifts");
             System.out.println("5. Manage Roles");
@@ -23,8 +25,8 @@ public class HRManagerMenu {
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1": hrSystemManager.printWeek(null); break;
-                case "2": manageEmployees(hrSystemManager, admin, scanner); break;
+                case "1": manageEmployees(hrSystemManager, admin, scanner); break;
+                //case "2": WeekManager.shiftsHistory(); break;
                 case "3": generateReports(hrSystemManager, admin, scanner); break;
                 case "4": manageShift(hrSystemManager, curWeek, admin, scanner); break;
                 case "5": manageRoles(hrSystemManager, admin, scanner); break;

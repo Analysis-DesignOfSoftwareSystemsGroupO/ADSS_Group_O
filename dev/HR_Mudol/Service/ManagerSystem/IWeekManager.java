@@ -3,6 +3,8 @@ package HR_Mudol.Service.ManagerSystem;
 import HR_Mudol.domain.User;
 import HR_Mudol.domain.Week;
 
+import java.util.List;
+
 public interface IWeekManager {
 
     //It creates instances of new shifts (Sunday - Friday)
@@ -12,7 +14,7 @@ public interface IWeekManager {
     void cancelShift(User caller,Week week);
 
     //choose relevant roles for each shift at the week
-    void manageTheWeekRelevantRoles (User caller,Week week);
+    void manageTheWeekRelevantRoles (User caller, Week week);
 
     //Assigning employees to shifts
     void assigningEmployToShifts (User caller,Week week);
