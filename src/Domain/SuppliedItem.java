@@ -30,4 +30,8 @@ public class SuppliedItem {
     public int getSuppliedItemPrice() {
         return suppliedItemPrice;
     }
+
+    public String toString(){
+        return product.toString();
+    }
 }

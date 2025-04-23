@@ -27,7 +27,7 @@ public class SuppliersDataBase {
      *Supplier Data Base Functions:
      */
     public void addSupplier(Supplier supplier) {
-        suppliers.put(supplier.getSupplierName(), supplier);
+        suppliers.put(supplier.getID(), supplier);
     }
 
     public Supplier getSupplier(String supplierID) {
@@ -52,9 +52,10 @@ public class SuppliersDataBase {
         for (SupplierBranchKey branchKey : suppliersAgreements.keySet()){
             if (Objects.equals(branchKey.branchID, branchId) && Objects.equals(branchKey.supplierID, supplierID)){
                 suppliersAgreements.remove(branchKey);
+                return;
             }
         }
-        throw new NullPointerException("agreement does not exist");
+        throw new NullPointerException("Agreement does not exist");
     }
 
     public void addAgreement(Agreement agreement) {
@@ -79,7 +80,8 @@ public class SuppliersDataBase {
     public void addProductToAgreement(SuppliedItem product, String branchID, String supplierID){
         Agreement agreement = this.getAgreement(branchID, supplierID);
         if (agreement == null){
-            throw new NullPointerException("agreement does not exist");
+            throw new NullPointerException("agreement does not exist for Branch:" + branchID + " And Supplier:" + supplierID);
+
         }
         agreement.addItem(product);
     }

@@ -47,4 +47,7 @@ public class SupplierController {
         supplierService.updateSupplierName(ID, name);
     }
 
+    public void printSupplierProducts(String supplierID) throws Exception {
+        supplierService.printAllSupplierProducts(supplierID);
+    }
 }

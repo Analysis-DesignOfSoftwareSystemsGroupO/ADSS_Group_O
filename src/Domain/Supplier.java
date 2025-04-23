@@ -43,6 +43,10 @@ public class Supplier {
         return supplierID;
     }
 
+    public List<Product> getProducts() {
+        return new ArrayList<>(supplyProducts.values());
+    }
+
     public String getAccountNumber() {
         return supplierAccountNumber;
     }

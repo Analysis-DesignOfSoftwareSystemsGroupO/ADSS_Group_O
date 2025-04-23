@@ -15,4 +15,8 @@ public class Product {
     public String getProductName() {
         return productName;
     }
+
+    public String toString(){
+        return "Product ID: " + productID + ", Product Name: " + productName;
+    }
 }

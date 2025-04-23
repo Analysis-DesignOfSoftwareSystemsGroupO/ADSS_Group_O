@@ -89,5 +89,14 @@ public class SupplierService {
             supplier.setSupplierName(newName);
         }
     }
-    
+
+    public void printAllSupplierProducts(String supplierID) throws Exception {
+        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null) {
+            throw new Exception("Supplier doesnt exist");
+        }
+        for (Product suppliedItem : supplier.getProducts()){
+            System.out.println(suppliedItem.toString());
+        }
+    }
 }
