@@ -11,7 +11,7 @@ public class Branch {
     static int counter=0; //branches counter
     private int branchID;
     private List<Week> weeks=new LinkedList<>();//שבועות עבודה
-    private List<Employee> employees=new LinkedList<>(); //עובדים בחברה
+    private List<Employee> employees; //עובדים בחברה
     private List<Role> roles=new LinkedList<>();//תפקידים בחברה
     private List<User> users;
 
@@ -19,10 +19,16 @@ public class Branch {
         this.branchID = counter;
         Week curWeek=new Week();
         this.weeks.add(curWeek);
-        User admin= new User(new Employee("Dana", 123456789, "pass", "123456", 5000,
-                LocalDate.now(), 2, 2, 5, 10), Level.regularEmp);
-        User dummyEmo=new User(new HRManager("Rami Levi", 111111111, "admin", "111111",
-                30000, LocalDate.now()), Level.HRManager);
+
+        Employee reg=new Employee("Dana", 123456789, "pass", "123456", 5000,LocalDate.now(), 2, 2, 5, 10);
+        HRManager manager=new HRManager("Rami Levi",111111111,"admin","122345",300000,LocalDate.now());
+
+        User admin= new User(manager,Level.HRManager);
+        User dummyEmo=new User(reg, Level.regularEmp);
+
+        this.employees=new LinkedList<>();
+        this.employees.add(reg);
+
         this.users=new LinkedList<>();
         this.users.add(admin);
         this.users.add(dummyEmo);

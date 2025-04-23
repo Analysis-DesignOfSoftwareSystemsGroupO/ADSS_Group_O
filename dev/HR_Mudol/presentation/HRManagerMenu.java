@@ -4,8 +4,11 @@ import HR_Mudol.Service.ManagerSystem.*;
 import HR_Mudol.domain.*;
 import HR_Mudol.Service.ManagerSystem.HRSystemManager;
 
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HRManagerMenu {
 
@@ -27,7 +30,7 @@ public class HRManagerMenu {
 
             switch (choice) {
                 case "1": manageEmployees(hrSystemManager, admin, scanner); break;
-                //case "2": WeekManager.shiftsHistory(); break;
+                case "2": viewShiftsHistory(hrSystemManager,curBranch.getWeeks()); break;
                 case "3": generateReports(hrSystemManager, admin, scanner); break;
                 case "4": manageShift(hrSystemManager, curBranch.getWeeks(), admin, scanner); break;
                 case "5": manageRoles(hrSystemManager, admin, scanner); break;
@@ -37,6 +40,84 @@ public class HRManagerMenu {
                     return true;
                 default:
                     System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
+    private static void viewShiftsHistory(HRSystemManager hr, List<Week> weeks) {
+        if (weeks == null || weeks.isEmpty()) {
+            System.out.println("No weeks available.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.print("Do you want to see only the last week? (Y/N): ");
+        String choice = scanner.nextLine().trim();
+
+        if (choice.equalsIgnoreCase("Y")) {
+            // מציאת השבוע האחרון ידנית
+            Week lastWeek = weeks.get(0);
+            for (int i = 1; i < weeks.size(); i++) {
+                if (weeks.get(i).getConstraintDeadline().isAfter(lastWeek.getConstraintDeadline())) {
+                    lastWeek = weeks.get(i);
+                }
+            }
+            System.out.println("Last week:");
+            hr.printWeek(lastWeek);
+            return;
+        }
+
+        // קבלת תאריכי התחלה וסיום
+        LocalDate fromDate = null;
+        LocalDate toDate = null;
+
+        while (fromDate == null) {
+            System.out.print("Enter start date (yyyy-MM-dd): ");
+            try {
+                fromDate = LocalDate.parse(scanner.nextLine(), formatter);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Try again.");
+            }
+        }
+
+        while (toDate == null) {
+            System.out.print("Enter end date (yyyy-MM-dd): ");
+            try {
+                toDate = LocalDate.parse(scanner.nextLine(), formatter);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Try again.");
+            }
+        }
+
+        // סינון שבועות בטווח באופן ידני
+        List<Week> filteredWeeks = new ArrayList<>();
+        for (int i = 0; i < weeks.size(); i++) {
+            LocalDate weekDate = weeks.get(i).getConstraintDeadline().toLocalDate();
+            if (!weekDate.isBefore(fromDate) && !weekDate.isAfter(toDate)) {
+                filteredWeeks.add(weeks.get(i));
+            }
+        }
+
+        // מיון ידני לפי תאריך
+        for (int i = 0; i < filteredWeeks.size() - 1; i++) {
+            for (int j = i + 1; j < filteredWeeks.size(); j++) {
+                LocalDate d1 = filteredWeeks.get(i).getConstraintDeadline().toLocalDate();
+                LocalDate d2 = filteredWeeks.get(j).getConstraintDeadline().toLocalDate();
+                if (d1.isAfter(d2)) {
+                    Week temp = filteredWeeks.get(i);
+                    filteredWeeks.set(i, filteredWeeks.get(j));
+                    filteredWeeks.set(j, temp);
+                }
+            }
+        }
+
+        if (filteredWeeks.isEmpty()) {
+            System.out.println("No weeks found in the selected range.");
+        } else {
+            System.out.println("Weeks in the selected range:");
+            for (Week week : filteredWeeks) {
+                hr.printWeek(week);
             }
         }
     }

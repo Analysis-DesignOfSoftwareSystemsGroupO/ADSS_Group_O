@@ -97,11 +97,23 @@ public class Shift {
     }
 
     @Override
-    public String toString(){
-        return "Shift "+ type + " number: "+ shiftID + " at "+ day + " — status: " + status
-                +"\n Roles: "+ necessaryRoles
-                +"\n Workers: "+ employees;
+    public String toString() {
+        StringBuilder rolesStr = new StringBuilder();
+        for (Role role : necessaryRoles) {
+            rolesStr.append(role.getDescription()).append(", ");
         }
+        if (rolesStr.length() > 0) rolesStr.setLength(rolesStr.length() - 2); // הסרת פסיק אחרון
+
+        StringBuilder employeesStr = new StringBuilder();
+        for (Employee emp : employees) {
+            employeesStr.append(emp.getEmpName()).append(", ");
+        }
+        if (employeesStr.length() > 0) employeesStr.setLength(employeesStr.length() - 2); // הסרת פסיק אחרון
+
+        return "Shift " + type + " number: " + shiftID + " at " + day + " — status: " + status
+                + "\nRoles: " + rolesStr
+                + "\nWorkers: " + employeesStr;
+    }
 
     public Employee getShiftManager() {
         return shiftManager;

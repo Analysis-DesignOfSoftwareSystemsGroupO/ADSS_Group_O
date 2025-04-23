@@ -120,7 +120,7 @@ public class WeekManager implements IWeekManager {
                 shift.updateStatus(caller, Status.Problem);
             }
 
-            System.out.println("Next shift.\n");
+            System.out.println("Finish with that shift.\n");
         }
     }
 
@@ -162,54 +162,5 @@ public class WeekManager implements IWeekManager {
         System.out.println(week);
     }
 
-/*
-    public static void shiftsHistory() {
-        Scanner scanner = new Scanner(System.in);
 
-        if (weeks.isEmpty()) {
-            System.out.println("No weeks available.");
-            return;
-        }
-
-        System.out.print("Do you want to see the last week only? (Y/N): ");
-        String choice = scanner.nextLine().trim();
-
-        if (choice.equalsIgnoreCase("Y")) {
-            Week lastWeek = Collections.max(weeks, Comparator.comparing(Week::getConstraintDeadline));
-            System.out.println("Last week:\n" + lastWeek);
-            return;
-        }
-
-        LocalDate fromDate = readDate(scanner, "Enter start date (yyyy-MM-dd): ");
-        LocalDate toDate = readDate(scanner, "Enter end date (yyyy-MM-dd): ");
-
-        List<Week> filteredWeeks = weeks.stream()
-                .filter(w -> !w.getConstraintDeadline().isBefore(fromDate.atStartOfDay()) &&
-                        !w.getConstraintDeadline().isAfter(toDate.atStartOfDay()))
-                .sorted(Comparator.comparing(Week::getConstraintDeadline))
-                .collect(Collectors.toList());
-
-        if (filteredWeeks.isEmpty()) {
-            System.out.println("No weeks found in the given date range.");
-        } else {
-            System.out.println("Weeks in the selected range:");
-            filteredWeeks.forEach(System.out::println);
-        }
-    }
-
-    // פונקציה עזר לקריאת תאריכים עם ולידציה
-    private LocalDate readDate(Scanner scanner, String prompt) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
-            try {
-                return LocalDate.parse(input, formatter);
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Please use yyyy-MM-dd.");
-            }
-        }
-    }
-*/
 }
