@@ -98,7 +98,7 @@ public class PresentAgreementOptions {
                 System.out.println("Enter supplier ID: ");
                 supplierID = editAgreement.nextLine();
                 try {
-                    agreementController.viewAgreement(supplierID, branchId);
+                    agreementController.viewAgreement(branchId, supplierID);
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -157,11 +157,13 @@ public class PresentAgreementOptions {
             System.out.println("Invalid option !\n");
         }
         try {
-            agreementController.addProductToAgreement(supplierID, branchId , productName, price, productQuantity, productDiscount);
+            agreementController.addProductToAgreement(branchId ,supplierID, productName, price, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println(productName + " was added to agreement");
     }
 
     //removes a product from an existing agreement
