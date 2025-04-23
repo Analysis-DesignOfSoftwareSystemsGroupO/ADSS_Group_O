@@ -127,10 +127,15 @@ public class Transport {
         truck.clear();
         isSent = true;
         driver.release();
+        System.out.println("Transport has successfully sent");
     }
 
     public int getId() {
         return id;
+    }
+
+    public boolean isSent() {
+        return isSent;
     }
 
     /**
@@ -183,6 +188,9 @@ public class Transport {
             }
         }
 
+    }
+    public LocalTime getDeparture_time(){
+        return departure_time;
     }
 
     public ProductListDocument getDocument(String site_name){
