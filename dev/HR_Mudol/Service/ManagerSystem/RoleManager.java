@@ -29,10 +29,17 @@ public class RoleManager implements IRoleManager {
         System.out.print("Enter role description: ");
         String description = scanner.nextLine();
 
+        for (Role r: allRoles){
+            if (r.getDescription().equalsIgnoreCase(description)){
+                System.out.println("This role already exist.");
+                return;
+            }
+        }
         Role role = new Role(description);
         allRoles.add(role);
 
         System.out.println("Role created successfully");
+
     }
 
     @Override
@@ -85,7 +92,7 @@ public class RoleManager implements IRoleManager {
 
             role.addNewEmployee(caller, employee);
 
-            System.out.println("Employee assigned to role.");
+            System.out.println(employee.getEmpName()+" assigned to "+role.getDescription()+".");
         }
     }
 

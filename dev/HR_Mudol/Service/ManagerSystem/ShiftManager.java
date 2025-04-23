@@ -17,6 +17,7 @@ public class ShiftManager implements IShiftManager {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
+
         shift.addEmployee(caller,employee);
         System.out.println("Employee " + employee.getEmpName() + " assigned to shift " + shift.getDay()+ " - "+ shift.getType() +".");
     }
@@ -102,7 +103,8 @@ public class ShiftManager implements IShiftManager {
     private void printRolesList(User caller){
 
         for (Role r :dependency.getAllRoles(caller) ) {
-            System.out.print(r.getRoleNumber() +" - " + r.getDescription()+ "\n");
+            if (r.getRoleNumber()!=1) //לדלג על המנהל משמרת כי צריך רק אחמש אחד
+            { System.out.print(r.getRoleNumber() +" - " + r.getDescription()+ "\n");}
         }
     }
 }
