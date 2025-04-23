@@ -9,11 +9,7 @@ public class Role {
     private List<Employee> relevantEmployees;
 
     //create new role only by HR manager
-    public Role(User caller, String description) {
-
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public Role(String description) {
 
         RoleCounter++;
         this.roleNumber = RoleCounter;

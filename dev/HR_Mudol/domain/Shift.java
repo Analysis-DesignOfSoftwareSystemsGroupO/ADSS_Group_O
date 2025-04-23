@@ -13,6 +13,7 @@ public class Shift {
     private Status status;
     private List<Employee> employees; //The employees who work at that shift
     private List<Role> necessaryRoles;
+    private Employee shiftManager;
 
     public Shift(WeekDay day, ShiftType type){
         counter++;
@@ -22,6 +23,7 @@ public class Shift {
         this.employees=new LinkedList<>();
         this.status=Status.Empty;
         this.necessaryRoles=new LinkedList<>();
+
     }
 
     // Getters
@@ -101,4 +103,15 @@ public class Shift {
                 +"\n Workers: "+ employees;
         }
 
+    public Employee getShiftManager() {
+        return shiftManager;
+    }
+
+
+    public void setShiftManager(User caller , Employee shiftManager) {
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        this.shiftManager = shiftManager;
+    }
 }

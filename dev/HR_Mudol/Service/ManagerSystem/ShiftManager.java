@@ -32,55 +32,63 @@ public class ShiftManager implements IShiftManager {
     }
 
     @Override
-    public void chooseRelevantRoleForShift(User caller, Shift shift){
+    public void chooseRelevantRoleForShift(User caller, Shift shift) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
-        if (dependency.getAllRoles(caller).isEmpty()){
+
+        if (dependency.getAllRoles(caller).isEmpty()) {
             throw new IllegalArgumentException("No roles at the system.");
         }
 
-        printRolesList(caller);
-        System.out.print("Enter relevant role number to add to te shift "+ shift.getDay() + " - "+ shift.getType()+ ":");
-        Scanner scanner = new Scanner(System.in);
-        int roleNumber = scanner.nextInt();
+        // always add shift manager
+        shift.addNecessaryRoles(caller, dependency.getRoleByNumber(1));
 
+        Scanner scanner = new Scanner(System.in);
         boolean done = false;
 
         while (!done) {
-            Role role = dependency.getRoleByNumber(roleNumber);
-            shift.addNecessaryRoles(caller, role);
-            System.out.print(role.getDescription() + " was added to the shift\n");
+            printRolesList(caller);
+            int roleNumber = -1;
 
+            // קלט מספרי תקין
+            while (true) {
+                System.out.print("Enter relevant role number to add to the shift " + shift.getDay() + " - " + shift.getType() + ": ");
+                String input = scanner.nextLine();
+                try {
+                    roleNumber = Integer.parseInt(input);
+                    Role role = dependency.getRoleByNumber(roleNumber);
+                    if (role == null) {
+                        System.out.println("Role number does not exist. Please try again.");
+                    } else if (role.getRoleNumber() == 1) {
+                        System.out.println("Shift Manager is already added. Please choose a different role.");
+                    } else {
+                        shift.addNecessaryRoles(caller, role);
+                        System.out.println(role.getDescription() + " was added to the shift.");
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                }
+            }
+
+            // קלט לסיום
             while (true) {
                 System.out.print("If you're done write D, else write N: ");
                 String isDone = scanner.nextLine().trim();
 
                 if (isDone.equalsIgnoreCase("D")) {
                     done = true;
-                    break; // יוצא מהלולאת קלט וממשיך בלולאה הראשית
+                    break;
                 } else if (isDone.equalsIgnoreCase("N")) {
-                    break; // ממשיך להוספת תפקיד נוסף
+                    break;
                 } else {
                     System.out.println("Invalid input. Please enter 'D' or 'N'.");
                 }
             }
-
-            if (!done) {
-                printRolesList(caller);
-                System.out.print("Enter role number to add: ");
-
-                // ניקוי שאריות מה־buffer (אם צריך)
-                while (!scanner.hasNextInt()) {
-                    System.out.println("Please enter a valid number.");
-                    scanner.nextLine();
-                }
-                roleNumber = scanner.nextInt();
-                scanner.nextLine();
-            }
         }
-
     }
+
 
     @Override
     public void printShift(User caller, Shift shift) {

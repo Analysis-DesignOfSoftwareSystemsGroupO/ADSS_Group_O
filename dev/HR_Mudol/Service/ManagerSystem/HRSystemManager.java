@@ -197,7 +197,7 @@ public class HRSystemManager implements IHRSystemManager {
 
     @Override
     public void manageTheWeekRelevantRoles(User caller, Week week) {
-        weekManager.manageTheWeekRelevantRoles(caller,week);
+        weekManager. manageTheWeekRelevantRoles(caller,week);
     }
 
     @Override

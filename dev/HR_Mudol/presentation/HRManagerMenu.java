@@ -91,6 +91,7 @@ public class HRManagerMenu {
         System.out.println("2. Employee Report");
         System.out.println("3. Shift Report");
         System.out.println("4. Custom Report");
+        System.out.println("0. Back to Main Menu");
 
         String choice = sc.nextLine();
         try {
@@ -115,8 +116,10 @@ public class HRManagerMenu {
                     String filter = sc.nextLine();
                     hr.generateCustomReport(caller, filter);
                     break;
+                case "0": return;
                 default:
                     System.out.println("Invalid option.");
+
             }
         } catch (Exception e) {
             System.out.println("Failed to generate report.");
@@ -129,14 +132,18 @@ public class HRManagerMenu {
         System.out.println("1. Create Role");
         System.out.println("2. Assign Employee to Role");
         System.out.println("3. Remove Employee from Role");
-        System.out.println("4. Print All Roles");
+        System.out.println("4. Assign employee to shift manager");
+        System.out.println("5. Print All Roles");
+        System.out.println("0. Back to Main Menu");
 
         String choice = sc.nextLine();
         switch (choice) {
             case "1": hr.createRole(caller); break;
             case "2": hr.assignEmployeeToRole(caller); break;
             case "3": hr.removeEmployeeFromRole(caller); break;
-            case "4": hr.printAllRoles(caller); break;
+            case "4": hr.assignEmployeeToShiftManager(caller); break;
+            case "5": hr.printAllRoles(caller); break;
+            case "0": return;
             default: System.out.println("Invalid option.");
         }
     }

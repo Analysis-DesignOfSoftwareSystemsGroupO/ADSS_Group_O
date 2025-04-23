@@ -34,28 +34,33 @@ public class WeekManager implements IWeekManager{
             Scanner scanner = new Scanner(System.in);
 
             //loop for all the week's shifts
-            for (Shift shift : week.getShifts()) { //example: Sunday morning
-
+            for (Shift shift : week.getShifts()) {
+                //example: Sunday morning
+                System.out.print("For the shift "+shift.getDay() + " - " + shift.getType()+ " ,");
                 if (!shift.getNecessaryRoles().isEmpty()) {
+
                     //loop for all the necessary roles at specific shift
                     for (Role role : shift.getNecessaryRoles()) { //example: Sunday morning
 
+                        System.out.print("You should find an employee from the list for the role - "+role.getDescription() + ", \nplease choose an employee from the list :\n");
+
                         //print all the relevant employee:
-                        System.out.println(role.getRelevantEmployees(caller));
+                        printRelevantEmp(caller,role);
                         boolean flag = false;
 
                         //loop for choosing an emp for that role
                         while (!flag) {
-                            System.out.println("Choose by employee by his place number on the list:");
+                            System.out.println("\n(Choose the employee by his place in the list)");
                             int index = scanner.nextInt();
 
-                            Employee employee = role.getRelevantEmployees(caller).get(index);
+                            Employee employee = role.getRelevantEmployees(caller).get(index-1);
                             constraint = employee.searchingForRelevantconstraint(caller, shift.getDay(), shift.getType());
                             if (constraint == null) {
                                 //there no constraint for that shift
                                 System.out.println("The employee can work at that shift, \n Do you want to choose him? IF so write - Y, else write N");
                                 String choosing = scanner.nextLine();
                                 if (choosing == "Y") {
+
                                     dependency.assignEmployeeToShift(caller, shift, employee);
                                     flag = true;
                                     break; //move to the next role
@@ -80,9 +85,17 @@ public class WeekManager implements IWeekManager{
             if (shift.getNecessaryRoles().size() == shift.getEmployees().size() && !shift.getNecessaryRoles().isEmpty()) {
                 shift.updateStatus(caller, Status.Full);
             } else shift.updateStatus(caller, Status.Problem);
-        }            //print result
-            printWeek(week);
+        }
     }
+    private void printRelevantEmp(User caller,Role role){
+        int index=1;
+        for (Employee emp :role.getRelevantEmployees(caller)){
+            System.out.println(index + ". " +emp.getEmpName() );
+            index++;
+
+        }
+    }
+
     //Remove a shift - for holidays case use
     @Override
     public void cancelShift (User caller, Week week){

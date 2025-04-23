@@ -13,6 +13,8 @@ public class RoleManager implements IRoleManager {
 
     public RoleManager() {
         this.allRoles = new LinkedList<>();
+        Role Shift_Manager=new Role("Shift Manager");
+        allRoles.add(Shift_Manager);
         this.scanner = new Scanner(System.in);
     }
     public void setEmployeeManager(IEmployeeManager employeeManager) {
@@ -27,7 +29,7 @@ public class RoleManager implements IRoleManager {
         System.out.print("Enter role description: ");
         String description = scanner.nextLine();
 
-        Role role = new Role(caller, description);
+        Role role = new Role(description);
         allRoles.add(role);
 
         System.out.println("Role created successfully");
@@ -56,18 +58,35 @@ public class RoleManager implements IRoleManager {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         printAllRoles(caller);
+
         System.out.print("Enter role number: ");
         int roleNumber = scanner.nextInt();
 
-        System.out.print("Enter employee ID: ");
-        int empId = scanner.nextInt();
+        if (roleNumber==1){
+            assignEmployeeToShiftManager(caller);
+        }
+        else {
+            System.out.print("Enter employee ID: ");
+            int empId = scanner.nextInt();
+            Employee employee;
 
-        Employee employee = employeeManager.getEmployeeById(caller, empId);
+            while (true) {
+                try {
+                    employee = employeeManager.getEmployeeById(caller, empId);
+                    break;
 
-        Role role = getRoleByNumber(roleNumber);
-        role.addNewEmployee(caller,employee);
+                } catch (Exception e) {
+                    System.out.print("Employee not found, please insert ID again :");
+                    System.out.print("Enter employee ID: ");
+                    empId = scanner.nextInt();
+                }
+            }
+            Role role = getRoleByNumber(roleNumber);
 
-        System.out.println("Employee assigned to role.");
+            role.addNewEmployee(caller, employee);
+
+            System.out.println("Employee assigned to role.");
+        }
     }
 
 
@@ -79,8 +98,19 @@ public class RoleManager implements IRoleManager {
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
         scanner.nextLine();
+        Employee employee;
+        while (true) {
 
-        Employee employee = employeeManager.getEmployeeById(caller, empId);
+            try {
+                employee = employeeManager.getEmployeeById(caller, empId);
+                break;
+            } catch (Exception e) {
+
+                System.out.print("Employee wasn't found, Enter employee ID again: ");
+            }
+            empId = scanner.nextInt();
+            scanner.nextLine();
+        }
 
         //if already exist "Shift Manager" role
         Role shiftManagerRole = null;
@@ -90,23 +120,16 @@ public class RoleManager implements IRoleManager {
                 break;
             }
         }
-        //else
-        if (shiftManagerRole == null) {
-            shiftManagerRole = new Role(caller, "Shift Manager");
-            allRoles.add(shiftManagerRole);
-            System.out.println("Created 'Shift Manager' role.");
-        }
 
         // checks if the emp already shift manager
         if (!shiftManagerRole.getRelevantEmployees(caller).contains(employee)) {
             shiftManagerRole.addNewEmployee(caller, employee);
-            System.out.println("Employee assigned to 'Shift Manager' role.");
+            System.out.println(employee.getEmpName() + " assigned to 'Shift Manager' role.");
         } else {
             System.out.println("Employee is already assigned to 'Shift Manager' role.");
         }
 
         //update his user level:
-
         User targetUser = null;
         for (User u : employeeManager.getAllUsers(caller)) {
             if (u.getUser().equals(employee)) {
@@ -182,6 +205,7 @@ public class RoleManager implements IRoleManager {
         for (Role r : allRoles) {
             if (r.getRoleNumber() == roleNumber) return r;
         }
-        throw new IllegalArgumentException("Role not found");
+        return null;
+
     }
 }
