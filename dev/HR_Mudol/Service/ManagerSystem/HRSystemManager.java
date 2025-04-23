@@ -26,8 +26,17 @@ public class HRSystemManager implements IHRSystemManager {
     }
 
     @Override
-    public void displayDashboard(User caller) {
+    public void displayDashboard(User caller, Branch curBranch) {
+        Week currentWeek = curBranch.getWeeks().getLast();
+        System.out.println("📅 Week starting " + currentWeek.getConstraintDeadline());
+        System.out.println("🚨" + weekManager.hasUnassignedRoles(currentWeek)+ " shifts are required attention!");
+        System.out.println(curBranch.getWeeks().getLast()); //print the shifts of the week
 
+        System.out.println("\n👥 Employees Status:");
+        System.out.println("- Total employees: " + curBranch.getEmployees().size());
+        //System.out.println("- On vacation: " + employeeManager.countOnVacation());
+        //System.out.println("- Sick leave: " + employeeManager.countSickEmployees());
+        System.out.println("- Without roles: " + roleManager.countEmployeesWithoutRoles(caller,curBranch.getEmployees()));
     }
 
     @Override
@@ -106,11 +115,6 @@ public class HRSystemManager implements IHRSystemManager {
     }
 
     @Override
-    public void generateCustomReport(User caller, String filter) {
-
-    }
-
-    @Override
     public void createRole(User caller) {
         roleManager.createRole(caller);
     }
@@ -158,6 +162,11 @@ public class HRSystemManager implements IHRSystemManager {
     @Override
     public Role getRoleByNumber(int roleNumber) {
         return roleManager.getRoleByNumber(roleNumber);
+    }
+
+    @Override
+    public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
+        return roleManager.countEmployeesWithoutRoles(caller,employeeList);
     }
 
     @Override
@@ -210,5 +219,10 @@ public class HRSystemManager implements IHRSystemManager {
     @Override
     public List<Shift> getShiftsForEmployee(Employee employee, Week curWeek) {
         return List.of();
+    }
+
+    @Override
+    public int hasUnassignedRoles(Week week) {
+        return 0;
     }
 }

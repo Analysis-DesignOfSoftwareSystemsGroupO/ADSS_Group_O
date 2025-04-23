@@ -34,7 +34,7 @@ public class HRManagerMenu {
                 case "3": generateReports(hrSystemManager, admin, scanner,curBranch); break;
                 case "4": manageShift(hrSystemManager, curBranch.getWeeks(), admin, scanner); break;
                 case "5": manageRoles(hrSystemManager, admin, scanner); break;
-                case "6": hrSystemManager.displayDashboard(admin); break;
+                case "6": hrSystemManager.displayDashboard(admin,curBranch); break;
                 case "0":
                     System.out.println("Logging out. Returning to login screen.");
                     return true;
@@ -175,7 +175,6 @@ public class HRManagerMenu {
         System.out.println("1. Weekly Report");
         System.out.println("2. Employee Report");
         System.out.println("3. Shift Report");
-        System.out.println("4. Custom Report");
         System.out.println("0. Back to Main Menu");
 
         String choice = sc.nextLine();
@@ -191,11 +190,6 @@ public class HRManagerMenu {
                     break;
                 case "3":
                     hr.generateShiftReport(caller, curBranch.getWeeks().getLast());
-                    break;
-                case "4":
-                    System.out.print("Enter filter: ");
-                    String filter = sc.nextLine();
-                    hr.generateCustomReport(caller, filter);
                     break;
                 case "0": return;
                 default:

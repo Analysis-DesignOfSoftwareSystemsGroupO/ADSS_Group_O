@@ -176,5 +176,13 @@ public class WeekManager implements IWeekManager {
         System.out.println(week);
     }
 
+    @Override
+    public int hasUnassignedRoles(Week week) {
+        int count = 0;
+        for (Shift shift : week.getShifts()) {
+            if (shift.getStatus()==Status.Problem||shift.getStatus()==Status.Empty) count++;
+        }
+        return count;
+    }
 
 }

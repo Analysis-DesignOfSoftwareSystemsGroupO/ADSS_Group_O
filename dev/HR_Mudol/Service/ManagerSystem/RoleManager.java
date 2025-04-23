@@ -210,11 +210,21 @@ public class RoleManager implements IRoleManager {
         }
     }
 
+    @Override
     public Role getRoleByNumber(int roleNumber) {
         for (Role r : curBranch.getRoles()) {
             if (r.getRoleNumber() == roleNumber) return r;
         }
         return null;
 
+    }
+
+    @Override
+    public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
+        int count = 0;
+        for (Employee e : employeeList) {
+            if (e.getRelevantRoles(caller).isEmpty()) count++;
+        }
+        return count;
     }
 }

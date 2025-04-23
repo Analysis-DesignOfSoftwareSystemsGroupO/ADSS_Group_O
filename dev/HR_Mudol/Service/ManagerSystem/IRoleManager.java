@@ -35,4 +35,6 @@ public interface IRoleManager {
     void printAllRoles(User caller);
 
     Role getRoleByNumber(int roleNumber);
+
+    int countEmployeesWithoutRoles(User caller, List<Employee> employeeList);
 }

@@ -15,4 +15,5 @@ public interface IReportGenerator {
     void generateEmployeeReport(User caller, int empId, Week week);
 
     void generateShiftReport(User caller, Week curWeek);
+
 }

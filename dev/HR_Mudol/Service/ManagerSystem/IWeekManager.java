@@ -26,4 +26,6 @@ public interface IWeekManager {
 
     List<Shift> getShiftsForEmployee(Employee employee, Week curWeek);
 
+    int hasUnassignedRoles(Week week);
+
 }
