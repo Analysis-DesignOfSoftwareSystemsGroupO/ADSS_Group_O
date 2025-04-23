@@ -17,7 +17,8 @@ public class Supplier {
     private int supplied_product_id = 0;
 
 
-    public Supplier(String ID, String supplierName, String paymentMethod, String bankAccount, String bankNumber, String bankBranch, String infoContactName, String infoContactPhoneNumber, String infoContactTitle) {
+    public Supplier(String ID, String supplierName, String paymentMethod, String bankAccount, String bankNumber,
+                    String bankBranch, String infoContactName, String infoContactPhoneNumber, String infoContactTitle) {
         if (ID == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null || paymentMethod == null) {
             throw new NullPointerException("Invalid Details");
         }
@@ -92,7 +93,7 @@ public class Supplier {
     @Override
     public String toString() {
         return "Supplier ID: " + supplierID + System.lineSeparator() + "Supplier Name: " +
-                supplierName + System.lineSeparator() + System.lineSeparator();
+                supplierName + System.lineSeparator();
     }
 
     public void addProduct(Product product) {

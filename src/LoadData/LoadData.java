@@ -25,22 +25,25 @@ public class LoadData {
                 {"8", "Eilat", "Sderot Hatmarim 3"},
                 {"9", "Petah Tikva", "Bar Kochva 78"}
         };
-
         for (String[] data : branchData) {
             branchesDataBase.addBranch(new Branch(data[0], data[1], data[2]));
         }
-        //add suppliers
+        // add suppliers with full data for the constructor
         String[][] supplierData = {
-                {"1", "", "Yosi", "568", "286", "658"},
-                {"2", "", "Dina", "123", "456", "789"},
-                {"3", "", "Avi", "111", "222", "333"},
-                {"4", "", "Liat", "444", "555", "666"},
-                {"5", "", "Moshe", "777", "888", "999"}
+                {"1", "Yosi", "CreditCard", "568", "286", "101", "Noa", "0501234567", "Manager"},
+                {"2", "Dina", "Cash", "123", "456", "102", "Rami", "0507654321", "Sales"},
+                {"3", "Avi", "Check", "111", "222", "103", "Lior", "0521112233", "Clerk"},
+                {"4", "Liat", "Bank Transfer", "444", "555", "104", "Dana", "0543334455", "Assistant"},
+                {"5", "Moshe", "CreditCard", "777", "888", "105", "Eli", "0539998877", "Supervisor"}
         };
 
         for (String[] data : supplierData) {
-            suppliersDataBase.addSupplier(new Supplier(data[0], data[1], data[2], data[3], data[4], data[5]));
+            suppliersDataBase.addSupplier(new Supplier(
+                    data[0], data[1], data[2], data[3], data[4],
+                    data[5], data[6], data[7], data[8]
+            ));
         }
+
         // add products
         String[][] productData = {
                 {"1", "Bamba"},
@@ -134,9 +137,5 @@ public class LoadData {
             SuppliedItem item = new SuppliedItem(quantity, productDataBase.getProduct(productName));
             suppliersDataBase.addProductToAgreement(item, branchId, supplierId);
         }
-
-
-
-
     }
 }

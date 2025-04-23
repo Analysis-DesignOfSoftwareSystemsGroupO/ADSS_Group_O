@@ -50,7 +50,7 @@ public class SupplierService {
     public void printAllSuppliers() {
         List<Supplier> suppliers = suppliersDataBase.getAllSuppliers();
         for (Supplier supplier : suppliers) {
-            System.out.println(supplier);
+            System.out.println(supplier.toString());
         }
     }
 

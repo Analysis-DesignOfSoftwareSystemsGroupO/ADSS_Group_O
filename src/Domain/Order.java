@@ -1,8 +1,6 @@
 package Domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Order {
     private static int idCounter = 0;
@@ -10,7 +8,7 @@ public class Order {
     private final Date orderDate;
     private int totalPrice;
     private final Agreement agreement;
-    private List<SuppliedItem> suppliedItems;
+    private Map<SuppliedItem, Integer> suppliedItems;
     private Boolean orderClosed = false;
     private Branch branch;
 
@@ -20,7 +18,7 @@ public class Order {
         }
         this.branch = branch;
         this.agreement = agreement;
-        this.suppliedItems = new ArrayList<>();
+        this.suppliedItems = new HashMap<SuppliedItem, Integer>();
         this.orderDate = new Date();
         this.orderID = String.valueOf(generateOrderID());
     }
@@ -38,13 +36,19 @@ public class Order {
     }
 
 
-    public Boolean addItemToOrder(String itemID, int quantity) {
-        if (itemID == null || itemID.isEmpty() || orderID == null || quantity <= 0) {
+    public void addItemToOrder(String itemId, int quantity) throws Exception {
+        if (itemId == null || itemId.isEmpty() || orderID == null || quantity <= 0) {
             throw new NullPointerException("Product ID cannot be null or empty || Quantity cannot be less than 1");
         }
+        for (SuppliedItem item : suppliedItems.keySet()) {
+            if (Integer.toString(item.getSuppliedItemID()).equals(itemId)) {
+                throw new Exception("Supplied item ID " + itemId + " already exists");
+            }
+        }
+
         for (SuppliedItem item : agreement.getSupplierItemsList()){
             int discountPercentage = 0;
-            if (Integer.toString(item.getSuppliedItemID()).equals(itemID)) {
+            if (Integer.toString(item.getSuppliedItemID()).equals(itemId)) {
                 for (Discount discount : agreement.getDiscounts()) {
                     if (discount.getSuppliedItem().equals(item) && quantity >= discount.getQuantity()) {
                         discountPercentage = discount.getDiscount();
@@ -53,13 +57,13 @@ public class Order {
                 }
                 int discountedPrice = item.getSuppliedItemPrice() - (item.getSuppliedItemPrice() * discountPercentage / 100);
                 for (int i = 0; i < quantity; i++) {
-                    suppliedItems.add(item);
                     totalPrice += discountedPrice;
                 }
-                return true;
+                suppliedItems.put(item, quantity);
+                return;
             }
+            throw new Exception("Invalid item, " + itemId + " doesnt exist in the agreement, enter valid ID");
         }
-        return false;
     }
 
     public int getTotalPrice() {
@@ -71,8 +75,10 @@ public class Order {
         System.out.println("Order Date: " + this.orderDate);
         System.out.println("Total Price: " + this.totalPrice);
         System.out.println("Items: ");
-        for (SuppliedItem item : suppliedItems) {
-            System.out.println(item.getSuppliedItemID() + ": " + item.getSuppliedItemPrice());
+        for (SuppliedItem item : suppliedItems.keySet()) {
+            System.out.println("Item id: " + item.getSuppliedItemID() + ", Name: " + item.getProduct().getProductName() +
+                    "Total price: " + item.getSuppliedItemPrice() + "₪");
+            System.out.println("\tquantity: " + this.suppliedItems.get(item));
         }
     }
 

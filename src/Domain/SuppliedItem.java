@@ -11,7 +11,7 @@ public class SuppliedItem {
             throw new IllegalArgumentException("Supplied item ID and product ID cannot be null");
         }
         if (suppliedItemPrice <= 0){
-            throw new IllegalArgumentException("price cant be negative");
+            throw new IllegalArgumentException("Price cant be negative");
         }
         this.suppliedItemID = gsuppliedItemID;
         suppliedItemID++;
@@ -32,6 +32,6 @@ public class SuppliedItem {
     }
 
     public String toString(){
-        return product.toString();
+        return "Product Id: " + suppliedItemID +  product.toString();
     }
 }

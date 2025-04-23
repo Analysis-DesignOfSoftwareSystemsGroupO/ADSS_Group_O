@@ -69,19 +69,22 @@ public class PresentOrderOptions {
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        //order Loop
         while (true){
             //view the agreement of products
             try {
                 agreementController.viewAgreement(branchId, supplierID);
+                System.out.println("Current order: ");
+                orderController.viewConcurrentOrder(orderID, supplierID);
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
+                break;
             }
-
-            System.out.println("To add product Enter the product name");
+            System.out.println("To add product Enter the product ID");
             System.out.println("To finalize order enter '*'");
             System.out.println("To cancel the order press '-'");
-            System.out.println("Choice: ");
+            System.out.println("Enter product ID: ");
             try {
                 String choice = scanner.nextLine();
                 switch (choice) {
@@ -118,7 +121,7 @@ public class PresentOrderOptions {
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
-                            continue;
+                            break;
                         }
                         System.out.println("Product added successfully !");
                 }
@@ -126,7 +129,7 @@ public class PresentOrderOptions {
             catch (Exception e) {
                 System.out.println("Invalid choice !");
             }
-            break;
+            scanner.nextLine();
         }
     }
 
