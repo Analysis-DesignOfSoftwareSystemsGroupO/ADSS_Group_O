@@ -73,11 +73,12 @@ public class Order {
     public void displayOrder() {
         System.out.println("Order Number: " + this.orderID);
         System.out.println("Order Date: " + this.orderDate);
-        System.out.println("Total Price: " + this.totalPrice);
+        System.out.println("Order Address: " + this.getBranch().getBranchID());
+        System.out.println("Total Price: " + this.totalPrice + "₪");
         System.out.println("Items: ");
         for (SuppliedItem item : suppliedItems.keySet()) {
             System.out.println("Item id: " + item.getSuppliedItemID() + ", Name: " + item.getProduct().getProductName() +
-                    "Total price: " + item.getSuppliedItemPrice() + "₪");
+                    " price: " + item.getSuppliedItemPrice() + "₪");
             System.out.println("\tquantity: " + this.suppliedItems.get(item));
         }
     }
@@ -92,7 +93,7 @@ public class Order {
 
     public void closeOrder() {
         if (totalPrice <= 0) {
-            throw new NullPointerException("Add Products to your cart");
+            throw new NullPointerException("Cannot finish an order with an empty cart");
         }
         orderClosed = true;
     }

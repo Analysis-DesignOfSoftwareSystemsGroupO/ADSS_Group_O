@@ -73,9 +73,10 @@ public class PresentOrderOptions {
         while (true){
             //view the agreement of products
             try {
+                System.out.println("***********************************");
                 agreementController.viewAgreement(branchId, supplierID);
-                System.out.println("Current order: ");
                 orderController.viewConcurrentOrder(orderID, supplierID);
+                System.out.println("***********************************");
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -101,23 +102,29 @@ public class PresentOrderOptions {
                     case "-": //cancel existing order option
                         while (true){
                             System.out.println("Are you sure you want to cancel ? y/n");
-                            scanner.nextLine();
-                            if (scanner.nextLine().equals("y")) {
-                                orderController.deleteConcurrentOrder(orderID, supplierID);
+                            String res = scanner.nextLine();
+                            if (res.equals("y")) {
+                                try {
+                                    orderController.deleteConcurrentOrder(orderID, supplierID);
+                                    System.out.println("Order canceled");
+                                }
+                                catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                }
                                 return;
-                            } else if (scanner.nextLine().equals("n")) {
+                            } else if (res.equals("n")) {
                                 break;
                             }
                             else {
                                 System.out.println("Invalid option ! ");
                             }
                         }
-                        break;
+                        continue;
                     default:
                         try {
                             System.out.println("Enter quantity:");
                             int quantity = scanner.nextInt();
-                            orderController.addProductToOrder(supplierID, branchId, orderID, choice, quantity);
+                            orderController.addProductToOrder(supplierID, orderID, choice, quantity);
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
@@ -127,7 +134,9 @@ public class PresentOrderOptions {
                 }
             }
             catch (Exception e) {
+                System.out.println(e.getMessage());
                 System.out.println("Invalid choice !");
+                return;
             }
             scanner.nextLine();
         }

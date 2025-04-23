@@ -14,7 +14,7 @@ public class SuppliedItem {
             throw new IllegalArgumentException("Price cant be negative");
         }
         this.suppliedItemID = gsuppliedItemID;
-        suppliedItemID++;
+        gsuppliedItemID++;
         this.suppliedItemPrice = suppliedItemPrice;
         this.product = product;
     }

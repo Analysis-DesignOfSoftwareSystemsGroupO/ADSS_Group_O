@@ -85,7 +85,6 @@ public void removeAgreement(String branchId, String supplierId) {
 
     //edits a product discount from an existing agreement
     public void editProductDiscount(String supplierID, String branchId, String productname, int quantity, int discount) throws Exception {
-
         Agreement agreement = getAgreement(branchId, supplierID);
         Product product = getProductfromSupplier(productname, supplierID);
         if (!agreement.productInAgreement(product)){

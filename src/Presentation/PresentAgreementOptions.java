@@ -150,6 +150,7 @@ public class PresentAgreementOptions {
                 productQuantity = editAgreement.nextInt();
                 System.out.println("Enter product discount:");
                 productDiscount = editAgreement.nextInt();
+                editAgreement.nextLine();
                 break;
             } else if (result.equals("n")) {
                 break;

@@ -41,18 +41,21 @@ public class OrderService {
     }
 
     //deletes an order if the user decides to cancel order while in the making
-    public void deleteOrder(String supplierID, String OrderID) {
+    public void deleteOrder(String supplierID, String OrderID) throws Exception {
         List<Order> orders = orderDataBase.getOrdersBySupplier(supplierID);
         for (Order order : orders) {
             if (order.getOrderID().equals(OrderID)) {
                 if (!order.isOrderClosed()) {
                     orderDataBase.removeOrder(supplierID, order);
+                    return;
                 }
-                else{
-                    System.out.println("Order is already closed");
+                else {
+                    throw new Exception("Order is already closed");
                 }
             }
+            throw new Exception("Order not found");
         }
+
     }
 
     //prints the order for the user to view while making the order
