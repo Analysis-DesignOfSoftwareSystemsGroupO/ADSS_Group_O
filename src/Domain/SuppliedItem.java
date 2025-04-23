@@ -1,10 +1,9 @@
 package Domain;
 
 public class SuppliedItem {
-    private static int gsuppliedItemID = 0;
-    private int suppliedItemPrice;
-    private Product product;
-    private int suppliedItemID;
+    private final int suppliedItemPrice;
+    private final Product product;
+    private final String suppliedItemID;
 
     public SuppliedItem(int suppliedItemPrice, Product product) {
         if (product == null) {
@@ -13,17 +12,16 @@ public class SuppliedItem {
         if (suppliedItemPrice <= 0){
             throw new IllegalArgumentException("price cant be negative");
         }
-        this.suppliedItemID = gsuppliedItemID;
-        suppliedItemID++;
         this.suppliedItemPrice = suppliedItemPrice;
         this.product = product;
+        this.suppliedItemID = product.getProductID();
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public int getSuppliedItemID() {
+    public String getSuppliedItemID() {
         return suppliedItemID;
     }
 

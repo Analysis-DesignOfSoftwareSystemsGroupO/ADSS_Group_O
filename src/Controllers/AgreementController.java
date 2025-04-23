@@ -9,8 +9,8 @@ public class AgreementController {
         agreementService.removeAgreement(branchId, supplierId);
     }
 
-    public void createNewAgreement(String supplierID, String branchId) throws Exception {
-        agreementService.createNewAgreement(supplierID, branchId);
+    public void createNewAgreement(String supplierID, String branchId, String deliveryWay) throws Exception {
+        agreementService.createNewAgreement(supplierID, branchId, deliveryWay);
     }
 
     //create a supplier and saves it in the database
@@ -39,6 +39,10 @@ public class AgreementController {
 
     public void removeProductFromAgreement(String supplierID, String branchId, String productID) throws Exception {
         agreementService.removeProductFromAgreement(supplierID, branchId, productID);
+    }
+
+    public void changeDeliveryInAgreement(String supplierID, String branchId, String deliveryWay) throws Exception {
+        agreementService.changeDeliveryWay(supplierID, branchId, deliveryWay);
     }
 
 

@@ -15,7 +15,7 @@ public void removeAgreement(String branchId, String supplierId) {
         suppliersDataBase.removeAgreement(branchId, supplierId);
     }
     //creates new agreement
-    public void createNewAgreement(String supplierID, String branchId) throws Exception {
+    public void createNewAgreement(String supplierID, String branchId, String deliveryWay) throws Exception {
         if (suppliersDataBase.getAgreement(branchId, supplierID) != null){ // if an agreement exist throw
             throw new Exception("agreement already exist");
         }
@@ -27,7 +27,9 @@ public void removeAgreement(String branchId, String supplierId) {
         if (supplier == null){
             throw new Exception("supplier does not exist");
         }
-        Agreement agreement = new  Agreement(branch, supplier);
+        Delivery delivery = new Delivery(deliveryWay);
+
+        Agreement agreement = new  Agreement(branch, supplier, delivery);
         suppliersDataBase.addAgreement(agreement);
 }
 
@@ -96,6 +98,14 @@ public void removeAgreement(String branchId, String supplierId) {
         agreement.addDiscount(new Discount(agreement.getSupplierItem(productname), quantity, discount));
     }
 
+
+    public void changeDeliveryWay(String supplierID, String branchId, String deliveryWay) throws Exception {
+        if (suppliersDataBase.getAgreement(branchId, supplierID) != null){
+            Agreement agreement = getAgreement(branchId, supplierID);
+            agreement.getDelivery().setDeliveryWay(deliveryWay);
+        }
+    }
+
     private Agreement getAgreement(String branchId, String supplierID) throws Exception {
         Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
         if (agreement == null) {
@@ -122,5 +132,6 @@ public void removeAgreement(String branchId, String supplierId) {
         }
         return product;
     }
+
 
 }

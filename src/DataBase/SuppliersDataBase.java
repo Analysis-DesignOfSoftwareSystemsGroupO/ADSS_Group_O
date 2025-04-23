@@ -58,6 +58,15 @@ public class SuppliersDataBase {
         throw new NullPointerException("Agreement does not exist");
     }
 
+    public void removeSupplier(String supplierID){
+        if (suppliers.containsKey(supplierID)){
+            suppliers.remove(supplierID);
+        }
+        else {
+            throw new NullPointerException("Supplier does not exist");
+        }
+    }
+
     public void addAgreement(Agreement agreement) {
         SupplierBranchKey supBKey = new SupplierBranchKey(agreement.getSupplierID(), agreement.getBranchID());
         suppliersAgreements.put(supBKey, agreement);

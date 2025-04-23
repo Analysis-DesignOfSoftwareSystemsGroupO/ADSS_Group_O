@@ -10,7 +10,6 @@ import java.util.List;
 public class SupplierService {
     private final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
     private ProductDataBase productDataBase = ProductDataBase.getInstance();
-    private int productId = 1000;
 
     public void createSupplier(String supplierID, String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
@@ -32,13 +31,15 @@ public class SupplierService {
     }
 
     //adds a new product to an existing supplier
-    public void addNewProductToSupplier(String supplierId, String productName, int price) {
+    public void addNewProductToSupplier(String supplierId, String productId, String productName, int price, String manufacturer) {
+        if (suppliersDataBase.getSupplier(supplierId) == null) {
+            throw new NullPointerException("Supplier does not exist");
+        }
         //add product to product database handles multiple products in the db
-        Product p = new Product(Integer.toString(productId),productName);
-        productId++;
+        Product p = new Product(productId,productName, manufacturer);
         productDataBase.addProduct(p);
         //add product to supplier
-        suppliersDataBase.getSupplier(supplierId).addProduct(p);
+        suppliersDataBase.getSupplier(supplierId).addProduct(p, price);
     }
 
     //checks validity of the id of the supplier
@@ -109,5 +110,19 @@ public class SupplierService {
         for (InformationContact infoContact : infoContacts) {
             System.out.println(infoContact);
         }
+    }
+
+    public void deleteSupplier(String supplierID) {
+        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null) {
+            throw new NullPointerException("Supplier not found");
+        }
+        List<Agreement> agreements = suppliersDataBase.getAllAgreement();
+        for (Agreement agreement : agreements){
+            if (agreement.getSupplierID().equals(supplierID)) {
+                suppliersDataBase.removeAgreement(agreement.getBranchID(), agreement.getSupplierID());
+            }
+        }
+        suppliersDataBase.removeSupplier(supplierID);
     }
 }

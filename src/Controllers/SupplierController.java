@@ -15,8 +15,8 @@ public class SupplierController {
     }
 
     //adds a new product to an existing supplier
-    public void addNewProductToSupplier(String supplierId, String productName, int price) {
-        supplierService.addNewProductToSupplier(supplierId, productName, price);
+    public void addNewProductToSupplier(String supplierId, String productID, String productName, String productManufacturer, int price) {
+        supplierService.addNewProductToSupplier(supplierId, productID, productName, price, productManufacturer);
     }
 
     //checks validity of the id of the supplier
@@ -56,5 +56,9 @@ public class SupplierController {
 
     public void printSupplierProducts(String supplierID) {
         supplierService.printSupplier(supplierID);
+    }
+
+    public void deleteSupplierFromSystem(String supplierID){
+        supplierService.deleteSupplier(supplierID);
     }
 }

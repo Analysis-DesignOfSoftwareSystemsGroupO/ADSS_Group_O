@@ -13,7 +13,7 @@ public class Supplier {
     private Bank bank;
     private PaymentMethod paymentMethod;
     private List<InformationContact> informationContacts;
-    private HashMap<String, Product> supplyProducts;
+    private HashMap<String, SuppliedItem> supplyProducts;
     private int supplied_product_id = 0;
 
 
@@ -32,7 +32,7 @@ public class Supplier {
         this.informationContacts.add(newInfoContact);
         this.supplierID = ID;
         this.supplierName = supplierName;
-        this.supplyProducts = new HashMap<String, Product>();
+        this.supplyProducts = new HashMap<String, SuppliedItem>();
     }
 
     public Supplier(Supplier other) {
@@ -95,14 +95,16 @@ public class Supplier {
                 supplierName + System.lineSeparator() + System.lineSeparator();
     }
 
-    public void addProduct(Product product) {
-        if (!supplyProducts.containsKey(product.getProductName())){
-            this.supplyProducts.put(product.getProductName(), product);
+    public void addProduct(Product product, int price) {
+        if (!supplyProducts.containsKey(product.getProductID())){
+            SuppliedItem suppliedItem = new SuppliedItem(price, product);
+            this.supplyProducts.put(product.getProductID(), suppliedItem);
         }
+        throw new NullPointerException("Supplied Product already exists");
     }
 
-    public Product getProduct(String pname){
-        return this.supplyProducts.get(pname);
+    public SuppliedItem getProduct(String pID){
+        return this.supplyProducts.get(pID);
     }
 
     public String getPaymentMethod(){

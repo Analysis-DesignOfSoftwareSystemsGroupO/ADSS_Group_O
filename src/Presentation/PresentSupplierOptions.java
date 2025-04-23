@@ -14,7 +14,8 @@ public class PresentSupplierOptions {
             System.out.println("1.Add Supplier");
             System.out.println("2.Edit Supplier Details");
             System.out.println("3.Get Supplier Information Contacts");
-            System.out.println("4.Return to Main Menu");
+            System.out.println("4.Remove Supplier From System");
+            System.out.println("5.Return to Main Menu");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
@@ -29,6 +30,8 @@ public class PresentSupplierOptions {
                         getAllInformationContacts();
                         break;
                     case 4:
+                        removeSupplierFromSystem();
+                    case 5:
                         return;
                     default:
                         throw new Exception();
@@ -114,12 +117,16 @@ public class PresentSupplierOptions {
     // helper method to add a product
     private void addNewProductToSupplier(String supplierId){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter product name: ");
+        System.out.println("Enter Product ID: ");
+        String productID = scanner.nextLine();
+        System.out.println("Enter Product Name: ");
         String productName = scanner.nextLine();
-        System.out.println("Enter product price: ");
+        System.out.println("Enter Product Manufacturer: ");
+        String productManufacturer = scanner.nextLine();
+        System.out.println("Enter Product Price: ");
         int productPrice = scanner.nextInt();
         try {
-            supplierController.addNewProductToSupplier(supplierId, productName, productPrice);
+            supplierController.addNewProductToSupplier(supplierId, productID, productName, productManufacturer, productPrice);
             System.out.println("Product added successfully");
         }
         catch (Exception e){
@@ -214,6 +221,20 @@ public class PresentSupplierOptions {
             System.out.println(e.getMessage());
         }
     }
+
+    private void removeSupplierFromSystem(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("** Notice : Removing Supplier Will Automatically Delete Agreements With That Supplier **");
+        System.out.println("Enter Supplier ID: ");
+        String supplierID = scanner.nextLine();
+        try{
+            supplierController.deleteSupplierFromSystem(supplierID);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 
 }
 

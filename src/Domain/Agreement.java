@@ -10,8 +10,9 @@ public class Agreement {
     private final Branch Branch;
     private List<SuppliedItem> supplierItemsList;
     private List<Discount> discounts;
+    private Delivery delivery;
 
-    public Agreement(Branch branch, Supplier supplier) {
+    public Agreement(Branch branch, Supplier supplier, Delivery delivery) {
         if (branch == null || supplier == null) {
             throw new NullPointerException();
         }
@@ -19,6 +20,7 @@ public class Agreement {
         this.Branch = branch;
         this.supplierItemsList = new ArrayList<SuppliedItem>();
         this.discounts = new ArrayList<Discount>();
+        this.delivery = delivery;
 
     }
 
@@ -28,6 +30,7 @@ public class Agreement {
         this.Branch = other.Branch;
         this.supplierItemsList = other.supplierItemsList;
         this.discounts = other.discounts;
+        this.delivery = other.delivery;
     }
 
     public List<Discount> getDiscounts() {
@@ -107,6 +110,10 @@ public class Agreement {
             }
         }
         return null;
+    }
+
+    public Delivery getDelivery() {
+        return delivery;
     }
 
     public String toString(){
