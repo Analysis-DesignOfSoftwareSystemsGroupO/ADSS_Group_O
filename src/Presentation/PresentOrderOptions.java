@@ -118,16 +118,15 @@ public class PresentOrderOptions {
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
-                            break;
+                            continue;
                         }
                         System.out.println("Product added successfully !");
-                        break;
                 }
-                break;
             }
             catch (Exception e) {
                 System.out.println("Invalid choice !");
             }
+            break;
         }
     }
 

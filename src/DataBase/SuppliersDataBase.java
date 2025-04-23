@@ -52,17 +52,18 @@ public class SuppliersDataBase {
         for (SupplierBranchKey branchKey : suppliersAgreements.keySet()){
             if (Objects.equals(branchKey.branchID, branchId) && Objects.equals(branchKey.supplierID, supplierID)){
                 suppliersAgreements.remove(branchKey);
+                return;
             }
         }
-        throw new NullPointerException("agreement does not exist");
+        throw new NullPointerException("Agreement does not exist");
     }
 
-    public void addAgreement(Supplier supplier, Branch branch, Agreement agreement) {
-        SupplierBranchKey supBKey = new SupplierBranchKey(supplier.getID(), branch.getBranchID());
+    public void addAgreement(Agreement agreement) {
+        SupplierBranchKey supBKey = new SupplierBranchKey(agreement.getSupplierID(), agreement.getBranchID());
         suppliersAgreements.put(supBKey, agreement);
     }
 
-    //return a copy of agreement
+    //return an agreement
     public Agreement getAgreement(String branchID, String supplierID) {
         if (supplierID == null || branchID == null) {
             throw new NullPointerException();
@@ -79,7 +80,8 @@ public class SuppliersDataBase {
     public void addProductToAgreement(SuppliedItem product, String branchID, String supplierID){
         Agreement agreement = this.getAgreement(branchID, supplierID);
         if (agreement == null){
-            throw new NullPointerException("agreement does not exist");
+            throw new NullPointerException("agreement does not exist for Branch:" + branchID + " And Supplier:" + supplierID);
+
         }
         agreement.addItem(product);
     }

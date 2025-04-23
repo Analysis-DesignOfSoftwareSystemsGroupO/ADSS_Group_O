@@ -38,6 +38,16 @@ public class Agreement {
         if (suppliedItem == null) {
             throw new NullPointerException();
         }
+        for (SuppliedItem supplierItem : supplierItemsList){
+            if (Objects.equals(suppliedItem.getProduct().getProductName(), supplierItem.getProduct().getProductName())){
+                throw new IllegalArgumentException(suppliedItem.getProduct().getProductName() +
+                        " already exists in the agreement");
+            }
+        }
+        if (supplier.getProduct(suppliedItem.getProduct().getProductName()) == null) {
+            throw new IllegalArgumentException("Supplier doesnt have this product (" +
+                    suppliedItem.getProduct().getProductName() + ")");
+        }
         supplierItemsList.add(suppliedItem);
     }
 
@@ -89,5 +99,25 @@ public class Agreement {
 
     public List<Discount> getDiscountsList() {
         return discounts;
+    }
+    public SuppliedItem getSupplierItem(String productName){
+        for (SuppliedItem supplierItem : supplierItemsList){
+            if (Objects.equals(productName, supplierItem.getProduct().getProductName())){
+                return supplierItem;
+            }
+        }
+        return null;
+    }
+
+    public String toString(){
+        StringBuilder returnString = new StringBuilder("Agreement between, "+ "Supplier id: " + this.supplier.getID() +
+                ", Branch id : " + this.Branch.getBranchID() + "\n" + "Product List: \n");
+        for (SuppliedItem supplierItem : supplierItemsList){
+            returnString.append(supplierItem.toString()).append(" ").append(supplierItem.getSuppliedItemPrice()).append("₪\n");
+        }
+        for (Discount discount : discounts){
+            returnString.append(discount.toString()).append("\n");
+        }
+        return returnString.toString();
     }
 }

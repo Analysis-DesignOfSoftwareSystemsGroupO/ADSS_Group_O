@@ -31,7 +31,7 @@ public class PresentAgreementOptions {
                         this.removeAgreementP();
                         break;
                     case 4:
-
+                        this.editAgreementP();
                         break;
                     case 5:
                         return;
@@ -70,13 +70,14 @@ public class PresentAgreementOptions {
         String supplierId = scanner.nextLine();
         System.out.println("Enter branch id:");
         String branchId = scanner.nextLine();
-        agreementController.viewAgreement(branchId, supplierId);
         try {
             agreementController.removeAgreement(branchId, supplierId);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("Agreement removed");
     }
 
 
@@ -84,21 +85,20 @@ public class PresentAgreementOptions {
     private void editAgreementP() {
         Scanner editAgreement = new Scanner(System.in);
         while (true){
-            System.out.println("1.Add product to agreement\n");
-            System.out.println("2.Remove product from agreement\n");
-            System.out.println("3.Edit product discount agreement\n");
-            System.out.println("4.Return to main menu\n");
+            System.out.println("1.Add product to agreement");
+            System.out.println("2.Remove product from agreement");
+            System.out.println("3.Edit product discount agreement");
+            System.out.println("4.Return to main menu");
             int choice = editAgreement.nextInt();
-            String agreementID = null;
+            editAgreement.nextLine();
             String supplierID = "", branchId = "";
             if (choice == 1 || choice == 2 || choice == 3) {
                 System.out.println("Enter branch Id: ");
                 branchId = editAgreement.nextLine();
-                supplierController.printAllSuppliers();
                 System.out.println("Enter supplier ID: ");
                 supplierID = editAgreement.nextLine();
                 try {
-                    agreementController.viewAgreement(supplierID, branchId);
+                    agreementController.viewAgreement(branchId, supplierID);
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -127,34 +127,43 @@ public class PresentAgreementOptions {
     ///edit agreement functions
     // adds a product to an existing agreement
     private void addProductToAgreementP(String supplierID, String branchId) {
-        //todo print all product from
+        try {
+            System.out.println("Supplier's products :");
+            supplierController.printSupplierProducts(supplierID);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productName = editAgreement.nextLine();
         System.out.println("Enter product price:");
         int price = editAgreement.nextInt();
-        int productDiscount = -1;
-        int productQuantity = -1;
+        editAgreement.nextLine();
+        Integer productDiscount = null;
+        Integer productQuantity = null;
         while (true) {
             System.out.println("Discount ? y/n");
-            editAgreement.nextLine();
-            if (editAgreement.nextLine().equals("y")) {
+            String result = editAgreement.nextLine();
+            if (result.equals("y")) {
                 System.out.println("Enter product quantity for discount:");
                 productQuantity = editAgreement.nextInt();
                 System.out.println("Enter product discount:");
                 productDiscount = editAgreement.nextInt();
                 break;
-            } else if (editAgreement.nextLine().equals("n")) {
+            } else if (result.equals("n")) {
                 break;
             }
             System.out.println("Invalid option !\n");
         }
         try {
-            agreementController.addProductToAgreement(supplierID, branchId , productName, price, productQuantity, productDiscount);
+            agreementController.addProductToAgreement(branchId ,supplierID, productName, price, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println(productName + " was added to agreement");
     }
 
     //removes a product from an existing agreement
@@ -170,31 +179,19 @@ public class PresentAgreementOptions {
         }
     }
 
-    //check if available to combine with addproduct
+    //check if available to combine with add product
     private void editProductDiscount(String supplierID, String branchId) {
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productName = editAgreement.nextLine();
-        System.out.println("Enter product price:");
-        int price = editAgreement.nextInt();
         Integer productDiscount = null;
         Integer productQuantity = null;
-        while (true) {
-            System.out.println("Discount ? y/n");
-            editAgreement.nextLine();
-            if (editAgreement.nextLine().equals("y")) {
-                System.out.println("Enter new product quantity for discount:");
-                productQuantity = editAgreement.nextInt();
-                System.out.println("Enter new product discount:");
-                productDiscount = editAgreement.nextInt();
-                break;
-            } else if (editAgreement.nextLine().equals("n")) {
-                break;
-            }
-            System.out.println("Invalid option !\n");
-        }
+        System.out.println("Enter new product quantity for discount:");
+        productQuantity = editAgreement.nextInt();
+        System.out.println("Enter new product discount:");
+        productDiscount = editAgreement.nextInt();
         try {
-            agreementController.addProductToAgreement(supplierID, branchId , productName, price, productQuantity, productDiscount);
+            agreementController.editProductDiscount(branchId, supplierID, productName, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

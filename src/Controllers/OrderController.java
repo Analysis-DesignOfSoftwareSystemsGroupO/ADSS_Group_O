@@ -31,7 +31,7 @@ public class OrderController {
                 orderService.addProductToOrder(supplierID, orderId, productId, quantity);
         }
         else {
-            throw new Exception("Invalid product id");
+            throw new Exception("Invalid product name");
         }
     }
 
