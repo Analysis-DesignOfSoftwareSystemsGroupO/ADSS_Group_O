@@ -364,6 +364,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         Truck[] trucks = new Truck[9];
@@ -373,6 +374,8 @@ public class Main {
         Map<Integer, ProductListDocument> documents = new HashMap<>();
         Map<Integer, Product> products = new HashMap<>();
         Map<String, Site> sites = new HashMap<>();
+
+        init_all_data(trucks,drivers,products,sites);
 
         // Run every 1 minute the sendTransport function
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
