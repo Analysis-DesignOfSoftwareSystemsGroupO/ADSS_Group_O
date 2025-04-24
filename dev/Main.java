@@ -30,19 +30,23 @@ public class Main {
 
     public static void init_all_data(Truck[] trucks, Map<String, Driver> drivers, Map<Integer, Product> products, Map<String, Site> sites) {
 
+        // create new driving license instances
         DrivingLicence C1 = new DrivingLicence("Medium track - maximum 12 tons", "C1");
         DrivingLicence C = new DrivingLicence("Heavy track - maximum 32 tons", "C");
         DrivingLicence CE = new DrivingLicence("Super heavy track - maximum 60 tons", "CE");
+
+        // save all trucks random plate numbers
         Map<Integer, Integer> numbers = new HashMap<>();
 
         // init all trucks
         for (int i = 0; i < 9; i++) {
 
-            int number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000);
-            while (numbers.get(number) != null)
+            int number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000); // draw a number
+            while (numbers.get(number) != null) // if number is already drawed, draw another one.
                 number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000);
-            numbers.put(number, number);
+            numbers.put(number, number); // save the drawed number for next time
 
+            // create random trucks
             if (i % 3 == 0) {
                 trucks[i] = new Truck(C1, 12000, String.valueOf(number));
             }
@@ -54,6 +58,7 @@ public class Main {
             }
 
         }
+        // create sites list
         List<Site> siteslist = Arrays.asList(
                 new Site("Haifa", "North"),
                 new Site("Acre", "North"),
@@ -78,6 +83,7 @@ public class Main {
         );
 
 
+        // add sites to sites list
         for (Site site : siteslist) {
             sites.put(site.getName(), site);
         }
@@ -91,8 +97,9 @@ public class Main {
      * Add new Transport function
      */
     public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports, Map<String, Site> sites, Map<LocalDate, List<Transport>> transportsPerDate) {
-        boolean allTrucksUnAvailabl = true;
-        Truck t = null;
+
+        boolean allTrucksUnAvailabl = true; // boolean variable for
+        Truck t = null; // variable for saving truck if available
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Please enter date by format: DD/MM/YEAR");
@@ -101,36 +108,37 @@ public class Main {
         LocalDate parsedDate = LocalDate.parse(dateStr, formatter);
 
         for (Truck truck : trucks) // check if there is an available truck.
-            if (truck.getAvailablity(parsedDate)) {
+            if (truck.getAvailablity(parsedDate)) { // if there is an avialable truck - stop searching
                 allTrucksUnAvailabl = false;
                 t = truck;
                 break;
             }
-        if (allTrucksUnAvailabl) {
+        if (allTrucksUnAvailabl) { // if all trucks are not available - print message
             System.out.println("There is no available truck please check later");
             return;
         }
 
+        // time input from user
         System.out.println("Please enter date by format: HH:MM");
         String timeStr = scanner.nextLine();
 
-
+        // source site input from user
         System.out.println("Please enter source site name");
         String site_name = scanner.nextLine();
-        if (sites.get(site_name) == null) {
-            System.out.println("There is no site " + site_name + " please try again");
+        if (sites.get(site_name) == null) { // check if there is a site in the system
+            System.out.println("There is no site " + site_name + " please try again"); // if there is no site - message to user
             scanner.close();
             return;
         }
 
 
-        try {
-            Transport transport = new Transport(dateStr, timeStr, t, sites.get(site_name));
-            transports.put(transport.getId(), transport);
-            transportsPerDate.computeIfAbsent(parsedDate, k -> new ArrayList<>());
+        try { // try to create new transport
+            Transport transport = new Transport(dateStr, timeStr, t, sites.get(site_name)); // create new transport with
+            transports.put(transport.getId(), transport); // if transport created - add it to transport list
+            transportsPerDate.computeIfAbsent(parsedDate, k -> new ArrayList<>()); // if transport created - add it to transport date map
             transportsPerDate.get(parsedDate).add(transport); // add the transport to scheduale
         } catch (Exception e) {
-            System.out.println(e.getMessage() + "please try again");
+            System.out.println(e.getMessage() + "please try again"); // if there is any problem with transport - message to user
         }
         scanner.close();
 
@@ -139,81 +147,98 @@ public class Main {
 
 //********************************************************************************************************************** Case 2 - Create new delivery document
 
-
+    /** a function that creates new ProductListDocument to new destination
+     * input - documents map, sites list
+     */
     public static void createNewDoc(Map<Integer, ProductListDocument> documents, Map<String, Site> sites) {
+        // destination name input from user
         System.out.println("Please enter destination name:");
         Scanner scanner = new Scanner(System.in);
         String siteName = scanner.nextLine();
-
-        if (sites.get(siteName) == null) {
-            System.out.println("Site is not in System - please try again:");
+        // check if site is in system
+        if (sites.get(siteName) == null) { // if there is no site
+            System.out.println("Site is not in System - please try again:"); // message to user if there is no site
             scanner.close();
 
             return;
         }
-        ProductListDocument document;
+        // date input from user
+        System.out.println("Please enter date by format: DD/MM/YEAR");
+        String dateStr = scanner.nextLine();
+        scanner.close();
+
         try {
-            document = new ProductListDocument(sites.get(siteName));
+            ProductListDocument document = new ProductListDocument(sites.get(siteName),dateStr); // create new document
+            documents.put(document.getId(), document); // add a document to documents list
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            scanner.close();
 
-            return;
         }
-        documents.put(document.getId(), document);
 
 
     }
+
+
 //********************************************************************************************************************** Case 3 - Add product to document
 
-
+    /** a function that attach a document to transport
+     * input - products list, documents list*/
     public static void AddProductToDocument(Map<Integer, Product> products, Map<Integer, ProductListDocument> documents) {
+        // document id input from user
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter document number");
         Integer documentId = scanner.nextInt();
-        if (documents.get(documentId) == null) {
+        if (documents.get(documentId) == null) { // if document is not in system - message to user
             System.out.println("There is no document " + documentId + " Please try again");
             scanner.close();
             return;
         }
+        // get the document from data base
         ProductListDocument document = documents.get(documentId);
+        // ask for product id from user
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
-        if (products.get(id) == null) {
+        if (products.get(id) == null) { // if product is not in data base - message to user
             System.out.println("Product not in System - please try again.");
             scanner.close();
             return;
         }
+        // ask for amount from user
         System.out.println("enter the amount you want to load: ");
         int amount = scanner.nextInt();
-        document.addProduct(products.get(id), amount);
+        document.addProduct(products.get(id), amount); // add product to document
         scanner.close();
     }
+
     //********************************************************************************************************************** Case 4 - Remove product from document
 
+    /** delete product from document*/
     public static void RemoveProductFromDocument(Map<Integer, Product> products, Map<Integer, ProductListDocument> documents) {
+        // ask for document id from user
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter document number");
         Integer documentId = scanner.nextInt();
-        if (documents.get(documentId) == null) {
-            System.out.println("There is no document " + documentId + " Please try again");
+        if (documents.get(documentId) == null) { // if ddocument not in the data base
+            System.out.println("There is no document " + documentId + " Please try again"); // message to user
             scanner.close();
             return;
         }
-        ProductListDocument document = documents.get(documentId);
+        ProductListDocument document = documents.get(documentId); // get the document from data
 
+        // ask for document id from user
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
-        if (products.get(id) == null) {
-            System.out.println("Product not in System - please try again.");
+        if (products.get(id) == null) { // if product is not in data base
+            System.out.println("Product not in System - please try again."); // message to user
             scanner.close();
             return;
         }
+         // ask for amount to remove from document
         System.out.println("enter the amount you want to remove: ");
         int amount = scanner.nextInt();
-        scanner.close();
-        document.reduceAmountFromProduct(products.get(id), amount);
+        scanner.close(); // close scanner
+        document.reduceAmountFromProduct(products.get(id), amount); // try to remove item from document
 
 
     }
@@ -428,7 +453,7 @@ public class Main {
 
                 }
                 case "7": {
-                    /// send transport
+                    /// send transport manual
 
                     sendTransportManual(transports);
 

@@ -91,6 +91,16 @@ public class Transport {
 
     public void changeTruck(Truck t){
         if (t!=this.truck && t!= null){
+            if( !t.getAvailablity(date))
+            {
+                System.out.println("Truck is not available");
+                return;
+            }
+            if (driver!= null){
+                if (!truck.confirmDriver(driver)) {
+                    System.out.println("Driver's licence doesn't match to truck's licence. please Assign another driver ");
+                }
+            }
             truck.releaseTruck(date); // release the previous truck from transport
             truck = t; // save new truck to this transport
             truck.setDate(date); // save the new date in new truck
@@ -177,7 +187,7 @@ public class Transport {
             int difference = (currWeight + document.getTotalWeight()) - maxWeight;
             System.out.println("Weight excess by " + difference + " kg");
         } else {
-            document.attachTransportToDocument(id);
+            document.attachTransportToDocument(this);
             destinations_document_map.put(document.getDestination().getName(), document);
             currWeight+=document.getTotalWeight();
             System.out.println("Truck has successfully loaded.");
@@ -198,6 +208,11 @@ public class Transport {
         return destinations_document_map.get(site_name);
 
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
     public void reduceAmountFromProduct(String destination, Product p, int amount){
         if(destinations_document_map.get(destination)!=null){
             destinations_document_map.get(destination).reduceAmountFromProduct(p,amount);

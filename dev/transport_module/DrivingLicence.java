@@ -1,12 +1,13 @@
 package transport_module;
 
 public class DrivingLicence {
-    private String description;
-    private String code;
+    private final String description;
+    private final String code;
 
     public DrivingLicence(String description , String code){
         this.description = description;
         this.code = code;
+
     }
 
     /**
@@ -16,6 +17,21 @@ public class DrivingLicence {
     public DrivingLicence(DrivingLicence other){
         this.code = other.code;
         this.description = other.description;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString(){
+        return code + " : "+description;
     }
 
     /**

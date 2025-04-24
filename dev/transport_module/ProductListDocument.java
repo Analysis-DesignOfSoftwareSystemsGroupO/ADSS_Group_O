@@ -1,5 +1,7 @@
 package transport_module;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +12,23 @@ public class ProductListDocument {
     private final Map<Product, Integer> productHashMap; // a map of products and amount of each product
     private int totalWeight; // total weight of the products in document
     private int transportId;
+    private LocalDate date;
 
     /**
      * a constructor - create a new document
      */
-    public ProductListDocument(Site site) throws Exception {
+    public ProductListDocument(Site site, String d) throws Exception {
         if (site == null) throw new Exception("InValid Input"); // if the site is null - don't create a document
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate parsedDate = LocalDate.parse(d, formatter);
+
+        if (parsedDate.isAfter(LocalDate.now())) {
+            date = parsedDate;
+        } else {
+            throw new Exception("Invalid date");
+        }
+
         id = ++documentID; // give index to document
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
@@ -24,11 +37,22 @@ public class ProductListDocument {
         System.out.println("Document number "+id+" has successfully created!");
     }
 
-    public void attachTransportToDocument(int id){
-        if(id>-1){
-            transportId = id;
+    public void attachTransportToDocument(Transport transport){
+        if (transport == null){
+            System.out.println("Invalid input");
+            return;
         }
+        if(transport.getDate()!= date){
+            System.out.println("Transport date doesn't match to document shipment date.");
+            return;
+        }
+        transportId = transport.getId();
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
     public int getTransportId(){
         return transportId;
     }
@@ -97,10 +121,20 @@ public class ProductListDocument {
      * a function that reduces the amount of product from the list - if remove all amounts of product, product will be deleted
      */
     public void reduceAmountFromProduct(Product p, int amount) {
-        if (p == null || amount < 1 || productHashMap.get(p) == null || amount > productHashMap.get(p)) {
+        if (p == null || amount < 1 ) {
             System.out.println("Invalid input");
             return;
         }
+        if( productHashMap.get(p) == null)
+        {
+            System.out.println("Item is not in document");
+            return;
+        }
+        if (amount > productHashMap.get(p)) {
+            System.out.println("amount is not match to product amount in document");
+            return;
+        }
+
         if (amount == productHashMap.get(p)) {
             System.out.println("Product has removed");
             productHashMap.remove(p);
