@@ -44,7 +44,7 @@ public class Order {
         }
         for (SuppliedItem item : agreement.getSupplierItemsList()){
             int discountPercentage = 0;
-            if (Integer.toString(item.getSuppliedItemID()).equals(itemID)) {
+            if (item.getSuppliedItemID().equals(itemID)) {
                 for (Discount discount : agreement.getDiscounts()) {
                     if (discount.getSuppliedItem().equals(item) && quantity >= discount.getQuantity()) {
                         discountPercentage = discount.getDiscount();

@@ -17,10 +17,9 @@ public class PresentMainMenu {
 
     public void runMainPresentation() {
         while (true) {
-            System.out.println("Welcome to Supplier Module !");
             Scanner input = new Scanner(System.in);
             while (true) { //load data
-                System.out.println("Welcome to SupplierMoudle !");
+                System.out.println("Welcome to Supplier Module !");
                 System.out.println("1.Load Data");
                 System.out.println("2.Empty Data");
                 System.out.println("3.Exit");

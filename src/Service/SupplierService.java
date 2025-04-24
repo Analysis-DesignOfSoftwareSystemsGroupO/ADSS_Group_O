@@ -13,8 +13,8 @@ public class SupplierService {
 
     public void createSupplier(String supplierID, String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
-                               String contactName, String contactPhoneNumber, String contactTitle) {
-        try {
+                               String contactName, String contactPhoneNumber, String contactTitle) throws Exception {
+
             if (suppliersDataBase.getSupplier(supplierID) == null) {
                 Supplier newSupplier = new Supplier(supplierID, supplierName, supplierPaymentMethod, bankAccount, bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle);
                 if (newSupplier.getID() != null) {
@@ -24,10 +24,6 @@ public class SupplierService {
             else{
                 throw new Exception("Supplier already exists");
             }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //adds a new product to an existing supplier

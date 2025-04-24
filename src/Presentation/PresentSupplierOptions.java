@@ -91,7 +91,7 @@ public class PresentSupplierOptions {
             System.out.println("1.Add new product");
             System.out.println("2.Edit supplier details");
             System.out.println("3.Add Information Contact");
-            System.out.println("3.Return to menu");
+            System.out.println("4.Return to menu");
             try {
                 int option = scanner.nextInt();
                 switch (option) {
@@ -103,6 +103,8 @@ public class PresentSupplierOptions {
                         return;
                     case 3:
                         this.addInformationContact(id);
+                        return;
+                    case 4:
                         return;
                     default:
                         throw new Exception();

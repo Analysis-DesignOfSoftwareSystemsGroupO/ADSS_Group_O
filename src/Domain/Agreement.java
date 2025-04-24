@@ -47,7 +47,7 @@ public class Agreement {
                         " already exists in the agreement");
             }
         }
-        if (supplier.getProduct(suppliedItem.getProduct().getProductName()) == null) {
+        if (supplier.getProduct(suppliedItem.getProduct().getProductID()) == null) {
             throw new IllegalArgumentException("Supplier doesnt have this product (" +
                     suppliedItem.getProduct().getProductName() + ")");
         }
@@ -55,9 +55,9 @@ public class Agreement {
     }
 
     //return true if a product in an agreement
-    public boolean productInAgreement(Product product){
+    public boolean productInAgreement(String productID){
         for (SuppliedItem supplierItem : supplierItemsList){
-            if (Objects.equals(product.getProductID(), supplierItem.getProduct().getProductID())){
+            if (Objects.equals(productID, supplierItem.getProduct().getProductID())){
                 return true;
             }
         }
@@ -77,20 +77,20 @@ public class Agreement {
     }
     public String getBranchID(){ return this.Branch.getBranchID();}
 
-    public void removeProduct(Product product){
+    public void removeProduct(String productID){
         for (SuppliedItem supplierItem : supplierItemsList){
-            if (Objects.equals(product.getProductName(), supplierItem.getProduct().getProductName())){
+            if (Objects.equals(productID, supplierItem.getProduct().getProductID())){
                 supplierItemsList.remove(supplierItem);
-                break;
+                this.removeDiscount(productID);
+                return;
             }
         }
-
-       this.removeDiscount(product);
+        throw new NullPointerException("product does not exist in the agreement");
     }
 
-    public void removeDiscount(Product product){
+    public void removeDiscount(String productID){
         for (Discount discount : discounts){
-            if (Objects.equals(discount.getProductName(), product.getProductName())){
+            if (Objects.equals(discount.getSuppliedItem().getSuppliedItemID(), productID)){
                 discounts.remove(discount);
                 break;
             }
@@ -103,9 +103,9 @@ public class Agreement {
     public List<Discount> getDiscountsList() {
         return discounts;
     }
-    public SuppliedItem getSupplierItem(String productName){
+    public SuppliedItem getSupplierItem(String productID){
         for (SuppliedItem supplierItem : supplierItemsList){
-            if (Objects.equals(productName, supplierItem.getProduct().getProductName())){
+            if (Objects.equals(productID, supplierItem.getProduct().getProductName())){
                 return supplierItem;
             }
         }

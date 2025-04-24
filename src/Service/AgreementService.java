@@ -49,8 +49,7 @@ public void removeAgreement(String branchId, String supplierId) {
         if (discount != null && discount <= 0){
             throw new Exception("discount have to be positive");
         }
-        Product product = getProductfromSupplier(productName, supplierID);
-        SuppliedItem suppliedItem = new SuppliedItem(price, product);
+        SuppliedItem suppliedItem = getProductfromSupplier(productName, supplierID);
         suppliersDataBase.addProductToAgreement(suppliedItem, branchid, supplierID);
         if (quantity != null && discount != null){ //add discount if needed
             Discount discount1 = new Discount(suppliedItem, quantity, discount);
@@ -64,38 +63,36 @@ public void removeAgreement(String branchId, String supplierId) {
         return suppliersDataBase.getAgreement(branchid, SupplierID) != null;
     }
     //check if an item exists in an Agreement
-    public boolean productExistsInAgreement(String supplierID, String branchId, String productname) throws Exception {
+    public boolean productExistsInAgreement(String supplierID, String branchId, String productID) throws Exception {
         Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
         if (agreement == null) {
             throw new Exception("no agreement");
         }
-        return agreement.productInAgreement(productDataBase.getProduct(productname));
+        return agreement.productInAgreement(productID);
     }
     //views an agreement given branch id and supplier id (ued for creating a new order)
     public void viewAgreement(String branchId, String supplierID) {
         System.out.println(suppliersDataBase.getAgreement(branchId, supplierID));
     }
     //removes a product from an existing agreement
-    public void removeProductFromAgreement(String supplierID, String branchId, String productname) throws Exception {
+    public void removeProductFromAgreement(String supplierID, String branchId, String productID) throws Exception {
         Agreement agreement = getAgreement(branchId, supplierID);
-        Product product = getProductfromSupplier(productname, supplierID);
-        if (!agreement.productInAgreement(product)){
+        if (!agreement.productInAgreement(productID)){
             throw new Exception("agreement does not have this product");
         }
-        agreement.removeProduct(product);
+        agreement.removeProduct(productID);
     }
 
     //edits a product discount from an existing agreement
-    public void editProductDiscount(String supplierID, String branchId, String productname, int quantity, int discount) throws Exception {
+    public void editProductDiscount(String supplierID, String branchId, String productID, int quantity, int discount) throws Exception {
 
         Agreement agreement = getAgreement(branchId, supplierID);
-        Product product = getProductfromSupplier(productname, supplierID);
-        if (!agreement.productInAgreement(product)){
+        if (!agreement.productInAgreement(productID)){
             throw new Exception("agreement does not have this product");
         }
-        agreement.removeDiscount(product);
+        agreement.removeDiscount(productID);
         //add the Discount
-        agreement.addDiscount(new Discount(agreement.getSupplierItem(productname), quantity, discount));
+        agreement.addDiscount(new Discount(agreement.getSupplierItem(productID), quantity, discount));
     }
 
 
@@ -121,12 +118,12 @@ public void removeAgreement(String branchId, String supplierId) {
         return agreement;
     }
 
-    private Product getProductfromSupplier(String productName, String supplierID) throws Exception {
+    private SuppliedItem getProductfromSupplier(String productID, String supplierID) throws Exception {
         Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
         if (supplier == null){
             throw new Exception("supplier does not exist");
         }
-        Product product = supplier.getProduct(productName);
+        SuppliedItem product = supplier.getProduct(productID);
         if (product == null){
             throw new Exception("supplier does not have this product");
         }

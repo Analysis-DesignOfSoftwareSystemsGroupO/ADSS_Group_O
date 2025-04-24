@@ -99,6 +99,7 @@ public class Supplier {
         if (!supplyProducts.containsKey(product.getProductID())){
             SuppliedItem suppliedItem = new SuppliedItem(price, product);
             this.supplyProducts.put(product.getProductID(), suppliedItem);
+            return;
         }
         throw new NullPointerException("Supplied Product already exists");
     }

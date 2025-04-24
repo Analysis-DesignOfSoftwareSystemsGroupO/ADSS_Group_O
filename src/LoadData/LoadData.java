@@ -1,9 +1,14 @@
+
 package LoadData;
 import DataBase.BranchesDataBase;
 import DataBase.OrderDataBase;
 import DataBase.ProductDataBase;
 import DataBase.SuppliersDataBase;
 import Domain.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class LoadData {
     private ProductDataBase productDataBase = ProductDataBase.getInstance();
@@ -25,43 +30,47 @@ public class LoadData {
                 {"8", "Eilat", "Sderot Hatmarim 3"},
                 {"9", "Petah Tikva", "Bar Kochva 78"}
         };
-
         for (String[] data : branchData) {
             branchesDataBase.addBranch(new Branch(data[0], data[1], data[2]));
         }
-        //add suppliers
+        // add suppliers with full data for the constructor
         String[][] supplierData = {
-                {"1", "", "Yosi", "568", "286", "658"},
-                {"2", "", "Dina", "123", "456", "789"},
-                {"3", "", "Avi", "111", "222", "333"},
-                {"4", "", "Liat", "444", "555", "666"},
-                {"5", "", "Moshe", "777", "888", "999"}
+                {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager"},
+                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales"},
+                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk"},
+                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant"},
+                {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor"}
         };
 
         for (String[] data : supplierData) {
-            suppliersDataBase.addSupplier(new Supplier(data[0], data[1], data[2], data[3], data[4], data[5]));
+            suppliersDataBase.addSupplier(new Supplier(
+                    data[0], data[1], data[2], data[3], data[4],
+                    data[5], data[6], data[7], data[8]
+            ));
         }
+
         // add products
         String[][] productData = {
-                {"1", "Bamba"},
-                {"2", "Bisli"},
-                {"3", "Coca Cola"},
-                {"4", "Sprite"},
-                {"5", "Milk"},
-                {"6", "Bread"},
-                {"7", "Water Bottle"},
-                {"8", "Cheese"},
-                {"9", "Yogurt"},
-                {"10", "Chocolate"},
-                {"11", "Pita"},
-                {"12", "Rice"},
-                {"13", "Pasta"},
-                {"14", "Ketchup"},
-                {"15", "Toilet Paper"}
+                {"1", "Bamba", "Osem"},
+                {"2", "Bisli", "Osem"},
+                {"3", "Cola", "Coca Cola"},
+                {"4", "Sprite", "Tempo"},
+                {"5", "Milk", "Tnuva"},
+                {"6", "Bread", "Ariel Bakery"},
+                {"7", "Water Bottle", "Tempo"},
+                {"8", "Cheese", "Tnuva"},
+                {"9", "Yogurt", "Shtraus"},
+                {"10", "Chocolate", "Elit"},
+                {"11", "Pita", "Ariel Bakery"},
+                {"12", "Rice", "Osem"},
+                {"13", "Pasta", "Osem"},
+                {"14", "Ketchup", "Osem"},
+                {"15", "Toilet Paper", "SuperLi"},
+                {"16", "Bamba", "Lulu"}
         };
 
         for (String[] data : productData) {
-            productDataBase.addProduct(new Product(data[0], data[1]));
+            productDataBase.addProduct(new Product(data[0], data[1], data[2]));
         }
         //add agreements
         String[][] agreementData = {
@@ -73,70 +82,72 @@ public class LoadData {
                 {"5", "5"}
         };
 
+        List<Delivery> deliveryList = new ArrayList<Delivery>();
+        Delivery constDel = new Delivery("Constant Delivery");
+        Delivery tempDel = new Delivery("Temporary Delivery");
+        Delivery needSuperLi = new Delivery("Self Pick Up");
+        deliveryList.add(constDel);
+        deliveryList.add(tempDel);
+        deliveryList.add(needSuperLi);
+        Random rand = new Random();
+
         for (String[] data : agreementData) {
-            Agreement agreement = new Agreement(
-                    branchesDataBase.getBranch(data[0]),
-                    suppliersDataBase.getSupplier(data[1])
-            );
+            Agreement agreement = new Agreement(branchesDataBase.getBranch(data[0]),
+                    suppliersDataBase.getSupplier(data[1]), deliveryList.get(rand.nextInt(deliveryList.size())));
             suppliersDataBase.addAgreement(agreement);
         }
 
-        //add products to agreements
-        Object[][] suppliedItems = {
-                {10, "Bamba", "1", "1"},
-                {13, "Pasta", "1", "1"},
-                {15, "Bisli", "2", "2"},
-                {20, "Coca Cola", "3", "3"},
-                {25, "Sprite", "4", "4"},
-                {30, "Milk", "5", "5"},
-                {12, "Bread", "6", "1"},
-                {18, "Water Bottle", "7", "2"},
-                {22, "Cheese", "8", "3"},
-                {14, "Yogurt", "9", "4"},
-                {16, "Chocolate", "1", "5"},
-                {11, "Pita", "2", "1"},
-                {19, "Rice", "3", "2"},
-                {13, "Pasta", "4", "3"},
-                {17, "Ketchup", "5", "4"},
-                {21, "Toilet Paper", "6", "5"},
-                {9, "Bamba", "7", "1"},
-                {8, "Bisli", "8", "2"},
-                {10, "Coca Cola", "9", "3"},
-                {20, "Sprite", "1", "4"},
-                {24, "Milk", "2", "5"},
-                {26, "Bread", "3", "1"},
-                {7, "Water Bottle", "4", "2"},
-                {6, "Cheese", "5", "3"},
-                {5, "Yogurt", "6", "4"},
-                {4, "Chocolate", "7", "5"},
-                {3, "Pita", "8", "1"},
-                {2, "Rice", "9", "2"},
-                {1, "Pasta", "1", "3"},
-                {30, "Ketchup", "2", "4"},
-                {28, "Toilet Paper", "3", "5"}
+
+    //add products to agreements
+        Object[][] items = {
+                {17, "1", "3", "1"},
+                {14, "2", "7", "2"},
+                {22, "3", "1", "4"},
+                {27, "4", "8", "3"},
+                {10, "5", "6", "5"},
+                {24, "6", "9", "2"},
+                {19, "7", "2", "1"},
+                {11, "8", "5", "3"},
+                {13, "9", "4", "4"},
+                {29, "10", "7", "1"},
+                {9, "11", "1", "5"},
+                {20, "12", "3", "5"},
+                {25, "13", "6", "4"},
+                {15, "14", "9", "4"},
+                {12, "15", "2", "1"},
+                {18, "16", "8", "3"}
         };
 
 // First: add products to suppliers
-        for (Object[] entry : suppliedItems) {
-            String productName = (String) entry[1];
+        for (Object[] entry : items) {
+            String productID = (String) entry[1];
             String supplierId = (String) entry[3];
+            int price = (int) entry[0];
+            try {
+                suppliersDataBase.getSupplier(supplierId).addProduct(productDataBase.getProduct(productID), price);
 
-            suppliersDataBase.getSupplier(supplierId).addProduct(productDataBase.getProduct(productName));
+            }catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("Product : " + productID);
+                System.out.println("Supplier : " + supplierId);
+            }
         }
 
 // Then: add supplied items to agreements
-        for (Object[] entry : suppliedItems) {
-            int quantity = (int) entry[0];
-            String productName = (String) entry[1];
+        for (Object[] entry : items) {
+            int price = (int) entry[0];
+            String productID = (String) entry[1];
             String branchId = (String) entry[2];
             String supplierId = (String) entry[3];
 
-            SuppliedItem item = new SuppliedItem(quantity, productDataBase.getProduct(productName));
+            SuppliedItem item = new SuppliedItem(price, productDataBase.getProduct(productID));
             suppliersDataBase.addProductToAgreement(item, branchId, supplierId);
+
+            List<Agreement> agreements = suppliersDataBase.getAllAgreement();
+            for (Agreement agreement : agreements) {
+                Discount discount = new Discount(suppliersDataBase.getSupplier(agreement.getSupplierID()).getProduct(productID), 4, 10);
+                agreement.addDiscount(discount);
+            }
         }
-
-
-
-
     }
 }
