@@ -91,8 +91,7 @@ public class PresentAgreementOptions {
             System.out.println("1.Add product to agreement");
             System.out.println("2.Remove product from agreement");
             System.out.println("3.Edit product discount agreement");
-            System.out.println("4.Change Delivery Way");
-            System.out.println("5.Return to main menu");
+            System.out.println("4.Return to main menu");
             int choice = editAgreement.nextInt();
             editAgreement.nextLine();
             String supplierID = "", branchId = "";
@@ -120,8 +119,6 @@ public class PresentAgreementOptions {
                     this.editProductDiscount(supplierID, branchId);
                     break;
                 case 4:
-                    this.changeDeliveryWay(supplierID, branchId);
-                case 5:
                     return;
                 default:
                     System.out.println("Invalid option !\n");
@@ -184,19 +181,6 @@ public class PresentAgreementOptions {
         String productId = editAgreement.nextLine();
         try {
             agreementController.removeProductFromAgreement(supplierID, branchId, productId);
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
-    //this method is created to change the delivery way of an agreement
-    private void changeDeliveryWay(String supplierID, String branchId){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter New Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up) : ");
-        String deliveryWay = scan.nextLine();
-
-        try{
-            agreementController.changeDeliveryInAgreement(supplierID, branchId, deliveryWay);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

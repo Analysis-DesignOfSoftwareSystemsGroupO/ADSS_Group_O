@@ -109,10 +109,6 @@ public class Agreement {
         return null;
     }
 
-    public Delivery getDelivery() {
-        return delivery;
-    }
-
     public String toString(){
         StringBuilder returnString = new StringBuilder("Agreement between, " + "Supplier id: " + this.supplier.getID() +
                 ", Branch id : " + this.Branch.getBranchID() + "\n" + "Product List: \n");

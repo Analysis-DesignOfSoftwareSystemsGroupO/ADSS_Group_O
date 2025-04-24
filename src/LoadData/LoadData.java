@@ -37,9 +37,9 @@ public class LoadData {
         String[][] supplierData = {
                 {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager", "Constant Delivery"},
                 {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales", "Temporary Delivery"},
-                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk", "SuperLi"},
-                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant", "SuperLi"},
-                {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor", "SuperLi"}
+                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk", "Self Pick Up"},
+                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant", "Self Pick Up"},
+                {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor", "Self Pick Up"}
         };
 
         for (String[] data : supplierData) {

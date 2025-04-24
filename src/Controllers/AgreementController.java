@@ -41,10 +41,6 @@ public class AgreementController {
         agreementService.removeProductFromAgreement(supplierID, branchId, productID);
     }
 
-    public void changeDeliveryInAgreement(String supplierID, String branchId, String deliveryWay) throws Exception {
-        agreementService.changeDeliveryWay(supplierID, branchId, deliveryWay);
-    }
-
     public boolean isAgreementEmpty(String branchId, String SupplierId){
         return agreementService.isAgreementEmpty(branchId, SupplierId);
     }

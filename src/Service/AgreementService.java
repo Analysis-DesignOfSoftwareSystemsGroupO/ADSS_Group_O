@@ -103,12 +103,6 @@ public void removeAgreement(String branchId, String supplierId) {
     }
 
 
-    public void changeDeliveryWay(String supplierID, String branchId, String deliveryWay) throws Exception {
-        if (suppliersDataBase.getAgreement(branchId, supplierID) != null){
-            Agreement agreement = getAgreement(branchId, supplierID);
-            agreement.getDelivery().setDeliveryWay(deliveryWay);
-        }
-    }
 
     private Agreement getAgreement(String branchId, String supplierID) throws Exception {
         Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
