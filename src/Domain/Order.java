@@ -41,14 +41,14 @@ public class Order {
             throw new NullPointerException("Product ID cannot be null or empty || Quantity cannot be less than 1");
         }
         for (SuppliedItem item : suppliedItems.keySet()) {
-            if (Integer.toString(item.getSuppliedItemID()).equals(itemId)) {
+            if (item.getSuppliedItemID().equals(itemId)) {
                 throw new Exception("Supplied item ID " + itemId + " already exists");
             }
         }
 
         for (SuppliedItem item : agreement.getSupplierItemsList()){
             int discountPercentage = 0;
-            if (Integer.toString(item.getSuppliedItemID()).equals(itemId)) {
+            if (item.getSuppliedItemID().equals(itemId)) {
                 for (Discount discount : agreement.getDiscounts()) {
                     if (discount.getSuppliedItem().equals(item) && quantity >= discount.getQuantity()) {
                         discountPercentage = discount.getDiscount();
