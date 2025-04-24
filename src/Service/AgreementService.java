@@ -110,7 +110,7 @@ public void removeAgreement(String branchId, String supplierId) {
         return agreement;
     }
 
-    private Product getProductfromSupplier(String productName, String supplierID) throws Exception {
+    private Product getProductFromSupplier(String productName, String supplierID) throws Exception {
         Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
         if (supplier == null){
             throw new Exception("supplier does not exist");

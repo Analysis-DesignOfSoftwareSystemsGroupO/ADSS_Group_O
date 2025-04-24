@@ -28,8 +28,8 @@ public void addProduct(Product product) {
         if (product == null){
             throw new IllegalArgumentException("Product cannot be null");
         }
-        if (!products.containsKey(product.getProductName())) {
-            products.put(product.getProductName(), product);
+        if (!products.containsKey(product.getProductID())) {
+            products.put(product.getProductID(), product);
         }
     }
     public Product getProduct(String productname){

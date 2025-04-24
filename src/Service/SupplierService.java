@@ -54,12 +54,14 @@ public class SupplierService {
         }
     }
 
-    //prints the details of a specific supplier
+    //prints the details of a specific supplier //todo
     public void printSupplier(String supplierId) {
         if (suppliersDataBase.getSupplier(supplierId) != null) {
             System.out.println(suppliersDataBase.getSupplier(supplierId));
         }
     }
+
+
 
     //updates supplier phone number given supplierId
     public void updateSupplierInfoContactPhoneNumber(String supplierId, String contactName, String newTitle, String newPhoneNumber) {
