@@ -10,25 +10,17 @@ public class Order {
     private final Agreement agreement;
     private Map<SuppliedItem, Integer> suppliedItems;
     private Boolean orderClosed = false;
-    private Branch branch;
+    private final Branch branch;
 
     public Order(Agreement agreement, Branch branch) {
         if (agreement == null || branch == null) {
-            throw new NullPointerException("Agreement or branch is null");
+            throw new NullPointerException("Agreement or Branch is null");
         }
         this.branch = branch;
         this.agreement = agreement;
         this.suppliedItems = new HashMap<SuppliedItem, Integer>();
         this.orderDate = new Date();
         this.orderID = String.valueOf(generateOrderID());
-    }
-
-    public Order(Order other) {
-        this.orderID = other.orderID;
-        this.orderDate = other.orderDate;
-        this.totalPrice = other.totalPrice;
-        this.agreement = other.agreement;
-        this.suppliedItems = other.suppliedItems;
     }
 
     private static int generateOrderID() {
