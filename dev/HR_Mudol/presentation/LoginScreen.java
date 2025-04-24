@@ -12,12 +12,9 @@ public class LoginScreen {
 
     private final Scanner scanner = new Scanner(System.in);
     private final EmployeeSystem employeeSystem = new EmployeeSystem();
-    private HRSystemManager hrSystemManager;
 
 
     public void start(Branch curBranch) {
-
-        this.hrSystemManager = new HRSystemManager(curBranch);
 
         while (true) {
             System.out.print("Enter employee ID: ");
@@ -29,11 +26,17 @@ public class LoginScreen {
 
             if (matched != null) {
                 if (matched.isManager()) {
-                    boolean logout = HRManagerMenu.runMenu(matched, hrSystemManager, curBranch);
+                    HRManagerMenu menu=new HRManagerMenu();
+                    boolean logout = menu.start(matched,  matched.getUser(), curBranch);
                     if (logout) continue; // חזרה למסך התחברות
-                } else {
+                } else if (matched.isShiftManager()){
+                    ShiftManagerMenu menu=new ShiftManagerMenu();
+                    boolean logout = menu.start(matched, matched.getUser(), curBranch);
+                    if (logout) continue; // חזרה למסך התחברות
+                }
+                else {
                     EmployeeMenu menu = new EmployeeMenu();
-                    boolean logout = menu.start(matched, (Employee) matched.getUser(), curBranch);
+                    boolean logout = menu.start(matched, matched.getUser(), curBranch);
                     if (logout) continue; // חזרה למסך התחברות
                 }
             } else {

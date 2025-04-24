@@ -10,10 +10,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HRManagerMenu {
+public class HRManagerMenu extends Menu{
 
-    public static boolean runMenu(User admin, HRSystemManager hrSystemManager, Branch curBranch) {
+
+    public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
         Scanner scanner = new Scanner(System.in);
+        HRSystemManager hrSystemManager=new HRSystemManager(curBranch);
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");
@@ -29,12 +31,12 @@ public class HRManagerMenu {
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1": manageEmployees(hrSystemManager, admin, scanner); break;
+                case "1": manageEmployees(hrSystemManager, caller, scanner); break;
                 case "2": viewShiftsHistory(hrSystemManager,curBranch.getWeeks()); break;
-                case "3": generateReports(hrSystemManager, admin, scanner,curBranch); break;
-                case "4": manageShift(hrSystemManager, curBranch.getWeeks(), admin, scanner); break;
-                case "5": manageRoles(hrSystemManager, admin, scanner); break;
-                case "6": hrSystemManager.displayDashboard(admin,curBranch); break;
+                case "3": generateReports(hrSystemManager, caller, scanner,curBranch); break;
+                case "4": manageShift(hrSystemManager, curBranch.getWeeks(), caller, scanner); break;
+                case "5": manageRoles(hrSystemManager, caller, scanner); break;
+                case "6": hrSystemManager.displayDashboard(caller,curBranch); break;
                 case "0":
                     System.out.println("Logging out. Returning to login screen.");
                     return true;
@@ -134,7 +136,12 @@ public class HRManagerMenu {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1":
-                    hr.manageTheWeekRelevantRoles(caller, weeks.getLast());
+                    try {
+                        hr.manageTheWeekRelevantRoles(caller, weeks.getLast());
+                    }
+                    catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "2":
                     hr.assigningEmployToShifts(caller, weeks.getLast());

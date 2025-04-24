@@ -10,9 +10,11 @@ import java.util.stream.Collectors;
 public class WeekManager implements IWeekManager {
 
     private IShiftManager dependency;
+    private Branch curBranch;
 
-    public WeekManager(IShiftManager dependency) {
+    public WeekManager(IShiftManager dependency,Branch curBranch ) {
         this.dependency = dependency;
+        this.curBranch=curBranch;
     }
 
     @Override
@@ -27,9 +29,16 @@ public class WeekManager implements IWeekManager {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
+        if (this.curBranch.getRoles().size()<=1) {
+            throw new IllegalArgumentException("No roles at the system - first add roles.");
+        }
+        if (this.curBranch.getEmployees().isEmpty()) {
+            throw new IllegalArgumentException("No employees at the system - first add them.");
+        }
 
         for (Shift shift : week.getShifts()) {
-            dependency.chooseRelevantRoleForShift(caller, shift);
+
+             dependency.chooseRelevantRoleForShift(caller, shift);
         }
     }
 

@@ -29,6 +29,13 @@ public class RoleManager implements IRoleManager {
         System.out.print("Enter role description: ");
         String description = scanner.nextLine();
 
+        // בדיקה אם התיאור ריק
+        if (description.trim().isEmpty()) {
+            System.out.println("Role description cannot be empty.");
+            return;
+        }
+
+
         for (Role r: curBranch.getRoles()){
             if (r.getDescription().equalsIgnoreCase(description)){
                 System.out.println("This role already exist.");
@@ -199,7 +206,7 @@ public class RoleManager implements IRoleManager {
     public List<Role> getAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
-        return new LinkedList<>(curBranch.getRoles());
+        return curBranch.getRoles();
     }
 
     @Override

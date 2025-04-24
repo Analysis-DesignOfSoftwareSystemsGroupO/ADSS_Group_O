@@ -118,6 +118,15 @@ public abstract class AbstractEmployee {
         }
         return this.empPassword.equals(inputPassword);
     }
+    // equals לפי ת"ז
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Employee other = (Employee) obj;
+        return this.empId==(other.getEmpId());
+    }
+
 
 
 

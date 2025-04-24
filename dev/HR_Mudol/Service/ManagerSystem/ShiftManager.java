@@ -38,10 +38,6 @@ public class ShiftManager implements IShiftManager {
             throw new SecurityException("Access denied.");
         }
 
-        if (dependency.getAllRoles(caller).isEmpty()) {
-            throw new IllegalArgumentException("No roles at the system.");
-        }
-
         // always add shift manager
         shift.addNecessaryRoles(caller, dependency.getRoleByNumber(1));
 

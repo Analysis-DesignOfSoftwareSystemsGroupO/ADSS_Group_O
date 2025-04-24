@@ -19,7 +19,7 @@ public class HRSystemManager implements IHRSystemManager {
         this.roleManager = new RoleManager(curBranch);
         this.employeeManager = new EmployeeManager(curBranch);
         this.shiftManager=new ShiftManager(this.roleManager);
-        this.weekManager=new WeekManager(shiftManager);
+        this.weekManager=new WeekManager(shiftManager,curBranch);
         this.reportGenerator=new ReportGenerator(weekManager,employeeManager);
         roleManager.setEmployeeManager(employeeManager);
         employeeManager.setRoleManager(roleManager);

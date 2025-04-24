@@ -15,6 +15,10 @@ public class Branch {
     private List<Role> roles=new LinkedList<>();//תפקידים בחברה
     private List<User> users;
 
+
+
+    private List<Employee> oldEmployee=new LinkedList<>();
+
     public Branch() {
         this.branchID = counter;
         Week curWeek=new Week();
@@ -38,6 +42,9 @@ public class Branch {
         return users;
     }
 
+    public List<Employee> getOldEmployee() {
+        return oldEmployee;
+    }
 
     public List<Role> getRoles() {
         return roles;

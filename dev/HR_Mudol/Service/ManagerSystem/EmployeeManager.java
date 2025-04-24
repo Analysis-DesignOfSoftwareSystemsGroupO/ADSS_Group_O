@@ -101,11 +101,31 @@ public class EmployeeManager implements IEmployeeManager {
             return;
         }
 
+        //remove him from the roles lists
         for (Role role : roleManager.getAllRoles(caller)) {
             roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
         }
 
-        curBranch.getUsers().remove(toRemove);
+        //add him to the "bank" of old employees
+        curBranch.getOldEmployee().add(toRemove);
+
+        //delete his user
+        User userToRemove = null;
+        for (User u : curBranch.getUsers()) {
+            if (u.getUser().equals(toRemove)) {
+                userToRemove = u;
+                break;
+            }
+        }
+
+        if (userToRemove != null) {
+            curBranch.getUsers().remove(userToRemove);
+        }
+
+
+        //remove to the "bank" of cur employees
+        curBranch.getEmployees().remove(toRemove);
+
         System.out.println("Employee removed successfully from system.");
     }
 
@@ -209,7 +229,7 @@ public class EmployeeManager implements IEmployeeManager {
             if (e.getEmpId() == empId) return e;
         }
 
-        throw new IllegalArgumentException("Employee not found");
+        return null;
     }
 
     @Override

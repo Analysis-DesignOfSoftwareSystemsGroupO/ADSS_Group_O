@@ -1,19 +1,16 @@
 package HR_Mudol.presentation;
 
 import HR_Mudol.Service.EmployeeSystem.EmployeeSystem;
-import HR_Mudol.domain.Branch;
-import HR_Mudol.domain.Employee;
-import HR_Mudol.domain.User;
-import HR_Mudol.domain.Week;
+import HR_Mudol.domain.*;
 
 import java.util.Scanner;
 
-public class EmployeeMenu {
+public class EmployeeMenu extends Menu {
 
     private final Scanner scanner = new Scanner(System.in);
     private final EmployeeSystem employeeSystem = new EmployeeSystem();
 
-    public boolean start(User caller, Employee self, Branch curBranch) {
+    public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
         if (!caller.isSameEmployee(self)) {
             System.out.println("Access denied: You can only access your own menu.");
             return false;
@@ -29,21 +26,20 @@ public class EmployeeMenu {
             System.out.println("6. View my available roles");
             System.out.println("7. View my personal details");
             System.out.println("8. Change my password");
-            System.out.println("0. Logout");
+            System.out.println("0. Exit");
 
             String choice = scanner.nextLine().trim();
-
+            Employee selfEmp=(Employee)self;
             switch (choice) {
-                case "1": employeeSystem.viewMyShifts(caller, self, curBranch.getWeeks().getLast()); break;
-                case "2": employeeSystem.submitConstraint(caller, self,curBranch.getWeeks().getLast()); break;
-                case "3": employeeSystem.updateConstraint(caller, self, curBranch.getWeeks().getLast()); break;
-                case "4": employeeSystem.viewMyConstraints(caller, self); break;
-                case "5": employeeSystem.viewContractDetails(caller, self); break;
-                case "6": employeeSystem.viewAvailableRoles(caller, self); break;
-                case "7": employeeSystem.viewPersonalDetails(caller, self); break;
-                case "8": employeeSystem.changePassword(caller, self); break;
+                case "1": employeeSystem.viewMyShifts(caller, selfEmp, curBranch.getWeeks().getLast()); break;
+                case "2": employeeSystem.submitConstraint(caller, selfEmp,curBranch.getWeeks().getLast()); break;
+                case "3": employeeSystem.updateConstraint(caller, selfEmp, curBranch.getWeeks().getLast()); break;
+                case "4": employeeSystem.viewMyConstraints(caller, selfEmp); break;
+                case "5": employeeSystem.viewContractDetails(caller, selfEmp); break;
+                case "6": employeeSystem.viewAvailableRoles(caller, selfEmp); break;
+                case "7": employeeSystem.viewPersonalDetails(caller, selfEmp); break;
+                case "8": employeeSystem.changePassword(caller, selfEmp); break;
                 case "0":
-                    System.out.println("Logging out. Returning to login screen.");
                     return true;
                 default:
                     System.out.println("Invalid option. Please try again.");
