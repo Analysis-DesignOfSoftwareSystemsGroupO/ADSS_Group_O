@@ -48,6 +48,10 @@ public class PresentSupplierOptions {
         System.out.println("Starting Define New Supplier, Please Follow the Next Steps");
         System.out.println("Enter Supplier ID: ");
         String supplierID = scanner.nextLine();
+        if(supplierController.validIdSupplier(supplierID)){
+            System.out.println("Supplier ID Already Exists! ");
+            return;
+        }
         System.out.println("Enter Supplier Name: ");
         String supplierName = scanner.nextLine();
         System.out.println("Enter Supplier Payment Method (CreditCard / Cash / Bank Transfer / Check): ");
@@ -79,7 +83,12 @@ public class PresentSupplierOptions {
 
     private void editSupplierPresentation() {
         Scanner scanner = new Scanner(System.in);
-        supplierController.printAllSuppliers();
+        try{
+            supplierController.printAllSuppliers();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
         System.out.println("Enter Supplier ID: ");
         String id = scanner.nextLine();
         if (!supplierController.validIdSupplier(id)){
@@ -155,9 +164,11 @@ public class PresentSupplierOptions {
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
+                scanner.nextLine();
                 switch (option) {
                     case 1:
-                        System.out.println("Enter information contact name: ");
+                        System.out.println("Edit Information Contact By Name");
+                        System.out.println("Enter information contact name to edit: ");
                         String contactName = scanner.nextLine();
                         System.out.println("Enter new title for " + contactName + " : ");
                         String newTitle = scanner.nextLine();

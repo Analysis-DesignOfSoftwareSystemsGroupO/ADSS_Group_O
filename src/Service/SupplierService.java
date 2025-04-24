@@ -46,6 +46,9 @@ public class SupplierService {
     //prints all existing suppliers
     public void printAllSuppliers() {
         List<Supplier> suppliers = suppliersDataBase.getAllSuppliers();
+        if(suppliers.isEmpty()) {
+            throw new NullPointerException("No Suppliers in System");
+        }
         for (Supplier supplier : suppliers) {
             System.out.println(supplier);
         }

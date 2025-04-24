@@ -21,7 +21,9 @@ public class Agreement {
         this.supplierItemsList = new ArrayList<SuppliedItem>();
         this.discounts = new ArrayList<Discount>();
         this.delivery = delivery;
-
+        if (Objects.equals(delivery.getDeliveryWay(), "Self Pick Up ")) {
+            //todo Notify Transfers Module !!!
+        }
     }
 
     public Agreement(Agreement other) {
