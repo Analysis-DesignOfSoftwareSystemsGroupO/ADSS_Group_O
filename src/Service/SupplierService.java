@@ -52,10 +52,11 @@ public class SupplierService {
     }
 
     //prints the details of a specific supplier //todo
-    public void printSupplier(String supplierId) {
+    public void printSupplier(String supplierId) throws Exception {
         if (suppliersDataBase.getSupplier(supplierId) != null) {
             System.out.println(suppliersDataBase.getSupplier(supplierId));
         }
+        throw new Exception("Supplier doesn't exist");
     }
 
 
@@ -68,22 +69,21 @@ public class SupplierService {
                 if (infoContact.getContactName().equals(contactName)) {
                     infoContact.setContactPhone(newPhoneNumber);
                     infoContact.setTitle(newTitle);
-                    break;
+                    return;
                 }
             }
+            throw new NullPointerException("Contact does not exist");
         }
+        throw new NullPointerException("Supplier does not exist");
     }
 
     //updates supplier phone number given supplierId
     public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber, String newBankBranch) {
         if(suppliersDataBase.getSupplier(supplierID) != null) {
-            try {
-                Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-                supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, supplierID);
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
+            Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+            supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, supplierID);
         }
+        throw new NullPointerException("Supplier does not exist");
     }
 
     //updates a supplier name given a supplier id
@@ -92,18 +92,26 @@ public class SupplierService {
         if (supplier != null) {
             supplier.setSupplierName(newName);
         }
+        throw new NullPointerException("Supplier does not exist");
     }
 
     public void addNewInfoContact(String supplierID, String contactName, String newPhoneNumber, String newTitle) {
         InformationContact infoContact = new InformationContact(contactName, newPhoneNumber, newTitle);
         if (infoContact.getContactName() != null) {
             Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+            if (supplier == null) {
+                throw new NullPointerException("Supplier doesn't exists");
+            }
             supplier.addInformationContact(infoContact);
         }
+
     }
 
     public void getAllSupplierInformationContacts(String supplierID){
         Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+        if (supplier == null) {
+            throw new NullPointerException("Supplier doesn't exists");
+        }
         List<InformationContact> infoContacts = supplier.getInformationContacts();
         for (InformationContact infoContact : infoContacts) {
             System.out.println(infoContact);

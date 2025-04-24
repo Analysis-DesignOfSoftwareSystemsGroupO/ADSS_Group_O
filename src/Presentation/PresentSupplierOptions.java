@@ -48,6 +48,7 @@ public class PresentSupplierOptions {
         System.out.println("Starting Define New Supplier, Please Follow the Next Steps");
         System.out.println("Enter Supplier ID: ");
         String supplierID = scanner.nextLine();
+        supplierController.validIdSupplier(supplierID);
         System.out.println("Enter Supplier Name: ");
         String supplierName = scanner.nextLine();
         System.out.println("Enter Supplier Payment Method (CreditCard / Cash / Bank Transfer / Check): ");
@@ -182,7 +183,10 @@ public class PresentSupplierOptions {
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());
+                            break;
                         }
+                        System.out.println("Added successfully");
+                        supplierController.printAllInformationContacts(id);
                         break;
                     case 4:
                         return;

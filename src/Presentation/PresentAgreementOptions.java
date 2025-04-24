@@ -134,7 +134,7 @@ public class PresentAgreementOptions {
     private void addProductToAgreementP(String supplierID, String branchId) {
         try {
             System.out.println("Supplier's products :");
-            supplierController.printSupplierProducts(supplierID);
+            supplierController.printSupplier(supplierID);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;

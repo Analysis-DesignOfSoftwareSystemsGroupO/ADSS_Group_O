@@ -92,8 +92,13 @@ public class Supplier {
 
     @Override
     public String toString() {
-        return "Supplier ID: " + supplierID + System.lineSeparator() + "Supplier Name: " +
-                supplierName + System.lineSeparator();
+        StringBuilder stringBuilder = new StringBuilder("Supplier ID: " + supplierID + System.lineSeparator() + "Supplier Name: " +
+                supplierName);
+        for (SuppliedItem suppliedItem : supplyProducts.values()) {
+            stringBuilder.append(suppliedItem.toString()).append("\t");
+        }
+        stringBuilder.append("\n\t").append(this.getBank().toString());
+        return stringBuilder.toString();
     }
 
     public void addProduct(Product product, int price) {
@@ -117,12 +122,9 @@ public class Supplier {
         if (paymentMethod == null || paymentMethod.isEmpty()) {
             throw new NullPointerException("Payment Method cannot be null or empty");
         }
-        try{
-            this.paymentMethod = new PaymentMethod(paymentMethod);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        this.paymentMethod = new PaymentMethod(paymentMethod);
+
+
     }
 
 }

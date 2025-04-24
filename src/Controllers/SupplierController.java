@@ -30,7 +30,7 @@ public class SupplierController {
     }
 
     //prints the details of a specific supplier
-    public void printSupplier(String supplierId) {
+    public void printSupplier(String supplierId) throws Exception {
         supplierService.printSupplier(supplierId);
     }
 
@@ -52,10 +52,6 @@ public class SupplierController {
 
     public void printAllInformationContacts(String supplierID) {
         supplierService.getAllSupplierInformationContacts(supplierID);
-    }
-
-    public void printSupplierProducts(String supplierID) {
-        supplierService.printSupplier(supplierID);
     }
 
     public void deleteSupplierFromSystem(String supplierID){
