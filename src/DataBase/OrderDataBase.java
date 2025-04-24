@@ -53,5 +53,8 @@ public class OrderDataBase {
 
     public void removeOrder(String supplierId, Order order) {
         orders.get(supplierId).remove(order);
+        if (orders.get(supplierId).isEmpty()){
+            orders.remove(supplierId);
+        }
     }
 }

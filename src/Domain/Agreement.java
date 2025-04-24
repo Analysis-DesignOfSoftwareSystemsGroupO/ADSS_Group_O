@@ -117,11 +117,12 @@ public class Agreement {
     }
 
     public String toString(){
-        StringBuilder returnString = new StringBuilder("Agreement between, "+ "Supplier id: " + this.supplier.getID() +
+        StringBuilder returnString = new StringBuilder("Agreement between, " + "Supplier id: " + this.supplier.getID() +
                 ", Branch id : " + this.Branch.getBranchID() + "\n" + "Product List: \n");
         for (SuppliedItem supplierItem : supplierItemsList){
             returnString.append(supplierItem.toString()).append(" ").append(supplierItem.getSuppliedItemPrice()).append("₪\n");
         }
+
         for (Discount discount : discounts){
             returnString.append(discount.toString()).append("\n");
         }

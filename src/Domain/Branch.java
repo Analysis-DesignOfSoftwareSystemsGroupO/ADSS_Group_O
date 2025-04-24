@@ -14,4 +14,11 @@ public class Branch {
     public String getBranchID() {
         return branchID;
     }
+    public String getBranchAddress() {
+        return branchAddress;
+    }
+
+    public String toString(){
+        return "Branch Id: " + branchID + ", Branch Name: " + branchName + ", Branch Address" + branchAddress;
+    }
 }

@@ -16,23 +16,19 @@ public class OrderController {
         return orderService.isOrderEmpty(OrderID, supplierId);
     }
     //deletes an order if the user decides to cancel order while in the making
-    public void deleteConcurrentOrder(String OrderID, String supplierId) {
-        orderService.deleteOrder(OrderID, supplierId);
+    public void deleteConcurrentOrder(String orderId, String supplierId) throws Exception {
+        orderService.deleteOrder(supplierId, orderId);
     }
     //prints the order for the user to view while making the order
-    public void viewConcurrentOrder(String OrderID, String supplierId) {
-        orderService.viewOrder(OrderID, supplierId);
+    public void viewConcurrentOrder(String OrderID, String supplierId) throws Exception {
+        orderService.viewOrder(supplierId, OrderID);
     }
 
     //adds a product to the order
-    public void addProductToOrder(String supplierID, String branchId, String orderId, String productId, int quantity) throws Exception {
+    public void addProductToOrder(String supplierID, String orderId, String productId, int quantity) throws Exception {
         //check if the product exists in the agreement
-        if (agreementService.productExistsInAgreement(supplierID, branchId, productId)) {
-                orderService.addProductToOrder(supplierID, orderId, productId, quantity);
-        }
-        else {
-            throw new Exception("Invalid product name");
-        }
+        orderService.addProductToOrder(supplierID, orderId, productId, quantity);
+
     }
 
     //prints all orders from a specific suppliers
@@ -46,6 +42,6 @@ public class OrderController {
 
     //method that finishes an orders (its point is to check if the order is empty, if it is throw an exception )
     public void finishOrder(String orderID, String supplierID){
-        orderService.finishOrder(orderID, supplierID);
+        orderService.finishOrder(supplierID, orderID);
     }
 }

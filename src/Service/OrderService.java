@@ -41,43 +41,45 @@ public class OrderService {
     }
 
     //deletes an order if the user decides to cancel order while in the making
-    public void deleteOrder(String supplierID, String OrderID) {
+    public void deleteOrder(String supplierID, String OrderID) throws Exception {
         List<Order> orders = orderDataBase.getOrdersBySupplier(supplierID);
         for (Order order : orders) {
             if (order.getOrderID().equals(OrderID)) {
                 if (!order.isOrderClosed()) {
                     orderDataBase.removeOrder(supplierID, order);
+                    return;
                 }
-                else{
-                    System.out.println("Order is already closed");
+                else {
+                    throw new Exception("Order is already closed");
                 }
             }
+            throw new Exception("Order not found");
         }
+
     }
 
     //prints the order for the user to view while making the order
-    public void viewOrder(String supplierID, String OrderID) {
+    public void viewOrder(String supplierID, String OrderID) throws Exception {
         List<Order> order = orderDataBase.getOrdersBySupplier(supplierID);
         for (Order o : order) {
             if (o.getOrderID().equals(OrderID)) {
                 o.displayOrder();
-                break;
+                return;
             }
         }
+        throw new Exception("Order does not exist");
+
     }
 
     //adds a product to the order, use doesProductExistsInAgreementFunc in AgreementService
-    public void addProductToOrder(String supplierID, String orderID, String productId, int quantity) {
+    public void addProductToOrder(String supplierID, String orderID, String productId, int quantity) throws Exception {
         List<Order> orders = orderDataBase.getOrdersBySupplier(supplierID);
         for (Order order : orders) {
             if (order.getOrderID().equals(orderID)) {
-                try {
-                    order.addItemToOrder(productId, quantity);
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+                order.addItemToOrder(productId, quantity);
             }
         }
+
     }
 
     //function that receives supplier id and prints all the past orders

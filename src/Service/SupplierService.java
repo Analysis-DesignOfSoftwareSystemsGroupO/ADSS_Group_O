@@ -47,16 +47,18 @@ public class SupplierService {
     public void printAllSuppliers() {
         List<Supplier> suppliers = suppliersDataBase.getAllSuppliers();
         for (Supplier supplier : suppliers) {
-            System.out.println(supplier);
+            System.out.println(supplier.toString());
         }
     }
 
-    //prints the details of a specific supplier
+    //prints the details of a specific supplier //todo
     public void printSupplier(String supplierId) {
         if (suppliersDataBase.getSupplier(supplierId) != null) {
             System.out.println(suppliersDataBase.getSupplier(supplierId));
         }
     }
+
+
 
     //updates supplier phone number given supplierId
     public void updateSupplierInfoContactPhoneNumber(String supplierId, String contactName, String newTitle, String newPhoneNumber) {

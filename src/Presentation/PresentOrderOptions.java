@@ -69,19 +69,23 @@ public class PresentOrderOptions {
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        //order Loop
         while (true){
             //view the agreement of products
             try {
+                System.out.println("***********************************");
                 agreementController.viewAgreement(branchId, supplierID);
+                orderController.viewConcurrentOrder(orderID, supplierID);
+                System.out.println("***********************************");
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
+                break;
             }
-
-            System.out.println("To add product Enter the product name");
+            System.out.println("To add product Enter the product ID");
             System.out.println("To finalize order enter '*'");
             System.out.println("To cancel the order press '-'");
-            System.out.println("Choice: ");
+            System.out.println("Enter product ID: ");
             try {
                 String choice = scanner.nextLine();
                 switch (choice) {
@@ -98,35 +102,43 @@ public class PresentOrderOptions {
                     case "-": //cancel existing order option
                         while (true){
                             System.out.println("Are you sure you want to cancel ? y/n");
-                            scanner.nextLine();
-                            if (scanner.nextLine().equals("y")) {
-                                orderController.deleteConcurrentOrder(orderID, supplierID);
+                            String res = scanner.nextLine();
+                            if (res.equals("y")) {
+                                try {
+                                    orderController.deleteConcurrentOrder(orderID, supplierID);
+                                    System.out.println("Order canceled");
+                                }
+                                catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                }
                                 return;
-                            } else if (scanner.nextLine().equals("n")) {
+                            } else if (res.equals("n")) {
                                 break;
                             }
                             else {
                                 System.out.println("Invalid option ! ");
                             }
                         }
-                        break;
+                        continue;
                     default:
                         try {
                             System.out.println("Enter quantity:");
                             int quantity = scanner.nextInt();
-                            orderController.addProductToOrder(supplierID, branchId, orderID, choice, quantity);
+                            orderController.addProductToOrder(supplierID, orderID, choice, quantity);
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
-                            continue;
+                            break;
                         }
                         System.out.println("Product added successfully !");
                 }
             }
             catch (Exception e) {
+                System.out.println(e.getMessage());
                 System.out.println("Invalid choice !");
+                return;
             }
-            break;
+            scanner.nextLine();
         }
     }
 
