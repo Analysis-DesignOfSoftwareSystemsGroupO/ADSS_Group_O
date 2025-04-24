@@ -64,8 +64,10 @@ public class EmployeeSystem implements IEmployeeSystem {
 
             // בדיקת דדליין
             if (!currentWeek.isConstraintSubmissionOpen()) {
-                System.out.println("Constraint submission is closed. Deadline was: " + currentWeek.getConstraintDeadline());
-                return;
+                self.lockWeeklyConstraints(caller); // שמירת האילוצים לשבוע הנוכחי ואיפוס הרשימות
+                System.out.println("Constraint submission is now closed.");
+                System.out.println("You are now submitting constraints for the new upcoming week.");
+                // לא מחזיר כאן – ממשיכים הלאה לשלב ההגשה!
             }
 
             int dayShiftLimit = self.getMinDayShift(caller);
@@ -94,11 +96,15 @@ public class EmployeeSystem implements IEmployeeSystem {
     }
 
 
+
     private int handleShiftTypeConstraints(User caller, Employee self, ShiftType type, int shiftLimit, List<Constraint> submittedConstraints) {
         int shiftCount = 0;
 
         for (WeekDay day : WeekDay.values()) {
-            if (day == WeekDay.FRIDAY && type == ShiftType.EVENING) continue;
+            if ((type == ShiftType.EVENING && (day == WeekDay.FRIDAY || day == WeekDay.SATURDAY)) ||
+                    (type == ShiftType.MORNING && day == WeekDay.SATURDAY)) {
+                continue;
+            }
 
             int remaining = Math.max(0, shiftLimit - shiftCount);
             System.out.println("You can still submit " + remaining + " constraint(s) for " + type + " shifts.");

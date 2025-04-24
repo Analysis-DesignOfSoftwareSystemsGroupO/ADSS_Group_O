@@ -2,11 +2,15 @@ package HR_Mudol.domain;
 
 import java.time.LocalDate;
 
-public class HRManager extends AbstractEmployee{
+public class HRManager extends Employee {
 
-    public HRManager(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
-        super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
+    public HRManager(String empName, int empId, String empPassword, String empBankAccount,
+                     int empSalary, LocalDate empStartDate,
+                     int minDayShift, int minEveningShift, int sickDays, int daysOff) {
+        super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate,
+                minDayShift, minEveningShift, sickDays, daysOff);
     }
+
 
 
     public String toString(User caller) {

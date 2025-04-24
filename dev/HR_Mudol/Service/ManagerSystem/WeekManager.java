@@ -88,7 +88,7 @@ public class WeekManager implements IWeekManager {
                         Employee employee = candidates.get(index - 1);
                         triedIndexes.add(index);
 
-                        Constraint constraint = employee.searchingForRelevantconstraint(caller, shift.getDay(), shift.getType());
+                        Constraint constraint = employee.searchingForRelevantconstraint(caller, week,shift.getDay(), shift.getType());
 
                         if (constraint == null) {
                             System.out.println("The employee *can* work this shift.");

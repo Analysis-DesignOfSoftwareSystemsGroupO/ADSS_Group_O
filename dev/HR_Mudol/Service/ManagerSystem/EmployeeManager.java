@@ -252,6 +252,18 @@ public class EmployeeManager implements IEmployeeManager {
         }
     }
 
+    @Override
+    public Branch getBranch() {
+        return this.curBranch;
+    }
+
+    @Override
+    public IRoleManager getRoleManager() {
+        return this.roleManager;
+    }
+
+
+
     private int getIntInput(String prompt) {
         int value;
         while (true) {

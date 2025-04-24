@@ -91,19 +91,31 @@ public class Employee extends AbstractEmployee {
     }
 
 
-    //searching for constraints
-    public Constraint searchingForRelevantconstraint(User caller, WeekDay day, ShiftType type){
-        if (!caller.isManager()&&!caller.isSameEmployee(this)) {
+    public Constraint searchingForRelevantconstraint(User caller, Week currentWeek, WeekDay day, ShiftType type) {
+        // בדיקת הרשאה
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
-        for (Constraint c : this.weeklyConstraints){
 
-            if (c.getDay()==day&&c.getType()==type){
+        // אם עדיין מותר להגיש – נחפש ברשימה השבועית
+        List<Constraint> relevantList;
+        if (currentWeek.isConstraintSubmissionOpen()) {
+            relevantList = this.weeklyConstraints;
+        } else {
+            // אם הדדליין עבר – נחפש ברשימה הסגורה
+            relevantList = this.lockedConstraints;
+        }
+
+        // חיפוש אילוץ לפי יום וסוג משמרת
+        for (Constraint c : relevantList) {
+            if (c.getDay() == day && c.getType() == type) {
                 return c;
             }
         }
-        return null;
+
+        return null; // אם לא נמצא כלום
     }
+
 
     // This method assumes that access control has already been verified externally
     public void printRelevantRoles() {
@@ -159,7 +171,7 @@ public class Employee extends AbstractEmployee {
     }
 
     public void lockWeeklyConstraints(User caller) {
-        if (!caller.isManager()) {
+        if (!caller.isManager()&& !caller.isSameEmployee(this)) {
             throw new SecurityException("Only manager can lock constraints.");
         }
 

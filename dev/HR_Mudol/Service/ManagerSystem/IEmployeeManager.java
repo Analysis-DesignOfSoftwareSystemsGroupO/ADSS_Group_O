@@ -1,5 +1,6 @@
 package HR_Mudol.Service.ManagerSystem;
 
+import HR_Mudol.domain.Branch;
 import HR_Mudol.domain.Employee;
 import HR_Mudol.domain.User;
 import HR_Mudol.domain.Week;
@@ -30,6 +31,11 @@ public interface IEmployeeManager {
 
     //Searching method:
     Employee getEmployeeById(User caller, int ID);
+
+    public Branch getBranch();
+
+    public IRoleManager getRoleManager();
+
 
     //Printing method:
     void printEmployees(User caller);

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class HRSystemManager implements IHRSystemManager {
 
+    private Branch curBranch;
     //private List<Week> weeksHistory;
     private RoleManager roleManager;
     private EmployeeManager employeeManager;
@@ -15,7 +16,7 @@ public class HRSystemManager implements IHRSystemManager {
     private ReportGenerator reportGenerator;
 
     public HRSystemManager(Branch curBranch){
-
+        this.curBranch = curBranch;
         this.roleManager = new RoleManager(curBranch);
         this.employeeManager = new EmployeeManager(curBranch);
         this.shiftManager=new ShiftManager(this.roleManager);
@@ -214,6 +215,16 @@ public class HRSystemManager implements IHRSystemManager {
     @Override
     public void printWeek(Week week) {
         weekManager.printWeek(week);
+    }
+
+    @Override
+    public Branch getBranch() {
+        return this.curBranch;
+    }
+
+    @Override
+    public IRoleManager getRoleManager() {
+        return this.roleManager;
     }
 
     @Override

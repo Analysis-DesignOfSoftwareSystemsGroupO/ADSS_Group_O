@@ -14,6 +14,10 @@ public class User {
         this.level = level;
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
     public AbstractEmployee getUser() {
         return user;
     }

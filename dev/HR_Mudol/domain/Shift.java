@@ -5,25 +5,24 @@ import java.util.List;
 
 public class Shift {
 
-    static int counter=0; //Counter
+    static int counter = 0; // Counter
 
     private int shiftID;
     private WeekDay day;
     private ShiftType type;
     private Status status;
-    private List<Employee> employees; //The employees who work at that shift
+    private List<Employee> employees; // The employees who work at that shift
     private List<Role> necessaryRoles;
     private Employee shiftManager;
 
-    public Shift(WeekDay day, ShiftType type){
+    public Shift(WeekDay day, ShiftType type) {
         counter++;
-        this.shiftID=counter;
-        this.day=day;
-        this.type=type;
-        this.employees=new LinkedList<>();
-        this.status=Status.Empty;
-        this.necessaryRoles=new LinkedList<>();
-
+        this.shiftID = counter;
+        this.day = day;
+        this.type = type;
+        this.employees = new LinkedList<>();
+        this.status = Status.Empty;
+        this.necessaryRoles = new LinkedList<>();
     }
 
     // Getters
@@ -47,14 +46,14 @@ public class Shift {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
-        this.status=status;
+        this.status = status;
     }
 
-    public List<Role> getNecessaryRoles(){
+    public List<Role> getNecessaryRoles() {
         return necessaryRoles;
     }
 
-    public void addNecessaryRoles(User caller,Role r){
+    public void addNecessaryRoles(User caller, Role r) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
@@ -65,8 +64,7 @@ public class Shift {
         return employees;
     }
 
-    //Only by HR manager methods:
-
+    // Only by HR manager methods:
     public void setStatus(User caller, Status status) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
@@ -74,23 +72,23 @@ public class Shift {
         this.status = status;
     }
 
-    public void setEmployees(User caller,List<Employee> employees) {
+    public void setEmployees(User caller, List<Employee> employees) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
         this.employees = employees;
     }
 
-    // Add/Remove employee helpers
-    public void addEmployee(User caller,Employee employee) {
-        if (!caller.isManager()) {
+    // Add/Remove employee helpers (updated to allow shift managers)
+    public void addEmployee(User caller, Employee employee) {
+        if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied");
         }
         this.employees.addLast(employee);
     }
 
-    public void removeEmployee(User caller,Employee employee) {
-        if (!caller.isManager()) {
+    public void removeEmployee(User caller, Employee employee) {
+        if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied");
         }
         this.employees.remove(employee);
@@ -119,8 +117,7 @@ public class Shift {
         return shiftManager;
     }
 
-
-    public void setShiftManager(User caller , Employee shiftManager) {
+    public void setShiftManager(User caller, Employee shiftManager) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
