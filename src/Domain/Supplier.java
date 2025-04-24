@@ -97,7 +97,7 @@ public class Supplier {
         for (SuppliedItem suppliedItem : supplyProducts.values()) {
             stringBuilder.append(suppliedItem.toString()).append("\t\n");
         }
-        stringBuilder.append("\n\t").append(this.getBank().toString());
+        stringBuilder.append("\t").append(this.getBank().toString());
         return stringBuilder.toString();
     }
 

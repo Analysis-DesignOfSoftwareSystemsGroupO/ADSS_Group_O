@@ -27,7 +27,7 @@ public class Order {
         return ++idCounter;
     }
 
-
+    //adds item to an order
     public void addItemToOrder(String itemId, int quantity) throws Exception {
         if (itemId == null || itemId.isEmpty() || orderID == null || quantity <= 0) {
             throw new NullPointerException("Product ID cannot be null or empty || Quantity cannot be less than 1");
@@ -41,31 +41,33 @@ public class Order {
         for (SuppliedItem item : agreement.getSupplierItemsList()){
             int discountPercentage = 0;
             if (item.getSuppliedItemID().equals(itemId)) {
-                for (Discount discount : agreement.getDiscounts()) {
-                    if (discount.getSuppliedItem().equals(item) && quantity >= discount.getQuantity()) {
-                        discountPercentage = discount.getDiscount();
-                        break;
-                    }
-                }
-                int discountedPrice = item.getSuppliedItemPrice() - (item.getSuppliedItemPrice() * discountPercentage / 100);
-                for (int i = 0; i < quantity; i++) {
-                    totalPrice += discountedPrice;
-                }
                 suppliedItems.put(item, quantity);
+                this.totalPrice += this.getTotalPrice();
                 return;
             }
             throw new Exception("Invalid item, " + itemId + " doesnt exist in the agreement, enter valid ID");
         }
     }
-
+    // returns total price of the order
     public int getTotalPrice() {
+        int totalPrice = 0;
+        List<Discount> discounts = agreement.getDiscounts();
+        for (SuppliedItem item : suppliedItems.keySet()) {
+            totalPrice += item.getSuppliedItemPrice() * suppliedItems.get(item);
+            for (Discount discount : discounts) {
+                if (discount.getSuppliedItem().equals(item) ) {
+                    totalPrice -= discount.getDiscount();
+                }
+            }
+        }
         return totalPrice;
     }
 
+    //displays an order
     public void displayOrder() {
         System.out.println("Order Number: " + this.orderID);
         System.out.println("Order Date: " + this.orderDate);
-        System.out.println("Order Address: " + this.getBranch().getBranchID());
+        System.out.println("Order Address: " + this.getBranch().getBranchCity() + ", " + this.getBranch().getBranchAddress());
         System.out.println("Total Price: " + this.totalPrice + "₪");
         System.out.println("Items: ");
         for (SuppliedItem item : suppliedItems.keySet()) {
@@ -73,6 +75,7 @@ public class Order {
                     " price: " + item.getSuppliedItemPrice() + "₪");
             System.out.println("\tquantity: " + this.suppliedItems.get(item));
         }
+        System.out.println("*********************************************************");
     }
 
     public Boolean isOrderClosed() {

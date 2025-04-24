@@ -50,10 +50,10 @@ public class SupplierService {
             throw new NullPointerException("No Suppliers in System");
         }
         for (Supplier supplier : suppliers) {
-            System.out.println("****************************************************************************************");
+            System.out.println("*********************************************************");
             System.out.println(supplier.toString());
         }
-        System.out.println("***********************");
+        System.out.println("*********************************************************");
     }
 
     //prints the details of a specific supplier //todo

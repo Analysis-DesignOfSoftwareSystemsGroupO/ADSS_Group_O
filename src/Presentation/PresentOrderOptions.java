@@ -78,10 +78,10 @@ public class PresentOrderOptions {
         while (true){
             //view the agreement of products
             try {
-                System.out.println("******************************************************************************");
+                System.out.println("*********************************************************");
                 agreementController.viewAgreement(branchId, supplierID);
+                System.out.println("*********************************************************");
                 orderController.viewConcurrentOrder(orderID, supplierID);
-                System.out.println("******************************************************************************");
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());

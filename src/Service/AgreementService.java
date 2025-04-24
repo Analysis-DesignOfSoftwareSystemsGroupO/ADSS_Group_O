@@ -72,7 +72,7 @@ public void removeAgreement(String branchId, String supplierId) {
     }
     //views an agreement given branch id and supplier id (ued for creating a new order)
     public void viewAgreement(String branchId, String supplierID) {
-        System.out.println(suppliersDataBase.getAgreement(branchId, supplierID));
+        System.out.println(suppliersDataBase.getAgreement(branchId, supplierID).toString());
     }
     //removes a product from an existing agreement
     public void removeProductFromAgreement(String supplierID, String branchId, String productID) throws Exception {

@@ -74,49 +74,67 @@ public class LoadData {
         }
         //add agreements
         String[][] agreementData = {
-                {"1", "1"}, {"1", "3"}, {"1", "4"}, {"1", "5"}, {"2", "1"}, {"2", "2"},
-                {"2", "4"}, {"2", "5"}, {"3", "1"}, {"3", "2"}, {"3", "3"}, {"3", "5"},
-                {"4", "2"}, {"4", "3"}, {"5", "1"}, {"5", "3"}, {"5", "4"}, {"6", "1"},
-                {"6", "4"}, {"6", "5"}, {"7", "1"}, {"7", "2"}, {"7", "5"}, {"8", "1"},
-                {"8", "2"}, {"8", "3"}, {"9", "2"}, {"9", "3"}, {"9", "4"}, {"4", "4"},
-                {"5", "5"}
+                { "1", "1", "Constant Delivery" },
+                { "1", "3", "Temporary Delivery" },
+                { "1", "4", "Self Pick Up" },
+                { "1", "5", "Constant Delivery" },
+                { "2", "1", "Temporary Delivery" },
+                { "2", "2", "Self Pick Up" },
+                { "2", "4", "Constant Delivery" },
+                { "2", "5", "Temporary Delivery" },
+                { "3", "1", "Constant Delivery" },
+                { "3", "2", "Temporary Delivery" },
+                { "3", "3", "Self Pick Up" },
+                { "3", "5", "Constant Delivery" },
+                { "4", "2", "Temporary Delivery" },
+                { "4", "3", "Self Pick Up" },
+                { "5", "1", "Constant Delivery" },
+                { "5", "3", "Temporary Delivery" },
+                { "5", "4", "Self Pick Up" },
+                { "6", "1", "Constant Delivery" },
+                { "6", "4", "Temporary Delivery" },
+                { "6", "5", "Self Pick Up" },
+                { "7", "1", "Temporary Delivery" },
+                { "7", "2", "Self Pick Up" },
+                { "7", "5", "Constant Delivery" },
+                { "8", "1", "Self Pick Up" },
+                { "8", "2", "Constant Delivery" },
+                { "8", "3", "Temporary Delivery" },
+                { "9", "2", "Self Pick Up" },
+                { "9", "3", "Temporary Delivery" },
+                { "9", "4", "Constant Delivery" },
+                { "4", "4", "Self Pick Up" },
+                { "5", "5", "Temporary Delivery" }
         };
 
-        List<Delivery> deliveryList = new ArrayList<Delivery>();
-        Delivery constDel = new Delivery("Constant Delivery");
-        Delivery tempDel = new Delivery("Temporary Delivery");
-        Delivery needSuperLi = new Delivery("Self Pick Up");
-        deliveryList.add(constDel);
-        deliveryList.add(tempDel);
-        deliveryList.add(needSuperLi);
-        Random rand = new Random();
 
         for (String[] data : agreementData) {
             Agreement agreement = new Agreement(branchesDataBase.getBranch(data[0]),
-                    suppliersDataBase.getSupplier(data[1]), deliveryList.get(rand.nextInt(deliveryList.size())));
+                    suppliersDataBase.getSupplier(data[1]), new Delivery(data[2]));
             suppliersDataBase.addAgreement(agreement);
         }
 
 
     //add products to agreements
         Object[][] items = {
-                {17, "1", "3", "1"},
-                {14, "2", "7", "2"},
-                {22, "3", "1", "4"},
-                {27, "4", "8", "3"},
-                {10, "5", "6", "5"},
-                {24, "6", "9", "2"},
-                {19, "7", "2", "1"},
-                {11, "8", "5", "3"},
-                {13, "9", "4", "4"},
-                {29, "10", "7", "1"},
-                {9, "11", "1", "5"},
-                {20, "12", "3", "5"},
-                {25, "13", "6", "4"},
-                {15, "14", "9", "4"},
-                {12, "15", "2", "1"},
-                {18, "16", "8", "3"}
+                { 17, "1", "3", "1", "Constant Delivery" },
+                { 14, "2", "7", "2", "Temporary Delivery" },
+                { 22, "3", "1", "4", "Self Pick Up" },
+                { 27, "4", "8", "3", "Constant Delivery" },
+                { 10, "5", "6", "5", "Temporary Delivery" },
+                { 24, "6", "9", "2", "Self Pick Up" },
+                { 19, "7", "2", "1", "Temporary Delivery" },
+                { 11, "8", "5", "3", "Constant Delivery" },
+                { 13, "9", "4", "4", "Self Pick Up" },
+                { 29, "10", "7", "1", "Temporary Delivery" },
+                { 9,  "11", "1", "5", "Constant Delivery" },
+                { 20, "12", "3", "5", "Self Pick Up" },
+                { 25, "13", "6", "4", "Constant Delivery" },
+                { 15, "14", "9", "4", "Temporary Delivery" },
+                { 12, "15", "2", "1", "Self Pick Up" },
+                { 18, "16", "8", "3", "Constant Delivery" }
         };
+
 
 // First: add products to suppliers
         for (Object[] entry : items) {
@@ -133,21 +151,21 @@ public class LoadData {
             }
         }
 
+        Random rand = new Random();
 // Then: add supplied items to agreements
         for (Object[] entry : items) {
             int price = (int) entry[0];
             String productID = (String) entry[1];
             String branchId = (String) entry[2];
             String supplierId = (String) entry[3];
-
             SuppliedItem item = new SuppliedItem(price, productDataBase.getProduct(productID));
             suppliersDataBase.addProductToAgreement(item, branchId, supplierId);
-
-            List<Agreement> agreements = suppliersDataBase.getAllAgreement();
-            for (Agreement agreement : agreements) {
-                Discount discount = new Discount(suppliersDataBase.getSupplier(agreement.getSupplierID()).getProduct(productID), 4, 10);
-                agreement.addDiscount(discount);
+            if (rand.nextBoolean()){
+                int quantity = rand.nextInt(20) + 1;
+                int price1 = rand.nextInt(40) + 1;
+                suppliersDataBase.addDiscountToAgreement(branchId, supplierId, new Discount(item, quantity, price1));
             }
+
         }
     }
 }

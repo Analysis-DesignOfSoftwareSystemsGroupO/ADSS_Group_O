@@ -2,12 +2,12 @@ package Domain;
 
 public class Branch {
     private String branchID;
-    private String branchName;
+    private String branchCity;
     private String branchAddress;
 
     public Branch(String branchID,  String branchName, String branchAddress) {
         this.branchID = branchID;
-        this.branchName = branchName;
+        this.branchCity = branchName;
         this.branchAddress = branchAddress;
     }
 
@@ -18,7 +18,11 @@ public class Branch {
         return branchAddress;
     }
 
+    public String getBranchCity() {
+        return branchCity;
+    }
+
     public String toString(){
-        return "Branch Id: " + branchID + ", Branch Name: " + branchName + ", Branch Address" + branchAddress;
+        return "Branch Id: " + branchID + ", Branch Name: " + branchCity + ", Branch Address" + branchAddress;
     }
 }

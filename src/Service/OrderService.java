@@ -24,6 +24,9 @@ public class OrderService {
         if (agreement == null) {
             throw new NullPointerException("Agreement Is Not Found");
         }
+        else if (agreement.getSupplierItemsList().isEmpty()){
+            throw new NullPointerException("Agreement has no items");
+        }
         Order newOrder = new Order(agreement, branch);
         orderDataBase.addOrder(agreement.getSupplierID(), newOrder);
         return newOrder.getOrderID();
