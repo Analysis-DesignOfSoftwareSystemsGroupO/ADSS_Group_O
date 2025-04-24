@@ -15,19 +15,18 @@ public class OrderService {
     private static BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
     //creates a new order, returns orderId as a string
     public String createOrder(String branchId, String supplierId) {
-        try {
-            Branch branch = branchesDataBase.getBranch(branchId);
-            Agreement agreement = suppliersDataBase.getAgreement(branch.getBranchID(), supplierId);
-            if (agreement == null) {
-                throw new Exception("Agreement not found");
-            }
-            Order newOrder = new Order(agreement, branch);
-            orderDataBase.addOrder(agreement.getSupplierID(), newOrder);
-            return newOrder.getOrderID();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        Branch branch = branchesDataBase.getBranch(branchId);
+        if (branch == null) {
+            throw new NullPointerException("Branch Not Found");
         }
-        return null;
+        Agreement agreement = suppliersDataBase.getAgreement(branch.getBranchID(), supplierId);
+        if (agreement == null) {
+            throw new NullPointerException("Agreement Is Not Found");
+        }
+        Order newOrder = new Order(agreement, branch);
+        orderDataBase.addOrder(agreement.getSupplierID(), newOrder);
+        return newOrder.getOrderID();
     }
 
     public boolean isOrderEmpty(String supplierID,String OrderID) {

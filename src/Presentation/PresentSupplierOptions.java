@@ -80,7 +80,12 @@ public class PresentSupplierOptions {
 
     private void editSupplierPresentation() {
         Scanner scanner = new Scanner(System.in);
-        supplierController.printAllSuppliers();
+        try{
+            supplierController.printAllSuppliers();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
         System.out.println("Enter Supplier ID: ");
         String id = scanner.nextLine();
         if (!supplierController.validIdSupplier(id)){
@@ -230,6 +235,12 @@ public class PresentSupplierOptions {
 
     private void removeSupplierFromSystem(){
         Scanner scanner = new Scanner(System.in);
+        try{
+            supplierController.printAllSuppliers();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
         System.out.println("** Notice : Removing Supplier Will Automatically Delete Agreements With That Supplier **");
         System.out.println("Enter Supplier ID: ");
         String supplierID = scanner.nextLine();

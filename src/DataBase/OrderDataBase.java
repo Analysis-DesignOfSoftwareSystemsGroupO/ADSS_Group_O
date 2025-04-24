@@ -45,7 +45,7 @@ public class OrderDataBase {
             throw new NullPointerException();
         }
         if (!orders.containsKey(supplierID)) {
-            return null;
+            throw new NullPointerException("Supplier Have No Orders");
         }
         List<Order> copyOrders = orders.get(supplierID);
         return copyOrders;

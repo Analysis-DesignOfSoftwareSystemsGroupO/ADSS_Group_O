@@ -14,7 +14,7 @@ public class PresentOrderOptions {
         Scanner scanner = new Scanner(System.in);
         while (true) { // order menu loop
             System.out.println("Order Options:");
-            System.out.println("1.View previous orders");
+            System.out.println("1.View Previous Orders Of Supplier");
             System.out.println("2.Add Order");
             System.out.println("3.Return to main menu");
             try {
@@ -41,14 +41,19 @@ public class PresentOrderOptions {
     // this function is used for viewing all orders by supplyId
     private void viewOrdersPresentation() {
         Scanner scanner = new Scanner(System.in);
-        supplierController.printAllSuppliers();
-        System.out.println("Enter supplier ID: ");
+        try{
+            supplierController.printAllSuppliers();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        System.out.println("Enter Supplier ID: ");
         try {
             String supplierID = scanner.nextLine();
             orderController.viewPastOrders(supplierID);
         }
         catch (Exception e) {
-            System.out.println("Invalid supplier ID ! ");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -73,10 +78,10 @@ public class PresentOrderOptions {
         while (true){
             //view the agreement of products
             try {
-                System.out.println("***********************************");
+                System.out.println("******************************************************************************");
                 agreementController.viewAgreement(branchId, supplierID);
                 orderController.viewConcurrentOrder(orderID, supplierID);
-                System.out.println("***********************************");
+                System.out.println("******************************************************************************");
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());

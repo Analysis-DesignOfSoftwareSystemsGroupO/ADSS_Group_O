@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Agreement {
-    private String agreementID;
     private final Supplier supplier;
     private final Branch Branch;
     private List<SuppliedItem> supplierItemsList;
@@ -14,7 +13,7 @@ public class Agreement {
 
     public Agreement(Branch branch, Supplier supplier, Delivery delivery) {
         if (branch == null || supplier == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("Supplier or branch is null");
         }
         this.supplier = supplier;
         this.Branch = branch;
@@ -27,7 +26,6 @@ public class Agreement {
     }
 
     public Agreement(Agreement other) {
-        this.agreementID = other.agreementID;
         this.supplier = new Supplier(other.supplier);
         this.Branch = other.Branch;
         this.supplierItemsList = other.supplierItemsList;
@@ -105,9 +103,10 @@ public class Agreement {
     public List<Discount> getDiscountsList() {
         return discounts;
     }
+
     public SuppliedItem getSupplierItem(String productID){
         for (SuppliedItem supplierItem : supplierItemsList){
-            if (Objects.equals(productID, supplierItem.getProduct().getProductName())){
+            if (Objects.equals(productID, supplierItem.getSuppliedItemID())){
                 return supplierItem;
             }
         }

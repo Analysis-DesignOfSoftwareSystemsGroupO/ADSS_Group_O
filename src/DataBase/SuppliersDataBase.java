@@ -75,7 +75,7 @@ public class SuppliersDataBase {
     //return an agreement
     public Agreement getAgreement(String branchID, String supplierID) {
         if (supplierID == null || branchID == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("branchID or supplierID does not exist");
         }
         for(SupplierBranchKey key : suppliersAgreements.keySet()){
             if (Objects.equals(key.getBranchID(), branchID) && Objects.equals(key.getSupplierID(), supplierID)) {
