@@ -118,19 +118,9 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter product number to cancel: ");
-        String productNumber = scanner.nextLine().trim();
-
-        if (productNumber.isEmpty()) {
-            System.out.println("Invalid input. Product number cannot be empty.");
-            return;
-        }
-
-        System.out.println("Product " + productNumber + " has been canceled.");
+        System.out.println("item canceled");
     }
-
 
     private Shift findShift(WeekDay day, ShiftType type) {
         for (Shift shift : currentWeek.getShifts()) {
