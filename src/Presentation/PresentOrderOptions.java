@@ -60,12 +60,12 @@ public class PresentOrderOptions {
     //this function is used for adding a new order
     private void addOrderPresentation() {
         Scanner scanner = new Scanner(System.in);
-        orderController.printAllBranchIds(); // prints all branch id's
-        System.out.println("Enter branch Id: ");
-        String branchId = scanner.nextLine();
         supplierController.printAllSuppliers();
         System.out.println("Enter supplier ID: ");
         String supplierID = scanner.nextLine();
+        orderController.printAllBranchIds(); // prints all branch id's
+        System.out.println("Enter branch Id: ");
+        String branchId = scanner.nextLine();
         String orderID = ""; // initialize order id
         //create an empty order
         try {
@@ -73,6 +73,7 @@ public class PresentOrderOptions {
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+            return;
         }
         //order Loop
         while (true){

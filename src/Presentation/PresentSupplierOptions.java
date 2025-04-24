@@ -68,10 +68,12 @@ public class PresentSupplierOptions {
         String contactPhoneNumber = scanner.nextLine();
         System.out.println("Enter Contact Title: ");
         String contactTitle = scanner.nextLine();
+        System.out.println("Enter Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up): ");
+        String deliveryWay = scanner.nextLine();
         try {
             supplierController.createSupplier(supplierID, supplierName, supplierPaymentMethod,
                     supplierBankAccountNumber, supplierBankNumber, supplierBankBranchNumber, contactName,
-                    contactPhoneNumber, contactTitle);
+                    contactPhoneNumber, contactTitle, deliveryWay);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

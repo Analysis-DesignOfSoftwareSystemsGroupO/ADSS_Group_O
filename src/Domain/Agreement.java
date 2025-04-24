@@ -9,9 +9,9 @@ public class Agreement {
     private final Branch Branch;
     private List<SuppliedItem> supplierItemsList;
     private List<Discount> discounts;
-    private Delivery delivery;
 
-    public Agreement(Branch branch, Supplier supplier, Delivery delivery) {
+
+    public Agreement(Branch branch, Supplier supplier) {
         if (branch == null || supplier == null) {
             throw new NullPointerException("Supplier or branch is null");
         }
@@ -19,10 +19,7 @@ public class Agreement {
         this.Branch = branch;
         this.supplierItemsList = new ArrayList<SuppliedItem>();
         this.discounts = new ArrayList<Discount>();
-        this.delivery = delivery;
-        if (Objects.equals(delivery.getDeliveryWay(), "Self Pick Up ")) {
-            //todo Notify Transfers Module !!!
-        }
+
     }
 
     public Agreement(Agreement other) {
@@ -30,7 +27,6 @@ public class Agreement {
         this.Branch = other.Branch;
         this.supplierItemsList = other.supplierItemsList;
         this.discounts = other.discounts;
-        this.delivery = other.delivery;
     }
 
     public List<Discount> getDiscounts() {
@@ -121,7 +117,7 @@ public class Agreement {
         StringBuilder returnString = new StringBuilder("Agreement between, " + "Supplier id: " + this.supplier.getID() +
                 ", Branch id : " + this.Branch.getBranchID() + "\n" + "Product List: \n");
         for (SuppliedItem supplierItem : supplierItemsList){
-            returnString.append(supplierItem.toString()).append(" ").append(supplierItem.getSuppliedItemPrice()).append("₪\n");
+            returnString.append(supplierItem.toString()).append(" Price: ").append(supplierItem.getSuppliedItemPrice()).append("₪\n");
         }
 
         for (Discount discount : discounts){

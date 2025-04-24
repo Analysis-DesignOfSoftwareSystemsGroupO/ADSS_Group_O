@@ -10,13 +10,14 @@ import java.util.List;
 public class SupplierService {
     private final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
     private ProductDataBase productDataBase = ProductDataBase.getInstance();
-
+    //this method creates a supplier
     public void createSupplier(String supplierID, String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
-                               String contactName, String contactPhoneNumber, String contactTitle) throws Exception {
+                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay) throws Exception {
 
             if (suppliersDataBase.getSupplier(supplierID) == null) {
-                Supplier newSupplier = new Supplier(supplierID, supplierName, supplierPaymentMethod, bankAccount, bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle);
+                Supplier newSupplier = new Supplier(supplierID, supplierName, supplierPaymentMethod, bankAccount,
+                        bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle, deliveryWay);
                 if (newSupplier.getID() != null) {
                     suppliersDataBase.addSupplier(newSupplier);
                 }
@@ -60,6 +61,7 @@ public class SupplierService {
     public void printSupplier(String supplierId) throws Exception {
         if (suppliersDataBase.getSupplier(supplierId) != null) {
             System.out.println(suppliersDataBase.getSupplier(supplierId));
+            return;
         }
         throw new Exception("Supplier doesn't exist");
     }

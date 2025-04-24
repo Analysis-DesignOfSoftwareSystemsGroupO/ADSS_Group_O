@@ -82,7 +82,7 @@ public class SuppliersDataBase {
                 return suppliersAgreements.get(key);
             }
         }
-        throw new NullPointerException("Agreement doesnt exist");
+        return null;
 }
 
     //add product to agreement

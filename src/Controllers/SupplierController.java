@@ -9,9 +9,9 @@ public class SupplierController {
     //creates a supplier and saves it in the database
     public void createSupplier(String supplierID, String supplierName, String paymentMethod,
                                       String bankAccount, String bankNumber, String bankBranch,
-                                        String contactName, String contactPhoneNumber, String contactTitle) throws Exception {
+                                        String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay) throws Exception {
         supplierService.createSupplier(supplierID, supplierName, paymentMethod, bankAccount, bankNumber, bankBranch,
-                contactName, contactPhoneNumber, contactTitle);
+                contactName, contactPhoneNumber, contactTitle, deliveryWay);
     }
 
     //adds a new product to an existing supplier

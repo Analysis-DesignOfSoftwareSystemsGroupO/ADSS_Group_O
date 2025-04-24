@@ -35,17 +35,17 @@ public class LoadData {
         }
         // add suppliers with full data for the constructor
         String[][] supplierData = {
-                {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager"},
-                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales"},
-                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk"},
-                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant"},
-                {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor"}
+                {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager", "Constant Delivery"},
+                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales", "Temporary Delivery"},
+                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk", "SuperLi"},
+                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant", "SuperLi"},
+                {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor", "SuperLi"}
         };
 
         for (String[] data : supplierData) {
             suppliersDataBase.addSupplier(new Supplier(
                     data[0], data[1], data[2], data[3], data[4],
-                    data[5], data[6], data[7], data[8]
+                    data[5], data[6], data[7], data[8], data[9]
             ));
         }
 
@@ -68,71 +68,71 @@ public class LoadData {
                 {"15", "Toilet Paper", "SuperLi"},
                 {"16", "Bamba", "Lulu"}
         };
-
+        //add to product dataBase
         for (String[] data : productData) {
             productDataBase.addProduct(new Product(data[0], data[1], data[2]));
         }
+
         //add agreements
         String[][] agreementData = {
-                { "1", "1", "Constant Delivery" },
-                { "1", "3", "Temporary Delivery" },
-                { "1", "4", "Self Pick Up" },
-                { "1", "5", "Constant Delivery" },
-                { "2", "1", "Temporary Delivery" },
-                { "2", "2", "Self Pick Up" },
-                { "2", "4", "Constant Delivery" },
-                { "2", "5", "Temporary Delivery" },
-                { "3", "1", "Constant Delivery" },
-                { "3", "2", "Temporary Delivery" },
-                { "3", "3", "Self Pick Up" },
-                { "3", "5", "Constant Delivery" },
-                { "4", "2", "Temporary Delivery" },
-                { "4", "3", "Self Pick Up" },
-                { "5", "1", "Constant Delivery" },
-                { "5", "3", "Temporary Delivery" },
-                { "5", "4", "Self Pick Up" },
-                { "6", "1", "Constant Delivery" },
-                { "6", "4", "Temporary Delivery" },
-                { "6", "5", "Self Pick Up" },
-                { "7", "1", "Temporary Delivery" },
-                { "7", "2", "Self Pick Up" },
-                { "7", "5", "Constant Delivery" },
-                { "8", "1", "Self Pick Up" },
-                { "8", "2", "Constant Delivery" },
-                { "8", "3", "Temporary Delivery" },
-                { "9", "2", "Self Pick Up" },
-                { "9", "3", "Temporary Delivery" },
-                { "9", "4", "Constant Delivery" },
-                { "4", "4", "Self Pick Up" },
-                { "5", "5", "Temporary Delivery" }
+                { "1", "1" },
+                { "1", "3" },
+                { "1", "4" },
+                { "1", "5" },
+                { "2", "1" },
+                { "2", "2" },
+                { "2", "4" },
+                { "2", "5" },
+                { "3", "1" },
+                { "3", "2" },
+                { "3", "3" },
+                { "3", "5" },
+                { "4", "2" },
+                { "4", "3" },
+                { "5", "1" },
+                { "5", "3" },
+                { "5", "4" },
+                { "6", "1" },
+                { "6", "4" },
+                { "6", "5" },
+                { "7", "1" },
+                { "7", "2" },
+                { "7", "5" },
+                { "8", "1" },
+                { "8", "2" },
+                { "8", "3" },
+                { "9", "2" },
+                { "9", "3" },
+                { "9", "4" },
+                { "4", "4" },
+                { "5", "5" }
         };
-
 
         for (String[] data : agreementData) {
             Agreement agreement = new Agreement(branchesDataBase.getBranch(data[0]),
-                    suppliersDataBase.getSupplier(data[1]), new Delivery(data[2]));
+                    suppliersDataBase.getSupplier(data[1]));
             suppliersDataBase.addAgreement(agreement);
         }
 
 
     //add products to agreements
         Object[][] items = {
-                { 17, "1", "3", "1", "Constant Delivery" },
-                { 14, "2", "7", "2", "Temporary Delivery" },
-                { 22, "3", "1", "4", "Self Pick Up" },
-                { 27, "4", "8", "3", "Constant Delivery" },
-                { 10, "5", "6", "5", "Temporary Delivery" },
-                { 24, "6", "9", "2", "Self Pick Up" },
-                { 19, "7", "2", "1", "Temporary Delivery" },
-                { 11, "8", "5", "3", "Constant Delivery" },
-                { 13, "9", "4", "4", "Self Pick Up" },
-                { 29, "10", "7", "1", "Temporary Delivery" },
-                { 9,  "11", "1", "5", "Constant Delivery" },
-                { 20, "12", "3", "5", "Self Pick Up" },
-                { 25, "13", "6", "4", "Constant Delivery" },
-                { 15, "14", "9", "4", "Temporary Delivery" },
-                { 12, "15", "2", "1", "Self Pick Up" },
-                { 18, "16", "8", "3", "Constant Delivery" }
+                { 17, "1", "3", "1"},
+                { 14, "2", "7", "2" },
+                { 22, "3", "1", "4"},
+                { 27, "4", "8", "3" },
+                { 10, "5", "6", "5"},
+                { 24, "6", "9", "2" },
+                { 19, "7", "2", "1" },
+                { 11, "8", "5", "3" },
+                { 13, "9", "4", "4" },
+                { 29, "10", "7", "1" },
+                { 9,  "11", "1", "5" },
+                { 20, "12", "3", "5" },
+                { 25, "13", "6", "4"},
+                { 15, "14", "9", "4" },
+                { 12, "15", "2", "1" },
+                { 18, "16", "8", "3" }
         };
 
 

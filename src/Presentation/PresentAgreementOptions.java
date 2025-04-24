@@ -55,15 +55,16 @@ public class PresentAgreementOptions {
         String supplierId = scanner.nextLine();
         System.out.println("Enter branch id: ");
         String branchId = scanner.nextLine();
-        System.out.println("Enter Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up): ");
-        String deliveryWay = scanner.nextLine();
         try {
             // transfer to controller
-            agreementController.createNewAgreement(supplierId, branchId, deliveryWay);
+            agreementController.createNewAgreement(supplierId, branchId);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("New Agreement Between Branch: " + branchId + " , Supplier: " + supplierId  +   " was added !");
+        System.out.println("*********************************************************");
     }
     //helper method to remove an agreement
     private void removeAgreementP() {
@@ -117,6 +118,7 @@ public class PresentAgreementOptions {
                     break;
                 case 3:
                     this.editProductDiscount(supplierID, branchId);
+                    break;
                 case 4:
                     this.changeDeliveryWay(supplierID, branchId);
                 case 5:
@@ -129,7 +131,6 @@ public class PresentAgreementOptions {
         }
     }
 
-    ///edit agreement functions
     // adds a product to an existing agreement
     private void addProductToAgreementP(String supplierID, String branchId) {
         try {
@@ -140,8 +141,8 @@ public class PresentAgreementOptions {
             return;
         }
         Scanner editAgreement = new Scanner(System.in);
-        System.out.println("Enter product name:");
-        String productName = editAgreement.nextLine();
+        System.out.println("Enter product ID:");
+        String productID = editAgreement.nextLine();
         System.out.println("Enter product price:");
         int price = editAgreement.nextInt();
         editAgreement.nextLine();
@@ -163,17 +164,21 @@ public class PresentAgreementOptions {
             System.out.println("Invalid option !\n");
         }
         try {
-            agreementController.addProductToAgreement(branchId ,supplierID, productName, price, productQuantity, productDiscount);
+            agreementController.addProductToAgreement(branchId ,supplierID, productID, price, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
             return;
         }
-        System.out.println(productName + " was added to agreement");
+        System.out.println("Product ID: " + productID + " was added to agreement");
     }
 
     //removes a product from an existing agreement
     private void removeProductFromAgreementP(String supplierID, String branchId) {
+        if (agreementController.isAgreementEmpty(branchId, supplierID)){ // check if agreement has items
+            System.out.println("Agreement has no items");
+            return;
+        }
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productId = editAgreement.nextLine();
@@ -184,7 +189,7 @@ public class PresentAgreementOptions {
             System.out.println(e.getMessage());
         }
     }
-
+    //this method is created to change the delivery way of an agreement
     private void changeDeliveryWay(String supplierID, String branchId){
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter New Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up) : ");
@@ -200,6 +205,10 @@ public class PresentAgreementOptions {
 
     //check if available to combine with add product
     private void editProductDiscount(String supplierID, String branchId) {
+        if (agreementController.isAgreementEmpty(branchId, supplierID)){ // check if agreement has items
+            System.out.println("Agreement has no items");
+            return;
+        }
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product name:");
         String productName = editAgreement.nextLine();

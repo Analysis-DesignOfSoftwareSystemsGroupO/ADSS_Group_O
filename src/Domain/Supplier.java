@@ -15,10 +15,11 @@ public class Supplier {
     private List<InformationContact> informationContacts;
     private HashMap<String, SuppliedItem> supplyProducts;
     private int supplied_product_id = 0;
-
+    private Delivery delivery;
 
     public Supplier(String ID, String supplierName, String paymentMethod, String bankAccount, String bankNumber,
-                    String bankBranch, String infoContactName, String infoContactPhoneNumber, String infoContactTitle) {
+                    String bankBranch, String infoContactName, String infoContactPhoneNumber, String infoContactTitle,
+                    String deliveryWay) {
         if (ID == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null || paymentMethod == null) {
             throw new NullPointerException("Invalid Details");
         }
@@ -34,6 +35,7 @@ public class Supplier {
         this.supplierID = ID;
         this.supplierName = supplierName;
         this.supplyProducts = new HashMap<String, SuppliedItem>();
+        this.delivery = new Delivery(deliveryWay);
     }
 
     public Supplier(Supplier other) {

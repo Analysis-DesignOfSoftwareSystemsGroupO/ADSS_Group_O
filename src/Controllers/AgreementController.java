@@ -9,8 +9,8 @@ public class AgreementController {
         agreementService.removeAgreement(branchId, supplierId);
     }
 
-    public void createNewAgreement(String supplierID, String branchId, String deliveryWay) throws Exception {
-        agreementService.createNewAgreement(supplierID, branchId, deliveryWay);
+    public void createNewAgreement(String supplierID, String branchId) throws Exception {
+        agreementService.createNewAgreement(supplierID, branchId);
     }
 
     //create a supplier and saves it in the database
@@ -45,6 +45,9 @@ public class AgreementController {
         agreementService.changeDeliveryWay(supplierID, branchId, deliveryWay);
     }
 
+    public boolean isAgreementEmpty(String branchId, String SupplierId){
+        return agreementService.isAgreementEmpty(branchId, SupplierId);
+    }
 
 
 }
