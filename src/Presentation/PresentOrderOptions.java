@@ -60,10 +60,9 @@ public class PresentOrderOptions {
     //this function is used for adding a new order
     private void addOrderPresentation() {
         Scanner scanner = new Scanner(System.in);
-        supplierController.printAllSuppliers();
+        agreementController.viewAllAgreements();
         System.out.println("Enter supplier ID: ");
         String supplierID = scanner.nextLine();
-        orderController.printAllBranchIds(); // prints all branch id's
         System.out.println("Enter branch Id: ");
         String branchId = scanner.nextLine();
         String orderID = ""; // initialize order id

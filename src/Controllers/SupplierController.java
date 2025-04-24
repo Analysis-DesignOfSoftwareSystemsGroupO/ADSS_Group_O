@@ -9,9 +9,10 @@ public class SupplierController {
     //creates a supplier and saves it in the database
     public void createSupplier(String supplierID, String supplierName, String paymentMethod,
                                       String bankAccount, String bankNumber, String bankBranch,
-                                        String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay) throws Exception {
+                                        String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay ,
+                                        String dayOfWeek ) throws Exception {
         supplierService.createSupplier(supplierID, supplierName, paymentMethod, bankAccount, bankNumber, bankBranch,
-                contactName, contactPhoneNumber, contactTitle, deliveryWay);
+                contactName, contactPhoneNumber, contactTitle, deliveryWay, dayOfWeek);
     }
 
     //adds a new product to an existing supplier
@@ -56,5 +57,9 @@ public class SupplierController {
 
     public void deleteSupplierFromSystem(String supplierID){
         supplierService.deleteSupplier(supplierID);
+    }
+
+    public void updateDeliveryMethod(String supplierId, String deliveryWay, String dayOfWeek) {
+        supplierService.updateDeliveryMethod(supplierId, deliveryWay, dayOfWeek);
     }
 }

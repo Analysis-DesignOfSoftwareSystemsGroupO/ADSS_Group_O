@@ -19,7 +19,7 @@ public class Supplier {
 
     public Supplier(String ID, String supplierName, String paymentMethod, String bankAccount, String bankNumber,
                     String bankBranch, String infoContactName, String infoContactPhoneNumber, String infoContactTitle,
-                    String deliveryWay) {
+                    String deliveryWay, String dayOfWeek) {
         if (ID == null || supplierName == null || bankAccount == null || bankNumber == null || bankBranch == null || paymentMethod == null) {
             throw new NullPointerException("Invalid Details");
         }
@@ -35,7 +35,7 @@ public class Supplier {
         this.supplierID = ID;
         this.supplierName = supplierName;
         this.supplyProducts = new HashMap<String, SuppliedItem>();
-        this.delivery = new Delivery(deliveryWay);
+        this.delivery = new Delivery(deliveryWay, dayOfWeek);
     }
 
     public Supplier(Supplier other) {
@@ -125,8 +125,9 @@ public class Supplier {
             throw new NullPointerException("Payment Method cannot be null or empty");
         }
         this.paymentMethod = new PaymentMethod(paymentMethod);
-
-
     }
 
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+    }
 }

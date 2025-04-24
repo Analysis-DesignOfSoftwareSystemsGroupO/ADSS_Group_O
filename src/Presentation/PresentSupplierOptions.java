@@ -7,6 +7,8 @@ import java.util.Scanner;
 public class PresentSupplierOptions {
     private final SupplierController supplierController = new SupplierController();
 
+    private String[] daysOfWeek = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    //main menu for supplier
     public void runSupplierMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true){
@@ -48,7 +50,10 @@ public class PresentSupplierOptions {
         System.out.println("Starting Define New Supplier, Please Follow the Next Steps");
         System.out.println("Enter Supplier ID: ");
         String supplierID = scanner.nextLine();
-        supplierController.validIdSupplier(supplierID);
+        if (supplierController.validIdSupplier(supplierID)){
+            System.out.println("Supplier ID: " + supplierID + " already exist");
+            return;
+        }
         System.out.println("Enter Supplier Name: ");
         String supplierName = scanner.nextLine();
         System.out.println("Enter Supplier Payment Method (CreditCard / Cash / Bank Transfer / Check): ");
@@ -70,16 +75,41 @@ public class PresentSupplierOptions {
         String contactTitle = scanner.nextLine();
         System.out.println("Enter Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up): ");
         String deliveryWay = scanner.nextLine();
+        String dayOfWeek = "";
+        if (deliveryWay.equals("Constant Delivery")){
+            while (true){
+                System.out.println("Enter day of the week: Sunday / Monday / Tuesday / Wednesday / Thursday / Friday / Saturday ");
+                dayOfWeek = scanner.nextLine();
+                if (!validWeek(dayOfWeek)){
+                    System.out.println("Invalid day of week");
+                    continue;
+                }
+                break;
+            }
+
+        }
+
         try {
             supplierController.createSupplier(supplierID, supplierName, supplierPaymentMethod,
                     supplierBankAccountNumber, supplierBankNumber, supplierBankBranchNumber, contactName,
-                    contactPhoneNumber, contactTitle, deliveryWay);
+                    contactPhoneNumber, contactTitle, deliveryWay, dayOfWeek);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("Supplier Added successfully ! ");
+        System.out.println("***************************************************");
     }
 
+    private boolean validWeek(String dayOfWeek){
+        for (String day : daysOfWeek){
+            if (day.equals(dayOfWeek)){
+                return true;
+            }
+        }
+        return false;
+    }
     private void editSupplierPresentation() {
         Scanner scanner = new Scanner(System.in);
         try{
@@ -103,13 +133,13 @@ public class PresentSupplierOptions {
             try {
                 int option = scanner.nextInt();
                 switch (option) {
-                    case 1:
+                    case 1: //add new product
                         this.addNewProductToSupplier(id);
                         break;
-                    case 2:
+                    case 2: //edit supplier details
                         this.editSupplierDetails(id);
                         return;
-                    case 3:
+                    case 3: //add information contact
                         this.addInformationContact(id);
                         return;
                     case 4:
@@ -159,12 +189,13 @@ public class PresentSupplierOptions {
             System.out.println("1.Edit information contact details");
             System.out.println("2.Edit supplier name");
             System.out.println("3.Edit bank account number");
-            System.out.println("4.Return to Main Menu");
+            System.out.println("4.Edit supplier delivery way");
+            System.out.println("5.Return to Main Menu");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();
                 switch (option) {
-                    case 1:
+                    case 1: // edit information contact
                         System.out.println("Enter information contact name: ");
                         String contactName = scanner.nextLine();
                         System.out.println("Enter new title for " + contactName + " : ");
@@ -173,12 +204,12 @@ public class PresentSupplierOptions {
                         String newPhone = scanner.nextLine();
                         supplierController.updateSupplierInformationContact(id, contactName, newTitle, newPhone);
                         break;
-                    case 2:
+                    case 2: //edit name
                         System.out.println("Enter new name : ");
                         String newName = scanner.nextLine();
                         supplierController.updateSupplierName(id, newName);
                         break;
-                    case 3:
+                    case 3: // edit bank detailes
                         System.out.println("Enter new bank number: ");
                         String newBankNumber = scanner.nextLine();
                         System.out.println("Enter new bank branch number: ");
@@ -195,8 +226,31 @@ public class PresentSupplierOptions {
                         System.out.println("Added successfully");
                         supplierController.printAllInformationContacts(id);
                         break;
-                    case 4:
-                        return;
+                    case 4: // edit delivery way
+                        System.out.println("Enter Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up): ");
+                        String deliveryWay = scanner.nextLine();
+                        String dayOfWeek = "";
+                        if (deliveryWay.equals("Constant Delivery")) {
+                            while (true) {
+                                System.out.println("Enter day of the week: Sunday / Monday / Tuesday / Wednesday / Thursday / Friday / Saturday ");
+                                dayOfWeek = scanner.nextLine();
+                                if (!validWeek(dayOfWeek)) {
+                                    System.out.println("Invalid day of week");
+                                    continue;
+                                }
+                                break;
+                            }
+                        }
+                        try {
+                            supplierController.updateDeliveryMethod(id, deliveryWay, dayOfWeek);
+                        }
+                        catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+
+                        case 5:
+                            return;
                     default:
                         throw new Exception();
                 }
@@ -206,7 +260,7 @@ public class PresentSupplierOptions {
             }
         }
     }
-
+    //adds information contact
     private void addInformationContact(String supID) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter new Information Contact name: ");
@@ -222,7 +276,7 @@ public class PresentSupplierOptions {
             System.out.println(e.getMessage());
         }
     }
-
+    //prints all information contacts
     private void getAllInformationContacts() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Supplier ID: ");
@@ -234,7 +288,7 @@ public class PresentSupplierOptions {
             System.out.println(e.getMessage());
         }
     }
-
+    // removes supplier from the sytem
     private void removeSupplierFromSystem(){
         Scanner scanner = new Scanner(System.in);
         try{

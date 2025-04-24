@@ -13,11 +13,11 @@ public class SupplierService {
     //this method creates a supplier
     public void createSupplier(String supplierID, String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
-                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay) throws Exception {
+                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay, String dayOfWeek) throws Exception {
 
             if (suppliersDataBase.getSupplier(supplierID) == null) {
                 Supplier newSupplier = new Supplier(supplierID, supplierName, supplierPaymentMethod, bankAccount,
-                        bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle, deliveryWay);
+                        bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle, deliveryWay, dayOfWeek);
                 if (newSupplier.getID() != null) {
                     suppliersDataBase.addSupplier(newSupplier);
                 }
@@ -137,5 +137,14 @@ public class SupplierService {
             }
         }
         suppliersDataBase.removeSupplier(supplierID);
+    }
+
+    public void updateDeliveryMethod(String supplierId, String deliveryWay, String dayOfWeek) {
+        Supplier supplier = suppliersDataBase.getSupplier(supplierId);
+        if (supplier == null) {
+            throw new NullPointerException("Supplier not found");
+        }
+        Delivery delivery = new Delivery(deliveryWay, dayOfWeek);
+        supplier.setDelivery(delivery);
     }
 }
