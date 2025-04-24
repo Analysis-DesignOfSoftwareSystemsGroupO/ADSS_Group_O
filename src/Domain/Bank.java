@@ -27,4 +27,8 @@ public class Bank {
     public String getOwnerID() {
         return ownerID;
     }
+
+    public String toString() {
+        return "Bank Account number :" + bankAccount + ", Bank Number:" + bankNumber + ", Bank Branch Number:" + bankBranch;
+    }
 }

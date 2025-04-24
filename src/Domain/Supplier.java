@@ -95,7 +95,7 @@ public class Supplier {
         StringBuilder stringBuilder = new StringBuilder("Supplier ID: " + supplierID + System.lineSeparator() + "Supplier Name: " +
                 supplierName);
         for (SuppliedItem suppliedItem : supplyProducts.values()) {
-            stringBuilder.append(suppliedItem.toString()).append("\t");
+            stringBuilder.append(suppliedItem.toString()).append("\t\n");
         }
         stringBuilder.append("\n\t").append(this.getBank().toString());
         return stringBuilder.toString();
