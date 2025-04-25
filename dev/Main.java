@@ -2,6 +2,7 @@ import java.sql.Driver;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -105,7 +106,15 @@ public class Main {
         System.out.println("Please enter date by format: DD/MM/YEAR");
         String dateStr = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate parsedDate = LocalDate.parse(dateStr, formatter);
+        LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(dateStr, formatter);
+        }
+        catch (DateTimeParseException e){
+            e.getMessage();
+            return;
+        }
+
 
         for (Truck truck : trucks) // check if there is an available truck.
             if (truck.getAvailablity(parsedDate)) { // if there is an avialable truck - stop searching
@@ -157,7 +166,7 @@ public class Main {
         String siteName = scanner.nextLine();
         // check if site is in system
         if (sites.get(siteName) == null) { // if there is no site
-            System.out.println("Site is not in System - please try again:"); // message to user if there is no site
+            System.out.println("There is no site " + siteName + " please try again"); // if there is no site - message to user
             scanner.close();
 
             return;
@@ -200,7 +209,7 @@ public class Main {
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
         if (products.get(id) == null) { // if product is not in data base - message to user
-            System.out.println("Product not in System - please try again.");
+            System.out.println("Product number "+id+" not in System - please try again.");
             scanner.close();
             return;
         }
@@ -230,7 +239,7 @@ public class Main {
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
         if (products.get(id) == null) { // if product is not in data base
-            System.out.println("Product not in System - please try again."); // message to user
+            System.out.println("Product number "+id+" not in System - please try again.");
             scanner.close();
             return;
         }
@@ -255,7 +264,7 @@ public class Main {
         String id = scanner.nextLine();
         Driver driver = drivers.get(id); // search for driver in database
         if (driver == null) { // if driver is not in system
-            System.out.println("Driver is not in system - please try again"); // message to user
+            System.out.println("Driver "+id +" is not in system - please try again"); // message to user
             scanner.close();
             return;
         }
@@ -264,7 +273,7 @@ public class Main {
         Integer transport_id = scanner.nextInt();
         Transport transport = transports.get(transport_id);// get transport from database by transport id
         if (transport == null) { // if transport is not in system
-            System.out.println("Transport number is not in system - please try again");
+            System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             scanner.close();
             return;
         }
@@ -275,25 +284,27 @@ public class Main {
     }
     //****************************************************************************************************************** Case 6 -  Attach document to transport
 
+    /** a function that attaches a document to transport*/
     public static void AttachDocumentToTransport(Map<Integer, ProductListDocument> documents, Map<Integer, Transport> transports) {
+        // ask for transport id from user
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
-        Transport transport = transports.get(transport_id);
-        scanner.close();
-        if (transport == null) {
-            System.out.println("Transport number is not in system - please try again");
+        Transport transport = transports.get(transport_id); // search for transport id in database
+        if (transport == null) { // if transport not in database - message to user
+            System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             scanner.close();
             return;
         }
+        // ask for document id from user
         System.out.println("Please enter document number");
-        Integer documentId = scanner.nextInt();
+        Integer documentId = scanner.nextInt(); // search document in database
         if (documents.get(documentId) == null) {
-            System.out.println("There is no document " + documentId + " Please try again");
+            System.out.println("There is no document " + documentId + " Please try again"); // if document not in database - message to user
             scanner.close();
             return;
         }
-        try {
+        try { // try to load document to transport
             transport.loadByDocument(documents.get(documentId));
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -303,14 +314,15 @@ public class Main {
 
     //********************************************************************************************************************** Case 7 - Send transport
 
+    /** a function that can send transport manual*/
     public static void sendTransportManual(Map<Integer, Transport> transports) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter Transport number");
+        System.out.println("Please enter Transport number"); // ask for input from user
         int transport_id = scanner.nextInt();
-        Transport transport = transports.get(transport_id);
+        Transport transport = transports.get(transport_id); // search transport in database
         scanner.close();
-        if (transport == null) {
-            System.out.println("Transport number is not in system - please try again");
+        if (transport == null) { // if transport not in data base - message to user
+            System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             return;
         }
         transport.sendTransport();
@@ -321,30 +333,39 @@ public class Main {
 
 //********************************************************************************************************************** Case 8 - Print Transport details
 
+    /** a function that prints transport by its id*/
     public static void printTransport(Map<Integer, Transport> transports) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); // ask for input from user
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
-        Transport transport = transports.get(transport_id);
+        Transport transport = transports.get(transport_id); // search for transport in database
         scanner.close();
-        if (transport == null) {
-            System.out.println("Transport number is not in system - please try again");
+        if (transport == null) { // if transport not in database - message to user
+            System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             return;
         }
-        System.out.println(transports.get(transport_id));
+        System.out.println(transports.get(transport_id)); // print transport to screen
 
     }
 
 
 //********************************************************************************************************************** Case 9 - Print all available trucks
 
+    /** a function that prints all availalbe trucks*/
     public static void printAllAvailableTrukcs(Truck[] trucks) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Please enter date by format: DD/MM/YEAR");
+        System.out.println("Please enter date by format: DD/MM/YEAR"); // ask for date from user
         String dateStr = scanner.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate parsedDate = LocalDate.parse(dateStr, formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //
+        LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(dateStr, formatter);
+        }
+        catch (DateTimeParseException e){
+            e.getMessage();
+            return;
+        }
         int count = 0;
         for (Truck truck : trucks) {
             if (truck.getAvailablity(parsedDate)) {

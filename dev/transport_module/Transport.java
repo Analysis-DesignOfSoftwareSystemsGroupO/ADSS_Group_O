@@ -2,6 +2,7 @@ package transport_module;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.time.LocalDate;
 
@@ -32,8 +33,13 @@ public class Transport {
         driver = null;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate parsedDate = LocalDate.parse(d, formatter);
-
+        LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(d, formatter);
+        }
+        catch (DateTimeParseException e){
+           throw new Exception("Invalid date format");
+        }
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
         } else {
@@ -224,7 +230,14 @@ public class Transport {
     }
     public void changeDate(String d){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate parsedDate = LocalDate.parse(d, formatter);
+        LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(d, formatter);
+        }
+        catch (DateTimeParseException e){
+            System.out.println("Invalid date format");
+            return;
+        }
 
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;

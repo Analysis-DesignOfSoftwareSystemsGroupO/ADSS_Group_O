@@ -163,5 +163,13 @@ public class ProductListDocument {
         return this.getId();
     }
 
+    public void changeDate(LocalDate date){
+        if( transportId != -1){
+            System.out.println("Please remove document from transport "+transportId+" first");
+            return;
+        }
+        this.date = date;
+    }
+
 
 }
