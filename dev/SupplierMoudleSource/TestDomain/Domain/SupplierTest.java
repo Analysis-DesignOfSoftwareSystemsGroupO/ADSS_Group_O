@@ -58,6 +58,6 @@ class SupplierTest {
         supplier.addProduct(product, 15);
         assertEquals(supplier.getProduct("1").getProduct(), product);
     }
-    
+
 
 }
