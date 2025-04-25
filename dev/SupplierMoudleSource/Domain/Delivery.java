@@ -38,5 +38,9 @@ public  class Delivery {
         }
         return false;
     }
+
+    public String getArrivalDay() {
+        return arrivalDay;
+    }
 }
 

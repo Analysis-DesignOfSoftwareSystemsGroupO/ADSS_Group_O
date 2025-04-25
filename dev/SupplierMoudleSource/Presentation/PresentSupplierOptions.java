@@ -254,9 +254,9 @@ public class PresentSupplierOptions {
             System.out.println("Choose: ");
             System.out.println("1.Edit information contact details");
             System.out.println("2.Edit supplier name");
-            System.out.println("3.Edit bank account number");
+            System.out.println("3.Edit bank details");
             System.out.println("4.Edit supplier delivery way");
-            System.out.println("5.Return to Main Menu");
+            System.out.println("5.Return to Supplier Menu");
             System.out.println("Please enter your option: ");
             try {
                 int option = scanner.nextInt();

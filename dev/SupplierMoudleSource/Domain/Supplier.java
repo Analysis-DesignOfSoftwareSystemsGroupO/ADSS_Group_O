@@ -97,7 +97,11 @@ public class Supplier {
         for (SuppliedItem suppliedItem : supplyProducts.values()) {
             stringBuilder.append("\t").append(suppliedItem.toString()).append("\n");
         }
-        stringBuilder.append("\t").append(this.getBank().toString());
+        stringBuilder.append("\t").append(this.getBank().toString()).append("\n");
+        stringBuilder.append("\t").append("Delivery Way: ").append(delivery.getDeliveryWay());
+        if (delivery.getDeliveryWay().equals("Constant Delivery")) {
+            stringBuilder.append(", At: ").append(delivery.getArrivalDay());
+        }
         return stringBuilder.toString();
     }
 
