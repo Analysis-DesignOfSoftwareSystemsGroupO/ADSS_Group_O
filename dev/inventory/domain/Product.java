@@ -1,7 +1,8 @@
 package inventory.domain;
 
-import java.math.BigDecimal;
+
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Represents a product in the inventory system. (catalog item)
@@ -11,8 +12,8 @@ public class Product {
     private String id;
     private String name;
     private String manufacturer;
-    private BigDecimal costPrice;
-    private BigDecimal sellingPrice;
+    private double costPrice;
+    private double sellingPrice;
     private int minimumStockLevel;
     private Category category;
 //    private Discount discount;
@@ -20,19 +21,19 @@ public class Product {
     /**
      * Constructor for Product
      *
-     * @param id                Unique id for the product. (cannot be null)
      * @param name              The display name of the product. (cannot be null)
      * @param minimumStockLevel The minimum amount of this product that should be in stock. (cannot be negative)
      */
-    public Product(String id, String name, int minimumStockLevel) {
-        Objects.requireNonNull(id, "Product id cannot be null");
+    public Product(String name, int minimumStockLevel, double costPrice) {
         Objects.requireNonNull(name, "Product name cannot be null");
         if (minimumStockLevel < 0) {
             throw new IllegalArgumentException("Minimum stock level cannot be negative");
         }
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.minimumStockLevel = minimumStockLevel;
+        this.costPrice = costPrice;
+        this.sellingPrice = costPrice * 1.2; // set Default selling price to 20% more than cost price
     }
 
     public String getId() {
@@ -47,11 +48,11 @@ public class Product {
         return manufacturer;
     }
 
-    public BigDecimal getCostPrice() {
+    public double getCostPrice() {
         return costPrice;
     }
 
-    public BigDecimal getSellingPrice() {
+    public double getSellingPrice() {
         return sellingPrice;
     }
 

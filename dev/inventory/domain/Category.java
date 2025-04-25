@@ -5,6 +5,7 @@ import inventory.data.InMemoryCategoryRepository;
 
 import java.util.Objects;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Category {
     private String id;
@@ -13,10 +14,10 @@ public class Category {
     ArrayList<Category> subCategories;
     ArrayList<Product> products;
 
-    public Category(String id, String name) {
+    public Category( String name) {
         Objects.requireNonNull(id, "Category id cannot be null");
         Objects.requireNonNull(name, "Category name cannot be null");
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.subCategories = new ArrayList<Category>();
         this.products = new ArrayList<Product>();
@@ -44,11 +45,6 @@ public class Category {
         return products;
     }
 
-    public void setId(String id) {
-        Objects.requireNonNull(id, "Category ID cannot be null");
-        this.id = id;
-        InMemoryCategoryRepository.updateCategory(this);
-    }
 
     public void setName(String name) {
         Objects.requireNonNull(name, "Category name cannot be null");
