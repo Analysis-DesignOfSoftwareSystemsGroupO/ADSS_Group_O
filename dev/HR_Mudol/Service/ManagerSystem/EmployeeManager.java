@@ -3,14 +3,13 @@ package HR_Mudol.Service.ManagerSystem;
 import HR_Mudol.domain.*;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeManager implements IEmployeeManager {
 
-    Scanner scanner = new Scanner(System.in);
-    private IRoleManager roleManager; // Reference to RoleManager to access all roles
+    private Scanner scanner = new Scanner(System.in);
+    private IRoleManager roleManager;
     private Branch curBranch;
 
     public EmployeeManager(Branch curBranch) {
@@ -41,9 +40,9 @@ public class EmployeeManager implements IEmployeeManager {
         do {
             empID = getIntInput("Enter employee ID: ");
             idString = String.valueOf(empID);
-            if (idString.length()!=9) System.out.println("Invalid ID.");
+            if (idString.length() != 9) System.out.println("Invalid ID.");
             if (checkIfAlreadyExist(empID)) System.out.println("This ID is already exist in the system.");
-        } while (idString.length()!=9||checkIfAlreadyExist(empID));
+        } while (idString.length() != 9 || checkIfAlreadyExist(empID));
 
         String empPassword;
         do {
@@ -61,8 +60,8 @@ public class EmployeeManager implements IEmployeeManager {
 
         int empSalary = getIntInput("Enter salary: ");
         LocalDate empStartDate = LocalDate.now();
-        int minDay = getIntInput("Enter minimum day shifts in contract: ");
-        int minEvening = getIntInput("Enter minimum evening shifts in contract: ");
+        int minDay = getIntInput("Enter max day shifts in contract: ");
+        int minEvening = getIntInput("Enter max evening shifts in contract: ");
         int sicks = getIntInput("Enter number of sick days: ");
         int daysOff = getIntInput("Enter number of vacation days: ");
 
@@ -71,18 +70,14 @@ public class EmployeeManager implements IEmployeeManager {
                 empStartDate, minDay, minEvening, sicks, daysOff
         );
         curBranch.getEmployees().add(employee);
-
-        User newUser = new User(employee, Level.regularEmp);
-        curBranch.getUsers().add(newUser);
+        curBranch.getUsers().add(new User(employee, Level.regularEmp));
 
         System.out.println("Employee and user created successfully!");
     }
 
-    private boolean checkIfAlreadyExist(int ID){
-        for (Employee emp: this.curBranch.getEmployees()){
-            if (emp.getEmpId()==ID){
-                return true;
-            }
+    private boolean checkIfAlreadyExist(int ID) {
+        for (Employee emp : this.curBranch.getEmployees()) {
+            if (emp.getEmpId() == ID) return true;
         }
         return false;
     }
@@ -93,23 +88,20 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID to remove: ");
         int empId = scanner.nextInt();
+        scanner.nextLine(); // clean buffer
 
         Employee toRemove = getEmployeeById(caller, empId);
-
         if (toRemove == null) {
             System.out.println("Employee not found.");
             return;
         }
 
-        //remove him from the roles lists
         for (Role role : roleManager.getAllRoles(caller)) {
             roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
         }
 
-        //add him to the "bank" of old employees
         curBranch.getOldEmployee().add(toRemove);
 
-        //delete his user
         User userToRemove = null;
         for (User u : curBranch.getUsers()) {
             if (u.getUser().equals(toRemove)) {
@@ -122,10 +114,7 @@ public class EmployeeManager implements IEmployeeManager {
             curBranch.getUsers().remove(userToRemove);
         }
 
-
-        //remove to the "bank" of cur employees
         curBranch.getEmployees().remove(toRemove);
-
         System.out.println("Employee removed successfully from system.");
     }
 
@@ -151,9 +140,11 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Enter new salary: ");
         int newSalary = scanner.nextInt();
+        scanner.nextLine();
 
         Employee e = getEmployeeById(caller, empId);
         e.setEmpSalary(caller, newSalary);
@@ -167,9 +158,11 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Enter new minimum day shifts: ");
         int newNumber = scanner.nextInt();
+        scanner.nextLine();
 
         Employee e = getEmployeeById(caller, empId);
         e.setMinDayShift(caller, newNumber);
@@ -182,9 +175,11 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Enter new minimum evening shifts: ");
         int newNumber = scanner.nextInt();
+        scanner.nextLine();
 
         Employee e = getEmployeeById(caller, empId);
         e.setMinEveninigShift(caller, newNumber);
@@ -197,9 +192,11 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Enter number of sick days: ");
         int number = scanner.nextInt();
+        scanner.nextLine();
 
         Employee e = getEmployeeById(caller, empId);
         e.setSickDays(caller, number);
@@ -212,9 +209,11 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Enter number of vacation days: ");
         int number = scanner.nextInt();
+        scanner.nextLine();
 
         Employee e = getEmployeeById(caller, empId);
         e.setDaysOff(caller, number);
@@ -224,8 +223,8 @@ public class EmployeeManager implements IEmployeeManager {
     @Override
     public Employee getEmployeeById(User caller, int empId) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
-        String idString = String.valueOf(empId);
-        if (idString.length() != 9) {
+
+        if (String.valueOf(empId).length() != 9) {
             throw new IllegalArgumentException("Employee ID must be exactly 9 digits.");
         }
 
@@ -242,6 +241,7 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID: ");
         int empId = scanner.nextInt();
+        scanner.nextLine();
 
         Employee e = getEmployeeById(caller, empId);
         System.out.println(e.toString());
@@ -266,13 +266,10 @@ public class EmployeeManager implements IEmployeeManager {
         return this.roleManager;
     }
 
-
-
     private int getIntInput(String prompt) {
         int value;
         while (true) {
             System.out.print(prompt);
-
             String input = scanner.nextLine().trim();
             try {
                 value = Integer.parseInt(input);
@@ -286,5 +283,9 @@ public class EmployeeManager implements IEmployeeManager {
             }
         }
         return value;
+    }
+
+    public void setScanner(Scanner newScanner) {
+        this.scanner = newScanner;
     }
 }

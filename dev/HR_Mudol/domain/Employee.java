@@ -117,17 +117,18 @@ public class Employee extends AbstractEmployee {
     }
 
 
-    // This method assumes that access control has already been verified externally
     public void printRelevantRoles() {
         System.out.println("\n--- Relevant Roles ---");
         if (relevantRoles.isEmpty()) {
             System.out.println("No roles assigned.");
         } else {
             for (int i = 0; i < relevantRoles.size(); i++) {
-                System.out.println((i + 1) + ". " + relevantRoles.get(i));
+                Role role = relevantRoles.get(i);
+                System.out.println((i + 1) + ". Role number " + role.getRoleNumber() + " - " + role.getDescription());
             }
         }
     }
+
 
 
     public int getMinDayShift(User caller) {

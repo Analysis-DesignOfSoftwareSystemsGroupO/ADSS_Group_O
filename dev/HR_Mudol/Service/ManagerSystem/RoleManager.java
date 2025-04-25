@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class RoleManager implements IRoleManager {
     private Branch curBranch; //The role at the branch
-    private final Scanner scanner;
+    private  Scanner scanner;
     private IEmployeeManager employeeManager;
 
     public RoleManager(Branch curBranch) {
@@ -239,4 +239,10 @@ public class RoleManager implements IRoleManager {
         }
         return count;
     }
+
+    // for tests
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
 }

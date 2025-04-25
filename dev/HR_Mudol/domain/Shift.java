@@ -50,7 +50,7 @@ public class Shift {
     }
 
     public void updateStatus(User caller, Status status) {
-        if (!caller.isManager()) {
+        if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied");
         }
         this.status = status;

@@ -136,7 +136,7 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
     }
 
     private WeekDay chooseDay() {
-        System.out.println("Select day of the week (by index):");
+        System.out.println("Select day of the week :");
         WeekDay[] days = WeekDay.values();
         for (int i = 0; i < days.length; i++) {
             System.out.println((i + 1) + ". " + days[i]);

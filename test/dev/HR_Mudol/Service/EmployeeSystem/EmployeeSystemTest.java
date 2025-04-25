@@ -25,14 +25,12 @@ public class EmployeeSystemTest {
     }
 
     @Test
-    // Tests that an employee can view their personal details without exceptions
     public void testViewPersonalDetails() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewPersonalDetails(employeeUser, employee);
     }
 
     @Test
-    // Tests a successful password change when correct current password is provided
     public void testChangePassword_Success() {
         String input = "pass\nnewpass123\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
@@ -44,7 +42,6 @@ public class EmployeeSystemTest {
     }
 
     @Test
-    // Tests a normal flow of submitting two morning and two evening constraints
     public void testSubmitConstraint_SimpleFlow() {
         String input = """
         yes
@@ -81,7 +78,6 @@ public class EmployeeSystemTest {
     }
 
     @Test
-    // Tests viewing shifts when no shifts were assigned yet
     public void testViewMyShifts_NoShifts() {
         EmployeeSystem system = new EmployeeSystem();
         Week currentWeek = new Week();
@@ -89,7 +85,6 @@ public class EmployeeSystemTest {
     }
 
     @Test
-    // Tests updating the explanation of an existing constraint
     public void testUpdateConstraint_ExplanationUpdate() {
         Constraint c = new Constraint("Can't work", WeekDay.MONDAY, ShiftType.MORNING);
         employee.addNewConstraints(employeeUser, c);
@@ -106,7 +101,7 @@ public class EmployeeSystemTest {
         Scanner testScanner = new Scanner(in);
         EmployeeSystem system = new EmployeeSystem(testScanner);
 
-        Week week = new Week(); // Week with no assignments yet
+        Week week = new Week();
         system.updateConstraint(employeeUser, employee, week);
 
         List<Constraint> updated = employee.getMorningConstraints(employeeUser);
@@ -115,48 +110,44 @@ public class EmployeeSystemTest {
     }
 
     @Test
-    // Tests that an employee can view their contract details without error
     public void testViewContractDetails() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewContractDetails(employeeUser, employee);
     }
 
     @Test
-    // Tests viewing constraints when none have been submitted yet
     public void testViewMyConstraints_EmptyInitially() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewMyConstraints(employeeUser, employee);
     }
 
     @Test
-    // Tests viewing available roles when no roles were assigned
     public void testViewAvailableRoles_NoRolesAssigned() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewAvailableRoles(employeeUser, employee);
     }
 
     @Test
-// Should show shift assigned to the employee
     public void testViewMyShifts_WithAssignedShift() {
-        Scanner testScanner = new Scanner(System.in); // קלט לא נדרש כאן בפועל
+        Scanner testScanner = new Scanner(System.in);
         EmployeeSystem system = new EmployeeSystem(testScanner);
 
         Week week = new Week();
         Shift shift = new Shift(WeekDay.MONDAY, ShiftType.MORNING);
 
-        // יצירת משתמש עם הרשאות HR Manager כדי לבצע את ההוספה למשמרת
         User hrManager = new User(employee, Level.HRManager);
 
-        shift.addEmployee(hrManager, employee);
+        // תפקיד עבור הוספת עובד
+        Role role = new Role("Cashier");
+        shift.addNecessaryRoles(hrManager, role);
+        shift.addEmployee(hrManager, employee, role); // <-- כאן עדכון לדרוש גם Role
+
         week.addShift(hrManager, shift);
 
-        // בדיקה עם משתמש רגיל
         system.viewMyShifts(employeeUser, employee, week);
     }
 
-
     @Test
-    // Should list constraints already submitted
     public void testViewMyConstraints_WithConstraints() {
         EmployeeSystem system = new EmployeeSystem();
         Constraint morningC = new Constraint("Busy on Monday", WeekDay.MONDAY, ShiftType.MORNING);
@@ -170,7 +161,6 @@ public class EmployeeSystemTest {
     }
 
     @Test
-    // Should list relevant roles assigned to the employee
     public void testViewAvailableRoles_WithRoles() {
         EmployeeSystem system = new EmployeeSystem();
         Role role = new Role("Cashier");
