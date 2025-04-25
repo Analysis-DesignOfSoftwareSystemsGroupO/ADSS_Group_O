@@ -46,25 +46,48 @@ public class InventoryManu {
     }
 
     private void displayMenu() {
+        List<String> menuOptions = Arrays.asList(
+                "List Products",
+                "List Categories",
+                "List Current Stock",
+                "Add Product",
+                "Update Product",
+                "Delete Product",
+                "Add Stock",
+                "Update Stock",
+                "Delete Stock",
+                "Print Stock Report (Category Based)",
+                "Print Order List (Stock Based)",
+                "Print Defect List (Product Based)",
+                "Upload Test Data",
+                "Add Category",
+                "Delete Category",
+                "Add Discount",
+                "List Discounts",
+                "Show discount for a product");
         System.out.println("\n---- Inventory Management Menu: ----");
-        System.out.println("1.  List Products");
-        System.out.println("2.  List Categories");
-        System.out.println("3.  List Current Stock");
-        System.out.println("4.  Add Product");
-        System.out.println("5.  Update Product");
-        System.out.println("6.  Delete Product");
-        System.out.println("7.  Add Stock");
-        System.out.println("8.  Update Stock");
-        System.out.println("9.  Delete Stock");
-        System.out.println("10. Print Stock Report (Category Based)");
-        System.out.println("11. Print Order List (Stock Based)");
-        System.out.println("12. Print Defect List (Product Based)");
-        System.out.println("13. Upload Test Data");
-        System.out.println("14. Add Category");
-        System.out.println("15. Delete Category");
-        System.out.println("16. Add Discount");
-        System.out.println("17. List Discounts");
-        System.out.println("18. Show discount for a product");
+        for (int i = 0; i < menuOptions.size(); i++) {
+            System.out.println((i + 1) + ".  " + menuOptions.get(i));
+        }
+
+//        System.out.println("1.  List Products");
+//        System.out.println("2.  List Categories");
+//        System.out.println("3.  List Current Stock");
+//        System.out.println("4.  Add Product");
+//        System.out.println("5.  Update Product");
+//        System.out.println("6.  Delete Product");
+//        System.out.println("7.  Add Stock");
+//        System.out.println("8.  Update Stock");
+//        System.out.println("9.  Delete Stock");
+//        System.out.println("10. Print Stock Report (Category Based)");
+//        System.out.println("11. Print Order List (Stock Based)");
+//        System.out.println("12. Print Defect List (Product Based)");
+//        System.out.println("13. Upload Test Data");
+//        System.out.println("14. Add Category");
+//        System.out.println("15. Delete Category");
+//        System.out.println("16. Add Discount");
+//        System.out.println("17. List Discounts");
+//        System.out.println("18. Show discount for a product");
         System.out.println("0.  Exit");
     }
 
@@ -95,7 +118,7 @@ public class InventoryManu {
                     String prodParentCatId = scanner.nextLine();
                     int minimumStock = readIntInput("Enter minimum stock: ");
                     System.out.print("Enter product cost price: ");
-                    double costPrice =readDoubleInput("Enter product cost price: ");
+                    double costPrice = readDoubleInput("Enter product cost price: ");
                     // Assuming InventoryController is a class that handles product operations
                     service.saveProduct(name, minimumStock, prodParentCatId, costPrice);
                     System.out.println("Product added successfully!");
@@ -112,9 +135,10 @@ public class InventoryManu {
                     break;
                 case 7:
                     // Create Stock
-                    // TODO: make the creation of stock more user friendly (make it use name instead of id)
-                    System.out.print("Enter product ID for stock: ");
-                    String stockProductId = scanner.nextLine();
+                     System.out.print("Enter product name: ");
+                    String productName = scanner.nextLine();
+                    System.out.print("Enter product manufacturer: ");
+                    String productManufacturer = scanner.nextLine();
                     int stockQuantity = readIntInput("Enter stock quantity: ");
                     System.out.print("Enter stock date (YYYY-MM-DD): ");
                     LocalDate stockDate = LocalDate.parse(scanner.nextLine());
@@ -122,7 +146,7 @@ public class InventoryManu {
                     String stockLocation = scanner.nextLine();
                     System.out.print("Enter stock condition (OK, DEFECT, EXPIRED): ");
                     StockItemStatus stockStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
-                    service.saveStockItem(stockProductId, stockQuantity, stockLocation, stockStatus, stockDate);
+                    service.saveStockItem(productName, productManufacturer, stockQuantity, stockLocation, stockStatus, stockDate);
                     System.out.println("Stock added successfully!");
                     break;
                 case 8:
@@ -138,6 +162,7 @@ public class InventoryManu {
                     // Print Order List (Stock-Based)
                     break;
                 case 12:
+                    service.printDefectedStockItems();
                     // Print Defect List (Product-Based)
                     break;
                 case 13:
@@ -149,7 +174,7 @@ public class InventoryManu {
                     // Add Category
                     System.out.print("Enter category name: ");
                     String catName = scanner.nextLine();
-                    System.out.print("Enter category's parent category ID (don't enter enything for no parent category): ");
+                    System.out.print("Enter category's parent category ID (don't enter anything for no parent category): ");
                     String parentCatId = scanner.nextLine();
                     service.saveCategory(catName, parentCatId);
                     System.out.println("Category added successfully!");

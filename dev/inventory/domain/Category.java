@@ -15,7 +15,6 @@ public class Category {
     ArrayList<Product> products;
 
     public Category( String name) {
-        Objects.requireNonNull(id, "Category id cannot be null");
         Objects.requireNonNull(name, "Category name cannot be null");
         this.id = UUID.randomUUID().toString();
         this.name = name;
@@ -24,6 +23,7 @@ public class Category {
 
         InMemoryCategoryRepository.saveCategory(this);
     }
+
 
     public String getId() {
         return id;

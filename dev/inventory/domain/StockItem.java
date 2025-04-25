@@ -5,35 +5,43 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class StockItem {
-    private String productId;
+    private String stockItemId;
+    private Product product;
     private int quantity;
     private String location;
     private LocalDate expiryDate;
     private StockItemStatus status;
 
-    public StockItem(String productId, int quantity, String location, StockItemStatus status) {
+    public StockItem(int quantity, String location, StockItemStatus status) {
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity cannot be negative");
         }
         Objects.requireNonNull(location, "Location cannot be null for StockItem");
-        this.productId = (productId == null) ? UUID.randomUUID().toString() : productId;
+        this.stockItemId = UUID.randomUUID().toString();
         this.quantity = quantity;
         this.location = location;
         this.status = status;
         this.expiryDate = null; // Default to null if not provided
-        
+
 
         // Getters and Setters
     }
 
-    public String getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    public StockItemStatus getStatus() {
+        return status;
+    }
+
 
     @Override
     public String toString() {
         return "StockItem{" +
-                "productId='" + productId + '\'' +
                 ", quantity=" + quantity +
                 ", location='" + location + '\'' +
                 ", expiryDate=" + expiryDate +
