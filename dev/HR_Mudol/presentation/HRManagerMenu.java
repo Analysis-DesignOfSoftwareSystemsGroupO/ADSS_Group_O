@@ -171,6 +171,7 @@ public class HRManagerMenu extends Menu{
             System.out.println("2. Remove employee");
             System.out.println("3. Add role");
             System.out.println("4. Remove role");
+            System.out.println("5. cancel a shift");
             System.out.println("0. Back");
             String choice = scanner.nextLine();
             switch (choice) {
@@ -185,6 +186,9 @@ public class HRManagerMenu extends Menu{
                     break;
                 case "4":
                     hr.removeRoleFromShift(caller,week);
+                    break;
+                case "5":
+                    hr.cancelShift(caller,week);
                     break;
                 case "0":
                     return;

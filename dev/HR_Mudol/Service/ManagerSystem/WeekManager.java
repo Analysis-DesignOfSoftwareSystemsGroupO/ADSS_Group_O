@@ -154,11 +154,9 @@ public class WeekManager implements IWeekManager {
     //Remove a shift - for holidays case use
     @Override
     public void cancelShift(User caller, Week week) {
-
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
-        Scanner scanner = new Scanner(System.in);
 
         Shift shift=findShift(week);
         week.removeShift(shift);
