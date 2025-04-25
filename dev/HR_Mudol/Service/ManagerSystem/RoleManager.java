@@ -174,11 +174,16 @@ public class RoleManager implements IRoleManager {
         int empId = scanner.nextInt();
         scanner.nextLine();
 
-        Employee e = employeeManager.getEmployeeById(caller, empId);
-        Role role = getRoleByNumber(roleNumber);
-        role.removeEmployee(caller,e);
+        try {
+            Employee e = employeeManager.getEmployeeById(caller, empId);
+            Role role = getRoleByNumber(roleNumber);
+            role.removeEmployee(caller, e);
 
-        System.out.println("Employee removed from role.");
+            System.out.println("Employee removed from role.");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
