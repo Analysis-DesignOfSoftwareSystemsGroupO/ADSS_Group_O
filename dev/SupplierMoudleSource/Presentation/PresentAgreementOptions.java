@@ -179,14 +179,16 @@ public class PresentAgreementOptions {
             return;
         }
         Scanner editAgreement = new Scanner(System.in);
-        System.out.println("Enter product name:");
+        System.out.println("Enter product ID:");
         String productId = editAgreement.nextLine();
         try {
             agreementController.removeProductFromAgreement(supplierID, branchId, productId);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("Product ID: " + productId + " was deleted");
     }
 
     //check if available to combine with add product
@@ -197,20 +199,20 @@ public class PresentAgreementOptions {
         }
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product ID:");
-        String productName = editAgreement.nextLine();
+        String productID = editAgreement.nextLine();
         System.out.println("Enter new product quantity for discount:");
         int productQuantity = editAgreement.nextInt();
         System.out.println("Enter new product discount amount:");
         int productDiscount = editAgreement.nextInt();
         editAgreement.nextLine();
         try {
-            agreementController.editProductDiscount(supplierID, branchId, productName, productQuantity, productDiscount);
+            agreementController.editProductDiscount(supplierID, branchId, productID, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
             return;
         }
-        System.out.println("Discount was updated succfully !");
+        System.out.println("Discount was updated successfully !");
 
     }
 }

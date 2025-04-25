@@ -90,6 +90,7 @@ public class SupplierService {
         if(suppliersDataBase.getSupplier(supplierID) != null) {
             Supplier supplier = suppliersDataBase.getSupplier(supplierID);
             supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, supplierID);
+            return;
         }
         throw new NullPointerException("Supplier does not exist");
     }
@@ -99,6 +100,7 @@ public class SupplierService {
         Supplier supplier = suppliersDataBase.getSupplier(supplierID);
         if (supplier != null) {
             supplier.setSupplierName(newName);
+            return;
         }
         throw new NullPointerException("Supplier does not exist");
     }

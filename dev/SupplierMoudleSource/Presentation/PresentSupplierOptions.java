@@ -211,7 +211,7 @@ public class PresentSupplierOptions {
             System.out.println(e.getMessage());
             return;
         }
-        System.out.println("Added successfully");
+        System.out.println("Bank was added successfully");
     }
     //helper func to edit the delivery way
     private void editDeliveryWay(String supplierId){
@@ -235,7 +235,9 @@ public class PresentSupplierOptions {
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("Delivery method was changed succefully");
     }
 
     //helper method to edit detail
@@ -267,6 +269,7 @@ public class PresentSupplierOptions {
                         System.out.println("Enter new name : ");
                         String newName = scanner.nextLine();
                         supplierController.updateSupplierName(id, newName);
+                        System.out.println("Name was updated successfully");
                         break;
                     case 3: // edit bank details
                         this.editBankDetails(id);
@@ -282,7 +285,9 @@ public class PresentSupplierOptions {
             }
             catch (Exception e){
                 System.out.println("Invalid option ! ");
+                return;
             }
+
         }
     }
     //adds information contact
@@ -332,7 +337,9 @@ public class PresentSupplierOptions {
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("Supplier was deleted successfully");
     }
 
 
