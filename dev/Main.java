@@ -357,16 +357,16 @@ public class Main {
 
         System.out.println("Please enter date by format: DD/MM/YEAR"); // ask for date from user
         String dateStr = scanner.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // try to create date variable
         LocalDate parsedDate;
-        try {
+        try { // if date format is wrong
             parsedDate = LocalDate.parse(dateStr, formatter);
         }
         catch (DateTimeParseException e){
-            e.getMessage();
+            System.out.println("Invalid date format - please try again with the format: DD/MM/YEAR");; // message to user and ask him to try again
             return;
         }
-        int count = 0;
+        int count = 0; // count all avalialbe trucks in system
         for (Truck truck : trucks) {
             if (truck.getAvailablity(parsedDate)) {
                 System.out.println(truck);
