@@ -367,38 +367,39 @@ public class Main {
             return;
         }
         int count = 0; // count all avalialbe trucks in system
-        for (Truck truck : trucks) {
-            if (truck.getAvailablity(parsedDate)) {
-                System.out.println(truck);
-
-                count++;
+        for (Truck truck : trucks) { // for each truck in database
+            if (truck.getAvailablity(parsedDate)) { // if truck is available at this date
+                System.out.println(truck); // print its data
+                count++; // count how many trucks are available
             }
         }
-        if (count == 0)
+        if (count == 0) // if there is no available - message to user
             System.out.println("There is no available truck in system.");
 
 
     }
 
     //********************************************************************************************************************** Case 10 - Print document details
+
+    /** a function that prints all document details by its id*/
     public static void PrintDocumentDetails(Map<Integer, ProductListDocument> documents) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter document number");
-        Integer documentId = scanner.nextInt();
-        if (documents.get(documentId) == null) {
-            System.out.println("There is no document " + documentId + " Please try again");
+        Scanner scanner = new Scanner(System.in); // ask for input from user
+        System.out.println("Please enter document number"); // print document data
+        Integer documentId = scanner.nextInt(); // document id from user
+        if (documents.get(documentId) == null) { // if document not in database
+            System.out.println("There is no document " + documentId + " Please try again"); // send message to user
             scanner.close();
             return;
         }
 
-        System.out.println(documents.get(documentId));
+        System.out.println(documents.get(documentId)); // print document details to screen
 
     }
-
+//********************************************************************************************************************** send Transport function every 1 minute
     public static void sendTransport(Map<LocalDate, List<Transport>> transportsPerDate) {
 
-        List<Transport> currlist = transportsPerDate.get(LocalDate.now());
-        if (currlist != null) {
+        List<Transport> currlist = transportsPerDate.get(LocalDate.now()); // save the list of all transport of current date
+        if (currlist != null) { // if there are transport of current date.
             for (Transport transport : currlist) { // for each transport in list
                 if (transport.getDeparture_time().isAfter(LocalTime.now())) { // if its time to send the transport
                     transport.sendTransport(); // send transport
