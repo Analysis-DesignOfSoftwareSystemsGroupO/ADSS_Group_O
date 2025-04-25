@@ -38,15 +38,24 @@ public class InventoryControllerImpl implements InventoryController {
         productRepository.deleteProduct(id);
     }
 
-    public void saveStockItem(String productId, int quantity, String location, StockItemStatus status) {
-        System.out.println("Adding stock for product with ID: " + productId);
-        StockItem stockItemToAdd = new StockItem(productId, quantity, location, status);
+    public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status) {
+        System.out.println("Adding stock for product: " + productName);
+        Product product = getProductByName(productName, productManufacturer);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting stock add operation.");
+        }
+        StockItem stockItemToAdd = new StockItem(quantity, location, status);
+        stockItemToAdd.setProduct(product);
         stockItemRepository.saveStockItem(stockItemToAdd);
     }
 
     public List<Product> getAllProductsDefinitions() {
         System.out.println("Getting all products...");
         return productRepository.getAllProducts();
+    }
+    public List<StockItem> getAllStockItems() {
+        System.out.println("Getting all stock items...");
+        return stockItemRepository.getAllStockItems();
     }
 
     public void printAllProducts() {
@@ -59,6 +68,10 @@ public class InventoryControllerImpl implements InventoryController {
 
     public Category getCategoryById(String id) {
         return InMemoryCategoryRepository.getCategoryById(id);
+    }
+
+    public String getCategoryIdByName(String name) {
+        return InMemoryCategoryRepository.getCategoryIdByName(name);
     }
 
     public void saveCategory( String catName, String parentCategoryId) {
@@ -175,4 +188,14 @@ public class InventoryControllerImpl implements InventoryController {
 
         return 100 * (1 - currentPricePercentage);
     }
+
+    public Product getProductByName(String name, String manufacturer) {
+        List<Product> products = productRepository.getAllProducts();
+        for (Product product : products) {
+            if (product.getName().equals(name) && product.getManufacturer().equals(manufacturer)) {
+                return product;
+            }
+        }
+        return null;
+        }
 }

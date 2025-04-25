@@ -33,6 +33,15 @@ public class InMemoryCategoryRepository implements CategoryRepository{
         }
         return null;
     }
+    public static String getCategoryIdByName(String name) {
+        for (Category category : categories) {
+            if (category.getName().equals(name)) {
+                return category.getId();
+            }
+        }
+        System.out.println("Category not found");
+        return null;
+    }
 
     public static List<Category> getAllCategories() {
         return new ArrayList<>(categories);

@@ -14,7 +14,7 @@ public interface InventoryController {
 
     void removeProduct(String id);
 
-    void saveStockItem(String productId, int quantity, String location, StockItemStatus status);
+    void saveStockItem(String productName,String productManufacturer, int quantity, String location, StockItemStatus status);
 
     void printProductById(String id);
 
@@ -32,4 +32,8 @@ public interface InventoryController {
     void listDiscounts();
 
     double getDiscountByProductId(String productId);
+
+    public String getCategoryIdByName(String name);
+
+    public List<StockItem> getAllStockItems();
 }
