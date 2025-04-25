@@ -98,7 +98,7 @@ public class WeekManager implements IWeekManager {
                             if (choosing.equalsIgnoreCase("Y")) {
 
                                 if (!shift.getEmployees().contains(employee)) {
-                                    dependency.assignEmployeeToShift(caller, shift, employee);
+                                    dependency.assignEmployeeToShift(caller, shift, employee, role);
                                     assigned = true;
                                     System.out.println(employee.getEmpName() + " was assigned to the shift.");
                                 } else {

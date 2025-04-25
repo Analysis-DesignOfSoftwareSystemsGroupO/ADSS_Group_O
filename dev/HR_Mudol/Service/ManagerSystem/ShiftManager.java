@@ -13,7 +13,7 @@ public class ShiftManager implements IShiftManager {
     }
 
     @Override
-    public void assignEmployeeToShift(User caller, Shift shift, Employee employee) {
+    public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
         System.out.println("DEBUG: caller = " + caller.getUser().getEmpName());
         System.out.println("DEBUG: isManager = " + caller.isManager());
         System.out.println("DEBUG: isShiftManager = " + caller.isShiftManager());
@@ -23,7 +23,7 @@ public class ShiftManager implements IShiftManager {
             throw new SecurityException("Access denied.");
         }
 
-        shift.addEmployee(caller, employee);
+        shift.addEmployee(caller, employee,role);
         System.out.println("Employee " + employee.getEmpName() +
                 " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }

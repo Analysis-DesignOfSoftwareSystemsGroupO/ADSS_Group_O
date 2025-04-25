@@ -171,8 +171,8 @@ public class HRSystemManager implements IHRSystemManager {
     }
 
     @Override
-    public void assignEmployeeToShift(User caller, Shift shift, Employee employee) {
-        shiftManager.assignEmployeeToShift(caller,shift,employee);
+    public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
+        shiftManager.assignEmployeeToShift(caller,shift,employee, role);
     }
 
     @Override

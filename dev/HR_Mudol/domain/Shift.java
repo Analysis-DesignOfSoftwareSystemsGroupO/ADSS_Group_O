@@ -14,6 +14,7 @@ public class Shift {
     private List<Employee> employees; // The employees who work at that shift
     private List<Role> necessaryRoles;
     private Employee shiftManager;
+    private List<FilledRole> filledRoles; //all the roles that already were assigned with emp
 
     public Shift(WeekDay day, ShiftType type) {
         counter++;
@@ -23,6 +24,7 @@ public class Shift {
         this.employees = new LinkedList<>();
         this.status = Status.Empty;
         this.necessaryRoles = new LinkedList<>();
+        this.filledRoles=new LinkedList<>();
     }
 
     // Getters
@@ -60,36 +62,46 @@ public class Shift {
         this.necessaryRoles.add(r);
     }
 
+    public void removeRole(User caller, Role r) {
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied");
+        }
+        this.necessaryRoles.remove(r);
+
+        for (FilledRole fr:this.filledRoles){
+            if (fr.getRole()==r){
+                this.employees.remove(fr.getEmployee()); //remove the emp from shift
+                this.filledRoles.remove(fr);
+                break;
+            }
+        }
+    }
+
     public List<Employee> getEmployees() {
         return employees;
     }
 
     // Only by HR manager methods:
-    public void setStatus(User caller, Status status) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
-        this.status = status;
-    }
-
-    public void setEmployees(User caller, List<Employee> employees) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
-        this.employees = employees;
-    }
 
     // Add/Remove employee helpers (updated to allow shift managers)
-    public void addEmployee(User caller, Employee employee) {
+    public void addEmployee(User caller, Employee employee, Role role) {
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied");
         }
+        this.filledRoles.addLast(new FilledRole(employee,role));
         this.employees.addLast(employee);
     }
 
     public void removeEmployee(User caller, Employee employee) {
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied");
+        }
+        for (FilledRole fr:this.filledRoles){
+            if (fr.getEmployee()==employee){
+                this.filledRoles.remove(fr); //the role isn't filled anymore
+                updateStatus(caller,Status.Problem);
+                break;
+            }
         }
         this.employees.remove(employee);
     }
