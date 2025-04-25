@@ -42,7 +42,7 @@ public void removeAgreement(String branchId, String supplierId) {
     }
 
     // adds a product to the agreement
-    public void addProductToAgreement(String branchid, String supplierID, String productName, int price,
+    public void addProductToAgreement(String branchid, String supplierID, String productID, int price,
                                       Integer quantity, Integer discount) throws Exception {
         if (quantity != null && quantity <= 0){
             throw new Exception("quantity have to be positive");
@@ -51,7 +51,7 @@ public void removeAgreement(String branchId, String supplierId) {
             throw new Exception("discount have to be positive");
         }
 
-        SuppliedItem suppliedItem = getProductFromSupplier(productName, supplierID);
+        SuppliedItem suppliedItem = getProductFromSupplier(productID, supplierID);
         suppliersDataBase.addProductToAgreement(suppliedItem, branchid, supplierID);
         if (quantity != null && discount != null){ //add discount if needed
             if ((price * quantity) < discount){
@@ -92,7 +92,9 @@ public void removeAgreement(String branchId, String supplierId) {
 
     //edits a product discount from an existing agreement
     public void editProductDiscount(String supplierID, String branchId, String productID, int quantity, int discount) throws Exception {
-
+        if (quantity <= 0 || discount <= 0){
+            throw new Exception("Quantity and discount amount have to be positive");
+        }
         Agreement agreement = getAgreement(branchId, supplierID);
         if (!agreement.productInAgreement(productID)){
             throw new Exception("Agreement does not have this product");

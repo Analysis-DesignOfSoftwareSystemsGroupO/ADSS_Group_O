@@ -42,15 +42,16 @@ public class Order {
 
         for (SuppliedItem item : suppliedItems.keySet()) {
             if (item.getSuppliedItemID().equals(itemId)) {
-                throw new Exception("Supplied item ID " + itemId + " already exists");
+                suppliedItems.put(item, quantity + suppliedItems.get(item));
+                this.totalPrice = this.getTotalPrice();
+                return;
             }
         }
 
         for (SuppliedItem item : agreement.getSupplierItemsList()){
-            int discountPercentage = 0;
             if (item.getSuppliedItemID().equals(itemId)) {
                 suppliedItems.put(item, quantity);
-                this.totalPrice += this.getTotalPrice();
+                this.totalPrice = this.getTotalPrice();
                 return;
             }
             throw new Exception("Invalid item, " + itemId + " doesnt exist in the agreement, enter valid ID");
@@ -63,7 +64,7 @@ public class Order {
         for (SuppliedItem item : suppliedItems.keySet()) {
             totalPrice += item.getSuppliedItemPrice() * suppliedItems.get(item);
             for (Discount discount : discounts) {
-                if (discount.getSuppliedItem().equals(item) ) {
+                if (discount.getSuppliedItem().equals(item) && suppliedItems.get(item) >= discount.getQuantity() ) {
                     totalPrice -= discount.getDiscount();
                 }
             }

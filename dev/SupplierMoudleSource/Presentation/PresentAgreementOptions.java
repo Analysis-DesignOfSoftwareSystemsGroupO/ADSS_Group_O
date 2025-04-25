@@ -97,11 +97,13 @@ public class PresentAgreementOptions {
             int choice = editAgreement.nextInt();
             editAgreement.nextLine();
             String supplierID = "", branchId = "";
-            if (choice == 1 || choice == 2 || choice == 3 || choice == 4) {
-                System.out.println("Enter branch Id: ");
-                branchId = editAgreement.nextLine();
+            if (choice == 4){return;}
+            if (choice == 1 || choice == 2 || choice == 3) {
+                agreementController.viewAllAgreements();
                 System.out.println("Enter supplier ID: ");
                 supplierID = editAgreement.nextLine();
+                System.out.println("Enter branch Id: ");
+                branchId = editAgreement.nextLine();
                 try {
                     agreementController.viewAgreement(branchId, supplierID);
                 }
@@ -120,8 +122,6 @@ public class PresentAgreementOptions {
                 case 3:
                     this.editProductDiscount(supplierID, branchId);
                     break;
-                case 4:
-                    return;
                 default:
                     System.out.println("Invalid option !\n");
                     break;
@@ -196,20 +196,21 @@ public class PresentAgreementOptions {
             return;
         }
         Scanner editAgreement = new Scanner(System.in);
-        System.out.println("Enter product name:");
+        System.out.println("Enter product ID:");
         String productName = editAgreement.nextLine();
-        Integer productDiscount = null;
-        Integer productQuantity = null;
         System.out.println("Enter new product quantity for discount:");
-        productQuantity = editAgreement.nextInt();
-        System.out.println("Enter new product discount:");
-        productDiscount = editAgreement.nextInt();
+        int productQuantity = editAgreement.nextInt();
+        System.out.println("Enter new product discount amount:");
+        int productDiscount = editAgreement.nextInt();
+        editAgreement.nextLine();
         try {
-            agreementController.editProductDiscount(branchId, supplierID, productName, productQuantity, productDiscount);
+            agreementController.editProductDiscount(supplierID, branchId, productName, productQuantity, productDiscount);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            return;
         }
+        System.out.println("Discount was updated succfully !");
 
     }
 }

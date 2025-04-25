@@ -113,7 +113,7 @@ public class Agreement {
                 return;
             }
         }
-        throw new NullPointerException("discount does not exist in the agreement");
+        throw new NullPointerException("Discount does not exist in the agreement");
     }
     public List<SuppliedItem> getSupplierItemsList() {
         return supplierItemsList;
@@ -140,4 +140,5 @@ public class Agreement {
         }
         return returnString.toString();
     }
+
 }

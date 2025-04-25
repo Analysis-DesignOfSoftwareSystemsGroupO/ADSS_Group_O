@@ -158,6 +158,9 @@ public class LoadData {
             if (rand.nextBoolean()){
                 int quantity = rand.nextInt(20) + 1;
                 int price1 = rand.nextInt(40) + 1;
+                if (quantity * price < price1){ // to avoid errors
+                    continue;
+                }
                 suppliersDataBase.addDiscountToAgreement(branchId, supplierId, new Discount(item, quantity, price1));
             }
 

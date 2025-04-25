@@ -84,7 +84,7 @@ public class PresentOrderOptions {
                 System.out.println("*********************************************************");
                 agreementController.viewAgreement(branchId, supplierID);
                 System.out.println("*********************************************************");
-                orderController.viewConcurrentOrder(orderID, supplierID);
+                orderController.viewConcurrentOrder(supplierID, orderID);
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -99,7 +99,7 @@ public class PresentOrderOptions {
                 switch (choice) {
                     case "*": // finish order choice
                         try {
-                            orderController.finishOrder(orderID, supplierID);
+                            orderController.finishOrder(supplierID, orderID);
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());
@@ -113,7 +113,7 @@ public class PresentOrderOptions {
                             String res = scanner.nextLine();
                             if (res.equals("y")) {
                                 try {
-                                    orderController.deleteConcurrentOrder(orderID, supplierID);
+                                    orderController.deleteConcurrentOrder(supplierID, orderID);
                                     System.out.println("Order canceled");
                                 }
                                 catch (Exception e) {

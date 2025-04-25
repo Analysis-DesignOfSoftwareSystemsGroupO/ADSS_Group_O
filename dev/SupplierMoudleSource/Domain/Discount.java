@@ -28,6 +28,10 @@ public class Discount {
         return this.suppliedItem.getProduct().getProductID();
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public String toString() {
         return "Buy " + this.quantity + " of " + this.suppliedItem.getProduct().getProductName() + " get " +
                 this.discount + "₪ discount";
