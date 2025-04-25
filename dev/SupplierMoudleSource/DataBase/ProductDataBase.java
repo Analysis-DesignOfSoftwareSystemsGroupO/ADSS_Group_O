@@ -1,0 +1,38 @@
+package SupplierMoudleSource.DataBase;
+
+
+import SupplierMoudleSource.Domain.Product;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ProductDataBase {
+    private Map<String, Product> products;
+
+    //singleton database
+    private static ProductDataBase productDataBase = null;
+    public static ProductDataBase getInstance() {
+        if (productDataBase == null) {
+            productDataBase = new ProductDataBase();
+        }
+        return productDataBase;
+    }
+    private ProductDataBase(){
+        products = new HashMap<>();
+    }
+
+public void addProduct(Product product) {
+        if (product == null){
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if (!products.containsKey(product.getProductID())) {
+            products.put(product.getProductID(), product);
+        }
+    }
+
+    public Product getProduct(String productID){
+        return products.get(productID);
+    }
+
+}
