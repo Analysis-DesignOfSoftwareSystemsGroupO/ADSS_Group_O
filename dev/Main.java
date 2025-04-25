@@ -249,24 +249,26 @@ public class Main {
      * add driver to transport
      */
     public static void AddDriverToTransport(Map<String, Driver> drivers, Map<Integer, Transport> transports) {
+        // ask for drivers id input
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter driver's id");
         String id = scanner.nextLine();
-        Driver driver = drivers.get(id);
-        if (driver == null) {
-            System.out.println("Driver is not in system - please try again");
+        Driver driver = drivers.get(id); // search for driver in database
+        if (driver == null) { // if driver is not in system
+            System.out.println("Driver is not in system - please try again"); // message to user
             scanner.close();
             return;
         }
+        // ask for transport id from user
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
-        Transport transport = transports.get(transport_id);
-        if (transport == null) {
+        Transport transport = transports.get(transport_id);// get transport from database by transport id
+        if (transport == null) { // if transport is not in system
             System.out.println("Transport number is not in system - please try again");
             scanner.close();
             return;
         }
-        transport.addDriver((transport_module.Driver) driver);
+        transport.addDriver((transport_module.Driver) driver); // try to add driver to transport
         scanner.close();
 
 
