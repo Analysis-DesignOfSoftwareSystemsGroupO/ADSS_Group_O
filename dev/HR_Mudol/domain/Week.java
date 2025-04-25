@@ -45,6 +45,24 @@ public class Week {
             shifts.addLast(newShift);
         }
     }
+    // בנאי נוסף לצורך בדיקות – מאפשר לקבוע את הדדליין ידנית
+    public Week(LocalDateTime customDeadline) {
+        this(); // קרא לבנאי הרגיל ליצירת המשמרות
+        this.constraintDeadline = customDeadline;
+    }
+
+    public void addShift(User caller, Shift shift) {
+        boolean isHR = caller.isManager();
+        boolean isSelfAssigned = shift.getEmployees().contains(caller.getUser());
+
+        if (!isHR && !isSelfAssigned) {
+            throw new SecurityException("Only HR or employees assigned to the shift can add it.");
+        }
+
+        this.shifts.add(shift);
+    }
+
+
 
     public List<Shift> getShifts() {
         return shifts;

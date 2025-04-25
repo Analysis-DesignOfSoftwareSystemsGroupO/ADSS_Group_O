@@ -1,5 +1,4 @@
 package HR_Mudol.Service.EmployeeSystem;
-
 import HR_Mudol.domain.Employee;
 import HR_Mudol.domain.User;
 import HR_Mudol.domain.Constraint;
@@ -7,14 +6,22 @@ import HR_Mudol.domain.WeekDay;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.Week;
 import HR_Mudol.domain.Shift;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeSystem implements IEmployeeSystem {
 
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
+
+
+    public EmployeeSystem() {
+        this.scanner = new Scanner(System.in);
+    }
+
+    public EmployeeSystem(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
     @Override
     // Updated method signature to receive Week as a parameter
