@@ -164,34 +164,14 @@ public class HRManagerMenu extends Menu{
         }
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter the day of the shift (Capital letters only): ");
-        String day = scanner.nextLine().toUpperCase();
-
-        System.out.print("Enter the type of the shift (Capital letters only): ");
-        String type = scanner.nextLine().toUpperCase();
-
-        // חיפוש משמרת לפי יום וסוג
-        Shift shiftToEdit = null;
-        for (Shift shift : week.getShifts()) {
-            if (shift.getDay().name().equals(day) && shift.getType().name().equals(type)) {
-                shiftToEdit = shift;
-                break;
-            }
-        }
-
-        if (shiftToEdit == null) {
-            System.out.println("Shift not found for " + day + " and " + type);
-            return;
-        }
-
         while (true) {
             // הצגת אפשרויות לעריכת המשמרת
-            System.out.println("Shift found: " + shiftToEdit);
             System.out.println("Choose an action: ");
             System.out.println("1. Add employee");
             System.out.println("2. Remove employee");
             System.out.println("3. Add role");
             System.out.println("4. Remove role");
+            System.out.println("0. Back");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":

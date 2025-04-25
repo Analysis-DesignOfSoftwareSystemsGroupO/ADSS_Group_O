@@ -82,10 +82,11 @@ public class ShiftManager implements IShiftManager {
 
         Role role = null;
 
+        // הדפסת רק את התפקידים ששייכים למשמרת
         while (role == null) {
             System.out.println("\nChoose a role to remove from shift " + shift.getDay() + " - " + shift.getType());
-            printRolesList(caller, dependency.getAllRoles(caller));  // make sure this prints roles with their numbers correctly
-            System.out.print("Enter role number (or type 'exit' to cancel): ");
+            printRolesListForShift(caller, relevantRoles);  // מדפיס רק את התפקידים ששייכים למשמרת
+            System.out.print("Enter role ID (or type 'exit' to cancel): ");
 
             String input = scanner.nextLine().trim();
 
@@ -95,20 +96,38 @@ public class ShiftManager implements IShiftManager {
             }
 
             try {
-                int roleNumber = Integer.parseInt(input);
-                role = dependency.getRoleByNumber(roleNumber);
+                int roleId = Integer.parseInt(input); // בחרת לפי ID של תפקיד
+                role = findRoleById(relevantRoles, roleId);
 
-                if (role == null || !relevantRoles.contains(role)) {
+                if (role == null) {
                     System.out.println("This role is not assigned to the shift. Please try again.");
-                    role = null;  // ensure it keeps looping
+                    role = null;  // make sure it keeps looping
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.out.println("Invalid input. Please enter a valid role ID.");
             }
         }
 
+        // הורדת התפקיד
         shift.removeRole(caller, role);
         System.out.println("Role \"" + role.getDescription() + "\" was removed from the shift.");
+    }
+
+    // הדפסת רשימת התפקידים ששייכים למשמרת לפי ID
+    private void printRolesListForShift(User caller, List<Role> roles) {
+        System.out.println("Roles assigned to this shift:");
+        for (Role role : roles) {
+            System.out.println("Role ID: " + role.getRoleNumber() + " - " + role.getDescription());
+        }
+    }
+    // פונקציה שמחזירה את התפקיד לפי ה-ID
+    private Role findRoleById(List<Role> roles, int roleId) {
+        for (Role role : roles) {
+            if (role.getRoleNumber() == roleId) {
+                return role;
+            }
+        }
+        return null;
     }
 
     @Override

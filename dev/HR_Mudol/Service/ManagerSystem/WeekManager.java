@@ -211,49 +211,63 @@ public class WeekManager implements IWeekManager {
     }
 
     @Override
-    public void addEmployeeToShift(User caller,Week week){
+    public void addEmployeeToShift(User caller, Week week) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
-        //choose a shift
+
+        // לבחור משמרת
         Shift shift = findShift(week);
         if (shift == null) {
             System.out.println("Shift not found.");
             return;
         }
 
-        //choose a role - בהכרח כאלו שעדיין לא אויישו
-        List<Role> relevantRole=shift.getNotOccupiedRoles();
-
+        // לבחור תפקידים פנויים
+        List<Role> relevantRole = shift.getNotOccupiedRoles();
         if (relevantRole == null || relevantRole.isEmpty()) {
             System.out.println("All roles are already assigned in this shift.");
             return;
         }
-        // לבחור תפקיד מתוך הרשימה
+
+        // הדפסת רשימת התפקידים עם ה-ID
         printRolesList(caller, relevantRole);
 
         Scanner scanner = new Scanner(System.in);
         Role selectedRole = null;
 
+        // בחירת תפקיד לפי ID
         while (selectedRole == null) {
-            System.out.print("Choose role number: ");
+            System.out.print("Choose role ID: ");
             String input = scanner.nextLine().trim();
+
             try {
-                int roleNum = Integer.parseInt(input);
-                if (roleNum < 1 || roleNum > relevantRole.size()) {
-                    System.out.println("Invalid number. Choose between 1 and " + relevantRole.size());
-                    continue;
+                int roleId = Integer.parseInt(input);
+                selectedRole = findRoleById(relevantRole, roleId);
+                if (selectedRole == null) {
+                    System.out.println("Invalid role ID. Try again.");
                 }
-                selectedRole = relevantRole.get(roleNum - 1);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("Invalid input. Please enter a valid role ID.");
             }
         }
 
-        //choose an emp
+        // לבחור עובד לתפקיד
         Employee chosen = chooseEmployeeForRole(caller, week, shift, selectedRole);
-        dependency.addEmployeeToShift(caller,shift,chosen,selectedRole);
+        dependency.addEmployeeToShift(caller, shift, chosen, selectedRole);
     }
+
+
+    // פונקציה שמחזירה את התפקיד לפי ה-ID
+    private Role findRoleById(List<Role> roles,int roleId) {
+        for (Role role : roles) {
+            if (role.getRoleNumber()==(roleId)) {
+                return role;
+            }
+        }
+        return null;
+    }
+
     private void printRolesList(User caller, List<Role> roles) {
         for (Role r : roles) {
             if (r.getRoleNumber() != 1) { // דילוג על Shift Manager, כי כבר הוסף אוטומטית

@@ -2,7 +2,7 @@ package HR_Mudol.presentation;
 
 import HR_Mudol.Service.ManagerSystem.HRSystemManager;
 import HR_Mudol.Service.ManagerSystem.ShiftManager;
-//import HR_Mudol.Service.ShiftManagerSystem.ShiftManagerSystem;
+import HR_Mudol.Service.ShiftManagerSystem.ShiftManagerSystem;
 import HR_Mudol.domain.*;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ShiftManagerMenu extends Menu {
                     menu.start(caller, self, curBranch);
                     break;
                 case "2":
-                    //manageShift(hr, curBranch, caller, scanner);
+                    manageShift(hr, curBranch, caller, scanner);
                     break;
                 case "0":
                     System.out.println("Logging out. Returning to login screen.");
@@ -39,8 +39,7 @@ public class ShiftManagerMenu extends Menu {
             }
         }
     }
-}
-/*
+
     private static void manageShift(HRSystemManager hr, Branch branch, User caller, Scanner sc) {
         Week currentWeek = branch.getWeeks().get(branch.getWeeks().size() - 1);
 
@@ -49,6 +48,7 @@ public class ShiftManagerMenu extends Menu {
 
         // יצירת ShiftManagerSystem
         ShiftManagerSystem shiftSys = new ShiftManagerSystem(currentWeek, branch, shiftManager);
+
 
         while (true) {
             System.out.println("\n--- Shift Management ---");
@@ -77,4 +77,3 @@ public class ShiftManagerMenu extends Menu {
         }
     }
 }
-*/
