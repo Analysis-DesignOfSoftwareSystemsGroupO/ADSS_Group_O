@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface InventoryController {
-    void addProduct(String id, String name, int minimumStock, String parentCategory);
+    void addProduct( String name, int minimumStock, String parentCategory, double costPrice);
 
     List<Product> getAllProductsDefinitions();
 
@@ -22,7 +22,7 @@ public interface InventoryController {
 
     Category getCategoryById(String catId);
 
-    void saveCategory(String catId, String catName, String parentCategory);
+    void saveCategory(String catName, String parentCategory);
 
     void deleteCategory(String toRemoveCatId);
 

@@ -36,6 +36,15 @@ public class InventoryManu {
 
     }
 
+    // TODO: implement a login by worker type
+    private void logIn() {
+        System.out.println("Please enter your username: ");
+        String username = scanner.nextLine();
+        System.out.println("Please enter your password: ");
+        String password = scanner.nextLine();
+
+    }
+
     private void displayMenu() {
         System.out.println("\n---- Inventory Management Menu: ----");
         System.out.println("1.  List Products");
@@ -80,15 +89,15 @@ public class InventoryManu {
                     break;
                 case 4:
                     // Add Product
-                    System.out.print("Enter product ID: ");
-                    String id = scanner.nextLine();
                     System.out.print("Enter product name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter product's parent category ID: ");
                     String prodParentCatId = scanner.nextLine();
                     int minimumStock = readIntInput("Enter minimum stock: ");
+                    System.out.print("Enter product cost price: ");
+                    double costPrice =readDoubleInput("Enter product cost price: ");
                     // Assuming InventoryController is a class that handles product operations
-                    service.saveProduct(id, name, minimumStock, prodParentCatId);
+                    service.saveProduct(name, minimumStock, prodParentCatId, costPrice);
                     System.out.println("Product added successfully!");
                     break;
                 case 5:
@@ -138,13 +147,11 @@ public class InventoryManu {
                     break;
                 case 14:
                     // Add Category
-                    System.out.print("Enter category ID: ");
-                    String catId = scanner.nextLine();
                     System.out.print("Enter category name: ");
                     String catName = scanner.nextLine();
                     System.out.print("Enter category's parent category ID (don't enter enything for no parent category): ");
                     String parentCatId = scanner.nextLine();
-                    service.saveCategory(catId, catName, parentCatId);
+                    service.saveCategory(catName, parentCatId);
                     System.out.println("Category added successfully!");
                     break;
                 case 15:
@@ -158,26 +165,26 @@ public class InventoryManu {
                     System.out.print("Enter 1 for a product discount and 2 for a category discount: ");
                     DiscountTargetType type;
                     String discountChoiceInput = scanner.nextLine();
-                    if(discountChoiceInput.equals("1")) {
+                    if (discountChoiceInput.equals("1")) {
                         type = DiscountTargetType.PRODUCT;
-                    } else if(discountChoiceInput.equals("2")) {
+                    } else if (discountChoiceInput.equals("2")) {
                         type = DiscountTargetType.CATEGORY;
                     } else {
                         System.out.println("Invalid choice. Please try again.");
                         break;
                     }
-                    System.out.print("Enter " + Discount.typeToString(type) + " ID: ");
-                    String discountTargetId = scanner.nextLine();
                     System.out.print("Enter discount percentage: ");
                     double discountPercentage = readDoubleInput("Enter discount percentage: ");
                     System.out.print("Enter discount description: ");
                     String discountDescription = scanner.nextLine();
+                    System.out.print("Enter target ID (product or category ID): ");
+                    String targetID = scanner.nextLine();
                     System.out.print("Enter discount start date (in the format of YYYY-MM-DD): ");
                     LocalDate discountStartDate = LocalDate.parse(scanner.nextLine());
                     System.out.print("Enter discount end date (in the format of YYYY-MM-DD): ");
                     LocalDate discountEndDate = LocalDate.parse(scanner.nextLine());
-                    service.addDiscount(discountTargetId, discountPercentage, discountDescription, type,
-                                        discountStartDate, discountEndDate);
+                    service.addDiscount(targetID, discountPercentage, discountDescription, type,
+                            discountStartDate, discountEndDate);
                     System.out.println("Discount added successfully!");
                     break;
                 case 17:
