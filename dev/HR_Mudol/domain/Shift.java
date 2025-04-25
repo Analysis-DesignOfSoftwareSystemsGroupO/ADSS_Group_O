@@ -16,6 +16,8 @@ public class Shift {
     private Employee shiftManager;
     private List<FilledRole> filledRoles; //all the roles that already were assigned with emp
 
+
+
     public Shift(WeekDay day, ShiftType type) {
         counter++;
         this.shiftID = counter;
@@ -30,6 +32,9 @@ public class Shift {
     // Getters
     public int getShiftID() {
         return shiftID;
+    }
+    public List<FilledRole> getFilledRoles() {
+        return filledRoles;
     }
 
     public WeekDay getDay() {
@@ -66,6 +71,9 @@ public class Shift {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
+        if (r==null){
+            System.out.println("This role isn't assigned to that shift");
+        }
         this.necessaryRoles.remove(r);
 
         for (FilledRole fr:this.filledRoles){
@@ -96,14 +104,19 @@ public class Shift {
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied");
         }
-        for (FilledRole fr:this.filledRoles){
-            if (fr.getEmployee()==employee){
-                this.filledRoles.remove(fr); //the role isn't filled anymore
-                updateStatus(caller,Status.Problem);
-                break;
+        if (this.employees.contains(employee))
+        {
+            for (FilledRole fr:this.filledRoles){
+                if (fr.getEmployee()==employee){
+                    this.filledRoles.remove(fr); //the role isn't filled anymore
+                    updateStatus(caller,Status.Problem);
+                    break;
+                }
             }
+            this.employees.remove(employee);
         }
-        this.employees.remove(employee);
+        else System.out.println(employee.getEmpName()+ " wasn't assigned to that shift.");
+
     }
 
     @Override
@@ -135,4 +148,26 @@ public class Shift {
         }
         this.shiftManager = shiftManager;
     }
+
+    public List<Role> getNotOccupiedRoles() {
+        List<Role> notOccupied = new LinkedList<>();
+
+        for (Role role : necessaryRoles) {
+            boolean isFilled = false;
+
+            for (FilledRole fr : filledRoles) {
+                if (fr.getRole().equals(role)) {
+                    isFilled = true;
+                    break;
+                }
+            }
+
+            if (!isFilled) {
+                notOccupied.add(role);
+            }
+        }
+
+        return notOccupied;
+    }
+
 }

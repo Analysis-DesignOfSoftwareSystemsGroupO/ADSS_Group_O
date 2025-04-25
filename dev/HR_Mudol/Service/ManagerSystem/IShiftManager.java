@@ -11,11 +11,15 @@ public interface IShiftManager {
     void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role);
 
     //Remove employee from shift
-    void removeEmployeeFromShift(User caller, Shift shift, Employee employee);
+    void removeEmployeeFromShift(User caller, Shift shift);
 
     //choosing relevantRole to a shift
     void chooseRelevantRoleForShift(User caller,Shift shift);
 
     //Printing method
     void printShift(User caller, Shift shift);
+
+    void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role);
+
+    void removeRoleFromShift(User caller, Shift shift);
 }

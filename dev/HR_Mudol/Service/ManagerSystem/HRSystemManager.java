@@ -35,8 +35,6 @@ public class HRSystemManager implements IHRSystemManager {
 
         System.out.println("\n👥 Employees Status:");
         System.out.println("- Total employees: " + curBranch.getEmployees().size());
-        //System.out.println("- On vacation: " + employeeManager.countOnVacation());
-        //System.out.println("- Sick leave: " + employeeManager.countSickEmployees());
         System.out.println("- Without roles: " + roleManager.countEmployeesWithoutRoles(caller,curBranch.getEmployees()));
     }
 
@@ -176,8 +174,8 @@ public class HRSystemManager implements IHRSystemManager {
     }
 
     @Override
-    public void removeEmployeeFromShift(User caller, Shift shift, Employee employee) {
-        shiftManager.removeEmployeeFromShift(caller,shift,employee);
+    public void removeEmployeeFromShift(User caller, Shift shift) {
+        shiftManager.removeEmployeeFromShift(caller,shift);
     }
 
     @Override
@@ -236,4 +234,35 @@ public class HRSystemManager implements IHRSystemManager {
     public int hasUnassignedRoles(Week week) {
         return 0;
     }
+
+    @Override
+    public void removeEmployeeFromShift(User caller, Week week) {
+        weekManager.removeEmployeeFromShift(caller,week);
+    }
+
+    @Override
+    public void removeRoleFromShift(User caller, Week week) {
+        weekManager.removeRoleFromShift(caller,week);
+    }
+
+    @Override
+    public void addARoleToShift(User caller, Week week) {
+        weekManager.addARoleToShift(caller,week);
+    }
+
+    @Override
+    public void addEmployeeToShift(User caller, Week week) {
+        weekManager.addEmployeeToShift(caller,week);
+    }
+
+    @Override
+    public void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
+
+    }
+
+    @Override
+    public void removeRoleFromShift(User caller, Shift shift) {
+
+    }
+
 }

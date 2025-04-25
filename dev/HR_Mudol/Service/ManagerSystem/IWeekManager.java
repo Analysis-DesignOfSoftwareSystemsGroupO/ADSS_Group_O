@@ -28,4 +28,12 @@ public interface IWeekManager {
 
     int hasUnassignedRoles(Week week);
 
+    void removeEmployeeFromShift(User caller,Week week);
+
+    void removeRoleFromShift(User caller,Week week);
+
+    void addARoleToShift(User caller, Week week);
+
+    void addEmployeeToShift(User caller,Week week);
+
 }

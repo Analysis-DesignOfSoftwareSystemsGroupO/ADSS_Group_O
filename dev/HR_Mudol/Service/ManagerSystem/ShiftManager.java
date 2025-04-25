@@ -2,6 +2,7 @@ package HR_Mudol.Service.ManagerSystem;
 
 import HR_Mudol.domain.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ShiftManager implements IShiftManager {
@@ -14,29 +15,100 @@ public class ShiftManager implements IShiftManager {
 
     @Override
     public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
-        System.out.println("DEBUG: caller = " + caller.getUser().getEmpName());
-        System.out.println("DEBUG: isManager = " + caller.isManager());
-        System.out.println("DEBUG: isShiftManager = " + caller.isShiftManager());
-        System.out.println("DEBUG: dependency is null? " + (dependency == null));
-
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
 
         shift.addEmployee(caller, employee,role);
-        System.out.println("Employee " + employee.getEmpName() +
+        System.out.println(employee.getEmpName() +
                 " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
 
     @Override
-    public void removeEmployeeFromShift(User caller, Shift shift, Employee employee) {
+    public void removeEmployeeFromShift(User caller, Shift shift) {
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
+        if (shift==null){
+            System.out.println("Shift doesn't exist.");
+            return;
+        }
+        List<Employee> employees = shift.getEmployees();
+        if (employees.isEmpty()) {
+            System.out.println("No employees assigned to this shift.");
+            return;
+        }
 
-        shift.removeEmployee(caller, employee);
-        System.out.println("Employee " + employee.getEmpName() +
-                " removed from shift " + shift.getDay() + " - " + shift.getType() + ".");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose an employee to remove by their index:");
+
+        int index = 1;
+        for (Employee e : employees) {
+            System.out.println(index + ". " + e.getEmpName());
+            index++;
+        }
+
+        String input = scanner.nextLine().trim();
+        int chosenIndex;
+
+        try {
+            chosenIndex = Integer.parseInt(input);
+            if (chosenIndex < 1 || chosenIndex > employees.size()) {
+                System.out.println("Invalid index. Please enter a number between 1 and " + employees.size());
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            return;
+        }
+
+        Employee employeeToRemove = employees.get(chosenIndex - 1);
+        shift.removeEmployee(caller, employeeToRemove);
+
+        System.out.println(employeeToRemove.getEmpName() +
+                " was removed from shift " + shift.getDay() + " - " + shift.getType() + ".");
+    }
+
+    @Override
+    public void removeRoleFromShift(User caller, Shift shift) {
+
+        Scanner scanner = new Scanner(System.in);
+        List<Role> relevantRoles = shift.getNecessaryRoles();
+
+        if (relevantRoles.isEmpty()) {
+            System.out.println("There are no roles assigned to this shift.");
+            return;
+        }
+
+        Role role = null;
+
+        while (role == null) {
+            System.out.println("\nChoose a role to remove from shift " + shift.getDay() + " - " + shift.getType());
+            printRolesList(caller, dependency.getAllRoles(caller));  // make sure this prints roles with their numbers correctly
+            System.out.print("Enter role number (or type 'exit' to cancel): ");
+
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+
+            try {
+                int roleNumber = Integer.parseInt(input);
+                role = dependency.getRoleByNumber(roleNumber);
+
+                if (role == null || !relevantRoles.contains(role)) {
+                    System.out.println("This role is not assigned to the shift. Please try again.");
+                    role = null;  // ensure it keeps looping
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+
+        shift.removeRole(caller, role);
+        System.out.println("Role \"" + role.getDescription() + "\" was removed from the shift.");
     }
 
     @Override
@@ -52,7 +124,7 @@ public class ShiftManager implements IShiftManager {
         boolean done = false;
 
         while (!done) {
-            printRolesList(caller);
+            printRolesList(caller,dependency.getAllRoles(caller));
 
             int roleNumber = -1;
             while (true) {
@@ -103,8 +175,16 @@ public class ShiftManager implements IShiftManager {
         System.out.println(shift.toString());
     }
 
-    private void printRolesList(User caller) {
-        for (Role r : dependency.getAllRoles(caller)) {
+    @Override
+    public void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
+        if (!caller.isManager() && !caller.isShiftManager()) {
+            throw new SecurityException("Access denied.");
+        }
+        shift.addEmployee(caller, employee, role);
+    }
+
+    private void printRolesList(User caller, List<Role> roles) {
+        for (Role r : roles) {
             if (r.getRoleNumber() != 1) { // דילוג על Shift Manager, כי כבר הוסף אוטומטית
                 System.out.println(r.getRoleNumber() + " - " + r.getDescription());
             }

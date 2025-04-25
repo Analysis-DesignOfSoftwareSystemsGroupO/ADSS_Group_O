@@ -36,7 +36,6 @@ public interface IEmployeeManager {
 
     public IRoleManager getRoleManager();
 
-
     //Printing method:
     void printEmployees(User caller);
 

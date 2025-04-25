@@ -130,6 +130,7 @@ public class HRManagerMenu extends Menu{
             System.out.println("\n--- Shift Management ---");
             System.out.println("1. Assigning roles to weekly shifts");
             System.out.println("2. Assigning employees to weekly shifts");
+            System.out.println("3. Edit shifts");
             System.out.println("0. Back to Main Menu");
 
 
@@ -145,6 +146,8 @@ public class HRManagerMenu extends Menu{
                     break;
                 case "2":
                     hr.assigningEmployToShifts(caller, weeks.getLast());
+                case "3":
+                    editShifts(hr,caller,weeks.getLast());
                     break;
                 case "0":
                     return;
@@ -154,7 +157,65 @@ public class HRManagerMenu extends Menu{
         }
     }
 
-    private static void manageEmployees(HRSystemManager hr, User caller, Scanner sc) {
+
+    public static void editShifts(HRSystemManager hr,User caller, Week week) {
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied.");
+        }
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the day of the shift (Capital letters only): ");
+        String day = scanner.nextLine().toUpperCase();
+
+        System.out.print("Enter the type of the shift (Capital letters only): ");
+        String type = scanner.nextLine().toUpperCase();
+
+        // חיפוש משמרת לפי יום וסוג
+        Shift shiftToEdit = null;
+        for (Shift shift : week.getShifts()) {
+            if (shift.getDay().name().equals(day) && shift.getType().name().equals(type)) {
+                shiftToEdit = shift;
+                break;
+            }
+        }
+
+        if (shiftToEdit == null) {
+            System.out.println("Shift not found for " + day + " and " + type);
+            return;
+        }
+
+        while (true) {
+            // הצגת אפשרויות לעריכת המשמרת
+            System.out.println("Shift found: " + shiftToEdit);
+            System.out.println("Choose an action: ");
+            System.out.println("1. Add employee");
+            System.out.println("2. Remove employee");
+            System.out.println("3. Add role");
+            System.out.println("4. Remove role");
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1":
+                    hr.addEmployeeToShift(caller,week);
+                    break;
+                case "2":
+                    hr.removeRoleFromShift(caller,week);
+                    break;
+                case "3":
+                    hr.addARoleToShift(caller,week);
+                    break;
+                case "4":
+                    hr.removeRoleFromShift(caller,week);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+
+
+    }
+        private static void manageEmployees(HRSystemManager hr, User caller, Scanner sc) {
         while (true) {
             System.out.println("\n--- Employee Management ---");
             System.out.println("1. Add Employee");

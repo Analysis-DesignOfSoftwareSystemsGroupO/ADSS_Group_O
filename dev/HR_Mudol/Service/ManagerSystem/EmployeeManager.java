@@ -224,6 +224,10 @@ public class EmployeeManager implements IEmployeeManager {
     @Override
     public Employee getEmployeeById(User caller, int empId) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
+        String idString = String.valueOf(empId);
+        if (idString.length() != 9) {
+            throw new IllegalArgumentException("Employee ID must be exactly 9 digits.");
+        }
 
         for (Employee e : curBranch.getEmployees()) {
             if (e.getEmpId() == empId) return e;
