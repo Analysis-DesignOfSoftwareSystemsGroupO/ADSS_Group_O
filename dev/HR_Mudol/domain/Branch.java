@@ -40,6 +40,9 @@ public class Branch {
         this.users = new LinkedList<>();
         this.oldEmployee = new LinkedList<>();
 
+        Role shiftManager=new Role("Shift Manager");
+        roles.addFirst(shiftManager);
+
         // Initialize with one current week
         this.weeks.add(new Week());
     }

@@ -84,8 +84,8 @@ public class Shift {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied");
         }
-        if (r == null || necessaryRoles.contains(r)) {
-            throw new IllegalArgumentException("Role already exists or is null.");
+        if (r == null) {
+            throw new IllegalArgumentException("Role is null.");
         }
         this.necessaryRoles.add(r);
     }

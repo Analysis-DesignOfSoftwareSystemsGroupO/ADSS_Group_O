@@ -211,11 +211,8 @@ public class ShiftManager implements IShiftManager {
             throw new SecurityException("Access denied.");
         }
 
-        // Add Shift Manager only if not already added (by role number check)
-        Role shiftManagerRole = dependency.getRoleByNumber(1);
-        if (shiftManagerRole != null && !shiftAlreadyHasRole(shift, shiftManagerRole.getRoleNumber())) {
-            shift.addNecessaryRoles(caller, shiftManagerRole);
-        }
+        //add automatically shift manager
+        shift.addNecessaryRoles(caller, dependency.getRoleByNumber(1));
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -236,9 +233,7 @@ public class ShiftManager implements IShiftManager {
                     if (role == null) {
                         System.out.println("Role number does not exist. Please try again.");
                     } else if (role.getRoleNumber() == 1) {
-                        System.out.println("Shift Manager already added. Please choose another role.");
-                    } else if (shiftAlreadyHasRole(shift, role.getRoleNumber())) {
-                        System.out.println("Role already assigned to the shift. Please choose another role.");
+                        System.out.println("Shift Manager was automatically added. Please choose another role.");
                     } else {
                         shift.addNecessaryRoles(caller, role);
                         System.out.println(role.getDescription() + " was added to the shift.");

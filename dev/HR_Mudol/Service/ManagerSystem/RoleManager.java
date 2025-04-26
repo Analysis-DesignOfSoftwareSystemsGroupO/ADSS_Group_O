@@ -29,9 +29,6 @@ public class RoleManager implements IRoleManager {
      */
     public RoleManager(Branch curBranch) {
         this.curBranch = curBranch;
-        // Initialize with a default "Shift Manager" role
-        Role Shift_Manager = new Role("Shift Manager");
-        this.curBranch.getRoles().add(Shift_Manager);
         this.scanner = new Scanner(System.in);
     }
 

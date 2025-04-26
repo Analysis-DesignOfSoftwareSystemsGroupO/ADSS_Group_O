@@ -126,4 +126,20 @@ public class Role {
 
         return string.toString();
     }
+
+    /**
+     * Compares this Role to another object for equality.
+     * Two roles are considered equal if they have the same description.
+     *
+     * @param obj the object to compare with
+     * @return true if the given object is a Role with the same description, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Comparing to itself
+        if (obj == null || getClass() != obj.getClass()) return false; // Null or different class
+        Role other = (Role) obj;
+        return description.equals(other.description); // Compare descriptions
+    }
+
 }

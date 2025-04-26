@@ -161,7 +161,7 @@ public class WeekManager implements IWeekManager {
 
                 if (constraint == null) {
                     System.out.println("The employee can work this shift.");
-                    System.out.print("Do you want to choose them? (Y/N): ");
+                    System.out.print("Do you want to choose him/her? (Y/N): ");
                     String choosing = scanner.nextLine().trim();
 
                     if (choosing.equalsIgnoreCase("Y")) {
@@ -375,9 +375,9 @@ public class WeekManager implements IWeekManager {
      */
     private void printRolesList(User caller, List<Role> roles) {
         for (Role r : roles) {
-            if (r.getRoleNumber() != 1) { // דילוג על Shift Manager, כי כבר הוסף אוטומטית
+
                 System.out.println(r.getRoleNumber() + " - " + r.getDescription());
-            }
+
         }
     }
 
