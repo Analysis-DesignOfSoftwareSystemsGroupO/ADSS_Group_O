@@ -395,19 +395,41 @@ public class EmployeeSystem implements IEmployeeSystem {
                 throw new SecurityException("Access denied: You may only view your own constraints.");
             }
 
-            List<Constraint> morning = self.getMorningConstraints(caller);
-            List<Constraint> evening = self.getEveningConstraints(caller);
+            System.out.println("Which constraints would you like to view?");
+            System.out.println("1. Current week's submitted constraints");
+            System.out.println("2. Locked (past) constraints");
+            System.out.print("Enter your choice: ");
 
-            System.out.println("=== Submitted Constraints ===");
+            String input = scanner.nextLine().trim();
 
-            if (morning.isEmpty() && evening.isEmpty()) {
-                System.out.println("No constraints submitted.");
-                return;
+            if (input.equals("1")) {
+                List<Constraint> morning = self.getMorningConstraints(caller);
+                List<Constraint> evening = self.getEveningConstraints(caller);
+
+                System.out.println("\n=== Current Week Constraints ===");
+
+                if (morning.isEmpty() && evening.isEmpty()) {
+                    System.out.println("No current week constraints submitted.");
+                    return;
+                }
+
+                printConstraintsList(morning, "MORNING shift");
+                printConstraintsList(evening, "EVENING shift");
+
+            } else if (input.equals("2")) {
+                List<Constraint> locked = self.getLockedConstraintsAllowSelfView(caller);
+
+                System.out.println("\n=== Locked Constraints ===");
+
+                if (locked.isEmpty()) {
+                    System.out.println("No locked constraints found.");
+                    return;
+                }
+
+                printConstraintsList(locked, "LOCKED");
+            } else {
+                System.out.println("Invalid input. Returning to menu.");
             }
-
-            // Display morning and evening constraints separately
-            printConstraintsList(morning, "MORNING shift");
-            printConstraintsList(evening, "EVENING shift");
 
         } catch (SecurityException se) {
             System.out.println("Access denied: " + se.getMessage());
@@ -415,6 +437,8 @@ public class EmployeeSystem implements IEmployeeSystem {
             System.out.println("An unexpected error occurred: " + ex.getMessage());
         }
     }
+
+
 
     /**
      * Allows the employee to change their password after verifying their current password.

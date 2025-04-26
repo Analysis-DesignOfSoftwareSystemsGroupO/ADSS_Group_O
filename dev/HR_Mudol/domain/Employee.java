@@ -188,6 +188,23 @@ public class Employee extends AbstractEmployee {
     }
 
     /**
+     * Returns the locked constraints (after submission deadline).
+     * Accessible by the employee himself or an HR manager.
+     *
+     * @param caller The user requesting access.
+     * @return List of locked constraints.
+     */
+    public List<Constraint> getLockedConstraintsAllowSelfView(User caller) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
+            throw new SecurityException("Access denied.");
+        }
+        return this.lockedConstraints;
+    }
+
+
+
+
+    /**
      * Prints the employee's relevant roles.
      */
     public void printRelevantRoles() {

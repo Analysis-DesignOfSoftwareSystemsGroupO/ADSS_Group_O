@@ -38,7 +38,7 @@ public class EmployeeMenu implements Menu {
             System.out.println("1. View my shifts");
             System.out.println("2. Submit weekly constraints");
             System.out.println("3. Edit existing constraints");
-            System.out.println("4. View my submitted constraints");
+            System.out.println("4. View my constraints (current/Locked)");
             System.out.println("5. View my contract details");
             System.out.println("6. View my available roles");
             System.out.println("7. View my personal details");
