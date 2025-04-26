@@ -38,14 +38,20 @@ public class InventoryControllerImpl implements InventoryController {
         productRepository.deleteProduct(id);
     }
 
-    public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status) {
+    public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
         System.out.println("Adding stock for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock add operation.");
         }
-        StockItem stockItemToAdd = new StockItem(quantity, location, status);
+        StockItem stockItemToAdd = new StockItem(quantity, location, status, expiryDate);
         stockItemToAdd.setProduct(product);
+        if (location == "in store") {
+            stockItemToAdd.setLocation(product.getLocation());
+        } else if (location == "storage") {
+            stockItemToAdd.setLocation(location);
+        }
+
         stockItemRepository.saveStockItem(stockItemToAdd);
     }
 
@@ -75,11 +81,11 @@ public class InventoryControllerImpl implements InventoryController {
         return InMemoryCategoryRepository.getCategoryIdByName(name);
     }
 
-    public void saveCategory( String catName, String parentCategoryId) {
+    public void saveCategory(String catName, String parentCategoryName) {
         System.out.println("Adding category: " + catName);
 
-        Category parentCategory = getCategoryById(parentCategoryId);
-        if (!parentCategoryId.isEmpty() && parentCategory == null) {
+        Category parentCategory = getCategoryById(getCategoryIdByName(parentCategoryName));
+        if (!parentCategoryName.isEmpty() && parentCategory == null) {
             throw new IllegalArgumentException("Parent category not found. Aborting category add operation.");
         }
         Category newCategory = new Category(catName);
@@ -428,4 +434,6 @@ public class InventoryControllerImpl implements InventoryController {
         }
         return null;
         }
+
+
 }

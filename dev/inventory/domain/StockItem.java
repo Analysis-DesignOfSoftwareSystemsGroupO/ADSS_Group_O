@@ -12,7 +12,7 @@ public class StockItem {
     private LocalDate expiryDate;
     private StockItemStatus status;
 
-    public StockItem(int quantity, String locationStatus, StockItemStatus status) {
+    public StockItem(int quantity, String locationStatus, StockItemStatus status, LocalDate expiryDate) {
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity cannot be negative");
         }
@@ -21,7 +21,7 @@ public class StockItem {
         this.quantity = quantity;
         this.location = locationStatus;
         this.status = status;
-        this.expiryDate = null; // Default to null if not provided
+        this.expiryDate = expiryDate;
 
 
         // Getters and Setters

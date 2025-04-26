@@ -32,6 +32,7 @@ public class Product {
         }
         this.id = UUID.randomUUID().toString();
         this.name = name;
+        this.manufacturer = manufacturer;
         this.minimumStockLevel = minimumStockLevel;
         this.costPrice = costPrice;
         this.sellingPrice = costPrice * 1.2; // set Default selling price to 20% more than cost price
