@@ -112,6 +112,10 @@ public class UserApplication {
         inventoryController.saveCategory(catName, parentCategoryId);
     }
 
+    public void updateDiscounts() {
+        inventoryController.UpdateDiscounts();
+    }
+
     public void deleteCategory(String toRemoveCatId) {
         inventoryController.deleteCategory(toRemoveCatId);
     }

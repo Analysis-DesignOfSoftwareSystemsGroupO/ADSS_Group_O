@@ -17,6 +17,7 @@ public class Product {
     private int minimumStockLevel;
     private Category category;
     private String location;
+    private boolean discountActive;
 //    private Discount discount;
 
     /**
@@ -35,8 +36,24 @@ public class Product {
         this.manufacturer = manufacturer;
         this.minimumStockLevel = minimumStockLevel;
         this.costPrice = costPrice;
-        this.sellingPrice = costPrice * 1.2; // set Default selling price to 20% more than cost price
+        this.sellingPrice = costPrice * 1.2;// set Default selling price to 20% more than cost price
+        this.discountActive = false;
         this.location = location;
+    }
+
+    public boolean getDiscountActive() {
+        return discountActive;
+    }
+
+    public void setDiscountActive(boolean discountActive) {
+        this.discountActive = discountActive;
+    }
+
+    public void setSellingPrice(double sellingPrice) {
+        if (sellingPrice < 0) {
+            throw new IllegalArgumentException("Selling price cannot be negative");
+        }
+        this.sellingPrice = sellingPrice;
     }
 
     public String getLocation() {

@@ -73,6 +73,55 @@ public class InventoryControllerImpl implements InventoryController {
         InMemoryCategoryRepository.printAllCategories();
     }
 
+    public void UpdateDiscounts() {
+        System.out.println("Activating discounts...");
+        List<Discount> discounts = discountRepository.getAllDiscounts();
+        for (Discount discount : discounts) {
+                if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
+                    Product product = productRepository.getProductById(discount.getTargetId());
+                    if (product != null) {
+                        if(discount.isActive()){
+                            activateDiscount(product, discount);
+                        }
+                        else {
+                            deactivateDiscount(product, discount);
+                        }
+                    } else {
+                        System.out.println("Product with ID " + discount.getTargetId() + " not found.");
+                    }
+                } else if (discount.getTargetType() == DiscountTargetType.CATEGORY) {
+                    Category category = getCategoryById(discount.getTargetId());
+                    if (category != null) {
+                        for (Product product : category.getProducts()) {
+                            if (product != null) {
+                                if (discount.isActive()) {
+                                    activateDiscount(product, discount);
+                                } else {
+                                    deactivateDiscount(product, discount);
+                                }
+                            }
+                        }
+                    }else {
+                        System.out.println("Category with ID " + discount.getTargetId() + " not found.");
+                    }
+                }
+        }
+    }
+
+
+    public void activateDiscount(Product product,Discount discount) {
+                if (!product.getDiscountActive()){
+                    product.setSellingPrice(product.getSellingPrice() * (1 - discount.getDiscountPercentage() / 100));
+                    product.setDiscountActive(true);
+                };
+    }
+    public void deactivateDiscount(Product product,Discount discount) {
+            if (product.getDiscountActive()) {
+                product.setSellingPrice(product.getSellingPrice() / (1 - discount.getDiscountPercentage() / 100));
+                product.setDiscountActive(false);
+        }
+    }
+
     public Category getCategoryById(String id) {
         return InMemoryCategoryRepository.getCategoryById(id);
     }
