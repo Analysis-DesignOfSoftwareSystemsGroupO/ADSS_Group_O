@@ -24,6 +24,8 @@ public interface InventoryController {
 
     Category getCategoryById(String catId);
 
+    StockItem getStockItemById(String id);
+
     void saveCategory(String catName, String parentCategory);
 
     void deleteCategory(String toRemoveCatId);
@@ -36,11 +38,13 @@ public interface InventoryController {
 
     double getDiscountByProductId(String productId);
 
-    void moveStockItem(String productName,String productManufacturer,String newLocation, int amount, LocalDate expiryDate, StockItemStatus status);
+    void moveStockItem(Product product, String newLocation, int amount, LocalDate expiryDate);
 
-    void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus);
+    void updateInventoryWithDefects(Product product,String location, LocalDate expiryDate, int defectedAmount);
 
     void UpdateDiscounts();
+
+
 
     String getCategoryIdByName(String name);
     List<StockItem> getAllStockItems();

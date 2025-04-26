@@ -12,9 +12,15 @@ public class UserApplication {
         this.inventoryController = new InventoryControllerImpl();
     }
 
-    public void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus){
-        inventoryController.changeStockItemStatus(productName,productManufacturer, expiryDate, newStatus);
+    public void updateInventoryWithDefectiveItems(String productName, String productManufacturer,String location, LocalDate expiryDate, int defectedAmount) {
+        Product product = inventoryController.getProductByName(productName, productManufacturer);
+
+        inventoryController.updateInventoryWithDefects(product,location, expiryDate, defectedAmount);
     }
+
+//    public void updateStockStatus(String stockId, StockItemStatus status) {
+//        StockItem stockItem = inventoryController.getStockItemById(stockId);
+//    }
 
     public void saveProduct(String name, int minimumStock, String[] categoryInfo, double costPrice, String location, String manufacturer) {
         System.out.println("Adding product: " + name);
@@ -68,7 +74,7 @@ public class UserApplication {
         inventoryController.saveStockItem("Test Product 3", "RCF", 30,"in store",StockItemStatus.OK, LocalDate.now().plusDays(12));
         inventoryController.saveStockItem("Test Product 4", "VBX", 30,"storage",StockItemStatus.EXPIRED, LocalDate.now().plusDays(5));
         inventoryController.saveStockItem("Test Product 5", "TCF", 15,"in store",StockItemStatus.OK,LocalDate.now().plusDays(10) );
-        inventoryController.saveStockItem("Test Product 6", "GGV", 30,"storage",StockItemStatus.DAMAGED,LocalDate.now().plusDays(70) );
+        inventoryController.saveStockItem("Test Product 6", "GGV", 30,"storage",StockItemStatus.DAMAGED,LocalDate.now().plusDays(365) );
         inventoryController.saveStockItem("Test Product 6", "GGV", 30,"in store",StockItemStatus.OK,LocalDate.now().plusDays(365) );
         inventoryController.saveStockItem("Test Product 1", "ADF", 40,"storage",StockItemStatus.OK ,LocalDate.now().plusDays(30));
         inventoryController.saveStockItem("Test Product 2", "DCF", 50,"storage",StockItemStatus.OK,LocalDate.now().plusDays(6) );
@@ -143,8 +149,9 @@ public class UserApplication {
         }
     }
 
-    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount, LocalDate expiryDate, StockItemStatus status){
-        inventoryController.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate, status);
+    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount, LocalDate expiryDate){
+        Product product = inventoryController.getProductByName(productName, productManufacturer);
+        inventoryController.moveStockItem(product,newLocation, amount, expiryDate);
 
     }
 }

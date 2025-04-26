@@ -19,7 +19,12 @@ public class InMemoryStockItemRepository implements StockItemRepository {
 
     @Override
     public void deleteStockItem(String id) {
-        stockItems.removeIf(stockItem -> stockItem.getProduct().getId().equals(id));
+        for (StockItem stockItem: stockItems) {
+            if (stockItem.getId().equals(id)) {
+                stockItems.remove(stockItem);
+                return;
+            }
+        }
     }
 
     @Override

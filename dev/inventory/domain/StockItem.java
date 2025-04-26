@@ -34,6 +34,7 @@ public class StockItem {
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
+
     public String getId() {
         return stockItemId;
     }
@@ -42,7 +43,7 @@ public class StockItem {
         this.expiryDate = expiryDate;
     }
 
-    public String getStockItemId(){
+    public String getStockItemId() {
         return stockItemId;
     }
 
@@ -64,6 +65,7 @@ public class StockItem {
     public void setProduct(Product product) {
         this.product = product;
     }
+
     public StockItemStatus getStatus() {
         return status;
     }
@@ -72,7 +74,7 @@ public class StockItem {
         return location;
     }
 
-   public void setLocation(String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 

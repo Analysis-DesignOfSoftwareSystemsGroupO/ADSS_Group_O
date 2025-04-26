@@ -21,10 +21,10 @@ public class InventoryMenu {
 
     public void run() {
         System.out.println("\nWelcome to the inventory Management Menu!");
-        service.updateDiscounts();
         int worker = chooseWorkerType();
         int choice = 0;
         do {
+            service.updateDiscounts();
             if (worker == 2) {
                 displayMenuForWorker();
                 choice = readIntInput("Please enter your choice: ");
@@ -37,8 +37,6 @@ public class InventoryMenu {
                 System.out.println("Invalid choice. Please try again.");
                 break;
             }
-
-
         } while (choice != 0);
         System.out.println("Exiting the inventory Management Menu. Goodbye!");
 
@@ -163,23 +161,31 @@ public class InventoryMenu {
                                 System.out.println("Enter expiry date (YYYY-MM-DD): ");
                                 expiryDate = LocalDate.parse(scanner.nextLine());
                             }
-                            System.out.print("Enter Product status (OK, DAMAGED, EXPIRED): ");
-                            StockItemStatus status = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
                             int amount = readIntInput("Enter amount to move: ");
-                            service.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate, status);
+                            service.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate);
                             break;
                         case 2:
-                            // Remove Items
-                            System.out.println("\n***Change Status***\n");
+                            // Update Defected Items
+                            System.out.println("\n***Update Defected Items***\n");
                             System.out.print("Enter Product name: ");
                             productName = scanner.nextLine();
                             System.out.print("Enter product manufacturer: ");
                             productManufacturer = scanner.nextLine();
-                            StockItemStatus newStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
                             System.out.print("Enter expiry date (YYYY-MM-DD): ");
                             expiryDate = LocalDate.parse(scanner.nextLine());
-                            service.changeStockItemStatus(productName, productManufacturer, expiryDate, newStatus);
+                            System.out.println("Enter Current location (in store/ storage): ");
+                            String currentLocation = scanner.nextLine();
+                            int defectedAmount = readIntInput("Enter amount of defected items: ");
+                            service.updateInventoryWithDefectiveItems(productName, productManufacturer, currentLocation, expiryDate, defectedAmount);
                             break;
+                        case 3:
+                            // Update Stock Status //TODO: Choose how we want to implement this (and if needed at all)
+//                            System.out.println("\n***Update Stock Status***\n");
+//                            System.out.print("Enter Stock id: ");
+//                            String stockId = scanner.nextLine();
+//                            System.out.print("Enter new status (OK, DEFECT, EXPIRED): ");
+//                            StockItemStatus newStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
+//                            service.updateStockStatus(stockId, newStatus);
                         default:
                             System.out.println("Invalid choice. Please try again.");
                     }
@@ -280,6 +286,7 @@ public class InventoryMenu {
                 case 18:
                     //List Discount
                     service.listDiscounts();
+                    break;
                 case 19:
                     // Upload Test Data
                     System.out.println("Uploading test data...");
@@ -303,8 +310,12 @@ public class InventoryMenu {
     }
 
     public void displayStockUpdateMenu() {
-        System.out.println("Choose which of the following you wold like to do:" +
-                "\n 1. Move Items" + "\n 2. Change Status");
+        System.out.println("""
+                Choose which of the following you wold like to do:\
+                
+                 1. Move Items (same Status)
+                 2. Update Defected Items (change status)
+                 3. Update Stock Status""");
     }
 
 
