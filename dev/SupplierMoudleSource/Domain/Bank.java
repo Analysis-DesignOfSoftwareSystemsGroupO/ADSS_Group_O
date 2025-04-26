@@ -25,7 +25,8 @@ public class Bank {
         return ownerID;
     }
 
+
     public String toString() {
-        return "Bank Account number :" + bankAccount + ", Bank Number:" + bankNumber + ", Bank Branch Number:" + bankBranch;
+        return "Bank Account number: " + bankAccount + ", Bank Number: " + bankNumber + ", Bank Branch Number: " + bankBranch;
     }
 }
