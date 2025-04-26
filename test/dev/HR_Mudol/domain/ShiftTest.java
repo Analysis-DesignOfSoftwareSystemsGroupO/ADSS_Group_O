@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,9 +36,12 @@ public class ShiftTest {
         regularUser = new User(regularEmp, Level.regularEmp);
 
         sampleRole = new Role("Cashier");
-        shift.addNecessaryRoles(hrUser, sampleRole); // נוסיף תפקיד לצורך בדיקות addEmployee
+        shift.addNecessaryRoles(hrUser, sampleRole);
     }
 
+    /**
+     * Test basic getters: day, type, and initial status of the shift.
+     */
     @Test
     public void testGetters() {
         assertEquals(WeekDay.TUESDAY, shift.getDay());
@@ -47,24 +49,36 @@ public class ShiftTest {
         assertEquals(Status.Empty, shift.getStatus());
     }
 
+    /**
+     * Test updating shift status by HR manager.
+     */
     @Test
     public void testUpdateStatusAsHR() {
         shift.updateStatus(hrUser, Status.Full);
         assertEquals(Status.Full, shift.getStatus());
     }
 
+    /**
+     * Test adding an employee to the shift by a shift manager.
+     */
     @Test
     public void testAddEmployeeByShiftManager() {
         shift.addEmployee(shiftManagerUser, regularEmp, sampleRole);
         assertTrue(shift.getEmployees().contains(regularEmp));
     }
 
+    /**
+     * Test adding an employee to the shift by HR manager.
+     */
     @Test
     public void testAddEmployeeByHR() {
         shift.addEmployee(hrUser, regularEmp, sampleRole);
         assertTrue(shift.getEmployees().contains(regularEmp));
     }
 
+    /**
+     * Test that a regular employee cannot add another employee to the shift.
+     */
     @Test
     public void testAddEmployeeAccessDenied() {
         assertThrows(SecurityException.class, () -> {
@@ -72,6 +86,9 @@ public class ShiftTest {
         });
     }
 
+    /**
+     * Test adding a necessary role to the shift.
+     */
     @Test
     public void testAddNecessaryRole() {
         Role newRole = new Role("Admin");
@@ -79,12 +96,18 @@ public class ShiftTest {
         assertTrue(shift.getNecessaryRoles().contains(newRole));
     }
 
+    /**
+     * Test setting the shift manager for the shift.
+     */
     @Test
     public void testSetShiftManager() {
         shift.setShiftManager(hrUser, shiftManagerEmp);
         assertEquals(shiftManagerEmp, shift.getShiftManager());
     }
 
+    /**
+     * Test that the shift's string representation includes employees and roles.
+     */
     @Test
     public void testToStringIncludesEmployeesAndRoles() {
         shift.addEmployee(hrUser, regularEmp, sampleRole);
@@ -93,6 +116,9 @@ public class ShiftTest {
         assertTrue(out.contains("Cashier"));
     }
 
+    /**
+     * Test removing an employee from the shift by the shift manager.
+     */
     @Test
     public void testRemoveEmployeeByShiftManager() {
         shift.addEmployee(hrUser, regularEmp, sampleRole);
@@ -102,16 +128,14 @@ public class ShiftTest {
 
     @Test
     public void testRemoveRoleRemovesEmployee() {
-        // הוספת תפקיד נחוץ למשמרת
-        shift.addNecessaryRoles(hrUser, sampleRole);
+        Role specialRole = new Role("SpecialRole"); // 🆕 תפקיד חדש
+        shift.addNecessaryRoles(hrUser, specialRole);
 
-        // שיוך עובד למשמרת עם אותו תפקיד
-        shift.addEmployee(hrUser, regularEmp, sampleRole);
+        shift.addEmployee(hrUser, regularEmp, specialRole);
 
-        // הסרה של התפקיד
-        shift.removeRole(hrUser, sampleRole);
+        shift.removeRole(hrUser, specialRole);
 
-        // בדיקה שהעובד הוסר מהמשמרת
+        // בדיקה שהעובד הוסר
         assertFalse(shift.getEmployees().contains(regularEmp));
 
         // בדיקה שה־FilledRole הוסר גם הוא
@@ -120,9 +144,70 @@ public class ShiftTest {
         assertFalse(roleStillFilled);
     }
 
+
+    /**
+     * Test getting the list of not-occupied necessary roles in the shift.
+     */
     @Test
     public void testGetNotOccupiedRoles() {
         List<Role> notOccupied = shift.getNotOccupiedRoles();
         assertTrue(notOccupied.contains(sampleRole));
+    }
+
+    // -------------------------
+    // Additional Edge Case Tests
+    // -------------------------
+
+    /**
+     * Test that adding an employee with a non-required role throws an exception.
+     */
+    @Test
+    public void testAddEmployeeWithNotNecessaryRole() {
+        Role nonRequiredRole = new Role("Security");
+        assertThrows(IllegalArgumentException.class, () -> {
+            shift.addEmployee(hrUser, regularEmp, nonRequiredRole);
+        });
+    }
+
+    /**
+     * Test that adding the same employee twice throws an exception.
+     */
+    @Test
+    public void testAddSameEmployeeTwice() {
+        shift.addEmployee(hrUser, regularEmp, sampleRole);
+        assertThrows(IllegalArgumentException.class, () -> {
+            shift.addEmployee(hrUser, regularEmp, sampleRole);
+        });
+    }
+
+    /**
+     * Test that adding the same necessary role twice throws an exception.
+     */
+    @Test
+    public void testAddSameNecessaryRoleTwice() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            shift.addNecessaryRoles(hrUser, sampleRole);
+        });
+    }
+
+    /**
+     * Test that removing a non-existing role throws an exception.
+     */
+    @Test
+    public void testRemoveNonExistingRole() {
+        Role nonExistingRole = new Role("Security");
+        assertThrows(IllegalArgumentException.class, () -> {
+            shift.removeRole(hrUser, nonExistingRole);
+        });
+    }
+
+    /**
+     * Test that removing an employee not assigned to the shift throws an exception.
+     */
+    @Test
+    public void testRemoveNonExistingEmployee() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            shift.removeEmployee(shiftManagerUser, regularEmp);
+        });
     }
 }

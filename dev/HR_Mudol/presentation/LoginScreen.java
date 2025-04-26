@@ -11,8 +11,6 @@ import java.util.Scanner;
 public class LoginScreen {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final EmployeeSystem employeeSystem = new EmployeeSystem();
-
 
     public void start(Branch curBranch) {
 

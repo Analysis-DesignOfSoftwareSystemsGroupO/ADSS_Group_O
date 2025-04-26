@@ -8,7 +8,6 @@ import java.util.List;
 public class HRSystemManager implements IHRSystemManager {
 
     private Branch curBranch;
-    //private List<Week> weeksHistory;
     private RoleManager roleManager;
     private EmployeeManager employeeManager;
     private ShiftManager shiftManager;
