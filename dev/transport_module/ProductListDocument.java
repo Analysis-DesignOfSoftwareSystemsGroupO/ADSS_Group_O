@@ -53,7 +53,7 @@ public class ProductListDocument {
             throw new InvalidInputException();
         }
         if(!transport.getDate().equals(date)){
-            throw new ATransportMismatchException("Transport date doesn't match to document shipment date.");
+            throw new TransportMismatchException("Transport date doesn't match to document shipment date.");
         }
         transportId = transport.getId();
     }

@@ -73,7 +73,6 @@ public class Transport {
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
         isSent = false;
-        System.out.println("Transport number " + id + " has successfully created."); // Can't load the truck
 
     }
 
@@ -85,8 +84,8 @@ public class Transport {
         if (!truck.confirmDriver(d)) {
             throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
         }
-        if (!driver.isavailable(date)) {
-            throw new InvalidDriverException("Driver is not available - please assign another driver ");
+        if (!d.isavailable(date)) {
+            throw new InvalidDriverException("New Driver is not available - please assign another driver ");
         }
         driver = d;
         driver.assignToMission(date);
@@ -114,37 +113,36 @@ public class Transport {
             truck = t; // save new truck to this transport
             truck.setDate(date); // save the new date in new truck
             maxWeight = t.getMaxWeight(); // change the maximum weight of transport
-            System.out.println("Truck has ben changed successfully");
             if (maxWeight < currWeight)
                 System.out.println("Truck has Over Weight");
         }
     }
 
     /**
-     * a function that sends transport to its mission
+     * Sends the transport if all conditions are met.
+     * Throws an exception if the transport has already been sent,
+     * if there is no driver assigned, or if the truck is overloaded.
+     *
+     * @throws ATransportModuleException if the transport cannot be sent
      */
-    public void sendTransport() {
+    public void sendTransport() throws ATransportModuleException {
         if (isSent) {
-            System.out.println("Transport has already sent.");
-            return;
+            throw new TransportAlreadySentException();
         }
         if (driver == null) {
-            System.out.println("Transport has no driver - please add driver first.");
-            return;
+            throw new InvalidDriverException("Transport has no driver - please add driver first.");
         }
         int calcWeight = 0;
         for (String site : destinations_document_map.keySet()) {
             calcWeight += destinations_document_map.get(site).getTotalWeight();
         }
-        if (truck.getMaxWeight() < calcWeight) {
-            System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
-            int difference = calcWeight - truck.getMaxWeight();
-            System.out.println("Weight excess by " + difference + " kg");
-            return;
+        if (truck.getMaxWeight() < calcWeight) {// Can't load the truck
+
+           throw new OverWeightException(calcWeight - truck.getMaxWeight()); // throw over weight exception
+
         }
         truck.clear();
         isSent = true;
-        System.out.println("Transport has successfully sent");
     }
 
     public int getId() {
@@ -175,7 +173,12 @@ public class Transport {
         str.append("Transport num: ").append(id).append("\n"); // start with the transport id
         str.append("Date:  ").append(date).append(" ").append(departure_time).append("\n"); // print the date and hour
         str.append("Truck details: ").append(truck.toString()).append("\n"); // print all truck details
-        str.append("Driver details: ").append(driver.toString()).append("\n"); // print all driver details
+        str.append("Driver details: ");
+        if(driver == null)
+            str.append("There is no driver\n"); // print all driver details
+        else
+            str.append(driver.toString()).append("\n"); // print all driver details
+
         str.append("From: ").append(source.toString()).append("\n"); // print the source site details
         str.append("To: ").append(destinations_string()).append("\n"); // print all destination details
         if (isOutOfZone) { // if transport has a destination out of area zone, it will show it.
@@ -191,14 +194,12 @@ public class Transport {
         if (document == null)
             throw new InvalidInputException();
         if (maxWeight < currWeight + document.getTotalWeight()) { // if truck is in Over Weight
-            System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
-            int difference = (currWeight + document.getTotalWeight()) - maxWeight;
-            System.out.println("Weight excess by " + difference + " kg");
+            throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
+
         } else {
             document.attachTransportToDocument(this);
             destinations_document_map.put(document.getDestination().getName(), document);
             currWeight += document.getTotalWeight();
-            System.out.println("Truck has successfully loaded.");
 
             if (!source.getArea().equals(document.getDestination().getArea())) {
                 System.out.println("This destination is out of Area Zone, this is a special Transport");

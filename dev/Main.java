@@ -352,7 +352,13 @@ public class Main {
             System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             return;
         }
-        transport.sendTransport();
+        try {
+            transport.sendTransport();
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
 
     }
@@ -429,7 +435,14 @@ public class Main {
         if (currlist != null) { // if there are transport of current date.
             for (Transport transport : currlist) { // for each transport in list
                 if (transport.getDeparture_time().isAfter(LocalTime.now())) { // if its time to send the transport
-                    transport.sendTransport(); // send transport
+                    try {
+                        transport.sendTransport(); // send transport
+                    }
+                    catch (Exception e){
+                        System.out.println(e.getMessage());
+                        return;
+                    }
+
                     if (transport.isSent()) // if transport sent successfully
                         currlist.remove(transport); // remove transport from list
                 }
