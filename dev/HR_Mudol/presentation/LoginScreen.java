@@ -8,8 +8,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The LoginScreen class manages the user login process.
+ * It prompts the user for their employee ID and password, then verifies the credentials against the stored users.
+ * Based on the user role (Manager, Shift Manager, or Employee), it redirects to the appropriate menu.
+ */
 public class LoginScreen {
 
+    /**
+     * Starts the login process. It continually asks for user credentials and directs the user to the appropriate menu based on their role.
+     * @param curBranch The current branch that holds the user data to verify against.
+     */
     public void start(Branch curBranch) {
 
      Scanner scanner = new Scanner(System.in);
@@ -43,7 +52,13 @@ public class LoginScreen {
         }
     }
 
-
+    /**
+     * Finds a user by their employee ID and password.
+     * @param id The employee ID to search for.
+     * @param password The password to check.
+     * @param users The list of users to search through.
+     * @return The matched User object if found, or null if no match is found.
+     */
     private User findUser(int id, String password,List<User> users) {
         for (User u : users) {
             if (u.getUser().getEmpId() == id && u.getUser().getEmpPassword().equals(password)) {

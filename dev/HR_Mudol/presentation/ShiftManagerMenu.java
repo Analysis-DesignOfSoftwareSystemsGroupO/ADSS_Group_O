@@ -6,8 +6,20 @@ import HR_Mudol.Service.ShiftManagerSystem.ShiftManagerSystem;
 import HR_Mudol.domain.*;
 import java.util.Scanner;
 
+/**
+ * ShiftManagerMenu is the menu for shift managers, providing access to various shift management features.
+ * It ensures that only shift managers can access this menu, and it offers the user options to manage shifts, profiles, and logout.
+ */
 public class ShiftManagerMenu implements Menu {
 
+    /**
+     * Starts the Shift Manager menu for the caller (shift manager).
+     * This method will display the options for managing the profile or shifts and process the user's choice.
+     * @param caller The user initiating the menu interaction (must be a shift manager).
+     * @param self The AbstractEmployee object representing the caller's personal data.
+     * @param curBranch The branch where the caller works.
+     * @return boolean indicating whether the menu interaction was completed successfully (i.e., if the user logged out or not).
+     */
     @Override
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
         if (!caller.isShiftManager()) {
