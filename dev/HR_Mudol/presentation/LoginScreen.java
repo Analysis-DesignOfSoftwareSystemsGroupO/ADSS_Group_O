@@ -10,9 +10,9 @@ import java.util.Scanner;
 
 public class LoginScreen {
 
-    private final Scanner scanner = new Scanner(System.in);
-
     public void start(Branch curBranch) {
+
+     Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.print("Enter employee ID: ");

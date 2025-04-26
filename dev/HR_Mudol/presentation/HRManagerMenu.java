@@ -10,10 +10,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HRManagerMenu extends Menu{
+public class HRManagerMenu implements Menu{
 
 
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
+        if (!caller.isShiftManager()) {
+            System.out.println("Access denied.");
+            return false;
+        }
+
         Scanner scanner = new Scanner(System.in);
         HRSystemManager hrSystemManager=new HRSystemManager(curBranch);
 

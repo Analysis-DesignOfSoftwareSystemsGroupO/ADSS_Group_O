@@ -4,14 +4,17 @@ import HR_Mudol.Service.ManagerSystem.HRSystemManager;
 import HR_Mudol.Service.ManagerSystem.ShiftManager;
 import HR_Mudol.Service.ShiftManagerSystem.ShiftManagerSystem;
 import HR_Mudol.domain.*;
-
-import java.util.List;
 import java.util.Scanner;
 
-public class ShiftManagerMenu extends Menu {
+public class ShiftManagerMenu implements Menu {
 
     @Override
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
+        if (!caller.isShiftManager()) {
+            System.out.println("Access denied.");
+            return false;
+        }
+
         Scanner scanner = new Scanner(System.in);
         HRSystemManager hr = new HRSystemManager(curBranch);
 

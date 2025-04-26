@@ -5,17 +5,15 @@ import HR_Mudol.domain.*;
 
 import java.util.Scanner;
 
-public class EmployeeMenu extends Menu {
-
-    private final Scanner scanner = new Scanner(System.in);
-    private final EmployeeSystem employeeSystem = new EmployeeSystem();
+public class EmployeeMenu implements Menu {
 
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
         if (!caller.isSameEmployee(self)) {
             System.out.println("Access denied: You can only access your own menu.");
             return false;
         }
-
+        Scanner scanner = new Scanner(System.in);
+        EmployeeSystem employeeSystem = new EmployeeSystem();
         while (true) {
             System.out.println("\n=== Employee Menu ===");
             System.out.println("1. View my shifts");
