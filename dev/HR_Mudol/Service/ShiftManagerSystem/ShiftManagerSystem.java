@@ -7,6 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * System for shift managers to manage employees' assignments to shifts.
+ * Provides functionality to add/remove employees and transfer cancellation cards.
+ */
 public class ShiftManagerSystem implements IShiftManagerSystem {
 
     private Week currentWeek;
@@ -14,12 +18,24 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
     private ShiftManager shiftManager;
     private Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Constructor for ShiftManagerSystem.
+     *
+     * @param currentWeek  the week object containing shifts
+     * @param branch       the branch this system manages
+     * @param shiftManager the shift manager operating the system
+     */
     public ShiftManagerSystem(Week currentWeek, Branch branch, ShiftManager shiftManager) {
         this.currentWeek = currentWeek;
         this.branch = branch;
         this.shiftManager = shiftManager;
     }
 
+    /**
+     * Allows a shift manager or general manager to remove an employee from a shift.
+     *
+     * @param caller the user requesting the operation
+     */
     @Override
     public void removeEmployeeFromShift(User caller) {
         if (!caller.isManager() && !caller.isShiftManager()) {
@@ -39,6 +55,11 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         shiftManager.removeEmployeeFromShift(caller, shift);
     }
 
+    /**
+     * Allows a shift manager or general manager to add an employee to a shift.
+     *
+     * @param caller the user requesting the operation
+     */
     @Override
     public void addEmployeeToShift(User caller) {
         if (!caller.isManager() && !caller.isShiftManager()) {
@@ -93,6 +114,11 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         shiftManager.assignEmployeeToShift(caller, shift, toAdd, role);
     }
 
+    /**
+     * Allows a shift manager to transfer a cancellation card (simplified for now).
+     *
+     * @param caller the user requesting the operation
+     */
     @Override
     public void transferCancellationCard(User caller) {
         if (!caller.isShiftManager()) {
@@ -103,7 +129,13 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         System.out.println("Item canceled.");
     }
 
-    // כלי עזר
+    // --------- Helper methods ---------
+
+    /**
+     * Prompts the user to choose a shift by selecting day and type.
+     *
+     * @return the selected Shift object, or null if not found
+     */
     private Shift chooseShift() {
         try {
             WeekDay selectedDay = chooseDay();
@@ -126,6 +158,13 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         }
     }
 
+    /**
+     * Finds a shift in the current week by day and type.
+     *
+     * @param day  the day of the shift
+     * @param type the type of the shift (morning/evening)
+     * @return the matching Shift, or null if not found
+     */
     private Shift findShift(WeekDay day, ShiftType type) {
         for (Shift shift : currentWeek.getShifts()) {
             if (shift.getDay() == day && shift.getType() == type) {
@@ -135,6 +174,11 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         return null;
     }
 
+    /**
+     * Prompts the user to select a day of the week.
+     *
+     * @return the selected WeekDay enum, or null if invalid input
+     */
     private WeekDay chooseDay() {
         System.out.println("Select day of the week :");
         WeekDay[] days = WeekDay.values();
@@ -156,6 +200,11 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         }
     }
 
+    /**
+     * Prompts the user to select a shift type (Morning/Evening).
+     *
+     * @return the selected ShiftType, or null if invalid input
+     */
     private ShiftType chooseShiftType() {
         System.out.println("Select shift type:");
         System.out.println("1. Morning");
@@ -172,6 +221,12 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         };
     }
 
+    /**
+     * Prompts the user to choose a role from the available roles.
+     *
+     * @param roles list of available roles
+     * @return the selected Role, or null if invalid input
+     */
     private Role chooseRoleFromList(List<Role> roles) {
         System.out.println("Available roles for this shift:");
         for (int i = 0; i < roles.size(); i++) {
@@ -194,7 +249,13 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
         }
     }
 
-    // פונקציה לוודא שהקורא הוא המנהל משמרת של המשמרת
+    /**
+     * Checks if the caller is the shift manager assigned to the given shift.
+     *
+     * @param caller the user making the request
+     * @param shift  the shift in question
+     * @return true if the caller is the shift manager, false otherwise
+     */
     private boolean isShiftManagerOfShift(User caller, Shift shift) {
         if (shift.getShiftManager()==null)
         {

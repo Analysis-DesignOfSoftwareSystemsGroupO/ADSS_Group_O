@@ -1,7 +1,5 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.Service.EmployeeSystem.EmployeeSystem;
-import HR_Mudol.Service.ManagerSystem.HRSystemManager;
 import HR_Mudol.domain.*;
 
 import java.util.List;
@@ -12,6 +10,12 @@ import java.util.Scanner;
  */
 public class LoginScreen {
 
+    /**
+     * Starts the login process, prompts for user credentials, and redirects to the appropriate menu
+     * based on the user role.
+     *
+     * @param curBranch The current branch object which contains the list of users.
+     */
     public void start(Branch curBranch) {
         Scanner scanner = new Scanner(System.in);
 
@@ -54,6 +58,11 @@ public class LoginScreen {
 
     /**
      * Finds a user by employee ID and password.
+     *
+     * @param id The employee ID.
+     * @param password The password entered by the user.
+     * @param users The list of users to search through.
+     * @return The matching user if found, or null if no match is found.
      */
     private User findUser(int id, String password, List<User> users) {
         for (User u : users) {

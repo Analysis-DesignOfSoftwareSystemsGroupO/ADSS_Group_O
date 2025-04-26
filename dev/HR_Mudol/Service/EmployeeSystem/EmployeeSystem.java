@@ -9,16 +9,27 @@ public class EmployeeSystem implements IEmployeeSystem {
 
     private Scanner scanner;
 
-    // Default constructor initializes scanner from System.in
+
+    /**
+     * Default constructor initializes the scanner using System.in
+     */
     public EmployeeSystem() {
         this.scanner = new Scanner(System.in);
     }
 
-    // Constructor for injecting custom scanner (useful for testing)
+    /**
+     * Constructor for injecting a custom scanner (useful for testing purposes)
+     */
     public EmployeeSystem(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    /**
+     * Displays the shifts assigned to the employee for the current week
+     * @param caller The user making the request
+     * @param self The employee whose shifts are to be viewed
+     * @param currentWeek The current week containing the shifts
+     */
     @Override
     public void viewMyShifts(User caller, Employee self, Week currentWeek) {
         try {
@@ -54,6 +65,12 @@ public class EmployeeSystem implements IEmployeeSystem {
         }
     }
 
+    /**
+     * Allows an employee to submit their shift constraints for the week
+     * @param caller The user making the request
+     * @param self The employee submitting constraints
+     * @param currentWeek The current week for which the constraints are being submitted
+     */
     @Override
     public void submitConstraint(User caller, Employee self, Week currentWeek) {
         try {
@@ -93,6 +110,15 @@ public class EmployeeSystem implements IEmployeeSystem {
         }
     }
 
+    /**
+     * Handles the submission of constraints for a specific shift type (morning or evening)
+     * @param caller The user making the request
+     * @param self The employee submitting constraints
+     * @param type The shift type (morning or evening)
+     * @param shiftLimit The limit on the number of shifts the employee can submit constraints for
+     * @param submittedConstraints The list of submitted constraints
+     * @return The total number of shifts submitted
+     */
     private int handleShiftTypeConstraints(User caller, Employee self, ShiftType type, int shiftLimit, List<Constraint> submittedConstraints) {
         int shiftCount = 0;
 
@@ -187,9 +213,11 @@ public class EmployeeSystem implements IEmployeeSystem {
     }
 
 
-
-
-    // Prints a list of constraints with their day and explanation
+    /**
+     * Prints the list of constraints for a specific shift type
+     * @param constraints The list of constraints to display
+     * @param title The title of the constraints (morning/evening)
+     */
     private void printConstraintsList(List<Constraint> constraints, String title) {
         if (constraints.isEmpty()) {
             System.out.println("No " + title + " constraints found."); // No constraints to show
@@ -204,10 +232,19 @@ public class EmployeeSystem implements IEmployeeSystem {
     }
 
 
-
-
-
-
+    /**
+     * Allows an employee to update or remove their own shift constraints for a given week.
+     *
+     * This method ensures that:
+     *
+     *   Employees can only edit their own constraints.
+     *   Constraints associated with assigned shifts cannot be changed or removed.
+     *   When removing a constraint, any associated sick day or day off is restored.
+     *
+     * @param caller The user requesting the update (must be the same as 'self').
+     * @param self The employee whose constraints are being updated.
+     * @param currentWeek The current week containing assigned shifts.
+     */
     @Override
     public void updateConstraint(User caller, Employee self, Week currentWeek) {
         try {
@@ -337,17 +374,12 @@ public class EmployeeSystem implements IEmployeeSystem {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    // View the constraints submitted by the employee
+    /**
+     * Displays all submitted shift constraints for the employee.
+     *
+     * @param caller The user requesting the view (must be a manager or the employee himself).
+     * @param self The employee whose constraints are being viewed.
+     */
     @Override
     public void viewMyConstraints(User caller, Employee self) {
         try {
@@ -376,7 +408,12 @@ public class EmployeeSystem implements IEmployeeSystem {
         }
     }
 
-    // Allow employee to change their password
+    /**
+     * Allows the employee to change their password after verifying their current password.
+     *
+     * @param caller The user requesting the password change (must be the same as 'self').
+     * @param self The employee whose password is being changed.
+     */
     @Override
     public void changePassword(User caller, Employee self) {
         try {
@@ -414,7 +451,15 @@ public class EmployeeSystem implements IEmployeeSystem {
         }
     }
 
-    // Returns the employee's contract details as a String, throws SecurityException if unauthorized
+
+    /**
+     * Returns the contract details of the employee.
+     *
+     * @param caller The user requesting the contract details (must be a manager or the employee himself).
+     * @param self The employee whose contract details are being retrieved.
+     * @return A string representing the contract details.
+     * @throws SecurityException if the caller is not authorized.
+     */
     public String getContractDetails(User caller, Employee self) {
         if (!caller.isManager() && !caller.isSameEmployee(self)) {
             throw new SecurityException("Access denied: Only HR managers or the employee can view contract details.");
@@ -422,6 +467,12 @@ public class EmployeeSystem implements IEmployeeSystem {
         return self.getContract(caller).toString();
     }
 
+    /**
+     * Displays the personal details of the employee.
+     *
+     * @param caller The user requesting the view (must be a manager or the employee himself).
+     * @param self The employee whose personal details are being viewed.
+     */
     @Override
     public void viewPersonalDetails(User caller, Employee self) {
         if (!caller.isManager() && !caller.isSameEmployee(self)) {
@@ -430,14 +481,13 @@ public class EmployeeSystem implements IEmployeeSystem {
         System.out.println("\n--- Employee Personal Details ---");
         System.out.println(self);  // uses toString()
     }
-    // Returns the employee's personal details (using toString)
-    public String getPersonalDetails(User caller, Employee self) {
-        if (!caller.isManager() && !caller.isSameEmployee(self)) {
-            throw new SecurityException("Access denied: Only HR managers or the employee can view personal details.");
-        }
-        return self.toString();
-    }
 
+    /**
+     * Displays the employment contract details of the employee.
+     *
+     * @param caller The user requesting the view (must be authorized).
+     * @param self The employee whose contract details are being displayed.
+     */
     @Override
     public void viewContractDetails(User caller, Employee self) {
         // Authorization check is inside getContractDetails
@@ -445,10 +495,14 @@ public class EmployeeSystem implements IEmployeeSystem {
         System.out.println(getContractDetails(caller, self));
     }
 
-
-
-
-    // Returns a formatted string of all roles assigned to the employee
+    /**
+     * Returns a formatted list of all relevant roles assigned to the employee.
+     *
+     * @param caller The user requesting the roles (must be a manager or the employee himself).
+     * @param self The employee whose roles are being retrieved.
+     * @return A string representing the list of relevant roles.
+     * @throws SecurityException if the caller is not authorized.
+     */
     public String getAvailableRoles(User caller, Employee self) {
         if (!caller.isManager() && !caller.isSameEmployee(self)) {
             throw new SecurityException("Access denied: Only HR managers or the employee can view roles.");
@@ -472,7 +526,12 @@ public class EmployeeSystem implements IEmployeeSystem {
         return sb.toString();
     }
 
-    // Displays the employee's relevant roles in the console
+    /**
+     * Displays the relevant roles assigned to the employee.
+     *
+     * @param caller The user requesting the view.
+     * @param self The employee whose roles are being displayed.
+     */
     @Override
     public void viewAvailableRoles(User caller, Employee self) {
         try {

@@ -1,20 +1,29 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.Service.ManagerSystem.*;
 import HR_Mudol.domain.*;
 import HR_Mudol.Service.ManagerSystem.HRSystemManager;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * The HRManagerMenu class implements the Menu interface and provides various functionalities
+ * for managing HR tasks such as employee management, shifts, roles, reports, and dashboards.
+ * It allows shift managers to perform various HR-related tasks.
+ */
 public class HRManagerMenu implements Menu{
 
-
+    /**
+     * Starts the HR manager menu, displaying options for managing employees, shifts, roles, and reports.
+     * Based on the user input, it redirects to the relevant action.
+     *
+     * @param caller The user calling the menu.
+     * @param self The current employee (used for role checking).
+     * @param curBranch The current branch the user is logged into.
+     * @return true if logout is successful, false if the session should continue.
+     */
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
-        if (!caller.isManager()) {
+        if (!caller.isShiftManager()) {
             System.out.println("Access denied.");
             return false;
         }
@@ -50,6 +59,12 @@ public class HRManagerMenu implements Menu{
             }
         }
     }
+    /**
+     * Displays and manages the shift history based on user input (by week or date range).
+     *
+     * @param hr The HR system manager.
+     * @param weeks The list of available weeks for the shift history.
+     */
     private static void viewShiftsHistory(HRSystemManager hr, List<Week> weeks) {
         if (weeks == null || weeks.isEmpty()) {
             System.out.println("No weeks available.");
@@ -129,7 +144,14 @@ public class HRManagerMenu implements Menu{
         }
     }
 
-
+    /**
+     * Manages the shifts, allowing assignment, editing, and other shift-related operations.
+     *
+     * @param hr The HR system manager.
+     * @param weeks The list of weeks for managing shifts.
+     * @param caller The user calling the menu.
+     * @param sc The scanner to capture user input.
+     */
     private static void manageShift(HRSystemManager hr,List<Week> weeks, User caller, Scanner sc) {
         while (true) {
             System.out.println("\n--- Shift Management ---");
@@ -162,7 +184,13 @@ public class HRManagerMenu implements Menu{
         }
     }
 
-
+    /**
+     * Edits shifts by adding/removing employees or roles, or canceling a shift.
+     *
+     * @param hr The HR system manager.
+     * @param caller The user calling the menu.
+     * @param week The current week to edit shifts for.
+     */
     public static void editShifts(HRSystemManager hr,User caller, Week week) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
@@ -204,7 +232,15 @@ public class HRManagerMenu implements Menu{
 
 
     }
-        private static void manageEmployees(HRSystemManager hr, User caller, Scanner sc) {
+
+    /**
+     * Manages employee actions, including adding, removing, or updating employee details.
+     *
+     * @param hr The HR system manager.
+     * @param caller The user calling the menu.
+     * @param sc The scanner to capture user input.
+     */
+    private static void manageEmployees(HRSystemManager hr, User caller, Scanner sc) {
         while (true) {
             System.out.println("\n--- Employee Management ---");
             System.out.println("1. Add Employee");
@@ -227,6 +263,14 @@ public class HRManagerMenu implements Menu{
         }
     }
 
+    /**
+     * Generates various types of reports such as weekly, employee, or shift reports.
+     *
+     * @param hr The HR system manager.
+     * @param caller The user calling the menu.
+     * @param sc The scanner to capture user input.
+     * @param curBranch The current branch to retrieve weeks and data from.
+     */
     private static void generateReports(HRSystemManager hr, User caller, Scanner sc,Branch curBranch) {
         System.out.println("\n--- Report Generation ---");
         System.out.println("1. Weekly Report");
@@ -259,6 +303,13 @@ public class HRManagerMenu implements Menu{
         }
     }
 
+    /**
+     * Manages roles, including creating, assigning, and removing roles.
+     *
+     * @param hr The HR system manager.
+     * @param caller The user calling the menu.
+     * @param sc The scanner to capture user input.
+     */
     private static void manageRoles(HRSystemManager hr, User caller, Scanner sc) {
         System.out.println("\n--- Role Management ---");
         System.out.println("1. Create Role");

@@ -67,8 +67,6 @@ public class Shift {
         return shiftManager;
     }
 
-    // -------------------- Permissions-based actions --------------------
-
     /**
      * Updates the shift status.
      */
