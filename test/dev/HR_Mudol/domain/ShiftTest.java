@@ -35,6 +35,7 @@ public class ShiftTest {
                 java.time.LocalDate.now(), 2, 2, 10, 5);
         regularUser = new User(regularEmp, Level.regularEmp);
 
+        // Always ensure a sample role exists and is necessary for the shift
         sampleRole = new Role("Cashier");
         shift.addNecessaryRoles(hrUser, sampleRole);
     }
@@ -126,24 +127,23 @@ public class ShiftTest {
         assertFalse(shift.getEmployees().contains(regularEmp));
     }
 
+    /**
+     * Test removing a role also removes the employee assigned to it.
+     */
     @Test
     public void testRemoveRoleRemovesEmployee() {
-        Role specialRole = new Role("SpecialRole"); // 🆕 תפקיד חדש
+        Role specialRole = new Role("SpecialRole");
         shift.addNecessaryRoles(hrUser, specialRole);
-
         shift.addEmployee(hrUser, regularEmp, specialRole);
 
         shift.removeRole(hrUser, specialRole);
 
-        // בדיקה שהעובד הוסר
         assertFalse(shift.getEmployees().contains(regularEmp));
 
-        // בדיקה שה־FilledRole הוסר גם הוא
         boolean roleStillFilled = shift.getFilledRoles().stream()
                 .anyMatch(fr -> fr.getEmployee().equals(regularEmp));
         assertFalse(roleStillFilled);
     }
-
 
     /**
      * Test getting the list of not-occupied necessary roles in the shift.

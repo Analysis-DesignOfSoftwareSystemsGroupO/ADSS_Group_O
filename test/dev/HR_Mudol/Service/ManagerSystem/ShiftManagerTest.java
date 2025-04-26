@@ -6,11 +6,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the ShiftManager class.
+ */
 public class ShiftManagerTest {
 
     private ShiftManager shiftManager;
@@ -21,7 +24,7 @@ public class ShiftManagerTest {
 
     @BeforeEach
     public void setUp() {
-        // Initialize test environment
+        // Initialize test environment before each test
         roleManagerMock = new RoleManagerMock();
         shiftManager = new ShiftManager(roleManagerMock);
 
@@ -105,9 +108,8 @@ public class ShiftManagerTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        shiftManager.chooseRelevantRoleForShift(managerUser, shift);
-
-        assertFalse(shift.getNecessaryRoles().isEmpty());
+        assertDoesNotThrow(() -> shiftManager.chooseRelevantRoleForShift(managerUser, shift));
+        assertTrue(shift.getNecessaryRoles().contains(cashier));
     }
 
     /**
@@ -183,6 +185,7 @@ public class ShiftManagerTest {
         System.setIn(in);
 
         assertDoesNotThrow(() -> shiftManager.chooseRelevantRoleForShift(managerUser, shift));
+        assertTrue(shift.getNecessaryRoles().contains(cashier));
     }
 
     /**

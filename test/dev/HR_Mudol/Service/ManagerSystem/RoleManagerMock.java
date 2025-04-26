@@ -1,23 +1,22 @@
 /**
  * RoleManagerMock is a simplified mock implementation of the IRoleManager interface.
  *
- * It is used exclusively for unit testing purposes, mainly inside the EmployeeManagerTest class.
+ * It is used exclusively for unit testing purposes, mainly inside the EmployeeManagerTest and ShiftManagerTest classes.
  *
  * Purpose:
  * - Simulate basic role management operations (adding/removing employees to roles).
- * - Allow EmployeeManager tests to run independently of the real RoleManager logic.
- * - Provide predictable behavior without involving complex real-world constraints.
+ * - Allow tests to run independently of the real RoleManager logic.
+ * - Provide predictable behavior without involving complex security checks or validation.
  *
  * Key Features:
  * - Stores a simple list of roles in memory.
  * - Automatically initializes with a default role ("Shift Manager") for testing.
- * - Skips security checks and exception throwing where possible to simplify tests.
- * - Empty implementation for non-critical methods that are not relevant to the tests.
+ * - Skips security and validation logic to simplify test environments.
+ * - Empty implementations for non-relevant methods.
  *
  * Main usage:
- * - Injected into EmployeeManager via setRoleManager(RoleManagerMock) during test setup in EmployeeManagerTest.
- *
- * This mock ensures that unit tests for employee operations remain focused, isolated, and deterministic.
+ * - Injected into EmployeeManager or ShiftManager during test setup.
+ * - Ensures that unit tests remain focused, isolated, and deterministic.
  */
 package dev.HR_Mudol.Service.ManagerSystem;
 
@@ -31,38 +30,90 @@ public class RoleManagerMock implements IRoleManager {
 
     private List<Role> roles = new LinkedList<>(); // Stores roles manually for test purposes
 
+    /**
+     * Constructor initializes the mock with a default "Shift Manager" role.
+     */
     public RoleManagerMock() {
-        // Add a default role: "Shift Manager"
         Role defaultRole = new Role("Shift Manager");
         roles.add(defaultRole);
     }
 
+    /**
+     * Adds a manually created role to the mock.
+     *
+     * @param role The role to add.
+     */
     public void addMockRole(Role role) {
-        // Manually add a new role to the mock
         roles.add(role);
     }
 
+    /**
+     * Returns all roles without permission checks (mock behavior).
+     *
+     * @param caller The user requesting the roles (ignored in mock).
+     * @return List of all roles.
+     */
     @Override
     public List<Role> getAllRoles(User caller) {
-        // Return all roles without security checks (mock behavior)
         return roles;
     }
 
+    /**
+     * Removes an employee from a role by role number, ignoring exceptions.
+     *
+     * @param caller The user requesting the operation.
+     * @param roleNumber The role number.
+     * @param e The employee to remove.
+     */
     @Override
     public void removeEmployeeFromRole(User caller, int roleNumber, Employee e) {
-        // Remove an employee from a specific role if exists
         for (Role role : roles) {
             if (role.getRoleNumber() == roleNumber) {
                 try {
                     role.removeEmployee(caller, e);
                 } catch (Exception ignored) {
-                    // Ignore exception for testing simplicity
+                    // Ignore exceptions for simplicity
                 }
             }
         }
     }
 
-    // Unused methods — left empty intentionally for unit testing purposes
+    /**
+     * Finds a role by its role number.
+     *
+     * @param roleNumber The number of the role to find.
+     * @return The matching role, or null if not found.
+     */
+    @Override
+    public Role getRoleByNumber(int roleNumber) {
+        for (Role r : roles) {
+            if (r.getRoleNumber() == roleNumber) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Counts how many employees from a list do not have any assigned role.
+     *
+     * @param caller The user requesting the count (ignored in mock).
+     * @param employeeList List of employees to check.
+     * @return Number of employees without assigned roles.
+     */
+    @Override
+    public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
+        int count = 0;
+        for (Employee e : employeeList) {
+            if (e.getRelevantRoles(caller).isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // ---------- Unused methods in this mock (left intentionally empty) ----------
+
     @Override public void createRole(User caller) {}
     @Override public void updateRoleDescription(User caller) {}
     @Override public void assignEmployeeToRole(User caller) {}
@@ -70,23 +121,4 @@ public class RoleManagerMock implements IRoleManager {
     @Override public void removeEmployeeFromRole(User caller) {}
     @Override public List<Employee> getRelevantEmployees(User caller) { return new LinkedList<>(); }
     @Override public void printAllRoles(User caller) {}
-
-    @Override
-    public Role getRoleByNumber(int roleNumber) {
-        // Find role by its number (or return null if not found)
-        for (Role r : roles) {
-            if (r.getRoleNumber() == roleNumber) return r;
-        }
-        return null;
-    }
-
-    @Override
-    public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
-        // Count how many employees do not have any assigned role
-        int count = 0;
-        for (Employee e : employeeList) {
-            if (e.getRelevantRoles(caller).isEmpty()) count++;
-        }
-        return count;
-    }
 }
