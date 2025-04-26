@@ -37,35 +37,60 @@ public class Branch {
      * - Initializes lists for employees, users, and roles
      */
     public Branch() {
-        this.branchID = counter;
+        this.branchID = counter++;
         Week curWeek = new Week();
         this.weeks.add(curWeek);
 
-        // Initialize employee and user lists
+        // Initialize lists
         this.employees = new LinkedList<>();
         this.users = new LinkedList<>();
 
-        // --- Add HR Manager ---
+        // --- HR Manager ---
         HRManager hrManager = new HRManager("Rami Levi", 111111111, "admin", "122345", 300000, LocalDate.now(), 2, 2, 5, 10);
         User hrUser = new User(hrManager, Level.HRManager);
         this.employees.add(hrManager);
         this.users.add(hrUser);
 
-        // --- Add Regular Employee ---
-        Employee regularEmp = new Employee("Dana", 123456789, "pass", "123456", 5000, LocalDate.now(), 2, 2, 5, 10);
-        User regularUser = new User(regularEmp, Level.regularEmp);
-        this.employees.add(regularEmp);
-        this.users.add(regularUser);
-
-        // --- Add Shift Manager ---
+        // --- Shift Manager ---
         Employee shiftManager = new Employee("Yossi Cohen", 222222222, "shiftadmin", "999999", 7000, LocalDate.now(), 2, 2, 5, 10);
         User shiftUser = new User(shiftManager, Level.shiftManager);
         this.employees.add(shiftManager);
         this.users.add(shiftUser);
 
-        // --- Add 15 Additional Regular Employees ---
-        for (int i = 0; i < 15; i++) {
-            int empId = 200000000 + i;
+        // --- Create predefined Roles ---
+        Role driverRole = new Role("Driver");
+        Role cashierRole = new Role("Cashier");
+        Role warehouseRole = new Role("Warehouse Worker");
+        Role shiftSupervisorRole = new Role("Shift Supervisor");
+        Role courierRole = new Role("Courier");
+        Role stockOrganizerRole = new Role("Stock Organizer");
+        Role cookRole = new Role("Cook");
+        Role securityGuardRole = new Role("Security Guard");
+
+        // Add roles to branch
+        roles.add(driverRole);
+        roles.add(cashierRole);
+        roles.add(warehouseRole);
+        roles.add(shiftSupervisorRole);
+        roles.add(courierRole);
+        roles.add(stockOrganizerRole);
+        roles.add(cookRole);
+        roles.add(securityGuardRole);
+
+        // --- Add Employees for Each Role ---
+
+        addEmployeeWithRole("Avi Driver", 333333333, "driverpass", "BANK1", 4500, driverRole, hrUser);
+        addEmployeeWithRole("Tamar Cashier", 444444444, "cashierpass", "BANK2", 4300, cashierRole, hrUser);
+        addEmployeeWithRole("David Warehouse", 555555555, "warehousepass", "BANK3", 4200, warehouseRole, hrUser);
+        addEmployeeWithRole("Shiran Supervisor", 666666666, "supervisorpass", "BANK4", 5200, shiftSupervisorRole, hrUser);
+        addEmployeeWithRole("Oren Courier", 777777777, "courierpass", "BANK5", 4100, courierRole, hrUser);
+        addEmployeeWithRole("Noa Organizer", 888888888, "organizerpass", "BANK6", 4000, stockOrganizerRole, hrUser);
+        addEmployeeWithRole("Ron Cook", 999999999, "cookpass", "BANK7", 4300, cookRole, hrUser);
+        addEmployeeWithRole("Eyal Security", 123123123, "securitypass", "BANK8", 4400, securityGuardRole, hrUser);
+
+        // --- Add 8 Additional Regular Employees ---
+        for (int i = 0; i < 8; i++) {
+            int empId = 600000000 + i;
             String name = "Employee" + (i + 1);
             String password = "pass" + (i + 1);
             String bankAccount = "BANK" + (i + 1);
@@ -78,6 +103,19 @@ public class Branch {
             this.users.add(user);
         }
     }
+
+    /**
+     * Helper method to add an employee with a role.
+     */
+    private void addEmployeeWithRole(String name, int id, String password, String bankAccount, int salary, Role role, User hrUser) {
+        Employee emp = new Employee(name, id, password, bankAccount, salary, LocalDate.now(), 2, 2, 5, 10);
+        User user = new User(emp, Level.regularEmp);
+
+        this.employees.add(emp);
+        this.users.add(user);
+        role.addNewEmployee(hrUser, emp);
+    }
+
 
     /**
      * Returns the list of users (employees with system accounts).
