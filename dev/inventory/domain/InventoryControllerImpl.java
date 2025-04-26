@@ -15,14 +15,14 @@ public class InventoryControllerImpl implements InventoryController {
         // Constructor can be used for dependency injection if needed
     }
 
-    public void addProduct(String name, int minimumStock, String parentCategory, double costPrice) {
+    public void addProduct(String name, int minimumStock, String parentCategory, double costPrice, String location,String manufacturer) {
         System.out.println("Adding product: " + name);
         Category prodParentCategory = getCategoryById(parentCategory);
         if (prodParentCategory == null) {
             throw new IllegalArgumentException("Parent category not found. Aborting product add operation.");
         }
 
-        Product productToAdd = new Product(name, minimumStock, costPrice);
+        Product productToAdd = new Product(name, minimumStock, costPrice, location,manufacturer);
         productToAdd.setCategory(prodParentCategory);
         productRepository.saveProduct(productToAdd);
     }
@@ -94,6 +94,19 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
+    public void removeStock(String id) {
+        System.out.println("Removing stock item with ID: " + id);
+        StockItem stockItemToRemove = stockItemRepository.getStockItemById(id);
+        Objects.requireNonNull(stockItemToRemove, "Stock item not found");
+        stockItemRepository.deleteStockItem(id);
+        int itemQuantity = countProductQuantity(stockItemToRemove.getProduct().getId());
+        int minQuantity = stockItemToRemove.getProduct().getMinimumStockLevel();
+        if (itemQuantity <= minQuantity) {
+            System.out.println(" ***** Warning: Product " + stockItemToRemove.getProduct().getName() +
+                " is below minimum stock level. Please restock. *****");
+        }
+    }
+
     public void deleteCategory(String toRemoveCatId) {
         System.out.println("Removing category with ID: " + toRemoveCatId);
         Category categoryToRemove = getCategoryById(toRemoveCatId);
@@ -120,10 +133,91 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void printCurrentStock(){
-        System.out.println("Current stock:");
+        System.out.println("------- Stock Report -------");
+        List<Product> products = productRepository.getAllProducts();
+        for (Product product : products) {
+            int inStorage = countProductInStorage(product.getId());
+            int productQuantity = countProductQuantity(product.getId());
+            System.out.println("Product: " + product.getName()
+                    + "\nProduct ID: " + product.getId()
+                    + "\nProduct Manufacturer: " + product.getManufacturer()
+                    + "\nProduct Minimum Stock Level: " + product.getMinimumStockLevel()
+                    + "\nProduct Quantity: " + productQuantity
+                    + "\nAmount of product in Storage: " + inStorage
+                    + "\nAmount of Product in Store: " + (productQuantity - inStorage)
+                    + "\nDamaged/Expired Product Quantity: " + countDefectedProductQuantity(product.getId())
+                    + "\nLocation: " + product.getLocation() +
+                    "\n------------------------------\n");
+        }
+    }
+
+    public void printStockItemByProductId(String id) {
+        System.out.println("Stock items for product ID: " + id);
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
-            System.out.println(stockItem);
+            if (stockItem.getProduct().getId().equals(id)) {
+                System.out.println(stockItem);
+            }
+        }
+    }
+
+   public int countProductInStorage(String id) {
+        Product product = productRepository.getProductById(id);
+        if (product == null) {
+            System.out.println("Product not found.");
+            throw new IllegalArgumentException("Product not found.");
+        }
+        int count = 0;
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getProduct().getId().equals(id) && stockItem.getLocation().equals("storage")) {
+                count += stockItem.getQuantity();
+            }
+        }
+        return count;
+    }
+
+    public int countProductQuantity(String id) {
+        Product product = productRepository.getProductById(id);
+        if (product == null) {
+            System.out.println("Product not found.");
+            throw new IllegalArgumentException("Product not found.");
+        }
+        int count = 0;
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getProduct().getId().equals(id) && stockItem.getStatus() == StockItemStatus.OK) {
+                count += stockItem.getQuantity();
+            }
+        }
+        return count;
+    }
+
+    public int countDefectedProductQuantity(String id) {
+        Product product = productRepository.getProductById(id);
+        if (product == null) {
+            System.out.println("Product not found.");
+            throw new IllegalArgumentException("Product not found.");
+        }
+        int count = 0;
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getProduct().getId().equals(id) && (stockItem.getStatus() != StockItemStatus.OK))
+            {
+                count += stockItem.getQuantity();
+            }
+        }
+        return count;
+    }
+
+
+    public void printDefectedStockItems() {
+        System.out.println("Defected stock items:");
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getStatus() == StockItemStatus.DAMAGED || stockItem.getStatus() == StockItemStatus.EXPIRED) {
+                System.out.println(stockItem);
+            }
         }
     }
 
@@ -165,6 +259,9 @@ public class InventoryControllerImpl implements InventoryController {
 
         double currentPricePercentage = 1; // Will be reverted before returned
         for (Discount discount : discounts) {
+            if(!discount.isActive()) {
+                continue;
+            }
             if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
                 if(discount.getTargetId().equals(productId)) {
                     currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
@@ -176,6 +273,9 @@ public class InventoryControllerImpl implements InventoryController {
         Category currCategory = product.getCategory();
         while (currCategory != null) {
             for (Discount discount : discounts) {
+                if(!discount.isActive()) {
+                    continue;
+                }
                 if (discount.getTargetType() == DiscountTargetType.CATEGORY) {
                     if(discount.getTargetId().equals(currCategory.getId())) {
                         currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);

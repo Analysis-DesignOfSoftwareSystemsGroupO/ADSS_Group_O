@@ -12,9 +12,9 @@ public class UserApplication {
         this.inventoryController = new InventoryControllerImpl();
     }
 
-    public void saveProduct(String name, int minimumStock, String parentCategory, double costPrice) {
+    public void saveProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer) {
         System.out.println("Adding product: " + name);
-        inventoryController.addProduct(name, minimumStock, parentCategory, costPrice);
+        inventoryController.addProduct(name, minimumStock, parentCategory, costPrice, location, manufacturer);
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate stockDate) {
@@ -26,18 +26,22 @@ public class UserApplication {
         inventoryController.removeProduct(id);
     }
 
+    public void removeStock(String id){
+        inventoryController.removeStock(id);
+    }
+
     public void uploadTestData() {
         inventoryController.saveCategory("1234", "");
         inventoryController.saveCategory("12345", inventoryController.getCategoryIdByName("1234"));
         inventoryController.saveCategory("123456", inventoryController.getCategoryIdByName("12345"));
 //        Category parentCategory = inventoryController.getCategoryById("1234");
 
-        inventoryController.addProduct("Test Product 1", 10, inventoryController.getCategoryIdByName("1234"), 10);
-        inventoryController.addProduct("Test Product 2", 20, inventoryController.getCategoryIdByName("1234"), 20);
-        inventoryController.addProduct("Test Product 3", 30, inventoryController.getCategoryIdByName("1234"), 30);
-        inventoryController.addProduct("Test Product 4", 40, inventoryController.getCategoryIdByName("1234"), 40);
-        inventoryController.addProduct("Test Product 5", 50, inventoryController.getCategoryIdByName("1234"), 50);
-        inventoryController.addProduct("Test Product 6", 60, inventoryController.getCategoryIdByName("12345"), 60);
+        inventoryController.addProduct("Test Product 1", 10, inventoryController.getCategoryIdByName("1234"), 10,"A17-Shelf 12","ADF");
+        inventoryController.addProduct("Test Product 2", 20, inventoryController.getCategoryIdByName("1234"), 20,"A18-Shelf 17","DCF");
+        inventoryController.addProduct("Test Product 3", 30, inventoryController.getCategoryIdByName("1234"), 30,"C27-Shelf 3","RCF");
+        inventoryController.addProduct("Test Product 4", 40, inventoryController.getCategoryIdByName("1234"), 40,"B2-Shelf 8","VBX");
+        inventoryController.addProduct("Test Product 5", 50, inventoryController.getCategoryIdByName("1234"), 50,"B7-Shelf 2","TCF");
+        inventoryController.addProduct("Test Product 6", 60, inventoryController.getCategoryIdByName("12345"), 60,"S6-Shelf 9","GGV");
 
         inventoryController.addDiscount(inventoryController.getCategoryIdByName("1234"), 20, "Test Discount 1",
                 DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));

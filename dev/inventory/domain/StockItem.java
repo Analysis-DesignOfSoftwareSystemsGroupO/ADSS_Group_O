@@ -12,14 +12,14 @@ public class StockItem {
     private LocalDate expiryDate;
     private StockItemStatus status;
 
-    public StockItem(int quantity, String location, StockItemStatus status) {
+    public StockItem(int quantity, String locationStatus, StockItemStatus status) {
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity cannot be negative");
         }
-        Objects.requireNonNull(location, "Location cannot be null for StockItem");
+        Objects.requireNonNull(locationStatus, "Location cannot be null for StockItem");
         this.stockItemId = UUID.randomUUID().toString();
         this.quantity = quantity;
-        this.location = location;
+        this.location = locationStatus;
         this.status = status;
         this.expiryDate = null; // Default to null if not provided
 
@@ -31,6 +31,10 @@ public class StockItem {
         return product;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
@@ -38,6 +42,13 @@ public class StockItem {
         return status;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+   public void setLocation(String location) {
+        this.location = location;
+    }
 
     @Override
     public String toString() {
@@ -48,4 +59,6 @@ public class StockItem {
                 ", status=" + status +
                 '}';
     }
+
+
 }

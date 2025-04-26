@@ -16,6 +16,7 @@ public class Product {
     private double sellingPrice;
     private int minimumStockLevel;
     private Category category;
+    private String location;
 //    private Discount discount;
 
     /**
@@ -24,7 +25,7 @@ public class Product {
      * @param name              The display name of the product. (cannot be null)
      * @param minimumStockLevel The minimum amount of this product that should be in stock. (cannot be negative)
      */
-    public Product(String name, int minimumStockLevel, double costPrice) {
+    public Product(String name, int minimumStockLevel, double costPrice, String location, String manufacturer) {
         Objects.requireNonNull(name, "Product name cannot be null");
         if (minimumStockLevel < 0) {
             throw new IllegalArgumentException("Minimum stock level cannot be negative");
@@ -34,6 +35,11 @@ public class Product {
         this.minimumStockLevel = minimumStockLevel;
         this.costPrice = costPrice;
         this.sellingPrice = costPrice * 1.2; // set Default selling price to 20% more than cost price
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public String getId() {
@@ -74,6 +80,7 @@ public class Product {
                 "\n\tsellingPrice = " + sellingPrice + "'," +
                 "\n\tminimumStockLevel = " + minimumStockLevel + "'," +
                 "\n\tcategory = '" + category.getName() + "'" +
+                "\n\tlocation = '" + location + "'" +
                 '}';
     }
 
@@ -90,4 +97,6 @@ public class Product {
         this.category = parentCategory;
         parentCategory.addProduct(this);
     }
+
+
 }
