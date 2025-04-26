@@ -52,15 +52,15 @@ public class UserApplication {
         saveProduct("Test Product 1", 10, new String[]{"Cat1", "Cat11", "Cat111"},10,"A17-Shelf 12","ADF");
         saveProduct("Test Product 2", 20, new String[]{"Cat2", "Cat21", "Cat211"}, 20,"A18-Shelf 17","DCF");
         saveProduct("Test Product 3", 30, new String[]{"Cat3", "Cat31", "Cat311"} ,30,"C27-Shelf 3","RCF");
-        saveProduct("Test Product 4", 40, new String[]{"Cat1", "Cat12", "Cat121"} ,40,"B2-Shelf 8","VBX");
-        saveProduct("Test Product 5", 50, new String[]{"Cat2", "Cat22", "Cat111"}, 50,"B7-Shelf 2","TCF");
+        saveProduct("Test Product 4", 40, new String[]{"Cat1", "Cat12", "Cat122"} ,40,"B2-Shelf 8","VBX");
+        saveProduct("Test Product 5", 50, new String[]{"Cat2", "Cat22", "Cat221"}, 50,"B7-Shelf 2","TCF");
         saveProduct("Test Product 6", 60, new String[]{"Cat1", "Cat12", "Cat122"}, 60,"S6-Shelf 9","GGV");
 
         inventoryController.addDiscount(inventoryController.getProductByName("Test Product 6", "GGV").getId(), 20, "Test Discount 1",
                 DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10));
-        inventoryController.addDiscount(inventoryController.getCategoryIdByName("1234"), 20, "Test Discount 2",
+        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat1"), 20, "Test Discount 2",
                 DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
-        inventoryController.addDiscount(inventoryController.getCategoryIdByName("12345"), 20, "Test Discount 3",
+        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat122"), 20, "Test Discount 3",
                 DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
 
         inventoryController.saveStockItem("Test Product 1", "ADF", 50,"in store",StockItemStatus.OK, LocalDate.now().plusDays(10));
@@ -139,8 +139,8 @@ public class UserApplication {
         }
     }
 
-    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount){
-        inventoryController.moveStockItem(productName, productManufacturer, newLocation, amount);
+    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount, LocalDate expiryDate){
+        inventoryController.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate);
 
     }
 }

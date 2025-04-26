@@ -1,6 +1,7 @@
 package inventory.domain;
 
 import inventory.data.*;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -12,12 +13,11 @@ public class InventoryControllerImpl implements InventoryController {
     private final DiscountRepository discountRepository = new InMemoryDiscountRepository();
 
     public InventoryControllerImpl() {
-        // Constructor can be used for dependency injection if needed
     }
 
     public void addProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer) {
         System.out.println("Adding product: " + name);
-        Category prodParentCategory = getCategoryById(parentCategory);
+        Category prodParentCategory = getCategoryById(getCategoryIdByName(parentCategory));
         if (prodParentCategory == null) {
             throw new IllegalArgumentException("Parent category not found. Aborting product add operation.");
         }
@@ -101,7 +101,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus) {
+    public void changeStockItemStatus(String productName, String productManufacturer, LocalDate expiryDate, StockItemStatus newStatus) {
         System.out.println("Changing stock item status for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
@@ -116,105 +116,148 @@ public class InventoryControllerImpl implements InventoryController {
         }
         if (countProductQuantity(product.getId()) <= product.getMinimumStockLevel()) {
             System.out.println(" ***** Warning: Product " + product.getName() +
-                " is below minimum stock level. Please restock. *****");
+                    " is below minimum stock level. Please restock. *****");
         }
     }
 
-    public void moveStockItem(String productName, String productManufacturer, String newLocation, int amount) {
+    public void moveStockItem(String productName, String productManufacturer, String newLocation, int amount, LocalDate expiryDate) {
         System.out.println("Moving stock item for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
         }
-        int leftToMove = amount;
-        String id = null;
+        String originId;
+        String destinationId;
 
-        while (leftToMove > 0) {
+        while (amount > 0) {
             if (Objects.equals(newLocation, "in store")) {
-                 id = earliestExpiryDateInStorage(productName, productManufacturer);
+                // Overall Product to move
+                originId = getEarliestExpiryDateInStorage(product); // Compatible StockItem ID Origin
+                destinationId = getTargetStockId(product, newLocation, expiryDate);
             } else if (Objects.equals(newLocation, "storage")) {
-                 id = latestExpiryDateInStorage(productName, productManufacturer);
-            }
-            else {
+                originId = getStockItemByBatch(product, "in store", expiryDate); //Giving StockItem ID
+                destinationId = getTargetStockId(product, newLocation, expiryDate);
+            } else {
                 throw new IllegalArgumentException("Invalid location. Aborting stock move operation.");
             }
-            StockItem stockItem = stockItemRepository.getStockItemById(id);
-            moveBatch(stockItem,leftToMove,product);
-            if (stockItem.getQuantity() - leftToMove > 0) { // batch too big , partial movement
-                stockItem.setQuantity(stockItem.getQuantity() - leftToMove);
-                leftToMove = 0;
+            StockItem origin = getStockItemById(originId);
+            StockItem destination = getStockItemById(destinationId);
+            if (amount >= origin.getQuantity()) {
+                System.out.println("Moving all stock from " + originId + " to " + destinationId);
+                moveBatch(origin, destination, amount);
+                amount = 0;
             } else {
-                leftToMove -= stockItem.getQuantity();
-                stockItemRepository.deleteStockItem(id);
+                System.out.println("Moving partial stock from " + originId + " to " + destinationId);
+                moveBatch(origin, destination, amount);
+                amount -= origin.getQuantity();
             }
+        }
+    }
 
+    public StockItem getStockItemById(String id) {
+        StockItem stockItem = stockItemRepository.getStockItemById(id);
+        if (stockItem == null) {
+            throw new IllegalArgumentException("Stock item not found. Aborting stock move operation.");
+        }
+        return stockItem;
+    }
+
+    public String getTargetStockId(Product product, String location, LocalDate expiryDate) {
+        String stockItemId = getStockItemByBatch(product, location, expiryDate);
+        if (stockItemId != null) {
+            return stockItemId;
+        } else {
+            // Create a new StockItem since no matching one exists
+            StockItem newStockItem = new StockItem(0, location, StockItemStatus.OK, expiryDate);
+            newStockItem.setProduct(product);
+            stockItemRepository.saveStockItem(newStockItem);
+            return newStockItem.getStockItemId();
         }
     }
 
 
-    public void moveBatch(StockItem stockItem, int leftToMove,Product product){
-         // Search for the same product in the store
-                    String stockItemID = findStockItembybatch(product, "in store", stockItem.getExpiryDate());
-                    // If not found, create a new stock item
-                    if (stockItemID == null) {
-                        StockItem newStockitem = new StockItem(leftToMove, "in store", stockItem.getStatus(),stockItem.getExpiryDate());
-                        stockItemRepository.saveStockItem(newStockitem);
-                        newStockitem.setProduct(product);
-                    }
-                    // If found, update the existing stock item
-                    else {
-                        StockItem existingStockItem = stockItemRepository.getStockItemById(stockItemID);
-                        existingStockItem.setQuantity(existingStockItem.getQuantity() + leftToMove);
-                    }
-    }
-
-
-    public String earliestExpiryDateInStorage(String productName,String productManufacturer){
-         System.out.println("Moving stock item for product: " + productName);
+    public String getStockItemByProdNameManExp(String productName, String productManufacturer, LocalDate expiryDate) {
+        System.out.println("Moving stock item for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
         }
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
-            LocalDate maxDate = LocalDate.now().minusYears(100);
-            String productToMove = null;
-            for (StockItem stockItem : stockItems) {
-                if (stockItem.getExpiryDate().isBefore(maxDate) && stockItem.getLocation().equals("storage") && stockItem.getExpiryDate().isAfter(LocalDate.now())){
-                          maxDate = stockItem.getExpiryDate();
-                          productToMove = stockItem.getProduct().getId();
-                }
-            }
-            if (productToMove == null) {
-                throw new IllegalArgumentException("No stock item found in storage with an expiry date before today.");
-            }
-            return productToMove;
-    }
-
-    public String latestExpiryDateInStorage(String productName,String productManufacturer){
-         System.out.println("Moving stock item for product: " + productName);
-        Product product = getProductByName(productName, productManufacturer);
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
-        }
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
-            LocalDate maxDate = LocalDate.now();
-            String productToMove = null;
-            for (StockItem stockItem : stockItems) {
-                if (stockItem.getExpiryDate().isAfter(maxDate) && stockItem.getLocation().equals("in store")){
-                          maxDate = stockItem.getExpiryDate();
-                          productToMove = stockItem.getProduct().getId();
-                }
-            }
-            if (productToMove == null) {
-                throw new IllegalArgumentException("No stock item found in storage with an expiry date before today.");
-            }
-            return productToMove;
-    }
-
-    public String findStockItembybatch(Product product,String location,LocalDate expiryDate){
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        String stockToMove = null;
         for (StockItem stockItem : stockItems) {
-            if (stockItem.getProduct().getId().equals(product.getId()) && stockItem.getLocation().equals(location) && stockItem.getExpiryDate().equals(expiryDate)) {
+            if (stockItem.getProduct().getId().equals(product.getId()) && stockItem.getExpiryDate().equals(expiryDate)) {
+                stockToMove = stockItem.getStockItemId();
+                break;
+            }
+        }
+        if (stockToMove == null) {
+            throw new IllegalArgumentException("No stock item found in store with an expiry date before today.");
+        }
+        return stockToMove;
+    }
+
+
+    public void moveBatch(StockItem origin, StockItem destination, int amount) {
+        System.out.println("Moving batch of " + amount + " from " + origin.getLocation() + " to " + destination.getLocation());
+        origin.setQuantity(origin.getQuantity() - amount);
+        destination.setQuantity(destination.getQuantity() + amount);
+        if (destination.getQuantity() == 0) {
+            stockItemRepository.deleteStockItem(destination.getStockItemId());
+        }
+    }
+
+
+    public String getEarliestExpiryDateInStorage(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
+        }
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        LocalDate maxDate = LocalDate.now().minusYears(100);
+        String productToMove = null;
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getExpiryDate().isBefore(maxDate) && stockItem.getLocation().equals("storage") && stockItem.getExpiryDate().isAfter(LocalDate.now())) {
+                maxDate = stockItem.getExpiryDate();
+                productToMove = stockItem.getProduct().getId();
+            }
+        }
+        if (productToMove == null) {
+            throw new IllegalArgumentException("No stock item found in storage with an expiry date before today.");
+        }
+        return productToMove;
+    }
+
+    public String latestExpiryDateInStorage(String productName, String productManufacturer) {
+        System.out.println("Moving stock item for product: " + productName);
+        Product product = getProductByName(productName, productManufacturer);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
+        }
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        LocalDate maxDate = LocalDate.now();
+        String productToMove = null;
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getExpiryDate().isAfter(maxDate) && stockItem.getLocation().equals("in store")) {
+                maxDate = stockItem.getExpiryDate();
+                productToMove = stockItem.getProduct().getId();
+            }
+        }
+        if (productToMove == null) {
+            throw new IllegalArgumentException("No stock item found in storage with an expiry date before today.");
+        }
+        return productToMove;
+    }
+
+    public String getStockItemByBatch(Product product, String location, LocalDate expiryDate) {
+        List<StockItem> stockItems;
+        if (location.equals("in store")) {
+            stockItems = getStockItemsInStore();
+        } else if (location.equals("storage")) {
+            stockItems = getStockItemsFromStorage();
+        } else {
+            throw new IllegalArgumentException("Invalid location. Aborting stock move operation.");
+        }
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getProduct().getId().equals(product.getId()) && stockItem.getExpiryDate().equals(expiryDate)) {
                 return stockItem.getStockItemId();
             }
         }
@@ -231,7 +274,7 @@ public class InventoryControllerImpl implements InventoryController {
         int minQuantity = stockItemToRemove.getProduct().getMinimumStockLevel();
         if (itemQuantity <= minQuantity) {
             System.out.println(" ***** Warning: Product " + stockItemToRemove.getProduct().getName() +
-                " is below minimum stock level. Please restock. *****");
+                    " is below minimum stock level. Please restock. *****");
         }
     }
 
@@ -242,7 +285,7 @@ public class InventoryControllerImpl implements InventoryController {
 
         if (!categoryToRemove.getProducts().isEmpty() || !categoryToRemove.getSubCategories().isEmpty()) {
             throw new IllegalArgumentException("Category has products or subcategories. " +
-                "Cannot delete non empty category.");
+                    "Cannot delete non empty category.");
         }
 
         if (categoryToRemove.getParentCategory() != null) {
@@ -260,7 +303,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void printCurrentStock(){
+    public void printCurrentStock() {
         System.out.println("------- Stock Report -------");
         List<Product> products = productRepository.getAllProducts();
         for (Product product : products) {
@@ -292,12 +335,12 @@ public class InventoryControllerImpl implements InventoryController {
                         + "\nLocation: " + stockItem.getLocation()
                         + "\nExpiry Date: " + stockItem.getExpiryDate().toString()
                         + "\nStatus: " + stockItem.getStatus() +
-                    "\n------------------------------\n");
+                        "\n------------------------------\n");
             }
         }
     }
 
-   public int countProductInStorage(String id) {
+    public int countProductInStorage(String id) {
         Product product = productRepository.getProductById(id);
         if (product == null) {
             System.out.println("Product not found.");
@@ -338,8 +381,7 @@ public class InventoryControllerImpl implements InventoryController {
         int count = 0;
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
-            if (stockItem.getProduct().getId().equals(id) && (stockItem.getStatus() != StockItemStatus.OK))
-            {
+            if (stockItem.getProduct().getId().equals(id) && (stockItem.getStatus() != StockItemStatus.OK)) {
                 count += stockItem.getQuantity();
             }
         }
@@ -360,18 +402,18 @@ public class InventoryControllerImpl implements InventoryController {
     public void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
                             DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate) {
         System.out.println("Adding discount: " + discountDescription);
-        if(discountPercentage < 0 || discountPercentage > 100) {
+        if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100.");
         }
-        if(discountEndDate.isBefore(discountStartDate)) {
+        if (discountEndDate.isBefore(discountStartDate)) {
             throw new IllegalArgumentException("Discount end date cannot be before start date.");
         }
-        if(type == DiscountTargetType.PRODUCT) {
+        if (type == DiscountTargetType.PRODUCT) {
             Product product = productRepository.getProductById(discountTargetId);
             if (product == null) {
                 throw new IllegalArgumentException("Product not found. Aborting discount add operation.");
             }
-        } else if(type == DiscountTargetType.CATEGORY) {
+        } else if (type == DiscountTargetType.CATEGORY) {
             Category category = getCategoryById(discountTargetId);
             if (category == null) {
                 throw new IllegalArgumentException("Category not found. Aborting discount add operation.");
@@ -380,7 +422,7 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Invalid discount target type. Aborting discount add operation.");
         }
         Discount discount = new Discount(discountDescription, type, discountTargetId, discountPercentage,
-                                          discountStartDate, discountEndDate);
+                discountStartDate, discountEndDate);
         discountRepository.saveDiscount(discount);
     }
 
@@ -395,11 +437,11 @@ public class InventoryControllerImpl implements InventoryController {
 
         double currentPricePercentage = 1; // Will be reverted before returned
         for (Discount discount : discounts) {
-            if(!discount.isActive()) {
+            if (!discount.isActive()) {
                 continue;
             }
             if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
-                if(discount.getTargetId().equals(productId)) {
+                if (discount.getTargetId().equals(productId)) {
                     currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
                     break;
                 }
@@ -409,11 +451,11 @@ public class InventoryControllerImpl implements InventoryController {
         Category currCategory = product.getCategory();
         while (currCategory != null) {
             for (Discount discount : discounts) {
-                if(!discount.isActive()) {
+                if (!discount.isActive()) {
                     continue;
                 }
                 if (discount.getTargetType() == DiscountTargetType.CATEGORY) {
-                    if(discount.getTargetId().equals(currCategory.getId())) {
+                    if (discount.getTargetId().equals(currCategory.getId())) {
                         currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
                         break;
                     }
@@ -433,7 +475,28 @@ public class InventoryControllerImpl implements InventoryController {
             }
         }
         return null;
-        }
+    }
 
+    public List<StockItem> getStockItemsFromStorage() {
+        List<StockItem> allStockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> storageItems = new java.util.ArrayList<>();
+        for (StockItem stockItem : allStockItems) {
+            if (stockItem.getLocation().equals("storage")) {
+                storageItems.add(stockItem);
+            }
+        }
+        return storageItems;
+    }
+
+    public List<StockItem> getStockItemsInStore() {
+        List<StockItem> allStockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> storeItems = new java.util.ArrayList<>();
+        for (StockItem stockItem : allStockItems) {
+            if (!stockItem.getLocation().equals("storage")) {
+                storeItems.add(stockItem);
+            }
+        }
+        return storeItems;
+    }
 
 }

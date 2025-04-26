@@ -36,7 +36,7 @@ public interface InventoryController {
 
     double getDiscountByProductId(String productId);
 
-    void moveStockItem(String productName,String productManufacturer,String newLocation, int amount);
+    void moveStockItem(String productName,String productManufacturer,String newLocation, int amount, LocalDate expiryDate);
 
     void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus);
 

@@ -34,6 +34,9 @@ public class StockItem {
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
+    public String getId() {
+        return stockItemId;
+    }
 
     public void setExpiryDate(LocalDate expiryDate) {
         this.expiryDate = expiryDate;

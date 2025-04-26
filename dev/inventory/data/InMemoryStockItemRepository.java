@@ -25,7 +25,7 @@ public class InMemoryStockItemRepository implements StockItemRepository {
     @Override
     public StockItem getStockItemById(String id) {
         for (StockItem stockItem : stockItems) {
-            if (stockItem.getProduct().getId().equals(id)) {
+            if (stockItem.getId().equals(id)) {
                 return stockItem;
             }
         }
