@@ -4,14 +4,82 @@ import HR_Mudol.domain.*;
 import HR_Mudol.presentation.LoginScreen;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        Branch curBranch=new Branch();
+        // Create an empty Branch
+        Branch curBranch = new Branch();
+
+        // Create and add HR Manager
+        HRManager hrManager = new HRManager("Rami Levi", 111111111, "admin", "122345", 300000, LocalDate.now(), 2, 2, 5, 10);
+        curBranch.getEmployees().add(hrManager);
+        User hrUser = new User(hrManager, Level.HRManager);
+        curBranch.getUsers().add(hrUser);
+
+        // Create and add Shift Manager
+        Employee shiftManager = new Employee("Yossi Cohen", 222222222, "shiftadmin", "999999", 7000, LocalDate.now(), 2, 2, 5, 10);
+        curBranch.getEmployees().add(shiftManager);
+        User shiftUser = new User(shiftManager, Level.shiftManager);
+        curBranch.getUsers().add(shiftUser);
+
+        // Create predefined roles
+        Role driverRole = new Role("Driver");
+        Role cashierRole = new Role("Cashier");
+        Role warehouseRole = new Role("Warehouse Worker");
+        Role shiftSupervisorRole = new Role("Shift Supervisor");
+        Role courierRole = new Role("Courier");
+        Role stockOrganizerRole = new Role("Stock Organizer");
+        Role cookRole = new Role("Cook");
+        Role securityGuardRole = new Role("Security Guard");
+
+        // Add roles to the branch
+        curBranch.getRoles().add(driverRole);
+        curBranch.getRoles().add(cashierRole);
+        curBranch.getRoles().add(warehouseRole);
+        curBranch.getRoles().add(shiftSupervisorRole);
+        curBranch.getRoles().add(courierRole);
+        curBranch.getRoles().add(stockOrganizerRole);
+        curBranch.getRoles().add(cookRole);
+        curBranch.getRoles().add(securityGuardRole);
+
+        // Add employees assigned to roles
+        addEmployeeWithRole(curBranch, "Avi Driver", 333333333, "driverpass", "BANK1", 4500, driverRole, hrUser);
+        addEmployeeWithRole(curBranch, "Tamar Cashier", 444444444, "cashierpass", "BANK2", 4300, cashierRole, hrUser);
+        addEmployeeWithRole(curBranch, "David Warehouse", 555555555, "warehousepass", "BANK3", 4200, warehouseRole, hrUser);
+        addEmployeeWithRole(curBranch, "Shiran Supervisor", 666666666, "supervisorpass", "BANK4", 5200, shiftSupervisorRole, hrUser);
+        addEmployeeWithRole(curBranch, "Oren Courier", 777777777, "courierpass", "BANK5", 4100, courierRole, hrUser);
+        addEmployeeWithRole(curBranch, "Noa Organizer", 888888888, "organizerpass", "BANK6", 4000, stockOrganizerRole, hrUser);
+        addEmployeeWithRole(curBranch, "Ron Cook", 999999999, "cookpass", "BANK7", 4300, cookRole, hrUser);
+        addEmployeeWithRole(curBranch, "Eyal Security", 123123123, "securitypass", "BANK8", 4400, securityGuardRole, hrUser);
+
+        // Add 8 additional regular employees
+        for (int i = 0; i < 8; i++) {
+            int empId = 600000000 + i;
+            String name = "Employee" + (i + 1);
+            String password = "pass" + (i + 1);
+            String bankAccount = "BANK" + (i + 1);
+            int salary = 4000 + (i * 100);
+
+            Employee emp = new Employee(name, empId, password, bankAccount, salary, LocalDate.now(), 2, 2, 5, 10);
+            curBranch.getEmployees().add(emp);
+            User user = new User(emp, Level.regularEmp);
+            curBranch.getUsers().add(user);
+        }
+
+        // Start the Login Screen
         LoginScreen login = new LoginScreen();
-        login.start(curBranch); // שלח את השבוע למסך ההתחברות
+        login.start(curBranch);
+    }
+
+    /**
+     * Helper method to add an employee with a role.
+     */
+    private static void addEmployeeWithRole(Branch branch, String name, int id, String password, String bankAccount, int salary, Role role, User hrUser) {
+        Employee emp = new Employee(name, id, password, bankAccount, salary, LocalDate.now(), 2, 2, 5, 10);
+        branch.getEmployees().add(emp);
+        User user = new User(emp, Level.regularEmp);
+        branch.getUsers().add(user);
+        role.addNewEmployee(hrUser, emp);
     }
 }

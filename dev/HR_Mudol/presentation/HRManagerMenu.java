@@ -14,7 +14,7 @@ public class HRManagerMenu implements Menu{
 
 
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
-        if (!caller.isShiftManager()) {
+        if (!caller.isManager()) {
             System.out.println("Access denied.");
             return false;
         }
