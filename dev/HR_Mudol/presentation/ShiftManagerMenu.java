@@ -54,7 +54,14 @@ public class ShiftManagerMenu implements Menu {
             }
         }
     }
-
+    /**
+     * Manages the shift assignments for the current week, such as adding/removing employees from shifts or handling shift cancellations.
+     * It allows the Shift Manager to interact with the system to manage shifts for employees.
+     * @param hr The HR system manager to interact with role management.
+     * @param branch The branch where the shift management takes place.
+     * @param caller The shift manager initiating the shift management actions.
+     * @param sc The scanner to capture user input.
+     */
     private static void manageShift(HRSystemManager hr, Branch branch, User caller, Scanner sc) {
         Week currentWeek = branch.getWeeks().get(branch.getWeeks().size() - 1);
 
