@@ -1,22 +1,38 @@
 package HR_Mudol.Service.ManagerSystem;
 import HR_Mudol.domain.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
+/**
+ * The WeekManager class handles the management of shifts and roles within a given week.
+ * This includes assigning employees to shifts, managing roles, and ensuring that all shifts
+ * are filled appropriately.
+ */
 public class WeekManager implements IWeekManager {
 
     private IShiftManager dependency;
     private Branch curBranch;
 
+
+    /**
+     * Constructor for WeekManager.
+     *
+     * @param dependency The IShiftManager dependency used for shift management operations.
+     * @param curBranch The current branch being managed.
+     */
     public WeekManager(IShiftManager dependency,Branch curBranch ) {
         this.dependency = dependency;
         this.curBranch=curBranch;
     }
 
+
+    /**
+     * Creates a new week with shifts, empty at first.
+     *
+     * @param caller The user who is requesting the creation of a new week.
+     * @return A new Week object.
+     */
     @Override
     public Week createNewWeek(User caller) {
         Week newWeek = new Week();
@@ -24,7 +40,15 @@ public class WeekManager implements IWeekManager {
         return newWeek;
     }
 
-    //choose relevant role for each shift
+    /**
+     * Manages the roles for each shift within the week, ensuring the correct roles are assigned.
+     * Only managers can execute this operation.
+     *
+     * @param caller The user who is attempting to manage the roles.
+     * @param week The week for which roles are being managed.
+     * @throws SecurityException if the caller is not a manager.
+     * @throws IllegalArgumentException if there are no roles or employees in the system.
+     */
     @Override
     public void manageTheWeekRelevantRoles(User caller, Week week) {
         if (!caller.isManager()) {
@@ -43,12 +67,24 @@ public class WeekManager implements IWeekManager {
         }
     }
 
+    /**
+     * Adds a role to the selected shift in the week.
+     *
+     * @param caller The user who is adding the role.
+     * @param week The week in which the shift is located.
+     */
     @Override
     public void addARoleToShift(User caller, Week week){
         dependency.chooseRelevantRoleForShift(caller,findShift(week));
     }
 
-    //Assigning employees to shifts
+    /**
+     * Assigns employees to the shifts for the week. Each shift is checked for available roles,
+     * and employees are assigned accordingly.
+     *
+     * @param caller The user who is assigning employees.
+     * @param week The week in which the shifts and roles are to be filled.
+     */
     @Override
     public void assigningEmployToShifts(User caller, Week week) {
         for (Shift shift : week.getShifts()) {
@@ -80,7 +116,15 @@ public class WeekManager implements IWeekManager {
         }
     }
 
-
+    /**
+     * Chooses an employee for a specific role in a shift, considering availability and constraints.
+     *
+     * @param caller The user attempting to assign the employee.
+     * @param week The week during which the shift is scheduled.
+     * @param shift The shift for which the employee is being selected.
+     * @param role The role to be assigned to the employee.
+     * @return The chosen employee, or null if no employee is available.
+     */
     private Employee chooseEmployeeForRole(User caller, Week week, Shift shift, Role role) {
         Scanner scanner = new Scanner(System.in);
         List<Employee> candidates = role.getRelevantEmployees(caller);
@@ -141,7 +185,12 @@ public class WeekManager implements IWeekManager {
         return null;
     }
 
-
+    /**
+     * Prints the list of relevant employees for a specific role.
+     *
+     * @param caller The user requesting the list of employees.
+     * @param role The role for which employees are being listed.
+     */
     private void printRelevantEmp(User caller, Role role) {
         int index = 1;
         for (Employee emp : role.getRelevantEmployees(caller)) {
@@ -151,7 +200,13 @@ public class WeekManager implements IWeekManager {
         }
     }
 
-    //Remove a shift - for holidays case use
+    /**
+     * Cancels a shift for a holiday or other reason.
+     *
+     * @param caller The user attempting to cancel the shift.
+     * @param week The week in which the shift is located.
+     * @throws SecurityException if the caller is not a manager.
+     */
     @Override
     public void cancelShift(User caller, Week week) {
         if (!caller.isManager()) {
@@ -164,6 +219,14 @@ public class WeekManager implements IWeekManager {
 
     }
 
+
+    /**
+     * Retrieves the shifts for a specific employee in a given week.
+     *
+     * @param employee The employee whose shifts are being retrieved.
+     * @param curWeek The week for which shifts are being retrieved.
+     * @return A list of shifts assigned to the employee.
+     */
     @Override
     public List<Shift> getShiftsForEmployee(Employee employee, Week curWeek) {
         List<Shift> result = new ArrayList<>();
@@ -178,11 +241,22 @@ public class WeekManager implements IWeekManager {
     }
 
 
+    /**
+     * Prints out the details of the entire week, including shifts and assigned roles.
+     *
+     * @param week The week to be printed.
+     */
     @Override
     public void printWeek(Week week) {
         System.out.println(week);
     }
 
+    /**
+     * Checks if there are any unassigned roles in the given week.
+     *
+     * @param week The week to check for unassigned roles.
+     * @return The number of shifts with unassigned roles.
+     */
     @Override
     public int hasUnassignedRoles(Week week) {
         int count = 0;
@@ -192,6 +266,13 @@ public class WeekManager implements IWeekManager {
         return count;
     }
 
+    /**
+     * Removes an employee from a shift.
+     *
+     * @param caller The user attempting to remove the employee.
+     * @param week The week in which the shift is located.
+     * @throws SecurityException if the caller is not a manager.
+     */
     @Override
     public void removeEmployeeFromShift(User caller,Week week){
         if (!caller.isManager()) {
@@ -200,6 +281,14 @@ public class WeekManager implements IWeekManager {
         dependency.removeEmployeeFromShift(caller,findShift(week)); //if the shift null it will print msg
     }
 
+
+    /**
+     * Removes a role from a shift.
+     *
+     * @param caller The user attempting to remove the role.
+     * @param week The week in which the shift is located.
+     * @throws SecurityException if the caller is not a manager.
+     */
     @Override
     public void removeRoleFromShift(User caller,Week week) {
         if (!caller.isManager()) {
@@ -208,6 +297,13 @@ public class WeekManager implements IWeekManager {
         dependency.removeRoleFromShift(caller,findShift(week));
     }
 
+    /**
+     * Adds an employee to a shift.
+     *
+     * @param caller The user attempting to add the employee.
+     * @param week The week in which the shift is located.
+     * @throws SecurityException if the caller is not a manager.
+     */
     @Override
     public void addEmployeeToShift(User caller, Week week) {
         if (!caller.isManager()) {
@@ -255,8 +351,13 @@ public class WeekManager implements IWeekManager {
         dependency.addEmployeeToShift(caller, shift, chosen, selectedRole);
     }
 
-
-    // פונקציה שמחזירה את התפקיד לפי ה-ID
+        /**
+     * Finds a role by its ID in a list of roles.
+     *
+     * @param roles The list of roles to search through.
+     * @param roleId The ID of the role to find.
+     * @return The role with the specified ID, or null if not found.
+     */
     private Role findRoleById(List<Role> roles,int roleId) {
         for (Role role : roles) {
             if (role.getRoleNumber()==(roleId)) {
@@ -266,6 +367,12 @@ public class WeekManager implements IWeekManager {
         return null;
     }
 
+    /**
+     * Prints the list of roles with their IDs.
+     *
+     * @param caller The user requesting the list of roles.
+     * @param roles The list of roles to print.
+     */
     private void printRolesList(User caller, List<Role> roles) {
         for (Role r : roles) {
             if (r.getRoleNumber() != 1) { // דילוג על Shift Manager, כי כבר הוסף אוטומטית
@@ -274,6 +381,12 @@ public class WeekManager implements IWeekManager {
         }
     }
 
+    /**
+     * Finds a shift in the week based on the specified day and type.
+     *
+     * @param week The week to search in.
+     * @return The matching shift, or null if not found.
+     */
     private Shift findShift(Week week){
         Scanner scanner = new Scanner(System.in);
 

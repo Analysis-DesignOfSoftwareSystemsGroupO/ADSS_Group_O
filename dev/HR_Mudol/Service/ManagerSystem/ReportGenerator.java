@@ -8,16 +8,34 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The ReportGenerator class is responsible for generating various reports related to employee shifts, weekly activities,
+ * and specific employee details. It implements the {@link IReportGenerator} interface.
+ */
 public class ReportGenerator implements IReportGenerator {
 
     private EmployeeManager empM;
     private WeekManager weekM;
 
+    /**
+     * Constructor to initialize the ReportGenerator with necessary managers.
+     *
+     * @param weekM The WeekManager used for week-related operations.
+     * @param empM  The EmployeeManager used for employee-related operations.
+     */
     public ReportGenerator(WeekManager weekM, EmployeeManager empM) {
         this.weekM = weekM;
         this.empM = empM;
     }
 
+
+    /**
+     * Generates a weekly report for the specified weeks. The report includes shift assignments and their details.
+     * The user is prompted to enter a date, and the report for the corresponding week is generated.
+     *
+     * @param caller The user requesting the report (e.g., HR manager or admin).
+     * @param weeks  The list of weeks to search for the required week.
+     */
     @Override
     public void generateWeeklyReport(User caller, List<Week> weeks) {
         Scanner scanner = new Scanner(System.in);
@@ -58,6 +76,14 @@ public class ReportGenerator implements IReportGenerator {
     }
 
 
+    /**
+     * Generates a report for a specific employee. The report includes the employee's personal details, shifts,
+     * roles, and available vacation and sick days.
+     *
+     * @param caller The user requesting the report (e.g., HR manager or admin).
+     * @param empId  The ID of the employee for which the report is generated.
+     * @param curWeek The current week for which the employee's shift details are requested.
+     */
     @Override
     public void generateEmployeeReport(User caller, int empId, Week curWeek) {
         Employee employee = empM.getEmployeeById(caller, empId);
@@ -86,6 +112,13 @@ public class ReportGenerator implements IReportGenerator {
         }
     }
 
+    /**
+     * Generates a shift report for a specific week. The user is prompted to input a day of the week and a shift type
+     * (morning or evening). The report includes shift details and assigned employees.
+     *
+     * @param caller The user requesting the report (e.g., HR manager or admin).
+     * @param curWeek The current week for which the shift report is generated.
+     */
     @Override
     public void generateShiftReport(User caller, Week curWeek) {
 
@@ -93,6 +126,12 @@ public class ReportGenerator implements IReportGenerator {
 
     }
 
+    /**
+     * Prompts the user to input a day and shift type, then generates the shift report for the corresponding day and shift type.
+     *
+     * @param caller The user requesting the shift report.
+     * @param curWeek The current week for which the shift report is generated.
+     */
     private static void askAndGenerateShiftReport(User caller, Week curWeek) {
         Scanner scanner = new Scanner(System.in);
 
@@ -124,6 +163,13 @@ public class ReportGenerator implements IReportGenerator {
         shiftReport(type, day, curWeek);
     }
 
+    /**
+     * Generates the shift report for a specified day and shift type within a given week.
+     *
+     * @param type The type of shift (e.g., MORNING, EVENING).
+     * @param day The day of the week (e.g., SUNDAY, MONDAY, etc.).
+     * @param curWeek The week for which the shift report is generated.
+     */
     private static void shiftReport(ShiftType type, WeekDay day, Week curWeek){
 
         if (curWeek == null) {

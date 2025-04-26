@@ -13,10 +13,23 @@ public class ShiftManager implements IShiftManager {
 
     private IRoleManager dependency; // Dependency for accessing role management
 
+
+    /**
+     * Constructor for ShiftManager.
+     * @param dependency The role manager dependency used for role-related operations.
+     */
     public ShiftManager(IRoleManager dependency) {
         this.dependency = dependency;
     }
-
+    /**
+     * Assigns an employee to a shift.
+     * This operation checks if the caller is a manager or shift manager before proceeding.
+     * @param caller The user (manager or shift manager) who is assigning the employee.
+     * @param shift The shift to which the employee is being assigned.
+     * @param employee The employee being assigned to the shift.
+     * @param role The role the employee will have in the shift.
+     * @throws SecurityException if the caller does not have manager or shift manager privileges.
+     */
     @Override
     public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
         // Authorization check
@@ -30,6 +43,13 @@ public class ShiftManager implements IShiftManager {
                 " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
 
+    /**
+     * Removes an employee from a shift.
+     * The user must be a manager or shift manager.
+     * @param caller The user (manager or shift manager) who is removing the employee.
+     * @param shift The shift from which the employee is being removed.
+     * @throws SecurityException if the caller does not have manager or shift manager privileges.
+     */
     @Override
     public void removeEmployeeFromShift(User caller, Shift shift) {
         // Authorization check
@@ -82,6 +102,13 @@ public class ShiftManager implements IShiftManager {
                 " was removed from shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
 
+
+    /**
+     * Removes a role from a shift.
+     * The user must be a manager or shift manager.
+     * @param caller The user (manager or shift manager) who is removing the role.
+     * @param shift The shift from which the role is being removed.
+     */
     @Override
     public void removeRoleFromShift(User caller, Shift shift) {
         Scanner scanner = new Scanner(System.in);
@@ -126,6 +153,12 @@ public class ShiftManager implements IShiftManager {
         System.out.println("Role \"" + role.getDescription() + "\" was removed from the shift.");
     }
 
+
+    /**
+     * Prints a list of roles assigned to a shift.
+     * @param caller The user (manager or shift manager) who is printing the roles.
+     * @param roles The list of roles assigned to the shift.
+     */
     private void printRolesListForShift(User caller, List<Role> roles) {
         // Print roles assigned to the shift
         System.out.println("Roles assigned to this shift:");
@@ -134,6 +167,12 @@ public class ShiftManager implements IShiftManager {
         }
     }
 
+    /**
+     * Finds a role by its ID from a list of roles.
+     * @param roles The list of roles to search in.
+     * @param roleId The ID of the role to find.
+     * @return The role with the matching ID, or null if not found.
+     */
     private Role findRoleById(List<Role> roles, int roleId) {
         // Find a role by its ID
         for (Role role : roles) {
@@ -144,7 +183,12 @@ public class ShiftManager implements IShiftManager {
         return null;
     }
 
-    // Helper method to check if a shift already has a role by ID
+    /**
+     * Helper method to check if a shift already has a role by ID.
+     * @param shift The shift to check.
+     * @param roleId The ID of the role to check.
+     * @return true if the shift already has the role, false otherwise.
+     */
     private boolean shiftAlreadyHasRole(Shift shift, int roleId) {
         for (Role role : shift.getNecessaryRoles()) {
             if (role.getRoleNumber() == roleId) {
@@ -154,6 +198,12 @@ public class ShiftManager implements IShiftManager {
         return false;
     }
 
+    /**
+     * Chooses relevant roles for a shift.
+     * The user must be a manager or shift manager.
+     * @param caller The user (manager or shift manager) who is adding roles.
+     * @param shift The shift to which roles are being added.
+     */
     @Override
     public void chooseRelevantRoleForShift(User caller, Shift shift) {
         // Authorization check
@@ -215,6 +265,12 @@ public class ShiftManager implements IShiftManager {
         }
     }
 
+
+    /**
+     * Prints the details of a shift.
+     * @param caller The user (manager or shift manager) who is printing the shift details.
+     * @param shift The shift to print.
+     */
     @Override
     public void printShift(User caller, Shift shift) {
         // Authorization check
@@ -225,6 +281,15 @@ public class ShiftManager implements IShiftManager {
         System.out.println(shift.toString());
     }
 
+
+    /**
+     * Adds an employee to a shift.
+     * This method ensures the caller has the correct privileges to perform the action.
+     * @param caller The user (manager or shift manager) who is adding the employee.
+     * @param shift The shift to which the employee is being added.
+     * @param employee The employee being added to the shift.
+     * @param role The role the employee will take in the shift.
+     */
     @Override
     public void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
         // Authorization check
@@ -234,6 +299,11 @@ public class ShiftManager implements IShiftManager {
         shift.addEmployee(caller, employee, role);
     }
 
+    /**
+     * Helper -Prints the list of roles available for the caller to choose from.
+     * @param caller The user (manager or shift manager) who is viewing the roles.
+     * @param roles The list of available roles.
+     */
     private void printRolesList(User caller, List<Role> roles) {
         // Print roles (except Shift Manager role)
         for (Role r : roles) {

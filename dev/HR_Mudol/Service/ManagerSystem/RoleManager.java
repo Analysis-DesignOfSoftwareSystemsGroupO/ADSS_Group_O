@@ -6,12 +6,27 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * This class manages roles within a branch. It allows the creation, assignment, and removal
+ * of roles, as well as the management of employees associated with those roles.
+ * A "Role" is a job description or position that employees can be assigned to.
+ * The manager can also update role descriptions, assign employees to roles (including the "Shift Manager" role),
+ * and remove employees from roles.
+ *
+ * The `RoleManager` ensures that role assignments and modifications are performed securely,
+ * verifying that the user requesting changes is a manager. It also provides utilities
+ * for managing and printing role-related information.
+ */
 public class RoleManager implements IRoleManager {
 
     private Branch curBranch; // The branch where roles are managed
     private Scanner scanner;
     private IEmployeeManager employeeManager;
 
+    /**
+     * Constructor to initialize the RoleManager with the current branch.
+     * @param curBranch The branch where roles are managed.
+     */
     public RoleManager(Branch curBranch) {
         this.curBranch = curBranch;
         // Initialize with a default "Shift Manager" role
@@ -20,12 +35,20 @@ public class RoleManager implements IRoleManager {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Setter for the Employee Manager.
+     * @param employeeManager The employee manager to be injected.
+     */
     public void setEmployeeManager(IEmployeeManager employeeManager) {
         this.employeeManager = employeeManager;
     }
 
+    /**
+     * Creates a new role based on user input.
+     * @param caller The user requesting the role creation.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Create a new role based on user input
     public void createRole(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -53,8 +76,12 @@ public class RoleManager implements IRoleManager {
         System.out.println("Role created successfully.");
     }
 
+    /**
+     * Updates the description of an existing role.
+     * @param caller The user requesting the update.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Update the description of an existing role
     public void updateRoleDescription(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -72,8 +99,12 @@ public class RoleManager implements IRoleManager {
         System.out.println("Role description updated successfully.");
     }
 
+    /**
+     * Assigns an employee to a specific role. If role 1 (Shift Manager) is selected, special handling is applied.
+     * @param caller The user requesting the assignment.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Assign an employee to a specific role (or Shift Manager if role 1 is selected)
     public void assignEmployeeToRole(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -109,8 +140,12 @@ public class RoleManager implements IRoleManager {
         }
     }
 
+    /**
+     * Assigns an employee to the "Shift Manager" role.
+     * @param caller The user requesting the assignment.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Assign an employee to the "Shift Manager" role
     public void assignEmployeeToShiftManager(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -172,9 +207,12 @@ public class RoleManager implements IRoleManager {
         }
     }
 
-
+    /**
+     * Removes an employee from a role based on user input.
+     * @param caller The user requesting the removal.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Remove an employee from a role based on user input
     public void removeEmployeeFromRole(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -198,8 +236,14 @@ public class RoleManager implements IRoleManager {
         }
     }
 
+    /**
+     * Removes an employee from a role (direct call without using Scanner).
+     * @param caller The user requesting the removal.
+     * @param roleNumber The role number to remove the employee from.
+     * @param e The employee to be removed.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Remove an employee from a role (direct call without Scanner)
     public void removeEmployeeFromRole(User caller, int roleNumber, Employee e) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -207,8 +251,14 @@ public class RoleManager implements IRoleManager {
         role.removeEmployee(caller, e);
     }
 
+
+    /**
+     * Retrieves employees assigned to a specific role.
+     * @param caller The user requesting the list of employees.
+     * @return A list of employees assigned to the specified role.
+     * @throws SecurityException If the caller does not have manager or shift manager permissions.
+     */
     @Override
-    // Retrieve employees assigned to a specific role
     public List<Employee> getRelevantEmployees(User caller) {
         if (!caller.isManager() || !caller.isShiftManager())
             throw new SecurityException("Access denied");
@@ -222,16 +272,25 @@ public class RoleManager implements IRoleManager {
         return new LinkedList<>(role.getRelevantEmployees(caller));
     }
 
+    /**
+     * Returns all roles in the current branch.
+     * @param caller The user requesting the list of roles.
+     * @return A list of all roles in the branch.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Return all roles in the current branch
     public List<Role> getAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         return curBranch.getRoles();
     }
 
+    /**
+     * Prints all roles in the current branch.
+     * @param caller The user requesting to print the roles.
+     * @throws SecurityException If the caller does not have manager permissions.
+     */
     @Override
-    // Print all roles in the branch
     public void printAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
@@ -240,8 +299,12 @@ public class RoleManager implements IRoleManager {
         }
     }
 
+    /**
+     * Retrieves a specific role by its number.
+     * @param roleNumber The number of the role to retrieve.
+     * @return The role with the specified number, or null if not found.
+     */
     @Override
-    // Retrieve a specific role by its number
     public Role getRoleByNumber(int roleNumber) {
         for (Role r : curBranch.getRoles()) {
             if (r.getRoleNumber() == roleNumber)
@@ -250,8 +313,13 @@ public class RoleManager implements IRoleManager {
         return null;
     }
 
+    /**
+     * Counts how many employees have no roles assigned.
+     * @param caller The user requesting the count.
+     * @param employeeList The list of employees to check.
+     * @return The count of employees without roles.
+     */
     @Override
-    // Count how many employees have no roles assigned
     public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
         int count = 0;
         for (Employee e : employeeList) {
@@ -261,7 +329,10 @@ public class RoleManager implements IRoleManager {
         return count;
     }
 
-    // Setter for injecting custom Scanner (used for testing)
+    /**
+     * Setter for injecting a custom Scanner (used for testing purposes).
+     * @param scanner The scanner to be used for receiving input.
+     */
     public void setScanner(Scanner scanner) {
         this.scanner = scanner;
     }

@@ -6,25 +6,45 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+
+/**
+ * EmployeeManager class handles all operations related to employees within a branch,
+ * such as adding, removing, updating employee details, and managing their roles.
+ */
 public class EmployeeManager implements IEmployeeManager {
 
     private Scanner scanner = new Scanner(System.in); // Scanner for input operations
     private IRoleManager roleManager; // Role manager interface
     private Branch curBranch; // Current branch being managed
 
+    /**
+     * Constructor to initialize EmployeeManager with a specific branch.
+     * @param curBranch the branch this manager operates on
+     */
     public EmployeeManager(Branch curBranch) {
         this.curBranch = curBranch;
     }
 
+    /**
+     * Sets the role manager dependency.
+     * @param roleManager the role manager to set
+     */
     public void setRoleManager(IRoleManager roleManager) {
         this.roleManager = roleManager;
     }
 
-    // Returns all users in the branch
+   /**
+           * Returns all users in the current branch.
+     * @param caller the user requesting the operation
+     * @return list of all users
+     */
     public List<User> getAllUsers(User caller) {
         return this.curBranch.getUsers();
     }
 
+    /**
+     * Adds a new employee to the branch and creates an associated user account.
+     */
     @Override
     public void addEmployee(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -81,7 +101,12 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Employee and user created successfully!");
     }
 
-    // Helper function: checks if employee ID already exists
+
+    /**
+     * Helper method to check if an employee ID already exists in the branch.
+     * @param ID the employee ID to check
+     * @return true if the ID exists, false otherwise
+     */
     private boolean checkIfAlreadyExist(int ID) {
         for (Employee emp : this.curBranch.getEmployees()) {
             if (emp.getEmpId() == ID) return true;
@@ -89,6 +114,8 @@ public class EmployeeManager implements IEmployeeManager {
         return false;
     }
 
+    /** Removes an employee and the corresponding user from the branch.
+    */
     @Override
     public void removeEmployee(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -127,6 +154,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Employee removed successfully from system.");
     }
 
+    /**  Updates the bank account information of an employee.
+     */
     @Override
     public void updateBankAccount(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -147,7 +176,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Changed successfully.");
     }
 
-
+    /** Updates the salary of an employee.
+     */
     @Override
     public void updateSalary(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -166,6 +196,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Changed successfully.");
     }
 
+    /** Updates the minimum required day shifts of an employee.
+     */
     @Override
     public void updateMinDayShift(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -183,6 +215,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Changed successfully.");
     }
 
+    /** Updates the minimum required evening shifts of an employee.
+     */
     @Override
     public void updateMinEveningShift(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -200,6 +234,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Changed successfully.");
     }
 
+    /** Sets the initial number of sick days for an employee.
+     */
     @Override
     public void setInitialsickDays(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -217,6 +253,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Changed successfully.");
     }
 
+    /** Sets the initial number of vacation days for an employee.
+     */
     @Override
     public void setInitialdaysOff(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -234,6 +272,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Changed successfully.");
     }
 
+    /** Retrieves an employee by their ID.
+     */
     @Override
     public Employee getEmployeeById(User caller, int empId) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -249,6 +289,8 @@ public class EmployeeManager implements IEmployeeManager {
         return null; // If employee not found
     }
 
+    /** Prints the details of a specific employee.
+     */
     @Override
     public void printEmployees(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -261,6 +303,8 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println(e.toString());
     }
 
+    /**Prints the details of all employees in the branch.
+     */
     @Override
     public void printAllEmployees(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
@@ -271,6 +315,9 @@ public class EmployeeManager implements IEmployeeManager {
         }
     }
 
+
+    /** Getter for the current branch
+     */
     @Override
     public Branch getBranch() {
         return this.curBranch;
@@ -281,6 +328,12 @@ public class EmployeeManager implements IEmployeeManager {
         return this.roleManager;
     }
 
+
+    /**
+     * Helper method to safely read a positive integer input from the user.
+     * @param prompt the prompt message to display
+     * @return the integer value input by the user
+     */
     // Helper method to safely read positive integers
     private int getIntInput(String prompt) {
         int value;
@@ -301,6 +354,10 @@ public class EmployeeManager implements IEmployeeManager {
         return value;
     }
 
+    /**
+     * Allows setting a custom Scanner instance (useful for testing).
+     * @param newScanner the scanner to set
+     */
     public void setScanner(Scanner newScanner) {
         this.scanner = newScanner;
     }
