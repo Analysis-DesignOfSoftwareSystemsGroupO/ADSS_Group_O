@@ -23,7 +23,7 @@ public class HRManagerMenu implements Menu{
      * @return true if logout is successful, false if the session should continue.
      */
     public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
-        if (!caller.isShiftManager()) {
+        if (!caller.isManager()) {
             System.out.println("Access denied.");
             return false;
         }
