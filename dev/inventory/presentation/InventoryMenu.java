@@ -21,6 +21,7 @@ public class InventoryMenu {
 
     public void run() {
         System.out.println("\nWelcome to the inventory Management Menu!");
+        service.updateDiscounts();
         int worker = chooseWorkerType();
         int choice = 0;
         do {

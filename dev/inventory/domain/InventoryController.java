@@ -40,6 +40,8 @@ public interface InventoryController {
 
     void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus);
 
+    void UpdateDiscounts();
+
     String getCategoryIdByName(String name);
     List<StockItem> getAllStockItems();
     Product getProductByName(String name, String manufacturer);
