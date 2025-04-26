@@ -27,12 +27,35 @@ public class StockItem {
         // Getters and Setters
     }
 
+    public void setStatus(StockItemStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public String getStockItemId(){
+        return stockItemId;
+    }
+
     public Product getProduct() {
         return product;
     }
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+        this.quantity = quantity;
     }
 
     public void setProduct(Product product) {

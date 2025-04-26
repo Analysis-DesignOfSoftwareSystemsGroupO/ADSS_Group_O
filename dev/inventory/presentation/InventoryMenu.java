@@ -101,6 +101,8 @@ public class InventoryMenu {
 
     private void handleMenuChoice(int choice) {
         try {
+            String productName;
+            String productManufacturer;
             switch (choice) {
                 case 1:
                     // List Products
@@ -243,6 +245,12 @@ public class InventoryMenu {
         }
     }
 
+    public void displayStockUpdateMenu(){
+         System.out.println("Choose which of the following you wold like to do:" +
+                 "\n 1. Move Items" + "\n 2. Change Status" );
+    }
+
+
     private int readIntInput(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -271,4 +279,5 @@ public class InventoryMenu {
         InventoryMenu inventoryMenu = new InventoryMenu();
         inventoryMenu.run();
     }
+
 }

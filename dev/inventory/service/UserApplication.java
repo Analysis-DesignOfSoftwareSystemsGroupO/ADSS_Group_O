@@ -12,6 +12,10 @@ public class UserApplication {
         this.inventoryController = new InventoryControllerImpl();
     }
 
+    public void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus){
+        inventoryController.changeStockItemStatus(productName,productManufacturer, expiryDate, newStatus);
+    }
+
     public void saveProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer) {
         System.out.println("Adding product: " + name);
         inventoryController.addProduct(name, minimumStock, parentCategory, costPrice, location, manufacturer);
@@ -50,6 +54,10 @@ public class UserApplication {
         inventoryController.addDiscount(inventoryController.getCategoryIdByName("12345"), 20, "Test Discount 3",
                 DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
 
+    }
+
+    public void printStockItemByProductByName(String name, String manufacturer){
+         inventoryController.printStockItemByProductByName(name, manufacturer);
     }
 
     public List<Product> getAllProductsDefinitions() {
@@ -109,5 +117,10 @@ public class UserApplication {
                 System.out.println(stockItem);
             }
         }
+    }
+
+    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount){
+        inventoryController.moveStockItem(productName, productManufacturer, newLocation, amount);
+
     }
 }

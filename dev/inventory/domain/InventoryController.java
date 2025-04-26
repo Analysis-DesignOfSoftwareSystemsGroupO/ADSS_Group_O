@@ -30,10 +30,15 @@ public interface InventoryController {
 
     void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
                      DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate);
+    void printStockItemByProductByName(String name, String manufacturer);
 
     void listDiscounts();
 
     double getDiscountByProductId(String productId);
+
+    void moveStockItem(String productName,String productManufacturer,String newLocation, int amount);
+
+    void changeStockItemStatus(String productName,String productManufacturer,LocalDate expiryDate,StockItemStatus newStatus);
 
     String getCategoryIdByName(String name);
     List<StockItem> getAllStockItems();
