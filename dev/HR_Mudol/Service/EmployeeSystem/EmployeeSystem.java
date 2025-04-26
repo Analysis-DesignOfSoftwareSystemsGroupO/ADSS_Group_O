@@ -252,8 +252,7 @@ public class EmployeeSystem implements IEmployeeSystem {
                 throw new SecurityException("Employees may only edit their own constraints."); // Only the employee himself can edit
             }
 
-            // Keep prompting until the user decides to exit
-            while (true) {
+            while (true) { // Main loop for selecting shift type
                 ShiftType selectedType = null;
 
                 // Ask which type of shift to edit
@@ -269,7 +268,7 @@ public class EmployeeSystem implements IEmployeeSystem {
                             selectedType = ShiftType.EVENING;
                             break;
                         case "back":
-                            System.out.println("Returning to main menu."); // Exit option
+                            System.out.println("Returning to main menu.");
                             return;
                         default:
                             System.out.println("Invalid input. Please enter 'morning', 'evening' or 'back'.");
@@ -283,11 +282,11 @@ public class EmployeeSystem implements IEmployeeSystem {
 
                 if (relevantList.isEmpty()) {
                     System.out.println("No constraints found for " + selectedType + " shifts.");
-                    continue;
+                    continue; // Go back to selecting shift type
                 }
 
-                while (true) {
-                    printConstraintsList(relevantList, selectedType + " shift"); // Print current constraints
+                while (true) { // Inner loop for editing/removing constraints
+                    printConstraintsList(relevantList, selectedType + " shift");
 
                     System.out.println("\nSelect an action:");
                     System.out.println("1. Update explanation of an existing constraint");
@@ -297,7 +296,7 @@ public class EmployeeSystem implements IEmployeeSystem {
                     String action = scanner.nextLine().trim();
 
                     if (action.equals("3")) {
-                        break; // Go back to shift type selection
+                        break; // Back to selecting shift type
                     }
 
                     if (!action.equals("1") && !action.equals("2")) {
@@ -305,9 +304,14 @@ public class EmployeeSystem implements IEmployeeSystem {
                         continue;
                     }
 
+                    if (relevantList.isEmpty()) {
+                        System.out.println("No constraints left to modify or remove.");
+                        break;
+                    }
+
                     int index = -1;
-                    // Ask for the constraint to modify or remove
-                    while (true) {
+
+                    while (true) { // Ask for constraint number
                         System.out.print("Enter number of constraint to modify/remove: ");
                         try {
                             index = Integer.parseInt(scanner.nextLine().trim()) - 1;
@@ -323,7 +327,7 @@ public class EmployeeSystem implements IEmployeeSystem {
 
                     Constraint selected = relevantList.get(index);
 
-                    // Check if employee is already assigned to this shift
+                    // Check if the employee has already been assigned to this shift
                     boolean assigned = currentWeek.getShifts().stream()
                             .filter(s -> s.getDay() == selected.getDay() && s.getType() == selected.getType())
                             .anyMatch(s -> s.getEmployees().contains(self));
@@ -334,12 +338,11 @@ public class EmployeeSystem implements IEmployeeSystem {
                         continue;
                     }
 
-                    // Choose between update or removal
                     if (action.equals("1")) {
                         System.out.print("Enter new explanation: ");
                         String newExplanation = scanner.nextLine().trim();
 
-                        // Preserve sick day or day off tag if exists
+                        // Preserve special tags (sick day / day off)
                         if (selected.getExplanation().contains("(used sick day)")) {
                             newExplanation += " (used sick day)";
                         } else if (selected.getExplanation().contains("(used day off)")) {
@@ -349,12 +352,12 @@ public class EmployeeSystem implements IEmployeeSystem {
                         selected.setExplanation(caller, self, newExplanation);
                         System.out.println("Explanation updated.");
 
-                    } else { // Remove constraint
+                    } else { // action.equals("2")
                         relevantList.remove(index);
                         self.getWeeklyConstraints(caller).remove(selected);
                         System.out.println("Constraint removed.");
 
-                        // Restore used sick day or day off if needed
+                        // Restore sick day or day off if necessary
                         if (selected.getExplanation().contains("(used sick day)")) {
                             self.setSickDays(caller, self.getSickDays(caller) + 1);
                             System.out.println("Sick day restored.");
@@ -362,16 +365,21 @@ public class EmployeeSystem implements IEmployeeSystem {
                             self.setDaysOff(caller, self.getDaysOff(caller) + 1);
                             System.out.println("Day off restored.");
                         }
+
+                        if (relevantList.isEmpty()) {
+                            System.out.println("No more constraints left for " + selectedType + " shifts.");
+                            break; // Break out to shift type selection
+                        }
                     }
                 }
             }
-
         } catch (SecurityException se) {
             System.out.println("Access denied: " + se.getMessage());
         } catch (Exception ex) {
             System.out.println("An unexpected error occurred: " + ex.getMessage());
         }
     }
+
 
 
     /**

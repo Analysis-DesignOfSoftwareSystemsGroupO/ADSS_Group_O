@@ -74,7 +74,7 @@ public class Employee extends AbstractEmployee {
      * Only accessible by the HR manager.
      */
     public List<Role> getRelevantRoles(User caller) {
-        if (!caller.isManager()) {
+        if (!caller.isManager() && !caller.isSameEmployee(this)) {
             throw new SecurityException("Access denied");
         }
         return this.relevantRoles;

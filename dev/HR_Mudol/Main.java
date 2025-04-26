@@ -47,14 +47,14 @@ public class Main {
         curBranch.getRoles().add(securityGuardRole);
 
         // Add employees assigned to specific roles
-        addEmployeeWithRole(curBranch, "Avi Driver", 333333333, "driverpass", "BANK1", 4500, driverRole, hrUser);
-        addEmployeeWithRole(curBranch, "Tamar Cashier", 444444444, "cashierpass", "BANK2", 4300, cashierRole, hrUser);
-        addEmployeeWithRole(curBranch, "David Warehouse", 555555555, "warehousepass", "BANK3", 4200, warehouseRole, hrUser);
-        addEmployeeWithRole(curBranch, "Shiran Supervisor", 666666666, "supervisorpass", "BANK4", 5200, shiftSupervisorRole, hrUser);
-        addEmployeeWithRole(curBranch, "Oren Courier", 777777777, "courierpass", "BANK5", 4100, courierRole, hrUser);
-        addEmployeeWithRole(curBranch, "Noa Organizer", 888888888, "organizerpass", "BANK6", 4000, stockOrganizerRole, hrUser);
-        addEmployeeWithRole(curBranch, "Ron Cook", 999999999, "cookpass", "BANK7", 4300, cookRole, hrUser);
-        addEmployeeWithRole(curBranch, "Eyal Security", 123123123, "securitypass", "BANK8", 4400, securityGuardRole, hrUser);
+        addEmployeeWithRole(curBranch, "Avi levi", 333333333, "driverpass", "BANK1", 4500, driverRole, hrUser);
+        addEmployeeWithRole(curBranch, "Tamar blala", 444444444, "cashierpass", "BANK2", 4300, cashierRole, hrUser);
+        addEmployeeWithRole(curBranch, "David king", 555555555, "warehousepass", "BANK3", 4200, warehouseRole, hrUser);
+        addEmployeeWithRole(curBranch, "Shiran princes", 666666666, "supervisorpass", "BANK4", 5200, shiftSupervisorRole, hrUser);
+        addEmployeeWithRole(curBranch, "Oren thetree", 777777777, "courierpass", "BANK5", 4100, courierRole, hrUser);
+        addEmployeeWithRole(curBranch, "Noa themagniva", 888888888, "organizerpass", "BANK6", 4000, stockOrganizerRole, hrUser);
+        addEmployeeWithRole(curBranch, "Ron shamimkashim", 999999999, "cookpass", "BANK7", 4300, cookRole, hrUser);
+        addEmployeeWithRole(curBranch, "Eyal thesmartmen", 123123123, "securitypass", "BANK8", 4400, securityGuardRole, hrUser);
 
         // Add 8 additional regular employees without specific roles
         for (int i = 0; i < 8; i++) {
