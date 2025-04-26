@@ -5,65 +5,112 @@ import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.io.ByteArrayInputStream;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for RoleManager functionality.
+ */
 public class RoleManagerTest {
 
+    private TestBranch branch;
     private RoleManager roleManager;
-    private Branch branch;
-    private HRManager hrManager;
     private User hrUser;
 
     @BeforeEach
     public void setUp() {
-        branch = new Branch();
+        branch = new TestBranch();
+        roleManager = new RoleManager(branch);
+        branch.getRoles().clear(); // Important: clear default "Shift Manager" role after creating RoleManager
 
-        // ניצור מנהל כוח אדם
-        hrManager = new HRManager("Admin", 123456789, "adminpass", "bank1", 50000, LocalDate.now(), 2, 2, 5, 10);
+        // Create HR manager for permissions
+        HRManager hrManager = new HRManager("Test HR", 111111111, "admin", "bank", 10000,
+                java.time.LocalDate.now(), 2, 2, 5, 5);
         hrUser = new User(hrManager, Level.HRManager);
-
-        // כאן ניצור את roleManager בלי להוסיף "Shift Manager" אוטומטי
-        roleManager = new RoleManager(branch, false); // <-- שים לב ל-false
+        branch.getEmployees().add(hrManager);
+        branch.getUsers().add(hrUser);
     }
 
+    /**
+     * Test creating a role successfully.
+     */
     @Test
     public void testCreateRole_Success() {
-        // יצירת תפקיד חדש
-        Role role = new Role("Driver");
-        branch.getRoles().add(role);
+        String input = "Cook\n";
+        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+
+        roleManager.createRole(hrUser);
 
         assertEquals(1, branch.getRoles().size());
-        assertEquals("Driver", branch.getRoles().get(0).getDescription());
+        assertEquals("Cook", branch.getRoles().get(0).getDescription());
     }
 
+    /**
+     * Test creating a role with a duplicate name.
+     */
+    @Test
+    public void testCreateRole_DuplicateRole() {
+        branch.getRoles().add(new Role("Cook"));
+
+        String input = "Cook\n";
+        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+
+        roleManager.createRole(hrUser);
+
+        assertEquals(1, branch.getRoles().size());
+    }
+
+    /**
+     * Test creating a role with whitespace input.
+     */
+    @Test
+    public void testCreateRole_WhitespaceInput() {
+        String input = "   \n";
+        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+
+        roleManager.createRole(hrUser);
+
+        assertEquals(0, branch.getRoles().size());
+    }
+
+    /**
+     * Test creating a role with empty description.
+     */
     @Test
     public void testCreateRole_EmptyDescription() {
-        // נסה להכניס תפקיד ריק (תוך שימוש ב-roleManager אם היית עושה createRole())
-        // כאן דוגמה שתדמה הזנה ריקה
+        String input = "\n";
+        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+
+        roleManager.createRole(hrUser);
+
+        assertEquals(0, branch.getRoles().size());
     }
 
+    /**
+     * Test retrieving all roles.
+     */
     @Test
     public void testGetAllRoles_Success() {
-        Role r1 = new Role("Driver");
-        Role r2 = new Role("Cashier");
-        branch.getRoles().add(r1);
-        branch.getRoles().add(r2);
+        branch.getRoles().add(new Role("Cook"));
 
-        assertEquals(2, roleManager.getAllRoles(hrUser).size());
+        assertEquals(1, roleManager.getAllRoles(hrUser).size());
     }
 
+    /**
+     * Test updating the description of an existing role successfully.
+     */
     @Test
-    public void testGetRoleByNumber_Success() {
-        Role r1 = new Role("Driver");
-        branch.getRoles().add(r1);
+    public void testUpdateRoleDescription_Success() {
+        Role cookRole = new Role("Cook");
+        branch.getRoles().add(cookRole);
 
-        assertEquals(r1, roleManager.getRoleByNumber(r1.getRoleNumber()));
-    }
+        String input = cookRole.getRoleNumber() + "\nNewCook\n";
+        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
 
-    @Test
-    public void testGetRoleByNumber_InvalidNumber() {
-        assertNull(roleManager.getRoleByNumber(9999));
+        roleManager.updateRoleDescription(hrUser);
+
+        assertEquals("NewCook", cookRole.getDescription());
     }
 }
