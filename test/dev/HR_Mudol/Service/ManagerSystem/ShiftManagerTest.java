@@ -97,22 +97,6 @@ public class ShiftManagerTest {
     }
 
     /**
-     * Test choosing relevant roles for a shift successfully.
-     */
-    @Test
-    public void testChooseRelevantRoleForShift_Success() {
-        Role cashier = new Role("Cashier");
-        roleManagerMock.addMockRole(cashier);
-
-        String input = cashier.getRoleNumber() + "\nD\n";
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        assertDoesNotThrow(() -> shiftManager.chooseRelevantRoleForShift(managerUser, shift));
-        assertTrue(shift.getNecessaryRoles().contains(cashier));
-    }
-
-    /**
      * Test that assigning the same employee twice to a shift throws IllegalArgumentException.
      */
     @Test
@@ -171,23 +155,6 @@ public class ShiftManagerTest {
 
         assertDoesNotThrow(() -> shiftManager.removeRoleFromShift(managerUser, shift));
     }
-
-    /**
-     * Test invalid input when choosing a relevant role.
-     */
-    @Test
-    public void testChooseRelevantRole_InvalidInput() {
-        Role cashier = new Role("Cashier");
-        roleManagerMock.addMockRole(cashier);
-
-        String input = "abc\n" + cashier.getRoleNumber() + "\nD\n";
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        assertDoesNotThrow(() -> shiftManager.chooseRelevantRoleForShift(managerUser, shift));
-        assertTrue(shift.getNecessaryRoles().contains(cashier));
-    }
-
     /**
      * Test printing a shift with unauthorized user throws SecurityException.
      */

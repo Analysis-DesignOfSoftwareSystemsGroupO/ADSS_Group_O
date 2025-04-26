@@ -7,25 +7,20 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * This class manages roles within a branch. It allows the creation, assignment, and removal
- * of roles, as well as the management of employees associated with those roles.
- * A "Role" is a job description or position that employees can be assigned to.
- * The manager can also update role descriptions, assign employees to roles (including the "Shift Manager" role),
- * and remove employees from roles.
- *
- * The `RoleManager` ensures that role assignments and modifications are performed securely,
- * verifying that the user requesting changes is a manager. It also provides utilities
- * for managing and printing role-related information.
+ * Manages roles within a branch: creation, assignment, removal, and description updates.
+ * Ensures security by validating manager privileges.
  */
 public class RoleManager implements IRoleManager {
 
-    private Branch curBranch; // The branch where roles are managed
+    private Branch curBranch;
     private Scanner scanner;
     private IEmployeeManager employeeManager;
 
+
     /**
-     * Constructor to initialize the RoleManager with the current branch.
-     * @param curBranch The branch where roles are managed.
+     * Constructs a RoleManager for the given branch.
+     *
+     * @param curBranch the current branch managed
      */
     public RoleManager(Branch curBranch) {
         this.curBranch = curBranch;
@@ -33,151 +28,139 @@ public class RoleManager implements IRoleManager {
     }
 
     /**
-     * Setter for the Employee Manager.
-     * @param employeeManager The employee manager to be injected.
+     * Sets the employee manager.
+     *
+     * @param employeeManager the employee manager to set
      */
     public void setEmployeeManager(IEmployeeManager employeeManager) {
         this.employeeManager = employeeManager;
     }
 
+
     /**
-     * Creates a new role based on user input.
-     * @param caller The user requesting the role creation.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Creates a new role in the branch after validating manager privileges.
+     *
+     * @param caller the user initiating the action
      */
     @Override
     public void createRole(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         System.out.print("Enter role description: ");
-        String description = scanner.nextLine();
+        String description = scanner.nextLine().trim();
 
-        // Check if description is empty
-        if (description.trim().isEmpty()) {
+        if (description.isEmpty()) {
             System.out.println("Role description cannot be empty.");
             return;
         }
 
-        // Check for duplicate role description
-        for (Role r : curBranch.getRoles()) {
-            if (r.getDescription().equalsIgnoreCase(description)) {
+        for (Role role : curBranch.getRoles()) {
+            if (role.getDescription().equalsIgnoreCase(description)) {
                 System.out.println("This role already exists.");
                 return;
             }
         }
 
-        // Create and add the new role
-        Role role = new Role(description);
-        curBranch.getRoles().add(role);
-
+        Role newRole = new Role(description);
+        curBranch.getRoles().add(newRole);
         System.out.println("Role created successfully.");
     }
 
+
     /**
      * Updates the description of an existing role.
-     * @param caller The user requesting the update.
-     * @throws SecurityException If the caller does not have manager permissions.
+     *
+     * @param caller the user initiating the action
      */
     @Override
     public void updateRoleDescription(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         printAllRoles(caller);
-        System.out.print("Enter role number to update: ");
-        int roleNumber = scanner.nextInt();
-        scanner.nextLine(); // clear buffer
+
+        int roleNumber = getValidIntInput("Enter role number to update: ");
+        Role role = getRoleByNumber(roleNumber);
+        if (role == null) {
+            System.out.println("Role not found.");
+            return;
+        }
 
         System.out.print("Enter new description: ");
-        String newDesc = scanner.nextLine();
+        String newDescription = scanner.nextLine().trim();
 
-        Role role = getRoleByNumber(roleNumber);
-        role.SetDescription(caller, newDesc);
+        if (newDescription.isEmpty()) {
+            System.out.println("Description cannot be empty.");
+            return;
+        }
 
+        role.SetDescription(caller, newDescription);
         System.out.println("Role description updated successfully.");
     }
 
     /**
-     * Assigns an employee to a specific role. If role 1 (Shift Manager) is selected, special handling is applied.
-     * @param caller The user requesting the assignment.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Assigns an employee to a specific role.
+     *
+     * @param caller the user initiating the action
      */
     @Override
     public void assignEmployeeToRole(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         printAllRoles(caller);
-
-        System.out.print("Enter role number: ");
-        int roleNumber = scanner.nextInt();
+        int roleNumber = getValidIntInput("Enter role number: ");
 
         if (roleNumber == 1) {
-            assignEmployeeToShiftManager(caller); // Special handling for Shift Manager
-        } else {
-            System.out.print("Enter employee ID: ");
-            int empId = scanner.nextInt();
-            Employee employee;
-
-            // Loop until a valid employee is found
-            while (true) {
-                try {
-                    employee = employeeManager.getEmployeeById(caller, empId);
-                    break;
-                } catch (Exception e) {
-                    System.out.print("Employee not found, please insert ID again: ");
-                    empId = scanner.nextInt();
-                }
-            }
-
-            Role role = getRoleByNumber(roleNumber);
-
-            role.addNewEmployee(caller, employee);
-            employee.addNewRole(caller, role);
-
-            System.out.println(employee.getEmpName() + " assigned to " + role.getDescription() + ".");
+            assignEmployeeToShiftManager(caller);
+            return;
         }
+
+        int empId = getValidIntInput("Enter employee ID: ");
+        Employee employee = findValidEmployee(caller, empId);
+
+        if (employee == null) {
+            System.out.println("Employee not found. Cannot assign role.");
+            return;
+        }
+
+        Role role = getRoleByNumber(roleNumber);
+        if (role == null) {
+            System.out.println("Role not found.");
+            return;
+        }
+
+        role.addNewEmployee(caller, employee);
+        employee.addNewRole(caller, role);
+
+        System.out.println(employee.getEmpName() + " assigned to " + role.getDescription() + ".");
     }
 
     /**
-     * Assigns an employee to the "Shift Manager" role.
-     * @param caller The user requesting the assignment.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Specifically assigns an employee to the "Shift Manager" role and updates the user's level.
+     *
+     * @param caller the user initiating the action
      */
     @Override
     public void assignEmployeeToShiftManager(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
-        System.out.print("Enter employee ID: ");
-        int empId;
-
-        // Check if input is valid integer
-        if (!scanner.hasNextInt()) {
-            throw new IllegalArgumentException("Invalid input. No valid employee ID entered.");
-        }
-        empId = scanner.nextInt();
-        scanner.nextLine(); // clear buffer
-
-        Employee employee;
-        while (true) {
-            try {
-                employee = employeeManager.getEmployeeById(caller, empId);
-                break;
-            } catch (Exception e) {
-                System.out.print("Employee wasn't found, Enter employee ID again: ");
-                if (!scanner.hasNextInt()) {
-                    throw new IllegalArgumentException("Invalid input. No valid employee ID entered.");
-                }
-                empId = scanner.nextInt();
-                scanner.nextLine(); // clear buffer
-            }
+        int empId = getValidIntInput("Enter employee ID: ");
+        Employee employee = findValidEmployee(caller, empId);
+        if (employee == null) {
+            System.out.println("Employee not found. Cannot assign shift manager role.");
+            return;
         }
 
-        // Find "Shift Manager" role
         Role shiftManagerRole = null;
         for (Role role : curBranch.getRoles()) {
             if (role.getDescription().equalsIgnoreCase("Shift Manager")) {
                 shiftManagerRole = role;
                 break;
             }
+        }
+
+        if (shiftManagerRole == null) {
+            System.out.println("'Shift Manager' role does not exist.");
+            return;
         }
 
         if (!shiftManagerRole.getRelevantEmployees(caller).contains(employee)) {
@@ -188,149 +171,197 @@ public class RoleManager implements IRoleManager {
             System.out.println("Employee is already assigned to 'Shift Manager' role.");
         }
 
-        // Update user's level
-        User targetUser = null;
-        for (User u : employeeManager.getAllUsers(caller)) {
-            if (u.getUser().equals(employee)) {
-                targetUser = u;
-                break;
-            }
-        }
+        User targetUser = findUserByEmployee(caller, employee);
         if (targetUser != null) {
             targetUser.setLevel(caller, Level.shiftManager);
             System.out.println("User level updated to 'Shift Manager'.");
         } else {
-            System.out.println("Warning: Could not update user level. User not found.");
+            System.out.println("Warning: User not found for employee.");
         }
     }
 
     /**
-     * Removes an employee from a role based on user input.
-     * @param caller The user requesting the removal.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Removes an employee from a specific role.
+     *
+     * @param caller the user initiating the action
      */
     @Override
     public void removeEmployeeFromRole(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         printAllRoles(caller);
-        System.out.print("Enter role number: ");
-        int roleNumber = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter employee ID: ");
-        int empId = scanner.nextInt();
-        scanner.nextLine();
+        int roleNumber = getValidIntInput("Enter role number: ");
+        int empId = getValidIntInput("Enter employee ID: ");
 
         try {
-            Employee e = employeeManager.getEmployeeById(caller, empId);
+            Employee employee = employeeManager.getEmployeeById(caller, empId);
             Role role = getRoleByNumber(roleNumber);
-            role.removeEmployee(caller, e);
 
+            if (role == null) {
+                System.out.println("Role not found.");
+                return;
+            }
+
+            role.removeEmployee(caller, employee);
             System.out.println("Employee removed from role.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-
     /**
-     * Removes an employee from a role (direct call without using Scanner).
-     * @param caller The user requesting the removal.
-     * @param roleNumber The role number to remove the employee from.
-     * @param e The employee to be removed.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Removes an employee from a specific role by role number and employee object.
+     *
+     * @param caller the user initiating the action
+     * @param roleNumber the number of the role
+     * @param employee the employee to remove
      */
     @Override
-    public void removeEmployeeFromRole(User caller, int roleNumber, Employee e) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+    public void removeEmployeeFromRole(User caller, int roleNumber, Employee employee) {
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         Role role = getRoleByNumber(roleNumber);
-        role.removeEmployee(caller, e);
+        if (role != null) {
+            role.removeEmployee(caller, employee);
+        } else {
+            System.out.println("Role not found.");
+        }
     }
-
-
     /**
-     * Retrieves employees assigned to a specific role.
-     * @param caller The user requesting the list of employees.
-     * @return A list of employees assigned to the specified role.
-     * @throws SecurityException If the caller does not have manager or shift manager permissions.
+     * Retrieves a list of employees assigned to a specific role.
+     *
+     * @param caller the user initiating the action
+     * @return a list of relevant employees
      */
     @Override
     public List<Employee> getRelevantEmployees(User caller) {
-        if (!caller.isManager() || !caller.isShiftManager())
-            throw new SecurityException("Access denied");
+        if (!caller.isManager() && !caller.isShiftManager())
+            throw new SecurityException("Access denied.");
 
         printAllRoles(caller);
-        System.out.print("Enter role number: ");
-        int roleNumber = scanner.nextInt();
-        scanner.nextLine();
+        int roleNumber = getValidIntInput("Enter role number: ");
 
         Role role = getRoleByNumber(roleNumber);
+        if (role == null) {
+            System.out.println("Role not found.");
+            return new LinkedList<>();
+        }
+
         return new LinkedList<>(role.getRelevantEmployees(caller));
     }
-
     /**
-     * Returns all roles in the current branch.
-     * @param caller The user requesting the list of roles.
-     * @return A list of all roles in the branch.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Retrieves all roles within the branch.
+     *
+     * @param caller the user initiating the action
+     * @return a list of all roles
      */
     @Override
     public List<Role> getAllRoles(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
         return curBranch.getRoles();
     }
-
     /**
-     * Prints all roles in the current branch.
-     * @param caller The user requesting to print the roles.
-     * @throws SecurityException If the caller does not have manager permissions.
+     * Prints all roles in the branch.
+     *
+     * @param caller the user initiating the action
      */
     @Override
     public void printAllRoles(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         for (Role role : curBranch.getRoles()) {
             System.out.println(role);
         }
     }
-
     /**
-     * Retrieves a specific role by its number.
-     * @param roleNumber The number of the role to retrieve.
-     * @return The role with the specified number, or null if not found.
+     * Retrieves a role by its role number.
+     *
+     * @param roleNumber the number of the role
+     * @return the Role object, or null if not found
      */
     @Override
     public Role getRoleByNumber(int roleNumber) {
-        for (Role r : curBranch.getRoles()) {
-            if (r.getRoleNumber() == roleNumber)
-                return r;
+        for (Role role : curBranch.getRoles()) {
+            if (role.getRoleNumber() == roleNumber) {
+                return role;
+            }
         }
         return null;
     }
-
     /**
-     * Counts how many employees have no roles assigned.
-     * @param caller The user requesting the count.
-     * @param employeeList The list of employees to check.
-     * @return The count of employees without roles.
+     * Counts the number of employees who are not assigned to any role.
+     *
+     * @param caller the user initiating the action
+     * @param employeeList the list of employees to check
+     * @return the count of employees without roles
      */
     @Override
     public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
         int count = 0;
-        for (Employee e : employeeList) {
-            if (e.getRelevantRoles(caller).isEmpty())
+        for (Employee employee : employeeList) {
+            if (employee.getRelevantRoles(caller).isEmpty()) {
                 count++;
+            }
         }
         return count;
     }
-
     /**
-     * Setter for injecting a custom Scanner (used for testing purposes).
-     * @param scanner The scanner to be used for receiving input.
+     * Sets a custom scanner for input, mainly for testing purposes.
+     *
+     * @param scanner the Scanner to set
      */
     public void setScanner(Scanner scanner) {
         this.scanner = scanner;
+    }
+
+    /**
+     * Helper method to retrieve a valid integer input from the user.
+     *
+     * @param prompt the prompt to display to the user
+     * @return a valid integer input
+     */
+    private int getValidIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (scanner.hasNextInt()) {
+                int value = scanner.nextInt();
+                scanner.nextLine(); // Clear buffer
+                return value;
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear invalid input
+            }
+        }
+    }
+    /**
+     * Helper method to find a valid employee by ID.
+     *
+     * @param caller the user initiating the action
+     * @param empId the employee ID to find
+     * @return the Employee object if found
+     */
+    private Employee findValidEmployee(User caller, int empId) {
+        while (true) {
+            try {
+                return employeeManager.getEmployeeById(caller, empId);
+            } catch (Exception e) {
+                System.out.print("Employee not found, enter ID again: ");
+                empId = getValidIntInput("");
+            }
+        }
+    }
+    /**
+        * Helper method to find a user associated with a specific employee.
+     *
+             * @param caller the user initiating the action
+     * @param employee the employee to find the user for
+            * @return the corresponding User object, or null if not found
+     */
+    private User findUserByEmployee(User caller, Employee employee) {
+        for (User user : employeeManager.getAllUsers(caller)) {
+            if (user.getUser().equals(employee)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

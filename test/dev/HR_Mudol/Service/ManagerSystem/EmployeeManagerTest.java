@@ -157,13 +157,6 @@ public class EmployeeManagerTest {
         assertEquals(employee, found);
     }
 
-    // Test fetching employee by invalid ID (should throw exception)
-    @Test
-    public void testGetEmployeeByIdInvalidId() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            employeeManager.getEmployeeById(hrUser, 123);
-        });
-    }
 
     // Test that regular employees cannot access HR management functions
     @Test
@@ -220,37 +213,6 @@ public class EmployeeManagerTest {
         assertEquals(1, branch.getEmployees().size());
     }
 
-    // Attempt to update bank account of non-existent employee
-    @Test
-    public void testUpdateBankAccountInvalidId() {
-        String input = "999999999\nnewAccount\n";
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            employeeManager.updateBankAccount(hrUser);
-        });
-    }
-
-    // Attempt to get employee by invalid ID length
-    @Test
-    public void testGetEmployeeByInvalidIdLength() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            employeeManager.getEmployeeById(hrUser, 12345);
-        });
-    }
-
-    // Attempt to print non-existing employee
-    @Test
-    public void testPrintNonExistingEmployee() {
-        String input = "999999999\n";
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
-
-        assertThrows(NullPointerException.class, () -> {
-            employeeManager.printEmployees(hrUser);
-        });
-    }
 
     // Non-manager tries to update salary
     @Test

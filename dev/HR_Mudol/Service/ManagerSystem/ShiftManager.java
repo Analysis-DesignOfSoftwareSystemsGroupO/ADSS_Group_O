@@ -214,6 +214,7 @@ public class ShiftManager implements IShiftManager {
         //add automatically shift manager
         shift.addNecessaryRoles(caller, dependency.getRoleByNumber(1));
 
+
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
 
