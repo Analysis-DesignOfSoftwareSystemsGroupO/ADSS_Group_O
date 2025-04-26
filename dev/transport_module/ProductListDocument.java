@@ -2,8 +2,11 @@ package transport_module;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
+
+import Transport_Module_Exceptions.*;
 
 public class ProductListDocument {
     public static int documentID = 0; // global variable for indexing documents.
@@ -17,16 +20,24 @@ public class ProductListDocument {
     /**
      * a constructor - create a new document
      */
-    public ProductListDocument(Site site, String d) throws Exception {
-        if (site == null) throw new Exception("InValid Input"); // if the site is null - don't create a document
+    public ProductListDocument(Site site, String d) throws ATransportModuleException {
+        if (site == null)
+            throw new InvalidInputException(); // if the site is null - don't create a document
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate parsedDate = LocalDate.parse(d, formatter);
+        LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(d, formatter);
+        }
+        catch (DateTimeParseException e){
+            throw new InvalidDateFormatException();
+        }
+
 
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
         } else {
-            throw new Exception("Invalid date");
+            throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
         }
 
         id = ++documentID; // give index to document
@@ -37,14 +48,12 @@ public class ProductListDocument {
         System.out.println("Document number "+id+" has successfully created!");
     }
 
-    public void attachTransportToDocument(Transport transport){
+    public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
         if (transport == null){
-            System.out.println("Invalid input");
-            return;
+            throw new InvalidInputException();
         }
-        if(transport.getDate()!= date){
-            System.out.println("Transport date doesn't match to document shipment date.");
-            return;
+        if(!transport.getDate().equals(date)){
+            throw new ATransportMismatchException("Transport date doesn't match to document shipment date.");
         }
         transportId = transport.getId();
     }
@@ -100,10 +109,9 @@ public class ProductListDocument {
     /**
      * a function that adds product to document, if
      */
-    public void addProduct(Product p, int amount) {
+    public void addProduct(Product p, int amount) throws ATransportModuleException {
         if (p == null || amount < 1) {
-            System.out.println("Invalid input");
-            return;
+            throw new InvalidInputException();
         }
         Integer newAmount = productHashMap.get(p);
         if (newAmount != null)
@@ -120,19 +128,18 @@ public class ProductListDocument {
     /**
      * a function that reduces the amount of product from the list - if remove all amounts of product, product will be deleted
      */
-    public void reduceAmountFromProduct(Product p, int amount) {
+    public void reduceAmountFromProduct(Product p, int amount) throws ATransportModuleException {
         if (p == null || amount < 1 ) {
-            System.out.println("Invalid input");
-            return;
+            throw new InvalidInputException();
+
         }
         if( productHashMap.get(p) == null)
         {
-            System.out.println("Item is not in document");
-            return;
+            throw new ProductNotFoundException();
         }
         if (amount > productHashMap.get(p)) {
-            System.out.println("amount is not match to product amount in document");
-            return;
+            throw new InvalidAmountException("amount is not match to product amount in document");
+
         }
 
         if (amount == productHashMap.get(p)) {
@@ -163,10 +170,10 @@ public class ProductListDocument {
         return this.getId();
     }
 
-    public void changeDate(LocalDate date){
+    public void changeDate(LocalDate date) throws ATransportModuleException {
         if( transportId != -1){
-            System.out.println("Please remove document from transport "+transportId+" first");
-            return;
+            throw new ChangeDateException("Please remove document from transport "+transportId+" first");
+
         }
         this.date = date;
     }

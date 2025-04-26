@@ -1,5 +1,7 @@
 package transport_module;
 
+import java.util.Objects;
+
 public class Site {
     private String name;
     private String area;
@@ -28,11 +30,22 @@ public class Site {
     }
 
     @Override
+    public String toString(){
+        return area+" : "+name;
+    }
+
+    @Override
     public final boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Site that = (Site) other;
         return that.area.equals(area) && that.name.equals(name);
+
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(name, area);
 
     }
 }

@@ -1,38 +1,66 @@
 package transport_module;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Driver extends Employee{
+public class Driver {
     private ArrayList<DrivingLicence> licencs;
+    private final String name;
+    private final String id;
+    private Map<LocalDate, Boolean> availablityCalander;
 
-    //todo : constructor
-    //public Driver(args){
-      //  super();
-   // }
+    public Driver(String name, String id, ArrayList<DrivingLicence> licencs) {
+        this.name = name;
+        this.id = id;
+        this.licencs = new ArrayList<>();
+        for (DrivingLicence licence : licencs) {
+            this.licencs.add(new DrivingLicence(licence));
+        }
+        availablityCalander = new HashMap<>();
+    }
 
     /**
      * @return Copy of the Driving licence list of the driver
      */
-    public ArrayList<DrivingLicence> getLicencs(){ //return copy of the list
+    public ArrayList<DrivingLicence> getLicencs() { //return copy of the list
         ArrayList<DrivingLicence> cpy = new ArrayList<DrivingLicence>();
-        for(DrivingLicence dl : licencs){
+        for (DrivingLicence dl : licencs) {
             cpy.add(new DrivingLicence(dl));
         }
         return cpy;
     }
-    public void assignToMission(){
+
+    public void assignToMission(LocalDate date) {
+        availablityCalander.put(date, true);
 
     }
-    public void release(){
+
+    public void release(LocalDate date) {
+        availablityCalander.remove(date);
 
     }
-    public boolean isavailable(){
-        return true;
+
+    public String getId() {
+        return id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isavailable(LocalDate date) {
+        return availablityCalander.get(date) == null;
+    }
+
     @Override
-    public String toString(){
-        //todo - write this with details.
-        StringBuilder str = new StringBuilder(); // build new string
-        return str.toString();    }
+    public String toString() {
+        return "Driver{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", licenses=" + licencs +
+                '}';
+    }
 
 }

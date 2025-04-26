@@ -1,5 +1,8 @@
 package transport_module;
 
+import Transport_Module_Exceptions.InvalidInputException;
+import Transport_Module_Exceptions.ATransportModuleException;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +14,15 @@ import java.util.Map;
  */
 public class Truck {
     private int weight;
-    private int maxWeight;
-    private DrivingLicence liceenceReq;
-    private String plateNumber;
-    private Map<LocalDate, Boolean> availablityCalander;
+    private final int maxWeight;
+    private final DrivingLicence liceenceReq;
+    private final String plateNumber;
+    private final Map<LocalDate, Boolean> availablityCalander;
 
 
-    public Truck(DrivingLicence dl, int maxWeight, String pn) {
+    public Truck(DrivingLicence dl, int maxWeight, String pn) throws ATransportModuleException {
+        if(dl == null || maxWeight<1 || pn.isEmpty())
+            throw new InvalidInputException();
         this.maxWeight = maxWeight;
         this.liceenceReq = dl;
         this.plateNumber = pn;
@@ -54,6 +59,10 @@ public class Truck {
 
     }
 
+    public DrivingLicence getDrivingLicence() {
+        return liceenceReq;
+    }
+
     public void releaseTruck(LocalDate date) {
         if (availablityCalander.get(date) != null) {
             availablityCalander.remove(date);
@@ -75,7 +84,7 @@ public class Truck {
         if (weight + add_w > maxWeight) {
             return false;
         }
-        weight = weight - add_w;
+        weight = weight + add_w;
         if (weight < 0) {
             weight = 0;
         } //todo : Think if it os better to set the value to 0 or to provoke an Error
@@ -87,7 +96,9 @@ public class Truck {
      *          if the driver can ride the truck
      * @return true or false
      */
-    public boolean confirmDriver(Driver d) {
+    public boolean confirmDriver(Driver d) throws ATransportModuleException {
+        if (d == null)
+            throw new InvalidInputException();
         for (DrivingLicence dl : d.getLicencs()) {
             if (dl.equals(liceenceReq)) { // using the equal function of Driving licence
                 return true;
@@ -115,7 +126,7 @@ public class Truck {
     }
 
     public boolean isOverWeight() {
-        return maxWeight > weight;
+        return maxWeight < weight;
     }
 
     @Override

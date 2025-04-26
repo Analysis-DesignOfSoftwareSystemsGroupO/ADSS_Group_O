@@ -1,5 +1,7 @@
 package transport_module;
 
+import Transport_Module_Exceptions.*;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -25,10 +27,10 @@ public class Transport {
     /**
      * a constructor for Transport
      */
-    public Transport(String d, String time, Truck t, Site s) throws Exception {
+    public Transport(String d, String time, Truck t, Site s) throws ATransportModuleException {
         // input check
         if (time.isEmpty() || d.isEmpty() || t == null || s == null) {
-            throw new Exception("Invalid Error");
+            throw new InvalidInputException();
         }
         driver = null;
 
@@ -36,20 +38,19 @@ public class Transport {
         LocalDate parsedDate;
         try {
             parsedDate = LocalDate.parse(d, formatter);
-        }
-        catch (DateTimeParseException e){
-           throw new Exception("Invalid date format");
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateFormatException();
         }
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
         } else {
-          throw new Exception("Invalid date");
+            throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
         }
 
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
-        if (hour < 1 || hour > 24){
+        if (hour < 1 || hour > 24) {
             System.out.println("Hour is wrong - changed to default hour - 7");
             hour = 7;
         }
@@ -62,49 +63,51 @@ public class Transport {
 
 
         id = ++staticTransportID; // give index to transport
-        if(!t.getAvailablity(date))
-            throw new Exception("Truck is not available at this date");
+        if (!t.getAvailablity(date))
+            throw new UnAvailableTruckException();
         truck = t; // save the truck as the original truck - not a copy of the truck.
         truck.setDate(date); // set date at truck schedule
-        currWeight =0;
+        currWeight = 0;
         maxWeight = t.getMaxWeight();
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
         isSent = false;
-        System.out.println("Transport number " +id+" has successfully created."); // Can't load the truck
+        System.out.println("Transport number " + id + " has successfully created."); // Can't load the truck
 
     }
 
     /**
      * a function that adds a driver to a transport
      */
-    public void addDriver(Driver d) {
+    public void addDriver(Driver d) throws ATransportModuleException {
         if (d == null) return;
         if (!truck.confirmDriver(d)) {
-            System.out.println("Driver's licence doesn't match to truck's licence. please Assign another driver ");
-            return;
+            throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
         }
-        if (!driver.isavailable()) {
-            System.out.println("Driver is not available - please assign another driver ");
-            return;
+        if (!driver.isavailable(date)) {
+            throw new InvalidDriverException("Driver is not available - please assign another driver ");
         }
         driver = d;
-        driver.assignToMission();
+        driver.assignToMission(date);
 
 
     }
 
-    public void changeTruck(Truck t){
-        if (t!=this.truck && t!= null){
-            if( !t.getAvailablity(date))
-            {
-                System.out.println("Truck is not available");
-                return;
+    public void changeTruck(Truck t) throws ATransportModuleException {
+        if (t != this.truck && t != null) {
+            if (!t.getAvailablity(date)) {
+                throw new UnAvailableTruckException();
+
             }
-            if (driver!= null){
-                if (!truck.confirmDriver(driver)) {
-                    System.out.println("Driver's licence doesn't match to truck's licence. please Assign another driver ");
+            if (driver != null) {
+                try {
+                    if (!truck.confirmDriver(driver)) {
+                        throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
+                    }
+                } catch (ATransportModuleException e) {
+                    throw e;
+
                 }
             }
             truck.releaseTruck(date); // release the previous truck from transport
@@ -112,7 +115,7 @@ public class Transport {
             truck.setDate(date); // save the new date in new truck
             maxWeight = t.getMaxWeight(); // change the maximum weight of transport
             System.out.println("Truck has ben changed successfully");
-            if(maxWeight<currWeight)
+            if (maxWeight < currWeight)
                 System.out.println("Truck has Over Weight");
         }
     }
@@ -121,8 +124,7 @@ public class Transport {
      * a function that sends transport to its mission
      */
     public void sendTransport() {
-        if(isSent)
-        {
+        if (isSent) {
             System.out.println("Transport has already sent.");
             return;
         }
@@ -142,7 +144,6 @@ public class Transport {
         }
         truck.clear();
         isSent = true;
-        driver.release();
         System.out.println("Transport has successfully sent");
     }
 
@@ -186,8 +187,9 @@ public class Transport {
     /**
      * a function that gets a document and load the products' list to the truck
      */
-    public void loadByDocument(ProductListDocument document) throws Exception {
-        if (document == null) throw new Exception("Invalid input");
+    public void loadByDocument(ProductListDocument document) throws ATransportModuleException {
+        if (document == null)
+            throw new InvalidInputException();
         if (maxWeight < currWeight + document.getTotalWeight()) { // if truck is in Over Weight
             System.out.println("Truck has Over Weight please remove products."); // Can't load the truck
             int difference = (currWeight + document.getTotalWeight()) - maxWeight;
@@ -195,7 +197,7 @@ public class Transport {
         } else {
             document.attachTransportToDocument(this);
             destinations_document_map.put(document.getDestination().getName(), document);
-            currWeight+=document.getTotalWeight();
+            currWeight += document.getTotalWeight();
             System.out.println("Truck has successfully loaded.");
 
             if (!source.getArea().equals(document.getDestination().getArea())) {
@@ -205,11 +207,12 @@ public class Transport {
         }
 
     }
-    public LocalTime getDeparture_time(){
+
+    public LocalTime getDeparture_time() {
         return departure_time;
     }
 
-    public ProductListDocument getDocument(String site_name){
+    public ProductListDocument getDocument(String site_name) {
 
         return destinations_document_map.get(site_name);
 
@@ -219,40 +222,40 @@ public class Transport {
         return date;
     }
 
-    public void reduceAmountFromProduct(String destination, Product p, int amount){
-        if(destinations_document_map.get(destination)!=null){
-            destinations_document_map.get(destination).reduceAmountFromProduct(p,amount);
+    public void reduceAmountFromProduct(String destination, Product p, int amount) throws ATransportModuleException {
+        if (destinations_document_map.get(destination) != null) {
+            destinations_document_map.get(destination).reduceAmountFromProduct(p, amount);
         }
     }
-    public boolean isSiteIsDestination(String site){
-        return destinations_document_map.get(site)!=null;
+
+    public boolean isSiteIsDestination(String site) {
+        return destinations_document_map.get(site) != null;
 
     }
-    public void changeDate(String d){
+
+    public void changeDate(String d) throws ATransportModuleException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate parsedDate;
         try {
             parsedDate = LocalDate.parse(d, formatter);
-        }
-        catch (DateTimeParseException e){
-            System.out.println("Invalid date format");
-            return;
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateFormatException();
         }
 
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
-            System.out.println("Date has been updated to: "+ date);
         } else {
-            System.out.println("wrong date - please enter new one");
+            throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
         }
 
 
     }
-    public void changeHour(String time){
+
+    public void changeHour(String time) {
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
-        if (hour < 1 || hour > 24){
+        if (hour < 1 || hour > 24) {
             System.out.println("Hour is wrong - changed to default hour - 7");
             hour = 7;
         }
@@ -262,28 +265,28 @@ public class Transport {
             minute = 0;
         }
         departure_time = LocalTime.of(hour, minute); // set the hour
-        System.out.println("Changed delivery time to: "+departure_time);
+        System.out.println("Changed delivery time to: " + departure_time);
 
     }
 
-    public void changeSourceSite(Site s){
-        if (!s.equals(source)){
+    public void changeSourceSite(Site s) {
+        if (!s.equals(source)) {
             source = new Site(s);
         }
     }
+
     @Override
-    public final boolean equals(Object other){
+    public final boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
         Transport that = (Transport) other;
-        return this.getId()==that.getId();
+        return this.getId() == that.getId();
     }
 
     @Override
-    public final int hashCode(){
+    public final int hashCode() {
         return this.getId();
     }
-
 
 
 }

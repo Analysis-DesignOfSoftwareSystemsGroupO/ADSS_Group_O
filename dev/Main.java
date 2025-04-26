@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.*;
 
+import Transport_Module_Exceptions.ATransportModuleException;
 import transport_module.*;
 
 public class Main {
@@ -49,13 +50,26 @@ public class Main {
 
             // create random trucks
             if (i % 3 == 0) {
-                trucks[i] = new Truck(C1, 12000, String.valueOf(number));
+                try {
+                    trucks[i] = new Truck(C1, 12000, String.valueOf(number));
+                } catch (ATransportModuleException e) {
+                    System.out.println("Invalid input - try again this function");
+                    return;
+                }
             }
             if (i % 3 == 1) {
-                trucks[i] = new Truck(C, 32000, String.valueOf(number));
+                try {
+                    trucks[i] = new Truck(C, 32000, String.valueOf(number));
+                } catch (ATransportModuleException e) {
+                    System.out.println("Invalid input - try again this function");
+                    return;                }
             }
             if (i % 3 == 2) {
-                trucks[i] = new Truck(CE, 60000, String.valueOf(number));
+                try {
+                    trucks[i] = new Truck(CE, 60000, String.valueOf(number));
+                } catch (ATransportModuleException e) {
+                    System.out.println("Invalid input - try again this function");
+                    return;                }
             }
 
         }
@@ -111,7 +125,7 @@ public class Main {
             parsedDate = LocalDate.parse(dateStr, formatter);
         }
         catch (DateTimeParseException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return;
         }
 
@@ -216,7 +230,12 @@ public class Main {
         // ask for amount from user
         System.out.println("enter the amount you want to load: ");
         int amount = scanner.nextInt();
-        document.addProduct(products.get(id), amount); // add product to document
+        try {
+            document.addProduct(products.get(id), amount); // add product to document
+        } catch (ATransportModuleException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         scanner.close();
     }
 
@@ -247,7 +266,11 @@ public class Main {
         System.out.println("enter the amount you want to remove: ");
         int amount = scanner.nextInt();
         scanner.close(); // close scanner
-        document.reduceAmountFromProduct(products.get(id), amount); // try to remove item from document
+        try {
+            document.reduceAmountFromProduct(products.get(id), amount); // try to remove item from document
+        } catch (ATransportModuleException e) {
+            System.out.println(e.getMessage());
+        }
 
 
     }
@@ -277,7 +300,11 @@ public class Main {
             scanner.close();
             return;
         }
-        transport.addDriver((transport_module.Driver) driver); // try to add driver to transport
+        try {
+            transport.addDriver((transport_module.Driver) driver); // try to add driver to transport
+        } catch (ATransportModuleException e) {
+            System.out.println(e.getMessage());
+        }
         scanner.close();
 
 
@@ -363,7 +390,7 @@ public class Main {
             parsedDate = LocalDate.parse(dateStr, formatter);
         }
         catch (DateTimeParseException e){
-            System.out.println("Invalid date format - please try again with the format: DD/MM/YEAR");; // message to user and ask him to try again
+            System.out.println("Invalid date format - please try again with the format: DD/MM/YEAR"); // message to user and ask him to try again
             return;
         }
         int count = 0; // count all avalialbe trucks in system
@@ -432,7 +459,7 @@ public class Main {
             try {
                 sendTransport(transportsPerDate);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }, 0, 1, TimeUnit.MINUTES);
 
