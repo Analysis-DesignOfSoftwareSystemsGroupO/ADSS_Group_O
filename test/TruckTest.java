@@ -42,6 +42,6 @@ public class TruckTest {
     public void testTruckOverWeight() throws Exception {
         Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 10000, "1234567");
         assertTrue(truck.addWeight(5000));
-        assertFalse(truck.addWeight(6000)); // ינסה להוסיף מעבר למותר
+        assertFalse(truck.addWeight(6000));
     }
 }

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.time.format.*;
 public class DomainTests {
 //********************************************************************************************************************** testFullTransportFlow
 
@@ -25,7 +25,7 @@ public class DomainTests {
 
         // Create a product list document
         Site destinationSite = new Site("Tel Aviv", "Center");
-        String dateStr = LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String dateStr = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         ProductListDocument document = new ProductListDocument(destinationSite, dateStr);
         Product product = new Product(2001, "Box", 100);
         document.addProduct(product, 10); // total 1000 kg
@@ -58,7 +58,7 @@ public class DomainTests {
         Truck truck = new Truck(new DrivingLicence("Heavy Truck", "C"), 1000, "1231231");
 
         Site destination = new Site("Eilat", "South");
-        String dateStr = LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String dateStr = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         ProductListDocument document = new ProductListDocument(destination, dateStr);
         Product product = new Product(3001, "HeavyMachine", 500);
         document.addProduct(product, 3); // total 1500kg
@@ -87,7 +87,7 @@ public class DomainTests {
 
         // Create a basic transport
         Site source = new Site("Haifa", "North");
-        String dateStr = LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String dateStr = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         Transport transport = new Transport(dateStr, "10:00", truck, source);
 
         assertNotNull(transport);
@@ -104,7 +104,7 @@ public class DomainTests {
         Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "2222222");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(
-                LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 "08:00",
                 truck,
                 source
@@ -119,7 +119,7 @@ public class DomainTests {
         // Create document and load
         Site destination = new Site("Tel Aviv", "Center");
         ProductListDocument document = new ProductListDocument(destination,
-                LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         document.addProduct(new Product(1001, "Box", 100), 5);
 
         // Load document into transport
@@ -142,11 +142,11 @@ public class DomainTests {
         // Create truck and transport
         Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 1000, "3333333");
         Site source = new Site("Haifa", "North");
-        Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "09:00", truck, source);
+        Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "09:00", truck, source);
 
         // Create heavy document
         Site destination = new Site("Eilat", "South");
-        ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         document.addProduct(new Product(1002, "HeavyMachine", 600), 2);
 
         // Assert that overweight exception is thrown when trying to load document
@@ -166,10 +166,10 @@ public class DomainTests {
         assertThrows(Exception.class, () -> {
             Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "4444444");
             Site source = new Site("Haifa", "North");
-            Transport transport = new Transport(LocalDate.now().plusDays(2).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "07:00", truck, source);
+            Transport transport = new Transport(LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "07:00", truck, source);
 
             Site destination = new Site("Tel Aviv", "Center");
-            ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
             transport.loadByDocument(document);
         });
@@ -184,7 +184,7 @@ public class DomainTests {
     public void testChangeDocumentDestination() throws Exception {
         // Change destination of a document
         Site originalDestination = new Site("Haifa", "North");
-        ProductListDocument document = new ProductListDocument(originalDestination, LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        ProductListDocument document = new ProductListDocument(originalDestination, LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
         Site newDestination = new Site("Jerusalem", "Center");
         document.changeDestination(newDestination);
@@ -203,7 +203,7 @@ public class DomainTests {
         Truck truck1 = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "5555555");
         Truck truck2 = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "6666666");
         Site source = new Site("Haifa", "North");
-        Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "11:00", truck1, source);
+        Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "11:00", truck1, source);
 
         transport.changeTruck(truck2);
         assertFalse(transport.toString().contains("5555555"));
@@ -219,10 +219,10 @@ public class DomainTests {
         // Create a transport that has an out-of-area destination
         Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "7777777");
         Site source = new Site("Haifa", "North");
-        Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "12:00", truck, source);
+        Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "12:00", truck, source);
 
         Site destination = new Site("Be'er Sheva", "South");
-        ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         document.addProduct(new Product(1003, "Chair", 50), 10);
 
         transport.loadByDocument(document);
@@ -240,7 +240,7 @@ public class DomainTests {
         assertThrows(Exception.class, () -> {
             Truck truck = new Truck(new DrivingLicence("Heavy Truck", "C"), 30000, "8888888");
             Site source = new Site("Tel Aviv", "Center");
-            Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "13:00", truck, source);
+            Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "13:00", truck, source);
 
             ArrayList<DrivingLicence> licences = new ArrayList<>();
             licences.add(new DrivingLicence("Small Car", "B")); // wrong licence
@@ -260,12 +260,12 @@ public class DomainTests {
         // Change transport date
         Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "9999999");
         Site source = new Site("Haifa", "North");
-        Transport transport = new Transport(LocalDate.now().plusDays(2).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "14:00", truck, source);
+        Transport transport = new Transport(LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "14:00", truck, source);
 
-        String newDate = LocalDate.now().plusDays(3).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String newDate = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         transport.changeDate(newDate);
 
-        assertEquals(LocalDate.parse(newDate, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), transport.getDate());
+        assertEquals(LocalDate.parse(newDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")), transport.getDate());
     }
 
 //********************************************************************************************************************** testChangeTransportHour
@@ -278,10 +278,101 @@ public class DomainTests {
         // Change transport departure time
         Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1010101");
         Site source = new Site("Haifa", "North");
-        Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "08:00", truck, source);
+        Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "08:00", truck, source);
 
         transport.changeHour("15:30");
         assertEquals(15, transport.getDeparture_time().getHour());
         assertEquals(30, transport.getDeparture_time().getMinute());
     }
+
+//********************************************************************************************************************** testChangeTruckToNull
+
+    /**
+     * Test changing truck to null should not affect current truck.
+     */
+    @Test
+    public void testChangeTruckToNull() throws Exception {
+        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1234567");
+        Site source = new Site("Haifa", "North");
+        Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "10:00", truck, source);
+
+        transport.changeTruck(null);
+        assertTrue(transport.toString().contains("1234567")); // Truck should remain unchanged
+    }
+
+//********************************************************************************************************************** testReduceMoreThanAvailable
+    /**
+     * Test reducing more units than available should throw exception.
+     */
+    @Test
+    public void testReduceMoreThanAvailable() throws Exception {
+        Site destination = new Site("Tel Aviv", "Center");
+        ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        Product product = new Product(1004, "Pallet", 200);
+        document.addProduct(product, 2);
+
+        assertThrows(InvalidAmountException.class, () -> {
+            document.reduceAmountFromProduct(product, 5);
+        });
+    }
+
+//********************************************************************************************************************** testDriverAvailabilityWhenNoMissions
+
+    /**
+     * Test checking availability for a date where driver has no missions.
+     */
+    @Test
+    public void testDriverAvailabilityWhenNoMissions() {
+        ArrayList<DrivingLicence> licences = new ArrayList<>();
+        licences.add(new DrivingLicence("Small Truck", "C1"));
+        Driver driver = new Driver("Test Driver", "555666777", licences);
+
+        assertTrue(driver.isavailable(LocalDate.now().plusDays(5))); // Should be available
+    }
+
+//********************************************************************************************************************** testReleaseDateNotSet
+
+    /**
+     * Test releasing a date that wasn't booked should do nothing.
+     */
+    @Test
+    public void testReleaseDateNotSet() throws Exception {
+        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1111222");
+
+        // Should not throw any exception
+        truck.releaseTruck(LocalDate.now().plusDays(3));
+        assertTrue(truck.getAvailablity(LocalDate.now().plusDays(3)));
+    }
+
+//********************************************************************************************************************** testSendTransportTwice
+
+    /**
+     * Test sending a transport twice should throw exception.
+     */
+    @Test
+    public void testSendTransportTwice() throws Exception {
+        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "3333444");
+        Site source = new Site("Haifa", "North");
+        Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "08:00", truck, source);
+
+        ArrayList<DrivingLicence> licences = new ArrayList<>();
+        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        Driver driver = new Driver("John Driver", "999888777", licences);
+
+        transport.addDriver(driver);
+
+        Site destination = new Site("Tel Aviv", "Center");
+        ProductListDocument document = new ProductListDocument(destination, LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        document.addProduct(new Product(1005, "Chair", 20), 10);
+
+        transport.loadByDocument(document);
+        transport.sendTransport();
+
+        assertThrows(TransportAlreadySentException.class, () -> {
+            transport.sendTransport();
+        });
+    }
+
+
 }
+
