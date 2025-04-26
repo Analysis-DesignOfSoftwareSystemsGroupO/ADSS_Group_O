@@ -17,8 +17,11 @@ public class ProductListDocument {
     private int transportId;
     private LocalDate date;
 
-    /**
-     * a constructor - create a new document
+    /***
+     * Constructor - creates a new ProductListDocument
+     * @param site Destination site
+     * @param d Date string in "dd/MM/yyyy" format
+     * @throws ATransportModuleException if input is invalid
      */
     public ProductListDocument(Site site, String d) throws ATransportModuleException {
         if (site == null)
@@ -28,8 +31,7 @@ public class ProductListDocument {
         LocalDate parsedDate;
         try {
             parsedDate = LocalDate.parse(d, formatter);
-        }
-        catch (DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             throw new InvalidDateFormatException();
         }
 
@@ -45,69 +47,67 @@ public class ProductListDocument {
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
         transportId = -1;
-        System.out.println("Document number "+id+" has successfully created!");
+        System.out.println("Document number " + id + " has successfully created!");
     }
+    //****************************************************************************************************************** Get functions
 
-    public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
-        if (transport == null){
-            throw new InvalidInputException();
-        }
-        if(!transport.getDate().equals(date)){
-            throw new TransportMismatchException("Transport date doesn't match to document shipment date.");
-        }
-        transportId = transport.getId();
-    }
-
+    /***
+     * @return Date of the shipment
+     */
     public LocalDate getDate() {
         return date;
     }
-
-    public int getTransportId(){
+    /***
+     * @return Transport ID attached to the document, or -1 if none
+     */
+    public int getTransportId() {
         return transportId;
     }
 
-    /**
-     * get the total weight of the products in document
+    /***
+     * @return Total weight of all products in the document
      */
     public int getTotalWeight() {
         return totalWeight;
     }
 
-    /**
-     * get the document id
+    /***
+     * @return Document ID
      */
     public int getId() {
         return id;
     }
 
-    /**
-     * get the destination
+    /***
+     * @return Destination site
      */
     public Site getDestination() {
         return destination;
     }
 
-    /**
-     * a function that prints the document details
+//********************************************************************************************************************** Set functions
+
+
+    /***
+     * Attaches the document to a given transport
+     * @param transport Transport to attach
+     * @throws ATransportModuleException if transport is null or dates mismatch
      */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder(); // build new string
-        str.append("Document num ").append(id).append("\n");
-        str.append("To destination: ").append(destination.getName()).append("\n");
-        str.append("Products: \n");
-        for (Product product : productHashMap.keySet())
-            // print all products with columns: product name , amount, total weight of product
-            str.append(product.getName()).append(productHashMap.get(product)).append(productHashMap.get(product) * product.getWeight()).append("\n");
-        str.append("Total weight: ").append(totalWeight);
-
-        return str.toString();
-
-
+    public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
+        if (transport == null) {
+            throw new InvalidInputException();
+        }
+        if (!transport.getDate().equals(date)) {
+            throw new TransportMismatchException("Transport date doesn't match to document shipment date.");
+        }
+        transportId = transport.getId();
     }
 
-    /**
-     * a function that adds product to document, if
+    /***
+     * Adds a product with a specific amount to the document
+     * @param p Product to add
+     * @param amount Amount to add
+     * @throws ATransportModuleException if input is invalid
      */
     public void addProduct(Product p, int amount) throws ATransportModuleException {
         if (p == null || amount < 1) {
@@ -125,16 +125,19 @@ public class ProductListDocument {
 
     }
 
-    /**
-     * a function that reduces the amount of product from the list - if remove all amounts of product, product will be deleted
+    /***
+     * Reduces the amount of a product from the document.
+     * Removes the product entirely if quantity reaches zero.
+     * @param p Product to reduce
+     * @param amount Amount to remove
+     * @throws ATransportModuleException if invalid operation
      */
     public void reduceAmountFromProduct(Product p, int amount) throws ATransportModuleException {
-        if (p == null || amount < 1 ) {
+        if (p == null || amount < 1) {
             throw new InvalidInputException();
 
         }
-        if( productHashMap.get(p) == null)
-        {
+        if (productHashMap.get(p) == null) {
             throw new ProductNotFoundException();
         }
         if (amount > productHashMap.get(p)) {
@@ -150,33 +153,74 @@ public class ProductListDocument {
         int newAmount = productHashMap.get(p) - amount;
         productHashMap.put(p, newAmount);
         totalWeight -= amount * p.getWeight();
-        System.out.println("Product has reduced by "+amount+" parts");
+        System.out.println("Product has reduced by " + amount + " parts");
 
     }
-    public void changeDestination(Site site){
+
+    /***
+     * Changes the destination of the document
+     * @param site New destination site
+     */
+    public void changeDestination(Site site) {
         destination = new Site(site);
     }
 
-    @Override
-    public final boolean equals(Object other){
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        ProductListDocument that = (ProductListDocument) other;
-        return this.getId()==that.getId();
-    }
-
-    @Override
-    public final int hashCode(){
-        return this.getId();
-    }
-
+    /***
+     * Changes the shipment date of the document (if not assigned to transport)
+     * @param date New date
+     * @throws ATransportModuleException if the document is already attached to a transport
+     */
     public void changeDate(LocalDate date) throws ATransportModuleException {
-        if( transportId != -1){
-            throw new ChangeDateException("Please remove document from transport "+transportId+" first");
+        if (transportId != -1) {
+            throw new ChangeDateException("Please remove document from transport " + transportId + " first");
 
         }
         this.date = date;
     }
+
+    //****************************************************************************************************************** Print functions
+
+
+    /***
+     * Prints the full details of the document including destination and product list
+     * @return Formatted string with document information
+     */
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder(); // build new string
+        str.append("Document num ").append(id).append("\n");
+        str.append("To destination: ").append(destination.getName()).append("\n");
+        str.append("Products: \n");
+        for (Product product : productHashMap.keySet())
+            // print all products with columns: product name , amount, total weight of product
+            str.append(product.getName()).append(productHashMap.get(product)).append(productHashMap.get(product) * product.getWeight()).append("\n");
+        str.append("Total weight: ").append(totalWeight);
+
+        return str.toString();
+
+
+    }
+
+    /***
+     * Compares two documents based on their ID
+     */
+    @Override
+    public final boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        ProductListDocument that = (ProductListDocument) other;
+        return this.getId() == that.getId();
+    }
+
+    /***
+     * @return Hash code based on document ID
+     */
+    @Override
+    public final int hashCode() {
+        return this.getId();
+    }
+
+
 
 
 }

@@ -1,4 +1,3 @@
-import java.sql.Driver;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -7,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import Transport_Module_Exceptions.ATransportModuleException;
+import Transport_Module_Exceptions.TransportAlreadySentException;
 import transport_module.*;
 
 public class Main {
@@ -44,6 +44,7 @@ public class Main {
         for (int i = 0; i < 9; i++) {
 
             int number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000); // draw a number
+
             while (numbers.get(number) != null) // if number is already drawed, draw another one.
                 number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000);
             numbers.put(number, number); // save the drawed number for next time
@@ -111,13 +112,13 @@ public class Main {
     /**
      * Add new Transport function
      */
-    public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports, Map<String, Site> sites, Map<LocalDate, List<Transport>> transportsPerDate) {
+    public static void AddNewTransport(Truck[] trucks, Map<Integer, Transport> transports, Map<String, Site> sites, Map<LocalDate, List<Transport>> transportsPerDate,Scanner scanner) {
 
         boolean allTrucksUnAvailabl = true; // boolean variable for
         Truck t = null; // variable for saving truck if available
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Please enter date by format: DD/MM/YEAR");
+
+        System.out.println("Please enter date by format: DD/MM/YYYY");
         String dateStr = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate parsedDate;
@@ -150,7 +151,7 @@ public class Main {
         String site_name = scanner.nextLine();
         if (sites.get(site_name) == null) { // check if there is a site in the system
             System.out.println("There is no site " + site_name + " please try again"); // if there is no site - message to user
-            scanner.close();
+            
             return;
         }
 
@@ -163,7 +164,7 @@ public class Main {
         } catch (Exception e) {
             System.out.println(e.getMessage() + "please try again"); // if there is any problem with transport - message to user
         }
-        scanner.close();
+        
 
 
     }
@@ -173,22 +174,22 @@ public class Main {
     /** a function that creates new ProductListDocument to new destination
      * input - documents map, sites list
      */
-    public static void createNewDoc(Map<Integer, ProductListDocument> documents, Map<String, Site> sites) {
+    public static void createNewDoc(Map<Integer, ProductListDocument> documents, Map<String, Site> sites,Scanner scanner) {
         // destination name input from user
         System.out.println("Please enter destination name:");
-        Scanner scanner = new Scanner(System.in);
+
         String siteName = scanner.nextLine();
         // check if site is in system
         if (sites.get(siteName) == null) { // if there is no site
             System.out.println("There is no site " + siteName + " please try again"); // if there is no site - message to user
-            scanner.close();
+            
 
             return;
         }
         // date input from user
-        System.out.println("Please enter date by format: DD/MM/YEAR");
+        System.out.println("Please enter date by format: DD/MM/YYYY");
         String dateStr = scanner.nextLine();
-        scanner.close();
+        
 
         try {
             ProductListDocument document = new ProductListDocument(sites.get(siteName),dateStr); // create new document
@@ -207,14 +208,16 @@ public class Main {
 
     /** a function that attach a document to transport
      * input - products list, documents list*/
-    public static void AddProductToDocument(Map<Integer, Product> products, Map<Integer, ProductListDocument> documents) {
+    public static void AddProductToDocument(Map<Integer, Product> products, Map<Integer, ProductListDocument> documents,Scanner scanner) {
         // document id input from user
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Please enter document number");
         Integer documentId = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         if (documents.get(documentId) == null) { // if document is not in system - message to user
             System.out.println("There is no document " + documentId + " Please try again");
-            scanner.close();
+            
             return;
         }
         // get the document from data base
@@ -222,34 +225,40 @@ public class Main {
         // ask for product id from user
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         if (products.get(id) == null) { // if product is not in data base - message to user
             System.out.println("Product number "+id+" not in System - please try again.");
-            scanner.close();
+            
             return;
         }
         // ask for amount from user
         System.out.println("enter the amount you want to load: ");
         int amount = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         try {
             document.addProduct(products.get(id), amount); // add product to document
         } catch (ATransportModuleException e) {
             System.out.println(e.getMessage());
             return;
         }
-        scanner.close();
+        
     }
 
     //********************************************************************************************************************** Case 4 - Remove product from document
 
     /** delete product from document*/
-    public static void RemoveProductFromDocument(Map<Integer, Product> products, Map<Integer, ProductListDocument> documents) {
+    public static void RemoveProductFromDocument(Map<Integer, Product> products, Map<Integer, ProductListDocument> documents,Scanner scanner) {
         // ask for document id from user
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Please enter document number");
         Integer documentId = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         if (documents.get(documentId) == null) { // if ddocument not in the data base
             System.out.println("There is no document " + documentId + " Please try again"); // message to user
-            scanner.close();
+            
             return;
         }
         ProductListDocument document = documents.get(documentId); // get the document from data
@@ -257,15 +266,19 @@ public class Main {
         // ask for document id from user
         System.out.println("Please enter Product Catalog Number: ");
         int id = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         if (products.get(id) == null) { // if product is not in data base
             System.out.println("Product number "+id+" not in System - please try again.");
-            scanner.close();
+            
             return;
         }
          // ask for amount to remove from document
         System.out.println("enter the amount you want to remove: ");
         int amount = scanner.nextInt();
-        scanner.close(); // close scanner
+        scanner.nextLine(); // Clear the newline
+
+        // close scanner
         try {
             document.reduceAmountFromProduct(products.get(id), amount); // try to remove item from document
         } catch (ATransportModuleException e) {
@@ -280,55 +293,61 @@ public class Main {
     /**
      * add driver to transport
      */
-    public static void AddDriverToTransport(Map<String, Driver> drivers, Map<Integer, Transport> transports) {
+    public static void AddDriverToTransport(Map<String, Driver> drivers, Map<Integer, Transport> transports,Scanner scanner) {
         // ask for drivers id input
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Please enter driver's id");
         String id = scanner.nextLine();
         Driver driver = drivers.get(id); // search for driver in database
         if (driver == null) { // if driver is not in system
             System.out.println("Driver "+id +" is not in system - please try again"); // message to user
-            scanner.close();
+            
             return;
         }
         // ask for transport id from user
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         Transport transport = transports.get(transport_id);// get transport from database by transport id
         if (transport == null) { // if transport is not in system
             System.out.println("Transport number " + transport_id+ " is not in system - please try again");
-            scanner.close();
+            
             return;
         }
         try {
-            transport.addDriver((transport_module.Driver) driver); // try to add driver to transport
+            transport.addDriver(driver);// try to add driver to transport
         } catch (ATransportModuleException e) {
             System.out.println(e.getMessage());
         }
-        scanner.close();
+        
 
 
     }
     //****************************************************************************************************************** Case 6 -  Attach document to transport
 
     /** a function that attaches a document to transport*/
-    public static void AttachDocumentToTransport(Map<Integer, ProductListDocument> documents, Map<Integer, Transport> transports) {
+    public static void AttachDocumentToTransport(Map<Integer, ProductListDocument> documents, Map<Integer, Transport> transports,Scanner scanner) {
         // ask for transport id from user
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         Transport transport = transports.get(transport_id); // search for transport id in database
         if (transport == null) { // if transport not in database - message to user
             System.out.println("Transport number " + transport_id+ " is not in system - please try again");
-            scanner.close();
+            
             return;
         }
         // ask for document id from user
         System.out.println("Please enter document number");
         Integer documentId = scanner.nextInt(); // search document in database
+        scanner.nextLine(); // Clear the newline
+
         if (documents.get(documentId) == null) {
             System.out.println("There is no document " + documentId + " Please try again"); // if document not in database - message to user
-            scanner.close();
+            
             return;
         }
         try { // try to load document to transport
@@ -342,12 +361,14 @@ public class Main {
     //********************************************************************************************************************** Case 7 - Send transport
 
     /** a function that can send transport manual*/
-    public static void sendTransportManual(Map<Integer, Transport> transports) {
-        Scanner scanner = new Scanner(System.in);
+    public static void sendTransportManual(Map<Integer, Transport> transports,Scanner scanner) {
+
         System.out.println("Please enter Transport number"); // ask for input from user
         int transport_id = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         Transport transport = transports.get(transport_id); // search transport in database
-        scanner.close();
+        
         if (transport == null) { // if transport not in data base - message to user
             System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             return;
@@ -367,12 +388,14 @@ public class Main {
 //********************************************************************************************************************** Case 8 - Print Transport details
 
     /** a function that prints transport by its id*/
-    public static void printTransport(Map<Integer, Transport> transports) {
-        Scanner scanner = new Scanner(System.in); // ask for input from user
+    public static void printTransport(Map<Integer, Transport> transports,Scanner scanner) {
+ // ask for input from user
         System.out.println("Please enter Transport number");
         Integer transport_id = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline
+
         Transport transport = transports.get(transport_id); // search for transport in database
-        scanner.close();
+        
         if (transport == null) { // if transport not in database - message to user
             System.out.println("Transport number " + transport_id+ " is not in system - please try again");
             return;
@@ -385,10 +408,10 @@ public class Main {
 //********************************************************************************************************************** Case 9 - Print all available trucks
 
     /** a function that prints all availalbe trucks*/
-    public static void printAllAvailableTrukcs(Truck[] trucks) {
-        Scanner scanner = new Scanner(System.in);
+    public static void printAllAvailableTrukcs(Truck[] trucks,Scanner scanner) {
 
-        System.out.println("Please enter date by format: DD/MM/YEAR"); // ask for date from user
+
+        System.out.println("Please enter date by format: DD/MM/YYYY"); // ask for date from user
         String dateStr = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // try to create date variable
         LocalDate parsedDate;
@@ -396,7 +419,7 @@ public class Main {
             parsedDate = LocalDate.parse(dateStr, formatter);
         }
         catch (DateTimeParseException e){
-            System.out.println("Invalid date format - please try again with the format: DD/MM/YEAR"); // message to user and ask him to try again
+            System.out.println("Invalid date format - please try again with the format: DD/MM/YYYY"); // message to user and ask him to try again
             return;
         }
         int count = 0; // count all avalialbe trucks in system
@@ -415,13 +438,15 @@ public class Main {
     //********************************************************************************************************************** Case 10 - Print document details
 
     /** a function that prints all document details by its id*/
-    public static void PrintDocumentDetails(Map<Integer, ProductListDocument> documents) {
-        Scanner scanner = new Scanner(System.in); // ask for input from user
+    public static void PrintDocumentDetails(Map<Integer, ProductListDocument> documents,Scanner scanner) {
+ // ask for input from user
         System.out.println("Please enter document number"); // print document data
         Integer documentId = scanner.nextInt(); // document id from user
+        scanner.nextLine(); // Clear the newline
+
         if (documents.get(documentId) == null) { // if document not in database
             System.out.println("There is no document " + documentId + " Please try again"); // send message to user
-            scanner.close();
+            
             return;
         }
 
@@ -433,18 +458,22 @@ public class Main {
 
         List<Transport> currlist = transportsPerDate.get(LocalDate.now()); // save the list of all transport of current date
         if (currlist != null) { // if there are transport of current date.
-            for (Transport transport : currlist) { // for each transport in list
-                if (transport.getDeparture_time().isAfter(LocalTime.now())) { // if its time to send the transport
+            Iterator<Transport> iterator = currlist.iterator();
+            while (iterator.hasNext()) {
+                Transport transport = iterator.next();
+                if (transport.getDeparture_time().isAfter(LocalTime.now())) {
                     try {
-                        transport.sendTransport(); // send transport
+                        transport.sendTransport();
                     }
-                    catch (Exception e){
-                        System.out.println(e.getMessage());
-                        return;
-                    }
+                    catch (TransportAlreadySentException e){
 
-                    if (transport.isSent()) // if transport sent successfully
-                        currlist.remove(transport); // remove transport from list
+                    }
+                    catch (ATransportModuleException e1){
+                        System.out.println(e1.getMessage());
+                    }
+                    if (transport.isSent()) {
+                        iterator.remove(); // Legal removal
+                    }
                 }
             }
         }
@@ -483,43 +512,43 @@ public class Main {
             switch (input) {
                 /// Add new transport
                 case "1": {
-                    AddNewTransport(trucks, transports, sites, transportsPerDate);
+                    AddNewTransport(trucks, transports, sites, transportsPerDate,scanner);
                     break;
 
                 }
                 case "2": {
                     /// create a new document
-                    createNewDoc(documents, sites);
+                    createNewDoc(documents, sites,scanner);
                     break;
 
                 }
                 case "3": {
                     /// add product to document
-                    AddProductToDocument(products, documents);
+                    AddProductToDocument(products, documents,scanner);
                     break;
                 }
                 case "4": {
                     /// Remove Product From document
-                    RemoveProductFromDocument(products, documents);
+                    RemoveProductFromDocument(products, documents,scanner);
                     break;
                 }
                 case "5": {
                     /// add driver to transport
-                    AddDriverToTransport(drivers, transports);
+                    AddDriverToTransport(drivers, transports,scanner);
 
 
                     break;
                 }
                 case "6": {
                     /// attach document to delivery
-                    AttachDocumentToTransport(documents, transports);
+                    AttachDocumentToTransport(documents, transports,scanner);
                     break;
 
                 }
                 case "7": {
                     /// send transport manual
 
-                    sendTransportManual(transports);
+                    sendTransportManual(transports,scanner);
 
                     break;
 
@@ -527,20 +556,21 @@ public class Main {
                 case "8": {
                     /// print transport details
 
-                    printTransport(transports);
+                    printTransport(transports,scanner);
                     break;
 
                 }
                 case "9": {
                     /// print all available trucks
 
-                    printAllAvailableTrukcs(trucks);
+                    printAllAvailableTrukcs(trucks,scanner);
                     break;
 
                 }
                 case "10": {
                     /// print document details
-                    PrintDocumentDetails(documents);
+                    PrintDocumentDetails(documents,scanner);
+                    break;
 
 
                 }
@@ -563,3 +593,113 @@ public class Main {
     }
 
 }
+
+/*
+=====================================================================
+Manual End-to-End Test 1: Create and Send a New Transport
+=====================================================================
+1. Restart the system (run main()) and initialize all data.
+
+2. Input:
+   - Choose option: 1 (Add new transport)
+   - Date: 27/05/2025
+   - Time: 14:30
+   - Source Site: Haifa
+
+Expected output:
+   - Message that Transport has been created successfully.
+
+3. Input:
+   - Choose option: 5 (Add driver to transport)
+   - Driver ID: 123456789
+   - Transport ID: 1
+
+Expected output:
+   - Message that driver assigned successfully.
+
+4. Input:
+   - Choose option: 7 (Send transport)
+   - Transport ID: 1
+
+Expected output:
+   - Message that transport was sent successfully.
+
+Result:
+   - Passed. Transport created, driver assigned and transport sent.
+
+=====================================================================
+Manual End-to-End Test 2: Create a New Delivery Document and Attach It
+=====================================================================
+1. Restart the system (run main()) and initialize all data.
+
+2. Input:
+   - Choose option: 2 (Create new delivery document)
+   - Destination Site: Tel Aviv
+   - Date: 28/05/2025
+
+Expected output:
+   - Message that Document created successfully.
+
+3. Input:
+   - Choose option: 3 (Add product to document)
+   - Document ID: 1
+   - Product Catalog Number: 1001
+   - Amount: 10
+
+Expected output:
+   - Message that product was added successfully.
+
+4. Input:
+   - Choose option: 1 (Add new transport)
+   - Date: 28/05/2025
+   - Time: 10:00
+   - Source Site: Haifa
+
+5. Input:
+   - Choose option: 6 (Attach document to transport)
+   - Transport ID: 2
+   - Document ID: 1
+
+Expected output:
+   - Document attached to transport successfully.
+
+Result:
+   - Passed. Document created, product added and attached to transport.
+
+=====================================================================
+Manual End-to-End Test 3: Remove Product from a Document
+=====================================================================
+1. Restart the system (run main()) and initialize all data.
+
+2. Input:
+   - Choose option: 2 (Create new delivery document)
+   - Destination Site: Eilat
+   - Date: 29/05/2025
+
+3. Input:
+   - Choose option: 3 (Add product to document)
+   - Document ID: 1
+   - Product Catalog Number: 1002
+   - Amount: 5
+
+Expected output:
+   - Product added successfully.
+
+4. Input:
+   - Choose option: 4 (Remove product from document)
+   - Document ID: 1
+   - Product Catalog Number: 1002
+   - Amount: 3
+
+Expected output:
+   - Message that 3 parts were removed from product.
+
+5. Print document details (Option 10):
+   - See that product now has 2 units.
+
+Result:
+   - Passed. Product reduced correctly in document.
+
+=====================================================================
+*/
+

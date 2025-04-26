@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-// import Pritim
 
-/**
- * multiTone class, holsds all it's instances in a static HashMap. To create an instance outside the class, has to use instance()
+/***
+ * A Truck class representing a vehicle used for transport.
+ * Each truck has weight limitations, a license requirement, and availability management.
  */
 public class Truck {
     private int weight;
@@ -19,7 +19,13 @@ public class Truck {
     private final String plateNumber;
     private final Map<LocalDate, Boolean> availablityCalander;
 
-
+    /***
+     * Constructor - creates a new Truck instance
+     * @param dl DrivingLicence required to drive the truck
+     * @param maxWeight Maximum load capacity
+     * @param pn Plate number
+     * @throws ATransportModuleException if input is invalid
+     */
     public Truck(DrivingLicence dl, int maxWeight, String pn) throws ATransportModuleException {
         if(dl == null || maxWeight<1 || pn.isEmpty())
             throw new InvalidInputException();
@@ -29,7 +35,7 @@ public class Truck {
         this.availablityCalander = new HashMap<>();
     }
 
-
+//********************************************************************************************************************** Get functions
     /**
      * @return weight of the truck
      */
@@ -44,12 +50,17 @@ public class Truck {
         return maxWeight;
     }
 
+    /***
+     * @return Plate number of the truck
+     */
     public String getPlateNumber(){
         return plateNumber;
     }
 
-    /**
-     * @return Truck Avilablity
+    /***
+     * Checks if the truck is available on a specific date
+     * @param date Date to check
+     * @return True if available, false if already scheduled
      */
     public boolean getAvailablity(LocalDate date) {
         if (date != null) {
@@ -59,42 +70,26 @@ public class Truck {
 
     }
 
+    /***
+     * @return Required Driving Licence for the truck
+     */
     public DrivingLicence getDrivingLicence() {
         return liceenceReq;
     }
 
-    public void releaseTruck(LocalDate date) {
-        if (availablityCalander.get(date) != null) {
-            availablityCalander.remove(date);
-        }
-    }
-
-    public void setDate(LocalDate date) {
-        if (date != null) {
-            availablityCalander.put(date, true);
-        }
-    }
-
-    /**
-     * @param add_w The weight to add to the Truck. Pay attention that the paramater is not The new
-     *              weight of the truck but the sum.
-     * @return if the adding is legal (not over weight) , return True, nither return false.
+    /***
+     * Checks if the current load exceeds maximum weight
+     * @return True if overweight, otherwise false
      */
-    public boolean addWeight(int add_w) {
-        if (weight + add_w > maxWeight) {
-            return false;
-        }
-        weight = weight + add_w;
-        if (weight < 0) {
-            weight = 0;
-        } //todo : Think if it os better to set the value to 0 or to provoke an Error
-        return true;
+    public boolean isOverWeight() {
+        return maxWeight < weight;
     }
 
-    /**
-     * @param d Driver instance, check his driving licence and use it's equals() function to check
-     *          if the driver can ride the truck
-     * @return true or false
+    /***
+     * Confirms if a driver has a valid license to drive the truck
+     * @param d Driver instance
+     * @return True if driver's license matches, false otherwise
+     * @throws ATransportModuleException if driver is null
      */
     public boolean confirmDriver(Driver d) throws ATransportModuleException {
         if (d == null)
@@ -107,6 +102,58 @@ public class Truck {
         return false;
     }
 
+
+
+//********************************************************************************************************************** Set functions
+
+    /***
+     * Schedules the truck for a specific date (marks it unavailable)
+     * @param date Date to reserve
+     */
+    public void setDate(LocalDate date) {
+        if (date != null) {
+            availablityCalander.put(date, true);
+        }
+    }
+
+    /***
+     * Releases the truck reservation for a specific date
+     * @param date Date to free
+     */
+    public void releaseTruck(LocalDate date) {
+        if (availablityCalander.get(date) != null) {
+            availablityCalander.remove(date);
+        }
+    }
+
+    /***
+     * Attempts to add weight to the truck
+     * @param add_w Additional weight to add
+     * @return True if successful, False if exceeds maximum weight
+     */
+    public boolean addWeight(int add_w) {
+        if (weight + add_w > maxWeight) {
+            return false;
+        }
+        weight = weight + add_w;
+
+        return true;
+    }
+
+    /***
+     * Clears the current weight on the truck (sets weight to 0)
+     */
+    public void clear() {
+        weight = 0;
+    }
+
+//********************************************************************************************************************** Print functions
+
+
+    /***
+     * Prints the full details of the truck
+     * @return Formatted string with truck information
+     */
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder(); // build new string
@@ -121,14 +168,11 @@ public class Truck {
         return str.toString();
     }
 
-    public void clear() {
-        weight = 0;
-    }
 
-    public boolean isOverWeight() {
-        return maxWeight < weight;
-    }
 
+    /***
+     * Compares trucks based on their plate numbers
+     */
     @Override
     public final boolean equals(Object other) {
         if (this == other) return true;
@@ -138,6 +182,9 @@ public class Truck {
         return this.getPlateNumber().equals(that.getPlateNumber());
     }
 
+    /***
+     * @return Hash code based on plate number
+     */
     @Override
     public final int hashCode() {
         return this.getPlateNumber()!=null ? this.getPlateNumber().hashCode() : 0;

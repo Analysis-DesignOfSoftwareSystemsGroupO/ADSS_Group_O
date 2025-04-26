@@ -24,8 +24,9 @@ public class Transport {
     private boolean isOutOfZone;
 
 
-    /**
-     * a constructor for Transport
+    /***
+     * Constructor for Transport
+     * Initializes a new transport instance with given parameters and checks input validity.
      */
     public Transport(String d, String time, Truck t, Site s) throws ATransportModuleException {
         // input check
@@ -76,8 +77,61 @@ public class Transport {
 
     }
 
-    /**
-     * a function that adds a driver to a transport
+    //****************************************************************************************************************** Get functions
+
+    /**@return Transport ID
+     */
+    public int getId() {
+        return id;
+    }
+
+    /***
+     * @return true if the transport was already sent, false otherwise
+     */
+    public boolean isSent() {
+        return isSent;
+    }
+
+    /***
+     * @return the departure time
+     */
+    public LocalTime getDeparture_time() {
+        return departure_time;
+    }
+
+    /***
+     * Gets the document associated with a specific destination site name.
+     * @param site_name Destination site name
+     * @return ProductListDocument if exists, null otherwise
+     */
+    public ProductListDocument getDocument(String site_name) {
+
+        return destinations_document_map.get(site_name);
+
+    }
+
+    /***
+     * @return Date of the transport
+     */
+    public LocalDate getDate() {
+        return date;
+    }
+
+    /***
+     * Checks if a site is one of the transport's destinations.
+     * @param site Site name
+     * @return true if site is destination, false otherwise
+     */
+    public boolean isSiteIsDestination(String site) {
+        return destinations_document_map.get(site) != null;
+
+    }
+    //****************************************************************************************************************** Set functions
+
+    /***
+     * Adds a driver to the transport after verifying license and availability.
+     * @param d Driver to add
+     * @throws ATransportModuleException if driver's license is invalid or not available
      */
     public void addDriver(Driver d) throws ATransportModuleException {
         if (d == null) return;
@@ -92,7 +146,11 @@ public class Transport {
 
 
     }
-
+    /***
+     * Changes the truck assigned to this transport.
+     * @param t New truck
+     * @throws ATransportModuleException if the truck is unavailable or driver license mismatch occurs
+     */
     public void changeTruck(Truck t) throws ATransportModuleException {
         if (t != this.truck && t != null) {
             if (!t.getAvailablity(date)) {
@@ -118,12 +176,9 @@ public class Transport {
         }
     }
 
-    /**
-     * Sends the transport if all conditions are met.
-     * Throws an exception if the transport has already been sent,
-     * if there is no driver assigned, or if the truck is overloaded.
-     *
-     * @throws ATransportModuleException if the transport cannot be sent
+    /***
+     * Sends the transport if all conditions are met: not already sent, has a driver, not overweight.
+     * @throws ATransportModuleException if transport cannot be sent
      */
     public void sendTransport() throws ATransportModuleException {
         if (isSent) {
@@ -138,57 +193,16 @@ public class Transport {
         }
         if (truck.getMaxWeight() < calcWeight) {// Can't load the truck
 
-           throw new OverWeightException(calcWeight - truck.getMaxWeight()); // throw over weight exception
+            throw new OverWeightException(calcWeight - truck.getMaxWeight()); // throw over weight exception
 
         }
         truck.clear();
         isSent = true;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public boolean isSent() {
-        return isSent;
-    }
-
-    /**
-     * private function that returns all destination details
-     */
-    private String destinations_string() {
-        StringBuilder str = new StringBuilder();
-        for (String site : destinations_document_map.keySet()) {
-            str.append(site).append(" ");
-        }
-        return str.toString();
-    }
-
-    /**
-     * a print function that prints all the details about the transport.
-     */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder(); // build new string
-        str.append("Transport num: ").append(id).append("\n"); // start with the transport id
-        str.append("Date:  ").append(date).append(" ").append(departure_time).append("\n"); // print the date and hour
-        str.append("Truck details: ").append(truck.toString()).append("\n"); // print all truck details
-        str.append("Driver details: ");
-        if(driver == null)
-            str.append("There is no driver\n"); // print all driver details
-        else
-            str.append(driver.toString()).append("\n"); // print all driver details
-
-        str.append("From: ").append(source.toString()).append("\n"); // print the source site details
-        str.append("To: ").append(destinations_string()).append("\n"); // print all destination details
-        if (isOutOfZone) { // if transport has a destination out of area zone, it will show it.
-            str.append("This Transport has a destination out of Area Zone!\n");
-        }
-        return str.toString();
-    }
-
-    /**
-     * a function that gets a document and load the products' list to the truck
+    /***
+     * Loads a document to the transport after weight validation.
+     * @param document ProductListDocument to load
+     * @throws ATransportModuleException if document is invalid or causes overweight
      */
     public void loadByDocument(ProductListDocument document) throws ATransportModuleException {
         if (document == null)
@@ -209,31 +223,27 @@ public class Transport {
 
     }
 
-    public LocalTime getDeparture_time() {
-        return departure_time;
-    }
 
-    public ProductListDocument getDocument(String site_name) {
-
-        return destinations_document_map.get(site_name);
-
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
+    /***
+     * Reduces a specified amount of product from a given destination document.
+     * @param destination Destination site name
+     * @param p Product to reduce
+     * @param amount Amount to reduce
+     * @throws ATransportModuleException if product cannot be reduced
+     */
     public void reduceAmountFromProduct(String destination, Product p, int amount) throws ATransportModuleException {
         if (destinations_document_map.get(destination) != null) {
             destinations_document_map.get(destination).reduceAmountFromProduct(p, amount);
         }
     }
 
-    public boolean isSiteIsDestination(String site) {
-        return destinations_document_map.get(site) != null;
 
-    }
 
+    /***
+     * Changes the date of the transport.
+     * @param d New date string in "dd/MM/yyyy" format
+     * @throws ATransportModuleException if date is invalid
+     */
     public void changeDate(String d) throws ATransportModuleException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate parsedDate;
@@ -252,6 +262,10 @@ public class Transport {
 
     }
 
+    /***
+     * Changes the hour of the transport.
+     * @param time New time string in "HH:MM" format
+     */
     public void changeHour(String time) {
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
@@ -269,13 +283,56 @@ public class Transport {
         System.out.println("Changed delivery time to: " + departure_time);
 
     }
-
+    /***
+     * Changes the source site of the transport.
+     * @param s New source site
+     */
     public void changeSourceSite(Site s) {
         if (!s.equals(source)) {
             source = new Site(s);
         }
     }
 
+
+    //****************************************************************************************************************** Print functions
+    /***
+     * Builds a string of all destination site names.
+     * @return String listing all destinations
+     */
+    private String destinations_string() {
+        StringBuilder str = new StringBuilder();
+        for (String site : destinations_document_map.keySet()) {
+            str.append(site).append(" ");
+        }
+        return str.toString();
+    }
+
+    /***
+     * @return String representation of the transport's details
+     */
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder(); // build new string
+        str.append("Transport num: ").append(id).append("\n"); // start with the transport id
+        str.append("Date:  ").append(date).append(" ").append(departure_time).append("\n"); // print the date and hour
+        str.append("Truck details: ").append(truck.toString()).append("\n"); // print all truck details
+        str.append("Driver details: ");
+        if (driver == null)
+            str.append("There is no driver\n"); // print all driver details
+        else
+            str.append(driver.toString()).append("\n"); // print all driver details
+
+        str.append("From: ").append(source.toString()).append("\n"); // print the source site details
+        str.append("To: ").append(destinations_string()).append("\n"); // print all destination details
+        if (isOutOfZone) { // if transport has a destination out of area zone, it will show it.
+            str.append("This Transport has a destination out of Area Zone!\n");
+        }
+        return str.toString();
+    }
+
+    /***
+     * Compares two Transport objects based on their ID.
+     */
     @Override
     public final boolean equals(Object other) {
         if (this == other) return true;
@@ -284,6 +341,9 @@ public class Transport {
         return this.getId() == that.getId();
     }
 
+    /***
+     * @return Hash code based on transport ID
+     */
     @Override
     public final int hashCode() {
         return this.getId();
