@@ -305,11 +305,9 @@ public class ShiftManager implements IShiftManager {
      * @param roles The list of available roles.
      */
     private void printRolesList(User caller, List<Role> roles) {
-        // Print roles (except Shift Manager role)
         for (Role r : roles) {
-            if (r.getRoleNumber() != 1) {
-                System.out.println(r.getRoleNumber() + " - " + r.getDescription());
-            }
+            System.out.println(r.getRoleNumber() + " - " + r.getDescription());
+
         }
     }
 }

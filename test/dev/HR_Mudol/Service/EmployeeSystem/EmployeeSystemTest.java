@@ -24,18 +24,12 @@ public class EmployeeSystemTest {
         employeeUser = new User(employee, Level.regularEmp);
     }
 
-    /**
-     * Test viewing personal details.
-     */
     @Test
     public void testViewPersonalDetails() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewPersonalDetails(employeeUser, employee);
     }
 
-    /**
-     * Test viewing personal details with unauthorized user.
-     */
     @Test
     public void testViewPersonalDetails_UnauthorizedAccess() {
         Employee other = new Employee("Other", 222222222, "pass", "bank", 5000, LocalDate.now(), 2, 2, 5, 5);
@@ -45,9 +39,6 @@ public class EmployeeSystemTest {
         assertThrows(SecurityException.class, () -> system.viewPersonalDetails(otherUser, employee));
     }
 
-    /**
-     * Test changing password successfully.
-     */
     @Test
     public void testChangePassword_Success() {
         String input = "pass\nnewpass123\n";
@@ -59,9 +50,6 @@ public class EmployeeSystemTest {
         assertEquals("newpass123", employee.getEmpPassword());
     }
 
-    /**
-     * Test changing password with the same password.
-     */
     @Test
     public void testChangePassword_SamePassword() {
         String input = "pass\npass\n";
@@ -73,9 +61,6 @@ public class EmployeeSystemTest {
         assertEquals("pass", employee.getEmpPassword());
     }
 
-    /**
-     * Test submitting constraints with valid input.
-     */
     @Test
     public void testSubmitConstraint_SimpleFlow() {
         String input = """
@@ -112,9 +97,6 @@ public class EmployeeSystemTest {
         assertEquals(2, eveningCount);
     }
 
-    /**
-     * Test submitting constraints with invalid/malformed input.
-     */
     @Test
     public void testSubmitConstraint_InvalidInputFlow() {
         String input = """
@@ -147,9 +129,6 @@ public class EmployeeSystemTest {
         assertEquals(0, eveningCount);
     }
 
-    /**
-     * Test viewing shifts when no shifts assigned.
-     */
     @Test
     public void testViewMyShifts_NoShifts() {
         EmployeeSystem system = new EmployeeSystem();
@@ -157,18 +136,12 @@ public class EmployeeSystemTest {
         system.viewMyShifts(employeeUser, employee, currentWeek);
     }
 
-    /**
-     * Test viewing contract details.
-     */
     @Test
     public void testViewContractDetails() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewContractDetails(employeeUser, employee);
     }
 
-    /**
-     * Test viewing contract details with unauthorized user.
-     */
     @Test
     public void testViewContractDetails_Unauthorized() {
         Employee other = new Employee("Other", 222222222, "pass", "bank", 5000, LocalDate.now(), 2, 2, 5, 5);
@@ -178,21 +151,23 @@ public class EmployeeSystemTest {
         assertThrows(SecurityException.class, () -> system.viewContractDetails(otherUser, employee));
     }
 
-    /**
-     * Test viewing constraints initially empty.
-     */
     @Test
     public void testViewMyConstraints_EmptyInitially() {
-        EmployeeSystem system = new EmployeeSystem();
+        String input = "1\n"; // בוחר לראות אילוצים של השבוע הנוכחי
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        Scanner testScanner = new Scanner(in);
+        EmployeeSystem system = new EmployeeSystem(testScanner);
+
         system.viewMyConstraints(employeeUser, employee);
     }
 
-    /**
-     * Test viewing constraints when constraints exist.
-     */
     @Test
     public void testViewMyConstraints_WithConstraints() {
-        EmployeeSystem system = new EmployeeSystem();
+        String input = "1\n"; // בוחר לראות אילוצים של השבוע הנוכחי
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        Scanner testScanner = new Scanner(in);
+        EmployeeSystem system = new EmployeeSystem(testScanner);
+
         Constraint morningC = new Constraint("Busy on Monday", WeekDay.MONDAY, ShiftType.MORNING);
         Constraint eveningC = new Constraint("Unavailable Tuesday", WeekDay.TUESDAY, ShiftType.EVENING);
         employee.addNewConstraints(employeeUser, morningC);
@@ -203,9 +178,6 @@ public class EmployeeSystemTest {
         system.viewMyConstraints(employeeUser, employee);
     }
 
-    /**
-     * Test updating a constraint.
-     */
     @Test
     public void testUpdateConstraint_ExplanationUpdate() {
         Constraint c = new Constraint("Can't work", WeekDay.MONDAY, ShiftType.MORNING);
@@ -231,9 +203,6 @@ public class EmployeeSystemTest {
         assertTrue(updatedCorrectly);
     }
 
-    /**
-     * Test updating a constraint when none exist.
-     */
     @Test
     public void testUpdateConstraint_NoConstraints() {
         String input = """
@@ -248,18 +217,12 @@ public class EmployeeSystemTest {
         system.updateConstraint(employeeUser, employee, currentWeek);
     }
 
-    /**
-     * Test viewing available roles when no roles exist.
-     */
     @Test
     public void testViewAvailableRoles_NoRolesAssigned() {
         EmployeeSystem system = new EmployeeSystem();
         system.viewAvailableRoles(employeeUser, employee);
     }
 
-    /**
-     * Test viewing available roles when roles exist.
-     */
     @Test
     public void testViewAvailableRoles_WithRoles() {
         EmployeeSystem system = new EmployeeSystem();
@@ -269,9 +232,6 @@ public class EmployeeSystemTest {
         system.viewAvailableRoles(employeeUser, employee);
     }
 
-    /**
-     * Test viewing my shifts with assigned shift.
-     */
     @Test
     public void testViewMyShifts_WithAssignedShift() {
         Scanner testScanner = new Scanner(System.in);

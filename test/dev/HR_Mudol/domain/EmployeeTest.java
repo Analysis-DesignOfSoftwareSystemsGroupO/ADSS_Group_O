@@ -160,12 +160,18 @@ public class EmployeeTest {
      */
     @Test
     public void testRegularEmployeeCannotViewRoles() {
-        User regularUser = new User(employee, Level.regularEmp);
+        // יצירת עובד אחר שהוא ינסה לקרוא לו
+        Employee anotherEmployee = new Employee(
+                "Jane Smith", 987654321, "pass456", "IL00-0000-0000",
+                7500, LocalDate.of(2022, 6, 10), 2, 2, 10, 5
+        );
+        User regularUser = new User(anotherEmployee, Level.regularEmp);
 
         assertThrows(SecurityException.class, () -> {
             employee.getRelevantRoles(regularUser);
         });
     }
+
 
     /**
      * Test that a different regular employee cannot lock constraints for another employee.
