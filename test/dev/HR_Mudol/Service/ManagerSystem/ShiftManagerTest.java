@@ -21,20 +21,22 @@ public class ShiftManagerTest {
 
     @BeforeEach
     public void setUp() {
-        // מגדירים את סביבת הבדיקה
-        roleManagerMock = new RoleManagerMock(); // Mock שלך
+        // Initialize test environment
+        roleManagerMock = new RoleManagerMock();
         shiftManager = new ShiftManager(roleManagerMock);
 
-        shift = new Shift(WeekDay.MONDAY, ShiftType.MORNING); // שיפט לבדיקה
+        shift = new Shift(WeekDay.MONDAY, ShiftType.MORNING);
         employee = new Employee("John Doe", 123456789, "pass", "bank", 5000,
                 java.time.LocalDate.now(), 5, 5, 10, 10);
 
-        managerUser = new User(employee, Level.HRManager); // יוזר עם הרשאות מנהל
+        managerUser = new User(employee, Level.HRManager);
     }
 
     @Test
     public void testAssignEmployeeToShift_Success() {
-        Role role = new Role("Cashier"); // יוצרים תפקיד דמה
+        // Fix: first add role to shift's necessaryRoles
+        Role role = new Role("Cashier");
+        shift.addNecessaryRoles(managerUser, role);
 
         shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
 
@@ -46,6 +48,7 @@ public class ShiftManagerTest {
         User regularUser = new User(employee, Level.regularEmp);
         Role role = new Role("Cashier");
 
+        // No need to add role — testing access
         assertThrows(SecurityException.class, () -> {
             shiftManager.assignEmployeeToShift(regularUser, shift, employee, role);
         });
@@ -53,11 +56,14 @@ public class ShiftManagerTest {
 
     @Test
     public void testRemoveEmployeeFromShift_Success() {
-        shift.addEmployee(managerUser, employee, new Role("Cashier"));
+        // Fix: add role to necessaryRoles before adding employee
+        Role role = new Role("Cashier");
+        shift.addNecessaryRoles(managerUser, role);
+        shift.addEmployee(managerUser, employee, role);
 
-        String input = "1\n"; // נבחר את העובד הראשון ברשימה
+        String input = "1\n"; // Choose first employee
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in); // ננתב את הקלט
+        System.setIn(in);
 
         shiftManager.removeEmployeeFromShift(managerUser, shift);
 
@@ -69,8 +75,7 @@ public class ShiftManagerTest {
         Role cashier = new Role("Cashier");
         shift.addNecessaryRoles(managerUser, cashier);
 
-        // מעבירים קלט תקין: מזהה של Cashier ואז "exit" כדי לצאת
-        String input = cashier.getRoleNumber() + "\n"; // זה מחליף את "8"
+        String input = cashier.getRoleNumber() + "\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
@@ -79,13 +84,13 @@ public class ShiftManagerTest {
         assertFalse(shift.getNecessaryRoles().contains(cashier));
     }
 
-
     @Test
     public void testChooseRelevantRoleForShift_Success() {
+        // Add a new role manually to the mock
         Role cashier = new Role("Cashier");
-        roleManagerMock.addMockRole(cashier); // הוספת תפקיד למוק
+        roleManagerMock.addMockRole(cashier);
 
-        String input = cashier.getRoleNumber() + "\nD\n"; // בוחר את התפקיד ואז יוצא
+        String input = cashier.getRoleNumber() + "\nD\n"; // select role and finish
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
@@ -94,6 +99,30 @@ public class ShiftManagerTest {
         assertFalse(shift.getNecessaryRoles().isEmpty());
     }
 
+
+    @Test
+    public void testAssignSameEmployeeTwice() {
+        // Fix: add role before assigning
+        Role role = new Role("Cashier");
+        shift.addNecessaryRoles(managerUser, role);
+
+        shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
+
+        // Trying to assign again the same employee
+        assertThrows(IllegalArgumentException.class, () -> {
+            shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
+        });
+    }
+
+    @Test
+    public void testAssignEmployeeWithNonManagerUser() {
+        User regularUser = new User(employee, Level.regularEmp);
+        Role role = new Role("Cashier");
+
+        assertThrows(SecurityException.class, () -> {
+            shiftManager.assignEmployeeToShift(regularUser, shift, employee, role);
+        });
+    }
 
     @Test
     public void testPrintShift_Success() {

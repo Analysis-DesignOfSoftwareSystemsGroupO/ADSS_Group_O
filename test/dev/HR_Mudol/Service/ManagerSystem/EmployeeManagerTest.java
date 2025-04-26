@@ -19,11 +19,12 @@ public class EmployeeManagerTest {
     private User hrUser;
     private RoleManagerMock roleManagerMock;
 
+    // Setup method to initialize a clean branch and HR user before each test
     @BeforeEach
     public void setUp() {
         branch = new Branch();
-        branch.getEmployees().clear(); // ריקון העובדים
-        branch.getUsers().clear();      // ריקון המשתמשים
+        branch.getEmployees().clear();
+        branch.getUsers().clear();
 
         employeeManager = new EmployeeManager(branch);
 
@@ -38,6 +39,7 @@ public class EmployeeManagerTest {
         employeeManager.setRoleManager(roleManagerMock);
     }
 
+    // Test adding a new employee through user input simulation
     @Test
     public void testAddEmployee() {
         String input = """
@@ -60,6 +62,7 @@ public class EmployeeManagerTest {
         assertEquals(2, branch.getUsers().size());
     }
 
+    // Test removing an employee from the branch
     @Test
     public void testRemoveEmployee() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -74,6 +77,7 @@ public class EmployeeManagerTest {
         assertTrue(branch.getOldEmployee().contains(employee));
     }
 
+    // Test updating employee's bank account
     @Test
     public void testUpdateBankAccount() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -85,6 +89,7 @@ public class EmployeeManagerTest {
         assertEquals("newBankAccount", employee.getEmpBankAccount());
     }
 
+    // Test updating employee's salary
     @Test
     public void testUpdateSalary() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -96,6 +101,7 @@ public class EmployeeManagerTest {
         assertEquals(6000, employee.getEmpSalary());
     }
 
+    // Test updating minimum required day shifts
     @Test
     public void testUpdateMinDayShift() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -107,6 +113,7 @@ public class EmployeeManagerTest {
         assertEquals(7, employee.getContract(hrUser).getMinDayShift(hrUser, employee));
     }
 
+    // Test updating minimum required evening shifts
     @Test
     public void testUpdateMinEveningShift() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -118,6 +125,7 @@ public class EmployeeManagerTest {
         assertEquals(8, employee.getContract(hrUser).getMinEveninigShift(hrUser, employee));
     }
 
+    // Test setting initial sick days
     @Test
     public void testSetInitialSickDays() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -129,6 +137,7 @@ public class EmployeeManagerTest {
         assertEquals(12, employee.getContract(hrUser).getSickDays(hrUser, employee));
     }
 
+    // Test setting initial days off
     @Test
     public void testSetInitialDaysOff() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -140,6 +149,7 @@ public class EmployeeManagerTest {
         assertEquals(14, employee.getContract(hrUser).getDaysOff(hrUser, employee));
     }
 
+    // Test fetching employee by ID (success case)
     @Test
     public void testGetEmployeeByIdSuccess() {
         Employee employee = createEmployeeAndAddToBranch();
@@ -147,6 +157,7 @@ public class EmployeeManagerTest {
         assertEquals(employee, found);
     }
 
+    // Test fetching employee by invalid ID (should throw exception)
     @Test
     public void testGetEmployeeByIdInvalidId() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -154,6 +165,7 @@ public class EmployeeManagerTest {
         });
     }
 
+    // Test that regular employees cannot access HR management functions
     @Test
     public void testAccessDeniedForNonManager() {
         User regularUser = new User(hrEmployee, Level.regularEmp);
@@ -162,6 +174,7 @@ public class EmployeeManagerTest {
         });
     }
 
+    // Helper method to create and add a test employee
     private Employee createEmployeeAndAddToBranch() {
         Employee employee = new Employee("John", 111111111, "pass", "bank", 5000,
                 LocalDate.now(), 5, 5, 10, 10);
@@ -169,4 +182,85 @@ public class EmployeeManagerTest {
         branch.getUsers().add(new User(employee, Level.regularEmp));
         return employee;
     }
+    // Attempt to add employee with duplicate ID
+    @Test
+    public void testAddEmployeeWithDuplicateId() {
+        createEmployeeAndAddToBranch(); // Add employee with 111111111
+
+        String input = """
+            John Doe
+            111111111
+            222222222
+            password123
+            bankAccount123
+            5000
+            5
+            5
+            10
+            15
+            """;
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        employeeManager.setScanner(new Scanner(in));
+
+        employeeManager.addEmployee(hrUser);
+
+        assertEquals(3, branch.getEmployees().size()); // HR + original + second valid
+    }
+
+    // Attempt to remove employee with invalid ID
+    @Test
+    public void testRemoveEmployeeInvalidId() {
+        String input = "999999999\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        employeeManager.setScanner(new Scanner(in));
+
+        employeeManager.removeEmployee(hrUser);
+
+        // No one removed, HR Manager still exists
+        assertEquals(1, branch.getEmployees().size());
+    }
+
+    // Attempt to update bank account of non-existent employee
+    @Test
+    public void testUpdateBankAccountInvalidId() {
+        String input = "999999999\nnewAccount\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        employeeManager.setScanner(new Scanner(in));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            employeeManager.updateBankAccount(hrUser);
+        });
+    }
+
+    // Attempt to get employee by invalid ID length
+    @Test
+    public void testGetEmployeeByInvalidIdLength() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            employeeManager.getEmployeeById(hrUser, 12345);
+        });
+    }
+
+    // Attempt to print non-existing employee
+    @Test
+    public void testPrintNonExistingEmployee() {
+        String input = "999999999\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        employeeManager.setScanner(new Scanner(in));
+
+        assertThrows(NullPointerException.class, () -> {
+            employeeManager.printEmployees(hrUser);
+        });
+    }
+
+    // Non-manager tries to update salary
+    @Test
+    public void testUpdateSalaryByNonManager() {
+        Employee employee = createEmployeeAndAddToBranch();
+        User regularUser = new User(employee, Level.regularEmp);
+
+        assertThrows(SecurityException.class, () -> {
+            employeeManager.updateSalary(regularUser);
+        });
+    }
+
 }

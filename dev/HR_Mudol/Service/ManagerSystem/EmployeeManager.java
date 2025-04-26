@@ -8,9 +8,9 @@ import java.util.Scanner;
 
 public class EmployeeManager implements IEmployeeManager {
 
-    private Scanner scanner = new Scanner(System.in);
-    private IRoleManager roleManager;
-    private Branch curBranch;
+    private Scanner scanner = new Scanner(System.in); // Scanner for input operations
+    private IRoleManager roleManager; // Role manager interface
+    private Branch curBranch; // Current branch being managed
 
     public EmployeeManager(Branch curBranch) {
         this.curBranch = curBranch;
@@ -20,6 +20,7 @@ public class EmployeeManager implements IEmployeeManager {
         this.roleManager = roleManager;
     }
 
+    // Returns all users in the branch
     public List<User> getAllUsers(User caller) {
         return this.curBranch.getUsers();
     }
@@ -28,6 +29,7 @@ public class EmployeeManager implements IEmployeeManager {
     public void addEmployee(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
+        // Input and validation for employee name
         String empName;
         do {
             System.out.print("Enter employee full name: ");
@@ -35,15 +37,17 @@ public class EmployeeManager implements IEmployeeManager {
             if (empName.isEmpty()) System.out.println("Name can't be empty.");
         } while (empName.isEmpty());
 
+        // Input and validation for employee ID
         int empID;
         String idString;
         do {
             empID = getIntInput("Enter employee ID: ");
             idString = String.valueOf(empID);
-            if (idString.length() != 9) System.out.println("Invalid ID.");
-            if (checkIfAlreadyExist(empID)) System.out.println("This ID is already exist in the system.");
+            if (idString.length() != 9) System.out.println("Invalid ID."); // Validate ID length
+            if (checkIfAlreadyExist(empID)) System.out.println("This ID is already exist in the system."); // Check if ID already exists
         } while (idString.length() != 9 || checkIfAlreadyExist(empID));
 
+        // Input and validation for password
         String empPassword;
         do {
             System.out.print("Enter initial password for employee: ");
@@ -51,6 +55,7 @@ public class EmployeeManager implements IEmployeeManager {
             if (empPassword.isEmpty()) System.out.println("Password can't be empty.");
         } while (empPassword.isEmpty());
 
+        // Input and validation for bank account
         String empBankAccount;
         do {
             System.out.print("Enter bank account: ");
@@ -65,6 +70,7 @@ public class EmployeeManager implements IEmployeeManager {
         int sicks = getIntInput("Enter number of sick days: ");
         int daysOff = getIntInput("Enter number of vacation days: ");
 
+        // Create and add new employee
         Employee employee = new Employee(
                 empName, empID, empPassword, empBankAccount, empSalary,
                 empStartDate, minDay, minEvening, sicks, daysOff
@@ -75,6 +81,7 @@ public class EmployeeManager implements IEmployeeManager {
         System.out.println("Employee and user created successfully!");
     }
 
+    // Helper function: checks if employee ID already exists
     private boolean checkIfAlreadyExist(int ID) {
         for (Employee emp : this.curBranch.getEmployees()) {
             if (emp.getEmpId() == ID) return true;
@@ -88,7 +95,7 @@ public class EmployeeManager implements IEmployeeManager {
 
         System.out.print("Enter employee ID to remove: ");
         int empId = scanner.nextInt();
-        scanner.nextLine(); // clean buffer
+        scanner.nextLine(); // Clean input buffer
 
         Employee toRemove = getEmployeeById(caller, empId);
         if (toRemove == null) {
@@ -96,12 +103,14 @@ public class EmployeeManager implements IEmployeeManager {
             return;
         }
 
+        // Remove employee from all roles
         for (Role role : roleManager.getAllRoles(caller)) {
             roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
         }
 
-        curBranch.getOldEmployee().add(toRemove);
+        curBranch.getOldEmployee().add(toRemove); // Move to old employees
 
+        // Remove associated user
         User userToRemove = null;
         for (User u : curBranch.getUsers()) {
             if (u.getUser().equals(toRemove)) {
@@ -126,13 +135,18 @@ public class EmployeeManager implements IEmployeeManager {
         int empId = scanner.nextInt();
         scanner.nextLine();
 
+        Employee e = getEmployeeById(caller, empId);
+        if (e == null) {
+            throw new IllegalArgumentException("Employee not found with ID: " + empId);
+        }
+
         System.out.print("Enter new bank account: ");
         String newBankAccount = scanner.nextLine();
 
-        Employee e = getEmployeeById(caller, empId);
         e.setEmpBankAccount(caller, newBankAccount);
         System.out.println("Changed successfully.");
     }
+
 
     @Override
     public void updateSalary(User caller) {
@@ -232,7 +246,7 @@ public class EmployeeManager implements IEmployeeManager {
             if (e.getEmpId() == empId) return e;
         }
 
-        return null;
+        return null; // If employee not found
     }
 
     @Override
@@ -251,6 +265,7 @@ public class EmployeeManager implements IEmployeeManager {
     public void printAllEmployees(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
+        // Print all employees in the branch
         for (Employee e : curBranch.getEmployees()) {
             System.out.println(e.toString());
         }
@@ -266,6 +281,7 @@ public class EmployeeManager implements IEmployeeManager {
         return this.roleManager;
     }
 
+    // Helper method to safely read positive integers
     private int getIntInput(String prompt) {
         int value;
         while (true) {

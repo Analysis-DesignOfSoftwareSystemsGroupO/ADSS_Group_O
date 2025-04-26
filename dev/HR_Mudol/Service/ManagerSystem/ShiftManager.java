@@ -5,9 +5,13 @@ import HR_Mudol.domain.*;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * ShiftManager class manages shift operations:
+ * Assign employees to shifts, remove employees, add/remove roles, and print shifts.
+ */
 public class ShiftManager implements IShiftManager {
 
-    private IRoleManager dependency;
+    private IRoleManager dependency; // Dependency for accessing role management
 
     public ShiftManager(IRoleManager dependency) {
         this.dependency = dependency;
@@ -15,25 +19,32 @@ public class ShiftManager implements IShiftManager {
 
     @Override
     public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
+        // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
 
-        shift.addEmployee(caller, employee,role);
+        // Assign employee to the shift
+        shift.addEmployee(caller, employee, role);
         System.out.println(employee.getEmpName() +
                 " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
 
     @Override
     public void removeEmployeeFromShift(User caller, Shift shift) {
+        // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
-        if (shift==null){
+
+        // Check if shift exists
+        if (shift == null) {
             System.out.println("Shift doesn't exist.");
             return;
         }
+
         List<Employee> employees = shift.getEmployees();
+        // Check if no employees assigned
         if (employees.isEmpty()) {
             System.out.println("No employees assigned to this shift.");
             return;
@@ -42,6 +53,7 @@ public class ShiftManager implements IShiftManager {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose an employee to remove by their index:");
 
+        // Print list of employees with indexes
         int index = 1;
         for (Employee e : employees) {
             System.out.println(index + ". " + e.getEmpName());
@@ -62,6 +74,7 @@ public class ShiftManager implements IShiftManager {
             return;
         }
 
+        // Remove selected employee
         Employee employeeToRemove = employees.get(chosenIndex - 1);
         shift.removeEmployee(caller, employeeToRemove);
 
@@ -71,10 +84,10 @@ public class ShiftManager implements IShiftManager {
 
     @Override
     public void removeRoleFromShift(User caller, Shift shift) {
-
         Scanner scanner = new Scanner(System.in);
         List<Role> relevantRoles = shift.getNecessaryRoles();
 
+        // Check if there are no roles assigned
         if (relevantRoles.isEmpty()) {
             System.out.println("There are no roles assigned to this shift.");
             return;
@@ -82,10 +95,10 @@ public class ShiftManager implements IShiftManager {
 
         Role role = null;
 
-        // הדפסת רק את התפקידים ששייכים למשמרת
+        // Loop until a valid role is selected
         while (role == null) {
             System.out.println("\nChoose a role to remove from shift " + shift.getDay() + " - " + shift.getType());
-            printRolesListForShift(caller, relevantRoles);  // מדפיס רק את התפקידים ששייכים למשמרת
+            printRolesListForShift(caller, relevantRoles);
             System.out.print("Enter role ID (or type 'exit' to cancel): ");
 
             String input = scanner.nextLine().trim();
@@ -96,32 +109,33 @@ public class ShiftManager implements IShiftManager {
             }
 
             try {
-                int roleId = Integer.parseInt(input); // בחרת לפי ID של תפקיד
+                int roleId = Integer.parseInt(input);
                 role = findRoleById(relevantRoles, roleId);
 
                 if (role == null) {
                     System.out.println("This role is not assigned to the shift. Please try again.");
-                    role = null;  // make sure it keeps looping
+                    role = null; // Stay in the loop
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid role ID.");
             }
         }
 
-        // הורדת התפקיד
+        // Remove the selected role
         shift.removeRole(caller, role);
         System.out.println("Role \"" + role.getDescription() + "\" was removed from the shift.");
     }
 
-    // הדפסת רשימת התפקידים ששייכים למשמרת לפי ID
     private void printRolesListForShift(User caller, List<Role> roles) {
+        // Print roles assigned to the shift
         System.out.println("Roles assigned to this shift:");
         for (Role role : roles) {
             System.out.println("Role ID: " + role.getRoleNumber() + " - " + role.getDescription());
         }
     }
-    // פונקציה שמחזירה את התפקיד לפי ה-ID
+
     private Role findRoleById(List<Role> roles, int roleId) {
+        // Find a role by its ID
         for (Role role : roles) {
             if (role.getRoleNumber() == roleId) {
                 return role;
@@ -130,20 +144,34 @@ public class ShiftManager implements IShiftManager {
         return null;
     }
 
+    // Helper method to check if a shift already has a role by ID
+    private boolean shiftAlreadyHasRole(Shift shift, int roleId) {
+        for (Role role : shift.getNecessaryRoles()) {
+            if (role.getRoleNumber() == roleId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void chooseRelevantRoleForShift(User caller, Shift shift) {
+        // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
 
-        // תמיד מוסיפים אחראי משמרת (תפקיד 1)
-        shift.addNecessaryRoles(caller, dependency.getRoleByNumber(1));
+        // Add Shift Manager only if not already added (by role number check)
+        Role shiftManagerRole = dependency.getRoleByNumber(1);
+        if (shiftManagerRole != null && !shiftAlreadyHasRole(shift, shiftManagerRole.getRoleNumber())) {
+            shift.addNecessaryRoles(caller, shiftManagerRole);
+        }
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
 
         while (!done) {
-            printRolesList(caller,dependency.getAllRoles(caller));
+            printRolesList(caller, dependency.getAllRoles(caller));
 
             int roleNumber = -1;
             while (true) {
@@ -159,6 +187,8 @@ public class ShiftManager implements IShiftManager {
                         System.out.println("Role number does not exist. Please try again.");
                     } else if (role.getRoleNumber() == 1) {
                         System.out.println("Shift Manager already added. Please choose another role.");
+                    } else if (shiftAlreadyHasRole(shift, role.getRoleNumber())) {
+                        System.out.println("Role already assigned to the shift. Please choose another role.");
                     } else {
                         shift.addNecessaryRoles(caller, role);
                         System.out.println(role.getDescription() + " was added to the shift.");
@@ -187,6 +217,7 @@ public class ShiftManager implements IShiftManager {
 
     @Override
     public void printShift(User caller, Shift shift) {
+        // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
@@ -196,6 +227,7 @@ public class ShiftManager implements IShiftManager {
 
     @Override
     public void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
+        // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
@@ -203,8 +235,9 @@ public class ShiftManager implements IShiftManager {
     }
 
     private void printRolesList(User caller, List<Role> roles) {
+        // Print roles (except Shift Manager role)
         for (Role r : roles) {
-            if (r.getRoleNumber() != 1) { // דילוג על Shift Manager, כי כבר הוסף אוטומטית
+            if (r.getRoleNumber() != 1) {
                 System.out.println(r.getRoleNumber() + " - " + r.getDescription());
             }
         }
