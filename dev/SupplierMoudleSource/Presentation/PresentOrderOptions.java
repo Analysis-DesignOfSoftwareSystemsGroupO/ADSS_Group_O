@@ -1,8 +1,5 @@
 package SupplierMoudleSource.Presentation;
 
-import SupplierMoudleSource.Controllers.AgreementController;
-import SupplierMoudleSource.Controllers.OrderController;
-import SupplierMoudleSource.Controllers.SupplierController;
 import SupplierMoudleSource.Service.AgreementService;
 import SupplierMoudleSource.Service.OrderService;
 import SupplierMoudleSource.Service.SupplierService;

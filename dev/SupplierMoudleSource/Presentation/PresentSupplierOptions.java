@@ -1,6 +1,5 @@
 package SupplierMoudleSource.Presentation;
 
-import SupplierMoudleSource.Controllers.SupplierController;
 import SupplierMoudleSource.Service.SupplierService;
 
 import java.util.Scanner;

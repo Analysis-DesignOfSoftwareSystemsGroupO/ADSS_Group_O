@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class BranchService {
     private BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
+
     //method that checks if a branch id is valid
     public boolean isValidBranch(String branchId) {
         return branchesDataBase.existsBranch(branchId);
