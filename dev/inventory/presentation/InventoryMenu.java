@@ -152,7 +152,7 @@ public class InventoryMenu {
                         case 1:
                             // Move Items
                             System.out.println("\n***Move Items***\n");
-                            System.out.print("Enter stock name: ");
+                            System.out.print("Enter Product name: ");
                             productName = scanner.nextLine();
                             System.out.print("Enter product manufacturer: ");
                             productManufacturer = scanner.nextLine();
@@ -163,17 +163,18 @@ public class InventoryMenu {
                                 System.out.println("Enter expiry date (YYYY-MM-DD): ");
                                 expiryDate = LocalDate.parse(scanner.nextLine());
                             }
+                            System.out.print("Enter Product status (OK, DAMAGED, EXPIRED): ");
+                            StockItemStatus status = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
                             int amount = readIntInput("Enter amount to move: ");
-                            service.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate);
+                            service.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate, status);
                             break;
                         case 2:
-                            // Change Status
+                            // Remove Items
                             System.out.println("\n***Change Status***\n");
                             System.out.print("Enter Product name: ");
                             productName = scanner.nextLine();
                             System.out.print("Enter product manufacturer: ");
                             productManufacturer = scanner.nextLine();
-                            System.out.print("Enter new status (OK, DAMAGED, EXPIRED): ");
                             StockItemStatus newStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
                             System.out.print("Enter expiry date (YYYY-MM-DD): ");
                             expiryDate = LocalDate.parse(scanner.nextLine());

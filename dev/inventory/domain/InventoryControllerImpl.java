@@ -150,7 +150,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void changeStockItemStatus(String productName, String productManufacturer, LocalDate expiryDate, StockItemStatus newStatus) {
+    public void changeStockItemStatus(String productName, String productManufacturer, LocalDate expiryDate, StockItemStatus status) {
         System.out.println("Changing stock item status for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
@@ -158,8 +158,9 @@ public class InventoryControllerImpl implements InventoryController {
         }
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
-            if (stockItem.getProduct().getId().equals(product.getId()) && stockItem.getExpiryDate().equals(expiryDate)) {
-                stockItem.setStatus(newStatus);
+            if (stockItem.getProduct().getId().equals(product.getId()) && stockItem.getExpiryDate().equals(expiryDate)
+                    && stockItem.getStatus() == status) {
+                stockItem.setStatus(status);
                 stockItemRepository.updateStockItem(stockItem);
             }
         }
@@ -169,7 +170,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void moveStockItem(String productName, String productManufacturer, String newLocation, int amount, LocalDate expiryDate) {
+    public void moveStockItem(String productName, String productManufacturer, String newLocation, int amount, LocalDate expiryDate, StockItemStatus status) {
         System.out.println("Moving stock item for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
@@ -197,7 +198,7 @@ public class InventoryControllerImpl implements InventoryController {
                 amount = 0;
             } else {
                 System.out.println("Moving partial stock from " + originId + " to " + destinationId);
-                moveBatch(origin, destination, amount);
+                moveBatch(origin, destination, origin.getQuantity());
                 amount -= origin.getQuantity();
             }
         }
@@ -250,8 +251,8 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("Moving batch of " + amount + " from " + origin.getLocation() + " to " + destination.getLocation());
         origin.setQuantity(origin.getQuantity() - amount);
         destination.setQuantity(destination.getQuantity() + amount);
-        if (destination.getQuantity() == 0) {
-            stockItemRepository.deleteStockItem(destination.getStockItemId());
+        if (origin.getQuantity() == 0) {
+            stockItemRepository.deleteStockItem(origin.getStockItemId());
         }
     }
 

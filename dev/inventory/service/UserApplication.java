@@ -143,8 +143,8 @@ public class UserApplication {
         }
     }
 
-    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount, LocalDate expiryDate){
-        inventoryController.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate);
+    public void moveStockItem(String productName,String productManufacturer,String newLocation , int amount, LocalDate expiryDate, StockItemStatus status){
+        inventoryController.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate, status);
 
     }
 }
