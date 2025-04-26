@@ -32,9 +32,11 @@ public class ShiftManagerTest {
         managerUser = new User(employee, Level.HRManager);
     }
 
+    /**
+     * Test assigning an employee to a shift successfully.
+     */
     @Test
     public void testAssignEmployeeToShift_Success() {
-        // Fix: first add role to shift's necessaryRoles
         Role role = new Role("Cashier");
         shift.addNecessaryRoles(managerUser, role);
 
@@ -43,25 +45,29 @@ public class ShiftManagerTest {
         assertTrue(shift.getEmployees().contains(employee));
     }
 
+    /**
+     * Test that assigning an employee with insufficient permissions throws SecurityException.
+     */
     @Test
     public void testAssignEmployeeToShift_AccessDenied() {
         User regularUser = new User(employee, Level.regularEmp);
         Role role = new Role("Cashier");
 
-        // No need to add role — testing access
         assertThrows(SecurityException.class, () -> {
             shiftManager.assignEmployeeToShift(regularUser, shift, employee, role);
         });
     }
 
+    /**
+     * Test removing an employee from a shift successfully.
+     */
     @Test
     public void testRemoveEmployeeFromShift_Success() {
-        // Fix: add role to necessaryRoles before adding employee
         Role role = new Role("Cashier");
         shift.addNecessaryRoles(managerUser, role);
         shift.addEmployee(managerUser, employee, role);
 
-        String input = "1\n"; // Choose first employee
+        String input = "1\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
@@ -70,6 +76,9 @@ public class ShiftManagerTest {
         assertFalse(shift.getEmployees().contains(employee));
     }
 
+    /**
+     * Test removing a role from a shift successfully.
+     */
     @Test
     public void testRemoveRoleFromShift_Success() {
         Role cashier = new Role("Cashier");
@@ -84,13 +93,15 @@ public class ShiftManagerTest {
         assertFalse(shift.getNecessaryRoles().contains(cashier));
     }
 
+    /**
+     * Test choosing relevant roles for a shift successfully.
+     */
     @Test
     public void testChooseRelevantRoleForShift_Success() {
-        // Add a new role manually to the mock
         Role cashier = new Role("Cashier");
         roleManagerMock.addMockRole(cashier);
 
-        String input = cashier.getRoleNumber() + "\nD\n"; // select role and finish
+        String input = cashier.getRoleNumber() + "\nD\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
@@ -99,21 +110,24 @@ public class ShiftManagerTest {
         assertFalse(shift.getNecessaryRoles().isEmpty());
     }
 
-
+    /**
+     * Test that assigning the same employee twice to a shift throws IllegalArgumentException.
+     */
     @Test
     public void testAssignSameEmployeeTwice() {
-        // Fix: add role before assigning
         Role role = new Role("Cashier");
         shift.addNecessaryRoles(managerUser, role);
 
         shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
 
-        // Trying to assign again the same employee
         assertThrows(IllegalArgumentException.class, () -> {
             shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
         });
     }
 
+    /**
+     * Test that assigning an employee with a non-manager user throws SecurityException.
+     */
     @Test
     public void testAssignEmployeeWithNonManagerUser() {
         User regularUser = new User(employee, Level.regularEmp);
@@ -124,8 +138,72 @@ public class ShiftManagerTest {
         });
     }
 
+    /**
+     * Test printing a shift successfully with authorized user.
+     */
     @Test
     public void testPrintShift_Success() {
         assertDoesNotThrow(() -> shiftManager.printShift(managerUser, shift));
+    }
+
+    /**
+     * Test removing an employee from an empty shift does not throw an exception.
+     */
+    @Test
+    public void testRemoveEmployeeFromEmptyShift() {
+        String input = "1\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertDoesNotThrow(() -> shiftManager.removeEmployeeFromShift(managerUser, shift));
+    }
+
+    /**
+     * Test removing a role from a shift with no roles does not throw an exception.
+     */
+    @Test
+    public void testRemoveRoleFromEmptyShift() {
+        String input = "1\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertDoesNotThrow(() -> shiftManager.removeRoleFromShift(managerUser, shift));
+    }
+
+    /**
+     * Test invalid input when choosing a relevant role.
+     */
+    @Test
+    public void testChooseRelevantRole_InvalidInput() {
+        Role cashier = new Role("Cashier");
+        roleManagerMock.addMockRole(cashier);
+
+        String input = "abc\n" + cashier.getRoleNumber() + "\nD\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertDoesNotThrow(() -> shiftManager.chooseRelevantRoleForShift(managerUser, shift));
+    }
+
+    /**
+     * Test printing a shift with unauthorized user throws SecurityException.
+     */
+    @Test
+    public void testPrintShift_AccessDenied() {
+        User regularUser = new User(employee, Level.regularEmp);
+
+        assertThrows(SecurityException.class, () -> shiftManager.printShift(regularUser, shift));
+    }
+
+    /**
+     * Test assigning an employee with a role not in the shift's necessaryRoles throws an exception.
+     */
+    @Test
+    public void testAssignEmployeeWithoutRoleInShift() {
+        Role cashier = new Role("Cashier");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            shiftManager.assignEmployeeToShift(managerUser, shift, employee, cashier);
+        });
     }
 }

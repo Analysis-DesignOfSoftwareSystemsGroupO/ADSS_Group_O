@@ -145,13 +145,14 @@ public class ConstraintTest {
     }
 
     /**
-     * Test that setting a field with null employee throws NullPointerException.
+     * Test that setting a field with null employee triggers SecurityException due to authorization check.
      */
     @Test
     public void testSetWithNullEmployee() {
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(SecurityException.class, () -> {
             constraint.setType(employeeUser, null, ShiftType.MORNING);
         });
     }
+
 
 }
