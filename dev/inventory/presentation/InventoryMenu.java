@@ -24,10 +24,11 @@ public class InventoryMenu {
         int worker = 0;
         int choice = 0;
         do {
-            service.updateDiscounts();
             if (choice == 0) {
                 worker = chooseWorkerType();
             }
+            service.updateDiscounts();
+//            service.checkForExpiredStock();
             if (worker == 2) {
                 displayMenuForWorker();
                 choice = readIntInput("Please enter your choice: ");
@@ -73,19 +74,20 @@ public class InventoryMenu {
                 "Update Product",
                 "Delete Product",
                 "Add Category",
-                "Update Category",
+                "Clear Stock (Expired/Defected)",
                 "Delete Category",
                 "Add Discount",
                 "Update Discount",
                 "Delete Discount",
                 "List Discounts",
-                "Upload Test Data",
+                "Print Expired List (Product Based)",
                 "Show discount for a product");
         System.out.println("\n---- Inventory Worker Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
             System.out.println((i + 1) + ".  " + menuOptions.get(i));
         }
         System.out.println("0.  Return To Worker Selection");
+        System.out.println("\tEnter Code For Test Data Upload");
     }
 
     private void displayMenuForWorker() {
@@ -105,6 +107,7 @@ public class InventoryMenu {
         }
 
         System.out.println("0.  Return To Worker Selection");
+        System.out.println("\tEnter Code For Test Data Upload");
     }
 
     private void handleMenuChoice(int choice) {
@@ -194,13 +197,7 @@ public class InventoryMenu {
                             System.out.println("\nChecking for expired items...\n");
                             service.checkForExpiredStock();
                             System.out.println("Expired items updated successfully!");
-                            // Update Stock Status //TODO: Choose how we want to implement this (and if needed at all)
-//                            System.out.println("\n***Update Stock Status***\n");
-//                            System.out.print("Enter Stock id: ");
-//                            String stockId = scanner.nextLine();
-//                            System.out.print("Enter new status (OK, DEFECT, EXPIRED): ");
-//                            StockItemStatus newStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
-//                            service.updateStockStatus(stockId, newStatus);
+                            break;
                         default:
                             System.out.println("Invalid choice. Please try again.");
                     }
@@ -245,6 +242,12 @@ public class InventoryMenu {
                     break;
                 case 11:
                     //Update Product
+                    /// currently not implemented, will check here the sell product
+                    System.out.println("Enter product ID: ");
+                    String productId = scanner.nextLine();
+                    int sellAmount = readIntInput("Enter Sell amount: ");
+                    service.sellProduct(productId, sellAmount);
+
                     break;
                 case 12:
                     // Delete Product
@@ -262,7 +265,29 @@ public class InventoryMenu {
                     System.out.println("Category added successfully!");
                     break;
                 case 14:
-                    //Update Category // Why do we need ??
+                    // Clear Stock (Expired/Defected)
+                    System.out.println("Choose which of the following you wold like to do: ");
+                    System.out.println("1. Clear Expired Items");
+                    System.out.println("2. Clear Defected Items");
+                    System.out.println("3. Clear All Items (Expired and Defected)");
+                    int clearChoice = readIntInput("Please enter your choice: ");
+                    switch (clearChoice) {
+                        case 1:
+                            System.out.println("Clearing expired items...");
+                            service.clearExpiredStock();
+                            break;
+                        case 2:
+                            System.out.println("Clearing defected items...");
+                            service.clearDefectedStockItems();
+                            break;
+                        case 3:
+                            System.out.println("Clearing all items...");
+                            service.clearExpiredStock();
+                            service.clearDefectedStockItems();
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
                     break;
                 case 15:
                     // Delete Category
@@ -308,18 +333,23 @@ public class InventoryMenu {
                     service.listDiscounts();
                     break;
                 case 20:
-                    // Upload Test Data
-                    System.out.println("Uploading test data...");
-                    service.uploadTestData();
+                    //Available For New Assignment-------Temporary
+                    //Print Expired Items
+                    service.printExpiredStockItems();
                     break;
                 case 21:
                     // Show discount for a product
                     System.out.print("Enter product ID: ");
-                    String productId = scanner.nextLine();
+                    productId = scanner.nextLine();
                     double discountPercentageForProduct = service.getDiscountByProductId(productId);
                     System.out.println("Discount percentage for product " + productId + ": " + Math.round(discountPercentageForProduct) + "%");
                 case 0:
                     // Return to worker selection
+                    break;
+                case 1234:
+                    // Upload Test Data
+                    System.out.println("Uploading test data...");
+                    service.uploadTestData();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");

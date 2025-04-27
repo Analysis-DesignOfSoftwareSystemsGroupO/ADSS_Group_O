@@ -76,12 +76,12 @@ public class UserApplication {
         inventoryController.saveStockItem("Test Product 1", "ADF", 50, "in store", StockItemStatus.OK, LocalDate.now().plusDays(10));
         inventoryController.saveStockItem("Test Product 2", "DCF", 20, "in store", StockItemStatus.OK, LocalDate.now().plusDays(20));
         inventoryController.saveStockItem("Test Product 3", "RCF", 30, "in store", StockItemStatus.OK, LocalDate.now().plusDays(12));
-        inventoryController.saveStockItem("Test Product 4", "VBX", 30, "storage", StockItemStatus.EXPIRED, LocalDate.now().plusDays(5));
+        inventoryController.saveStockItem("Test Product 4", "VBX", 30, "storage", StockItemStatus.EXPIRED, LocalDate.now().minusDays(10));
         inventoryController.saveStockItem("Test Product 5", "TCF", 15, "in store", StockItemStatus.OK, LocalDate.now().plusDays(10));
         inventoryController.saveStockItem("Test Product 6", "GGV", 30, "storage", StockItemStatus.DAMAGED, LocalDate.now().plusDays(365));
         inventoryController.saveStockItem("Test Product 6", "GGV", 30, "in store", StockItemStatus.OK, LocalDate.now().plusDays(365));
         inventoryController.saveStockItem("Test Product 1", "ADF", 40, "storage", StockItemStatus.OK, LocalDate.now().plusDays(30));
-        inventoryController.saveStockItem("Test Product 2", "DCF", 50, "storage", StockItemStatus.OK, LocalDate.now().plusDays(6));
+        inventoryController.saveStockItem("Test Product 2", "DCF", 50, "storage", StockItemStatus.OK, LocalDate.now().minusDays(6));
         inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
 
     }
@@ -157,9 +157,26 @@ public class UserApplication {
         }
     }
 
+    public void sellProduct(String productId, int quantity) {
+        inventoryController.sellProduct(productId, quantity);
+    }
+
     public void moveStockItem(String productName, String productManufacturer, String newLocation, int amount, LocalDate expiryDate) {
         Product product = inventoryController.getProductByName(productName, productManufacturer);
         inventoryController.moveStockItem(product, newLocation, amount, expiryDate);
 
     }
+
+    public void printExpiredStockItems() {
+        inventoryController.printExpiredStockItems();
+    }
+
+    public void clearExpiredStock() {
+        inventoryController.clearExpiredStock();
+    }
+
+    public void clearDefectedStockItems() {
+        inventoryController.clearDefectedStockItems();
+    }
+
 }
