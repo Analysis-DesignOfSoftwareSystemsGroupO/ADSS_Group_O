@@ -63,9 +63,10 @@ public class Transport {
         departure_time = LocalTime.of(hour, minute); // set the hour
 
 
-        id = ++staticTransportID; // give index to transport
         if (!t.getAvailablity(date))
             throw new UnAvailableTruckException();
+        id = ++staticTransportID; // give index to transport
+
         truck = t; // save the truck as the original truck - not a copy of the truck.
         truck.setDate(date); // set date at truck schedule
         currWeight = 0;
@@ -159,7 +160,7 @@ public class Transport {
             }
             if (driver != null) {
                 try {
-                    if (!truck.confirmDriver(driver)) {
+                    if (!t.confirmDriver(driver)) {
                         throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
                     }
                 } catch (ATransportModuleException e) {
