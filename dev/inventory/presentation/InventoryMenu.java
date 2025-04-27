@@ -28,7 +28,7 @@ public class InventoryMenu {
                 worker = chooseWorkerType();
             }
             service.updateDiscounts();
-            service.checkForExpiredStock();
+//            service.checkForExpiredStock();
             if (worker == 2) {
                 displayMenuForWorker();
                 choice = readIntInput("Please enter your choice: ");
@@ -74,13 +74,13 @@ public class InventoryMenu {
                 "Update Product",
                 "Delete Product",
                 "Add Category",
-                "Update Category",
+                "Clear Stock (Expired/Defected)",
                 "Delete Category",
                 "Add Discount",
                 "Update Discount",
                 "Delete Discount",
                 "List Discounts",
-                "Available For New Assignment-------Temporary",
+                "Print Expired List (Product Based)",
                 "Show discount for a product");
         System.out.println("\n---- Inventory Worker Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
@@ -197,6 +197,7 @@ public class InventoryMenu {
                             System.out.println("\nChecking for expired items...\n");
                             service.checkForExpiredStock();
                             System.out.println("Expired items updated successfully!");
+                            break;
                         default:
                             System.out.println("Invalid choice. Please try again.");
                     }
@@ -264,7 +265,29 @@ public class InventoryMenu {
                     System.out.println("Category added successfully!");
                     break;
                 case 14:
-                    //Update Category // Why do we need ??
+                    // Clear Stock (Expired/Defected)
+                    System.out.println("Choose which of the following you wold like to do: ");
+                    System.out.println("1. Clear Expired Items");
+                    System.out.println("2. Clear Defected Items");
+                    System.out.println("3. Clear All Items (Expired and Defected)");
+                    int clearChoice = readIntInput("Please enter your choice: ");
+                    switch (clearChoice) {
+                        case 1:
+                            System.out.println("Clearing expired items...");
+                            service.clearExpiredStock();
+                            break;
+                        case 2:
+                            System.out.println("Clearing defected items...");
+                            service.clearDefectedStockItems();
+                            break;
+                        case 3:
+                            System.out.println("Clearing all items...");
+                            service.clearExpiredStock();
+                            service.clearDefectedStockItems();
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
                     break;
                 case 15:
                     // Delete Category
@@ -311,6 +334,8 @@ public class InventoryMenu {
                     break;
                 case 20:
                     //Available For New Assignment-------Temporary
+                    //Print Expired Items
+                    service.printExpiredStockItems();
                     break;
                 case 21:
                     // Show discount for a product

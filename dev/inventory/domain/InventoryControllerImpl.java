@@ -113,8 +113,7 @@ public class InventoryControllerImpl implements InventoryController {
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.OK && stockItem.getExpiryDate().isBefore(LocalDate.now())) {
-                System.out.println("Product " + stockItem.getProduct().getName() + " is expired." +
-                        "need to be moved to storage");
+                System.out.println("Product " + stockItem.getProduct().getName() + " is expired.");
                 stockItem.setStatus(StockItemStatus.EXPIRED);
             }
         }
@@ -445,7 +444,7 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("Defected stock items:");
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
-            if (stockItem.getStatus() == StockItemStatus.DAMAGED || stockItem.getStatus() == StockItemStatus.EXPIRED) {
+            if (stockItem.getStatus() == StockItemStatus.DAMAGED) {
                 System.out.println(stockItem);
             }
         }
@@ -611,6 +610,36 @@ public class InventoryControllerImpl implements InventoryController {
             System.out.println("Items that need to be ordered:");
             for (Product product : orderList) {
                 System.out.println(product.getName() + " - " + product.getManufacturer() + " - " + (product.getMinimumStockLevel() - countProductQuantity(product.getId())));
+            }
+        }
+    }
+
+    public void printExpiredStockItems() {
+        System.out.println("Expired stock items:");
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getStatus() == StockItemStatus.EXPIRED) {
+                System.out.println(stockItem);
+            }
+        }
+    }
+
+    public void clearDefectedStockItems(){
+        System.out.println("Clearing defected stock items...");
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getStatus() == StockItemStatus.DAMAGED) {
+                stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+            }
+        }
+    }
+
+    public void clearExpiredStock(){
+        System.out.println("Clearing expired stock...");
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getStatus() == StockItemStatus.EXPIRED) {
+                stockItemRepository.deleteStockItem(stockItem.getStockItemId());
             }
         }
     }
