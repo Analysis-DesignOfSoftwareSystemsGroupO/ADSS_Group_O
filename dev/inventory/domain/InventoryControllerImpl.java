@@ -178,6 +178,8 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
+
+
     public void updateInventoryWithDefects(Product product, String location, LocalDate expiryDate, int defectedAmount) {
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock status change operation.");
@@ -657,6 +659,56 @@ public class InventoryControllerImpl implements InventoryController {
             if (stockItem.getStatus() == StockItemStatus.EXPIRED) {
                 stockItemRepository.deleteStockItem(stockItem.getStockItemId());
             }
+        }
+    }
+
+    public void printProductByCategory( String categoryName){
+        System.out.println("Products in category: " + categoryName);
+        Category category = getCategoryById(getCategoryIdByName(categoryName));
+        if (category == null) {
+            System.out.println("Category not found.");
+            return;
+        }
+        List<Product> products = category.getProducts();
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }
+
+    public void printProductByManufacturer(String manufacturerName){
+        System.out.println("Products by manufacturer: " + manufacturerName);
+        List<Product> products = productRepository.getAllProducts();
+        for (Product product : products) {
+            if (product.getManufacturer().equals(manufacturerName)) {
+                System.out.println(product);
+            }
+        }
+    }
+
+
+    public void printProductByLocation(String locationFilter){
+        System.out.println("Products by location: " + locationFilter);
+            if (locationFilter.equals("in store")) {
+                getStockItemsInStore()
+                        .forEach(stockItem -> System.out.println("Stock ID: " + stockItem.getStockItemId()
+                                + "\nProduct: " + stockItem.getProduct().getName()
+                                + "\nQuantity: " + stockItem.getQuantity()
+                                + "\nLocation: " + stockItem.getLocation()
+                                + "\nExpiry Date: " + stockItem.getExpiryDate().toString()
+                                + "\nStatus: " + stockItem.getStatus() +
+                                "\n------------------------------\n"));
+            } else if (locationFilter.equals("storage")) {
+                getStockItemsFromStorage()
+                        .forEach(stockItem -> System.out.println("Stock ID: " + stockItem.getStockItemId()
+                                + "\nProduct: " + stockItem.getProduct().getName()
+                                + "\nQuantity: " + stockItem.getQuantity()
+                                + "\nLocation: " + stockItem.getLocation()
+                                + "\nExpiry Date: " + stockItem.getExpiryDate().toString()
+                                + "\nStatus: " + stockItem.getStatus() +
+                                "\n------------------------------\n"));
+            }
+         else {
+                System.out.println("Invalid location filter.");
         }
     }
 

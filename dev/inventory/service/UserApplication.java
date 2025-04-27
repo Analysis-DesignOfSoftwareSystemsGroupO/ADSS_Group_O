@@ -38,6 +38,11 @@ public class UserApplication {
             }
         }
         inventoryController.addProduct(name, minimumStock, mainCategory, costPrice, location, manufacturer);
+        Category cat2 = inventoryController.getCategoryById(inventoryController.getCategoryIdByName(categoryInfo[1]));
+        Category cat3 = inventoryController.getCategoryById(inventoryController.getCategoryIdByName(categoryInfo[2]));
+        Product product = inventoryController.getProductByName(name, manufacturer);
+        cat2.addProduct(product);
+        cat3.addProduct(product);
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
@@ -177,6 +182,19 @@ public class UserApplication {
 
     public void clearDefectedStockItems() {
         inventoryController.clearDefectedStockItems();
+    }
+
+    public void printProductByCategory( String categoryName){
+        inventoryController.printProductByCategory(categoryName);
+    }
+
+    public void printProductByManufacturer(String manufacturerName){
+        inventoryController.printProductByManufacturer(manufacturerName);
+    }
+
+
+    public void printProductByLocation(String locationFilter){
+        inventoryController.printProductByLocation(locationFilter);
     }
 
 }

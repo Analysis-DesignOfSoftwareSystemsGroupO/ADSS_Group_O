@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Category {
+public class  Category {
     private String id;
     private String name;
     private Category parentCategory;

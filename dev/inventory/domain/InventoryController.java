@@ -6,6 +6,12 @@ import java.util.List;
 public interface InventoryController {
     void addProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer);
 
+    void printProductByCategory( String categoryName);
+
+    void printProductByManufacturer(String manufacturerName);
+
+    void printProductByLocation(String locationFilter);
+
     List<Product> getAllProductsDefinitions();
 
     void printAllProducts();

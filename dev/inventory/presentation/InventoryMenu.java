@@ -28,7 +28,7 @@ public class InventoryMenu {
                 worker = chooseWorkerType();
             }
             service.updateDiscounts();
-//            service.checkForExpiredStock();
+            service.checkForExpiredStock();
             if (worker == 2) {
                 displayMenuForWorker();
                 choice = readIntInput("Please enter your choice: ");
@@ -71,7 +71,7 @@ public class InventoryMenu {
                 "Print Defect List (Product Based)",
                 "Print Order List",
                 "Add Product",
-                "Update Product",
+                "Print Product By Filter",
                 "Delete Product",
                 "Add Category",
                 "Clear Stock (Expired/Defected)",
@@ -241,12 +241,39 @@ public class InventoryMenu {
                     System.out.println("Product added successfully!");
                     break;
                 case 11:
-                    //Update Product
-                    /// currently not implemented, will check here the sell product
-                    System.out.println("Enter product ID: ");
-                    String productId = scanner.nextLine();
-                    int sellAmount = readIntInput("Enter Sell amount: ");
-                    service.sellProduct(productId, sellAmount);
+//                    //Update Product
+//                    /// currently not implemented, will check here the sell product
+//                    System.out.println("Enter product ID: ");
+//                    String productId = scanner.nextLine();
+//                    int sellAmount = readIntInput("Enter Sell amount: ");
+//                    service.sellProduct(productId, sellAmount);
+//                    System.out.println("Product sold successfully!");
+//                    break;
+                    // Print Product By Filter
+                    System.out.println("\n***Print Product By Filter***\n");
+                    System.out.print("Would you like to filter by:\n1. Category\n2. Manufacturer\n3. Location(in `Store`/ Storage)\nEnter your choice: ");
+                    int filterChoice = readIntInput("Please enter your choice: ");
+                    switch (filterChoice) {
+                        case 1:
+                            System.out.print("Enter category name: ");
+                            String categoryName = scanner.nextLine();
+                            service.printProductByCategory(categoryName);
+                            break;
+                        case 2:
+                            System.out.print("Enter manufacturer name: ");
+                            String manufacturerName = scanner.nextLine();
+                            service.printProductByManufacturer(manufacturerName);
+                            break;
+                        case 3:
+                            System.out.print("Enter location: ");
+                            String locationFilter = scanner.nextLine();
+                            service.printProductByLocation(locationFilter);
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
+
+
 
                     break;
                 case 12:
@@ -340,7 +367,7 @@ public class InventoryMenu {
                 case 21:
                     // Show discount for a product
                     System.out.print("Enter product ID: ");
-                    productId = scanner.nextLine();
+                    String productId = scanner.nextLine();
                     double discountPercentageForProduct = service.getDiscountByProductId(productId);
                     System.out.println("Discount percentage for product " + productId + ": " + Math.round(discountPercentageForProduct) + "%");
                 case 0:
