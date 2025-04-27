@@ -51,6 +51,12 @@ public interface InventoryController {
 
     void sellProduct(String productId, int quantity);
 
+    void clearExpiredStock();
+
+    void printExpiredStockItems();
+
+    void clearDefectedStockItems();
+
     List<StockItem> getBatchesInStoreByProduct(Product product);
 
     String getCategoryIdByName(String name);
