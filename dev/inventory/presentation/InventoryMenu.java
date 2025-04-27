@@ -24,10 +24,10 @@ public class InventoryMenu {
         int worker = 0;
         int choice = 0;
         do {
+            service.updateDiscounts();
             if (choice == 0) {
                 worker = chooseWorkerType();
             }
-            service.updateDiscounts();
             if (worker == 2) {
                 displayMenuForWorker();
                 choice = readIntInput("Please enter your choice: ");
