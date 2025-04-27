@@ -551,10 +551,10 @@ public class InventoryControllerImpl implements InventoryController {
         return storeItems;
     }
 
-    public void printOrderList(){
+    public void printOrderList() {
         System.out.println("Printing order list...");
         List<Product> products = productRepository.getAllProducts();
-        List<Product > orderList = new ArrayList<>();
+        List<Product> orderList = new ArrayList<>();
         for (Product product : products) {
             if (countProductQuantity(product.getId()) < product.getMinimumStockLevel()) {
                 orderList.add(product);
