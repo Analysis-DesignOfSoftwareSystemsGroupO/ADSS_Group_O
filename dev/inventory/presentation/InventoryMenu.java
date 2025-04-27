@@ -21,10 +21,10 @@ public class InventoryMenu {
 
     public void run() {
         System.out.println("\nWelcome to the inventory Management Menu!");
-        service.updateDiscounts();
         int worker = chooseWorkerType();
         int choice = 0;
         do {
+            service.updateDiscounts();
             if (worker == 2) {
                 displayMenuForWorker();
                 choice = readIntInput("Please enter your choice: ");
@@ -37,7 +37,6 @@ public class InventoryMenu {
                 System.out.println("Invalid choice. Please try again.");
                 break;
             }
-
 
         } while (choice != 0);
         System.out.println("Exiting the inventory Management Menu. Goodbye!");

@@ -66,11 +66,27 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void printAllProducts() {
-        productRepository.printAllProducts();
+        productRepository.getAllProducts()
+                .forEach(product -> System.out.println("Product: " + product.getName()
+                        + "\nProduct ID: " + product.getId()
+                        + "\nProduct Manufacturer: " + product.getManufacturer()
+                        + "\nProduct cost Price: " + product.getCostPrice()
+                        + "\nProduct Selling Price: " + Math.round(product.getSellingPrice())
+                        + "\nProduct Minimum Stock Level: " + product.getMinimumStockLevel()
+                        + "\nProduct Location: " + product.getLocation()
+                        + "\nProduct Category: " + product.getCategory().getName()
+                        + "\nDiscount Active: " + product.getDiscountActive() +
+                        "\n------------------------------\n"));
     }
 
     public void printAllCategories() {
-        InMemoryCategoryRepository.printAllCategories();
+        InMemoryCategoryRepository.getAllCategories().forEach(category -> System.out.println("Category: " + category.getName()
+                + "\nCategory ID: " + category.getId()
+                + "\nParent Category: " + (category.getParentCategory() != null ? category.getParentCategory().getName() : "None")
+                + "\nProducts: " + category.getProducts()
+                + "\nSubcategories: " + category.getSubCategories() +
+                "\n------------------------------\n"));
+
     }
 
     public void UpdateDiscounts() {
