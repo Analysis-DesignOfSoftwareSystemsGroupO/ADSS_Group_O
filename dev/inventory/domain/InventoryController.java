@@ -22,9 +22,13 @@ public interface InventoryController {
 
     void printCurrentStock();
 
+    void printOrderList();
+
     Category getCategoryById(String catId);
 
     StockItem getStockItemById(String id);
+
+    void checkForExpiredStock();
 
     void saveCategory(String catName, String parentCategory);
 

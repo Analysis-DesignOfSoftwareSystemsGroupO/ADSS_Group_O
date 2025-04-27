@@ -108,7 +108,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void checkForExpiredProducts() {
+    public void checkForExpiredStock() {
         System.out.println("Checking for expired products...");
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
@@ -119,7 +119,6 @@ public class InventoryControllerImpl implements InventoryController {
             }
         }
     }
-
 
     public void activateDiscount(Product product, Discount discount) {
         if (!product.getDiscountActive()) {
@@ -550,6 +549,25 @@ public class InventoryControllerImpl implements InventoryController {
             }
         }
         return storeItems;
+    }
+
+    public void printOrderList(){
+        System.out.println("Printing order list...");
+        List<Product> products = productRepository.getAllProducts();
+        List<Product > orderList = new ArrayList<>();
+        for (Product product : products) {
+            if (countProductQuantity(product.getId()) < product.getMinimumStockLevel()) {
+                orderList.add(product);
+            }
+        }
+        if (orderList.isEmpty()) {
+            System.out.println("No items need to be ordered.");
+        } else {
+            System.out.println("Items that need to be ordered:");
+            for (Product product : orderList) {
+                System.out.println(product.getName() + " - " + product.getManufacturer() + " - " + (product.getMinimumStockLevel() - countProductQuantity(product.getId())));
+            }
+        }
     }
 
 }
