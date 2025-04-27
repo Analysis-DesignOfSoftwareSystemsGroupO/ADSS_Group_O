@@ -481,6 +481,51 @@ public class InventoryControllerImpl implements InventoryController {
     public void listDiscounts() {
         discountRepository.printAllDiscounts();
     }
+    
+    public void sellProduct(String productId, int quantity) {
+        Product product = productRepository.getProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting sell operation.");
+        }
+        int availableQuantity = countProductQuantity(productId);
+        if (availableQuantity < quantity) {
+            throw new IllegalArgumentException("Not enough stock available. Aborting sell operation.");
+        }
+
+        List<StockItem> stockItems = getBatchesInStoreByProduct(product);
+        stockItems.sort((a, b) -> a.getExpiryDate().compareTo(b.getExpiryDate()));
+
+        int remainingQuantity = quantity;
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getQuantity() >= remainingQuantity) {
+                stockItem.setQuantity(stockItem.getQuantity() - remainingQuantity);
+                if (stockItem.getQuantity() == 0) {
+                    stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+                }
+                break;
+            } else {
+                remainingQuantity -= stockItem.getQuantity();
+                stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+            }
+        }
+
+        if (countProductQuantity(productId) <= product.getMinimumStockLevel()) {
+            System.out.println(" ***** Warning: Product " + product.getName() +
+                    " is below minimum stock level. Please restock. *****");
+        }
+    }
+
+    public List<StockItem> getBatchesInStoreByProduct(Product product) {
+        List<StockItem> result = new ArrayList<>();
+        List<StockItem> stockItems = getStockItemsInStore();
+        for (StockItem item : stockItems) {
+            if (item.getProduct().getId().equals(product.getId()) &&
+                    item.getStatus() == StockItemStatus.OK) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
 
     public double getDiscountByProductId(String productId) {
         Product product = productRepository.getProductById(productId);

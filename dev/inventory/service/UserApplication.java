@@ -157,6 +157,10 @@ public class UserApplication {
         }
     }
 
+    public void sellProduct(String productId, int quantity){
+        inventoryController.sellProduct(productId, quantity);
+    }
+
     public void moveStockItem(String productName, String productManufacturer, String newLocation, int amount, LocalDate expiryDate) {
         Product product = inventoryController.getProductByName(productName, productManufacturer);
         inventoryController.moveStockItem(product, newLocation, amount, expiryDate);
