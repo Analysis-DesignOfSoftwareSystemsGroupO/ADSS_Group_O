@@ -45,7 +45,6 @@ public class Category {
         return products;
     }
 
-
     public void setName(String name) {
         Objects.requireNonNull(name, "Category name cannot be null");
         this.name = name;
