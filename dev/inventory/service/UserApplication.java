@@ -3,6 +3,7 @@ package inventory.service;
 import inventory.domain.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserApplication {
@@ -183,8 +184,8 @@ public class UserApplication {
         inventoryController.removeDiscount(discountId);
     }
 
-    public void printProductsByCatagories(List<String> catagoryIDs) {
-        inventoryController.printProductsByCatagories(catagoryIDs);
+    public void printProductsByCategories(ArrayList<String> categoryIDs) {
+        inventoryController.printProductsByCategories(categoryIDs);
     }
 
 }

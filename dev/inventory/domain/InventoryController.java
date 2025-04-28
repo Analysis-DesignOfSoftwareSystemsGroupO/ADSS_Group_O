@@ -1,6 +1,7 @@
 package inventory.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface InventoryController {
@@ -69,6 +70,5 @@ public interface InventoryController {
 
     Product getProductByName(String name, String manufacturer);
 
-    void printProductsByCatagories(List<String> catagoryIDs);
-
+    void printProductsByCategories(ArrayList<String> categoryIDs);
 }

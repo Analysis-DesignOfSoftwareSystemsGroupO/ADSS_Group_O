@@ -124,7 +124,7 @@ public class InventoryMenu {
                         case 2:
                             // List Products By Category
                             System.out.println("\nListing products by category...\n");
-                            List<String> categories = new ArrayList<>();
+                            ArrayList<String> categories = new ArrayList<>();
                             while (true) {
                                 System.out.println("Enter category name (or 0 to stop):");
                                 String categoryInput = scanner.nextLine();
@@ -411,6 +411,15 @@ public class InventoryMenu {
     }
 
 
+    public void displayProductsMenu() {
+        System.out.println("""
+                
+                Choose which of the following you would like to do:
+                
+                 1. All Products
+                 2. Products By Category (Enter multiple categories, 0 to return)""");
+    }
+
     private int readIntInput(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -439,5 +448,6 @@ public class InventoryMenu {
         InventoryMenu inventoryMenu = new InventoryMenu();
         inventoryMenu.run();
     }
+
 
 }
