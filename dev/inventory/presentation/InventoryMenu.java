@@ -77,7 +77,8 @@ public class InventoryMenu {
                 "Delete Discount",
                 "List Discounts",
                 "Show discount for a product",
-                "Sell Product");
+                "Sell Product",
+                "Update Minimum Stock Level per Product");
         System.out.println("\n---- Inventory Worker Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
             System.out.println((i + 1) + ".  " + menuOptions.get(i));
@@ -375,6 +376,13 @@ public class InventoryMenu {
                     int sellAmount = readIntInput("Enter Sell amount: ");
                     service.sellProduct(productId, sellAmount);
                     break;
+                case 17:
+                    // update Minimum stock level
+                    System.out.println("Enter product ID: ");
+                    productId = scanner.nextLine();
+                    int newMinimumStockLevel = readIntInput("Enter new minimum stock level: ");
+                    service.updateMinimumStockLevel(productId, newMinimumStockLevel);
+
                 case 0:
                     // Return to worker selection
                     break;

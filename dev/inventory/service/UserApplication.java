@@ -193,4 +193,8 @@ public class UserApplication {
         inventoryController.printProductsByCategories(categorynames);
     }
 
+    public void updateMinimumStockLevel(String productId,int newMinimumStockLevel){
+        inventoryController.updateMinimumStockLevel(productId, newMinimumStockLevel);
+    }
+
 }

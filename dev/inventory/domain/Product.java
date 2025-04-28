@@ -47,6 +47,14 @@ public class Product {
         this.discountSellingPrice = 0;
     }
 
+
+    public void setMinimumStockLevel(int minimumStockLevel) {
+        if (minimumStockLevel < 0) {
+            throw new IllegalArgumentException("Minimum stock level cannot be negative");
+        }
+        this.minimumStockLevel = minimumStockLevel;
+    }
+
     public boolean getStoreDiscountActive() {
         return manufacturerDiscountActive;
     }

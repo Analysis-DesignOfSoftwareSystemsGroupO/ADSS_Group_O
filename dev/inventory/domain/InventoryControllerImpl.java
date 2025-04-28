@@ -679,4 +679,13 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
+    public void updateMinimumStockLevel(String productId,int newMinimumStockLevel){
+        Product product = productRepository.getProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting update operation.");
+        }
+        product.setMinimumStockLevel(newMinimumStockLevel);
+        productRepository.saveProduct(product);
+    }
+
 }

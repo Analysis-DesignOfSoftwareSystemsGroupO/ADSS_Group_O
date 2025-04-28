@@ -71,4 +71,6 @@ public interface InventoryController {
     Product getProductByName(String name, String manufacturer);
 
     void printProductsByCategories(ArrayList<String> catagoryNames);
+
+    void updateMinimumStockLevel(String productId,int newMinimumStockLevel);
 }
