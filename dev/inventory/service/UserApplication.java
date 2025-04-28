@@ -39,8 +39,8 @@ public class UserApplication {
             }
         }
         inventoryController.addProduct(name, minimumStock, mainCategory, costPrice, location, manufacturer);
-        for (String category : categoryInfo) {
-            String categoryId = inventoryController.getCategoryIdByName(category);
+        for (int i = 1; i <= 2; i++) {
+            String categoryId = inventoryController.getCategoryIdByName(categoryInfo[i]);
             Category cat = inventoryController.getCategoryById(categoryId);
             cat.getProducts().add(inventoryController.getProductByName(name, manufacturer));
         }

@@ -95,7 +95,7 @@ public class InventoryMenu {
                 "Add Stock",
                 "Update Stock",
                 "Delete Stock"
-                );
+        );
         System.out.println("\n---- Inventory Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
             System.out.println((i + 1) + ".  " + menuOptions.get(i));
@@ -132,8 +132,8 @@ public class InventoryMenu {
                                 if (categoryInput.equals("0")) {
                                     break;
                                 }
-                                service.printProductsByCategories(categories);
                             }
+                            service.printProductsByCategories(categories);
                             break;
                         default:
                             System.out.println("Invalid choice. Please try again.");
@@ -348,7 +348,7 @@ public class InventoryMenu {
                         break;
                     }
                     service.addDiscount(targetID, discountPercentage, discountDescription, type,
-                            discountStartDate, discountEndDate,discountType);
+                            discountStartDate, discountEndDate, discountType);
                     System.out.println("Discount added successfully!");
                     break;
                 case 13:
