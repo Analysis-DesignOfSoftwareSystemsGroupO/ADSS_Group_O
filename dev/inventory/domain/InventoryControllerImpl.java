@@ -32,9 +32,17 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("Removing product with ID: " + id);
         Product productToRemove = productRepository.getProductById(id);
         Objects.requireNonNull(productToRemove, "Product not found");
-        Category parentCategory = productToRemove.getCategory();
-        if (parentCategory != null) {
-            parentCategory.removeProduct(productToRemove);
+        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        for (StockItem stockItem : stockItems) {
+            if (stockItem.getProduct().getId().equals(productToRemove.getId())) {
+                throw new IllegalArgumentException("Product is still in stock. Cannot delete product.");
+            }
+        }
+        List<Category> categories = InMemoryCategoryRepository.getAllCategories();
+        for (Category category : categories) {
+            if (category.getProducts().contains(productToRemove)) {
+                category.removeProduct(productToRemove);
+            }
         }
         productRepository.deleteProduct(id);
     }
@@ -120,17 +128,25 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void activateDiscount(Product product, Discount discount) {
-        if (!product.getDiscountActive()) {
-            product.setSellingPrice(product.getSellingPrice() * (1 - discount.getDiscountPercentage() / 100));
-            product.setDiscountActive(true);
+        double newPrice;
+        if (!product.getStoreDiscountActive() && discount.getDiscountType() == DiscountType.STORE) {
+            newPrice = product.getSellingPrice() * (1 - discount.getDiscountPercentage() / 100);
+            product.setDiscountSellingPrice(Math.round(newPrice * 100.0) / 100.0);
+            product.setStoreDiscountActive(true);
+        } else if (!product.getManufacturerDiscountActive() && discount.getDiscountType() == DiscountType.MANUFACTURER) {
+            newPrice = product.getCostPrice() * (1 - discount.getDiscountPercentage() / 100);
+            product.setDiscountCostPrice(Math.round(newPrice * 100.0) / 100.0);
+            product.setManufacturerDiscountActive(true);
         }
-        ;
     }
 
     public void deactivateDiscount(Product product, Discount discount) {
-        if (product.getDiscountActive()) {
-            product.setSellingPrice(product.getSellingPrice() / (1 - discount.getDiscountPercentage() / 100));
-            product.setDiscountActive(false);
+        if (product.getStoreDiscountActive() && discount.getDiscountType() == DiscountType.STORE) {
+            product.setDiscountSellingPrice(product.getSellingPrice());
+            product.setStoreDiscountActive(false);
+        } else if (product.getManufacturerDiscountActive() && discount.getDiscountType() == DiscountType.MANUFACTURER) {
+            product.setDiscountCostPrice(product.getCostPrice());
+            product.setManufacturerDiscountActive(false);
         }
     }
 
@@ -269,7 +285,7 @@ public class InventoryControllerImpl implements InventoryController {
             }
         }
         if (productToMove == null) {
-            throw new IllegalArgumentException("No stock item found in storage with an expiry date before today.");
+            throw new IllegalArgumentException("No available stock item found in storage.");
         }
         return productToMove;
     }
@@ -451,7 +467,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
-                            DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate) {
+                            DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate, DiscountType discountType) {
         System.out.println("Adding discount: " + discountDescription);
         if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100.");
@@ -473,14 +489,14 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Invalid discount target type. Aborting discount add operation.");
         }
         Discount discount = new Discount(discountDescription, type, discountTargetId, discountPercentage,
-                discountStartDate, discountEndDate);
+                discountStartDate, discountEndDate, discountType);
         discountRepository.saveDiscount(discount);
     }
 
     public void listDiscounts() {
         discountRepository.printAllDiscounts();
     }
-    
+
     public void sellProduct(String productId, int quantity) {
         Product product = productRepository.getProductById(productId);
         if (product == null) {
@@ -624,7 +640,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void clearDefectedStockItems(){
+    public void clearDefectedStockItems() {
         System.out.println("Clearing defected stock items...");
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
@@ -634,7 +650,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void clearExpiredStock(){
+    public void clearExpiredStock() {
         System.out.println("Clearing expired stock...");
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
@@ -642,6 +658,18 @@ public class InventoryControllerImpl implements InventoryController {
                 stockItemRepository.deleteStockItem(stockItem.getStockItemId());
             }
         }
+    }
+
+
+    public void removeDiscount(String discountId) {
+        System.out.println("Removing discount with ID: " + discountId);
+        Discount discountToRemove = discountRepository.getDiscountById(discountId);
+        Objects.requireNonNull(discountToRemove, "Discount not found");
+        discountRepository.deleteDiscount(discountId);
+    }
+
+    public void addManufacturerDiscount(String manufacturer) {
+
     }
 
 }

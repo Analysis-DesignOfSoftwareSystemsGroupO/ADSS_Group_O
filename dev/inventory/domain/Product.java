@@ -14,10 +14,13 @@ public class Product {
     private String manufacturer;
     private double costPrice;
     private double sellingPrice;
+    private double discountCostPrice;
+    private double discountSellingPrice;
     private int minimumStockLevel;
     private Category category;
     private String location;
-    private boolean discountActive;
+    private boolean storeDiscountActive;
+    private boolean manufacturerDiscountActive;
 //    private Discount discount;
 
     /**
@@ -37,16 +40,34 @@ public class Product {
         this.minimumStockLevel = minimumStockLevel;
         this.costPrice = costPrice;
         this.sellingPrice = costPrice * 1.2;// set Default selling price to 20% more than cost price
-        this.discountActive = false;
+        this.manufacturerDiscountActive = false;
+        this.storeDiscountActive = false;
         this.location = location;
+        this.discountCostPrice = 0;
+        this.discountSellingPrice = 0;
     }
 
-    public boolean getDiscountActive() {
-        return discountActive;
+    public boolean getStoreDiscountActive() {
+        return manufacturerDiscountActive;
     }
 
-    public void setDiscountActive(boolean discountActive) {
-        this.discountActive = discountActive;
+    public boolean getManufacturerDiscountActive() {
+        return manufacturerDiscountActive;
+    }
+
+    public void setStoreDiscountActive(boolean discountActive) {
+        this.storeDiscountActive = discountActive;
+    }
+
+    public void setManufacturerDiscountActive(boolean discountActive) {
+        this.manufacturerDiscountActive = discountActive;
+    }
+
+    public void setCostPrice(double costPrice) {
+        if (costPrice < 0) {
+            throw new IllegalArgumentException("Cost price cannot be negative");
+        }
+        this.costPrice = costPrice;
     }
 
     public void setSellingPrice(double sellingPrice) {
@@ -88,18 +109,57 @@ public class Product {
         return category;
     }
 
+    public double getDiscountCostPrice() {
+        return discountCostPrice;
+    }
+
+    public double getDiscountSellingPrice() {
+        return discountSellingPrice;
+    }
+
+    public void setDiscountCostPrice(double discountCostPrice) {
+        if (discountCostPrice < 0) {
+            throw new IllegalArgumentException("Discount cost price cannot be negative");
+        }
+        this.discountCostPrice = discountCostPrice;
+    }
+
+    public void setDiscountSellingPrice(double discountSellingPrice) {
+        if (discountSellingPrice < 0) {
+            throw new IllegalArgumentException("Discount selling price cannot be negative");
+        }
+        this.discountSellingPrice = discountSellingPrice;
+    }
+
     @Override
     public String toString() {
-        return "Product {" +
+        String res = "Product {" +
                 "\n\tid = '" + id + "'," +
                 "\n\tname= '" + name + "'," +
                 "\n\tmanufacturer = '" + manufacturer + "'," +
-                "\n\tcostPrice = " + costPrice + "'," +
-                "\n\tsellingPrice = " + sellingPrice + "'," +
                 "\n\tminimumStockLevel = " + minimumStockLevel + "'," +
                 "\n\tcategory = '" + category.getName() + "'" +
-                "\n\tlocation = '" + location + "'" +
-                '}';
+                "\n\tlocation = '" + location + "'";
+        if (storeDiscountActive && manufacturerDiscountActive) {
+            res += "\n\tCost Price = " + costPrice +
+                    "\n\tDiscount Cost Price = " + discountCostPrice +
+                    "\n\tSelling Price = " + sellingPrice +
+                    "\n\tDiscount Selling Price = " + discountSellingPrice;
+        } else if (storeDiscountActive) {
+            res += "\n\tCost Price = " + costPrice +
+                    "\n\tSelling Price = " + sellingPrice +
+                    "\n\tDiscount Selling Price = " + discountSellingPrice;
+        } else if (manufacturerDiscountActive) {
+            res += "\n\tCost Price = " + costPrice +
+                    "\n\tDiscount Cost Price = " + discountCostPrice +
+                    "\n\tSelling Price = " + sellingPrice;
+        } else {
+            res += "\n\tCost Price = " + costPrice +
+                    "\n\tSelling Price = " + sellingPrice;
+        }
+
+        res += "\n}";
+        return res;
     }
 
     @Override
