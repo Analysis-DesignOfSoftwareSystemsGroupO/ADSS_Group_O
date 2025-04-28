@@ -38,6 +38,11 @@ public class UserApplication {
             }
         }
         inventoryController.addProduct(name, minimumStock, mainCategory, costPrice, location, manufacturer);
+        for (String category : categoryInfo) {
+            String categoryId = inventoryController.getCategoryIdByName(category);
+            Category cat = inventoryController.getCategoryById(categoryId);
+            cat.getProducts().add(inventoryController.getProductByName(name, manufacturer));
+        }
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {

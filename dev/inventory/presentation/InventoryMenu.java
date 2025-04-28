@@ -305,7 +305,6 @@ public class InventoryMenu {
                         System.out.println("Invalid choice. Please try again.");
                         break;
                     }
-                    System.out.print("Enter discount percentage: ");
                     double discountPercentage = readDoubleInput("Enter discount percentage: ");
                     System.out.print("Enter discount description: ");
                     String discountDescription = scanner.nextLine();
