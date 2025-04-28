@@ -128,10 +128,10 @@ public class InventoryMenu {
                             while (true) {
                                 System.out.println("Enter category name (or 0 to stop):");
                                 String categoryInput = scanner.nextLine();
-                                categories.add(categoryInput);
                                 if (categoryInput.equals("0")) {
                                     break;
                                 }
+                                categories.add(categoryInput);
                             }
                             service.printProductsByCategories(categories);
                             break;

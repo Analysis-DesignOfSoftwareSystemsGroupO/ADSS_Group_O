@@ -106,15 +106,16 @@ public class Discount {
 
     @Override
     public String toString() {
-        return "Discount{" +
-                "id='" + id + '\'' +
-                ", description='" + description + '\'' +
-                ", targetType=" + targetType +
-                ", targetId='" + targetId + '\'' +
-                ", discountPercentage=" + discountPercentage +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
+        return "----- Discount ------" +
+                "\n\t id: '" + id  +
+                "\n\t description: '" + description  +
+                "\n\t targetType: " + targetType +
+                "\n\t targetId: '" + targetId +
+                "\n\t discountPercentage: " + discountPercentage +
+                "\n\t startDate: " + startDate +
+                "\n\t endDate:" + endDate +
+                "n\t discountType: " + discountType +
+                "\n---------------------";
     }
 
     public boolean isActive() {

@@ -101,13 +101,12 @@ public class Category {
         for (Category category : this.subCategories) {
             subCategoriesString += "'" + category.getName() + "', ";
         }
-        return "Category {" +
-                "\n\tid = '" + id + "', " +
-                "\n\tname = '" + name + "', " +
-                "\n\tproducts = " + products +
-                "\n\tsubCategories = " + subCategoriesString +
-                "\n\tparentCategory = '" + (parentCategory != null ? parentCategory.getName() : "None") + "'" +
-                "\n}";
+        return "---------- Category: " + name + " ----------" +
+                "\n\tid = '" + id + "'," +
+                "\n\tparentCategory = '" + (parentCategory != null ? parentCategory.getName() : "Is main catagory") + "'," +
+                "\n\tsubCategories = [" + subCategoriesString + "]" +
+                "\n\tproducts = [" + products + "]" +
+                "\n ------------------------------------\n";
     }
 
     @Override

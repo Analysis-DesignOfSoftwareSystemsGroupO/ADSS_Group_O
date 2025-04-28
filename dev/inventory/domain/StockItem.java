@@ -80,12 +80,14 @@ public class StockItem {
 
     @Override
     public String toString() {
-        return "StockItem{" +
-                ", quantity=" + quantity +
-                ", location='" + location + '\'' +
-                ", expiryDate=" + expiryDate +
-                ", status=" + status +
-                '}';
+        return "-----Stock Item-----" +
+                "\nStock Item ID: " + stockItemId +
+                "\nProduct: " + product.getName() +
+                "\nQuantity: " + quantity +
+                "\nLocation: " + location +
+                "\nStatus: " + status +
+                "\nExpiry Date: " + expiryDate +
+                "\n---------------------";
     }
 
 
