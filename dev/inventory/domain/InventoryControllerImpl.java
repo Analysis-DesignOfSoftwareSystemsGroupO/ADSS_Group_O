@@ -17,7 +17,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void addProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer) {
-        System.out.println("Adding product: " + name);
         Category prodParentCategory = getCategoryById(getCategoryIdByName(parentCategory));
         if (prodParentCategory == null) {
             throw new IllegalArgumentException("Parent category not found. Aborting product add operation.");
@@ -48,7 +47,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
-        System.out.println("Adding stock for product: " + productName);
         Product product = getProductByName(productName, productManufacturer);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock add operation.");
@@ -83,7 +81,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void UpdateDiscounts() {
-        System.out.println("Activating discounts...");
         List<Discount> discounts = discountRepository.getAllDiscounts();
         for (Discount discount : discounts) {
             if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
@@ -117,7 +114,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void checkForExpiredStock() {
-        System.out.println("Checking for expired products...");
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.OK && stockItem.getExpiryDate().isBefore(LocalDate.now())) {
@@ -159,8 +155,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void saveCategory(String catName, String parentCategoryName) {
-        System.out.println("Adding category: " + catName);
-
         Category parentCategory = getCategoryById(getCategoryIdByName(parentCategoryName));
         if (!parentCategoryName.isEmpty() && parentCategory == null) {
             throw new IllegalArgumentException("Parent category not found. Aborting category add operation.");
@@ -471,7 +465,6 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
                             DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate, DiscountType discountType) {
-        System.out.println("Adding discount: " + discountDescription);
         if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100.");
         }
@@ -671,7 +664,7 @@ public class InventoryControllerImpl implements InventoryController {
         discountRepository.deleteDiscount(discountId);
     }
 
-    public void printProductsByCategories(ArrayList<String> categoryNames){
+    public void printProductsByCategories(ArrayList<String> categoryNames) {
         System.out.println("Products by categories:");
         for (String categoryName : categoryNames) {
             Category category = getCategoryById(getCategoryIdByName(categoryName));
