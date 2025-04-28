@@ -394,6 +394,9 @@ public class InventoryControllerImpl implements InventoryController {
     public void printStockItemByProductByName(String name, String manufacturer) {
         System.out.println("Stock items for product: " + name + " " + manufacturer);
         Product product = getProductByName(name, manufacturer);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found.");
+        }
         List<StockItem> stockItems = stockItemRepository.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getProduct().getId().equals(product.getId())) {
