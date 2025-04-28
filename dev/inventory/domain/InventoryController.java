@@ -69,4 +69,6 @@ public interface InventoryController {
 
     Product getProductByName(String name, String manufacturer);
 
+    void printProductsByCatagories(List<String> catagoryIDs);
+
 }

@@ -133,9 +133,8 @@ public class Product {
 
     @Override
     public String toString() {
-        String res = "Product {" +
+        String res = "------ Product: " + name + "-------" +
                 "\n\tid = '" + id + "'," +
-                "\n\tname= '" + name + "'," +
                 "\n\tmanufacturer = '" + manufacturer + "'," +
                 "\n\tminimumStockLevel = " + minimumStockLevel + "'," +
                 "\n\tcategory = '" + category.getName() + "'" +
@@ -158,7 +157,7 @@ public class Product {
                     "\n\tSelling Price = " + sellingPrice;
         }
 
-        res += "\n}";
+        res += "\n ------------------------------\n";
         return res;
     }
 

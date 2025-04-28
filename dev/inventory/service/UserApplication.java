@@ -183,4 +183,8 @@ public class UserApplication {
         inventoryController.removeDiscount(discountId);
     }
 
+    public void printProductsByCatagories(List<String> catagoryIDs) {
+        inventoryController.printProductsByCatagories(catagoryIDs);
+    }
+
 }
