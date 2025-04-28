@@ -39,7 +39,6 @@ public class InMemoryCategoryRepository implements CategoryRepository{
                 return category.getId();
             }
         }
-        System.out.println("Category not found");
         return null;
     }
 

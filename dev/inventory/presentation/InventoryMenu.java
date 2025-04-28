@@ -14,10 +14,12 @@ public class InventoryMenu {
 
     private final Scanner scanner;
     private final UserApplication service;
+    private boolean dataLoaded;
 
     public InventoryMenu() {
         this.scanner = new Scanner(System.in);
         this.service = new UserApplication();
+        this.dataLoaded = false;
     }
 
     public void run() {
@@ -388,8 +390,14 @@ public class InventoryMenu {
                     break;
                 case 1234:
                     // Upload Test Data
+                    if (dataLoaded) {
+                        System.out.println("Test data already uploaded.");
+                    }
+                    else {
                     System.out.println("Uploading test data...");
                     service.uploadTestData();
+                    dataLoaded = true;
+                    }
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
