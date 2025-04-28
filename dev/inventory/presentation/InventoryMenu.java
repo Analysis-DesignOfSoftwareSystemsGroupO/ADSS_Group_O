@@ -113,8 +113,31 @@ public class InventoryMenu {
             switch (choice) {
                 case 1:
                     // List Products
-                    System.out.println("\nListing all products...\n");
-                    service.printAllProducts();
+                    displayProductsMenu();
+                    int productChoice = readIntInput("Please enter your choice: ");
+                    switch (productChoice) {
+                        case 1:
+                            // List All Products
+                            System.out.println("\nListing all products...\n");
+                            service.printAllProducts();
+                            break;
+                        case 2:
+                            // List Products By Category
+                            System.out.println("\nListing products by category...\n");
+                            List<String> categories = new ArrayList<>();
+                            while (true) {
+                                System.out.println("Enter category name (or 0 to stop):");
+                                String categoryInput = scanner.nextLine();
+                                categories.add(categoryInput);
+                                if (categoryInput.equals("0")) {
+                                    break;
+                                }
+                                service.printProductsByCategories(categories);
+                            }
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
                     break;
                 case 2:
                     // List Categories
