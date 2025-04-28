@@ -70,5 +70,5 @@ public interface InventoryController {
 
     Product getProductByName(String name, String manufacturer);
 
-    void printProductsByCategories(ArrayList<String> categoryIDs);
+    void printProductsByCategories(ArrayList<String> catagoryNames);
 }

@@ -668,17 +668,17 @@ public class InventoryControllerImpl implements InventoryController {
         discountRepository.deleteDiscount(discountId);
     }
 
-    public void printProductsByCategories(ArrayList<String> categoryIDs){
+    public void printProductsByCategories(ArrayList<String> categoryNames){
         System.out.println("Products by categories:");
-        for (String categoryId : categoryIDs) {
-            Category category = getCategoryById(categoryId);
+        for (String categoryName : categoryNames) {
+            Category category = getCategoryById(getCategoryIdByName(categoryName));
             if (category != null) {
                 System.out.println("Category: " + category.getName());
                 for (Product product : category.getProducts()) {
                     System.out.println(product.toString());
                 }
             } else {
-                System.out.println("Category with ID " + categoryId + " not found.");
+                System.out.println("Category with name " + categoryName + " not found.");
             }
         }
     }
