@@ -35,11 +35,13 @@ public interface InventoryController {
     void deleteCategory(String toRemoveCatId);
 
     void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
-                     DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate);
+                     DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate, DiscountType discountType);
 
     void printStockItemByProductByName(String name, String manufacturer);
 
     void listDiscounts();
+
+    void removeDiscount(String discountId);
 
     double getDiscountByProductId(String productId);
 
@@ -57,6 +59,8 @@ public interface InventoryController {
 
     void clearDefectedStockItems();
 
+    void printDefectedStockItems();
+
     List<StockItem> getBatchesInStoreByProduct(Product product);
 
     String getCategoryIdByName(String name);
@@ -64,4 +68,5 @@ public interface InventoryController {
     List<StockItem> getAllStockItems();
 
     Product getProductByName(String name, String manufacturer);
+
 }

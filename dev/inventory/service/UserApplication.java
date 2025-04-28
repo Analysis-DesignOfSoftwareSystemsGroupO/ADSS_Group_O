@@ -38,6 +38,11 @@ public class UserApplication {
             }
         }
         inventoryController.addProduct(name, minimumStock, mainCategory, costPrice, location, manufacturer);
+        for (String category : categoryInfo) {
+            String categoryId = inventoryController.getCategoryIdByName(category);
+            Category cat = inventoryController.getCategoryById(categoryId);
+            cat.getProducts().add(inventoryController.getProductByName(name, manufacturer));
+        }
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
@@ -66,12 +71,12 @@ public class UserApplication {
         saveProduct("Test Product 5", 50, new String[]{"Cat2", "Cat22", "Cat221"}, 50, "B7-Shelf 2", "TCF");
         saveProduct("Test Product 6", 60, new String[]{"Cat1", "Cat12", "Cat122"}, 60, "S6-Shelf 9", "GGV");
 
-        inventoryController.addDiscount(inventoryController.getProductByName("Test Product 6", "GGV").getId(), 20, "Test Discount 1",
-                DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10));
-        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat1"), 20, "Test Discount 2",
-                DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
-        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat122"), 20, "Test Discount 3",
-                DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10));
+        inventoryController.addDiscount(inventoryController.getProductByName("Test Product 3", "RCF").getId(), 20, "Test Discount 1",
+                DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10),DiscountType.STORE);
+        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat2"), 20, "Test Discount 2",
+                DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10),DiscountType.STORE);
+        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat12"), 20, "Test Discount 3",
+                DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10),DiscountType.MANUFACTURER);
 
         inventoryController.saveStockItem("Test Product 1", "ADF", 50, "in store", StockItemStatus.OK, LocalDate.now().plusDays(10));
         inventoryController.saveStockItem("Test Product 2", "DCF", 20, "in store", StockItemStatus.OK, LocalDate.now().plusDays(20));
@@ -135,9 +140,9 @@ public class UserApplication {
     }
 
     public void addDiscount(String discountTargetId, double discountPercentage, String discountDescription,
-                            DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate) {
+                            DiscountTargetType type, LocalDate discountStartDate, LocalDate discountEndDate,DiscountType discountType) {
         inventoryController.addDiscount(discountTargetId, discountPercentage, discountDescription, type,
-                discountStartDate, discountEndDate);
+                discountStartDate, discountEndDate, discountType);
     }
 
     public void listDiscounts() {
@@ -149,12 +154,7 @@ public class UserApplication {
     }
 
     public void printDefectedStockItems() {
-        List<StockItem> stockItems = inventoryController.getAllStockItems();
-        for (StockItem stockItem : stockItems) {
-            if (stockItem.getStatus() != StockItemStatus.OK) {
-                System.out.println(stockItem);
-            }
-        }
+        inventoryController.printDefectedStockItems();
     }
 
     public void sellProduct(String productId, int quantity) {
@@ -177,6 +177,10 @@ public class UserApplication {
 
     public void clearDefectedStockItems() {
         inventoryController.clearDefectedStockItems();
+    }
+
+    public void removeDiscount(String discountId) {
+        inventoryController.removeDiscount(discountId);
     }
 
 }

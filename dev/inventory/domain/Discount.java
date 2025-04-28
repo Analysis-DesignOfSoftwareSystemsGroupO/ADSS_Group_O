@@ -12,9 +12,10 @@ public class Discount {
     private double discountPercentage;
     private LocalDate startDate;
     private LocalDate endDate;
+    private DiscountType discountType;
 
     public Discount(String description, DiscountTargetType targetType,
-                    String targetId, double discountPercentage, LocalDate startDate, LocalDate endDate) {
+                    String targetId, double discountPercentage, LocalDate startDate, LocalDate endDate,DiscountType discountType) {
         Objects.requireNonNull(description, "Description cannot be null");
         Objects.requireNonNull(targetType, "Target type cannot be null");
         Objects.requireNonNull(targetId, "Target ID cannot be null");
@@ -30,6 +31,11 @@ public class Discount {
         this.discountPercentage = discountPercentage;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.discountType = discountType;
+    }
+
+    public DiscountType getDiscountType(){
+        return discountType;
     }
 
     public String getId() {
