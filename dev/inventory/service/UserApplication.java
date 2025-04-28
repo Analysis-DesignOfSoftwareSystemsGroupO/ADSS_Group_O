@@ -59,21 +59,25 @@ public class UserApplication {
 
         saveProduct("Test Product 1", 10, new String[]{"Cat1", "Cat11", "Cat111"}, 10, "A17-Shelf 12", "ADF");
         saveProduct("Test Product 2", 20, new String[]{"Cat2", "Cat21", "Cat211"}, 20, "A18-Shelf 17", "DCF");
-        saveProduct("Test Product 3", 30, new String[]{"Cat3", "Cat31", "Cat311"}, 30, "C27-Shelf 3", "RCF");
-        saveProduct("Test Product 4", 40, new String[]{"Cat1", "Cat12", "Cat122"}, 40, "B2-Shelf 8", "VBX");
-        saveProduct("Test Product 5", 50, new String[]{"Cat2", "Cat22", "Cat221"}, 50, "B7-Shelf 2", "TCF");
-        saveProduct("Test Product 6", 60, new String[]{"Cat4", "Cat12", "Cat122"}, 60, "S6-Shelf 9", "GGV");
-        saveProduct("Test Product 7", 60, new String[]{"Cat2", "Cat12", "Cat122"}, 60, "S6-Shelf 9", "BBG");
-        saveProduct("Test Product 8", 60, new String[]{"Cat3", "Cat12", "Cat122"}, 60, "S6-Shelf 9", "GGV");
-        saveProduct("Test Product 9", 60, new String[]{"Cat2", "Cat12", "Cat122"}, 60, "S6-Shelf 9", "ATD");
-        saveProduct("Test Product 10", 60, new String[]{"Cat1", "Cat13", "Cat132"}, 60, "S6-Shelf 9", "VBX");
+        saveProduct("Test Product 3", 30, new String[]{"Cat3", "Cat31", "Cat311"}, 55, "C27-Shelf 3", "RCF");
+        saveProduct("Test Product 4", 150, new String[]{"Cat1", "Cat12", "Cat122"}, 11, "B2-Shelf 8", "VBX");
+        saveProduct("Test Product 5", 100, new String[]{"Cat2", "Cat22", "Cat221"}, 11.5, "B7-Shelf 2", "TCF");
+        saveProduct("Test Product 6", 60, new String[]{"Cat4", "Cat41", "Cat411"}, 45.90, "S6-Shelf 9", "GGV");
+        saveProduct("Test Product 7", 100, new String[]{"Cat2", "Cat22", "Cat222"}, 21.90, "S4-Shelf 13", "BBG");
+        saveProduct("Test Product 8", 80, new String[]{"Cat3", "Cat32", "Cat321"}, 15.90, "M11-Shelf 12", "GGV");
+        saveProduct("Test Product 9", 150, new String[]{"Cat2", "Cat22", "Cat121"}, 12, "H5-Shelf 18", "ATD");
+        saveProduct("Test Product 10", 200, new String[]{"Cat4", "Cat41", "Cat412"}, 9.90, "U2-Shelf 10", "VBX");
 
         inventoryController.addDiscount(inventoryController.getProductByName("Test Product 3", "RCF").getId(), 20, "Test Discount 1",
                 DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10), DiscountType.STORE);
-        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat2"), 20, "Test Discount 2",
+        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat4"), 10, "Test Discount 2",
                 DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10), DiscountType.STORE);
-        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat12"), 20, "Test Discount 3",
+        inventoryController.addDiscount(inventoryController.getCategoryIdByName("Cat12"), 5, "Test Discount 3",
                 DiscountTargetType.CATEGORY, LocalDate.now(), LocalDate.now().plusDays(10), DiscountType.MANUFACTURER);
+        inventoryController.addDiscount(inventoryController.getProductByName("Test Product 10","VBX").getId(), 10, "Test Discount 4",
+                DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10), DiscountType.STORE);
+        inventoryController.addDiscount(inventoryController.getProductByName("Test Product 1","ADF").getId(), 15, "Test Discount 5",
+                DiscountTargetType.PRODUCT, LocalDate.now(), LocalDate.now().plusDays(10), DiscountType.MANUFACTURER);
 
         inventoryController.saveStockItem("Test Product 1", "ADF", 50, "in store", StockItemStatus.OK, LocalDate.now().plusDays(10));
         inventoryController.saveStockItem("Test Product 2", "DCF", 20, "in store", StockItemStatus.OK, LocalDate.now().plusDays(20));
@@ -84,16 +88,16 @@ public class UserApplication {
         inventoryController.saveStockItem("Test Product 6", "GGV", 30, "in store", StockItemStatus.OK, LocalDate.now().plusDays(365));
         inventoryController.saveStockItem("Test Product 1", "ADF", 40, "storage", StockItemStatus.OK, LocalDate.now().plusDays(30));
         inventoryController.saveStockItem("Test Product 2", "DCF", 50, "storage", StockItemStatus.OK, LocalDate.now().minusDays(6));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
-        inventoryController.saveStockItem("Test Product 5", "TCF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(35));
+        inventoryController.saveStockItem("Test Product 5", "TCF", 15, "storage", StockItemStatus.DAMAGED, LocalDate.now().plusDays(20));
+        inventoryController.saveStockItem("Test Product 1", "ADF", 60, "storage", StockItemStatus.OK, LocalDate.now().plusDays(110));
+        inventoryController.saveStockItem("Test Product 4", "VBX", 20, "storage", StockItemStatus.OK, LocalDate.now().plusDays(1));
+        inventoryController.saveStockItem("Test Product 8", "GGV", 22, "storage", StockItemStatus.OK, LocalDate.now().plusDays(20));
+        inventoryController.saveStockItem("Test Product 4", "VBX", 13, "storage", StockItemStatus.DAMAGED, LocalDate.now().plusDays(150));
+        inventoryController.saveStockItem("Test Product 2", "DCF", 52, "storage", StockItemStatus.OK, LocalDate.now().plusDays(22));
+        inventoryController.saveStockItem("Test Product 1", "ADF", 74, "storage", StockItemStatus.OK, LocalDate.now().plusDays(21));
+        inventoryController.saveStockItem("Test Product 6", "GGV", 30, "storage", StockItemStatus.OK, LocalDate.now().plusDays(21));
+        inventoryController.saveStockItem("Test Product 7", "BBG", 24, "storage", StockItemStatus.OK, LocalDate.now().minusDays(3));
+        inventoryController.saveStockItem("Test Product 7", "BBG", 36, "storage", StockItemStatus.OK, LocalDate.now().plusDays(4));
 
     }
 
