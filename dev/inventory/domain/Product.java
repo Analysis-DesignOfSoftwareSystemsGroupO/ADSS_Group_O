@@ -38,8 +38,8 @@ public class Product {
         this.name = name;
         this.manufacturer = manufacturer;
         this.minimumStockLevel = minimumStockLevel;
-        this.costPrice = costPrice;
-        this.sellingPrice = costPrice * 1.2;// set Default selling price to 20% more than cost price
+        this.costPrice = Math.round(costPrice * 100.0) / 100.0;
+        this.sellingPrice = Math.round(costPrice* 2.2 * 100.0) / 100.0;// set Default selling price to 120% more than cost price
         this.manufacturerDiscountActive = false;
         this.storeDiscountActive = false;
         this.location = location;
