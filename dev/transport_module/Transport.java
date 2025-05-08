@@ -16,7 +16,7 @@ public class Transport {
     private Truck truck; // the truck that connects to the transport
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
-    private final Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
+    private final Map<Site, ProductListDocument> destinations_document_map; // a map for each destination.
     private boolean isSent;
     private int currWeight;
     private int maxWeight;
@@ -189,7 +189,7 @@ public class Transport {
             throw new InvalidDriverException("Transport has no driver - please add driver first.");
         }
         int calcWeight = 0;
-        for (String site : destinations_document_map.keySet()) {
+        for (Site site : destinations_document_map.keySet()) {
             calcWeight += destinations_document_map.get(site).getTotalWeight();
         }
         if (truck.getMaxWeight() < calcWeight) {// Can't load the truck
@@ -212,11 +212,11 @@ public class Transport {
             throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
 
         } else {
-            if( destinations_document_map.get(document.getDestination().getName())!= null){ // if destination is already a destination in transport - throw exception
+            if( destinations_document_map.get(document.getDestination())!= null){ // if destination is already a destination in transport - throw exception
                 throw new AlreadyExistDestinationException();
             }
             document.attachTransportToDocument(this);
-            destinations_document_map.put(document.getDestination().getName(), document);
+            destinations_document_map.put(document.getDestination(), document);
             currWeight += document.getTotalWeight();
 
             if (!source.getArea().equals(document.getDestination().getArea())) {
@@ -277,8 +277,8 @@ public class Transport {
 
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
-            for(String sitename: destinations_document_map.keySet()){ // for each document in transport map - update their date
-                destinations_document_map.get(sitename).changeDate(date);
+            for(Site site: destinations_document_map.keySet()){ // for each document in transport map - update their date
+                destinations_document_map.get(site).changeDate(date);
             }
         } else {
             throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
@@ -326,8 +326,8 @@ public class Transport {
      */
     private String destinations_string() {
         StringBuilder str = new StringBuilder();
-        for (String site : destinations_document_map.keySet()) {
-            str.append(site).append(" ");
+        for (Site site : destinations_document_map.keySet()) {
+            str.append(site.toString()).append(" ");
         }
         return str.toString();
     }
