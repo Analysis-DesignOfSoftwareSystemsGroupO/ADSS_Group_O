@@ -430,27 +430,6 @@ public class Main {
     public static void printAllAvailableTrukcs(Truck[] trucks,Scanner scanner) {
 
 
-        System.out.println("Please enter date by format: DD/MM/YYYY"); // ask for date from user
-        String dateStr = scanner.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // try to create date variable
-        LocalDate parsedDate;
-        try { // if date format is wrong
-            parsedDate = LocalDate.parse(dateStr, formatter);
-        }
-        catch (DateTimeParseException e){
-            System.out.println("Invalid date format - please try again with the format: DD/MM/YYYY"); // message to user and ask him to try again
-            return;
-        }
-        int count = 0; // count all avalialbe trucks in system
-        for (Truck truck : trucks) { // for each truck in database
-            if (truck.getAvailablity(parsedDate)) { // if truck is available at this date
-                System.out.println(truck); // print its data
-                count++; // count how many trucks are available
-            }
-        }
-        if (count == 0) // if there is no available - message to user
-            System.out.println("There is no available truck in system.");
-
 
     }
 
