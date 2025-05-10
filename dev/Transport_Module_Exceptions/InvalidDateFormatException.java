@@ -4,4 +4,8 @@ public class InvalidDateFormatException extends ATransportModuleException {
     public InvalidDateFormatException(){
         super("Date format must be DD/MM/YYYY");
     }
+    public InvalidDateFormatException(String m){
+        super(m);
+    }
+
 }

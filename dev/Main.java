@@ -10,19 +10,24 @@ import Transport_Module_Exceptions.TransportAlreadySentException;
 import transport_module.*;
 
 public class Main {
-    public static void menu_message() {
+    public static void menu_message(boolean flag) {
         System.out.println("Welcome to the Transportation Department!");
         System.out.println("Please choose your next");
+        if(!flag)
+            System.out.println("Press S to start and load data");
         System.out.println("1. Add new transport");
         System.out.println("2. Create new delivery document");
         System.out.println("3. Add product to document");
         System.out.println("4. Remove product from document");
         System.out.println("5. Add driver to transport");
         System.out.println("6. Attach document to transport");
-        System.out.println("7. Send transport");
+        System.out.println("7. Send transport manually");
         System.out.println("8. Print Transport details");
         System.out.println("9. Print all available trucks");
         System.out.println("10. Print document details");
+        System.out.println("11. Add new Truck");
+        System.out.println("12. Add new Site");
+        System.out.println("13. Add new Product");
 
 
         System.out.println("Press E to Exit.");
@@ -32,76 +37,90 @@ public class Main {
 
     public static void init_all_data(Truck[] trucks, Map<String, Driver> drivers, Map<Integer, Product> products, Map<String, Site> sites) {
 
-        // create new driving license instances
+        // Create new driving license instances
         DrivingLicence C1 = new DrivingLicence("Medium track - maximum 12 tons", "C1");
         DrivingLicence C = new DrivingLicence("Heavy track - maximum 32 tons", "C");
         DrivingLicence CE = new DrivingLicence("Super heavy track - maximum 60 tons", "CE");
 
-        // save all trucks random plate numbers
+        // Save all trucks random plate numbers
         Map<Integer, Integer> numbers = new HashMap<>();
 
-        // init all trucks
+        // Initialize all trucks
         for (int i = 0; i < 9; i++) {
-
             int number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000); // draw a number
-
-            while (numbers.get(number) != null) // if number is already drawed, draw another one.
+            while (numbers.get(number) != null) // if number is already drawn, draw another one.
                 number = ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000);
-            numbers.put(number, number); // save the drawed number for next time
+            numbers.put(number, number); // save the drawn number
 
-            // create random trucks
-            if (i % 3 == 0) {
-                try {
+            try {
+                if (i % 3 == 0) {
                     trucks[i] = new Truck(C1, 12000, String.valueOf(number));
-                } catch (ATransportModuleException e) {
-                    System.out.println("Invalid input - try again this function");
-                    return;
-                }
-            }
-            if (i % 3 == 1) {
-                try {
+                } else if (i % 3 == 1) {
                     trucks[i] = new Truck(C, 32000, String.valueOf(number));
-                } catch (ATransportModuleException e) {
-                    System.out.println("Invalid input - try again this function");
-                    return;                }
-            }
-            if (i % 3 == 2) {
-                try {
+                } else {
                     trucks[i] = new Truck(CE, 60000, String.valueOf(number));
-                } catch (ATransportModuleException e) {
-                    System.out.println("Invalid input - try again this function");
-                    return;                }
+                }
+            } catch (ATransportModuleException e) {
+                System.out.println("Invalid input - try again this function");
+                return;
             }
-
         }
-        // create sites list
-        List<Site> siteslist = Arrays.asList(
-                new Site("Haifa", "North"),
-                new Site("Acre", "North"),
-                new Site("Kiryat Shmona", "North"),
-                new Site("Tiberias", "North"),
-                new Site("Nazareth", "North"),
-                new Site("Tel Aviv", "Center"),
-                new Site("Ramat Gan", "Center"),
-                new Site("Petah Tikva", "Center"),
-                new Site("Holon", "Center"),
-                new Site("Herzliya", "Center"),
-                new Site("Beer Sheva", "South"),
-                new Site("Ashkelon", "South"),
-                new Site("Eilat", "South"),
-                new Site("Dimona", "South"),
-                new Site("Sderot", "South"),
-                new Site("Netanya", "Center"),
-                new Site("Hadera", "Center"),
-                new Site("Yokneam", "North"),
-                new Site("Karmiel", "North"),
-                new Site("Arad", "South")
+
+        // Create list of sites
+        List<Site> sitesList = Arrays.asList(
+                new Site("Haifa", "North"), new Site("Acre", "North"), new Site("Kiryat Shmona", "North"),
+                new Site("Tiberias", "North"), new Site("Nazareth", "North"), new Site("Tel Aviv", "Center"),
+                new Site("Ramat Gan", "Center"), new Site("Petah Tikva", "Center"), new Site("Holon", "Center"),
+                new Site("Herzliya", "Center"), new Site("Beer Sheva", "South"), new Site("Ashkelon", "South"),
+                new Site("Eilat", "South"), new Site("Dimona", "South"), new Site("Sderot", "South"),
+                new Site("Netanya", "Center"), new Site("Hadera", "Center"), new Site("Yokneam", "North"),
+                new Site("Karmiel", "North"), new Site("Arad", "South")
         );
 
-
-        // add sites to sites list
-        for (Site site : siteslist) {
+        // Add sites to map
+        for (Site site : sitesList) {
             sites.put(site.getName(), site);
+        }
+
+        // Create drivers
+        String[] driverNames = {
+                "David Cohen", "Sara Levi", "Moshe Mizrahi", "Rachel Avraham", "Yossi Peretz",
+                "Noa Biton", "Daniel Azulay", "Maya Shahar", "Avi Ben David", "Gal Itzhak",
+                "Lior Sasson", "Nadav Koren", "Shira Oren", "Hila Golan", "Tomer Bar",
+                "Yael Shimon", "Ronen Hadad", "Dana Mor", "Amir Malka", "Tal Tzur"
+        };
+
+        for (int i = 0; i < driverNames.length; i++) {
+            ArrayList<DrivingLicence> licences = new ArrayList<>();
+            if (i % 3 == 0) {
+                licences.add(C1);
+            } else if (i % 3 == 1) {
+                licences.add(C);
+            } else {
+                licences.add(CE);
+            }
+            Driver driver = new Driver(driverNames[i], String.valueOf(300000000 + i), licences);
+            drivers.put(driver.getId(), driver);
+        }
+
+        // Create products (supermarket style)
+        String[] productNames = {
+                "Milk", "Cheese", "Yogurt", "Butter", "Eggs", "Chicken Breast", "Ground Beef", "Salmon Fillet", "Tuna Cans", "Hot Dogs",
+                "Frozen Pizza", "Frozen Vegetables", "Frozen French Fries", "Ice Cream", "Apple", "Banana", "Orange", "Grapes", "Watermelon", "Strawberries",
+                "Tomato", "Cucumber", "Carrot", "Potato", "Onion", "Garlic", "Lettuce", "Cabbage", "Broccoli", "Cauliflower",
+                "Pasta", "Rice", "Flour", "Sugar", "Salt", "Black Pepper", "Olive Oil", "Canola Oil", "Vinegar", "Soy Sauce",
+                "Ketchup", "Mayonnaise", "Mustard", "Peanut Butter", "Jam", "Honey", "Cornflakes", "Oatmeal", "Chocolate Spread", "Cookies",
+                "Chocolate Bar", "Chips", "Pretzels", "Popcorn", "Nuts", "Almonds", "Cashews", "Sunflower Seeds", "Coffee", "Tea",
+                "Instant Coffee", "Green Tea", "Juice", "Mineral Water", "Soda", "Energy Drink", "Beer", "Red Wine", "White Wine", "Whiskey",
+                "Laundry Detergent", "Fabric Softener", "Dish Soap", "Surface Cleaner", "Bleach", "Sponges", "Toilet Paper", "Paper Towels", "Tissues", "Garbage Bags",
+                "Shampoo", "Conditioner", "Soap Bar", "Shower Gel", "Toothpaste", "Toothbrush", "Razor Blades", "Deodorant", "Body Lotion", "Hand Cream",
+                "Diapers", "Baby Wipes", "Baby Formula", "Cat Food", "Dog Food", "Bird Seeds", "Pet Shampoo", "Plastic Plates", "Plastic Cups", "Aluminum Foil",
+                "Baking Paper", "Sandwich Bags", "Batteries", "Light Bulbs", "Matches", "Lighter", "Umbrella", "Slippers", "Broom", "Mop"
+        };
+
+        for (int i = 0; i < productNames.length; i++) {
+            int weight = ThreadLocalRandom.current().nextInt(1, 6); // random 1-5 kg
+            products.put(i + 1, new Product(i + 1, productNames[i], weight));
         }
 
     }
@@ -411,27 +430,6 @@ public class Main {
     public static void printAllAvailableTrukcs(Truck[] trucks,Scanner scanner) {
 
 
-        System.out.println("Please enter date by format: DD/MM/YYYY"); // ask for date from user
-        String dateStr = scanner.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // try to create date variable
-        LocalDate parsedDate;
-        try { // if date format is wrong
-            parsedDate = LocalDate.parse(dateStr, formatter);
-        }
-        catch (DateTimeParseException e){
-            System.out.println("Invalid date format - please try again with the format: DD/MM/YYYY"); // message to user and ask him to try again
-            return;
-        }
-        int count = 0; // count all avalialbe trucks in system
-        for (Truck truck : trucks) { // for each truck in database
-            if (truck.getAvailablity(parsedDate)) { // if truck is available at this date
-                System.out.println(truck); // print its data
-                count++; // count how many trucks are available
-            }
-        }
-        if (count == 0) // if there is no available - message to user
-            System.out.println("There is no available truck in system.");
-
 
     }
 
@@ -492,8 +490,7 @@ public class Main {
         Map<Integer, ProductListDocument> documents = new HashMap<>();
         Map<Integer, Product> products = new HashMap<>();
         Map<String, Site> sites = new HashMap<>();
-
-        init_all_data(trucks,drivers,products,sites);
+        boolean isInit = false;
 
         // Run every 1 minute the sendTransport function
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -506,10 +503,17 @@ public class Main {
         }, 0, 1, TimeUnit.MINUTES);
 
         while (running) {
-            menu_message();
+            menu_message(isInit);
             String input = scanner.nextLine();
 
             switch (input) {
+                case "S":{
+                    if(!isInit) {
+                        init_all_data(trucks, drivers, products, sites);
+                        System.out.println("Data is set");
+                    }
+
+                }
                 /// Add new transport
                 case "1": {
                     AddNewTransport(trucks, transports, sites, transportsPerDate,scanner);
@@ -593,113 +597,3 @@ public class Main {
     }
 
 }
-
-/*
-=====================================================================
-Manual End-to-End Test 1: Create and Send a New Transport
-=====================================================================
-1. Restart the system (run main()) and initialize all data.
-
-2. Input:
-   - Choose option: 1 (Add new transport)
-   - Date: 27/05/2025
-   - Time: 14:30
-   - Source Site: Haifa
-
-Expected output:
-   - Message that Transport has been created successfully.
-
-3. Input:
-   - Choose option: 5 (Add driver to transport)
-   - Driver ID: 123456789
-   - Transport ID: 1
-
-Expected output:
-   - Message that driver assigned successfully.
-
-4. Input:
-   - Choose option: 7 (Send transport)
-   - Transport ID: 1
-
-Expected output:
-   - Message that transport was sent successfully.
-
-Result:
-   - Passed. Transport created, driver assigned and transport sent.
-
-=====================================================================
-Manual End-to-End Test 2: Create a New Delivery Document and Attach It
-=====================================================================
-1. Restart the system (run main()) and initialize all data.
-
-2. Input:
-   - Choose option: 2 (Create new delivery document)
-   - Destination Site: Tel Aviv
-   - Date: 28/05/2025
-
-Expected output:
-   - Message that Document created successfully.
-
-3. Input:
-   - Choose option: 3 (Add product to document)
-   - Document ID: 1
-   - Product Catalog Number: 1001
-   - Amount: 10
-
-Expected output:
-   - Message that product was added successfully.
-
-4. Input:
-   - Choose option: 1 (Add new transport)
-   - Date: 28/05/2025
-   - Time: 10:00
-   - Source Site: Haifa
-
-5. Input:
-   - Choose option: 6 (Attach document to transport)
-   - Transport ID: 2
-   - Document ID: 1
-
-Expected output:
-   - Document attached to transport successfully.
-
-Result:
-   - Passed. Document created, product added and attached to transport.
-
-=====================================================================
-Manual End-to-End Test 3: Remove Product from a Document
-=====================================================================
-1. Restart the system (run main()) and initialize all data.
-
-2. Input:
-   - Choose option: 2 (Create new delivery document)
-   - Destination Site: Eilat
-   - Date: 29/05/2025
-
-3. Input:
-   - Choose option: 3 (Add product to document)
-   - Document ID: 1
-   - Product Catalog Number: 1002
-   - Amount: 5
-
-Expected output:
-   - Product added successfully.
-
-4. Input:
-   - Choose option: 4 (Remove product from document)
-   - Document ID: 1
-   - Product Catalog Number: 1002
-   - Amount: 3
-
-Expected output:
-   - Message that 3 parts were removed from product.
-
-5. Print document details (Option 10):
-   - See that product now has 2 units.
-
-Result:
-   - Passed. Product reduced correctly in document.
-
-=====================================================================
-*/
-

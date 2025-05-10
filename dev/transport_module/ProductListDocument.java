@@ -16,6 +16,7 @@ public class ProductListDocument {
     private int totalWeight; // total weight of the products in document
     private int transportId;
     private LocalDate date;
+    private Transport transport;
 
     /***
      * Constructor - creates a new ProductListDocument
@@ -46,8 +47,8 @@ public class ProductListDocument {
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
-        transportId = -1;
-        System.out.println("Document number " + id + " has successfully created!");
+        transport = null;
+
     }
     //****************************************************************************************************************** Get functions
 
@@ -57,11 +58,12 @@ public class ProductListDocument {
     public LocalDate getDate() {
         return date;
     }
+
     /***
      * @return Transport ID attached to the document, or -1 if none
      */
-    public int getTransportId() {
-        return transportId;
+    public Transport getTransport() {
+        return transport;
     }
 
     /***
@@ -94,13 +96,15 @@ public class ProductListDocument {
      * @throws ATransportModuleException if transport is null or dates mismatch
      */
     public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
-        if (transport == null) {
+        if (transport == null || this.transport.equals(transport)) {
             throw new InvalidInputException();
         }
         if (!transport.getDate().equals(date)) {
             throw new TransportMismatchException("Transport date doesn't match to document shipment date.");
         }
-        transportId = transport.getId();
+        if (this.transport != null)
+            this.realiseFromTransport(this.transport);
+        this.transport = transport;
     }
 
     /***
@@ -171,12 +175,24 @@ public class ProductListDocument {
      * @throws ATransportModuleException if the document is already attached to a transport
      */
     public void changeDate(LocalDate date) throws ATransportModuleException {
-        if (transportId != -1) {
-            throw new ChangeDateException("Please remove document from transport " + transportId + " first");
-
+        if (transport != null && transport.getDate() != date) {
+            throw new ChangeDateException("Please remove document from transport " + transport.getId() + " first");
         }
         this.date = date;
     }
+
+
+    public void realiseFromTransport(Transport transport1) {
+        if (this.transport.equals(transport1)) {
+            this.transport = null;
+            try {
+                transport1.removeDocumentFromTransport(this);
+            } catch (ATransportModuleException e) {
+
+            }
+        }
+    }
+
 
     //****************************************************************************************************************** Print functions
 
@@ -219,8 +235,6 @@ public class ProductListDocument {
     public final int hashCode() {
         return this.getId();
     }
-
-
 
 
 }

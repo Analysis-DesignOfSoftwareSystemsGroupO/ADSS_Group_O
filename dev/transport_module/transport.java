@@ -16,7 +16,7 @@ public class Transport {
     private Truck truck; // the truck that connects to the transport
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
-    private final Map<String, ProductListDocument> destinations_document_map; // a map for each destination.
+    private final Map<Site, ProductListDocument> destinations_document_map; // a map for each destination.
     private boolean isSent;
     private int currWeight;
     private int maxWeight;
@@ -63,9 +63,10 @@ public class Transport {
         departure_time = LocalTime.of(hour, minute); // set the hour
 
 
-        id = ++staticTransportID; // give index to transport
         if (!t.getAvailablity(date))
             throw new UnAvailableTruckException();
+        id = ++staticTransportID; // give index to transport
+
         truck = t; // save the truck as the original truck - not a copy of the truck.
         truck.setDate(date); // set date at truck schedule
         currWeight = 0;
@@ -159,7 +160,7 @@ public class Transport {
             }
             if (driver != null) {
                 try {
-                    if (!truck.confirmDriver(driver)) {
+                    if (!t.confirmDriver(driver)) {
                         throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
                     }
                 } catch (ATransportModuleException e) {
@@ -188,7 +189,7 @@ public class Transport {
             throw new InvalidDriverException("Transport has no driver - please add driver first.");
         }
         int calcWeight = 0;
-        for (String site : destinations_document_map.keySet()) {
+        for (Site site : destinations_document_map.keySet()) {
             calcWeight += destinations_document_map.get(site).getTotalWeight();
         }
         if (truck.getMaxWeight() < calcWeight) {// Can't load the truck
@@ -211,8 +212,11 @@ public class Transport {
             throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
 
         } else {
+            if( destinations_document_map.get(document.getDestination())!= null){ // if destination is already a destination in transport - throw exception
+                throw new AlreadyExistDestinationException();
+            }
             document.attachTransportToDocument(this);
-            destinations_document_map.put(document.getDestination().getName(), document);
+            destinations_document_map.put(document.getDestination(), document);
             currWeight += document.getTotalWeight();
 
             if (!source.getArea().equals(document.getDestination().getArea())) {
@@ -238,6 +242,24 @@ public class Transport {
     }
 
 
+    public void removeDocumentFromTransport(ProductListDocument document) throws ATransportModuleException{
+        if(document == null)
+            throw new InvalidInputException();
+        if(destinations_document_map.get(document.getDestination().getName()) == null){
+            return;
+        }
+        if(!destinations_document_map.get(document.getDestination().getName()).equals(document))
+            throw new InvalidInputException();
+        if(document.getTransport().equals(this)){
+            destinations_document_map.remove(document.getDestination().getName()); // remove document from map
+            currWeight-=document.getTotalWeight();// reduce weight from transport
+
+            document.realiseFromTransport(this);
+        }
+
+    }
+
+
 
     /***
      * Changes the date of the transport.
@@ -255,6 +277,9 @@ public class Transport {
 
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
+            for(Site site: destinations_document_map.keySet()){ // for each document in transport map - update their date
+                destinations_document_map.get(site).changeDate(date);
+            }
         } else {
             throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
         }
@@ -301,8 +326,8 @@ public class Transport {
      */
     private String destinations_string() {
         StringBuilder str = new StringBuilder();
-        for (String site : destinations_document_map.keySet()) {
-            str.append(site).append(" ");
+        for (Site site : destinations_document_map.keySet()) {
+            str.append(site.toString()).append(" ");
         }
         return str.toString();
     }
