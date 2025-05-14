@@ -1,6 +1,7 @@
 package Presentation;
 
 import DataAccess.DriverDto;
+import transport_module.DomainController;
 import transport_module.Driver;
 import transport_module.DrivingLicence;
 
@@ -22,6 +23,8 @@ public class DriversMenu {
         String regex = "[,\\.\\s]";
         String[] licence = licences.split(regex);
         DriverDto driverDto = new DriverDto(name, id, licence);
+        //send Dto to DomainController
+        DomainController.addNewDriver(driverDto); //todo
     };
 
     default ArrayList<Driver> getAllDrivers(){
