@@ -18,7 +18,7 @@ public class DriversMenu {
         String name = scanner.nextLine(); // user input name
         System.out.println("Enter id of Driver: ");
         String id = scanner.nextLine();
-        System.out.println("Enter Licence of Driver, Seperated by  ',' ");
+        System.out.println("Enter Licence of Driver, Seperated by  ','  ");
         String licences = scanner.nextLine();
         String regex = "[,\\.\\s]";
         String[] licence = licences.split(regex);
@@ -27,9 +27,9 @@ public class DriversMenu {
         DomainController.addNewDriver(driverDto); //todo
     };
 
-    default ArrayList<Driver> getAllDrivers(){
+    public DriverDto[] getAllDrivers(){
         //todo: make a data base and return all drivers from the data base
-        return null;
+        return DomainDriverController.getAllDrivers();
     }
 
     default  Driver getAvailableDriver(Date date){

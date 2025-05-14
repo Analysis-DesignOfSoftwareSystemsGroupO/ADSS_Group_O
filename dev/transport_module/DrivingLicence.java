@@ -10,11 +10,9 @@ public class DrivingLicence {
 
     /***
      * Constructor - creates a DrivingLicence with given description and code.
-     * @param description Description of the licence
      * @param code Licence code
      */
-    public DrivingLicence(String description, String code) {
-        this.description = description;
+    public DrivingLicence( String code) {
         this.code = code;
 
     }
@@ -27,7 +25,6 @@ public class DrivingLicence {
     {
         if(other!= null) {
             this.code = other.code;
-            this.description = other.description;
         }
     }
 //********************************************************************************************************************** Get functions
