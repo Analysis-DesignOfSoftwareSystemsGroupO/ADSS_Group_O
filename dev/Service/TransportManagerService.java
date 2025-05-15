@@ -10,14 +10,13 @@ import java.time.LocalDate;
 public interface TransportManagerService {
 
     /**
-     * Adds a new transport to the system.
+     * Assigns a truck to an existing transport.
      *
-     * @param dateStr   date of transport in format dd/MM/yyyy
-     * @param timeStr   time of transport in format HH:mm
-     * @param siteName  the source site name
-     * @throws ATransportModuleException if inputs are invalid or no truck is available
+     * @param plateNumber the truck's plate number
+     * @param transportId the ID of the transport
+     * @throws ATransportModuleException if truck or transport not found
      */
-    void addNewTransport(String dateStr, String timeStr, String siteName) throws ATransportModuleException;
+    void assignTruckToTransport(String plateNumber, int transportId) throws ATransportModuleException;
 
     /**
      * Assigns a driver to a transport.

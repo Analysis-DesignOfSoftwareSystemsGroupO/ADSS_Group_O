@@ -4,11 +4,15 @@ import Transport_Module_Exceptions.*;
 import transport_module.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * Implementation of the TransportManagerService interface.
+ * Handles core transport-related operations such as driver assignment,
+ * truck assignment, document attachment, manual sending, and delayed reporting.
+ */
 public class TransportManagerServiceImpl implements TransportManagerService {
+
     private final Map<String, Truck> trucks;
     private final Map<Integer, Transport> transports;
     private final Map<String, Site> sites;
@@ -31,31 +35,31 @@ public class TransportManagerServiceImpl implements TransportManagerService {
         this.documents = documents;
     }
 
+    /**
+     * Assigns a truck to an existing transport by ID.
+     *
+     * @param plateNumber  license plate of the truck to assign
+     * @param transportId  ID of the transport
+     * @throws ATransportModuleException if the truck or transport is invalid or unavailable
+     */
     @Override
-    public void addNewTransport(String dateStr, String timeStr, String siteName) throws ATransportModuleException {
-        if (trucks == null || transports == null || sites == null || transportsPerDate == null)
-            throw new InvalidInputException();
+    public void assignTruckToTransport(String plateNumber, int transportId) throws ATransportModuleException {
+        Truck truck = trucks.get(plateNumber);
+        if (truck == null)
+            throw new InvalidInputException("Truck not found");
 
-        LocalDate parsedDate;
-        try {
-            parsedDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        } catch (DateTimeParseException e) {
-            throw new InvalidDateFormatException();
+        Transport transport = transports.get(transportId);
+        if (transport == null)
+            throw new InvalidInputException("Transport not found");
+
+        transport.assignTruck(truck);
+
+        // Update per-date map
+        LocalDate date = transport.getDate();
+        transportsPerDate.computeIfAbsent(date, k -> new ArrayList<>());
+        if (!transportsPerDate.get(date).contains(transport)) {
+            transportsPerDate.get(date).add(transport);
         }
-
-        Truck availableTruck = trucks.values().stream()
-                .filter(t -> t.getAvailablity(parsedDate))
-                .findFirst()
-                .orElseThrow(UnAvailableTruckException::new);
-
-        Site site = sites.get(siteName);
-        if (site == null) {
-            throw new InvalidInputException("Site " + siteName + " not found.");
-        }
-
-        Transport transport = new Transport(dateStr, timeStr, availableTruck, site);
-        transports.put(transport.getId(), transport);
-        transportsPerDate.computeIfAbsent(parsedDate, k -> new ArrayList<>()).add(transport);
     }
 
     @Override
