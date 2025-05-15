@@ -28,12 +28,13 @@ public class Transport {
      * Constructor for Transport
      * Initializes a new transport instance with given parameters and checks input validity.
      */
-    public Transport(String d, String time, Truck t, Site s) throws ATransportModuleException {
+    public Transport(String d, String time, Site s,Site destinationSite) throws ATransportModuleException {
         // input check
-        if (time.isEmpty() || d.isEmpty() || t == null || s == null) {
+        if (time.isEmpty() || d.isEmpty()  || s == null || destinationSite == null) {
             throw new InvalidInputException();
         }
-        driver = null;
+        driver = null;// no driver at this stage
+        truck = null; // no truck at this stage
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate parsedDate;
@@ -63,18 +64,20 @@ public class Transport {
         departure_time = LocalTime.of(hour, minute); // set the hour
 
 
-        if (!t.getAvailablity(date))
-            throw new UnAvailableTruckException();
+
         id = ++staticTransportID; // give index to transport
 
-        truck = t; // save the truck as the original truck - not a copy of the truck.
-        truck.setDate(date); // set date at truck schedule
         currWeight = 0;
-        maxWeight = t.getMaxWeight();
+        maxWeight = 0;
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
         status = Status.waitForShipment;
+
+        //  Create empty document and attach to transport
+        ProductListDocument doc = new ProductListDocument(destinationSite, d);
+        doc.attachTransportToDocument(this);
+        destinations_document_map.put(destinationSite, doc);
 
     }
 
@@ -158,7 +161,7 @@ public class Transport {
      * @param t New truck
      * @throws ATransportModuleException if the truck is unavailable or driver license mismatch occurs
      */
-    public void changeTruck(Truck t) throws ATransportModuleException {
+    public void assignTruck(Truck t) throws ATransportModuleException {
         if (t != this.truck && t != null) {
             if (!t.getAvailablity(date)) {
                 throw new UnAvailableTruckException();
