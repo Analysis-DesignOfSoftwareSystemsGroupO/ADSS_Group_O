@@ -2,9 +2,9 @@ package Users;
 
 import java.util.Objects;
 
-public class User {
-    private static int id = 0;
-    private  int code;
+public abstract class User {
+    protected static int id = 0;
+    protected   int code;
     protected String username;
     protected String password;
 
@@ -39,7 +39,8 @@ public class User {
 
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        User that = (User) other;
         return Objects.equals(((User) other).password, password) &&  Objects.equals(((User) other).username, username);
     }
+
+    public abstract void showMenu();
 }
