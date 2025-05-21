@@ -4,18 +4,24 @@ public class ProductListDocumentDto {
 
     //maybe put id
     //private id
+    private int id;
     private String siteDes;
     private String[] products;
     private int[] quantity;
 
-    public ProductListDocumentDto(String siteDes, String[] products, int[] quantity) {
+    public ProductListDocumentDto(int id, String siteDes, String[] products, int[] quantity) {
         this.siteDes = siteDes;
         this.products = products;
         this.quantity = quantity;
+        this.id = id;
 
     }
 
     // Getters
+    public int getId() {
+        return id;
+    }
+
     public String getSiteDes() {
         return siteDes;
     }
