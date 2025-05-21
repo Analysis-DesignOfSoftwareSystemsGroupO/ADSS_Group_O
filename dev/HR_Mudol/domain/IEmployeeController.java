@@ -1,8 +1,4 @@
-package HR_Mudol.Service.ManagerSystem;
-
-import HR_Mudol.domain.Branch;
-import HR_Mudol.domain.Employee;
-import HR_Mudol.domain.User;
+package HR_Mudol.domain;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@ import HR_Mudol.domain.Employee;
 import HR_Mudol.domain.User;
 import HR_Mudol.domain.Week;
 
-public interface IEmployeeSystem {
+public interface IEmployeeService {
 
     /**
      * Display all upcoming shifts assigned to the given employee.

@@ -2,20 +2,19 @@ package HR_Mudol.Service.ManagerSystem;
 
 import HR_Mudol.domain.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * HRSystemManager is responsible for the overall management of the HR system for a specific branch.
  * It coordinates all operational managers: employees, roles, shifts, weeks, and reports.
  */
-public class HRSystemManager implements IHRSystemManager {
+public class HRControllerService implements IHRControllerService {
 
     private Branch curBranch;
-    private RoleManager roleManager;
-    private EmployeeManager employeeManager;
-    private ShiftManager shiftManager;
-    private WeekManager weekManager;
+    private RoleController roleController;
+    private EmployeeController employeeController;
+    private ShiftController shiftController;
+    private WeekController weekController;
     private ReportGenerator reportGenerator;
 
     /**
@@ -23,15 +22,15 @@ public class HRSystemManager implements IHRSystemManager {
      *
      * @param curBranch The branch the system will manage.
      */
-    public HRSystemManager(Branch curBranch){
+    public HRControllerService(Branch curBranch){
         this.curBranch = curBranch;
-        this.roleManager = new RoleManager(curBranch);
-        this.employeeManager = new EmployeeManager(curBranch);
-        this.shiftManager=new ShiftManager(this.roleManager);
-        this.weekManager=new WeekManager(shiftManager,curBranch);
-        this.reportGenerator=new ReportGenerator(weekManager,employeeManager);
-        roleManager.setEmployeeManager(employeeManager);
-        employeeManager.setRoleManager(roleManager);
+        this.roleController = new RoleController(curBranch);
+        this.employeeController = new EmployeeController(curBranch);
+        this.shiftController =new ShiftController(this.roleController);
+        this.weekController =new WeekController(shiftController,curBranch);
+        this.reportGenerator=new ReportGenerator(weekController, employeeController);
+        roleController.setEmployeeManager(employeeController);
+        employeeController.setRoleManager(roleController);
     }
 
     /**
@@ -43,85 +42,85 @@ public class HRSystemManager implements IHRSystemManager {
     public void displayDashboard(User caller, Branch curBranch) {
         Week currentWeek = curBranch.getWeeks().getLast();
         System.out.println("📅 Week starting " + currentWeek.getConstraintDeadline());
-        System.out.println("🚨" + weekManager.hasUnassignedRoles(currentWeek)+ " shifts are required attention!");
+        System.out.println("🚨" + weekController.hasUnassignedRoles(currentWeek)+ " shifts are required attention!");
         System.out.println(curBranch.getWeeks().getLast()); //print the shifts of the week
 
         System.out.println("\n👥 Employees Status:");
         System.out.println("- Total employees: " + curBranch.getEmployees().size());
-        System.out.println("- Without roles: " + roleManager.countEmployeesWithoutRoles(caller,curBranch.getEmployees()));
+        System.out.println("- Without roles: " + roleController.countEmployeesWithoutRoles(caller,curBranch.getEmployees()));
     }
 
     // ----- Employee Management Methods -----
     /** {@inheritDoc} */
     @Override
     public void addEmployee(User caller) {
-        employeeManager.addEmployee(caller);
+        employeeController.addEmployee(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void removeEmployee(User caller) {
-        employeeManager.removeEmployee(caller);
+        employeeController.removeEmployee(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void updateBankAccount(User caller) {
-        employeeManager.updateBankAccount(caller);
+        employeeController.updateBankAccount(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void updateSalary(User caller) {
-        employeeManager.updateSalary(caller);
+        employeeController.updateSalary(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void updateMinDayShift(User caller) {
-        employeeManager.updateMinDayShift(caller);
+        employeeController.updateMinDayShift(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void updateMinEveningShift(User caller) {
-        employeeManager.updateMinEveningShift(caller);
+        employeeController.updateMinEveningShift(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setInitialsickDays(User caller) {
-        employeeManager.setInitialsickDays(caller);
+        employeeController.setInitialsickDays(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setInitialdaysOff(User caller) {
-        employeeManager.setInitialdaysOff(caller);
+        employeeController.setInitialdaysOff(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public Employee getEmployeeById(User caller, int ID) {
-        return employeeManager.getEmployeeById(caller,ID);
+        return employeeController.getEmployeeById(caller,ID);
     }
 
     /** {@inheritDoc} */
     @Override
     public void printEmployees(User caller) {
-        employeeManager.printEmployees(caller);
+        employeeController.printEmployees(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void printAllEmployees(User caller) {
-        employeeManager.printAllEmployees(caller);
+        employeeController.printAllEmployees(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public List<User> getAllUsers(User caller) {
-        return employeeManager.getAllUsers(caller);
+        return employeeController.getAllUsers(caller);
     }
 
     // ----- Report Generation Methods -----
@@ -149,67 +148,67 @@ public class HRSystemManager implements IHRSystemManager {
     /** {@inheritDoc} */
     @Override
     public void createRole(User caller) {
-        roleManager.createRole(caller);
+        roleController.createRole(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void updateRoleDescription(User caller) {
-        roleManager.updateRoleDescription(caller);
+        roleController.updateRoleDescription(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void assignEmployeeToRole(User caller) {
-        roleManager.assignEmployeeToRole(caller);
+        roleController.assignEmployeeToRole(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void assignEmployeeToShiftManager(User caller) {
-        roleManager.assignEmployeeToShiftManager(caller);
+        roleController.assignEmployeeToShiftManager(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void removeEmployeeFromRole(User caller) {
-        roleManager.removeEmployeeFromRole(caller);
+        roleController.removeEmployeeFromRole(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void removeEmployeeFromRole(User caller, int roleNumber, Employee e) {
-        roleManager.removeEmployeeFromRole(caller,roleNumber,e);
+        roleController.removeEmployeeFromRole(caller,roleNumber,e);
     }
 
     /** {@inheritDoc} */
     @Override
     public List<Employee> getRelevantEmployees(User caller) {
-       return roleManager.getRelevantEmployees(caller);
+       return roleController.getRelevantEmployees(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public List<Role> getAllRoles(User caller) {
-        return roleManager.getAllRoles(caller);
+        return roleController.getAllRoles(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public void printAllRoles(User caller) {
-        roleManager.printAllRoles(caller);
+        roleController.printAllRoles(caller);
     }
 
     /** {@inheritDoc} */
     @Override
     public Role getRoleByNumber(int roleNumber) {
-        return roleManager.getRoleByNumber(roleNumber);
+        return roleController.getRoleByNumber(roleNumber);
     }
 
     /** {@inheritDoc} */
     @Override
     public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
-        return roleManager.countEmployeesWithoutRoles(caller,employeeList);
+        return roleController.countEmployeesWithoutRoles(caller,employeeList);
     }
 
     // ----- Shift Management Methods -----
@@ -217,25 +216,25 @@ public class HRSystemManager implements IHRSystemManager {
     /** {@inheritDoc} */
     @Override
     public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
-        shiftManager.assignEmployeeToShift(caller,shift,employee, role);
+        shiftController.assignEmployeeToShift(caller,shift,employee, role);
     }
 
     /** {@inheritDoc} */
     @Override
     public void removeEmployeeFromShift(User caller, Shift shift) {
-        shiftManager.removeEmployeeFromShift(caller,shift);
+        shiftController.removeEmployeeFromShift(caller,shift);
     }
 
     /** {@inheritDoc} */
     @Override
     public void chooseRelevantRoleForShift(User caller, Shift shift) {
-        shiftManager.chooseRelevantRoleForShift(caller,shift);
+        shiftController.chooseRelevantRoleForShift(caller,shift);
     }
 
     /** {@inheritDoc} */
     @Override
     public void printShift(User caller, Shift shift) {
-        shiftManager.printShift(caller,shift);
+        shiftController.printShift(caller,shift);
     }
 
     // ----- Week Management Methods -----
@@ -243,33 +242,33 @@ public class HRSystemManager implements IHRSystemManager {
     /** {@inheritDoc} */
     @Override
     public Week createNewWeek(User caller) {
-        Week week=weekManager.createNewWeek(caller);
+        Week week= weekController.createNewWeek(caller);
         return week;
     }
 
     /** {@inheritDoc} */
     @Override
     public void cancelShift(User caller, Week week) {
-        weekManager.cancelShift(caller,week);
+        weekController.cancelShift(caller,week);
 
     }
 
     /** {@inheritDoc} */
     @Override
     public void manageTheWeekRelevantRoles(User caller, Week week) {
-        weekManager. manageTheWeekRelevantRoles(caller,week);
+        weekController. manageTheWeekRelevantRoles(caller,week);
     }
 
     /** {@inheritDoc} */
     @Override
     public void assigningEmployToShifts(User caller, Week week) {
-        weekManager.assigningEmployToShifts(caller,week);
+        weekController.assigningEmployToShifts(caller,week);
     }
 
     /** {@inheritDoc} */
     @Override
     public void printWeek(Week week) {
-        weekManager.printWeek(week);
+        weekController.printWeek(week);
     }
 
     // ----- Utility Methods -----
@@ -282,8 +281,8 @@ public class HRSystemManager implements IHRSystemManager {
 
     /** {@inheritDoc} */
     @Override
-    public IRoleManager getRoleManager() {
-        return this.roleManager;
+    public IRoleController getRoleManager() {
+        return this.roleController;
     }
 
     /** {@inheritDoc} */
@@ -301,25 +300,25 @@ public class HRSystemManager implements IHRSystemManager {
     /** {@inheritDoc} */
     @Override
     public void removeEmployeeFromShift(User caller, Week week) {
-        weekManager.removeEmployeeFromShift(caller,week);
+        weekController.removeEmployeeFromShift(caller,week);
     }
 
     /** {@inheritDoc} */
     @Override
     public void removeRoleFromShift(User caller, Week week) {
-        weekManager.removeRoleFromShift(caller,week);
+        weekController.removeRoleFromShift(caller,week);
     }
 
     /** {@inheritDoc} */
     @Override
     public void addARoleToShift(User caller, Week week) {
-        weekManager.addARoleToShift(caller,week);
+        weekController.addARoleToShift(caller,week);
     }
 
     /** {@inheritDoc} */
     @Override
     public void addEmployeeToShift(User caller, Week week) {
-        weekManager.addEmployeeToShift(caller,week);
+        weekController.addEmployeeToShift(caller,week);
     }
 
     /** {@inheritDoc} */

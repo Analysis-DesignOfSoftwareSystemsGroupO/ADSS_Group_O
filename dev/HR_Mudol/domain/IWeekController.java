@@ -1,9 +1,4 @@
-package HR_Mudol.Service.ManagerSystem;
-
-import HR_Mudol.domain.Employee;
-import HR_Mudol.domain.Shift;
-import HR_Mudol.domain.User;
-import HR_Mudol.domain.Week;
+package HR_Mudol.domain;
 
 import java.util.List;
 /**

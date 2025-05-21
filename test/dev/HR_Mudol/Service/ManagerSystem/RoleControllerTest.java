@@ -1,6 +1,6 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.Service.ManagerSystem.RoleManager;
+import HR_Mudol.domain.RoleManager;
 import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

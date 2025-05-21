@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class EmployeeSystem implements IEmployeeSystem {
+public class EmployeeService implements IEmployeeService {
 
     private Scanner scanner;
 
@@ -13,14 +13,14 @@ public class EmployeeSystem implements IEmployeeSystem {
     /**
      * Default constructor initializes the scanner using System.in
      */
-    public EmployeeSystem() {
+    public EmployeeService() {
         this.scanner = new Scanner(System.in);
     }
 
     /**
      * Constructor for injecting a custom scanner (useful for testing purposes)
      */
-    public EmployeeSystem(Scanner scanner) {
+    public EmployeeService(Scanner scanner) {
         this.scanner = scanner;
     }
 

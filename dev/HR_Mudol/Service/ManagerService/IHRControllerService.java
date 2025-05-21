@@ -1,14 +1,13 @@
 package HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.Branch;
-import HR_Mudol.domain.User;
+import HR_Mudol.domain.*;
 
 /**
  * IHRSystemManager is an interface that defines the core functionality required to manage the HR system for a given branch.
  * This includes managing employees, roles, shifts, weeks, and generating reports.
  * The interface extends multiple other manager interfaces for employee, role, shift, week, and report generation functionality.
  */
-public interface IHRSystemManager extends IEmployeeManager, IRoleManager, IShiftManager, IWeekManager, IReportGenerator {
+public interface IHRControllerService extends IEmployeeController, IRoleController, IShiftController, IWeekController, IReportGenerator {
 
     /**
      * Displays the dashboard with an overview of the current week and employee status.

@@ -1,6 +1,4 @@
-package HR_Mudol.Service.ManagerSystem;
-
-import HR_Mudol.domain.*;
+package HR_Mudol.domain;
 
 import java.time.LocalDate;
 import java.util.List;

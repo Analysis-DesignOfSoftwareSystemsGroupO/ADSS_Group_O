@@ -2,7 +2,7 @@ package HR_Mudol.Service.ShiftManagerSystem;
 
 import HR_Mudol.domain.User;
 
-public interface IShiftManagerSystem {
+public interface IShiftManagerService {
 
     /**
      * Remove an employee from a selected shift in the current week.

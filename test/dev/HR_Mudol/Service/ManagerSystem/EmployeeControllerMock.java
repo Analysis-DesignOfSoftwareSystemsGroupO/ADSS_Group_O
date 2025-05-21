@@ -1,7 +1,7 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.Service.ManagerSystem.IEmployeeManager;
-import HR_Mudol.Service.ManagerSystem.IRoleManager;
+import HR_Mudol.domain.IEmployeeManager;
+import HR_Mudol.domain.IRoleManager;
 import HR_Mudol.domain.*;
 
 import java.util.List;

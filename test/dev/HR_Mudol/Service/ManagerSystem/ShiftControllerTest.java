@@ -1,13 +1,11 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.Service.ManagerSystem.ShiftManager;
+import HR_Mudol.domain.ShiftManager;
 import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

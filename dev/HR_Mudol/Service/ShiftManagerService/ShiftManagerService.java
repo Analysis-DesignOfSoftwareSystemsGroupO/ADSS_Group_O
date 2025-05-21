@@ -1,9 +1,8 @@
 package HR_Mudol.Service.ShiftManagerSystem;
 
-import HR_Mudol.Service.ManagerSystem.ShiftManager;
+import HR_Mudol.domain.ShiftController;
 import HR_Mudol.domain.*;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,11 +10,11 @@ import java.util.Scanner;
  * System for shift managers to manage employees' assignments to shifts.
  * Provides functionality to add/remove employees and transfer cancellation cards.
  */
-public class ShiftManagerSystem implements IShiftManagerSystem {
+public class ShiftManagerService implements IShiftManagerService {
 
     private Week currentWeek;
     private Branch branch;
-    private ShiftManager shiftManager;
+    private ShiftController shiftController;
     private Scanner scanner = new Scanner(System.in);
 
     /**
@@ -23,12 +22,12 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
      *
      * @param currentWeek  the week object containing shifts
      * @param branch       the branch this system manages
-     * @param shiftManager the shift manager operating the system
+     * @param shiftController the shift manager operating the system
      */
-    public ShiftManagerSystem(Week currentWeek, Branch branch, ShiftManager shiftManager) {
+    public ShiftManagerService(Week currentWeek, Branch branch, ShiftController shiftController) {
         this.currentWeek = currentWeek;
         this.branch = branch;
-        this.shiftManager = shiftManager;
+        this.shiftController = shiftController;
     }
 
     /**
@@ -52,7 +51,7 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
             return;
         }
 
-        shiftManager.removeEmployeeFromShift(caller, shift);
+        shiftController.removeEmployeeFromShift(caller, shift);
     }
 
     /**
@@ -106,12 +105,12 @@ public class ShiftManagerSystem implements IShiftManagerSystem {
             return;
         }
 
-        shiftManager.printShift(caller, shift); // אפשר להדפיס מידע בסיסי
+        shiftController.printShift(caller, shift); // אפשר להדפיס מידע בסיסי
 
         Role role = chooseRoleFromList(shift.getNotOccupiedRoles());
         if (role == null) return;
 
-        shiftManager.assignEmployeeToShift(caller, shift, toAdd, role);
+        shiftController.assignEmployeeToShift(caller, shift, toAdd, role);
     }
 
     /**
