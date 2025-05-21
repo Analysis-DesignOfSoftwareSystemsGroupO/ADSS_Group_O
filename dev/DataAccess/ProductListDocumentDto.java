@@ -7,12 +7,12 @@ public class ProductListDocumentDto {
     private String siteDes;
     private String[] products;
     private int[] quantity;
-    private String date;
-    public ProductListDocumentDto(String siteDes, String[] products, int[] quantity, String date) {
+
+    public ProductListDocumentDto(String siteDes, String[] products, int[] quantity) {
         this.siteDes = siteDes;
         this.products = products;
         this.quantity = quantity;
-        this.date = date;
+
     }
 
     // Getters
@@ -28,9 +28,6 @@ public class ProductListDocumentDto {
         return quantity;
     }
 
-    public String getDate() {
-        return date;
-    }
 
     // Setters
     public void setSiteDes(String siteDes) {
@@ -45,8 +42,5 @@ public class ProductListDocumentDto {
         this.quantity = quantity;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
 }
 
