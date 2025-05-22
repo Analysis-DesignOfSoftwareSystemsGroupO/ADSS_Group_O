@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public class DomainDriverController {
 
-
+/**
     public static Driver getDriverFromDto(DriverDto dto ){
         //todo
     }
-
+**/
     //create a DriverDto from Driver instance
     public static DriverDto makeDtoFromDriver(Driver driver){
         return new DriverDto(driver.getName(), driver.getId(), (String[]) driver.getLicencs().toArray());

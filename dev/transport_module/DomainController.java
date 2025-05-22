@@ -18,7 +18,7 @@ public abstract class DomainController {
 
     }
 
-    public static ProductListDocument createPLDFromDTO(ProductListDocumentDTO dto){}
+   // public static ProductListDocument createPLDFromDTO(ProductListDocumentDTO dto){}
 
 
 

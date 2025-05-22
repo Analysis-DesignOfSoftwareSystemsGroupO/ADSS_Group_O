@@ -17,11 +17,11 @@ public class DomainTests {
     public void testFullTransportFlow() throws Exception {
         // Create a driver
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        licences.add(new DrivingLicence( "C1"));
         Driver driver = new Driver("John Doe", "123456789", licences);
 
         // Create a truck
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "9876543");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "9876543");
 
         // Create a product list document
         Site destinationSite = new Site("Tel Aviv", "Center");
@@ -53,9 +53,9 @@ public class DomainTests {
     @Test
     public void testOverWeightShouldThrowException() throws Exception {
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Heavy Truck", "C"));
+        licences.add(new DrivingLicence( "C"));
         Driver driver = new Driver("Jane Doe", "987654321", licences);
-        Truck truck = new Truck(new DrivingLicence("Heavy Truck", "C"), 1000, "1231231");
+        Truck truck = new Truck(new DrivingLicence( "C"), 1000, "1231231");
 
         Site destination = new Site("Eilat", "South");
         String dateStr = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -83,7 +83,7 @@ public class DomainTests {
     @Test
     public void testBasicTransportCreation() throws Exception {
         // Create a truck
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1111111");
+        Truck truck = new Truck(new DrivingLicence("C1"), 12000, "1111111");
 
         // Create a basic transport
         Site source = new Site("Haifa", "North");
@@ -101,7 +101,7 @@ public class DomainTests {
     @Test
     public void testLoadDocumentAndSendTransport() throws Exception {
         // Create truck and transport
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "2222222");
+        Truck truck = new Truck(new DrivingLicence("C1"), 12000, "2222222");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(
                 LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
@@ -112,7 +112,7 @@ public class DomainTests {
 
         // Create driver and add to transport
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        licences.add(new DrivingLicence( "C1"));
         Driver driver = new Driver("Alice", "111111111", licences);
         transport.addDriver(driver);
 
@@ -140,7 +140,7 @@ public class DomainTests {
     @Test
     public void testOverweightTransportShouldNotSend() throws Exception {
         // Create truck and transport
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 1000, "3333333");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 1000, "3333333");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "09:00", truck, source);
 
@@ -164,7 +164,7 @@ public class DomainTests {
     public void testAttachDocumentWithMismatchedDateThrows() {
         // Try to attach a document with different date - should throw exception
         assertThrows(Exception.class, () -> {
-            Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "4444444");
+            Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "4444444");
             Site source = new Site("Haifa", "North");
             Transport transport = new Transport(LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "07:00", truck, source);
 
@@ -200,8 +200,8 @@ public class DomainTests {
     @Test
     public void testChangeTruckSuccessfully() throws Exception {
         // Change the truck for an existing transport
-        Truck truck1 = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "5555555");
-        Truck truck2 = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "6666666");
+        Truck truck1 = new Truck(new DrivingLicence( "C1"), 12000, "5555555");
+        Truck truck2 = new Truck(new DrivingLicence( "C1"), 12000, "6666666");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "11:00", truck1, source);
 
@@ -217,7 +217,7 @@ public class DomainTests {
     @Test
     public void testOutOfZoneTransportFlag() throws Exception {
         // Create a transport that has an out-of-area destination
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "7777777");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "7777777");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "12:00", truck, source);
 
@@ -238,12 +238,12 @@ public class DomainTests {
     public void testAddDriverWithWrongLicenceFails() {
         // Try to assign a driver with wrong license - should fail
         assertThrows(Exception.class, () -> {
-            Truck truck = new Truck(new DrivingLicence("Heavy Truck", "C"), 30000, "8888888");
+            Truck truck = new Truck(new DrivingLicence("C"), 30000, "8888888");
             Site source = new Site("Tel Aviv", "Center");
             Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "13:00", truck, source);
 
             ArrayList<DrivingLicence> licences = new ArrayList<>();
-            licences.add(new DrivingLicence("Small Car", "B")); // wrong licence
+            licences.add(new DrivingLicence( "B")); // wrong licence
             Driver driver = new Driver("BadDriver", "123456789", licences);
 
             transport.addDriver(driver);
@@ -258,7 +258,7 @@ public class DomainTests {
     @Test
     public void testChangeTransportDate() throws Exception {
         // Change transport date
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "9999999");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "9999999");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "14:00", truck, source);
 
@@ -276,7 +276,7 @@ public class DomainTests {
     @Test
     public void testChangeTransportHour() throws Exception {
         // Change transport departure time
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1010101");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "1010101");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "08:00", truck, source);
 
@@ -292,7 +292,7 @@ public class DomainTests {
      */
     @Test
     public void testChangeTruckToNull() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1234567");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "1234567");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "10:00", truck, source);
 
@@ -324,7 +324,7 @@ public class DomainTests {
     @Test
     public void testDriverAvailabilityWhenNoMissions() {
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Small Truck", "C1"));
+        licences.add(new DrivingLicence("C1"));
         Driver driver = new Driver("Test Driver", "555666777", licences);
 
         assertTrue(driver.isavailable(LocalDate.now().plusDays(5))); // Should be available
@@ -337,7 +337,7 @@ public class DomainTests {
      */
     @Test
     public void testReleaseDateNotSet() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1111222");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "1111222");
 
         // Should not throw any exception
         truck.releaseTruck(LocalDate.now().plusDays(3));
@@ -351,12 +351,12 @@ public class DomainTests {
      */
     @Test
     public void testSendTransportTwice() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "3333444");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "3333444");
         Site source = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "08:00", truck, source);
 
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        licences.add(new DrivingLicence( "C1"));
         Driver driver = new Driver("John Driver", "999888777", licences);
 
         transport.addDriver(driver);

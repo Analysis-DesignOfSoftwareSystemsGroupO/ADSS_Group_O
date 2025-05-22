@@ -9,7 +9,7 @@ public class TruckTest {
 
     @Test
     public void testTruckCreation() throws Exception {
-        DrivingLicence licence = new DrivingLicence("Medium Truck", "C1");
+        DrivingLicence licence = new DrivingLicence( "C1");
         Truck truck = new Truck(licence, 12000, "1234567");
         assertEquals(12000, truck.getMaxWeight());
         assertEquals("1234567", truck.getPlateNumber());
@@ -18,7 +18,7 @@ public class TruckTest {
 
     @Test
     public void testTruckAvailability() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1234567");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "1234567");
         LocalDate today = LocalDate.now();
         assertTrue(truck.getAvailablity(today));
 
@@ -28,11 +28,11 @@ public class TruckTest {
 
     @Test
     public void testTruckConfirmDriver() throws Exception {
-        DrivingLicence licence = new DrivingLicence("Medium Truck", "C1");
+        DrivingLicence licence = new DrivingLicence( "C1");
         Truck truck = new Truck(licence, 12000, "1234567");
 
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        licences.add(new DrivingLicence( "C1"));
         Driver driver = new Driver("John", "123456789", licences);
 
         assertTrue(truck.confirmDriver(driver));
@@ -40,7 +40,7 @@ public class TruckTest {
 
     @Test
     public void testTruckOverWeight() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 10000, "1234567");
+        Truck truck = new Truck(new DrivingLicence("C1"), 10000, "1234567");
         assertTrue(truck.addWeight(5000));
         assertFalse(truck.addWeight(6000));
     }

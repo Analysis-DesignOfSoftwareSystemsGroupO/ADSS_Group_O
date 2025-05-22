@@ -1,3 +1,4 @@
+/**
 package Users;
 
 import transport_module.Driver;
@@ -14,6 +15,7 @@ public interface IDriversManager {
      * @param id
      * @param licencs
      */
+/**
     default void addNewDriver(Driver[] drivers, String name, String id, ArrayList<DrivingLicence> licencs){
         //todo : add driver to data base
 
@@ -40,3 +42,4 @@ public interface IDriversManager {
 
 
 }
+**/

@@ -8,7 +8,7 @@ public class TransportTest {
 
     @Test
     public void testTransportCreation() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1234567");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "1234567");
         Site site = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "10:30", truck, site);
 
@@ -18,7 +18,7 @@ public class TransportTest {
 
     @Test
     public void testLoadDocument() throws Exception {
-        Truck truck = new Truck(new DrivingLicence("Medium Truck", "C1"), 12000, "1234567");
+        Truck truck = new Truck(new DrivingLicence( "C1"), 12000, "1234567");
         Site site = new Site("Haifa", "North");
         Transport transport = new Transport(LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), "10:30", truck, site);
 

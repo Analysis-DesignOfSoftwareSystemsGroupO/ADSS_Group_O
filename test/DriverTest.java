@@ -9,7 +9,7 @@ public class DriverTest {
     @Test
     public void testDriverAvailability() {
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        licences.add(new DrivingLicence( "C1"));
         Driver driver = new Driver("John", "123456789", licences);
 
         LocalDate date = LocalDate.now();
@@ -19,7 +19,7 @@ public class DriverTest {
     @Test
     public void testDriverAssignRelease() {
         ArrayList<DrivingLicence> licences = new ArrayList<>();
-        licences.add(new DrivingLicence("Medium Truck", "C1"));
+        licences.add(new DrivingLicence( "C1"));
         Driver driver = new Driver("John", "123456789", licences);
 
         LocalDate date = LocalDate.now();

@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -38,9 +39,9 @@ public class Main {
     public static void init_all_data(Truck[] trucks, Map<String, Driver> drivers, Map<Integer, Product> products, Map<String, Site> sites) {
 
         // Create new driving license instances
-        DrivingLicence C1 = new DrivingLicence("Medium track - maximum 12 tons", "C1");
-        DrivingLicence C = new DrivingLicence("Heavy track - maximum 32 tons", "C");
-        DrivingLicence CE = new DrivingLicence("Super heavy track - maximum 60 tons", "CE");
+        DrivingLicence C1 = new DrivingLicence( "C1");
+        DrivingLicence C = new DrivingLicence( "C");
+        DrivingLicence CE = new DrivingLicence( "CE");
 
         // Save all trucks random plate numbers
         Map<Integer, Integer> numbers = new HashMap<>();
@@ -597,3 +598,4 @@ public class Main {
     }
 
 }
+
