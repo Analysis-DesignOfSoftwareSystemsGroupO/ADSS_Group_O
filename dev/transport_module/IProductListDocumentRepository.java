@@ -6,8 +6,9 @@ import Transport_Module_Exceptions.ATransportModuleException;
 public interface IProductListDocumentRepository {
 
     ProductListDocument getProductListDocumentByid(int id) throws ATransportModuleException;
-    void saveProductListDocument(ProductListDocumentDto pldDTO) throws ATransportModuleException ;
 
-    void deleteProductListDocument(ProductListDocument pldDTO ) throws  ATransportModuleException;
+    void saveProductListDocument(ProductListDocument pld) throws ATransportModuleException ;
+
+    void deleteProductListDocument(ProductListDocument pld ) throws  ATransportModuleException;
 
 }

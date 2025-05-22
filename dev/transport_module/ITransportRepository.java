@@ -9,10 +9,11 @@ public interface ITransportRepository {
 
 
     Transport getTransportByid(int id) throws ATransportModuleException;
-    Transport getTransportsByDate(Date date);
 
-    void saveTransport(TransportDTO transportDTO) throws ATransportModuleException ;
+    Transport[] getTransportsByDate(Date date);
 
-    void deleteTransport(TransportDTO transportDTODTO ) throws  ATransportModuleException;
+    void saveTransport(Transport transport) throws ATransportModuleException ;
+
+    void deleteTransport(Transport transport ) throws  ATransportModuleException;
 
 }

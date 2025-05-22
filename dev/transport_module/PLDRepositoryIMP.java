@@ -12,12 +12,12 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     }
 
     @Override
-    public void saveProductListDocument(ProductListDocumentDto pldDTO) throws ATransportModuleException {
+    public void saveProductListDocument(ProductListDocument pld) throws ATransportModuleException {
 
     }
 
     @Override
-    public void deleteProductListDocument(ProductListDocument pldDTO) throws ATransportModuleException {
+    public void deleteProductListDocument(ProductListDocument pld) throws ATransportModuleException {
 
     }
 }
