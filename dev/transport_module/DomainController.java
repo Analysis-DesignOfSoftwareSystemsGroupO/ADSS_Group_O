@@ -1,11 +1,7 @@
 package transport_module;
 
-import DataAccess.DriverDto;
-import DataAccess.TruckDto;
+import DTO.TruckDto;
 import Transport_Module_Exceptions.ATransportModuleException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class DomainController {
 

@@ -1,6 +1,5 @@
 package transport_module;
 
-import DataAccess.ProductListDocumentDto;
 import Transport_Module_Exceptions.ATransportModuleException;
 
 public class PLDRepositoryIMP implements IProductListDocumentRepository {

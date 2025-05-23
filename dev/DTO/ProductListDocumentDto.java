@@ -1,4 +1,4 @@
-package DataAccess;
+package DTO;
 
 public class ProductListDocumentDto {
 

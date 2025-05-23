@@ -1,6 +1,6 @@
 package transport_module;
 
-import DataAccess.ProductListDocumentDto;
+import DTO.ProductListDocumentDto;
 import Transport_Module_Exceptions.ATransportModuleException;
 
 public interface IProductListDocumentRepository {
@@ -11,4 +11,7 @@ public interface IProductListDocumentRepository {
 
     void deleteProductListDocument(ProductListDocument pld ) throws  ATransportModuleException;
 
+    ProductListDocument PLDdtoTOPLD(ProductListDocumentDto dto);
+
+    ProductListDocumentDto pldToDTO(ProductListDocument pld);
 }
