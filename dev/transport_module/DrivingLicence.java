@@ -5,16 +5,13 @@ package transport_module;
  * Each licence has a description (like "Medium truck") and a code (like "C1").
  */
 public class DrivingLicence {
-    private  String description;
     private  String code;
 
     /***
      * Constructor - creates a DrivingLicence with given description and code.
-     * @param description Description of the licence
      * @param code Licence code
      */
-    public DrivingLicence(String description, String code) {
-        this.description = description;
+    public DrivingLicence( String code) {
         this.code = code;
 
     }
@@ -27,7 +24,6 @@ public class DrivingLicence {
     {
         if(other!= null) {
             this.code = other.code;
-            this.description = other.description;
         }
     }
 //********************************************************************************************************************** Get functions
@@ -39,12 +35,7 @@ public class DrivingLicence {
         return code;
     }
 
-    /***
-     * @return Licence description
-     */
-    public String getDescription() {
-        return description;
-    }
+
 //********************************************************************************************************************** print functions
 
     /***
@@ -52,7 +43,7 @@ public class DrivingLicence {
      */
     @Override
     public String toString() {
-        return code + " : " + description;
+        return code;
     }
 
     /***

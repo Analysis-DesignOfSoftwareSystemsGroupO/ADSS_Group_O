@@ -76,6 +76,10 @@ public class Driver {
         return false;
     }
 
+    public int getNumberOfDrivingLicencs(){
+        return licencs.size();
+    }
+
 //*********************************************************************************************************************** Set functions
 
     /***
