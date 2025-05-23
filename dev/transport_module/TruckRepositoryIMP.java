@@ -16,7 +16,7 @@ public class TruckRepositoryIMP implements  ITruckRepository{
     }
 
     @Override
-    public void deleteTruck(Truck truck) throws ATransportModuleException {
+    public void deleteTruck(String pn ) throws ATransportModuleException {
 
     }
 }

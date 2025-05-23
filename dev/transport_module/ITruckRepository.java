@@ -9,7 +9,7 @@ public interface ITruckRepository {
 
     Truck getTruckBYPlateNumber(int pn) throws  ATransportModuleException;
 
-    void deleteTruck(Truck truck) throws ATransportModuleException;
+    void deleteTruck(String pn) throws ATransportModuleException;
 
     Truck DTOtoTruck(TruckDto dto);
 
