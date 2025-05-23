@@ -16,9 +16,6 @@ public class TruckDto {
         return weight;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
 
     public int getMaxWeight() {
         return maxWeight;
@@ -32,6 +29,12 @@ public class TruckDto {
     public String getPlateNumber() {
         return plateNumber;
     }
+
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
 
 
 

@@ -12,22 +12,34 @@ import java.util.Scanner;
 public class TruckManagerMenu {
 
     // Service layer that handles truck-related business logic
-    private final TruckManagerService truckService;
+    private TruckControllerPL controller;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Constructs the TruckManagerMenu with the provided service instance.
-     * @param truckService the service that provides truck management operations
+     * @param controller the controller that provides truck management operations
      */
-    public TruckManagerMenu(TruckManagerService truckService) {
-        this.truckService = truckService;
+    public TruckManagerMenu(TruckControllerPL controller) {
+        this.controller = controller;
     }
 
+    private void addTruck(){
+        System.out.println("Enter truck plate number:");
+        String plate = scanner.nextLine();
+
+        System.out.println("Enter max weight:");
+        int maxWeight = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Enter driving licence code:");
+        String licence = scanner.nextLine();
+
+        controller.addTruck(plate, maxWeight, licence);
+    }
     /**
      * Displays the truck manager menu and handles user input.
      * Supported actions: add truck, list all trucks, show available trucks on date, remove truck, and exit.
      */
     public void showMenu() {
-        Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
             // Print menu options
@@ -42,20 +54,8 @@ public class TruckManagerMenu {
                 switch (input) {
 
                     // Option 1: Add a new truck to the system
-                    case "1" -> {
-                        System.out.println("Enter plate number:");
-                        String plate = scanner.nextLine();
+                    case "1" -> addTruck();
 
-                        System.out.println("Enter driving licence code:");
-                        String code = scanner.nextLine();
-
-                        System.out.println("Enter max weight:");
-                        int weight = Integer.parseInt(scanner.nextLine());
-
-                        // Delegate to service
-                        truckService.addNewTruck(plate, code, weight);// Delegate to service
-                        System.out.println("Truck added.");
-                    }
 
                     // Option 2: Show all registered trucks
                     case "2" -> {

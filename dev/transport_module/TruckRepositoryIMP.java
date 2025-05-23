@@ -11,7 +11,7 @@ public class TruckRepositoryIMP implements  ITruckRepository{
     }
 
     @Override
-    public Truck getTruckBYPlateNumber(int pn) throws ATransportModuleException {
+    public Truck getTruckBYPlateNumber(String pn) throws ATransportModuleException {
         return null;
     }
 
