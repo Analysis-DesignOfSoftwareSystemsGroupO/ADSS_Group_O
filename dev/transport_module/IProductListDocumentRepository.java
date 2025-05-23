@@ -9,7 +9,7 @@ public interface IProductListDocumentRepository {
 
     void saveProductListDocument(ProductListDocument pld) throws ATransportModuleException ;
 
-    void deleteProductListDocument(ProductListDocument pld ) throws  ATransportModuleException;
+    void deleteProductListDocument(int id ) throws  ATransportModuleException;
 
     ProductListDocument PLDdtoTOPLD(ProductListDocumentDto dto);
 
