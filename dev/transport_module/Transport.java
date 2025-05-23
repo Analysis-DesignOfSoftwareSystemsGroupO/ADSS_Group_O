@@ -33,6 +33,7 @@ public class Transport {
         if (time.isEmpty() || d.isEmpty()  || s == null || destinationSite == null) {
             throw new InvalidInputException();
         }
+
         driver = null;// no driver at this stage
         truck = null; // no truck at this stage
 
