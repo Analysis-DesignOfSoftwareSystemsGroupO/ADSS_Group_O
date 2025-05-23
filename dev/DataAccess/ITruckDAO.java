@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface ITruckDAO {
 
-    TruckDto save(TruckDto Truckdto) throws SQLException;
-    Optional<TruckDto> findByTruckPN(String plateNumber) throws SQLException;
+    void save(TruckDto Truckdto) throws SQLException;
+    Optional<TruckDto> findByTruckPN(String pn) throws SQLException;
     List<TruckDto> findAllTrucks() throws SQLException;
+    void deleteTruck(String pn);
 }
