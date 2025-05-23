@@ -1,5 +1,7 @@
 package Presentation;
+import DataAccess.TruckDto;
 import Service.TruckManagerService;
+import Transport_Module_Exceptions.ATransportModuleException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -33,8 +35,74 @@ public class TruckManagerMenu {
         System.out.println("Enter driving licence code:");
         String licence = scanner.nextLine();
 
-        controller.addTruck(plate, maxWeight, licence);
+        try { // try to add new truck to system
+            controller.addTruck(plate, maxWeight, licence);
+            System.out.println("Truck has added successfully");
+        }
+        catch (Exception e){ // catch the Exception if threw
+            System.out.println(e.getMessage());
+        }
+
     }
+    private void printTrucksArrayOfDTO(TruckDto[] trucks){
+        if (trucks == null)
+            return;
+        for (TruckDto currTruck : trucks) {
+            System.out.println("Truck number: " + currTruck.getPlateNumber() + " Licence " + currTruck.getLiceenceReq());
+            System.out.println(currTruck.getWeight() + "/" + currTruck.getMaxWeight() + " weight");
+        }
+    }
+
+    private void showAllTrucks(){
+        try {
+            // Get from controller all trucks
+            TruckDto[] trucks = controller.getAllTrucks();
+
+            // for each truck - print its details
+            printTrucksArrayOfDTO(trucks);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    private void showavailableTrucks(){
+        System.out.println("Enter date (DD/MM/YYYY):");
+        String dateStr = scanner.nextLine();
+
+        // Parse date from string
+        try {
+            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
+        try {
+            // get all trucks from controller
+            TruckDto[] trucks = controller.getAllAvailableTrucks(dateStr);
+            printTrucksArrayOfDTO(trucks); // print all trucks
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public void deleteTruck(){
+        System.out.println("Enter plate number:");
+        String plate = scanner.nextLine();
+        try{
+            controller.deleteTruck(plate);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
+    }
+
     /**
      * Displays the truck manager menu and handles user input.
      * Supported actions: add truck, list all trucks, show available trucks on date, remove truck, and exit.
@@ -53,41 +121,15 @@ public class TruckManagerMenu {
             try {
                 switch (input) {
 
-                    // Option 1: Add a new truck to the system
                     case "1" -> addTruck();
 
+                    case "2" -> showAllTrucks();
 
-                    // Option 2: Show all registered trucks
-                    case "2" -> {
-                        truckService.getAllTrucks().forEach(System.out::println);
-                    }
+                    case "3" -> showAllTrucks();
 
-                    // Option 3: Show trucks available on a specific date
-                    case "3" -> {
+                    case "4" -> deleteTruck();
 
-                        System.out.println("Enter date (DD/MM/YYYY):");
-                        String dateStr = scanner.nextLine();
 
-                        // Parse date from string
-                        LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-                        var available = truckService.getAvailableTrucksOnDate(date);
-                        if (available.isEmpty()) {
-                            System.out.println("No trucks available");
-                        } else {
-                            available.forEach(System.out::println);
-                        }
-                    }
-
-                    // Option 4: Remove a truck by plate number
-                    case "4" -> {
-                        System.out.println("Enter plate number:");
-                        String plate = scanner.nextLine();
-                        truckService.removeTruck(plate);
-                        System.out.println("Truck removed.");
-                    }
-
-                    // Option E: Exit the menu
                     case "E", "e" -> {
                         running = false;
                         System.out.println("Goodbye.");
