@@ -1,6 +1,6 @@
 package transport_module;
 
-import DataAccess.ProductListDocumentDto;
+import DTO.ProductListDocumentDto;
 import Transport_Module_Exceptions.ATransportModuleException;
 
 import java.util.Date;
