@@ -1,18 +1,22 @@
 package transport_module;
 
-import DataAccess.TruckDto;
+import DTO.TruckDto;
 import Transport_Module_Exceptions.ATransportModuleException;
 
 public interface ITruckRepository {
 
-    void addTruck(TruckDto truckDto)throws ATransportModuleException;
+    void addTruck(Truck truck)throws ATransportModuleException;
 
-    Truck getTruckBYPlateNumber(String pn) throws  ATransportModuleException;
+    Truck getTruckBYPlateNumber(int pn) throws  ATransportModuleException;
 
     void deleteTruck(String pn) throws ATransportModuleException;
 
-    TruckDto[] getAllTrucks() throws Exception;
+    Truck DTOtoTruck(TruckDto dto);
 
-    TruckDto[] getAllAvailableTrucks ( String date) throws Exception;
+    TruckDto truckToDTO(Truck truck);
+
+
+
+
 
 }

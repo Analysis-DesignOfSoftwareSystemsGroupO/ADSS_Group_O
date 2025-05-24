@@ -1,7 +1,6 @@
 package transport_module;
 
-
-import DataAccess.TruckDto;
+import DTO.*;
 
 import Transport_Module_Exceptions.*;
 

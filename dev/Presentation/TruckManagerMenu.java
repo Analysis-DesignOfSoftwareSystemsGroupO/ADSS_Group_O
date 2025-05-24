@@ -1,5 +1,5 @@
 package Presentation;
-import DataAccess.TruckDto;
+import DTO.TruckDto;
 import Service.TruckManagerService;
 import Transport_Module_Exceptions.ATransportModuleException;
 

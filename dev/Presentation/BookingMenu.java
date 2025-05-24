@@ -3,6 +3,8 @@ package Presentation;
 import Service.BookingService;
 import Transport_Module_Exceptions.ATransportModuleException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
@@ -12,14 +14,15 @@ import java.util.Scanner;
 public class BookingMenu {
 
     // Dependency on the BookingService to process transport requests
-    private final BookingService bookingService;
+    private BookingControllerPL controller;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Constructs a new BookingMenu instance with the provided BookingService.
-     * @param bookingService the service responsible for handling transport bookings
+     * @param controller the controller responsible for handling transport bookings
      */
-    public BookingMenu(BookingService bookingService) {
-        this.bookingService = bookingService;
+    public BookingMenu(BookingControllerPL controller) {
+        this.controller = controller;
     }
 
     /**
@@ -35,6 +38,7 @@ public class BookingMenu {
             // Display the main menu options
             System.out.println("Welcome to Booking Menu!");
             System.out.println("1. Request new transport");
+            System.out.println("2. Add Products to transport");
             System.out.println("E. Exit");
 
             String input = scanner.nextLine();
@@ -61,16 +65,25 @@ public class BookingMenu {
      * Prompts the user for date, time, source, and destination site names,
      * and delegates the request to the BookingService.
      *
-     * @param scanner the Scanner used to read user input
      */
-    private void handleBooking(Scanner scanner) {
+    private void handleBooking() {
         try {
+
             // Ask user for transport details
             System.out.println("Enter delivery date (dd/MM/yyyy):");
-            String date = scanner.nextLine();
+            String datestr = scanner.nextLine();
+            try
+            {
+                LocalDate date = LocalDate.parse(datestr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return;
+            }
 
             System.out.println("Enter delivery time (HH:mm):");
-            String time = scanner.nextLine();
+            String outtime = scanner.nextLine();
 
             System.out.println("Enter source site name:");
             String source = scanner.nextLine();
@@ -79,7 +92,7 @@ public class BookingMenu {
             String destination = scanner.nextLine();
 
             // Submit the transport request to the service
-            bookingService.requestTransport(date, time, source, destination);
+            controller.createTransport(datestr,outtime,source,destination);
 
         } catch (ATransportModuleException e) {
             // Catch and display known transport-related exceptions
