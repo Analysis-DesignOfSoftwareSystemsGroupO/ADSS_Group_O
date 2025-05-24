@@ -1,18 +1,19 @@
 package DTO;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
 public class TransportDTO {
     private int id;
-    private Date date;
+    private LocalDate date;
     private boolean is_sent ;
     private int maxWeight;
     private String driverID;
-    private int truckPN;
+    private String truckPN;
     private String siteName;
     private LocalTime departureTime ;
-    public TransportDTO(int id, Date date, boolean is_sent, int maxWeight, String driverID, int truckPN, String siteName, LocalTime departureTime){
+    public TransportDTO(int id, LocalDate date, boolean is_sent, int maxWeight, String driverID, String truckPN, String siteName, LocalTime departureTime){
         this.id = id;
         this.date = date;
         this.is_sent = is_sent;
@@ -28,7 +29,7 @@ public class TransportDTO {
         return id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -44,7 +45,7 @@ public class TransportDTO {
         return driverID;
     }
 
-    public int getTruckPN() {
+    public String getTruckPN() {
         return truckPN;
     }
 
@@ -57,7 +58,7 @@ public class TransportDTO {
         this.id = id;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -73,7 +74,7 @@ public class TransportDTO {
         this.driverID = driverID;
     }
 
-    public void setTruckPN(int truckPN) {
+    public void setTruckPN(String truckPN) {
         this.truckPN = truckPN;
     }
 

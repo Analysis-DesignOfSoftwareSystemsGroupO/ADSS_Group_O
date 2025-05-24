@@ -21,6 +21,18 @@
             <version>2.14.1</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.14.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lazyluke.log4jdbc-remix</groupId>
+            <artifactId>log4jdbc-remix</artifactId>
+            <version>0.2.7</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/log4jdbc-remix-0.2.7.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version>
@@ -31,5 +43,6 @@
             <version>5.13.0-RC1</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 </project>

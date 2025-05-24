@@ -15,7 +15,8 @@ public class jdbcTruckDAO  implements ITruckDAO{
 
     @Override
     public void save(TruckDto dto) throws SQLException {
-        if (dto.getPlateNumber() == null) {
+        log.info("jdbcTrucakDAO:: save() ");
+        if (dto.getPlateNumber() != null) {
             String sql = "INSERT INTO Trucks (MaxWeight, LicenceReq, PlateNumber) VALUES (?,?,?)";
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1, dto.getMaxWeight());
@@ -25,8 +26,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
                 log.info("Added a Truck to the DataBase with  pn: " + dto.getPlateNumber());
             } catch (SQLException e) {
                 log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-            } catch (Exception e) {
-                e.printStackTrace();
+                throw e;
             }
         }
     }
@@ -40,7 +40,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
             try(ResultSet rs = ps.executeQuery()){
                 return rs.next()
                         ? Optional.of(new TruckDto(rs.getInt("maxWeight"), rs.getString("LicenceReq"),rs.getString("PlateNumber") ))
-                        :Optional.empty(); //create DTO id id exsist in data base
+                        :Optional.empty(); //Create DTo by the query
             }
         }
 

@@ -8,9 +8,13 @@ import java.util.HashMap;
 public class TruckRepositoryIMP implements  ITruckRepository{
 
 
+    private HashMap<String , Truck> trucksHashMap ;
+
+
     @Override
     public void addTruck(Truck truck) throws ATransportModuleException {
-
+        //Adding track to data base
+        // if succesed :Add Truck to truckHashMap
     }
 
     @Override
@@ -33,5 +37,4 @@ public class TruckRepositoryIMP implements  ITruckRepository{
         return null;
     }
 
-    HashMap<String plateNumber, Truck>
 }

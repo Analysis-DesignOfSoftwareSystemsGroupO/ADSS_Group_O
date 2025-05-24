@@ -78,6 +78,16 @@ public class Transport {
 
     }
 
+    //todo
+    public int getmaxWeight(){
+        return 0 ;
+    }
+    public Truck getTruck(){
+        return this.truck;
+    }
+    public String getSourceSiteName(){
+        return this.source.getName();
+    }
     //****************************************************************************************************************** Get functions
 
     /**@return Transport ID
@@ -117,7 +127,9 @@ public class Transport {
     public LocalDate getDate() {
         return date;
     }
-
+    public Driver getDriver(){
+        return this.driver;
+    }
     /***
      * Checks if a site is one of the transport's destinations.
      * @param site Site name
@@ -317,6 +329,9 @@ public class Transport {
             source = new Site(s);
         }
     }
+
+
+
 
 
     //****************************************************************************************************************** Print functions

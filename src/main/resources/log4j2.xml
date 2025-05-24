@@ -4,6 +4,9 @@
         <Console name="STDOUT">
             <PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n" />
         </Console>
+        <File name="SQLFile" fileName="log/SQLFile.txt" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger - %msg%n"/>
+        </File>
         <File name="File" fileName="log/Execution_output.txt">
             <PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n" />
         </File>
@@ -16,6 +19,13 @@
         </File>
     </Appenders>
     <Loggers>
+        <Logger name="jdbc.sqlonly" level="debug" additivity="false">
+            <AppenderRef ref="SQLFile"/>
+        </Logger>
+
+        <Logger name="jdbc.sqltiming" level="debug" additivity="false">
+            <AppenderRef ref="SQLFile"/>
+        </Logger>
         <Root level="info">
             <AppenderRef ref="STDOUT" />
             <AppenderRef ref="File"/>

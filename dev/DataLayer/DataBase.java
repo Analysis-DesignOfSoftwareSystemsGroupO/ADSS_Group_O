@@ -5,12 +5,13 @@ import java.sql.*;
 
 public class DataBase {
     private static final Logger log = LogManager.getLogger(DataBase.class);
-    private static final String DB_URL = "jdbc:postgresql://10.100.102.28:5432/postgres?user=postgres&password=1234&connectTimeout=10&sslmode=prefer";
+    private static final String DB_URL = "jdbc:log4jdbc:postgresql://10.100.102.28:5432/postgres?user=postgres&password=1234&connectTimeout=10&sslmode=prefer";
     private static Connection conn;
 
     static {
         try{
-            Class.forName("org.postgresql.Driver");
+            Class.forName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy"); // initialize logger query
+            Class.forName("org.postgresql.Driver"); // initialize coonectopn
             conn = DriverManager.getConnection(DB_URL);
             log.info("Connecting to SQL Server... ");
             log.info("Connected to SQLite at {}", DB_URL);
