@@ -1,6 +1,7 @@
 package transport_module;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class ProductListDocument {
     private int transportId;
     private LocalDate date;
     private Transport transport;
+    private LocalTime approximatedArriavaleTime;
 
     /***
      * Constructor - creates a new ProductListDocument
@@ -24,7 +26,7 @@ public class ProductListDocument {
      * @param d Date string in "dd/MM/yyyy" format
      * @throws ATransportModuleException if input is invalid
      */
-    public ProductListDocument(Site site, String d) throws ATransportModuleException {
+    public ProductListDocument(Site site, String d ) throws ATransportModuleException {
         if (site == null)
             throw new InvalidInputException(); // if the site is null - don't create a document
 

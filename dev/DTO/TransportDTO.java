@@ -1,15 +1,18 @@
 package DTO;
 
+import java.time.LocalTime;
+import java.util.Date;
+
 public class TransportDTO {
     private int id;
-    private String date;
+    private Date date;
     private boolean is_sent ;
     private int maxWeight;
-    private int driverID;
+    private String driverID;
     private int truckPN;
     private String siteName;
-
-    public TransportDTO(int id, String date, boolean is_sent, int maxWeight, int driverID, int truckPN, String siteName){
+    private LocalTime departureTime ;
+    public TransportDTO(int id, Date date, boolean is_sent, int maxWeight, String driverID, int truckPN, String siteName, LocalTime departureTime){
         this.id = id;
         this.date = date;
         this.is_sent = is_sent;
@@ -17,6 +20,7 @@ public class TransportDTO {
         this.driverID = driverID;
         this.truckPN = truckPN;
         this.siteName = siteName;
+        this.departureTime = departureTime;
     }
 
     // Getters
@@ -24,7 +28,7 @@ public class TransportDTO {
         return id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -36,7 +40,7 @@ public class TransportDTO {
         return maxWeight;
     }
 
-    public int getDriverID() {
+    public String getDriverID() {
         return driverID;
     }
 
@@ -53,7 +57,7 @@ public class TransportDTO {
         this.id = id;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -65,7 +69,7 @@ public class TransportDTO {
         this.maxWeight = maxWeight;
     }
 
-    public void setDriverID(int driverID) {
+    public void setDriverID(String driverID) {
         this.driverID = driverID;
     }
 
@@ -75,6 +79,13 @@ public class TransportDTO {
 
     public void setSiteName(String siteName) {
         this.siteName = siteName;
+    }
+
+    public void setDepartureTime(LocalTime time ){
+        this.departureTime = departureTime;
+    }
+    public LocalTime getDepartureTime(){
+        return this.departureTime;
     }
 
 }

@@ -1,6 +1,9 @@
 package transport_module;
 
+import DTO.TruckDto;
 import Transport_Module_Exceptions.ATransportModuleException;
+
+import java.util.HashMap;
 
 public class TruckRepositoryIMP implements  ITruckRepository{
 
@@ -19,4 +22,16 @@ public class TruckRepositoryIMP implements  ITruckRepository{
     public void deleteTruck(String pn ) throws ATransportModuleException {
 
     }
+
+    @Override
+    public Truck DTOtoTruck(TruckDto dto) {
+        return null;
+    }
+
+    @Override
+    public TruckDto truckToDTO(Truck truck) {
+        return null;
+    }
+
+    HashMap<String plateNumber, Truck>
 }
