@@ -28,9 +28,9 @@ public class Transport {
      * Constructor for Transport
      * Initializes a new transport instance with given parameters and checks input validity.
      */
-    public Transport(String d, String time, Site s,Site destinationSite) throws ATransportModuleException {
+    public Transport(String d, String time, Site s) throws ATransportModuleException {
         // input check
-        if (time.isEmpty() || d.isEmpty()  || s == null || destinationSite == null) {
+        if (time.isEmpty() || d.isEmpty()  || s == null) {
             throw new InvalidInputException();
         }
 
@@ -53,14 +53,9 @@ public class Transport {
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
-        if (hour < 1 || hour > 24) {
-            System.out.println("Hour is wrong - changed to default hour - 7");
-            hour = 7;
-        }
-        if (minute < 0 || minute > 59) {
-            System.out.println("Minutes is wrong - changed to default minutes - 00");
+        if (hour < 1 || hour > 24 || minute < 0 || minute > 59) {
+            throw new InvalidInputException("Hour is Invalid format. Please try again");
 
-            minute = 0;
         }
         departure_time = LocalTime.of(hour, minute); // set the hour
 
@@ -75,10 +70,6 @@ public class Transport {
         isOutOfZone = false;
         status = Status.waitForShipment;
 
-        //  Create empty document and attach to transport
-        ProductListDocument doc = new ProductListDocument(destinationSite, d);
-        doc.attachTransportToDocument(this);
-        destinations_document_map.put(destinationSite, doc);
 
     }
 

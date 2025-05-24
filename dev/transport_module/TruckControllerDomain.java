@@ -12,6 +12,8 @@ import java.util.Map;
 public class TruckControllerDomain {
 
     private static ITruckRepository truckRepository= new TruckRepositoryIMP();
+    private static ITransportRepository transportRepository = new TransportRepositoryIMP() {
+    };
 
     public TruckControllerDomain(){
 
@@ -65,5 +67,17 @@ public class TruckControllerDomain {
             throw new InvalidInputException("Plate is empty");
 
         truckRepository.deleteTruck(plate);
+    }
+
+    public void assignTruckToTransport(int transportId, String plate) throws ATransportModuleException {
+
+        Transport transport = transportRepository.findById(transportId); // create a transport
+        Truck truck = truckRepository.findByPlate(plate); // create a truck
+        transport.assignTruck(truck); // try to assign truck - if failed throw exception. otherwise, continue
+        // if truck assigned
+        // todo - update database that truck is in transport
+        truckRepository.updateTransport(transport);
+
+
     }
 }

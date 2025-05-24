@@ -4,10 +4,8 @@ import Transport_Module_Exceptions.InvalidInputException;
 import transport_module.TruckControllerDomain;
 
 public class TruckControllerPL {
-    private TruckControllerDomain domain; //think if needed
 
-    public TruckControllerPL(TruckControllerDomain domain) throws Exception {
-        this.domain = domain;
+    public TruckControllerPL() {
     }
 
     public void addTruck(String plate, int maxWeight, String licenceCode) throws Exception{

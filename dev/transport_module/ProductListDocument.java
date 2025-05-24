@@ -1,6 +1,7 @@
 package transport_module;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -14,9 +15,9 @@ public class ProductListDocument {
     private Site destination; // document destination
     private final Map<Product, Integer> productHashMap; // a map of products and amount of each product
     private int totalWeight; // total weight of the products in document
-    private int transportId;
     private LocalDate date;
     private Transport transport;
+    private LocalTime departure_time;
 
     /***
      * Constructor - creates a new ProductListDocument
@@ -24,7 +25,7 @@ public class ProductListDocument {
      * @param d Date string in "dd/MM/yyyy" format
      * @throws ATransportModuleException if input is invalid
      */
-    public ProductListDocument(Site site, String d) throws ATransportModuleException {
+    public ProductListDocument(Site site, String d, String h) throws ATransportModuleException {
         if (site == null)
             throw new InvalidInputException(); // if the site is null - don't create a document
 
@@ -48,6 +49,16 @@ public class ProductListDocument {
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
         transport = null;
+        String[] parts = h.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        if (hour < 1 || hour > 24 || minute < 0 || minute > 59) {
+            throw new InvalidInputException("Hour is Invalid format. Please try again");
+
+        }
+        departure_time = LocalTime.of(hour, minute); // set the hour
+
+
 
     }
     //****************************************************************************************************************** Get functions
