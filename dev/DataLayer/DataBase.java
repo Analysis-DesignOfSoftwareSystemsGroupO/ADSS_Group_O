@@ -11,10 +11,9 @@ public class DataBase {
     static {
         try{
             Class.forName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy"); // initialize logger query
-            Class.forName("org.postgresql.Driver"); // initialize coonectopn
             conn = DriverManager.getConnection(DB_URL);
             log.info("Connecting to SQL Server... ");
-            log.info("Connected to SQLite at {}", DB_URL);
+            log.info("Connected to SQL {}", DB_URL);
         } catch (ClassNotFoundException e) {
             log.error("ClassNotFoundError, connection Failed");
             throw new RuntimeException(e);

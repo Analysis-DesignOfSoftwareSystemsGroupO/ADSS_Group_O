@@ -11,5 +11,5 @@ public interface ITruckDAO {
     void save(TruckDto Truckdto) throws SQLException;
     Optional<TruckDto> findByTruckPN(String pn) throws SQLException;
     List<TruckDto> findAllTrucks() throws SQLException;
-    void deleteTruck(String pn);
+    void deleteTruck(String pn) throws SQLException;
 }

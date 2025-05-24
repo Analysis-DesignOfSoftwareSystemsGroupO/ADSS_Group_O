@@ -23,7 +23,6 @@ public class jdbcTruckDAO  implements ITruckDAO{
                 ps.setString(2, dto.getLiceenceReq());
                 ps.setString(2, dto.getPlateNumber());
                 ps.executeUpdate();
-                log.info("Added a Truck to the DataBase with  pn: " + dto.getPlateNumber());
             } catch (SQLException e) {
                 log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
                 throw e;
@@ -71,7 +70,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     }
 
     @Override
-    public void deleteTruck(String pn) {
+    public void deleteTruck(String pn) throws SQLException {
         log.info("jdbcTruckDAO :: deleteTruck()");
         String sql = "DELETE FROM Trucks WHERE PlateNumber = ?";
         try (Connection conn = DataBase.getConnection();
@@ -81,6 +80,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
 
         } catch (SQLException e) {
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
         }

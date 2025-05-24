@@ -71,22 +71,40 @@ public class jdbcTransportDAO implements ITransportDAO {
     public void save(TransportDTO transportDTO) throws SQLException {
         log.info("jdbcTransportsDAO :: save() ");
         String sql = "INSERT INTO Transports (id, Date, is_sent, maximum_weight, Truck_PN, DriverID, departure_time, Source_site_name ) VALUES (?,?,?,?,?,?,?,?)";
-        if(transportDTO != null){
+        if (transportDTO != null) {
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
-                ps.setInt(1,transportDTO.getId());
-                ps.setTime(2, Time.valueOf(transportDTO.getDepartureTime()) );
+                ps.setInt(1, transportDTO.getId());
+                ps.setTime(2, Time.valueOf(transportDTO.getDepartureTime()));
                 ps.setBoolean(3, transportDTO.isSent());
-                ps.setInt(4,transportDTO.getMaxWeight());
+                ps.setInt(4, transportDTO.getMaxWeight());
                 ps.setString(5, transportDTO.getSiteName());
-                ps.setString(6,transportDTO.getTruckPN());
+                ps.setString(6, transportDTO.getTruckPN());
                 ps.setDate(7, Date.valueOf(transportDTO.getDate()));
-                ps.setString(8, ((Integer)transportDTO.getId()).toString());
-
+                ps.setString(8, ((Integer) transportDTO.getId()).toString());
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+                throw e;
             }
+        }
     }
+        @Override
+        public void deleteTransport ( int id ) throws SQLException{
+            log.info("jdbcTransport::deleteTransport( " + id + ")");
+            String sql = "DELETE FROM Transport WHERE id = ?";
+            try (Connection conn = DataBase.getConnection();
+                 PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+                preparedStatement.setInt(1, id);
+                preparedStatement.executeUpdate();
+            }
+            catch (SQLException e) {
+                log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+                throw e;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
-    @Override
-    public void deleteTransport(int id) throws SQLException {
+        }
 
-    }
 }
