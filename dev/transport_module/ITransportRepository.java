@@ -1,6 +1,6 @@
 package transport_module;
 
-import DTO.ProductListDocumentDto;
+import DTO.TransportDTO;
 import Transport_Module_Exceptions.ATransportModuleException;
 
 import java.util.Date;
@@ -14,6 +14,10 @@ public interface ITransportRepository {
 
     void saveTransport(Transport transport) throws ATransportModuleException ;
 
-    void deleteTransport(Transport transport ) throws  ATransportModuleException;
+    void deleteTransport(int transportID ) throws  ATransportModuleException;
+
+    Transport TransportDTOtoTransport(TransportDTO dto );
+
+    TransportDTO transportToTransportDTO(Transport transport);
 
 }
