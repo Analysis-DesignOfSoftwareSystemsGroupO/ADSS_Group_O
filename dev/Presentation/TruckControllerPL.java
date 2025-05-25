@@ -31,5 +31,7 @@ public class TruckControllerPL {
 
     }
 
+     // Attach truck - aopplu attach truck in domain
+
 
 }

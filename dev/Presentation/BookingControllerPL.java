@@ -14,6 +14,7 @@ public class BookingControllerPL {
 
 
     public BookingControllerPL() {
+        // todo Create repositories in domain
         ITransportRepository transportRepo = new TransportRepositoryIMP();
         IProductListDocumentRepository documentRepo = new ProductListDocumentRepositoryIMP();
         IProductRepository productRepo = new ProductRepositoryIMP();

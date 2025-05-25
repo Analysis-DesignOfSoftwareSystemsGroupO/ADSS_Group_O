@@ -29,16 +29,20 @@ public class TransportContorollerDomain {
      */
     public int createTransport(TransportReqDTO dto) throws ATransportModuleException {
         // Get source site from repository
+        // todo - ask for site name and area from user
+        // todo - posposed later will be integrated with more models ST site will have more functionality - right now just site name and area name
         Site source = siteRepo.getSiteByName(dto.getSource());
         if (source == null) throw new InvalidInputException("Source site not found");
 
         // Convert date/time to strings for constructor
-        String dateStr = dto.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String timeStr = dto.getOutTime().toString(); // format: HH:mm
+        String dateStr = dto.date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeStr = dto.departureTime().toString(); // format: HH:mm
 
         // Create and persist transport
+        // todo - send DTO to repository
         Transport t = new Transport(dateStr, timeStr, source);
-        transportRepo.saveTransport(t);
+
+        // todo use Repository getTransportID
         return t.getId();
     }
 
