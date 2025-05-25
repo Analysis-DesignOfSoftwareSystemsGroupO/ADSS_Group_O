@@ -6,23 +6,35 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Optional;
 
 public class jdbcPLDDAO implements IPLDDAO{
     private static final Logger log = LogManager.getLogger(jdbcPLDDAO.class);
 
-
+    /**
+     *
+     * @param dto DataTransportObject holds the data to store in the data base
+     * @throws SQLException
+     */
     @Override
     public void save(ProductListDocumentDto dto) throws SQLException {
         log.info("jdbcPLDDAO ::deletePLD(DTO)");
-        String sql = "INSERT INTO ProductListDocument (ProductListDocumentID, DestinationSiteName, TransportID, totalweight, Date) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO ProductListDocument (ProductListDocumentID, TransportID, totalweight, AproximatedArrivaleTime, DestinationSiteName) VALUES (?,?,?,?,?)";
         if(dto != null){
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1,dto.getId());
-                ps.setString(2, dto.getSiteDes());
-                ps.setInt(3,dto.getTransportID());
-                ps.setInt(4, dto.ge);
+                ps.setInt(2,dto.getTransportID());
+                ps.setInt(3, dto.getWeight());
+                ps.setTime(4, Time.valueOf(dto.getApproximatedArrivalTime()));
+                ps.setString(5, dto.getSiteDes());
+                ps.executeUpdate();//run query
             }
-
+            catch (SQLException e){
+                log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+                throw e;
+            }
+        }
     }
 
     //delete a PLD from DataBase
@@ -66,5 +78,30 @@ public class jdbcPLDDAO implements IPLDDAO{
             throw e;
         }
         return 0 ;
+    }
+
+    /**
+     *
+     * @param id ProductListDocumentID
+     * @return Optional PLDDTO, all data necesary to Create PLD
+     * @throws SQLException
+     */
+    @Override
+    public Optional<ProductListDocumentDto> findByPLDID(int id) throws SQLException {
+        log.info("jdbc:: findByPLDID( " + id+ ")");
+        String sql = "SELECT * FROM ProductListDocument WHERE ProductListDocumentID = ?";
+        try (PreparedStatement ps =  DataBase.getConnection().prepareStatement(sql)){
+            ps.setInt(1,id);
+
+        }
+        return Optional.empty();
+    }
+    public List<String> getListOfProductsByPLDID(int pldID)throws  SQLException{
+        log.info("jdbc::getListOfProductsByPLDID( " + pldID + ")");
+
+    }
+    @Override
+    public List<ProductListDocumentDto> findByTransport(int Tid) throws SQLException {
+        return List.of();
     }
 }
