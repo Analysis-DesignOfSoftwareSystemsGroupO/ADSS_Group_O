@@ -9,7 +9,8 @@ import java.util.*;
 import java.time.LocalDate;
 
 public class Transport {
-    public enum Status{waitForShipment, sent, delayed}
+    public enum Status {waitForShipment, sent, delayed}
+
     private static int staticTransportID = 0;
     private final int id;
     private LocalDate date; // field for date of the transport
@@ -30,7 +31,7 @@ public class Transport {
      */
     public Transport(String d, String time, Site s) throws ATransportModuleException {
         // input check
-        if (time.isEmpty() || d.isEmpty()  || s == null) {
+        if (time.isEmpty() || d.isEmpty() || s == null) {
             throw new InvalidInputException();
         }
 
@@ -58,7 +59,6 @@ public class Transport {
 
         }
         departure_time = LocalTime.of(hour, minute); // set the hour
-
 
 
         id = ++staticTransportID; // give index to transport
@@ -113,7 +113,8 @@ public class Transport {
     public LocalDate getDate() {
         return date;
     }
-    public Status getStatus(){
+
+    public Status getStatus() {
         return status;
     }
 
@@ -198,6 +199,10 @@ public class Transport {
         status = Status.sent;
     }
 
+    public void setMaxWeight(int maxWeight){
+        this.maxWeight = maxWeight;
+    }
+
     /***
      * Loads a document to the transport after weight validation.
      * @param document ProductListDocument to load
@@ -207,7 +212,7 @@ public class Transport {
         if (document == null)
             throw new InvalidInputException();
         if (maxWeight < currWeight + document.getTotalWeight()) { // if truck is in Over Weight
-            throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
+//            throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
 
         } else {
             if (destinations_document_map.get(document.getDestination()) != null) { // if destination is already a destination in transport - throw exception
@@ -221,7 +226,9 @@ public class Transport {
                 System.out.println("This destination is out of Area Zone, this is a special Transport");
                 isOutOfZone = true;
             }
+
         }
+
 
     }
 

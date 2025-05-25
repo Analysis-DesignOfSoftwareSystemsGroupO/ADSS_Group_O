@@ -10,7 +10,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
+
+import static java.lang.Object.*;
 
 /**
  * Console-based presentation layer for customers to request new transports.
@@ -24,6 +27,7 @@ public class BookingMenu {
     private String d; // date variable for Transport request
     private int transportId;
     private List<Integer> productsDocumentIdList;
+    private int maxWeight;
 
 
     /**
@@ -35,6 +39,7 @@ public class BookingMenu {
         this.controller = controller;
         d = "";
         transportId = -1;
+        maxWeight = 0;
         productsDocumentIdList = new ArrayList<>();
     }
 
@@ -106,17 +111,24 @@ public class BookingMenu {
             System.out.println("Enter source site name:");
             String source = scanner.nextLine();
 
-            // Submit the transport request to the service
-            this.transportId = controller.createTransport(date,departure_time,source);
-            this.d = datestr;
-
-            ProductListDocumentMenu();
-            if(productsDocumentIdList.isEmpty())
-            {
-                throw new Exception("There is no destination");
+            // let the user choose if send it empty or not
+            System.out.println("Press 1 To add Products to transport");
+            System.out.println("Press any key to return to Booking Transport Menu");
+            String input = scanner.nextLine();
+            if(Objects.equals(input, "1")){
+                ProductListDocumentMenu();
+            }
+            else {
+                productsDocumentIdList.add(createEmptyProductListDocument());
             }
 
 
+            // Submit the transport request to the service
+            this.transportId = controller.createTransport(date,departure_time,source,maxWeight);
+            this.d = datestr;
+
+            for (int ProductListDocumentId : productsDocumentIdList) // attach each product list document to transport( even if its empty one)
+                controller.attachProductListDocumentToTransport(ProductListDocumentId, transportId);
 
 
 
@@ -145,6 +157,7 @@ public class BookingMenu {
                 case "1"-> {
                     try {
                         productsDocumentIdList.add(createProductListDocument());
+
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -160,7 +173,17 @@ public class BookingMenu {
     }
 
 
+    private int createEmptyProductListDocument() throws Exception{
+        System.out.println("Please enter your site destination");
+        String site = scanner.nextLine();
+        System.out.println("Please enter wanted hour ");
+        String wantedhour = scanner.nextLine();
+        int ProductListDocumentId = 0;
+        ProductListDocumentId = controller.createProductListDocument(site, wantedhour, d);
 
+        return ProductListDocumentId;
+
+    }
 
     private int createProductListDocument() throws Exception{
         boolean running = true;
@@ -180,7 +203,7 @@ public class BookingMenu {
                     String productId = scanner.nextLine();
                     System.out.println("Please enter amount");
                     int amount = Integer.parseInt(scanner.nextLine());
-                    ProductDTO productDTO = new ProductDTO(productId, amount);
+                    ProductDTO productDTO = new ProductDTO(productId,5, amount);
                     try {
                         controller.addProductToDocument(productDTO, ProductListDocumentId);
                     }
@@ -196,8 +219,7 @@ public class BookingMenu {
             }
         }
 
-
-        controller.attachProductListDocumentToTransport(ProductListDocumentId, transportId);
+        maxWeight+= controller.getProductListDocumentWeight(ProductListDocumentId); // add the weight to total weight
         return ProductListDocumentId;
 
     }
