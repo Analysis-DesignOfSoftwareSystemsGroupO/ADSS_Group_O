@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class jdbcTruckDAO  implements ITruckDAO{
-    private static final Logger log = LogManager.getLogger(DataBase.class);
+    private static final Logger log = LogManager.getLogger(jdbcTruckDAO.class);
 
     @Override
     public void save(TruckDto dto) throws SQLException {

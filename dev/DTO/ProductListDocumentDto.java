@@ -11,20 +11,25 @@ public class ProductListDocumentDto {
     private String[] products;
     private int[] quantity;
     private LocalTime approximatedArrivalTime ;
+    private int transportID;
+    private int weight;
 
-    public ProductListDocumentDto(int id, String siteDes, String[] products, int[] quantity , LocalTime time) {
+    public ProductListDocumentDto(int id, int transportID, String siteDes, String[] products, int[] quantity , int weight, LocalTime time ) {
         this.siteDes = siteDes;
         this.products = products;
         this.quantity = quantity;
         this.id = id;
         this.approximatedArrivalTime = time;
-
+        this.transportID = transportID;
+        this.weight = weight;
     }
 
     // Getters
+    public int getTransportID(){return  transportID;}
     public int getId() {
         return id;
     }
+    public int getWeight(){return this.weight;}
 
     public String getSiteDes() {
         return siteDes;

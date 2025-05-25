@@ -6,7 +6,7 @@ import transport_module.ProductListDocument;
 import java.sql.SQLException;
 
 public interface IPLDDAO {
-    ProductListDocumentDto save(ProductListDocumentDto dto ) throws SQLException;
+    void save(ProductListDocumentDto dto ) throws SQLException;
     void deletePLD(int serialNumber ) throws  SQLException;
-
+    int getHieghestTransportID() throws  SQLException;
 }

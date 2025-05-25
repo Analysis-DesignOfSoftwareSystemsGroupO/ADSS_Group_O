@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class jdbcTransportDAO implements ITransportDAO {
-    private static final Logger log = LogManager.getLogger(DataBase.class);
+    private static final Logger log = LogManager.getLogger(jdbcTransportDAO.class);
 
     @Override
     public Optional<TransportDTO> getTransportByid(int id) throws SQLException {
