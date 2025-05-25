@@ -1,6 +1,7 @@
 package DTO;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class ProductListDocumentDto {
 
@@ -8,16 +9,14 @@ public class ProductListDocumentDto {
     //private id
     private int id;
     private String siteDes;
-    private String[] products;
-    private int[] quantity;
+    private List<ProductDTO> products;
     private LocalTime approximatedArrivalTime ;
     private int transportID;
     private int weight;
 
-    public ProductListDocumentDto(int id, int transportID, String siteDes, String[] products, int[] quantity , int weight, LocalTime time ) {
+    public ProductListDocumentDto(int id, int transportID, String siteDes, List<ProductDTO> products , int weight, LocalTime time ) {
         this.siteDes = siteDes;
         this.products = products;
-        this.quantity = quantity;
         this.id = id;
         this.approximatedArrivalTime = time;
         this.transportID = transportID;
@@ -35,12 +34,8 @@ public class ProductListDocumentDto {
         return siteDes;
     }
 
-    public String[] getProducts() {
+    public List<ProductDTO> getProducts() {
         return products;
-    }
-
-    public int[] getQuantity() {
-        return quantity;
     }
 
 
@@ -49,13 +44,7 @@ public class ProductListDocumentDto {
         this.siteDes = siteDes;
     }
 
-    public void setProducts(String[] products) {
-        this.products = products;
-    }
 
-    public void setQuantity(int[] quantity) {
-        this.quantity = quantity;
-    }
 
     public void setApproximatedArrivalTime(LocalTime time ){
         this.approximatedArrivalTime = time;

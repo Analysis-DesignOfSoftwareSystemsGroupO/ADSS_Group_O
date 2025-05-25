@@ -1,11 +1,14 @@
 package DataAccess;
 
+import DTO.ProductDTO;
 import DTO.ProductListDocumentDto;
+import DTO.TransportDTO;
 import DataLayer.DataBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,10 +99,24 @@ public class jdbcPLDDAO implements IPLDDAO{
         }
         return Optional.empty();
     }
-    public List<String> getListOfProductsByPLDID(int pldID)throws  SQLException{
-        log.info("jdbc::getListOfProductsByPLDID( " + pldID + ")");
 
+    public List<ProductDTO> getListOfProductsByPLDID(int pldID)throws  SQLException{
+        log.info("jdbc::getListOfProductsByPLDID( " + pldID + ")");
+        String sql = "SELECT ProductQuantety, WeightPerUnit, ProductSerialNumber WHERE ProductListDocumentId = ?";
+        List<ProductDTO> products = new ArrayList<>();
+        try(Statement st = DataBase.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                //Adding ProductDTO to the List
+                products.add(new ProductDTO(rs.getString("ProductSerialNumber"), rs.getInt("WeightPerUnit"), rs.getInt("ProductQuantety")));
+            }
+        }catch (SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+        return products;
     }
+
     @Override
     public List<ProductListDocumentDto> findByTransport(int Tid) throws SQLException {
         return List.of();

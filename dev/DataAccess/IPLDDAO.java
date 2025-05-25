@@ -1,5 +1,6 @@
 package DataAccess;
 
+import DTO.ProductDTO;
 import DTO.ProductListDocumentDto;
 import transport_module.ProductListDocument;
 
@@ -13,7 +14,7 @@ public interface IPLDDAO {
     int getHieghestTransportID() throws  SQLException;
     Optional<ProductListDocumentDto> findByPLDID(int id) throws  SQLException;
     List<ProductListDocumentDto> findByTransport(int Tid) throws SQLException;
-    List<String> getListOfProductsByPLDID(int pldID)throws  SQLException;
+    List<ProductDTO> getListOfProductsByPLDID(int pldID)throws  SQLException;
     List<Integer> quantetyOfProductsbyPLDID(int pldID)throws SQLException;
 
 }
