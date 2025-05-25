@@ -5,7 +5,7 @@ import java.util.List;
  * The IWeekManager interface defines the operations for managing a week's shifts in the system.
  * These operations include creating new weeks, managing roles, assigning employees, and printing details of the week.
  */
-public interface IWeekManager {
+public interface IWeekController {
 
     /**
      * Creates instances of new shifts for each day of the week (Sunday to Friday).

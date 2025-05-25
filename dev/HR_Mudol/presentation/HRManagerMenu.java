@@ -1,7 +1,7 @@
 package HR_Mudol.presentation;
 
 import HR_Mudol.domain.*;
-import HR_Mudol.Service.ManagerSystem.HRSystemManager;
+import HR_Mudol.Service.ManagerService.HRControllerService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -29,7 +29,7 @@ public class HRManagerMenu implements Menu{
         }
 
         Scanner scanner = new Scanner(System.in);
-        HRSystemManager hrSystemManager=new HRSystemManager(curBranch);
+        HRControllerService hrSystemManager=new HRControllerService(curBranch);
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");
@@ -65,7 +65,7 @@ public class HRManagerMenu implements Menu{
      * @param hr The HR system manager.
      * @param weeks The list of available weeks for the shift history.
      */
-    private static void viewShiftsHistory(HRSystemManager hr, List<Week> weeks) {
+    private static void viewShiftsHistory(HRControllerService hr, List<Week> weeks) {
         if (weeks == null || weeks.isEmpty()) {
             System.out.println("No weeks available.");
             return;
@@ -152,7 +152,7 @@ public class HRManagerMenu implements Menu{
      * @param caller The user calling the menu.
      * @param sc The scanner to capture user input.
      */
-    private static void manageShift(HRSystemManager hr,List<Week> weeks, User caller, Scanner sc) {
+    private static void manageShift(HRControllerService hr, List<Week> weeks, User caller, Scanner sc) {
         while (true) {
             System.out.println("\n--- Shift Management ---");
             System.out.println("1. Assigning roles to weekly shifts");
@@ -191,7 +191,7 @@ public class HRManagerMenu implements Menu{
      * @param caller The user calling the menu.
      * @param week The current week to edit shifts for.
      */
-    public static void editShifts(HRSystemManager hr,User caller, Week week) {
+    public static void editShifts(HRControllerService hr, User caller, Week week) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
@@ -240,7 +240,7 @@ public class HRManagerMenu implements Menu{
      * @param caller The user calling the menu.
      * @param sc The scanner to capture user input.
      */
-    private static void manageEmployees(HRSystemManager hr, User caller, Scanner sc) {
+    private static void manageEmployees(HRControllerService hr, User caller, Scanner sc) {
         while (true) {
             System.out.println("\n--- Employee Management ---");
             System.out.println("1. Add Employee");
@@ -271,7 +271,7 @@ public class HRManagerMenu implements Menu{
      * @param sc The scanner to capture user input.
      * @param curBranch The current branch to retrieve weeks and data from.
      */
-    private static void generateReports(HRSystemManager hr, User caller, Scanner sc,Branch curBranch) {
+    private static void generateReports(HRControllerService hr, User caller, Scanner sc, Branch curBranch) {
         System.out.println("\n--- Report Generation ---");
         System.out.println("1. Weekly Report");
         System.out.println("2. Employee Report");
@@ -310,7 +310,7 @@ public class HRManagerMenu implements Menu{
      * @param caller The user calling the menu.
      * @param sc The scanner to capture user input.
      */
-    private static void manageRoles(HRSystemManager hr, User caller, Scanner sc) {
+    private static void manageRoles(HRControllerService hr, User caller, Scanner sc) {
         System.out.println("\n--- Role Management ---");
         System.out.println("1. Create Role");
         System.out.println("2. Assign Employee to Role");

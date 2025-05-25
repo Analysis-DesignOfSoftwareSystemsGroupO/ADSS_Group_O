@@ -7,16 +7,16 @@ import java.util.Scanner;
  * ShiftManager class manages shift operations:
  * Assign employees to shifts, remove employees, add/remove roles, and print shifts.
  */
-public class ShiftManager implements IShiftManager {
+public class ShiftController implements IShiftController {
 
-    private IRoleManager dependency; // Dependency for accessing role management
+    private IRoleController dependency; // Dependency for accessing role management
 
 
     /**
      * Constructor for ShiftManager.
      * @param dependency The role manager dependency used for role-related operations.
      */
-    public ShiftManager(IRoleManager dependency) {
+    public ShiftController(IRoleController dependency) {
         this.dependency = dependency;
     }
     /**

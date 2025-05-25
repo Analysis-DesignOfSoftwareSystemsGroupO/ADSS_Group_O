@@ -1,6 +1,6 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.EmployeeManager;
+import HR_Mudol.domain.EmployeeController;
 import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,13 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EmployeeManagerTest {
+public class EmployeeControllerTest {
 
     private Branch branch;
-    private EmployeeManager employeeManager;
+    private EmployeeController employeeController;
     private Employee hrEmployee;
     private User hrUser;
-    private RoleManagerMock roleManagerMock;
+    private RoleControllerMock roleManagerMock;
 
     // Setup method to initialize a clean branch and HR user before each test
     @BeforeEach
@@ -26,7 +26,7 @@ public class EmployeeManagerTest {
         branch.getEmployees().clear();
         branch.getUsers().clear();
 
-        employeeManager = new EmployeeManager(branch);
+        employeeController = new EmployeeController(branch);
 
         hrEmployee = new Employee("HR Manager", 123456789, "password", "bank123", 10000,
                 LocalDate.of(2020, 1, 1), 5, 5, 10, 15);
@@ -35,8 +35,8 @@ public class EmployeeManagerTest {
         branch.getEmployees().add(hrEmployee);
         branch.getUsers().add(hrUser);
 
-        roleManagerMock = new RoleManagerMock();
-        employeeManager.setRoleManager(roleManagerMock);
+        roleManagerMock = new RoleControllerMock();
+        employeeController.setRoleManager(roleManagerMock);
     }
 
     // Test adding a new employee through user input simulation
@@ -54,9 +54,9 @@ public class EmployeeManagerTest {
             15
             """;
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.addEmployee(hrUser);
+        employeeController.addEmployee(hrUser);
 
         assertEquals(2, branch.getEmployees().size());
         assertEquals(2, branch.getUsers().size());
@@ -68,9 +68,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.removeEmployee(hrUser);
+        employeeController.removeEmployee(hrUser);
 
         assertEquals(1, branch.getEmployees().size());
         assertEquals(1, branch.getUsers().size());
@@ -83,9 +83,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\nnewBankAccount\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.updateBankAccount(hrUser);
+        employeeController.updateBankAccount(hrUser);
         assertEquals("newBankAccount", employee.getEmpBankAccount());
     }
 
@@ -95,9 +95,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\n6000\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.updateSalary(hrUser);
+        employeeController.updateSalary(hrUser);
         assertEquals(6000, employee.getEmpSalary());
     }
 
@@ -107,9 +107,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\n7\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.updateMinDayShift(hrUser);
+        employeeController.updateMinDayShift(hrUser);
         assertEquals(7, employee.getContract(hrUser).getMinDayShift(hrUser, employee));
     }
 
@@ -119,9 +119,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\n8\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.updateMinEveningShift(hrUser);
+        employeeController.updateMinEveningShift(hrUser);
         assertEquals(8, employee.getContract(hrUser).getMinEveninigShift(hrUser, employee));
     }
 
@@ -131,9 +131,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\n12\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.setInitialsickDays(hrUser);
+        employeeController.setInitialsickDays(hrUser);
         assertEquals(12, employee.getContract(hrUser).getSickDays(hrUser, employee));
     }
 
@@ -143,9 +143,9 @@ public class EmployeeManagerTest {
         Employee employee = createEmployeeAndAddToBranch();
         String input = "111111111\n14\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.setInitialdaysOff(hrUser);
+        employeeController.setInitialdaysOff(hrUser);
         assertEquals(14, employee.getContract(hrUser).getDaysOff(hrUser, employee));
     }
 
@@ -153,7 +153,7 @@ public class EmployeeManagerTest {
     @Test
     public void testGetEmployeeByIdSuccess() {
         Employee employee = createEmployeeAndAddToBranch();
-        Employee found = employeeManager.getEmployeeById(hrUser, employee.getEmpId());
+        Employee found = employeeController.getEmployeeById(hrUser, employee.getEmpId());
         assertEquals(employee, found);
     }
 
@@ -163,7 +163,7 @@ public class EmployeeManagerTest {
     public void testAccessDeniedForNonManager() {
         User regularUser = new User(hrEmployee, Level.regularEmp);
         assertThrows(SecurityException.class, () -> {
-            employeeManager.printAllEmployees(regularUser);
+            employeeController.printAllEmployees(regularUser);
         });
     }
 
@@ -193,9 +193,9 @@ public class EmployeeManagerTest {
             15
             """;
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.addEmployee(hrUser);
+        employeeController.addEmployee(hrUser);
 
         assertEquals(3, branch.getEmployees().size()); // HR + original + second valid
     }
@@ -205,9 +205,9 @@ public class EmployeeManagerTest {
     public void testRemoveEmployeeInvalidId() {
         String input = "999999999\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        employeeManager.setScanner(new Scanner(in));
+        employeeController.setScanner(new Scanner(in));
 
-        employeeManager.removeEmployee(hrUser);
+        employeeController.removeEmployee(hrUser);
 
         // No one removed, HR Manager still exists
         assertEquals(1, branch.getEmployees().size());
@@ -221,7 +221,7 @@ public class EmployeeManagerTest {
         User regularUser = new User(employee, Level.regularEmp);
 
         assertThrows(SecurityException.class, () -> {
-            employeeManager.updateSalary(regularUser);
+            employeeController.updateSalary(regularUser);
         });
     }
 

@@ -1,6 +1,6 @@
 package dev.HR_Mudol.Service.EmployeeSystem;
 
-import HR_Mudol.Service.EmployeeSystem.EmployeeSystem;
+import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EmployeeSystemTest {
+public class EmployeeServiceTest {
 
     private Employee employee;
     private User employeeUser;
@@ -26,7 +26,7 @@ public class EmployeeSystemTest {
 
     @Test
     public void testViewPersonalDetails() {
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         system.viewPersonalDetails(employeeUser, employee);
     }
 
@@ -35,7 +35,7 @@ public class EmployeeSystemTest {
         Employee other = new Employee("Other", 222222222, "pass", "bank", 5000, LocalDate.now(), 2, 2, 5, 5);
         User otherUser = new User(other, Level.regularEmp);
 
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         assertThrows(SecurityException.class, () -> system.viewPersonalDetails(otherUser, employee));
     }
 
@@ -44,7 +44,7 @@ public class EmployeeSystemTest {
         String input = "pass\nnewpass123\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         system.changePassword(employeeUser, employee);
         assertEquals("newpass123", employee.getEmpPassword());
@@ -55,7 +55,7 @@ public class EmployeeSystemTest {
         String input = "pass\npass\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         system.changePassword(employeeUser, employee);
         assertEquals("pass", employee.getEmpPassword());
@@ -85,7 +85,7 @@ public class EmployeeSystemTest {
         """;
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         Week currentWeek = new Week();
         system.submitConstraint(employeeUser, employee, currentWeek);
@@ -117,7 +117,7 @@ public class EmployeeSystemTest {
         """;
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         Week currentWeek = new Week();
         system.submitConstraint(employeeUser, employee, currentWeek);
@@ -131,14 +131,14 @@ public class EmployeeSystemTest {
 
     @Test
     public void testViewMyShifts_NoShifts() {
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         Week currentWeek = new Week();
         system.viewMyShifts(employeeUser, employee, currentWeek);
     }
 
     @Test
     public void testViewContractDetails() {
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         system.viewContractDetails(employeeUser, employee);
     }
 
@@ -147,7 +147,7 @@ public class EmployeeSystemTest {
         Employee other = new Employee("Other", 222222222, "pass", "bank", 5000, LocalDate.now(), 2, 2, 5, 5);
         User otherUser = new User(other, Level.regularEmp);
 
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         assertThrows(SecurityException.class, () -> system.viewContractDetails(otherUser, employee));
     }
 
@@ -156,7 +156,7 @@ public class EmployeeSystemTest {
         String input = "1\n"; // בוחר לראות אילוצים של השבוע הנוכחי
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         system.viewMyConstraints(employeeUser, employee);
     }
@@ -166,7 +166,7 @@ public class EmployeeSystemTest {
         String input = "1\n"; // בוחר לראות אילוצים של השבוע הנוכחי
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         Constraint morningC = new Constraint("Busy on Monday", WeekDay.MONDAY, ShiftType.MORNING);
         Constraint eveningC = new Constraint("Unavailable Tuesday", WeekDay.TUESDAY, ShiftType.EVENING);
@@ -193,7 +193,7 @@ public class EmployeeSystemTest {
         """;
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         Week week = new Week();
         system.updateConstraint(employeeUser, employee, week);
@@ -211,7 +211,7 @@ public class EmployeeSystemTest {
         """;
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         Scanner testScanner = new Scanner(in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         Week currentWeek = new Week();
         system.updateConstraint(employeeUser, employee, currentWeek);
@@ -219,13 +219,13 @@ public class EmployeeSystemTest {
 
     @Test
     public void testViewAvailableRoles_NoRolesAssigned() {
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         system.viewAvailableRoles(employeeUser, employee);
     }
 
     @Test
     public void testViewAvailableRoles_WithRoles() {
-        EmployeeSystem system = new EmployeeSystem();
+        EmployeeService system = new EmployeeService();
         Role role = new Role("Cashier");
         role.addNewEmployee(new User(employee, Level.HRManager), employee);
         employee.addNewRole(new User(employee, Level.HRManager), role);
@@ -235,7 +235,7 @@ public class EmployeeSystemTest {
     @Test
     public void testViewMyShifts_WithAssignedShift() {
         Scanner testScanner = new Scanner(System.in);
-        EmployeeSystem system = new EmployeeSystem(testScanner);
+        EmployeeService system = new EmployeeService(testScanner);
 
         Week week = new Week();
         Shift shift = new Shift(WeekDay.MONDAY, ShiftType.MORNING);

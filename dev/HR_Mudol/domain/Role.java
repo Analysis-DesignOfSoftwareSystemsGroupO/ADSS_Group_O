@@ -14,7 +14,7 @@ public class Role {
     static int RoleCounter = 0;
 
     // Unique identifier for the role
-    private final int roleNumber;
+    private  int roleNumber;
 
     // Description of the role
     private String description;
@@ -27,6 +27,13 @@ public class Role {
      * Should be used only by an HR Manager.
      * @param description The description of the role.
      */
+    public Role(String description, int roleNumber) {
+        this.roleNumber = roleNumber;
+        this.description = description;
+        this.relevantEmployees = new LinkedList<>();
+    }
+
+
     public Role(String description) {
         RoleCounter++;
         this.roleNumber = RoleCounter;
@@ -39,7 +46,7 @@ public class Role {
      * @return role number
      */
     public int getRoleNumber() {
-        return roleNumber;
+        return  this.roleNumber;
     }
 
     /**

@@ -7,7 +7,7 @@ package HR_Mudol.domain;
  * The primary user of this interface is a manager or a user with the required permissions
  * who can manage shift assignments and roles for employees.
  */
-public interface IShiftManager {
+public interface IShiftController {
 
     /**
      * Assigns an employee to a specific shift with a particular role.

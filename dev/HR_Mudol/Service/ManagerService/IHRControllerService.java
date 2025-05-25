@@ -1,5 +1,6 @@
-package HR_Mudol.Service.ManagerSystem;
+package HR_Mudol.Service.ManagerService;
 
+import HR_Mudol.Service.EmployeeService.IEmployeeService;
 import HR_Mudol.domain.*;
 
 /**
@@ -7,7 +8,8 @@ import HR_Mudol.domain.*;
  * This includes managing employees, roles, shifts, weeks, and generating reports.
  * The interface extends multiple other manager interfaces for employee, role, shift, week, and report generation functionality.
  */
-public interface IHRControllerService extends IEmployeeController, IRoleController, IShiftController, IWeekController, IReportGenerator {
+public interface IHRControllerService extends IEmployeeService, IRoleController, IShiftController, IWeekController, IReportGenerator
+ {
 
     /**
      * Displays the dashboard with an overview of the current week and employee status.
@@ -17,4 +19,7 @@ public interface IHRControllerService extends IEmployeeController, IRoleControll
      * @param curBranch The branch for which the dashboard is being displayed.
      */
     void displayDashboard(User caller, Branch curBranch);
+
+     Branch getBranch();
+     IRoleController getRoleManager();
 }

@@ -1,8 +1,8 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.Service.ManagerSystem.HRSystemManager;
-import HR_Mudol.Service.ManagerSystem.ShiftManager;
-import HR_Mudol.Service.ShiftManagerSystem.ShiftManagerSystem;
+import HR_Mudol.Service.ManagerService.HRControllerService;
+import HR_Mudol.domain.ShiftController;
+import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
 import HR_Mudol.domain.*;
 import java.util.Scanner;
 
@@ -28,7 +28,7 @@ public class ShiftManagerMenu implements Menu {
         }
 
         Scanner scanner = new Scanner(System.in);
-        HRSystemManager hr = new HRSystemManager(curBranch);
+        HRControllerService hr = new HRControllerService(curBranch);
 
         while (true) {
             System.out.println("\n=== Employee Menu ===");
@@ -62,14 +62,14 @@ public class ShiftManagerMenu implements Menu {
      * @param caller The shift manager initiating the shift management actions.
      * @param sc The scanner to capture user input.
      */
-    private static void manageShift(HRSystemManager hr, Branch branch, User caller, Scanner sc) {
+    private static void manageShift(HRControllerService hr, Branch branch, User caller, Scanner sc) {
         Week currentWeek = branch.getWeeks().get(branch.getWeeks().size() - 1);
 
         // יצירת ShiftManager (דורש IRoleManager שנמצא ב־HRSystemManager)
-        ShiftManager shiftManager = new ShiftManager(hr.getRoleManager());
+        ShiftController shiftController = new ShiftController(hr.getRoleManager());
 
         // יצירת ShiftManagerSystem
-        ShiftManagerSystem shiftSys = new ShiftManagerSystem(currentWeek, branch, shiftManager);
+        ShiftManagerService shiftSys = new ShiftManagerService(currentWeek, branch, shiftController);
 
 
         while (true) {

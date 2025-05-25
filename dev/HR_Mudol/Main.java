@@ -29,7 +29,7 @@ public class Main {
             Employee employee = new Employee(
                     "Employee" + (i + 1),
                     200000000 + i,
-                    "pass" + (i + 1),
+                    "pass" ,
                     "IL987654321" + i,
                     8000 + i * 100,
                     LocalDate.now().minusDays(i * 10),

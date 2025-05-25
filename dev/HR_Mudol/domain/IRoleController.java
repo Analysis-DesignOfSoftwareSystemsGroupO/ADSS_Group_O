@@ -6,7 +6,7 @@ import java.util.List;
  * The IRoleManager interface defines the operations related to managing roles within the system.
  * These operations include creating, updating, assigning, and removing roles, as well as querying and counting employees' role assignments.
  */
-public interface IRoleManager {
+public interface IRoleController {
 
     /**
      * Creates a new role in the system.

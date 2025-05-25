@@ -6,7 +6,7 @@ import java.util.List;
  * Interface for managing employees within a branch.
  * Provides methods to add, remove, update, search, and display employees.
  */
-public interface IEmployeeManager {
+public interface IEmployeeController {
 
     /**
      * Adds a new employee to the system.
@@ -78,7 +78,7 @@ public interface IEmployeeManager {
      * Returns the role manager associated with this employee manager.
      * @return the role manager
      */
-    IRoleManager getRoleManager();
+    IRoleController getRoleManager();
 
     // --- Display ---
 

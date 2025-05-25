@@ -1,7 +1,7 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.IEmployeeManager;
-import HR_Mudol.domain.IRoleManager;
+import HR_Mudol.domain.IEmployeeController;
+import HR_Mudol.domain.IRoleController;
 import HR_Mudol.domain.*;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * EmployeeManagerMock is a special lightweight version of an employee manager.
  * It is used only for unit testing to provide controlled responses without requiring real system setup.
  */
-public class EmployeeManagerMock implements IEmployeeManager {
+public class EmployeeControllerMock implements IEmployeeController {
 
     private Branch branch;
 
@@ -18,7 +18,7 @@ public class EmployeeManagerMock implements IEmployeeManager {
      * Constructs a mock employee manager based on a given branch.
      * @param branch the branch to operate on (usually a TestBranch instance).
      */
-    public EmployeeManagerMock(Branch branch) {
+    public EmployeeControllerMock(Branch branch) {
         this.branch = branch;
     }
 
@@ -78,7 +78,7 @@ public class EmployeeManagerMock implements IEmployeeManager {
     }
 
     @Override
-    public IRoleManager getRoleManager() {
+    public IRoleController getRoleManager() {
         return null;
     }
 

@@ -8,9 +8,9 @@ import java.util.*;
  * This includes assigning employees to shifts, managing roles, and ensuring that all shifts
  * are filled appropriately.
  */
-public class WeekManager implements IWeekManager {
+public class WeekController implements IWeekController {
 
-    private IShiftManager dependency;
+    private IShiftController dependency;
     private Branch curBranch;
 
 
@@ -20,7 +20,7 @@ public class WeekManager implements IWeekManager {
      * @param dependency The IShiftManager dependency used for shift management operations.
      * @param curBranch The current branch being managed.
      */
-    public WeekManager(IShiftManager dependency,Branch curBranch ) {
+    public WeekController(IShiftController dependency, Branch curBranch ) {
         this.dependency = dependency;
         this.curBranch=curBranch;
     }
@@ -53,10 +53,12 @@ public class WeekManager implements IWeekManager {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
-        if (this.curBranch.getRoles().size()<=1) {
+        if (this.curBranch.getRoleRepo().getAll().size() <= 1)
+        {
             throw new IllegalArgumentException("No roles at the system - first add roles.");
         }
-        if (this.curBranch.getEmployees().isEmpty()) {
+        if (this.curBranch.getEmployeeRepo().getAll().isEmpty())
+        {
             throw new IllegalArgumentException("No employees at the system - first add them.");
         }
 

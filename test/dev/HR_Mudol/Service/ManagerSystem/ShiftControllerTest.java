@@ -1,6 +1,6 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.ShiftManager;
+import HR_Mudol.domain.ShiftController;
 import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,19 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit tests for the ShiftManager class.
  */
-public class ShiftManagerTest {
+public class ShiftControllerTest {
 
-    private ShiftManager shiftManager;
+    private ShiftController shiftController;
     private Shift shift;
     private Employee employee;
     private User managerUser;
-    private RoleManagerMock roleManagerMock;
+    private RoleControllerMock roleManagerMock;
 
     @BeforeEach
     public void setUp() {
         // Initialize test environment before each test
-        roleManagerMock = new RoleManagerMock();
-        shiftManager = new ShiftManager(roleManagerMock);
+        roleManagerMock = new RoleControllerMock();
+        shiftController = new ShiftController(roleManagerMock);
 
         shift = new Shift(WeekDay.MONDAY, ShiftType.MORNING);
         employee = new Employee("John Doe", 123456789, "pass", "bank", 5000,
@@ -41,7 +41,7 @@ public class ShiftManagerTest {
         Role role = new Role("Cashier");
         shift.addNecessaryRoles(managerUser, role);
 
-        shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
+        shiftController.assignEmployeeToShift(managerUser, shift, employee, role);
 
         assertTrue(shift.getEmployees().contains(employee));
     }
@@ -55,7 +55,7 @@ public class ShiftManagerTest {
         Role role = new Role("Cashier");
 
         assertThrows(SecurityException.class, () -> {
-            shiftManager.assignEmployeeToShift(regularUser, shift, employee, role);
+            shiftController.assignEmployeeToShift(regularUser, shift, employee, role);
         });
     }
 
@@ -72,7 +72,7 @@ public class ShiftManagerTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        shiftManager.removeEmployeeFromShift(managerUser, shift);
+        shiftController.removeEmployeeFromShift(managerUser, shift);
 
         assertFalse(shift.getEmployees().contains(employee));
     }
@@ -89,7 +89,7 @@ public class ShiftManagerTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        shiftManager.removeRoleFromShift(managerUser, shift);
+        shiftController.removeRoleFromShift(managerUser, shift);
 
         assertFalse(shift.getNecessaryRoles().contains(cashier));
     }
@@ -102,10 +102,10 @@ public class ShiftManagerTest {
         Role role = new Role("Cashier");
         shift.addNecessaryRoles(managerUser, role);
 
-        shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
+        shiftController.assignEmployeeToShift(managerUser, shift, employee, role);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            shiftManager.assignEmployeeToShift(managerUser, shift, employee, role);
+            shiftController.assignEmployeeToShift(managerUser, shift, employee, role);
         });
     }
 
@@ -118,7 +118,7 @@ public class ShiftManagerTest {
         Role role = new Role("Cashier");
 
         assertThrows(SecurityException.class, () -> {
-            shiftManager.assignEmployeeToShift(regularUser, shift, employee, role);
+            shiftController.assignEmployeeToShift(regularUser, shift, employee, role);
         });
     }
 
@@ -127,7 +127,7 @@ public class ShiftManagerTest {
      */
     @Test
     public void testPrintShift_Success() {
-        assertDoesNotThrow(() -> shiftManager.printShift(managerUser, shift));
+        assertDoesNotThrow(() -> shiftController.printShift(managerUser, shift));
     }
 
     /**
@@ -139,7 +139,7 @@ public class ShiftManagerTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertDoesNotThrow(() -> shiftManager.removeEmployeeFromShift(managerUser, shift));
+        assertDoesNotThrow(() -> shiftController.removeEmployeeFromShift(managerUser, shift));
     }
 
     /**
@@ -151,7 +151,7 @@ public class ShiftManagerTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertDoesNotThrow(() -> shiftManager.removeRoleFromShift(managerUser, shift));
+        assertDoesNotThrow(() -> shiftController.removeRoleFromShift(managerUser, shift));
     }
     /**
      * Test printing a shift with unauthorized user throws SecurityException.
@@ -160,7 +160,7 @@ public class ShiftManagerTest {
     public void testPrintShift_AccessDenied() {
         User regularUser = new User(employee, Level.regularEmp);
 
-        assertThrows(SecurityException.class, () -> shiftManager.printShift(regularUser, shift));
+        assertThrows(SecurityException.class, () -> shiftController.printShift(regularUser, shift));
     }
 
     /**
@@ -171,7 +171,7 @@ public class ShiftManagerTest {
         Role cashier = new Role("Cashier");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            shiftManager.assignEmployeeToShift(managerUser, shift, employee, cashier);
+            shiftController.assignEmployeeToShift(managerUser, shift, employee, cashier);
         });
     }
 }

@@ -20,20 +20,20 @@
  */
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.IRoleManager;
+import HR_Mudol.domain.IRoleController;
 import HR_Mudol.domain.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class RoleManagerMock implements IRoleManager {
+public class RoleControllerMock implements IRoleController {
 
     private List<Role> roles = new LinkedList<>(); // Stores roles manually for test purposes
 
     /**
      * Constructor initializes the mock with a default "Shift Manager" role.
      */
-    public RoleManagerMock() {
+    public RoleControllerMock() {
         Role defaultRole = new Role("Shift Manager");
         roles.add(defaultRole);
     }

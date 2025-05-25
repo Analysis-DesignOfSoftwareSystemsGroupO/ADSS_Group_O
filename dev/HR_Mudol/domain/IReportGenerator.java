@@ -1,11 +1,5 @@
-package HR_Mudol.Service.ManagerSystem;
+package HR_Mudol.domain;
 
-import HR_Mudol.domain.ShiftType;
-import HR_Mudol.domain.User;
-import HR_Mudol.domain.Week;
-import HR_Mudol.domain.WeekDay;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

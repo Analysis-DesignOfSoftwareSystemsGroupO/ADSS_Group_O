@@ -1,6 +1,6 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.Service.EmployeeSystem.EmployeeSystem;
+import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.*;
 
 import java.util.Scanner;
@@ -29,7 +29,7 @@ public class EmployeeMenu implements Menu {
 
         // Initialize scanner and employee system for user input
         Scanner scanner = new Scanner(System.in);
-        EmployeeSystem employeeSystem = new EmployeeSystem();
+        EmployeeService employeeService = new EmployeeService();
 
         // Infinite loop for continuous interaction with the employee menu
         while (true) {
@@ -54,28 +54,28 @@ public class EmployeeMenu implements Menu {
             // Process the user's choice
             switch (choice) {
                 case "1":
-                    employeeSystem.viewMyShifts(caller, selfEmp, curBranch.getWeeks().getLast());
+                    employeeService.viewMyShifts(caller, selfEmp, curBranch.getWeeks().getLast());
                     break;
                 case "2":
-                    employeeSystem.submitConstraint(caller, selfEmp, curBranch.getWeeks().getLast());
+                    employeeService.submitConstraint(caller, selfEmp, curBranch.getWeeks().getLast());
                     break;
                 case "3":
-                    employeeSystem.updateConstraint(caller, selfEmp, curBranch.getWeeks().getLast());
+                    employeeService.updateConstraint(caller, selfEmp, curBranch.getWeeks().getLast());
                     break;
                 case "4":
-                    employeeSystem.viewMyConstraints(caller, selfEmp);
+                    employeeService.viewMyConstraints(caller, selfEmp);
                     break;
                 case "5":
-                    employeeSystem.viewContractDetails(caller, selfEmp);
+                    employeeService.viewContractDetails(caller, selfEmp);
                     break;
                 case "6":
-                    employeeSystem.viewAvailableRoles(caller, selfEmp);
+                    employeeService.viewAvailableRoles(caller, selfEmp);
                     break;
                 case "7":
-                    employeeSystem.viewPersonalDetails(caller, selfEmp);
+                    employeeService.viewPersonalDetails(caller, selfEmp);
                     break;
                 case "8":
-                    employeeSystem.changePassword(caller, selfEmp);
+                    employeeService.changePassword(caller, selfEmp);
                     break;
                 case "0":
                     return true;  // Exit the menu

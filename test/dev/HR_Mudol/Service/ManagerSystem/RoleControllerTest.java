@@ -1,6 +1,6 @@
 package dev.HR_Mudol.Service.ManagerSystem;
 
-import HR_Mudol.domain.RoleManager;
+import HR_Mudol.domain.RoleController;
 import HR_Mudol.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,16 +13,16 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit tests for RoleManager functionality.
  */
-public class RoleManagerTest {
+public class RoleControllerTest {
 
     private TestBranch branch;
-    private RoleManager roleManager;
+    private RoleController roleController;
     private User hrUser;
 
     @BeforeEach
     public void setUp() {
         branch = new TestBranch();
-        roleManager = new RoleManager(branch);
+        roleController = new RoleController(branch);
         branch.getRoles().clear(); // Important: clear default "Shift Manager" role after creating RoleManager
 
         // Create HR manager for permissions
@@ -39,9 +39,9 @@ public class RoleManagerTest {
     @Test
     public void testCreateRole_Success() {
         String input = "Cook\n";
-        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+        roleController.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
 
-        roleManager.createRole(hrUser);
+        roleController.createRole(hrUser);
 
         assertEquals(1, branch.getRoles().size());
         assertEquals("Cook", branch.getRoles().get(0).getDescription());
@@ -55,9 +55,9 @@ public class RoleManagerTest {
         branch.getRoles().add(new Role("Cook"));
 
         String input = "Cook\n";
-        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+        roleController.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
 
-        roleManager.createRole(hrUser);
+        roleController.createRole(hrUser);
 
         assertEquals(1, branch.getRoles().size());
     }
@@ -68,9 +68,9 @@ public class RoleManagerTest {
     @Test
     public void testCreateRole_WhitespaceInput() {
         String input = "   \n";
-        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+        roleController.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
 
-        roleManager.createRole(hrUser);
+        roleController.createRole(hrUser);
 
         assertEquals(0, branch.getRoles().size());
     }
@@ -81,9 +81,9 @@ public class RoleManagerTest {
     @Test
     public void testCreateRole_EmptyDescription() {
         String input = "\n";
-        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+        roleController.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
 
-        roleManager.createRole(hrUser);
+        roleController.createRole(hrUser);
 
         assertEquals(0, branch.getRoles().size());
     }
@@ -95,7 +95,7 @@ public class RoleManagerTest {
     public void testGetAllRoles_Success() {
         branch.getRoles().add(new Role("Cook"));
 
-        assertEquals(1, roleManager.getAllRoles(hrUser).size());
+        assertEquals(1, roleController.getAllRoles(hrUser).size());
     }
 
     /**
@@ -107,9 +107,9 @@ public class RoleManagerTest {
         branch.getRoles().add(cookRole);
 
         String input = cookRole.getRoleNumber() + "\nNewCook\n";
-        roleManager.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
+        roleController.setScanner(new Scanner(new ByteArrayInputStream(input.getBytes())));
 
-        roleManager.updateRoleDescription(hrUser);
+        roleController.updateRoleDescription(hrUser);
 
         assertEquals("NewCook", cookRole.getDescription());
     }

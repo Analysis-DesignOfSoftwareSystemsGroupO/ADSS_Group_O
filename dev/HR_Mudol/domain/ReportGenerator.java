@@ -1,9 +1,6 @@
-package HR_Mudol.Service.ManagerSystem;
-
-import HR_Mudol.domain.*;
+package HR_Mudol.domain;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
@@ -14,8 +11,8 @@ import java.util.Scanner;
  */
 public class ReportGenerator implements IReportGenerator {
 
-    private EmployeeManager empM;
-    private WeekManager weekM;
+    private EmployeeController empM;
+    private WeekController weekM;
 
     /**
      * Constructor to initialize the ReportGenerator with necessary managers.
@@ -23,7 +20,7 @@ public class ReportGenerator implements IReportGenerator {
      * @param weekM The WeekManager used for week-related operations.
      * @param empM  The EmployeeManager used for employee-related operations.
      */
-    public ReportGenerator(WeekManager weekM, EmployeeManager empM) {
+    public ReportGenerator(WeekController weekM, EmployeeController empM) {
         this.weekM = weekM;
         this.empM = empM;
     }

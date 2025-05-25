@@ -1,4 +1,4 @@
-package HR_Mudol.Service.ShiftManagerSystem;
+package HR_Mudol.Service.ShiftManagerService;
 
 import HR_Mudol.domain.User;
 
