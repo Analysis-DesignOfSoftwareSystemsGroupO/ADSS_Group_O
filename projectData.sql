@@ -237,6 +237,7 @@ ALTER SEQUENCE supplierinventorydb.supplieditem_id_seq OWNED BY supplierinventor
 CREATE TABLE supplierinventorydb.supplier (
                                               id integer NOT NULL,
                                               name character varying(100),
+                                              deliverymethod character varying(50)
                                               paymentmethod character varying(50)
 );
 

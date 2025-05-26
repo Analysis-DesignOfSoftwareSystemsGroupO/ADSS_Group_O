@@ -2,12 +2,10 @@ package SupplierMoudleSource.dao;
 
 import SupplierMoudleSource.Domain.PaymentMethod;
 import SupplierMoudleSource.Domain.Supplier;
-import dto.BankDTO;
-import dto.DeliveryDTO;
-import dto.InformationContactDTO;
-import dto.SuppliedItemDTO;
+import dto.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +19,13 @@ public class Supplierdao {
         String supplierId;
 
         // Step 1: Insert supplier and get generated ID
-        String supplierSql = "INSERT INTO supplier (name, paymentmethod) VALUES (?, ?)";
+        String supplierSql = "INSERT INTO supplier (name, paymentmethod, deliverymethod) VALUES (?, ?)";
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(supplierSql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, supplierName);
             pstmt.setString(2, paymentMethod);
+            pstmt.setString(3, delivery.getDeliveryWay());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -41,6 +40,7 @@ public class Supplierdao {
         }
 
         // Step 2: Use supplierId in subsequent inserts
+        //add to product catalog all product
         for (SuppliedItemDTO supply : supplyProducts) {
             // For example: insert into productcatalog
             String insertProductCatalogSql = "INSERT INTO productcatalog (productid, supplierid, price) VALUES (?, ?, ?)";
@@ -54,6 +54,49 @@ public class Supplierdao {
                 throw new RuntimeException("Error inserting productcatalog for supplier", e);
             }
         }
+
+        //add to bank table
+        String sql = "INSERT INTO supplierinventorydb.bank (supplierid, bankaccountnumber, banknumber, bankbranch) " +
+                "VALUES (?, ?, ?, ?)";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, supplierId);
+            pstmt.setString(2, bank.getBankAccount());
+            pstmt.setString(3, bank.getBankNumber());
+            pstmt.setString(4, bank.getBankBranch());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("❌ Failed to insert bank information", e);
+        }
+
+
+        //add to information contact
+        sql = "INSERT INTO supplierinventorydb.informationcontact " +
+                "(supplierid, contactname, contactphone, title) VALUES (?, ?, ?, ?)";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            for (InformationContactDTO contact : informationContacts) {
+                pstmt.setString(1, supplierId);
+                pstmt.setString(2, contact.getContactName());
+                pstmt.setString(3, contact.getContactPhone());
+                pstmt.setString(4, contact.getTitle());
+                pstmt.addBatch();
+            }
+
+            pstmt.executeBatch();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("❌ Failed to insert contact information", e);
+        }
+
         // Repeat similar blocks for `bank`, `delivery`, `informationContacts`, etc.
         return supplierId;
     }
@@ -71,14 +114,120 @@ public class Supplierdao {
         }
     }
 
-    public int getSuppliers(String supplierID){
-        String getql = "SELECT * FROM supplier WHERE supplierID=?";
+    public SupplierDTO getSupplier(String supplierID) throws SQLException {
+        String id = "", name = "", delivery = "", paymentMethod = "";
 
+        // Step 1: Get supplier basic info
+        String getSql = "SELECT * FROM supplier WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(getSql)) {
+
+            pstmt.setString(1, supplierID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                id = rs.getString("id");
+                name = rs.getString("name");
+                delivery = rs.getString("deliverymethod");
+                paymentMethod = rs.getString("paymentmethod");
+            } else {
+                return null; // supplier not found
+            }
+        }
+
+        PaymentMethodDTO paymentMethodDTO = new PaymentMethodDTO(paymentMethod);
+        DeliveryDTO deliveryDTO = new DeliveryDTO(delivery);
+
+        // Step 2: Get bank info
+        BankDTO bankDTO = null;
+        String bankSql = "SELECT * FROM bank WHERE supplierid = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(bankSql)) {
+
+            pstmt.setString(1, supplierID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String bankBranch = rs.getString("bankbranch");
+                String bankNumber = rs.getString("banknumber");
+                String bankAccountNumber = rs.getString("bankaccountnumber");
+                bankDTO = new BankDTO(bankAccountNumber, bankNumber, bankBranch, supplierID);
+            }
+        }
+
+        // Step 3: Get contact list
+        List<InformationContactDTO> informationContacts = new ArrayList<>();
+        String contactSql = "SELECT * FROM informationcontact WHERE supplierid = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(contactSql)) {
+
+            pstmt.setString(1, supplierID);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String contactName = rs.getString("contactname");
+                String contactPhone = rs.getString("contactphone");
+                String title = rs.getString("title");
+                informationContacts.add(new InformationContactDTO(contactName, contactPhone, title));
+            }
+        }
+
+        // Step 4: Get product catalog
+        HashMap<String, SuppliedItemDTO> supplyProducts = new HashMap<>();
+        String catalogSql = "SELECT * FROM productcatalog WHERE supplierid = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(catalogSql)) {
+
+            pstmt.setString(1, supplierID);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int price = rs.getInt("price");
+                String productId = rs.getString("productid");
+
+                // Get product details
+                String productSql = "SELECT * FROM product WHERE id = ?";
+                try (PreparedStatement productStmt = con.prepareStatement(productSql)) {
+                    productStmt.setString(1, productId);
+                    ResultSet rs2 = productStmt.executeQuery();
+                    if (rs2.next()) {
+                        String pname = rs2.getString("name");
+                        String manufacturer = rs2.getString("manafacturer");
+                        int shelfLifeDays = rs2.getInt("shelflifedays");
+
+                        ProductDTO product = new ProductDTO(productId, pname, manufacturer, shelfLifeDays);
+                        SuppliedItemDTO suppliedItem = new SuppliedItemDTO(price, product, productId);
+                        supplyProducts.put(productId, suppliedItem);
+                    }
+                }
+            }
+        }
+
+        return new SupplierDTO(supplierID, bankDTO, paymentMethodDTO, deliveryDTO, informationContacts, supplyProducts);
     }
 
-    public List<Supplier> getAllSuppliers(){
+
+    public List<SupplierDTO> getAllSuppliers() throws SQLException {
+        List<SupplierDTO> suppliers = new ArrayList<>();
+        String sql = "SELECT id FROM supplier";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String supplierId = rs.getString("id");
+                SupplierDTO supplier = getSupplier(supplierId);
+                suppliers.add(supplier);
+            }
+        }
+
+        return suppliers;
+    }
+
+    public void addproduct(SupplierDTO supplierDTO, SuppliedItemDTO suppliedItemDTO) throws SQLException {
+
 
     }
 
 
 }
+
+
+
