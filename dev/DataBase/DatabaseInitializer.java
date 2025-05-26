@@ -1,5 +1,7 @@
 package DataBase;
 
+import SupplierMoudleSource.dao.ProductDAO;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -10,7 +12,7 @@ public class DatabaseInitializer {
 
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "020100";
 
     private static final String SCHEMA_SQL_FILE = "projectData.sql";// path to your .sql file
 
@@ -46,4 +48,5 @@ public class DatabaseInitializer {
             System.err.println("❌ Failed to initialize database.");
         }
     }
+
 }

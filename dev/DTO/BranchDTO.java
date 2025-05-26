@@ -1,4 +1,4 @@
-package dto;
+package DTO;
 
 public class BranchDTO {
     private String branchID;

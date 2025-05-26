@@ -1,6 +1,6 @@
 package SupplierMoudleSource.dao;
 
-import dto.BranchDTO;
+import DTO.BranchDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import static DataBase.PostgresConnection.getConnection;
 
-public class branchdao {
+public class BranchDAO {
 
     public void addBranch(BranchDTO branch) throws SQLException {
         String sql = "INSERT INTO supplierinventorydb.branch (city, address) VALUES (?, ?)";
