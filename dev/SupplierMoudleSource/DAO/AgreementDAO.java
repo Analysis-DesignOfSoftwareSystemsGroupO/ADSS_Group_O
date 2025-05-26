@@ -1,6 +1,6 @@
 package SupplierMoudleSource.DAO;
 
-import dto.SuppliedItemDTO;
+import DTO.SuppliedItemDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 import static DataBase.PostgresConnection.getConnection;
 
-public class agreementdao {
+public class AgreementDAO {
     public void addagreement(String branchid, String supplierid){
         String sql = "insert into agreement (branchid, supplierid) values(?,?)";
         try (Connection con = getConnection()){
