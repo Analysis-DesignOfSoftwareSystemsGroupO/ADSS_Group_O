@@ -57,7 +57,7 @@ public class jdbcTransportDAO implements ITransportDAO {
         try(Statement st = DataBase.getConnection().createStatement();
             ResultSet rs = st.executeQuery(sql)){
             if(rs.next()){
-                return   rs.getInt(1);
+                return   rs.getInt("id");
             }
         }
         catch (SQLException e){
@@ -65,6 +65,50 @@ public class jdbcTransportDAO implements ITransportDAO {
             throw e;
         }
         return 0 ;
+    }
+
+    //retun list of Transport dto that have no trucks assigned
+    @Override
+    public List<TransportDTO> getTransportsWithoutTruck() throws SQLException {
+        log.info("jdbcTransportDAO:: getTransportsWithoutTruck");
+        String sql = "SELECT id FROM Transports WHERE TruckPN IS NULL";
+        List<Integer> tIDs = new ArrayList<>(); // create a list of transport id that has no trucks assigned
+        try (Statement st = DataBase.getConnection().createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) { //get all Tranports id without tansports, foreach add the id to the list
+                tIDs.add(rs.getInt("id"));
+            }
+            List<TransportDTO> transportsDTO = new ArrayList<>();
+            for (int id : tIDs) { //iterate the transportsID list, for each transport id , get the TransportDTo and add it to the list
+                Optional<TransportDTO> optionalTransport = getTransportByid(id);
+                if (optionalTransport.isPresent())
+                    transportsDTO.add(optionalTransport.get()); // add the Dto to the list if it present
+            }
+            return transportsDTO;
+        }catch (SQLException e ){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Update the truck PN on the record of the transportID
+     * @param transportID
+     * @param truckPN
+     * @throws SQLException
+     */
+    @Override
+    public void assignTruckToTransport(int transportID, int truckPN) throws SQLException {
+        log.info("jdbcTransportDAO ::assignTruckToTransport( " + transportID+ " , " +truckPN + " )" );
+        String sql = "UPDATE Transports SET TruckPN = ? WHERE id = ?";
+        try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
+            ps.setInt(1,transportID); //set the transportID argument as the first questionMark
+            ps.setInt(2, truckPN);//set the truckPN  argument as the second questionMark
+            ps.executeUpdate(); //run query
+        }catch (SQLException e ){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -104,7 +148,6 @@ public class jdbcTransportDAO implements ITransportDAO {
             catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
 
 }

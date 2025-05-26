@@ -13,4 +13,7 @@ public interface ITransportDAO {
     void save(TransportDTO transportDTO) throws SQLException;
     void deleteTransport(int id ) throws  SQLException;
     int getHieghestTransportID() throws  SQLException;
+    List<TransportDTO> getTransportsWithoutTruck()throws SQLException;
+    void assignTruckToTransport(int transportID, int truckPN) throws SQLException;
+
 }

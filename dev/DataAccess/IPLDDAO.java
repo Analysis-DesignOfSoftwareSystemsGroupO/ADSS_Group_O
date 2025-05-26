@@ -13,8 +13,7 @@ public interface IPLDDAO {
     void deletePLD(int serialNumber ) throws  SQLException;
     int getHieghestTransportID() throws  SQLException;
     Optional<ProductListDocumentDto> findByPLDID(int id) throws  SQLException;
-    List<ProductListDocumentDto> findByTransport(int Tid) throws SQLException;
+    List<Integer> findByTransport(int Tid) throws SQLException;
     List<ProductDTO> getListOfProductsByPLDID(int pldID)throws  SQLException;
-    List<Integer> quantetyOfProductsbyPLDID(int pldID)throws SQLException;
 
 }
