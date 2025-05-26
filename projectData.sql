@@ -1,4 +1,3 @@
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -156,28 +155,4 @@ SELECT pg_catalog.setval('supplierinventorydb.product_id_seq', 1, false);
 SELECT pg_catalog.setval('supplierinventorydb.supplieditem_id_seq', 1, false);
 SELECT pg_catalog.setval('supplierinventorydb.supplier_id_seq', 1, false);
 
-ALTER TABLE ONLY supplierinventorydb.agreement ADD CONSTRAINT agreement_pkey PRIMARY KEY (branchid, supplierid);
-ALTER TABLE ONLY supplierinventorydb.bank ADD CONSTRAINT bank_pkey PRIMARY KEY (bankaccountnumber, banknumber, bankbranch);
-ALTER TABLE ONLY supplierinventorydb.branch ADD CONSTRAINT branch_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY supplierinventorydb."order" ADD CONSTRAINT order_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY supplierinventorydb.product ADD CONSTRAINT product_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY supplierinventorydb.supplieditem ADD CONSTRAINT supplieditem_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY supplierinventorydb.supplier ADD CONSTRAINT supplier_pkey PRIMARY KEY (id);
 
-ALTER TABLE ONLY supplierinventorydb.agreement ADD CONSTRAINT agreement_branchid_fkey FOREIGN KEY (branchid) REFERENCES supplierinventorydb.branch(id);
-ALTER TABLE ONLY supplierinventorydb.agreement ADD CONSTRAINT agreement_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.bank ADD CONSTRAINT bank_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.constantdelivery ADD CONSTRAINT constantdelivery_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.discount ADD CONSTRAINT discount_supplieditemid_fkey FOREIGN KEY (supplieditemid) REFERENCES supplierinventorydb.supplieditem(id);
-ALTER TABLE ONLY supplierinventorydb.immidiatedelivery ADD CONSTRAINT immidiatedelivery_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.informationcontact ADD CONSTRAINT informationcontact_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb."order" ADD CONSTRAINT order_branchid_fkey FOREIGN KEY (branchid) REFERENCES supplierinventorydb.branch(id);
-ALTER TABLE ONLY supplierinventorydb."order" ADD CONSTRAINT order_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.productcatalog ADD CONSTRAINT productcatalog_productid_fkey FOREIGN KEY (productid) REFERENCES supplierinventorydb.product(id);
-ALTER TABLE ONLY supplierinventorydb.productcatalog ADD CONSTRAINT productcatalog_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.productsinorder ADD CONSTRAINT productsinorder_orderid_fkey FOREIGN KEY (orderid) REFERENCES supplierinventorydb."order"(id);
-ALTER TABLE ONLY supplierinventorydb.productsinorder ADD CONSTRAINT productsinorder_supplieditemid_fkey FOREIGN KEY (supplieditemid) REFERENCES supplierinventorydb.supplieditem(id);
-ALTER TABLE ONLY supplierinventorydb.selfpickupdelivery ADD CONSTRAINT selfpickupdelivery_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
-ALTER TABLE ONLY supplierinventorydb.supplieditem ADD CONSTRAINT supplieditem_branchid_fkey FOREIGN KEY (branchid) REFERENCES supplierinventorydb.branch(id);
-ALTER TABLE ONLY supplierinventorydb.supplieditem ADD CONSTRAINT supplieditem_productid_fkey FOREIGN KEY (productid) REFERENCES supplierinventorydb.product(id);
-ALTER TABLE ONLY supplierinventorydb.supplieditem ADD CONSTRAINT supplieditem_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES supplierinventorydb.supplier(id);
