@@ -25,4 +25,8 @@ public class SupplierDTO {
         this.supplyProducts = supplyProducts;
 
     }
+
+    public String getSupplierID() {
+        return supplierID;
+    }
 }

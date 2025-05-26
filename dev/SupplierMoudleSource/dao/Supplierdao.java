@@ -101,6 +101,23 @@ public class Supplierdao {
         return supplierId;
     }
 
+    public boolean productexist(String supplierId, String productId) throws SQLException {
+        String sql = "select * from productcatalog where supplierid = ? and productid = ?";
+        try (Connection connection = getConnection()){
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, supplierId);
+            pstmt.setString(2, productId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+            return false;
+        }
+
+
+        }
+
+
     public void removeSupplier(String supplierID){
         String removeSupplierSql = "DELETE FROM supplier WHERE supplierID=?";
 
@@ -154,20 +171,8 @@ public class Supplierdao {
         }
 
         // Step 3: Get contact list
-        List<InformationContactDTO> informationContacts = new ArrayList<>();
-        String contactSql = "SELECT * FROM informationcontact WHERE supplierid = ?";
-        try (Connection con = getConnection();
-             PreparedStatement pstmt = con.prepareStatement(contactSql)) {
+        List<InformationContactDTO> informationContacts = getInformationContacts(supplierID);
 
-            pstmt.setString(1, supplierID);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                String contactName = rs.getString("contactname");
-                String contactPhone = rs.getString("contactphone");
-                String title = rs.getString("title");
-                informationContacts.add(new InformationContactDTO(contactName, contactPhone, title));
-            }
-        }
 
         // Step 4: Get product catalog
         HashMap<String, SuppliedItemDTO> supplyProducts = new HashMap<>();
@@ -198,7 +203,6 @@ public class Supplierdao {
                 }
             }
         }
-
         return new SupplierDTO(supplierID, bankDTO, paymentMethodDTO, deliveryDTO, informationContacts, supplyProducts);
     }
 
@@ -221,11 +225,91 @@ public class Supplierdao {
         return suppliers;
     }
 
-    public void addproduct(SupplierDTO supplierDTO, SuppliedItemDTO suppliedItemDTO) throws SQLException {
+    public   List<InformationContactDTO> getInformationContacts(String supplierID) throws SQLException {
+        List<InformationContactDTO> informationContacts = new ArrayList<>();
+        String contactSql = "SELECT * FROM informationcontact WHERE supplierid = ?";
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(contactSql)) {
 
+            pstmt.setString(1, supplierID);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String contactName = rs.getString("contactname");
+                String contactPhone = rs.getString("contactphone");
+                String title = rs.getString("title");
+                informationContacts.add(new InformationContactDTO(contactName, contactPhone, title));
+            }
+        }
+        return informationContacts;
+    }  // Step 3: Get contact list
+
+
+    public void addproduct(String supplierid, SuppliedItemDTO suppliedItemDTO) throws SQLException {
+        String sql = "INSERT INTO productcatalog (productid, supplierid, price) VALUES (?, ?, ?)";
+        try (Connection con = getConnection();){
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, suppliedItemDTO.product.productID);
+            pstmt.setString(2, supplierid);
+            pstmt.setInt(3, suppliedItemDTO.suppliedItemPrice);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void editinformationcotact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
+        String sql = "UPDATE informationcontact SET title=?, contactphone=? WHERE contactname=? and supplierid=?";
+        try (Connection con = getConnection();){
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, informationContactDTO.getTitle());
+            pstmt.setString(2, informationContactDTO.getContactPhone());
+            pstmt.setString(3, informationContactDTO.getContactName());
+            pstmt.setString(4, supplierid);
+        }
 
     }
 
+    public void addinformationcontact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
+        String sql = "INSERT into informationcontact (supplier, contactname, contactphone, title) VALUES (?, ?, ?, ?)";
+        try (Connection con = getConnection();){
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, supplierid);
+            pstmt.setString(2, informationContactDTO.getContactName());
+            pstmt.setString(3, informationContactDTO.getContactPhone());
+            pstmt.setString(4, informationContactDTO.getTitle());
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void editsuppliername(String supplierid, String name) throws SQLException {
+        String sql = "UPDATE supplier SET suppliername=? WHERE supplierid=?";
+        try (Connection con = getConnection();){
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, supplierid);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void editbank(String supplierid, BankDTO bankDTO) throws SQLException {
+        String sql = "UPDATE bank SET bankbranch=?, banknumber=?, bankaccountnumber=? WHERE supplierid=?";
+        try (Connection con = getConnection();){
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, bankDTO.getBankBranch());
+            pstmt.setString(2, bankDTO.getBankNumber());
+            pstmt.setString(3, bankDTO.getBankAccount());
+            pstmt.setString(4, supplierid);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void editdelivery(String supplierid, DeliveryDTO deliveryDTO) throws SQLException {
+        String sql = "UPDATE supplier SET deliverymethod=? WHERE supplierid=?";
+        try (Connection con = getConnection();){
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, deliveryDTO.getDeliveryWay());
+            pstmt.setString(2, supplierid);
+            pstmt.executeUpdate();
+        }
+    }
 
 }
 
