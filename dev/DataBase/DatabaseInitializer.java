@@ -1,7 +1,5 @@
 package DataBase;
 
-import SupplierMoudleSource.dao.ProductDAO;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;

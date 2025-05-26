@@ -1,10 +1,7 @@
-package SupplierMoudleSource.dao;
-
-import DTO.BranchDTO;
+package SupplierMoudleSource.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import static DataBase.PostgresConnection.getConnection;
 

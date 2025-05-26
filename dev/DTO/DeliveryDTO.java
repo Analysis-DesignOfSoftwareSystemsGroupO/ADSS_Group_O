@@ -1,3 +1,5 @@
+package DTO;
+
 public class DeliveryDTO {
     private String deliveryWay;
     public DeliveryDTO(String deliveryWay) {

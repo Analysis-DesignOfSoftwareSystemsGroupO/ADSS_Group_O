@@ -1,4 +1,4 @@
-package SupplierMoudleSource.dao;
+package SupplierMoudleSource.DAO;
 
 import DTO.OrderDTO;
 import DTO.ProductDTO;

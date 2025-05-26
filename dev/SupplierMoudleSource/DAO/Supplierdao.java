@@ -1,14 +1,11 @@
-package SupplierMoudleSource.dao;
+package SupplierMoudleSource.DAO;
 
-import SupplierMoudleSource.Domain.PaymentMethod;
-import SupplierMoudleSource.Domain.Supplier;
-import dto.*;
+import DTO.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static DataBase.PostgresConnection.getConnection;
 
