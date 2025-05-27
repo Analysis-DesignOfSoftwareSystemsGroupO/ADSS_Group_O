@@ -44,16 +44,7 @@ public interface IShiftController {
      */
     void printShift(User caller, Shift shift);
 
-    /**
-     * Adds an employee to a shift with a specific role.
-     * @param caller The user (e.g., manager) requesting the addition.
-     * @param shift The shift the employee is being added to.
-     * @param employee The employee being added to the shift.
-     * @param role The role the employee will take on during the shift.
-     */
-    void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role);
-
-    /**
+       /**
      * Removes a role from a shift.
      * @param caller The user (e.g., manager) requesting the removal of the role.
      * @param shift The shift from which the role is being removed.

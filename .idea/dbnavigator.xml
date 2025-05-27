@@ -34,6 +34,7 @@
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="5f573533-8f0f-4c49-b77f-48867567438c" dataset="HR.Branch" active-filter-id="" />
+    <filter-actions connection-id="5f573533-8f0f-4c49-b77f-48867567438c" dataset="HR.FilledRole" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />

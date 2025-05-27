@@ -5,9 +5,18 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IShiftDAO {
+
     void insert(ShiftDTO shift) throws SQLException;
     void update(ShiftDTO shift) throws SQLException;
     void delete(int shiftID) throws SQLException;
     ShiftDTO get(int shiftID) throws SQLException;
     List<ShiftDTO> getAll() throws SQLException;
+
+    void insertEmpToShift(int brunchID, int empID, int shiftID, int roleNumber);
+
+    void removeEmpFromShift(int shiftID, int empNum);
+
+    void decrementOrRemove(int branchID, int shiftID, int roleNumber);
+
+    void insertOrIncrementRequiredRole(int branchID, int shiftID, int roleNumber, int count);
 }

@@ -352,7 +352,7 @@ public class WeekController implements IWeekController {
 
         // לבחור עובד לתפקיד
         Employee chosen = chooseEmployeeForRole(caller, week, shift, selectedRole);
-        dependency.addEmployeeToShift(caller, shift, chosen, selectedRole);
+        dependency.assignEmployeeToShift(caller, shift, chosen, selectedRole);
     }
 
         /**

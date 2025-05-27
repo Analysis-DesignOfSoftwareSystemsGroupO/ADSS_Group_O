@@ -1,9 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
-import HR_Mudol.domain.Objects.Employee;
-import HR_Mudol.domain.Objects.Role;
-import HR_Mudol.domain.Objects.Shift;
-import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,6 +11,7 @@ import java.util.Scanner;
  */
 public class ShiftController implements IShiftController {
 
+    private Branch curBranch;
     private IRoleController dependency; // Dependency for accessing role management
 
 
@@ -21,7 +19,8 @@ public class ShiftController implements IShiftController {
      * Constructor for ShiftManager.
      * @param dependency The role manager dependency used for role-related operations.
      */
-    public ShiftController(IRoleController dependency) {
+    public ShiftController(Branch curBranch,IRoleController dependency) {
+        this.curBranch=curBranch;
         this.dependency = dependency;
     }
     /**
@@ -40,8 +39,12 @@ public class ShiftController implements IShiftController {
             throw new SecurityException("Access denied.");
         }
 
-        // Assign employee to the shift
+        // save at RAM
         shift.addEmployee(caller, employee, role);
+
+        //save at the DB
+        curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpNum(), shift.getShiftID(), role.getRoleNumber());
+
         System.out.println(employee.getEmpName() +
                 " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
@@ -65,6 +68,7 @@ public class ShiftController implements IShiftController {
             System.out.println("Shift doesn't exist.");
             return;
         }
+
 
         List<Employee> employees = shift.getEmployees();
         // Check if no employees assigned
@@ -97,9 +101,12 @@ public class ShiftController implements IShiftController {
             return;
         }
 
-        // Remove selected employee
+        // Remove selected employee - RAM
         Employee employeeToRemove = employees.get(chosenIndex - 1);
         shift.removeEmployee(caller, employeeToRemove);
+
+        //Remove from DB
+        curBranch.getWeekRepo().removeEmployeeFromShift(employeeToRemove.getEmpNum(),shift.getShiftID());
 
         System.out.println(employeeToRemove.getEmpName() +
                 " was removed from shift " + shift.getDay() + " - " + shift.getType() + ".");
@@ -151,8 +158,13 @@ public class ShiftController implements IShiftController {
             }
         }
 
-        // Remove the selected role
+        // Remove the selected role from RAM
         shift.removeRole(caller, role);
+        System.out.println("Role \"" + role.getDescription() + "\" was removed from the shift.");
+
+        // 2. עדכון RequiredRoles בטבלת DB
+        curBranch.getWeekRepo().removeRoleFromShift(curBranch.getBranchID(), shift.getShiftID(), role.getRoleNumber());
+
         System.out.println("Role \"" + role.getDescription() + "\" was removed from the shift.");
     }
 
@@ -186,20 +198,6 @@ public class ShiftController implements IShiftController {
         return null;
     }
 
-    /**
-     * Helper method to check if a shift already has a role by ID.
-     * @param shift The shift to check.
-     * @param roleId The ID of the role to check.
-     * @return true if the shift already has the role, false otherwise.
-     */
-    private boolean shiftAlreadyHasRole(Shift shift, int roleId) {
-        for (Role role : shift.getNecessaryRoles()) {
-            if (role.getRoleNumber() == roleId) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Chooses relevant roles for a shift.
@@ -209,14 +207,16 @@ public class ShiftController implements IShiftController {
      */
     @Override
     public void chooseRelevantRoleForShift(User caller, Shift shift) {
-        // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
 
-        //add automatically shift manager
-        shift.addNecessaryRoles(caller, dependency.getRoleByNumber(1));
-
+        // Add Shift Manager automatically (only once)
+        Role shiftManager = dependency.getRoleByNumber(1);
+        shift.addNecessaryRoles(caller, shiftManager);
+        curBranch.getWeekRepo().addOrUpdateRequiredRole(
+                curBranch.getBranchID(), shift.getShiftID(), 1, 1
+        );
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -226,8 +226,7 @@ public class ShiftController implements IShiftController {
 
             int roleNumber = -1;
             while (true) {
-                System.out.print("Enter relevant role number to add to the shift " +
-                        shift.getDay() + " - " + shift.getType() + ": ");
+                System.out.print("Enter role number to add (other than 1): ");
                 String input = scanner.nextLine();
 
                 try {
@@ -236,11 +235,34 @@ public class ShiftController implements IShiftController {
 
                     if (role == null) {
                         System.out.println("Role number does not exist. Please try again.");
-                    } else if (role.getRoleNumber() == 1) {
+                    } else if (roleNumber == 1) {
                         System.out.println("Shift Manager was automatically added. Please choose another role.");
                     } else {
-                        shift.addNecessaryRoles(caller, role);
-                        System.out.println(role.getDescription() + " was added to the shift.");
+                        // Ask for the amount:
+                        int count = -1;
+                        while (count < 1) {
+                            System.out.print("Enter number of employees required for this role: ");
+                            try {
+                                count = Integer.parseInt(scanner.nextLine().trim());
+                                if (count < 1) {
+                                    System.out.println("Please enter a positive number.");
+                                }
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid input. Please enter a number.");
+                            }
+                        }
+
+                        // Add to RAM
+                        for (int i = 0; i < count; i++) {
+                            shift.addNecessaryRoles(caller, role);
+                        }
+
+                        // Add to DB
+                        curBranch.getWeekRepo().addOrUpdateRequiredRole(
+                                curBranch.getBranchID(), shift.getShiftID(), roleNumber, count
+                        );
+
+                        System.out.println(count + " x " + role.getDescription() + " added to the shift.");
                         break;
                     }
                 } catch (NumberFormatException e) {
@@ -265,6 +287,7 @@ public class ShiftController implements IShiftController {
     }
 
 
+
     /**
      * Prints the details of a shift.
      * @param caller The user (manager or shift manager) who is printing the shift details.
@@ -280,23 +303,6 @@ public class ShiftController implements IShiftController {
         System.out.println(shift.toString());
     }
 
-
-    /**
-     * Adds an employee to a shift.
-     * This method ensures the caller has the correct privileges to perform the action.
-     * @param caller The user (manager or shift manager) who is adding the employee.
-     * @param shift The shift to which the employee is being added.
-     * @param employee The employee being added to the shift.
-     * @param role The role the employee will take in the shift.
-     */
-    @Override
-    public void addEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
-        // Authorization check
-        if (!caller.isManager() && !caller.isShiftManager()) {
-            throw new SecurityException("Access denied.");
-        }
-        shift.addEmployee(caller, employee, role);
-    }
 
     /**
      * Helper -Prints the list of roles available for the caller to choose from.
