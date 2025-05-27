@@ -1,7 +1,4 @@
-package HR_Mudol.domain;
-
-import HR_Mudol.domain.Objects.Employee;
-import HR_Mudol.domain.Objects.User;
+package HR_Mudol.domain.Objects;
 
 /**
  * Represents an employment contract for an employee,

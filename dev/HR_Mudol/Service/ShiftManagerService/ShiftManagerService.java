@@ -1,6 +1,7 @@
 package HR_Mudol.Service.ShiftManagerService;
 
 import HR_Mudol.domain.*;
+import HR_Mudol.domain.Controllers.IShiftController;
 import HR_Mudol.domain.Objects.*;
 
 import java.util.List;

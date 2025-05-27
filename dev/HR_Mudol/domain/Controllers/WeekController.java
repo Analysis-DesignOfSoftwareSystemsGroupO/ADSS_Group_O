@@ -1,6 +1,7 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.Status;
 
 import java.util.*;
 

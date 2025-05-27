@@ -1,10 +1,8 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
-
-import java.util.List;
 
 /**
  * Interface for managing employees within a branch.

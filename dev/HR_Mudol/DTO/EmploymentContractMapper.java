@@ -1,6 +1,6 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.domain.EmploymentContract;
+import HR_Mudol.domain.Objects.EmploymentContract;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.repository.EmployeeRepository;

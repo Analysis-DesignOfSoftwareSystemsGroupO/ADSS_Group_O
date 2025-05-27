@@ -5,7 +5,7 @@ import HR_Mudol.domain.Objects.AbstractEmployee;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Week;
-import HR_Mudol.domain.ShiftController;
+import HR_Mudol.domain.Controllers.ShiftController;
 import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
 
 import java.util.Scanner;

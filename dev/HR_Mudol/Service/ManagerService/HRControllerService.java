@@ -1,8 +1,8 @@
 package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.Service.ReportGenerator;
-import HR_Mudol.domain.*;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
+import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.Objects.*;
 
 import java.util.List;

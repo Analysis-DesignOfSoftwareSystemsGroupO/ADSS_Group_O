@@ -1,4 +1,4 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,11 @@ import HR_Mudol.domain.repository.RoleRepository;
 public class RoleController implements IRoleController {
 
     private Branch curBranch;
-    private RoleRepository roleRepo;
     private Scanner scanner;
     private IEmployeeController employeeManager;
 
     public RoleController(Branch curBranch) {
         this.curBranch = curBranch;
-        this.roleRepo = curBranch.getRoleRepo();
         this.scanner = new Scanner(System.in);
     }
 
@@ -43,14 +41,14 @@ public class RoleController implements IRoleController {
             return;
         }
 
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             if (role.getDescription().equalsIgnoreCase(description)) {
                 System.out.println("Role already exists.");
                 return;
             }
         }
 
-        roleRepo.add(new Role(description));
+        curBranch.getRoleRepo().add(new Role(description));
         System.out.println("Role created successfully.");
     }
 
@@ -113,7 +111,7 @@ public class RoleController implements IRoleController {
         }
 
         try {
-            Role shiftManager = roleRepo.getAll().get(0); // assuming first is always Shift Manager
+            Role shiftManager = curBranch.getRoleRepo().getAll().get(0); // assuming first is always Shift Manager
             shiftManager.addNewEmployee(caller, employee);
             System.out.println("Employee assigned as Shift Manager.");
         } catch (SecurityException e) {
@@ -132,7 +130,7 @@ public class RoleController implements IRoleController {
             return;
         }
 
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             try {
                 role.removeEmployee(caller, employee);
             } catch (SecurityException e) {
@@ -146,7 +144,7 @@ public class RoleController implements IRoleController {
     public void removeEmployeeFromRole(User caller, int roleId, Employee employee) {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             if (role.getRoleNumber() == roleId) {
                 try {
                     role.removeEmployee(caller, employee);
@@ -164,7 +162,7 @@ public class RoleController implements IRoleController {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         List<Employee> relevant = new ArrayList<>();
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             try {
                 relevant.addAll(role.getRelevantEmployees(caller));
             } catch (SecurityException e) {
@@ -177,21 +175,21 @@ public class RoleController implements IRoleController {
     @Override
     public List<Role> getAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
-        return roleRepo.getAll();
+        return curBranch.getRoleRepo().getAll();
     }
 
     @Override
     public void printAllRoles(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             System.out.println(role);
         }
     }
 
     @Override
     public Role getRoleByNumber(int roleNumber) {
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             if (role.getRoleNumber() == roleNumber)
                 return role;
         }
@@ -205,7 +203,7 @@ public class RoleController implements IRoleController {
         int count = 0;
         for (Employee emp : employeeList) {
             boolean found = false;
-            for (Role role : roleRepo.getAll()) {
+            for (Role role : curBranch.getRoleRepo().getAll()) {
                 try {
                     if (role.getRelevantEmployees(caller).contains(emp)) {
                         found = true;
@@ -223,7 +221,7 @@ public class RoleController implements IRoleController {
     public void printEmployeesInRole(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
-        for (Role role : roleRepo.getAll()) {
+        for (Role role : curBranch.getRoleRepo().getAll()) {
             System.out.println("Role: " + role.getDescription());
             try {
                 for (Employee emp : role.getRelevantEmployees(caller)) {

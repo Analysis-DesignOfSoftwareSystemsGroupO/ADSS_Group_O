@@ -2,7 +2,9 @@ package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.Service.EmployeeService.IEmployeeService;
 import HR_Mudol.Service.IReportGenerator;
-import HR_Mudol.domain.*;
+import HR_Mudol.domain.Controllers.IRoleController;
+import HR_Mudol.domain.Controllers.IShiftController;
+import HR_Mudol.domain.Controllers.IWeekController;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.User;
 
