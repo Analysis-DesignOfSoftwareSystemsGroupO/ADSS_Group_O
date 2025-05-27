@@ -97,4 +97,34 @@ public class FilledRoleDAOImpl implements IFilledRoleDAO {
         }
         return list;
     }
+
+    @Override
+    public List<FilledRoleDTO> getEmployees(int shiftId) {
+        final String sql =
+                "SELECT roleNumber, empId, shiftID " +
+                        "FROM   FilledRole " +
+                        "WHERE  shiftID = ?";
+
+        List<FilledRoleDTO> employees = new ArrayList<>();
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, shiftId);          // מציבים את הפרמטר
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    employees.add(
+                            new FilledRoleDTO(
+                                    rs.getInt("roleNumber"),
+                                    rs.getInt("empId"),
+                                    rs.getInt("shiftID")
+                            )
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch employees for shift " + shiftId, e);
+        }
+        return employees;
+    }
 }

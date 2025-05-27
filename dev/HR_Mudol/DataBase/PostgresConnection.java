@@ -1,0 +1,26 @@
+package DataBase;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class PostgresConnection {
+
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "Sansa1234";
+
+    static {
+        try {
+            // Load the PostgreSQL JDBC driver
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("⚠️ PostgreSQL JDBC Driver not found.");
+            e.printStackTrace();
+        }
+    }
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, USER, PASSWORD);
+    }
+}

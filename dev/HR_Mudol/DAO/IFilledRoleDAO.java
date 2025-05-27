@@ -9,4 +9,6 @@ public interface IFilledRoleDAO {
     List<FilledRoleDTO> findByShift(int shiftId);
     List<FilledRoleDTO> findByEmployee(int empId);
     List<FilledRoleDTO> findAll();
+    List<FilledRoleDTO> getEmployees(int shiftId);
+
 }

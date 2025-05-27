@@ -59,7 +59,7 @@ public class Week {
             }
 
             newShift = new Shift(day, type);
-            shifts.addLast(newShift);
+            //shifts.addLast(newShift);
         }
     }
 

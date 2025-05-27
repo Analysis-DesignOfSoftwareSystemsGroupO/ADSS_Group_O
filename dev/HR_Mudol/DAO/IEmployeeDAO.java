@@ -11,4 +11,5 @@ public interface IEmployeeDAO {
     void delete(int empID) throws SQLException;
     EmployeeDTO get(int empID) throws SQLException;
     List<EmployeeDTO> getAll() throws SQLException;
+
 }
