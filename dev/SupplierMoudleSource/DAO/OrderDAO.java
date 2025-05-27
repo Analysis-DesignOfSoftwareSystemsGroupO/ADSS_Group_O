@@ -28,11 +28,11 @@ public class OrderDAO {
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            pstmt.setString(1, orderID);
+            pstmt.setInt(1, Integer.parseInt(orderID));
             pstmt.setDate(2, (java.sql.Date) orderDate);
             pstmt.setInt(3, totalPrice);
-            pstmt.setString(4, branchID);
-            pstmt.setString(5, supplierID);
+            pstmt.setInt(4, Integer.parseInt(branchID));
+            pstmt.setInt(5, Integer.parseInt(supplierID));
             pstmt.executeUpdate();
         }
         String sql2 = "INSERT INTO supplierinventorydb.productsinorder (quantity, orderID, suppliedItemID) VALUES (?, ?, ?)";
@@ -44,8 +44,8 @@ public class OrderDAO {
                 SuppliedItemDTO suppliedItem = entry.getKey();
                 Integer quantity = entry.getValue();
                 pstmt2.setInt(1, quantity);
-                pstmt2.setString(2, orderID);
-                pstmt2.setString(3, suppliedItem.suppliedItemID);
+                pstmt2.setInt(2, Integer.parseInt(orderID));
+                pstmt2.setInt(3, Integer.parseInt(suppliedItem.product.productID));
                 pstmt2.executeUpdate();
             }
         }
@@ -56,14 +56,14 @@ public class OrderDAO {
         int oTotalPrice = 0;
         String oBranchID = "";
         String oSupplierID = "";
-        String pID = "";
+        int pID = -1;
         String pName = "";
         String pManufacturer = "";
         int shelfLifeDays = 0;
         int siPrice = 0;
         OrderDTO oDTO = null;
 
-        String sql = "SELECT * FROM order WHERE id = ?";
+        String sql = "SELECT * FROM supplierinventorydb.order WHERE id = ?";
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class OrderDAO {
                 oSupplierID = rs.getString("supplierID");
             }
 
-            String sql2 = "SELECT * FROM productsInOrder WHERE id = ?";
+            String sql2 = "SELECT * FROM supplierinventorydb.productsInOrder WHERE id = ?";
 
             Map<SuppliedItemDTO, Integer> suppliedItems = new HashMap<>();
 
@@ -91,7 +91,7 @@ public class OrderDAO {
                     Integer quantity = rs2.getInt("quantity");
                     String suppliedItemID = rs2.getString("suppliedItemID");
 
-                    String sql3 = "SELECT * FROM product WHERE id = ?";
+                    String sql3 = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
                     try (Connection con3 = getConnection();
                          PreparedStatement pstmt3 = con3.prepareStatement(sql3)) {
 
@@ -100,20 +100,20 @@ public class OrderDAO {
 
 
                         if (rs3.next()) {
-                            pID = rs3.getString("id");
+                            pID = rs3.getInt("id");
                             pName = rs3.getString("name");
                             pManufacturer = rs3.getString("manufacturer");
                             shelfLifeDays = rs3.getInt("shelfLifeDays");
                         }
-                        ProductDTO pDTO = new ProductDTO(pID, pName, pManufacturer, shelfLifeDays);
+                        ProductDTO pDTO = new ProductDTO(Integer.toString(pID), pName, pManufacturer, shelfLifeDays);
 
 
-                        String sql4 = "SELECT * FROM suppliedItem WHERE productid = ? AND branchid = ? AND supplierID = ?";
+                        String sql4 = "SELECT * FROM supplierinventorydb.productinagreement WHERE productid = ? AND branchid = ? AND supplierID = ?";
 
                         try (Connection con4 = getConnection();
                              PreparedStatement pstmt4 = con.prepareStatement(sql4)) {
 
-                            pstmt4.setString(1, pID);
+                            pstmt4.setInt(1, pID);
                             pstmt4.setString(2, oBranchID);
                             pstmt4.setString(3, oSupplierID);
 
@@ -121,7 +121,7 @@ public class OrderDAO {
                             if (rs4.next()) {
                                 siPrice = rs4.getInt("price");
                             }
-                            SuppliedItemDTO supItemDTO = new SuppliedItemDTO(siPrice, pDTO, suppliedItemID);
+                            SuppliedItemDTO supItemDTO = new SuppliedItemDTO(siPrice, pDTO);
                             suppliedItems.put(supItemDTO, quantity);
                         }
                     }

@@ -1,32 +1,48 @@
 
 package SupplierMoudleSource.LoadData;
+import DTO.*;
+import SupplierMoudleSource.DAO.AgreementDAO;
+import SupplierMoudleSource.DAO.BranchDAO;
+import SupplierMoudleSource.DAO.ProductDAO;
+import SupplierMoudleSource.DAO.SupplierDAO;
 import SupplierMoudleSource.DataBase.*;
 import SupplierMoudleSource.Domain.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class LoadData {
-    private ProductDataBase productDataBase = ProductDataBase.getInstance();
-    private BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
-    private SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
-    private OrderDataBase orderDataBase = OrderDataBase.getInstance();
+    private ProductDAO productDataBase = new ProductDAO();
+    private final BranchDAO branchesDataBase = new BranchDAO();
+    private SupplierDAO suppliersDataBase = new SupplierDAO();
+    private AgreementDAO agreementDAO = new AgreementDAO();
 
+    public static void main(String[] args) {
+        LoadData loadData = new LoadData();
+        loadData.LoadData();
+    }
     //loads data to dataBase
     public void LoadData() {
         //add branches
         String[][] branchData = {
-                {"1", "Beer Sheva", "Rager 101"},
-                {"2", "Lehavim", "HaGefen 12"},
-                {"3", "Tel Aviv", "Ibn Gabirol 25"},
-                {"4", "Jerusalem", "King George 10"},
-                {"5", "Haifa", "Herzl 15"},
-                {"6", "Ramat Gan", "Jabotinsky 120"},
-                {"7", "Netanya", "Ben Gurion 45"},
-                {"8", "Eilat", "Sderot Hatmarim 3"},
-                {"9", "Petah Tikva", "Bar Kochva 78"}
+                { "Beer Sheva", "Rager 101"},
+                {"Lehavim", "HaGefen 12"},
+                {"Tel Aviv", "Ibn Gabirol 25"},
+                {"Jerusalem", "King George 10"},
+                {"Haifa", "Herzl 15"},
+                {"Ramat Gan", "Jabotinsky 120"},
+                {"Netanya", "Ben Gurion 45"},
+                {"Eilat", "Sderot Hatmarim 3"},
+                {"Petah Tikva", "Bar Kochva 78"}
         };
         for (String[] data : branchData) {
-            branchesDataBase.addBranch(new Branch(data[0], data[1], data[2]));
+            try {
+                branchesDataBase.addBranch(data[0], data[1]);
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         // add suppliers with full data for the constructor
         String[][] supplierData = {
@@ -38,34 +54,40 @@ public class LoadData {
         };
 
         for (String[] data : supplierData) {
-            suppliersDataBase.addSupplier(new Supplier(
-                    data[0], data[1], data[2], data[3], data[4],
-                    data[5], data[6], data[7], data[8], data[9], data[10]
-            ));
+            BankDTO bankDTO = new BankDTO(data[3], data[4], data[5], data[0]);
+            DeliveryDTO deliveryDTO = new DeliveryDTO(data[9]);
+            InformationContactDTO informationContactDTO = new InformationContactDTO(data[6], data[7], data[8]);
+            List<InformationContactDTO> informationContactDTOList = new ArrayList<>();
+            informationContactDTOList.add(informationContactDTO);
+            suppliersDataBase.addSupplier(data[1], bankDTO, data[2], deliveryDTO, informationContactDTOList);
         }
 
         // add products
-        String[][] productData = {
-                {"1", "Bamba", "Osem"},
-                {"2", "Bisli", "Osem"},
-                {"3", "Cola", "Coca Cola"},
-                {"4", "Sprite", "Tempo"},
-                {"5", "Milk", "Tnuva"},
-                {"6", "Bread", "Ariel Bakery"},
-                {"7", "Water Bottle", "Tempo"},
-                {"8", "Cheese", "Tnuva"},
-                {"9", "Yogurt", "Shtraus"},
-                {"10", "Chocolate", "Elit"},
-                {"11", "Pita", "Ariel Bakery"},
-                {"12", "Rice", "Osem"},
-                {"13", "Pasta", "Osem"},
-                {"14", "Ketchup", "Osem"},
-                {"15", "Toilet Paper", "SuperLi"},
-                {"16", "Bamba", "Lulu"}
+        Object[][] productData = {
+                {"1", "Bamba", "Osem", 60},
+                {"2", "Bisli", "Osem", 60},
+                {"3", "Cola", "Coca Cola", 120},
+                {"4", "Sprite", "Tempo", 120},
+                {"5", "Milk", "Tnuva", 14},
+                {"6", "Bread", "Ariel Bakery", 7},
+                {"7", "Water Bottle", "Tempo", 100},
+                {"8", "Cheese", "Tnuva", 30},
+                {"9", "Yogurt", "Shtraus", 21},
+                {"10", "Chocolate", "Elit", 60},
+                {"11", "Pita", "Ariel Bakery", 7},
+                {"12", "Rice", "Osem", 80},
+                {"13", "Pasta", "Osem", 80},
+                {"14", "Ketchup", "Osem", 90},
+                {"15", "Toilet Paper", "SuperLi", 365},
+                {"16", "Bamba", "Lulu", 60}
         };
         //add to product dataBase
-        for (String[] data : productData) {
-            productDataBase.addProduct(new Product(data[0], data[1], data[2]));
+        for (Object[] data : productData) {
+            try {
+                productDataBase.addProduct((String) data[1], (String) data[2], (int) data[3]);
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         //add agreements
@@ -104,9 +126,7 @@ public class LoadData {
         };
 
         for (String[] data : agreementData) {
-            Agreement agreement = new Agreement(branchesDataBase.getBranch(data[0]),
-                    suppliersDataBase.getSupplier(data[1]));
-            suppliersDataBase.addAgreement(agreement);
+            agreementDAO.addAgreement(data[0], data[1]);
         }
 
 
@@ -137,7 +157,9 @@ public class LoadData {
             String supplierId = (String) entry[3];
             int price = (int) entry[0];
             try {
-                suppliersDataBase.getSupplier(supplierId).addProduct(productDataBase.getProduct(productID), price);
+                ProductDTO productDTO = productDataBase.getProduct(productID);
+                SuppliedItemDTO suppliedItemDTO = new SuppliedItemDTO(price, productDTO);
+                suppliersDataBase.addproduct(supplierId, suppliedItemDTO);
 
             }catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -149,19 +171,25 @@ public class LoadData {
         Random rand = new Random();
 // Then: add supplied items to agreements
         for (Object[] entry : items) {
-            int price = (int) entry[0];
-            String productID = (String) entry[1];
-            String branchId = (String) entry[2];
-            String supplierId = (String) entry[3];
-            SuppliedItem item = new SuppliedItem(price, productDataBase.getProduct(productID));
-            suppliersDataBase.addProductToAgreement(item, branchId, supplierId);
-            if (rand.nextBoolean()){
-                int quantity = rand.nextInt(20) + 1;
-                int price1 = rand.nextInt(40) + 1;
-                if (quantity * price < price1){ // to avoid errors
-                    continue;
+            try {
+                int price = (int) entry[0];
+                String productID = (String) entry[1];
+                String branchId = (String) entry[2];
+                String supplierId = (String) entry[3];
+                SuppliedItemDTO item = new SuppliedItemDTO(price, productDataBase.getProduct(productID));
+                agreementDAO.addProductToAgreement(branchId, supplierId, item);
+                if (rand.nextBoolean()){
+                    int quantity = rand.nextInt(20) + 1;
+                    int price1 = rand.nextInt(40) + 1;
+                    if (quantity * price < price1){ // to avoid errors
+                        continue;
+                    }
+                    agreementDAO.addDiscountToAgreement(branchId, supplierId, new DiscountDTO(item.product.productID, quantity, price1));
+
                 }
-                suppliersDataBase.addDiscountToAgreement(branchId, supplierId, new Discount(item, quantity, price1));
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println("error int adding items to agreement");
             }
 
         }

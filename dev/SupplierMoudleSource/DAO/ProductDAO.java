@@ -31,25 +31,25 @@ public class ProductDAO {
     }
 
     public ProductDTO getProduct(String id) throws SQLException {
-        String sql = "SELECT * FROM product WHERE id = ?";
+        String sql = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            pstmt.setString(1, id);
+            pstmt.setInt(1, Integer.parseInt(id));
             ResultSet rs = pstmt.executeQuery();
 
-            String pID = null;
+            int pID = 0;
             String pName = null;
             String pManufacturer = null;
             int shelfLifeDays = 0;
             if (rs.next()) {
-                pID = rs.getString(1);
+                pID = rs.getInt(1);
                 pName = rs.getString(2);
                 pManufacturer = rs.getString(3);
                 shelfLifeDays = rs.getInt(4);
             }
-            ProductDTO pDTO = new ProductDTO(pID, pName, pManufacturer, shelfLifeDays);
+            ProductDTO pDTO = new ProductDTO(Integer.toString(pID), pName, pManufacturer, shelfLifeDays);
             return pDTO;
         }
     }

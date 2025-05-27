@@ -9,8 +9,11 @@ import java.sql.SQLException;
 import static DataBase.PostgresConnection.getConnection;
 
 public class BranchDAO {
+    public BranchDAO(){
 
-    public void addBrunch(String branchCity, String branchAddress) throws SQLException {
+    }
+
+    public void addBranch(String branchCity, String branchAddress) throws SQLException {
         String sql = "INSERT INTO supplierinventorydb.branch (city, address) VALUES (?, ?)";
 
         try (Connection con = getConnection();
@@ -19,11 +22,9 @@ public class BranchDAO {
             pstmt.setString(1, branchCity);
             pstmt.setString(2, branchAddress);
             pstmt.executeUpdate();
-            System.out.println("✅ Branch added successfully.");
         }
     }
 
-    public BranchDAO() throws SQLException {
-    }
+
 }
 
