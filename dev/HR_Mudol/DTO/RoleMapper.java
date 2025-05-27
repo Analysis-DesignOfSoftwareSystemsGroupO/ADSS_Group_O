@@ -1,7 +1,6 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.DTO.RoleDTO;
-import HR_Mudol.domain.Role;
+import HR_Mudol.domain.Objects.Role;
 
 public class RoleMapper {
     public static RoleDTO toDTO(Role role) {

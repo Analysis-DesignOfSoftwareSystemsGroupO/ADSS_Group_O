@@ -1,4 +1,4 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Objects;
 
 /**
  * Represents a role that is filled by a specific employee.

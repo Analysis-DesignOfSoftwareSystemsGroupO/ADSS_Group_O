@@ -1,6 +1,8 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.domain.*;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.FilledRole;
+import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.repository.EmployeeRepository;
 import HR_Mudol.domain.repository.RoleRepository;
 

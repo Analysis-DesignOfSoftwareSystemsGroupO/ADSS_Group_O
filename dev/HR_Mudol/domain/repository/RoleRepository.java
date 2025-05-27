@@ -2,7 +2,7 @@ package HR_Mudol.domain.repository;
 
 import HR_Mudol.DTO.RoleDTO;
 import HR_Mudol.DTO.RoleMapper;
-import HR_Mudol.domain.Role;
+import HR_Mudol.domain.Objects.Role;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,5 +1,10 @@
 package HR_Mudol.domain;
 
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.Shift;
+import HR_Mudol.domain.Objects.User;
+
 /**
  * This interface defines the contract for managing employee shifts within the system.
  * It includes operations such as assigning and removing employees from shifts,

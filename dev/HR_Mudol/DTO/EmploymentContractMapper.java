@@ -1,9 +1,8 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.DTO.EmploymentContractDTO;
 import HR_Mudol.domain.EmploymentContract;
-import HR_Mudol.domain.Employee;
-import HR_Mudol.domain.User;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.repository.EmployeeRepository;
 
 public class EmploymentContractMapper {

@@ -1,5 +1,7 @@
 package HR_Mudol.domain;
 
+import HR_Mudol.domain.Objects.*;
+
 import java.util.*;
 
 

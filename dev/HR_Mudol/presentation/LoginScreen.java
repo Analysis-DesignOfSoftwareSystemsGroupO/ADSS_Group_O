@@ -1,6 +1,7 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.domain.*;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.User;
 
 import java.util.List;
 import java.util.Scanner;

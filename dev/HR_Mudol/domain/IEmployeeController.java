@@ -1,5 +1,9 @@
 package HR_Mudol.domain;
 
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.User;
+
 import java.util.List;
 
 /**
@@ -73,14 +77,6 @@ public interface IEmployeeController {
      * @return the current branch
      */
     Branch getBranch();
-
-    /**
-     * Returns the role manager associated with this employee manager.
-     * @return the role manager
-     */
-    IRoleController getRoleManager();
-
-    // --- Display ---
 
     /**
      * Prints the details of a specific employee.

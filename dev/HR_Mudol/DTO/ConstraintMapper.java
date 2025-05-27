@@ -1,6 +1,6 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.domain.Constraint;
+import HR_Mudol.domain.Objects.Constraint;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
 

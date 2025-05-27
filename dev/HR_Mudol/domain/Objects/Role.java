@@ -1,4 +1,4 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Objects;
 
 import java.util.LinkedList;
 import java.util.List;

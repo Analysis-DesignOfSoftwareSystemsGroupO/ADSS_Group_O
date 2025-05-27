@@ -1,7 +1,7 @@
 package HR_Mudol.presentation;
-import HR_Mudol.domain.AbstractEmployee;
-import HR_Mudol.domain.Branch;
-import HR_Mudol.domain.User;
+import HR_Mudol.domain.Objects.AbstractEmployee;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.User;
 
 /**
  * The Menu interface defines the structure for all menus in the system.

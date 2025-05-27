@@ -1,6 +1,6 @@
 package HR_Mudol.domain.repository;
 
-import HR_Mudol.domain.Employee;
+import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.DTO.EmployeeDTO;
 
 import java.util.*;

@@ -1,8 +1,6 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.DTO.*;
-import HR_Mudol.domain.Branch;
-import HR_Mudol.domain.repository.*;
+import HR_Mudol.domain.Objects.Branch;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,10 @@
 package HR_Mudol.presentation;
 
 import HR_Mudol.Service.EmployeeService.EmployeeService;
-import HR_Mudol.domain.*;
+import HR_Mudol.domain.Objects.AbstractEmployee;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.User;
 
 import java.util.Scanner;
 

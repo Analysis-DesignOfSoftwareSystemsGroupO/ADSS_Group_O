@@ -1,5 +1,8 @@
 package HR_Mudol.domain;
 
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.User;
+
 /**
  * Represents an employment contract for an employee,
  * including minimum shift requirements and leave balances.

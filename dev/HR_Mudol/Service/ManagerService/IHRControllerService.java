@@ -1,7 +1,10 @@
 package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.Service.EmployeeService.IEmployeeService;
+import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.domain.*;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.User;
 
 /**
  * IHRSystemManager is an interface that defines the core functionality required to manage the HR system for a given branch.

@@ -1,6 +1,7 @@
 package HR_Mudol.Service.EmployeeService;
 
 import HR_Mudol.domain.*;
+import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.repository.EmployeeRepository;
 
 import java.util.*;

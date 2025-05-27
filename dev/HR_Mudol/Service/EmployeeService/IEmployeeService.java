@@ -1,7 +1,7 @@
 package HR_Mudol.Service.EmployeeService;
 
-import HR_Mudol.domain.User;
-import HR_Mudol.domain.Week;
+import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.Week;
 
 public interface IEmployeeService {
 

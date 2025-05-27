@@ -1,4 +1,7 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Objects;
+
+import HR_Mudol.domain.ShiftType;
+import HR_Mudol.domain.WeekDay;
 
 import java.time.*;
 import java.util.LinkedList;

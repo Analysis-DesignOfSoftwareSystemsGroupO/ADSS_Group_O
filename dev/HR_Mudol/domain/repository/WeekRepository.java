@@ -1,6 +1,6 @@
 package HR_Mudol.domain.repository;
 
-import HR_Mudol.domain.Week;
+import HR_Mudol.domain.Objects.Week;
 
 import java.util.LinkedList;
 import java.util.List;

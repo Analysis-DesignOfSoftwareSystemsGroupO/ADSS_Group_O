@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.repository.EmployeeRepository;
 import HR_Mudol.domain.repository.UserRepository;
 

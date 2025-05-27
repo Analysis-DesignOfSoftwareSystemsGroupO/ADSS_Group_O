@@ -3,7 +3,7 @@ package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.IUserRepositoryDAO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.UserMapper;
-import HR_Mudol.domain.User;
+import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
 import java.util.LinkedList;

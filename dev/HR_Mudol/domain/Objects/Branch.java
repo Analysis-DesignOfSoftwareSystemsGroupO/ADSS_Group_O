@@ -1,4 +1,4 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Objects;
 
 import HR_Mudol.domain.repository.*;
 
@@ -12,6 +12,8 @@ public class Branch {
 
     // Branch ID assigned at creation
     private int branchID;
+    private String district;
+    private String name;
 
     // Repositories
     private EmployeeRepository employeeRepo;
@@ -22,27 +24,21 @@ public class Branch {
     /**
      * Constructs an empty Branch with initialized repositories.
      */
-    public Branch() {
+    public Branch(String district,String name) {
         this.branchID = counter++;
         this.employeeRepo = new EmployeeRepository();
         this.roleRepo = new RoleRepository();
         this.userRepo = new UserRepository();
         this.weekRepo = new WeekRepository();
+        this.name=name;
+        this.district=district;
 
         Role shiftManager = new Role("Shift Manager");
+        Role Driver = new Role("Driver");
         roleRepo.add(shiftManager);
-
+        roleRepo.add(Driver);
         weekRepo.add(new Week());
     }
-
-    public Branch(int branchID) {
-        this.branchID = branchID;
-        this.employeeRepo = new EmployeeRepository();
-        this.roleRepo = new RoleRepository();
-        this.userRepo = new UserRepository();
-        this.weekRepo = new WeekRepository();
-    }
-
 
     public int getBranchID() {
         return branchID;

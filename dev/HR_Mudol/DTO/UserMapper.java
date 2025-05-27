@@ -1,8 +1,7 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.domain.User;
-import HR_Mudol.domain.AbstractEmployee;
+import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.AbstractEmployee;
 import HR_Mudol.domain.repository.EmployeeRepository;
 import HR_Mudol.domain.Level;
 

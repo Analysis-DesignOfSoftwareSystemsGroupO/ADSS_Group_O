@@ -1,4 +1,7 @@
-package HR_Mudol.domain;
+package HR_Mudol.Service;
+
+import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.Week;
 
 import java.util.List;
 

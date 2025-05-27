@@ -1,5 +1,10 @@
 package HR_Mudol.domain;
 
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Shift;
+import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.Week;
+
 import java.util.List;
 /**
  * The IWeekManager interface defines the operations for managing a week's shifts in the system.

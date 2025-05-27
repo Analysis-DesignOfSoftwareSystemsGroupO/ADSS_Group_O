@@ -1,4 +1,6 @@
-package HR_Mudol.domain;
+package HR_Mudol.domain.Objects;
+
+import HR_Mudol.domain.Level;
 
 /**
  * Represents a system user, wrapping an employee and their access level.

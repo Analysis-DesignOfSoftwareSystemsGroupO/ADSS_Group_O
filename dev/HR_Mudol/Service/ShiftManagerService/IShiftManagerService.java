@@ -1,6 +1,6 @@
 package HR_Mudol.Service.ShiftManagerService;
 
-import HR_Mudol.domain.User;
+import HR_Mudol.domain.Objects.User;
 
 public interface IShiftManagerService {
 

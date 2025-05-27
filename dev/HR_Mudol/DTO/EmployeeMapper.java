@@ -1,8 +1,7 @@
 package HR_Mudol.DTO;
 
 
-import HR_Mudol.DTO.EmployeeDTO;
-import HR_Mudol.domain.Employee;
+import HR_Mudol.domain.Objects.Employee;
 
 public class EmployeeMapper {
     public static EmployeeDTO toDTO(Employee emp) {

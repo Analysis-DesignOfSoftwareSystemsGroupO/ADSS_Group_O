@@ -1,6 +1,6 @@
 package HR_Mudol.DAO;
 
-import HR_Mudol.domain.Branch;
+import HR_Mudol.domain.Objects.Branch;
 import java.sql.SQLException;
 import java.util.List;
 

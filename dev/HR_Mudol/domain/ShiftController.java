@@ -1,5 +1,10 @@
 package HR_Mudol.domain;
 
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.Shift;
+import HR_Mudol.domain.Objects.User;
+
 import java.util.List;
 import java.util.Scanner;
 
