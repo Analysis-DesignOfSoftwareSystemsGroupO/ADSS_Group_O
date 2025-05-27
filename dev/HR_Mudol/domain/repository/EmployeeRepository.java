@@ -45,4 +45,8 @@ public class EmployeeRepository {
     public List<Employee> getArchived() {
         return new ArrayList<>(oldEmployees);
     }
+
+    public void remove(){}
+
+    public void archived(){}
 }

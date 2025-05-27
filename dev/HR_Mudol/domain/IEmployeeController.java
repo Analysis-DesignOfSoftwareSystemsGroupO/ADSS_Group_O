@@ -90,10 +90,4 @@ public interface IEmployeeController {
      */
     void printAllEmployees(User caller);
 
-    /**
-     * Returns a list of all users in the branch.
-     * @param caller the user performing the operation (must be a manager)
-     * @return list of users
-     */
-    List<User> getAllUsers(User caller);
 }

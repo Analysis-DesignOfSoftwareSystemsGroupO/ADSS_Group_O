@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
@@ -21,23 +23,20 @@ public class EmployeeController implements IEmployeeController {
     private Scanner scanner = new Scanner(System.in);
     private IRoleController roleManager;
     private Branch curBranch;
-    private EmployeeRepository employeeRepo;
-    private UserRepository userRepo;
+
+    @Override
+    public Branch getBranch() {
+        return this.curBranch;
+    }
 
     public EmployeeController(Branch curBranch) {
         this.curBranch = curBranch;
-        this.employeeRepo = curBranch.getEmployeeRepo();
-        this.userRepo = curBranch.getUserRepo();
     }
 
     public void setRoleManager(IRoleController roleManager) {
         this.roleManager = roleManager;
     }
 
-    @Override
-    public List<User> getAllUsers(User caller) {
-        return userRepo.getAll();
-    }
 
     @Override
     public void addEmployee(User caller) {
@@ -50,7 +49,7 @@ public class EmployeeController implements IEmployeeController {
             empID = getIntInput("Enter employee ID (9 digits): ");
             if (String.valueOf(empID).length() != 9) {
                 System.out.println("Invalid ID. Must be exactly 9 digits.");
-            } else if (employeeRepo.exists(empID)) {
+            } else if (curBranch.getEmployeeRepo().exists(empID)) {
                 System.out.println("This ID already exists in the system.");
             } else {
                 break;
@@ -69,27 +68,14 @@ public class EmployeeController implements IEmployeeController {
         EmployeeDTO dto = new EmployeeDTO(empID, empName, empPassword, empBankAccount,
                 empSalary, empStartDate, minDay, minEvening, sicks, daysOff);
 
-        employeeRepo.addFromDTO(dto);
-        userRepo.add(new User(employeeRepo.getById(empID), Level.regularEmp));
+        curBranch.getEmployeeRepo().addFromDTO(dto);
+        curBranch.getUserRepo().add(new User(curBranch.getEmployeeRepo().getById(empID), Level.regularEmp));
 
         System.out.println("Employee and user created successfully!");
     }
 
-    private boolean checkIfAlreadyExist(int ID) {
-        return employeeRepo.exists(ID);
-    }
-
     // שאר המתודות יעודכנו בהמשך באופן דומה לשימוש ב-repositories
 
-    @Override
-    public Branch getBranch() {
-        return this.curBranch;
-    }
-
-    @Override
-    public IRoleController getRoleManager() {
-        return this.roleManager;
-    }
 
     // שאר המתודות נשארות זמנית כמו שהן עד שנעדכן אותן
     // (removeEmployee, getEmployeeById, updateSalary וכו')
@@ -136,29 +122,26 @@ public class EmployeeController implements IEmployeeController {
         return input;
     }
 
-    public void setScanner(Scanner newScanner) {
-        this.scanner = newScanner;
-    }
     @Override
     public void removeEmployee(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID to remove: ");
-        if (!employeeRepo.exists(empId)) {
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
             System.out.println("Employee not found.");
             return;
         }
 
-        Employee toRemove = employeeRepo.getById(empId);
+        Employee toRemove = curBranch.getEmployeeRepo().getById(empId);
 
         for (Role role : roleManager.getAllRoles(caller)) {
             roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
         }
 
-        employeeRepo.archive(empId);
+        curBranch.getEmployeeRepo().archive(empId);
 
         User userToRemove = null;
-        for (User u : userRepo.getAll()) {
+        for (User u : curBranch.getUserRepo().getAll()) {
             if (u.getUser().equals(toRemove)) {
                 userToRemove = u;
                 break;
@@ -166,7 +149,7 @@ public class EmployeeController implements IEmployeeController {
         }
 
         if (userToRemove != null) {
-            userRepo.remove(userToRemove);
+            curBranch.getUserRepo().remove(userToRemove);
         }
 
         System.out.println("Employee removed successfully from system.");
@@ -176,7 +159,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e == null) {
             System.out.println("Employee not found.");
             return;
@@ -191,7 +174,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e == null) {
             System.out.println("Employee not found.");
             return;
@@ -206,7 +189,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e == null) {
             System.out.println("Employee not found.");
             return;
@@ -221,7 +204,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e == null) {
             System.out.println("Employee not found.");
             return;
@@ -236,7 +219,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e == null) {
             System.out.println("Employee not found.");
             return;
@@ -251,7 +234,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e == null) {
             System.out.println("Employee not found.");
             return;
@@ -272,7 +255,7 @@ public class EmployeeController implements IEmployeeController {
             return null;
         }
 
-        return employeeRepo.getById(empId);
+        return curBranch.getEmployeeRepo().getById(empId);
     }
 
     @Override
@@ -280,7 +263,7 @@ public class EmployeeController implements IEmployeeController {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee e = employeeRepo.getById(empId);
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
         if (e != null) {
             System.out.println(e.toString());
         } else {
@@ -292,7 +275,7 @@ public class EmployeeController implements IEmployeeController {
     public void printAllEmployees(User caller) {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
-        for (Employee e : employeeRepo.getAll()) {
+        for (Employee e : curBranch.getEmployeeRepo().getAll()) {
             System.out.println(e.toString());
         }
     }
