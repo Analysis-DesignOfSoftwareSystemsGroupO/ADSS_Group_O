@@ -1,7 +1,6 @@
 package inventory.domain;
 
-import inventory.data.CategoryRepository;
-import inventory.data.InMemoryCategoryRepository;
+import inventory.data.Repositories.InMemoryCategoryRepository;
 
 import java.util.Objects;
 import java.util.ArrayList;

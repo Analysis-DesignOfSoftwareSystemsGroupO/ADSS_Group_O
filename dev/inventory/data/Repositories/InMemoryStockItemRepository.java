@@ -1,5 +1,6 @@
-package inventory.data;
+package inventory.data.Repositories;
 
+import inventory.data.StockItemRepository;
 import inventory.domain.StockItem;
 
 import java.util.ArrayList;

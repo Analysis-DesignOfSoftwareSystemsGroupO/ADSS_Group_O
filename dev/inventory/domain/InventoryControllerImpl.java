@@ -1,6 +1,10 @@
 package inventory.domain;
 
 import inventory.data.*;
+import inventory.data.Repositories.InMemoryCategoryRepository;
+import inventory.data.Repositories.InMemoryDiscountRepository;
+import inventory.data.Repositories.InMemoryProductRepository;
+import inventory.data.Repositories.InMemoryStockItemRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

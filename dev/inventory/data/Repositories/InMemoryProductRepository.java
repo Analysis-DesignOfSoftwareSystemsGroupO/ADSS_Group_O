@@ -1,5 +1,6 @@
-package inventory.data;
+package inventory.data.Repositories;
 
+import inventory.data.ProductRepository;
 import inventory.domain.Product;
 import java.util.ArrayList;
 import java.util.List;

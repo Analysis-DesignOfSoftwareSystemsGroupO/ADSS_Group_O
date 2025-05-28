@@ -1,5 +1,6 @@
-package inventory.data;
+package inventory.data.Repositories;
 
+import inventory.data.DiscountRepository;
 import inventory.domain.Discount;
 
 import java.util.ArrayList;

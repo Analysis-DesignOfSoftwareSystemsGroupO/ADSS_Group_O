@@ -1,11 +1,12 @@
-package inventory.data;
+package inventory.data.Repositories;
 
+import inventory.data.CategoryRepository;
 import inventory.domain.Category;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryCategoryRepository implements CategoryRepository{
+public class InMemoryCategoryRepository implements CategoryRepository {
     private static final List<Category> categories = new ArrayList<>();
 
     public static void saveCategory(Category category) {
