@@ -1,18 +1,46 @@
 package transport_module;
 
 import DTO.TransportDTO;
+import DataAccess.ITransportDAO;
+import DataAccess.jdbcTruckDAO;
 import Transport_Module_Exceptions.ATransportModuleException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
+
 
 public class TransportRepositoryIMP implements ITransportRepository{
-
+    private static final Logger log =  LogManager.getLogger(TransportRepositoryIMP.class);
     HashMap<Integer, Transport> transports;
+    ITransportDAO dao;
 
+    /**
+     *
+     * @param id
+     * @return transport object or null if not exsists
+     * @throws ATransportModuleException
+     */
     @Override
     public Transport getTransportByid(int id) throws ATransportModuleException {
-        return null;
+        if( transports.get(id ) == null){ // if the transport is not in the mapper, look for it in the data base
+            try {
+                Optional<TransportDTO> transportDTO = dao.getTransportByid(id);
+                if(transportDTO.isPresent()){
+                    Transport t = TransportDTOtoTransport(transportDTO.get()); //get the transport Object from Dto
+                    transports.put(t.getId(), t);
+                    return t;
+                }
+                else {return null;}
+            }
+            catch (SQLException e){
+                log.error("SQL exception in getTransportById()");
+            }
+        }
+        return transports.get(id);
     }
 
     @Override
@@ -21,7 +49,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
     }
 
     @Override
-    public void saveTransport(Transport transport) throws ATransportModuleException {
+    public void saveTransport(TransportDTO transport) throws ATransportModuleException {
 
     }
 

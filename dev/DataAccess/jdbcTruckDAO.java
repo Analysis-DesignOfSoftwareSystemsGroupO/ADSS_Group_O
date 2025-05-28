@@ -90,7 +90,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
 
     //assign truck to the date
     @Override
-    public boolean checkAvailabilityOfTruck(String truckPN, LocalDate date) throws SQLException , UnAvailableTruckException {
+    public boolean checkAvailabilityOfTruck(String truckPN, LocalDate date) throws SQLException  {
         log.info("jdbcTruckDAO :: checkAvailabilityOfTruck( " + truckPN+ " , " + date + " ) ");
         //check that the Truck is not occuppied
         String sql = "SELECT COUNT(TruckPN) AS COUNTER FROM TruckAvailability WHERE EXSISTS (SELECT TruckPN FROM TruckAvailability WHERE TruckPn = ? AND Date = ? );";
@@ -112,6 +112,34 @@ public class jdbcTruckDAO  implements ITruckDAO{
         }
         return true;
     }
+
+    /**
+     *
+     * @param truckPn
+     * @return list of dates that the truck is available
+      * @throws SQLException
+     */
+    public List<LocalDate> getListofOccupiedDates(String truckPn) throws SQLException{
+        log.info("jdbcTruckDAO :: checkAvailabilityOfTruck( " + truckPn+ "  ) ");
+        String sql = "SELECT Date FROM TruckAvailability WHERE TruckPN = ? ;";
+        List<LocalDate> dates = new ArrayList<>();
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
+            ps.setString(1, truckPn);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                dates.add(rs.getDate("Date").toLocalDate());
+            }
+        }
+        catch (SQLException e ){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dates;
+        }
+
 
 
     /**

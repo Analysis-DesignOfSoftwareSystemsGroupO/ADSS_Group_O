@@ -12,7 +12,7 @@ public interface ITransportRepository {
 
     Transport[] getTransportsByDate(Date date);
 
-    void saveTransport(Transport transport) throws ATransportModuleException ;
+    void saveTransport(TransportDTO transport) throws ATransportModuleException ;
 
     void deleteTransport(int transportID ) throws  ATransportModuleException;
 

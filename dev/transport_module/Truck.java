@@ -4,7 +4,9 @@ import Transport_Module_Exceptions.InvalidInputException;
 import Transport_Module_Exceptions.ATransportModuleException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,7 +19,7 @@ public class Truck {
     private final int maxWeight;
     private final DrivingLicence liceenceReq;
     private final String plateNumber;
-    private final Map<LocalDate, Boolean> availablityCalander;
+    private final HashMap<LocalDate, Boolean> availablityCalander;
 
     /***
      * Constructor - creates a new Truck instance
@@ -33,6 +35,26 @@ public class Truck {
         this.liceenceReq = dl;
         this.plateNumber = pn;
         this.availablityCalander = new HashMap<>();
+    }
+
+    /**
+     *  Same as other constructor but with a availabilty map setted.
+     * @param dl
+     * @param maxWeight
+     * @param pn
+     * @param availability
+     * @throws ATransportModuleException
+     */
+    public Truck(DrivingLicence dl, int maxWeight, String pn, List<LocalDate> availability) throws ATransportModuleException {
+        if(dl == null || maxWeight<1 || pn.isEmpty())
+            throw new InvalidInputException();
+        this.maxWeight = maxWeight;
+        this.liceenceReq = dl;
+        this.plateNumber = pn;
+        this.availablityCalander = new HashMap<>();
+        for (LocalDate d : availability){
+            availablityCalander.put(d, true);
+        }
     }
 
 //********************************************************************************************************************** Get functions
