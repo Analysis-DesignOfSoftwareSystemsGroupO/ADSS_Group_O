@@ -8,7 +8,7 @@ public class Discount {
     private String id;
     private String description;
     private DiscountTargetType targetType;
-    private String targetId; // Product ID or Category ID
+    private String targetId;
     private double discountPercentage;
     private LocalDate startDate;
     private LocalDate endDate;

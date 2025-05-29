@@ -9,6 +9,7 @@ import java.util.UUID;
  * Holds information common to all items of this type.
  */
 public class Product {
+    //TODO: change the cost price thing
     private String id;
     private String name;
     private String manufacturer;
