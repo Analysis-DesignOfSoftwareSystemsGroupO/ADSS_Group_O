@@ -23,7 +23,7 @@ public class EmployeeController implements IEmployeeController {
 
     public EmployeeController(Branch curBranch) {
         this.curBranch = curBranch;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo());
+        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
 
     public void setRoleManager(IRoleController roleManager) {
@@ -36,8 +36,9 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void addEmployee(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void addEmployee(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         String empName = getNonEmptyStringInput("Enter employee full name: ");
 
@@ -62,21 +63,22 @@ public class EmployeeController implements IEmployeeController {
         int sicks = getIntInput("Enter number of sick days: ");
         int daysOff = getIntInput("Enter number of vacation days: ");
 
-        EmployeeDTO dto = new EmployeeDTO(empID, empName, empPassword, empBankAccount,
+        Employee emp = new Employee(empName, empID, empPassword, empBankAccount,
                 empSalary, empStartDate, minDay, minEvening, sicks, daysOff);
 
         //add him
-        Employee created = curBranch.getEmployeeRepo().addFromDTO(dto);
+        curBranch.getEmployeeRepo().addFromDTO(emp);
 
         //create his User with employee reference
-        curBranch.getUserRepo().add(new User(created, Level.regularEmp));
+        curBranch.getUserRepo().add(new User(emp, Level.regularEmp));
 
         System.out.println("Employee and user created successfully!");
     }
 
     @Override
-    public void removeEmployee(UserDTO caller) throws SQLException {
-        if (!DTOToDomainMapper.fromDTO(caller,curBranch.getUserRepo()).isManager()) throw new SecurityException("Access denied");
+    public void removeEmployee(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID to remove: ");
         if (!curBranch.getEmployeeRepo().exists(empId)) {
@@ -86,8 +88,8 @@ public class EmployeeController implements IEmployeeController {
 
         Employee toRemove = curBranch.getEmployeeRepo().getById(empId);
 
-        for (Role role : roleManager.getAllRoles(caller)) {
-            roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
+        for (Role role : roleManager.getAllRoles(theCaller)) {
+            roleManager.removeEmployeeFromRole(theCaller, role.getRoleNumber(), toRemove);
         }
 
         User user = curBranch.getUserRepo().getByEmployeeId(empId);
@@ -101,8 +103,9 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void updateBankAccount(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void updateBankAccount(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         if (!curBranch.getEmployeeRepo().exists(empId)) {
@@ -111,14 +114,15 @@ public class EmployeeController implements IEmployeeController {
         }
 
         String newBankAccount = getValidatedBankAccountInput("Enter new bank account (digits only): ");
-        curBranch.getEmployeeRepo().updateBankAccount(UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()), empId, newBankAccount);
+        curBranch.getEmployeeRepo().updateBankAccount(caller, empId, newBankAccount);
 
         System.out.println("Bank account updated successfully.");
     }
 
     @Override
-    public void updateSalary(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void updateSalary(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         if (!curBranch.getEmployeeRepo().exists(empId)) {
@@ -127,14 +131,15 @@ public class EmployeeController implements IEmployeeController {
         }
 
         int newSalary = getIntInput("Enter new salary: ");
-        curBranch.getEmployeeRepo().updateSalary(UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()), empId, newSalary);
+        curBranch.getEmployeeRepo().updateSalary(caller, empId, newSalary);
 
         System.out.println("Salary updated successfully.");
     }
 
     @Override
-    public void updateMinDayShift(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void updateMinDayShift(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         if (!curBranch.getEmployeeRepo().exists(empId)) {
@@ -143,14 +148,15 @@ public class EmployeeController implements IEmployeeController {
         }
 
         int newNumber = getIntInput("Enter new minimum day shifts: ");
-        curBranch.getEmployeeRepo().updateMinDayShift(UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()), empId, newNumber);
+        curBranch.getEmployeeRepo().updateMinDayShift(caller, empId, newNumber);
 
         System.out.println("Minimum day shifts updated successfully.");
     }
 
     @Override
-    public void updateMinEveningShift(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void updateMinEveningShift(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         if (!curBranch.getEmployeeRepo().exists(empId)) {
@@ -159,15 +165,16 @@ public class EmployeeController implements IEmployeeController {
         }
 
         int newNumber = getIntInput("Enter new minimum evening shifts: ");
-        curBranch.getEmployeeRepo().updateMinEveningShift(UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()), empId, newNumber);
+        curBranch.getEmployeeRepo().updateMinEveningShift(caller, empId, newNumber);
 
         System.out.println("Minimum evening shifts updated successfully.");
     }
 
 
     @Override
-    public void setInitialsickDays(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void setInitialsickDays(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         if (!curBranch.getEmployeeRepo().exists(empId)) {
@@ -176,14 +183,15 @@ public class EmployeeController implements IEmployeeController {
         }
 
         int number = getIntInput("Enter number of sick days: ");
-        curBranch.getEmployeeRepo().updateSickDays(UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()), empId, number);
+        curBranch.getEmployeeRepo().updateSickDays(caller, empId, number);
 
         System.out.println("Sick days updated successfully.");
     }
 
     @Override
-    public void setInitialdaysOff(UserDTO caller) throws SQLException {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void setInitialdaysOff(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         Employee e = curBranch.getEmployeeRepo().getById(empId);
@@ -193,7 +201,7 @@ public class EmployeeController implements IEmployeeController {
         }
 
         int number = getIntInput("Enter number of vacation days: ");
-        e.setDaysOff(UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()), number);
+        e.setDaysOff(caller, number);
 
         curBranch.getEmployeeRepo().updateDaysOff(empId, number);
 
@@ -202,8 +210,9 @@ public class EmployeeController implements IEmployeeController {
 
 
     @Override
-    public Employee getEmployeeById(UserDTO caller, int empId) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public Employee getEmployeeById(UserDTO theCaller, int empId) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         if (String.valueOf(empId).length() != 9) {
             System.out.println("Employee ID must be exactly 9 digits.");
@@ -218,8 +227,9 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void printEmployees(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void printEmployees(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
         if (String.valueOf(empId).length() != 9) {
@@ -236,8 +246,9 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void printAllEmployees(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied");
+    public void printAllEmployees(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         List<Employee> allEmployees = curBranch.getEmployeeRepo().getAll();
         if (allEmployees.isEmpty()) {

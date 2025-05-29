@@ -2,7 +2,7 @@ package HR_Mudol.domain.repository;
 
 import HR_Mudol.DAO.*;
 import HR_Mudol.domain.Objects.*;
-import HR_Mudol.domain.*;
+import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.DTO.*;
 
 import java.sql.SQLException;
@@ -19,29 +19,12 @@ public class EmployeeRepository {
         this.constraintDAO=cdao;
     }
 
-    public Employee addFromDTO(EmployeeDTO dto) throws SQLException {
+    public void addFromDTO(Employee emp) throws SQLException {
         //RAM
-        Employee employee = mapFromDTO(dto);
-        employeesById.put(employee.getEmpId(), employee);
+        employeesById.put(emp.getEmpId(), emp);
 
         // DB
-        employeeDAO.insert(dto);
-        return employee;
-    }
-
-    private Employee mapFromDTO(EmployeeDTO dto) {
-        return new Employee(
-                dto.getFullName(),
-                dto.getEmployeeId(),
-                dto.getPassword(),
-                dto.getBankAccount(),
-                dto.getSalary(),
-                dto.getStartDate(),
-                dto.getMinDayShift(),
-                dto.getMinEveningShift(),
-                dto.getSickDays(),
-                dto.getDaysOff()
-        );
+        employeeDAO.insert(DTOToDomainMapper.toDTO(emp));
     }
 
     public void archive(int empId) throws SQLException {
@@ -69,7 +52,7 @@ public class EmployeeRepository {
         EmployeeDTO dto = employeeDAO.getById(empId);
         if (dto == null) return null;
 
-        Employee e = mapFromDTO(dto);
+        Employee e = DTOToDomainMapper.fromDTO(dto);
         employeesById.put(empId, e);
         return e;
     }
@@ -100,7 +83,7 @@ public class EmployeeRepository {
         Employee e = getById(empId);
         if (e == null) throw new IllegalArgumentException("Employee not found");
 
-        e.setMinDayShift(caller, newMinDay); // RAM
+        e.setMinDayShift(newMinDay); // RAM
         employeeDAO.updateMinDayShift(empId, newMinDay); // DB
     }
 
@@ -108,7 +91,7 @@ public class EmployeeRepository {
         Employee e = getById(empId);
         if (e == null) throw new IllegalArgumentException("Employee not found");
 
-        e.setMinEveninigShift(caller, newMinEvening); // RAM
+        e.setMinEveninigShift(newMinEvening); // RAM
         employeeDAO.updateMinEveningShift(empId, newMinEvening); // DB
     }
 
@@ -116,7 +99,7 @@ public class EmployeeRepository {
         Employee e = getById(empId);
         if (e == null) throw new IllegalArgumentException("Employee not found");
 
-        e.setSickDays(caller, newSickDays); // בזיכרון
+        e.setSickDays(newSickDays); // בזיכרון
         employeeDAO.updateSickDays(empId, newSickDays); // בבסיס הנתונים
     }
 

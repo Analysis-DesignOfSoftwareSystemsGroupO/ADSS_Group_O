@@ -1,5 +1,8 @@
 package HR_Mudol.DTO;
 
+/**
+ * Data Transfer Object representing a Constraint for an employee's availability.
+ */
 public class ConstraintDTO {
     private int empID;
     private String explanation;
@@ -13,8 +16,20 @@ public class ConstraintDTO {
         this.type = type;
     }
 
-    public int getEmpID() { return empID; }
-    public String getExplanation() { return explanation; }
-    public String getDay() { return day; }
-    public String getType() { return type; }
+    public int getEmpID() {
+        return empID;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public String getType() {
+        return type;
+    }
+
 }

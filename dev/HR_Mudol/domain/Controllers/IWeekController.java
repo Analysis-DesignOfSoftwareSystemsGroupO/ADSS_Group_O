@@ -29,7 +29,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is canceling the shift.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void cancelShift(UserDTO theCaller, WeekDTO theWeek);
+    void cancelShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 
     /**
      * Allows the user to choose relevant roles for each shift within the given theWeek.
@@ -45,7 +45,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is assigning employees.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek);
+    void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 
     /**
      * Prints the details of the theWeek, including shifts and roles.
@@ -75,7 +75,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is removing the employee.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void removeEmployeeFromShift(UserDTO theCaller, WeekDTO theWeek);
+    void removeEmployeeFromShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 
     /**
      * Removes a role from a shift in the current theWeek.
@@ -83,7 +83,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is removing the role.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void removeRoleFromShift(UserDTO theCaller, WeekDTO theWeek);
+    void removeRoleFromShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 
     /**
      * Adds a role to a shift in the current theWeek.
@@ -91,7 +91,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is adding the role.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void addARoleToShift(UserDTO theCaller, WeekDTO theWeek);
+    void addARoleToShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 
     /**
      * Adds an employee to a shift in the current theWeek.
@@ -99,5 +99,5 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is adding the employee.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void addEmployeeToShift(UserDTO theCaller, WeekDTO theWeek);
+    void addEmployeeToShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 }

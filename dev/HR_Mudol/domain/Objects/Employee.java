@@ -75,10 +75,8 @@ public class Employee extends AbstractEmployee {
      * Returns the list of roles assigned to the employee.
      * Only accessible by the HR manager.
      */
-    public List<Role> getRelevantRoles(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public List<Role> getRelevantRoles() {
+
         return this.relevantRoles;
     }
 
@@ -86,10 +84,8 @@ public class Employee extends AbstractEmployee {
      * Returns the list of weekly constraints submitted by the employee.
      * Accessible by the employee himself or the HR manager.
      */
-    public List<Constraint> getWeeklyConstraints(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public List<Constraint> getWeeklyConstraints() {
+
         return this.weeklyConstraints;
     }
 
@@ -224,57 +220,57 @@ public class Employee extends AbstractEmployee {
     /**
      * Returns the minimum number of day shifts required.
      */
-    public int getMinDayShift(User caller) {
-        return this.Contract.getMinDayShift(caller, this);
+    public int getMinDayShift() {
+        return this.Contract.getMinDayShift( this);
     }
 
     /**
      * Sets the minimum number of day shifts required.
      */
-    public void setMinDayShift(User caller, int minDayShift) {
-        this.Contract.setMinDayShift(caller, minDayShift);
+    public void setMinDayShift(int minDayShift) {
+        this.Contract.setMinDayShift(minDayShift);
     }
 
     /**
      * Returns the minimum number of evening shifts required.
      */
-    public int getMinEveninigShift(User caller) {
-        return this.Contract.getMinEveninigShift(caller, this);
+    public int getMinEveninigShift() {
+        return this.Contract.getMinEveninigShift( this);
     }
 
     /**
      * Sets the minimum number of evening shifts required.
      */
-    public void setMinEveninigShift(User caller, int minEveninigShift) {
-        this.Contract.setMinEveninigShift(caller, minEveninigShift);
+    public void setMinEveninigShift( int minEveninigShift) {
+        this.Contract.setMinEveninigShift( minEveninigShift);
     }
 
     /**
      * Returns the number of sick days remaining.
      */
-    public int getSickDays(User caller) {
-        return this.Contract.getSickDays(caller, this);
+    public int getSickDays() {
+        return this.Contract.getSickDays(this);
     }
 
     /**
      * Sets the number of sick days.
      */
-    public void setSickDays(User caller, int sickDays) {
-        this.Contract.setSickDays(caller, sickDays);
+    public void setSickDays(int sickDays) {
+        this.Contract.setSickDays(sickDays);
     }
 
     /**
      * Returns the number of vacation days remaining.
      */
-    public int getDaysOff(User caller) {
-        return this.Contract.getDaysOff(caller, this);
+    public int getDaysOff() {
+        return this.Contract.getDaysOff(this);
     }
 
     /**
      * Sets the number of vacation days.
      */
     public void setDaysOff(User caller, int daysOff) {
-        this.Contract.setDaysOff(caller, daysOff);
+        this.Contract.setDaysOff(daysOff);
     }
 
     /**
@@ -296,8 +292,8 @@ public class Employee extends AbstractEmployee {
             throw new SecurityException("Only manager can lock constraints.");
         }
 
-        this.lockedConstraints = new ArrayList<>(this.getWeeklyConstraints(caller));
-        this.getWeeklyConstraints(caller).clear();
+        this.lockedConstraints = new ArrayList<>(this.getWeeklyConstraints());
+        this.getWeeklyConstraints().clear();
         this.getMorningConstraints(caller).clear();
         this.getEveningConstraints(caller).clear();
     }

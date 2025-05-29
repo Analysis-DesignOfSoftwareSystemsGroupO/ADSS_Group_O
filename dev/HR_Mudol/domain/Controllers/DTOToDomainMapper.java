@@ -1,26 +1,32 @@
 package HR_Mudol.domain.Controllers;
 import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.*;
-import HR_Mudol.domain.repository.*
+import HR_Mudol.domain.repository.*;
+import HR_Mudol.domain.*;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DTOToDomainMapper {
     private final UserRepository userRepository;
-    private final EmployeeRepository employeeRepository;
+    private static EmployeeRepository employeeRepository = null;
     private final RoleRepository roleRepository;
+    private WeekRepository weekRepository;
 
     public DTOToDomainMapper(UserRepository userRepository,
                              EmployeeRepository employeeRepository,
-                             RoleRepository roleRepository) {
+                             RoleRepository roleRepository, WeekRepository weekRepository) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
+        this.weekRepository=weekRepository;
     }
-
-    // ... (fromDTO for User, Employee, Role, Constraint, Shift)
 
     public Week fromDTO(WeekDTO dto) {
         Week week = new Week();
-        week.setWeekNumber(dto.getWeekNumber());
 
         for (ShiftDTO shiftDTO : dto.getShifts()) {
             Shift shift = fromDTO(shiftDTO);
@@ -29,31 +35,28 @@ public class DTOToDomainMapper {
 
         return week;
     }
-    public User fromDTO(UserDTO dto) {
-        User user = userRepository.getById(dto.getId());
+
+    public User fromDTO(UserDTO dto) throws SQLException {
+        User user = userRepository.getByEmployeeId(dto.getUserId());
         if (user != null) return user;
 
-        Employee employee = fromDTO(dto.getEmployee());
-        User newUser = new User(dto.getId(), dto.getUsername(), dto.getPassword(), dto.getPhone(), dto.getEmail(), employee, dto.isManager());
-        userRepository.add(newUser);
+        Employee employee = employeeRepository.getById(dto.getUserId());
+        User newUser = new User(employee, Level.valueOf(dto.getLevel()));
         return newUser;
     }
 
-    public Employee fromDTO(EmployeeDTO dto) {
-        Employee emp = employeeRepository.getById(dto.getId());
+    public static Employee fromDTO(EmployeeDTO dto) {
+        Employee emp = employeeRepository.getById(dto.getEmployeeId());
         if (emp != null) return emp;
 
-        Employee newEmp = new Employee(dto.getId(), dto.getEmpName());
-        employeeRepository.add(newEmp);
-        return newEmp;
+        return new Employee(dto.getFullName(),dto.getEmployeeId(),dto.getPassword(),dto.getBankAccount(),dto.getSalary(),dto.getStartDate(),dto.getSalary(),dto.getMinEveningShift(),dto.getSickDays(),dto.getDaysOff());
     }
 
     public Role fromDTO(RoleDTO dto) {
-        Role role = roleRepository.getById(dto.getRoleNumber());
+        Role role = roleRepository.getRoleByNumber(dto.getRoleNumber());
         if (role != null) return role;
 
-        Role newRole = new Role(dto.getRoleNumber(), dto.getDescription());
-        roleRepository.add(newRole);
+        Role newRole = new Role(dto.getDescription());
         return newRole;
     }
 
@@ -66,52 +69,77 @@ public class DTOToDomainMapper {
     }
 
     public Shift fromDTO(ShiftDTO dto) {
-        Shift shift = new Shift(dto.getDay(), dto.getType());
-        shift.setShiftID(dto.getShiftID());
-        shift.setStatus(dto.getStatus());
+        Shift existing = weekRepository.getShiftById(dto.getShiftID());
+        if (existing != null) return existing;
 
-        // הוספת עובדים
-        List<Employee> employees = dto.getEmployeeIds().stream()
-                .map(employeeRepository::getById)
-                .collect(Collectors.toList());
-        shift.setEmployees(employees);
+        Shift shift = new Shift(
+                WeekDay.valueOf(dto.getDay().toUpperCase()),
+                ShiftType.valueOf(dto.getType().toUpperCase())
+        );
+        shift.updateStatus(Status.valueOf(dto.getStatus().toUpperCase()));
+
+        Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
+        shift.setShiftManager(shiftManager);
 
         // הוספת תפקידים דרושים
-        List<Role> necessaryRoles = dto.getNecessaryRoleIds().stream()
-                .map(roleRepository::getById)
-                .collect(Collectors.toList());
-        shift.setNecessaryRoles(necessaryRoles);
+        for (RoleDTO roleDTO : dto.getNecessaryRoles()) {
+            shift.addNecessaryRoles(fromDTO(roleDTO));
+        }
+
+        // הוספת תפקידי מילוי (FilledRoles)
+        for (FilledRoleDTO filledRoleDTO : dto.getFilledRoles()) {
+            Employee employee = employeeRepository.getById(filledRoleDTO.getEmployeeId());
+            Role role=roleRepository.getRoleByNumber(filledRoleDTO.getRoleId());
+            shift.addEmployee(employee,role);
+        }
 
         return shift;
     }
+
+    // --- toDTO ---
+
     public ShiftDTO toDTO(Shift shift) {
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee e : shift.getEmployees()) {
+            employeeDTOs.add(toDTO(e));
+        }
+
+        List<RoleDTO> roleDTOs = new ArrayList<>();
+        for (Role r : shift.getNecessaryRoles()) {
+            roleDTOs.add(toDTO(r));
+        }
+
+        List<FilledRoleDTO> filledRoleDTOs = new ArrayList<>();
+        for (FilledRole fr : shift.getFilledRoles()) {
+            filledRoleDTOs.add(new FilledRoleDTO(
+                    shift.getShiftID(),
+                    fr.getEmployee().getEmpId(),
+                    fr.getRole().getRoleNumber()
+            ));
+        }
+
         return new ShiftDTO(
                 shift.getShiftID(),
-                shift.getDay().name(),              // assuming WeekDay enum
-                shift.getType().name(),             // assuming ShiftType enum
-                shift.getStatus().name(),           // assuming Status enum
-                shift.getShiftManager() != null ? shift.getShiftManager().getEmpId() : -1
-        );
-    }
-    public static EmployeeDTO toDTO(Employee e) {
-        return new EmployeeDTO(
-                e.getEmpId(),
-                e.getEmpName(),
-                e.getEmpPassword(),
-                e.getEmpBankAccount(),
-                e.getEmpSalary(),
-                e.getEmpStartDate(),
-                e.getMinDayShift(),
-                e.getMinEveninigShift(),
-                e.getSickDays(),
-                e.getDaysOff()
+                shift.getDay().name(),
+                shift.getType().name(),
+                shift.getStatus().name(),
+                shift.getShiftManager() != null ? shift.getShiftManager().getEmpId() : -1,
+                employeeDTOs,
+                roleDTOs,
+                filledRoleDTOs
         );
     }
 
-    public static RoleDTO toDTO(Role r) {
-        return new RoleDTO(
-                r.getRoleNumber(),
-                r.getDescription()
-        );
+    public static EmployeeDTO toDTO(Employee e) {
+        return new EmployeeDTO(e.getEmpId(), e.getEmpName(), e.getEmpPassword(), e.getEmpBankAccount(),e.getEmpStartDate(),e.getMinDayShift(),e.getMinDayShift(),e.getSickDays(),e.getDaysOff(),e.getRelevantRoles(),e.getWeeklyConstraints());
+    }
+
+    public RoleDTO toDTO(Role r) {
+        List<EmployeeDTO> relevantEmployees = new ArrayList<>();
+        for (Employee e : r.getRelevantEmployees()) {
+            relevantEmployees.add(toDTO(e));
+        }
+
+        return new RoleDTO(r.getRoleNumber(), r.getDescription(), relevantEmployees);
     }
 }

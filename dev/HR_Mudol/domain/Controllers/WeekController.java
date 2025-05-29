@@ -33,7 +33,7 @@ public class WeekController implements IWeekController {
         this.dependency = dependency;
         this.curBranch=curBranch;
         this.roleController=roleController;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo());
+        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
 
     /**
@@ -90,7 +90,7 @@ public class WeekController implements IWeekController {
      * @param theWeek The week in which the shift is located.
      */
     @Override
-    public void addARoleToShift(UserDTO theCaller, WeekDTO theWeek){
+    public void addARoleToShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         dependency.chooseRelevantRoleForShift(theCaller,mapper.toDTO(findShift(theWeek)));
     }
@@ -103,7 +103,7 @@ public class WeekController implements IWeekController {
      * @param theWeek The week in which the shifts and roles are to be filled.
      */
     @Override
-    public void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) {
+    public void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
         Week week=mapper.fromDTO(theWeek);
@@ -132,7 +132,7 @@ public class WeekController implements IWeekController {
                     : Status.Problem;
 
             // RAM
-            shift.updateStatus(caller, newStatus);
+            shift.updateStatus(newStatus);
 
             // DB
             curBranch.getWeekRepo().updateShiftStatus(shift.getShiftID(), newStatus);
@@ -233,7 +233,7 @@ public class WeekController implements IWeekController {
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void cancelShift(UserDTO theCaller, WeekDTO theWeek) {
+    public void cancelShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
         Week week=mapper.fromDTO(theWeek);
@@ -316,7 +316,7 @@ public class WeekController implements IWeekController {
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void removeEmployeeFromShift(UserDTO theCaller,WeekDTO theWeek){
+    public void removeEmployeeFromShift(UserDTO theCaller,WeekDTO theWeek) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
 
         if (!caller.isManager()) {
@@ -334,7 +334,7 @@ public class WeekController implements IWeekController {
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void removeRoleFromShift(UserDTO theCaller,WeekDTO theWeek) {
+    public void removeRoleFromShift(UserDTO theCaller,WeekDTO theWeek) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
@@ -350,7 +350,7 @@ public class WeekController implements IWeekController {
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void addEmployeeToShift(UserDTO theCaller, WeekDTO theWeek) {
+    public void addEmployeeToShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         Week week=mapper.fromDTO(theWeek);
         User caller=mapper.fromDTO(theCaller);

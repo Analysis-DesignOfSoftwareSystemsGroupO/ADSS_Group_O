@@ -80,17 +80,10 @@ public class Week {
     /**
      * Adds a new shift to the week.
      * Only HR managers or employees already assigned to the shift are allowed to add.
-     * @param caller The user attempting to add the shift.
      * @param shift The shift to be added.
      * @throws SecurityException if the caller is unauthorized.
      */
-    public void addShift(User caller, Shift shift) {
-        boolean isHR = caller.isManager();
-        boolean isSelfAssigned = shift.getEmployees().contains(caller.getUser());
-
-        if (!isHR && !isSelfAssigned) {
-            throw new SecurityException("Only HR or employees assigned to the shift can add it.");
-        }
+    public void addShift(Shift shift) {
 
         this.shifts.add(shift);
     }

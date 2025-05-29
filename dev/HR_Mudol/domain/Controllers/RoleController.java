@@ -1,11 +1,11 @@
 package HR_Mudol.domain.Controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.DTO.UserMapper;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
@@ -26,7 +26,7 @@ public class RoleController implements IRoleController {
     public RoleController(Branch curBranch) {
         this.curBranch = curBranch;
         this.scanner = new Scanner(System.in);
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo());
+        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
 
     public void setEmployeeManager(IEmployeeController employeeManager) {
@@ -34,8 +34,9 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void createRole(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public void createRole(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         System.out.print("Enter role description: ");
         String description = scanner.nextLine().trim();
@@ -62,8 +63,9 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void updateRoleDescription(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public void updateRoleDescription(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int roleNumber = getIntInput("Enter role number to update: ");
         Role role = getRoleByNumber(roleNumber);
@@ -89,11 +91,12 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void assignEmployeeToRole(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public void assignEmployeeToRole(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee employee = employeeManager.getEmployeeById(caller, empId);
+        Employee employee = employeeManager.getEmployeeById(theCaller, empId);
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
@@ -111,11 +114,12 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void assignEmployeeToShiftManager(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public void assignEmployeeToShiftManager(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID to promote to Shift Manager: ");
-        Employee employee = employeeManager.getEmployeeById(caller, empId);
+        Employee employee = employeeManager.getEmployeeById(theCaller, empId);
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
@@ -132,11 +136,12 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void removeEmployeeFromALLRoles(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public void removeEmployeeFromALLRoles(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee employee = employeeManager.getEmployeeById(caller, empId);
+        Employee employee = employeeManager.getEmployeeById(theCaller, empId);
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
@@ -149,8 +154,9 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void removeEmployeeFromRole(UserDTO caller, int roleId, Employee employee) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public void removeEmployeeFromRole(UserDTO theCaller, int roleId, Employee employee) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         Role role = getRoleByNumber(roleId);
         if (role == null) {
@@ -168,21 +174,26 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public List<Employee> getRelevantEmployees(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException {
+
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
+
         return curBranch.getRoleRepo().getAllRelevantEmployees();
     }
 
     @Override
-    public List<Role> getAllRoles(UserDTO caller) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public List<Role> getAllRoles(UserDTO theCaller) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
+
         return curBranch.getRoleRepo().getAllRoles();
     }
 
     @Override
-    public void printAllRoles(UserDTO caller) {
+    public void printAllRoles(UserDTO theCaller) throws SQLException {
 
-        List<Role> roles = getAllRoles(caller);
+        List<Role> roles = getAllRoles(theCaller);
 
         if (roles.isEmpty()) {
             System.out.println("No roles found.");
@@ -195,15 +206,15 @@ public class RoleController implements IRoleController {
         }
     }
 
-
     @Override
     public Role getRoleByNumber(int roleNumber) {
         return curBranch.getRoleRepo().getRoleByNumber(roleNumber);
     }
 
     @Override
-    public int countEmployeesWithoutRoles(UserDTO caller, List<Employee> employeeList) {
-        if (!UserMapper.fromDTO(caller,curBranch.getEmployeeRepo()).isManager()) throw new SecurityException("Access denied.");
+    public int countEmployeesWithoutRoles(UserDTO theCaller, List<Employee> employeeList) throws SQLException {
+        User caller=mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         List<Integer> empIDsWithRoles = curBranch.getRoleRepo().getAllEmployeeIDsWithRoles();
 

@@ -43,10 +43,8 @@ public class EmploymentContract {
      * Returns the minimum number of day shifts required per week.
      * Accessible only by the employee himself or a manager.
      */
-    public int getMinDayShift(User caller, Employee employee) {
-        if (!caller.isManager() && !caller.isSameEmployee(employee)) {
-            throw new SecurityException("Access denied");
-        }
+    public int getMinDayShift(Employee employee) {
+
         return minDayShift;
     }
 
@@ -54,10 +52,8 @@ public class EmploymentContract {
      * Updates the minimum number of day shifts required per week.
      * Accessible only by the employee himself or a manager.
      */
-    public void setMinDayShift(User caller, int minDayShift) {
-        if (!caller.isManager() && !caller.isSameEmployee(this.getOwner())) {
-            throw new SecurityException("Access denied");
-        }
+    public void setMinDayShift(int minDayShift) {
+
         this.minDayShift = minDayShift;
     }
 
@@ -65,10 +61,8 @@ public class EmploymentContract {
      * Updates the minimum number of evening shifts required per week.
      * Accessible only by the employee himself or a manager.
      */
-    public void setMinEveninigShift(User caller, int minEveninigShift) {
-        if (!caller.isManager() && !caller.isSameEmployee(this.getOwner())) {
-            throw new SecurityException("Access denied");
-        }
+    public void setMinEveninigShift(int minEveninigShift) {
+
         this.minEveninigShift = minEveninigShift;
     }
 
@@ -76,10 +70,8 @@ public class EmploymentContract {
      * Updates the number of remaining sick days.
      * Accessible only by the employee himself or a manager.
      */
-    public void setSickDays(User caller, int sickDays) {
-        if (!caller.isManager() && !caller.isSameEmployee(this.getOwner())) {
-            throw new SecurityException("Access denied");
-        }
+    public void setSickDays(int sickDays) {
+
         this.sickDays = sickDays;
     }
 
@@ -87,10 +79,8 @@ public class EmploymentContract {
      * Updates the number of remaining vacation days.
      * Accessible only by the employee himself or a manager.
      */
-    public void setDaysOff(User caller, int daysOff) {
-        if (!caller.isManager() && !caller.isSameEmployee(this.getOwner())) {
-            throw new SecurityException("Access denied");
-        }
+    public void setDaysOff(int daysOff) {
+
         this.daysOff = daysOff;
     }
 
@@ -98,10 +88,8 @@ public class EmploymentContract {
      * Returns the minimum number of evening shifts required per week.
      * Accessible only by the employee himself or a manager.
      */
-    public int getMinEveninigShift(User caller, Employee employee) {
-        if (!caller.isManager() && !caller.isSameEmployee(employee)) {
-            throw new SecurityException("Access denied");
-        }
+    public int getMinEveninigShift( Employee employee) {
+
         return minEveninigShift;
     }
 
@@ -109,10 +97,8 @@ public class EmploymentContract {
      * Returns the number of remaining sick days.
      * Accessible only by the employee himself or a manager.
      */
-    public int getSickDays(User caller, Employee employee) {
-        if (!caller.isManager() && !caller.isSameEmployee(employee)) {
-            throw new SecurityException("Access denied");
-        }
+    public int getSickDays(Employee employee) {
+
         return sickDays;
     }
 
@@ -120,10 +106,8 @@ public class EmploymentContract {
      * Returns the number of remaining vacation days.
      * Accessible only by the employee himself or a manager.
      */
-    public int getDaysOff(User caller, Employee employee) {
-        if (!caller.isManager() && !caller.isSameEmployee(employee)) {
-            throw new SecurityException("Access denied");
-        }
+    public int getDaysOff(Employee employee) {
+
         return daysOff;
     }
 

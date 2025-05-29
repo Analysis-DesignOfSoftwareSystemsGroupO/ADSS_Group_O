@@ -6,6 +6,7 @@ import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,11 +27,11 @@ public class ShiftController implements IShiftController {
     public ShiftController(Branch curBranch,IRoleController dependency) {
         this.curBranch=curBranch;
         this.dependency = dependency;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo());
+        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
 
     @Override
-    public void assignEmployeeToShift(UserDTO theCaller, ShiftDTO theShift, EmployeeDTO theEmployee, RoleDTO theRole) {
+    public void assignEmployeeToShift(UserDTO theCaller, ShiftDTO theShift, EmployeeDTO theEmployee, RoleDTO theRole) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
@@ -43,7 +44,7 @@ public class ShiftController implements IShiftController {
         }
 
         // save at RAM
-        shift.addEmployee(caller, employee, role);
+        shift.addEmployee(employee, role);
 
         //save at the DB
         curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpId(), shift.getShiftID(), role.getRoleNumber());
@@ -54,7 +55,7 @@ public class ShiftController implements IShiftController {
 
 
     @Override
-    public void removeEmployeeFromShift(UserDTO theCaller, ShiftDTO theShift) {
+    public void removeEmployeeFromShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
@@ -116,7 +117,7 @@ public class ShiftController implements IShiftController {
 
 
     @Override
-    public void removeRoleFromShift(UserDTO theCaller, ShiftDTO theShift) {
+    public void removeRoleFromShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
 
@@ -198,7 +199,7 @@ public class ShiftController implements IShiftController {
 
 
     @Override
-    public void chooseRelevantRoleForShift(UserDTO theCaller, ShiftDTO theShift) {
+    public void chooseRelevantRoleForShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
 
@@ -208,7 +209,7 @@ public class ShiftController implements IShiftController {
 
         // Add Shift Manager automatically (only once)
         Role shiftManager = dependency.getRoleByNumber(1);
-        shift.addNecessaryRoles(caller, shiftManager);
+        shift.addNecessaryRoles(shiftManager);
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
                 curBranch.getBranchID(), shift.getShiftID(), 1, 1
         );
@@ -249,7 +250,7 @@ public class ShiftController implements IShiftController {
 
                         // Add to RAM
                         for (int i = 0; i < count; i++) {
-                            shift.addNecessaryRoles(caller, role);
+                            shift.addNecessaryRoles(role);
                         }
 
                         // Add to DB
@@ -284,7 +285,7 @@ public class ShiftController implements IShiftController {
 
 
     @Override
-    public void printShift(UserDTO theCaller, ShiftDTO theShift) {
+    public void printShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
         // Authorization check

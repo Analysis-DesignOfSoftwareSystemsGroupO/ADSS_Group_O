@@ -74,20 +74,16 @@ public class Shift {
     /**
      * Updates the shift status.
      */
-    public void updateStatus(User caller, Status status) {
-        if (!caller.isManager() && !caller.isShiftManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void updateStatus(Status status) {
+
         this.status = status;
     }
 
     /**
      * Adds a necessary role to this shift.
      */
-    public void addNecessaryRoles(User caller, Role r) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void addNecessaryRoles( Role r) {
+
         if (r == null) {
             throw new IllegalArgumentException("Role is null.");
         }
@@ -121,10 +117,8 @@ public class Shift {
     /**
      * Adds an employee to this shift with a specific role.
      */
-    public void addEmployee(User caller, Employee employee, Role role) {
-        if (!caller.isManager() && !caller.isShiftManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void addEmployee(Employee employee, Role role) {
+
         if (!necessaryRoles.contains(role)) {
             throw new IllegalArgumentException("Role is not necessary for this shift.");
         }
@@ -149,7 +143,7 @@ public class Shift {
         for (FilledRole fr : new LinkedList<>(this.filledRoles)) {
             if (fr.getEmployee().equals(employee)) {
                 this.filledRoles.remove(fr);
-                updateStatus(caller, Status.Problem);
+                updateStatus(Status.Problem);
                 break;
             }
         }
@@ -159,10 +153,8 @@ public class Shift {
     /**
      * Sets the manager responsible for the shift.
      */
-    public void setShiftManager(User caller, Employee shiftManager) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void setShiftManager(Employee shiftManager) {
+
         this.shiftManager = shiftManager;
     }
 

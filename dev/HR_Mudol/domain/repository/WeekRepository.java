@@ -59,4 +59,16 @@ public class WeekRepository {
         return shiftDAO.getShiftStatus(shiftId);
     }
 
+    public Shift getShiftById(int shiftId) {
+        for (Week week : weeks) {
+            for (Shift shift : week.getShifts()) {
+                if (shift.getShiftID() == shiftId) {
+                    return shift;
+                }
+            }
+        }
+        return null;
+    }
+
+
 }
