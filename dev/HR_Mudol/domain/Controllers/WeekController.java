@@ -14,6 +14,7 @@ import java.util.*;
 public class WeekController implements IWeekController {
 
     private IShiftController dependency;
+    private IRoleController roleController;
 
     private Branch curBranch;
 
@@ -24,9 +25,10 @@ public class WeekController implements IWeekController {
      * @param dependency The IShiftManager dependency used for shift management operations.
      * @param curBranch The current branch being managed.
      */
-    public WeekController(IShiftController dependency, Branch curBranch) {
+    public WeekController(IShiftController dependency, Branch curBranch, IRoleController roleController) {
         this.dependency = dependency;
         this.curBranch=curBranch;
+        this.roleController=roleController;
     }
 
     /**
@@ -354,7 +356,7 @@ public class WeekController implements IWeekController {
 
             try {
                 int roleId = Integer.parseInt(input);
-                selectedRole = findRoleById(relevantRole, roleId);
+                selectedRole = findRoleById(roleId);
                 if (selectedRole == null) {
                     System.out.println("Invalid role ID. Try again.");
                 }
@@ -379,17 +381,11 @@ public class WeekController implements IWeekController {
         /**
      * Finds a role by its ID in a list of roles.
      *
-     * @param roles The list of roles to search through.
      * @param roleId The ID of the role to find.
      * @return The role with the specified ID, or null if not found.
      */
-    private Role findRoleById(List<Role> roles,int roleId) {
-        for (Role role : roles) {
-            if (role.getRoleNumber()==(roleId)) {
-                return role;
-            }
-        }
-        return null;
+    private Role findRoleById(int roleId) {
+        return roleController.getRoleByNumber(roleId);
     }
 
     /**
@@ -400,9 +396,14 @@ public class WeekController implements IWeekController {
      */
     private void printRolesList(User caller, List<Role> roles) {
         for (Role r : roles) {
+            // משיגים את הגרסה הכי מעודכנת של התפקיד מהקונטרולר לפי המספר שלו
+            Role updatedRole = roleController.getRoleByNumber(r.getRoleNumber());
 
-                System.out.println(r.getRoleNumber() + " - " + r.getDescription());
-
+            if (updatedRole != null) {
+                System.out.println(updatedRole.getRoleNumber() + " - " + updatedRole.getDescription());
+            } else {
+                System.out.println("Role with ID " + r.getRoleNumber() + " not found.");
+            }
         }
     }
 
