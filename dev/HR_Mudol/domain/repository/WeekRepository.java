@@ -1,7 +1,7 @@
 package HR_Mudol.domain.repository;
-
 import HR_Mudol.DAO.ShiftDAOImpl;
 import HR_Mudol.domain.Objects.Week;
+import HR_Mudol.domain.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,5 +40,24 @@ public class WeekRepository {
     public void addOrUpdateRequiredRole(int branchID, int shiftID, int roleNumber, int count) {
         shiftDAO.insertOrIncrementRequiredRole(branchID, shiftID, roleNumber, count);
     }
+
+    public void updateShiftStatus(int shiftId, Status newStatus) {
+        shiftDAO.updateStatus(shiftId, newStatus.name());
+    }
+
+    public void deleteShift(int shiftId) {
+        shiftDAO.delete(shiftId);
+    }
+
+    public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
+        return shiftDAO.isEmployeeAssignedToShift(empId, shiftId);
+    }
+
+    public Status getShiftStatus(int shiftId) {
+        return shiftDAO.getShiftStatus(shiftId);
+    }
+
+
+
 
 }

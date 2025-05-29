@@ -2,6 +2,7 @@ package HR_Mudol.domain.repository;
 
 import HR_Mudol.DAO.*;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.*;
 import HR_Mudol.DTO.*;
 
 import java.sql.SQLException;
@@ -11,9 +12,11 @@ public class EmployeeRepository {
     private final Map<Integer, Employee> employeesById = new HashMap<>();
     private final List<Employee> oldEmployees = new LinkedList<>();
     private final IEmployeeDAO employeeDAO;
+    private final IConstraintDAO constraintDAO;
 
-    public EmployeeRepository(IEmployeeDAO dao) {
-        this.employeeDAO = dao;
+    public EmployeeRepository(IEmployeeDAO edao, IConstraintDAO cdao) {
+        this.employeeDAO = edao;
+        this.constraintDAO=cdao;
     }
 
     public Employee addFromDTO(EmployeeDTO dto) throws SQLException {
@@ -124,6 +127,8 @@ public class EmployeeRepository {
             employeeDAO.updateDaysOff(empId, daysOff); // עדכון ב־DB
         }
     }
+
+
 
 
 

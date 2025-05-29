@@ -1,7 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ConstraintDTO;
-
+import HR_Mudol.domain.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,7 @@ public class ConstraintDAOImpl implements IConstraintDAO {
             stmt.executeUpdate();
         }
     }
+
 
     @Override
     public List<ConstraintDTO> getByEmployee(int empID) throws SQLException {
@@ -72,4 +73,29 @@ public class ConstraintDAOImpl implements IConstraintDAO {
         }
         return list;
     }
+
+    @Override
+    public ConstraintDTO getConstraint(int empId, WeekDay day, ShiftType type) {
+        String sql = "SELECT explanation FROM Constraints WHERE empNum = ? AND WeekDay = ? AND ShiftType = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empId);
+            stmt.setString(2, day.name());
+            stmt.setString(3, type.name());
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String explanation = rs.getString("explanation");
+                return new ConstraintDTO(empId, explanation, day.name(), type.name());
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch constraint", e);
+        }
+
+        return null;
+    }
+
+
 }

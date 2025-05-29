@@ -14,6 +14,7 @@ import java.util.*;
 public class WeekController implements IWeekController {
 
     private IShiftController dependency;
+
     private Branch curBranch;
 
 
@@ -23,11 +24,10 @@ public class WeekController implements IWeekController {
      * @param dependency The IShiftManager dependency used for shift management operations.
      * @param curBranch The current branch being managed.
      */
-    public WeekController(IShiftController dependency, Branch curBranch ) {
+    public WeekController(IShiftController dependency, Branch curBranch) {
         this.dependency = dependency;
         this.curBranch=curBranch;
     }
-
 
     /**
      * Creates a new week with shifts, empty at first.
@@ -37,7 +37,7 @@ public class WeekController implements IWeekController {
      */
     @Override
     public Week createNewWeek(User caller) {
-        Week newWeek = new Week();
+        Week newWeek = new Week(); //only on RAM
 
         return newWeek;
     }
@@ -67,7 +67,7 @@ public class WeekController implements IWeekController {
 
         for (Shift shift : week.getShifts()) {
 
-             dependency.chooseRelevantRoleForShift(caller, shift);
+            dependency.chooseRelevantRoleForShift(caller, shift);
         }
     }
 
@@ -110,11 +110,15 @@ public class WeekController implements IWeekController {
                 System.out.println("Next role.\n");
             }
 
-            if (shift.getNecessaryRoles().size() == shift.getEmployees().size()) {
-                shift.updateStatus(caller, Status.Full);
-            } else {
-                shift.updateStatus(caller, Status.Problem);
-            }
+            Status newStatus = (shift.getNecessaryRoles().size() == shift.getEmployees().size())
+                    ? Status.Full
+                    : Status.Problem;
+
+            // RAM
+            shift.updateStatus(caller, newStatus);
+
+            // DB
+            curBranch.getWeekRepo().updateShiftStatus(shift.getShiftID(), newStatus);
 
             System.out.println("Finished with that shift.\n");
         }
@@ -131,7 +135,7 @@ public class WeekController implements IWeekController {
      */
     private Employee chooseEmployeeForRole(User caller, Week week, Shift shift, Role role) {
         Scanner scanner = new Scanner(System.in);
-        List<Employee> candidates = role.getRelevantEmployees(caller);
+        List<Employee> candidates = role.getRelevantEmployees();
         if (candidates.isEmpty()) {
             System.out.println("No employees are available for role: " + role.getDescription());
             return null;
@@ -161,7 +165,8 @@ public class WeekController implements IWeekController {
                 Employee employee = candidates.get(index - 1);
                 triedIndexes.add(index);
 
-                Constraint constraint = employee.searchingForRelevantconstraint(caller, week, shift.getDay(), shift.getType());
+                Constraint constraint = curBranch.getConstraintRepo()
+                        .getConstraint(employee.getEmpId(), shift.getDay(), shift.getType());
 
                 if (constraint == null) {
                     System.out.println("The employee can work this shift.");
@@ -197,7 +202,7 @@ public class WeekController implements IWeekController {
      */
     private void printRelevantEmp(User caller, Role role) {
         int index = 1;
-        for (Employee emp : role.getRelevantEmployees(caller)) {
+        for (Employee emp : role.getRelevantEmployees()) {
             System.out.println(index + ". " + emp.getEmpName());
             index++;
 
@@ -218,11 +223,14 @@ public class WeekController implements IWeekController {
         }
 
         Shift shift=findShift(week);
-        week.removeShift(shift);
+
+        week.removeShift(shift); //DB
+
+        curBranch.getWeekRepo().deleteShift(shift.getShiftID());//DB
+
         System.out.println(shift + " was deleted");
 
     }
-
 
     /**
      * Retrieves the shifts for a specific employee in a given week.
@@ -236,9 +244,9 @@ public class WeekController implements IWeekController {
         List<Shift> result = new ArrayList<>();
 
         for (Shift shift : curWeek.getShifts()) {
-                if (shift.getEmployees().contains(employee)) {
-                    result.add(shift);
-                }
+            if (curBranch.getWeekRepo().isEmployeeAssignedToShift(employee.getEmpId(), shift.getShiftID())) {
+                result.add(shift);
+            }
         }
 
         return result;
@@ -264,9 +272,14 @@ public class WeekController implements IWeekController {
     @Override
     public int hasUnassignedRoles(Week week) {
         int count = 0;
+
         for (Shift shift : week.getShifts()) {
-            if (shift.getStatus()==Status.Problem||shift.getStatus()==Status.Empty) count++;
+            Status dbStatus = curBranch.getWeekRepo().getShiftStatus(shift.getShiftID());
+            if (dbStatus == Status.Problem || dbStatus == Status.Empty) {
+                count++;
+            }
         }
+
         return count;
     }
 
@@ -352,7 +365,15 @@ public class WeekController implements IWeekController {
 
         // לבחור עובד לתפקיד
         Employee chosen = chooseEmployeeForRole(caller, week, shift, selectedRole);
+
+        if (chosen == null) {
+            System.out.println("No employee was selected for the role. Action cancelled.");
+            return;
+        }
+
+        // מימוש ההשמה בפועל
         dependency.assignEmployeeToShift(caller, shift, chosen, selectedRole);
+        System.out.println(chosen.getEmpName() + " assigned successfully to the shift.");
     }
 
         /**

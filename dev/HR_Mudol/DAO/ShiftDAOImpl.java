@@ -1,6 +1,8 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.domain.Status;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +41,33 @@ public class ShiftDAOImpl implements IShiftDAO {
     }
 
     @Override
-    public void delete(int shiftID) throws SQLException {
-        String sql = "DELETE FROM shifts WHERE shiftID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, shiftID);
-            stmt.executeUpdate();
+    public void delete(int shiftId) {
+        String deleteAssignedEmployees = "DELETE FROM AssignedEmployeesToShifts WHERE shiftId = ?";
+        String deleteRequiredRoles = "DELETE FROM RequiredRolesInShifts WHERE shiftId = ?";
+        String deleteShift = "DELETE FROM Shifts WHERE shiftId = ?";
+
+        try (
+                PreparedStatement stmt1 = conn.prepareStatement(deleteAssignedEmployees);
+                PreparedStatement stmt2 = conn.prepareStatement(deleteRequiredRoles);
+                PreparedStatement stmt3 = conn.prepareStatement(deleteShift)
+        ) {
+            // מחיקה מטבלת השיבוצים
+            stmt1.setInt(1, shiftId);
+            stmt1.executeUpdate();
+
+            // מחיקה מטבלת התפקידים הנדרשים
+            stmt2.setInt(1, shiftId);
+            stmt2.executeUpdate();
+
+            // מחיקת המשמרת עצמה
+            stmt3.setInt(1, shiftId);
+            stmt3.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fully delete shift with ID: " + shiftId, e);
         }
     }
+
 
     @Override
     public ShiftDTO get(int shiftID) throws SQLException {
@@ -183,6 +205,52 @@ public class ShiftDAOImpl implements IShiftDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert/increment required role", e);
+        }
+    }
+
+    public void updateStatus(int shiftId, String newStatus) {
+        String sql = "UPDATE Shifts SET status = ? WHERE shiftID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, shiftId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update shift status", e);
+        }
+    }
+
+    @Override
+    public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
+        String sql = "SELECT 1 FROM AssignedEmployeesToShifts WHERE empId = ? AND shiftId = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empId);
+            stmt.setInt(2, shiftId);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // מחזיר true אם נמצא תוצאה
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to check if employee is assigned to shift", e);
+        }
+    }
+
+    @Override
+    public Status getShiftStatus(int shiftId) {
+        String sql = "SELECT status FROM Shifts WHERE shiftId = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shiftId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String statusStr = rs.getString("status");
+                return Status.valueOf(statusStr.toUpperCase());
+            } else {
+                throw new RuntimeException("No shift found with ID: " + shiftId);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch shift status", e);
         }
     }
 

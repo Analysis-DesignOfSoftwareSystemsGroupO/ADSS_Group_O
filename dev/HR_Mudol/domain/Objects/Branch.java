@@ -21,6 +21,7 @@ public class Branch {
     private RoleRepository roleRepo;
     private UserRepository userRepo;
     private WeekRepository weekRepo;
+    private ConstraintRepository constraintRepository;
 
     /**
      * Constructs an empty Branch with initialized repositories.
@@ -31,6 +32,8 @@ public class Branch {
         this.roleRepo = new RoleRepository(new RoleDAOImpl ());
         this.userRepo = new UserRepository();
         this.weekRepo = new WeekRepository(new ShiftDAOImpl);
+        this.constraintRepository= new ConstraintRepository();
+
         this.name=name;
         this.district=district;
 
@@ -60,4 +63,6 @@ public class Branch {
     public WeekRepository getWeekRepo() {
         return weekRepo;
     }
+
+    public ConstraintRepository getConstraintRepo() {return constraintRepository; }
 }
