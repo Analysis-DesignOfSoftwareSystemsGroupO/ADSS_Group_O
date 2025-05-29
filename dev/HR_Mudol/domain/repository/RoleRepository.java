@@ -49,6 +49,7 @@ public class RoleRepository {
 
     public void removeEmployeeFromRole(Employee employee, Role role) {
         if (role.getRelevantEmployees().contains(employee)) {
+            role.removeEmployee(employee); // remove from memory
             roleDAO.removeEmployeeFromRole(employee.getEmpId(), role.getRoleNumber()); // DB
         }
     }
@@ -91,6 +92,10 @@ public class RoleRepository {
         Role newRole = new Role(dto.getDescription());
         roles.add(newRole); // הוספה לזיכרון
         return newRole;
+    }
+
+    public List<Integer> getAllEmployeeIDsWithRoles() {
+        return roleDAO.getAllEmployeeIDsWithRoles();
     }
 
 

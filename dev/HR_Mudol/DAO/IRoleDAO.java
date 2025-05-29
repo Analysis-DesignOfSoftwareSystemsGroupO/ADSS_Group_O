@@ -11,6 +11,9 @@ public interface IRoleDAO {
     void removeEmployeeFromRole(int empID, int roleNumber);
     List<EmployeeDTO> getAllEmployeeDTOsWithRoles();
     RoleDTO getByNumber(int roleNumber);
+    List<Integer> getAllEmployeeIDsWithRoles();
+
+
 
     void delete(int roleNumber) throws SQLException;
 

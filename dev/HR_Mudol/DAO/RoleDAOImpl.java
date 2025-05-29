@@ -132,6 +132,22 @@ public class RoleDAOImpl implements IRoleDAO {
         }
     }
 
+    @Override
+    public List<Integer> getAllEmployeeIDsWithRoles() {
+        List<Integer> result = new ArrayList<>();
+        String sql = "SELECT DISTINCT empID FROM EmployeeRoles";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(rs.getInt("empID"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch employee IDs with roles", e);
+        }
+
+        return result;
+    }
 
 
     @Override

@@ -201,20 +201,13 @@ public class RoleController implements IRoleController {
     public int countEmployeesWithoutRoles(User caller, List<Employee> employeeList) {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
+        List<Integer> empIDsWithRoles = curBranch.getRoleRepo().getAllEmployeeIDsWithRoles();
+
         int count = 0;
         for (Employee emp : employeeList) {
-            boolean found = false;
-            for (Role role : curBranch.getRoleRepo().getAll()) {
-                try {
-                    if (role.getRelevantEmployees(caller).contains(emp)) {
-                        found = true;
-                        break;
-                    }
-                } catch (SecurityException e) {
-                    System.out.println(e.getMessage());
-                }
+            if (!empIDsWithRoles.contains(emp.getEmpId())) {
+                count++;
             }
-            if (!found) count++;
         }
         return count;
     }
