@@ -193,4 +193,9 @@ public class ProductDAO implements ProductRepository {
             return null; // Return null if mapping fails
         }
     }
+
+    @Override
+    public void printAllProducts() {
+        System.out.println("All Products:");
+    }
 }

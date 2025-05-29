@@ -1,6 +1,10 @@
 package inventory.domain;
 
 import inventory.data.*;
+import inventory.data.DAO.CategoryDAO;
+import inventory.data.DAO.DiscountDAO;
+import inventory.data.DAO.ProductDAO;
+import inventory.data.DAO.StockItemDAO;
 import inventory.data.Repositories.InMemoryCategoryRepository;
 import inventory.data.Repositories.InMemoryDiscountRepository;
 import inventory.data.Repositories.InMemoryProductRepository;
@@ -16,6 +20,12 @@ public class InventoryControllerImpl implements InventoryController {
     private final ProductRepository productRepository = new InMemoryProductRepository();
     private final StockItemRepository stockItemRepository = new InMemoryStockItemRepository();
     private final DiscountRepository discountRepository = new InMemoryDiscountRepository();
+    private final CategoryRepository categoryRepository = new InMemoryCategoryRepository();
+    private final ProductDAO productDAO = new ProductDAO();
+    private final StockItemDAO stockItemDAO = new StockItemDAO(productDAO);
+    private final DiscountDAO discountDAO = new DiscountDAO();
+    private final CategoryDAO categoryDAO = new CategoryDAO();
+
 
     public InventoryControllerImpl() {
     }
@@ -29,6 +39,7 @@ public class InventoryControllerImpl implements InventoryController {
         Product productToAdd = new Product(name, minimumStock, costPrice, location, manufacturer);
         productToAdd.setCategory(prodParentCategory);
         productRepository.saveProduct(productToAdd);
+        productDAO.saveProduct(productToAdd);
     }
 
     public void removeProduct(String id) {
@@ -48,6 +59,7 @@ public class InventoryControllerImpl implements InventoryController {
             }
         }
         productRepository.deleteProduct(id);
+        productDAO.deleteProduct(id);
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
@@ -64,6 +76,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
 
         stockItemRepository.saveStockItem(stockItemToAdd);
+        stockItemDAO.saveStockItem(stockItemToAdd);
     }
 
     public List<Product> getAllProductsDefinitions() {
