@@ -100,24 +100,20 @@ public class FilledRoleDAOImpl implements IFilledRoleDAO {
 
     @Override
     public List<FilledRoleDTO> getEmployees(int shiftId) {
-        final String sql =
-                "SELECT roleNumber, empId, shiftID " +
-                        "FROM   FilledRole " +
-                        "WHERE  shiftID = ?";
+        final String sql = "SELECT roleNumber, empId, shiftID FROM FilledRoles WHERE shiftID = ?";
 
         List<FilledRoleDTO> employees = new ArrayList<>();
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, shiftId); // מציבים את הפרמטר
 
-            ps.setInt(1, shiftId);          // מציבים את הפרמטר
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     employees.add(
                             new FilledRoleDTO(
-                                    rs.getInt("roleNumber"),
+                                    rs.getInt("shiftID"),
                                     rs.getInt("empId"),
-                                    rs.getInt("shiftID")
+                                    rs.getInt("roleNumber")
                             )
                     );
                 }
@@ -125,6 +121,7 @@ public class FilledRoleDAOImpl implements IFilledRoleDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to fetch employees for shift " + shiftId, e);
         }
+
         return employees;
     }
 }

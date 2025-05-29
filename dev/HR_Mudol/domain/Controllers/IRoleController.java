@@ -1,5 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.User;
@@ -18,7 +19,7 @@ public interface IRoleController {
      *
      * @param caller The user who is creating the role (typically an HR manager).
      */
-    void createRole(User caller);
+    void createRole(UserDTO caller);
 
     /**
      * Updates the description of an existing role.
@@ -26,7 +27,7 @@ public interface IRoleController {
      *
      * @param caller The user who is updating the role description (typically an HR manager).
      */
-    void updateRoleDescription(User caller);
+    void updateRoleDescription(UserDTO caller);
 
     /**
      * Assigns an employee to a specific role.
@@ -34,7 +35,7 @@ public interface IRoleController {
      *
      * @param caller The user who is assigning the employee to the role (typically an HR manager).
      */
-    void assignEmployeeToRole(User caller);
+    void assignEmployeeToRole(UserDTO caller);
 
     /**
      * Assigns an employee to be a shift manager.
@@ -42,7 +43,7 @@ public interface IRoleController {
      *
      * @param caller The user who is assigning the shift manager role (typically an HR manager).
      */
-    void assignEmployeeToShiftManager(User caller);
+    void assignEmployeeToShiftManager(UserDTO caller);
 
     /**
      * Removes an employee from a role.
@@ -50,7 +51,7 @@ public interface IRoleController {
      *
      * @param caller The user who is removing the employee from the role (typically an HR manager).
      */
-    void removeEmployeeFromALLRoles(User caller);
+    void removeEmployeeFromALLRoles(UserDTO caller);
 
     /**
      * Removes an employee from a specific role.
@@ -60,7 +61,7 @@ public interface IRoleController {
      * @param roleNumber The identifier for the role.
      * @param e The employee to be removed from the role.
      */
-    void removeEmployeeFromRole(User caller, int roleNumber, Employee e);
+    void removeEmployeeFromRole(UserDTO caller, int roleNumber, Employee e);
 
     /**
      * Finds all employees who have been assigned to any role.
@@ -69,7 +70,7 @@ public interface IRoleController {
      * @param caller The user who is querying the employees (typically an HR manager).
      * @return A list of employees who are assigned to roles.
      */
-    List<Employee> getRelevantEmployees(User caller);
+    List<Employee> getRelevantEmployees(UserDTO caller);
 
     /**
      * Retrieves a list of all roles in the system.
@@ -78,7 +79,7 @@ public interface IRoleController {
      * @param caller The user who is querying the roles (typically an HR manager).
      * @return A list of all roles in the system.
      */
-    List<Role> getAllRoles(User caller);
+    List<Role> getAllRoles(UserDTO caller);
 
     /**
      * Prints all roles in the system.
@@ -86,7 +87,7 @@ public interface IRoleController {
      *
      * @param caller The user who is requesting the printout of all roles.
      */
-    void printAllRoles(User caller);
+    void printAllRoles(UserDTO caller);
 
     /**
      * Retrieves a role by its unique number.
@@ -105,5 +106,5 @@ public interface IRoleController {
      * @param employeeList The list of all employees in the system.
      * @return The number of employees who do not have any roles.
      */
-    int countEmployeesWithoutRoles(User caller, List<Employee> employeeList);
-}
+    int countEmployeesWithoutRoles(UserDTO caller, List<Employee> employeeList);
+        }

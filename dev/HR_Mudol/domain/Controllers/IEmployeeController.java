@@ -1,5 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
@@ -16,13 +17,13 @@ public interface IEmployeeController {
      * Adds a new employee to the system.
      * @param caller the user performing the operation (must be a manager)
      */
-    void addEmployee(User caller) throws SQLException;
+    void addEmployee(UserDTO caller) throws SQLException;
 
     /**
      * Removes an employee from the system.
      * @param caller the user performing the operation (must be a manager)
      */
-    void removeEmployee(User caller) throws SQLException;
+    void removeEmployee(UserDTO caller) throws SQLException;
 
     // --- Update employee details ---
 
@@ -30,37 +31,37 @@ public interface IEmployeeController {
      * Updates the bank account information of an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateBankAccount(User caller) throws SQLException;
+    void updateBankAccount(UserDTO caller) throws SQLException;
 
     /**
      * Updates the salary of an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateSalary(User caller) throws SQLException;
+    void updateSalary(UserDTO caller) throws SQLException;
 
     /**
      * Updates the minimum required number of day shifts for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateMinDayShift(User caller) throws SQLException;
+    void updateMinDayShift(UserDTO caller) throws SQLException;
 
     /**
      * Updates the minimum required number of evening shifts for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateMinEveningShift(User caller) throws SQLException;
+    void updateMinEveningShift(UserDTO caller) throws SQLException;
 
     /**
      * Sets the initial number of sick days for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void setInitialsickDays(User caller) throws SQLException;
+    void setInitialsickDays(UserDTO caller) throws SQLException;
 
     /**
      * Sets the initial number of vacation days for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void setInitialdaysOff(User caller) throws SQLException;
+    void setInitialdaysOff(UserDTO caller) throws SQLException;
 
     // --- Search and retrieval ---
 
@@ -70,7 +71,7 @@ public interface IEmployeeController {
      * @param ID the employee ID
      * @return the employee object if found, or null otherwise
      */
-    Employee getEmployeeById(User caller, int ID);
+    Employee getEmployeeById(UserDTO caller, int ID);
 
     /**
      * Returns the branch associated with this employee manager.
@@ -82,12 +83,12 @@ public interface IEmployeeController {
      * Prints the details of a specific employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void printEmployees(User caller);
+    void printEmployees(UserDTO caller);
 
     /**
      * Prints the details of all employees in the branch.
      * @param caller the user performing the operation (must be a manager)
      */
-    void printAllEmployees(User caller);
+    void printAllEmployees(UserDTO caller);
 
 }

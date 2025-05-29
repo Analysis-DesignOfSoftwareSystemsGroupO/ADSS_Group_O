@@ -1,8 +1,12 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.Status;
 
+import java.sql.SQLException;
 import java.util.*;
 
 
@@ -15,7 +19,7 @@ public class WeekController implements IWeekController {
 
     private IShiftController dependency;
     private IRoleController roleController;
-
+    private DTOToDomainMapper mapper;
     private Branch curBranch;
 
 
@@ -29,16 +33,17 @@ public class WeekController implements IWeekController {
         this.dependency = dependency;
         this.curBranch=curBranch;
         this.roleController=roleController;
+        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo());
     }
 
     /**
      * Creates a new week with shifts, empty at first.
      *
-     * @param caller The user who is requesting the creation of a new week.
      * @return A new Week object.
      */
     @Override
-    public Week createNewWeek(User caller) {
+    public Week createNewWeek() {
+
         Week newWeek = new Week(); //only on RAM
 
         return newWeek;
@@ -48,16 +53,21 @@ public class WeekController implements IWeekController {
      * Manages the roles for each shift within the week, ensuring the correct roles are assigned.
      * Only managers can execute this operation.
      *
-     * @param caller The user who is attempting to manage the roles.
-     * @param week The week for which roles are being managed.
+     * @param theCaller The user who is attempting to manage the roles.
+     * @param theWeek The week for which roles are being managed.
      * @throws SecurityException if the caller is not a manager.
      * @throws IllegalArgumentException if there are no roles or employees in the system.
      */
     @Override
-    public void manageTheWeekRelevantRoles(User caller, Week week) {
+    public void manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
+
+        User caller=mapper.fromDTO(theCaller);
+        Week week=mapper.fromDTO(theWeek);
+
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
+
         if (this.curBranch.getRoleRepo().getAll().size() <= 1)
         {
             throw new IllegalArgumentException("No roles at the system - first add roles.");
@@ -69,30 +79,35 @@ public class WeekController implements IWeekController {
 
         for (Shift shift : week.getShifts()) {
 
-            dependency.chooseRelevantRoleForShift(caller, shift);
+            dependency.chooseRelevantRoleForShift(theCaller, mapper.toDTO(shift));
         }
     }
 
     /**
      * Adds a role to the selected shift in the week.
      *
-     * @param caller The user who is adding the role.
-     * @param week The week in which the shift is located.
+     * @param theCaller The user who is adding the role.
+     * @param theWeek The week in which the shift is located.
      */
     @Override
-    public void addARoleToShift(User caller, Week week){
-        dependency.chooseRelevantRoleForShift(caller,findShift(week));
+    public void addARoleToShift(UserDTO theCaller, WeekDTO theWeek){
+
+        dependency.chooseRelevantRoleForShift(theCaller,mapper.toDTO(findShift(theWeek)));
     }
 
     /**
      * Assigns employees to the shifts for the week. Each shift is checked for available roles,
      * and employees are assigned accordingly.
      *
-     * @param caller The user who is assigning employees.
-     * @param week The week in which the shifts and roles are to be filled.
+     * @param theCaller The user who is assigning employees.
+     * @param theWeek The week in which the shifts and roles are to be filled.
      */
     @Override
-    public void assigningEmployToShifts(User caller, Week week) {
+    public void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) {
+
+        User caller=mapper.fromDTO(theCaller);
+        Week week=mapper.fromDTO(theWeek);
+
         for (Shift shift : week.getShifts()) {
             System.out.print("For the shift " + shift.getDay() + " - " + shift.getType() + ", ");
 
@@ -102,9 +117,9 @@ public class WeekController implements IWeekController {
             }
 
             for (Role role : shift.getNecessaryRoles()) {
-                Employee chosen = chooseEmployeeForRole(caller, week, shift, role);
+                Employee chosen = chooseEmployeeForRole(shift, role);
                 if (chosen != null) {
-                    dependency.assignEmployeeToShift(caller, shift, chosen, role);
+                    dependency.assignEmployeeToShift(theCaller, mapper.toDTO(shift), mapper.toDTO(chosen), mapper.toDTO(role));
                     System.out.println(chosen.getEmpName() + " assigned to " + role.getDescription() + " in this shift.");
                 } else {
                     System.out.println("No suitable employee found for role: " + role.getDescription());
@@ -129,13 +144,13 @@ public class WeekController implements IWeekController {
     /**
      * Chooses an employee for a specific role in a shift, considering availability and constraints.
      *
-     * @param caller The user attempting to assign the employee.
-     * @param week The week during which the shift is scheduled.
      * @param shift The shift for which the employee is being selected.
      * @param role The role to be assigned to the employee.
      * @return The chosen employee, or null if no employee is available.
      */
-    private Employee chooseEmployeeForRole(User caller, Week week, Shift shift, Role role) {
+    private Employee chooseEmployeeForRole(Shift shift, Role role) {
+
+
         Scanner scanner = new Scanner(System.in);
         List<Employee> candidates = role.getRelevantEmployees();
         if (candidates.isEmpty()) {
@@ -144,7 +159,7 @@ public class WeekController implements IWeekController {
         }
 
         System.out.println("You should find an employee for the role - " + role.getDescription());
-        printRelevantEmp(caller, role);
+        printRelevantEmp(role);
 
         Set<Integer> triedIndexes = new HashSet<>();
 
@@ -199,10 +214,9 @@ public class WeekController implements IWeekController {
     /**
      * Prints the list of relevant employees for a specific role.
      *
-     * @param caller The user requesting the list of employees.
      * @param role The role for which employees are being listed.
      */
-    private void printRelevantEmp(User caller, Role role) {
+    private void printRelevantEmp(Role role) {
         int index = 1;
         for (Employee emp : role.getRelevantEmployees()) {
             System.out.println(index + ". " + emp.getEmpName());
@@ -214,17 +228,20 @@ public class WeekController implements IWeekController {
     /**
      * Cancels a shift for a holiday or other reason.
      *
-     * @param caller The user attempting to cancel the shift.
-     * @param week The week in which the shift is located.
+     * @param theCaller The user attempting to cancel the shift.
+     * @param theWeek The week in which the shift is located.
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void cancelShift(User caller, Week week) {
+    public void cancelShift(UserDTO theCaller, WeekDTO theWeek) {
+
+        User caller=mapper.fromDTO(theCaller);
+        Week week=mapper.fromDTO(theWeek);
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
 
-        Shift shift=findShift(week);
+        Shift shift=findShift(theWeek);
 
         week.removeShift(shift); //DB
 
@@ -237,12 +254,16 @@ public class WeekController implements IWeekController {
     /**
      * Retrieves the shifts for a specific employee in a given week.
      *
-     * @param employee The employee whose shifts are being retrieved.
-     * @param curWeek The week for which shifts are being retrieved.
+     * @param theEmployee The employee whose shifts are being retrieved.
+     * @param theWeek The week for which shifts are being retrieved.
      * @return A list of shifts assigned to the employee.
      */
     @Override
-    public List<Shift> getShiftsForEmployee(Employee employee, Week curWeek) {
+    public List<Shift> getShiftsForEmployee(EmployeeDTO theEmployee, WeekDTO theWeek) {
+
+        Employee employee=mapper.fromDTO(theEmployee);
+        Week curWeek=mapper.fromDTO(theWeek);
+
         List<Shift> result = new ArrayList<>();
 
         for (Shift shift : curWeek.getShifts()) {
@@ -258,21 +279,23 @@ public class WeekController implements IWeekController {
     /**
      * Prints out the details of the entire week, including shifts and assigned roles.
      *
-     * @param week The week to be printed.
+     * @param theWeek The week to be printed.
      */
     @Override
-    public void printWeek(Week week) {
+    public void printWeek(WeekDTO theWeek) {
+        Week week=mapper.fromDTO(theWeek);
         System.out.println(week);
     }
 
     /**
      * Checks if there are any unassigned roles in the given week.
      *
-     * @param week The week to check for unassigned roles.
+     * @param theWeek The week to check for unassigned roles.
      * @return The number of shifts with unassigned roles.
      */
     @Override
-    public int hasUnassignedRoles(Week week) {
+    public int hasUnassignedRoles(WeekDTO theWeek) {
+        Week week=mapper.fromDTO(theWeek);
         int count = 0;
 
         for (Shift shift : week.getShifts()) {
@@ -288,49 +311,56 @@ public class WeekController implements IWeekController {
     /**
      * Removes an employee from a shift.
      *
-     * @param caller The user attempting to remove the employee.
-     * @param week The week in which the shift is located.
+     * @param theCaller The user attempting to remove the employee.
+     * @param theWeek The week in which the shift is located.
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void removeEmployeeFromShift(User caller,Week week){
+    public void removeEmployeeFromShift(UserDTO theCaller,WeekDTO theWeek){
+        User caller=mapper.fromDTO(theCaller);
+
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
-        dependency.removeEmployeeFromShift(caller,findShift(week)); //if the shift null it will print msg
+        dependency.removeEmployeeFromShift(theCaller,mapper.toDTO(findShift(theWeek))); //if the shift null it will print msg
     }
 
 
     /**
      * Removes a role from a shift.
      *
-     * @param caller The user attempting to remove the role.
-     * @param week The week in which the shift is located.
+     * @param theCaller The user attempting to remove the role.
+     * @param theWeek The week in which the shift is located.
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void removeRoleFromShift(User caller,Week week) {
+    public void removeRoleFromShift(UserDTO theCaller,WeekDTO theWeek) {
+        User caller=mapper.fromDTO(theCaller);
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
-        dependency.removeRoleFromShift(caller,findShift(week));
+        dependency.removeRoleFromShift(theCaller,mapper.toDTO(findShift(theWeek)));
     }
 
     /**
      * Adds an employee to a shift.
      *
-     * @param caller The user attempting to add the employee.
-     * @param week The week in which the shift is located.
+     * @param theCaller The user attempting to add the employee.
+     * @param theWeek The week in which the shift is located.
      * @throws SecurityException if the caller is not a manager.
      */
     @Override
-    public void addEmployeeToShift(User caller, Week week) {
+    public void addEmployeeToShift(UserDTO theCaller, WeekDTO theWeek) {
+
+        Week week=mapper.fromDTO(theWeek);
+        User caller=mapper.fromDTO(theCaller);
+
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
 
         // לבחור משמרת
-        Shift shift = findShift(week);
+        Shift shift = findShift(theWeek);
         if (shift == null) {
             System.out.println("Shift not found.");
             return;
@@ -344,7 +374,7 @@ public class WeekController implements IWeekController {
         }
 
         // הדפסת רשימת התפקידים עם ה-ID
-        printRolesList(caller, relevantRole);
+        printRolesList(relevantRole);
 
         Scanner scanner = new Scanner(System.in);
         Role selectedRole = null;
@@ -366,7 +396,7 @@ public class WeekController implements IWeekController {
         }
 
         // לבחור עובד לתפקיד
-        Employee chosen = chooseEmployeeForRole(caller, week, shift, selectedRole);
+        Employee chosen = chooseEmployeeForRole(shift, selectedRole);
 
         if (chosen == null) {
             System.out.println("No employee was selected for the role. Action cancelled.");
@@ -374,7 +404,7 @@ public class WeekController implements IWeekController {
         }
 
         // מימוש ההשמה בפועל
-        dependency.assignEmployeeToShift(caller, shift, chosen, selectedRole);
+        dependency.assignEmployeeToShift(theCaller, mapper.toDTO(shift),mapper.toDTO(chosen), mapper.toDTO(selectedRole));
         System.out.println(chosen.getEmpName() + " assigned successfully to the shift.");
     }
 
@@ -391,10 +421,9 @@ public class WeekController implements IWeekController {
     /**
      * Prints the list of roles with their IDs.
      *
-     * @param caller The user requesting the list of roles.
-     * @param roles The list of roles to print.
+         * @param roles The list of roles to print.
      */
-    private void printRolesList(User caller, List<Role> roles) {
+    private void printRolesList(List<Role> roles) {
         for (Role r : roles) {
             // משיגים את הגרסה הכי מעודכנת של התפקיד מהקונטרולר לפי המספר שלו
             Role updatedRole = roleController.getRoleByNumber(r.getRoleNumber());
@@ -410,10 +439,12 @@ public class WeekController implements IWeekController {
     /**
      * Finds a shift in the week based on the specified day and type.
      *
-     * @param week The week to search in.
+     * @param theWeek The week to search in.
      * @return The matching shift, or null if not found.
      */
-    private Shift findShift(Week week){
+    private Shift findShift(WeekDTO theWeek){
+
+        Week week=mapper.fromDTO(theWeek);
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Choose day (Capital letters only)\n");

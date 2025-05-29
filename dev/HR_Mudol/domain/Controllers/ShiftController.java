@@ -1,5 +1,9 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.RoleDTO;
+import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.*;
 
 import java.util.List;
@@ -13,7 +17,7 @@ public class ShiftController implements IShiftController {
 
     private Branch curBranch;
     private IRoleController dependency; // Dependency for accessing role management
-
+    private DTOToDomainMapper mapper;
 
     /**
      * Constructor for ShiftManager.
@@ -22,18 +26,17 @@ public class ShiftController implements IShiftController {
     public ShiftController(Branch curBranch,IRoleController dependency) {
         this.curBranch=curBranch;
         this.dependency = dependency;
+        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo());
     }
-    /**
-     * Assigns an employee to a shift.
-     * This operation checks if the caller is a manager or shift manager before proceeding.
-     * @param caller The user (manager or shift manager) who is assigning the employee.
-     * @param shift The shift to which the employee is being assigned.
-     * @param employee The employee being assigned to the shift.
-     * @param role The role the employee will have in the shift.
-     * @throws SecurityException if the caller does not have manager or shift manager privileges.
-     */
+
     @Override
-    public void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role) {
+    public void assignEmployeeToShift(UserDTO theCaller, ShiftDTO theShift, EmployeeDTO theEmployee, RoleDTO theRole) {
+
+        User caller=mapper.fromDTO(theCaller);
+        Shift shift=mapper.fromDTO(theShift);
+        Employee employee=mapper.fromDTO(theEmployee);
+        Role role=mapper.fromDTO(theRole);
+
         // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
@@ -43,21 +46,19 @@ public class ShiftController implements IShiftController {
         shift.addEmployee(caller, employee, role);
 
         //save at the DB
-        curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpNum(), shift.getShiftID(), role.getRoleNumber());
+        curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpId(), shift.getShiftID(), role.getRoleNumber());
 
         System.out.println(employee.getEmpName() +
                 " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
 
-    /**
-     * Removes an employee from a shift.
-     * The user must be a manager or shift manager.
-     * @param caller The user (manager or shift manager) who is removing the employee.
-     * @param shift The shift from which the employee is being removed.
-     * @throws SecurityException if the caller does not have manager or shift manager privileges.
-     */
+
     @Override
-    public void removeEmployeeFromShift(User caller, Shift shift) {
+    public void removeEmployeeFromShift(UserDTO theCaller, ShiftDTO theShift) {
+
+        User caller=mapper.fromDTO(theCaller);
+        Shift shift=mapper.fromDTO(theShift);
+
         // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
@@ -113,14 +114,12 @@ public class ShiftController implements IShiftController {
     }
 
 
-    /**
-     * Removes a role from a shift.
-     * The user must be a manager or shift manager.
-     * @param caller The user (manager or shift manager) who is removing the role.
-     * @param shift The shift from which the role is being removed.
-     */
+
     @Override
-    public void removeRoleFromShift(User caller, Shift shift) {
+    public void removeRoleFromShift(UserDTO theCaller, ShiftDTO theShift) {
+        User caller=mapper.fromDTO(theCaller);
+        Shift shift=mapper.fromDTO(theShift);
+
         Scanner scanner = new Scanner(System.in);
         List<Role> relevantRoles = shift.getNecessaryRoles();
 
@@ -135,7 +134,7 @@ public class ShiftController implements IShiftController {
         // Loop until a valid role is selected
         while (role == null) {
             System.out.println("\nChoose a role to remove from shift " + shift.getDay() + " - " + shift.getType());
-            printRolesListForShift(caller, relevantRoles);
+            printRolesListForShift(relevantRoles);
             System.out.print("Enter role ID (or type 'exit' to cancel): ");
 
             String input = scanner.nextLine().trim();
@@ -171,10 +170,9 @@ public class ShiftController implements IShiftController {
 
     /**
      * Prints a list of roles assigned to a shift.
-     * @param caller The user (manager or shift manager) who is printing the roles.
      * @param roles The list of roles assigned to the shift.
      */
-    private void printRolesListForShift(User caller, List<Role> roles) {
+    private void printRolesListForShift(List<Role> roles) {
         // Print roles assigned to the shift
         System.out.println("Roles assigned to this shift:");
         for (Role role : roles) {
@@ -199,14 +197,11 @@ public class ShiftController implements IShiftController {
     }
 
 
-    /**
-     * Chooses relevant roles for a shift.
-     * The user must be a manager or shift manager.
-     * @param caller The user (manager or shift manager) who is adding roles.
-     * @param shift The shift to which roles are being added.
-     */
     @Override
-    public void chooseRelevantRoleForShift(User caller, Shift shift) {
+    public void chooseRelevantRoleForShift(UserDTO theCaller, ShiftDTO theShift) {
+        User caller=mapper.fromDTO(theCaller);
+        Shift shift=mapper.fromDTO(theShift);
+
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
         }
@@ -222,7 +217,7 @@ public class ShiftController implements IShiftController {
         boolean done = false;
 
         while (!done) {
-            printRolesList(caller, dependency.getAllRoles(caller));
+            printRolesList(dependency.getAllRoles(theCaller));
 
             int roleNumber = -1;
             while (true) {
@@ -288,13 +283,10 @@ public class ShiftController implements IShiftController {
 
 
 
-    /**
-     * Prints the details of a shift.
-     * @param caller The user (manager or shift manager) who is printing the shift details.
-     * @param shift The shift to print.
-     */
     @Override
-    public void printShift(User caller, Shift shift) {
+    public void printShift(UserDTO theCaller, ShiftDTO theShift) {
+        User caller=mapper.fromDTO(theCaller);
+        Shift shift=mapper.fromDTO(theShift);
         // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
             throw new SecurityException("Access denied.");
@@ -306,10 +298,9 @@ public class ShiftController implements IShiftController {
 
     /**
      * Helper -Prints the list of roles available for the caller to choose from.
-     * @param caller The user (manager or shift manager) who is viewing the roles.
      * @param roles The list of available roles.
      */
-    private void printRolesList(User caller, List<Role> roles) {
+    private void printRolesList(List<Role> roles) {
         for (Role r : roles) {
             System.out.println(r.getRoleNumber() + " - " + r.getDescription());
 

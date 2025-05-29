@@ -1,5 +1,9 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.RoleDTO;
+import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Shift;
@@ -16,38 +20,38 @@ public interface IShiftController {
 
     /**
      * Assigns an employee to a specific shift with a particular role.
-     * @param caller The user (e.g., manager) requesting the assignment.
-     * @param shift The shift the employee is being assigned to.
-     * @param employee The employee being assigned to the shift.
-     * @param role The role the employee will take on during the shift.
+     * @param theCaller The user (e.g., manager) requesting the assignment.
+     * @param theShift The shift the employee is being assigned to.
+     * @param theEmployee The employee being assigned to the shift.
+     * @param theRole The role the employee will take on during the shift.
      */
-    void assignEmployeeToShift(User caller, Shift shift, Employee employee, Role role);
+    void assignEmployeeToShift(UserDTO theCaller, ShiftDTO theShift, EmployeeDTO theEmployee, RoleDTO theRole);
 
     /**
      * Removes an employee from a specific shift.
-     * @param caller The user (e.g., manager) requesting the removal.
-     * @param shift The shift from which the employee is being removed.
+     * @param theCaller The user (e.g., manager) requesting the removal.
+     * @param theShift The shift from which the employee is being removed.
      */
-    void removeEmployeeFromShift(User caller, Shift shift);
+    void removeEmployeeFromShift(UserDTO theCaller, ShiftDTO theShift);
 
     /**
      * Chooses a relevant role to be assigned to a shift.
-     * @param caller The user (e.g., manager) choosing the relevant role.
-     * @param shift The shift for which the role is being chosen.
+     * @param theCaller The user (e.g., manager) choosing the relevant role.
+     * @param theShift The shift for which the role is being chosen.
      */
-    void chooseRelevantRoleForShift(User caller, Shift shift);
+    void chooseRelevantRoleForShift(UserDTO theCaller, ShiftDTO theShift);
 
     /**
      * Prints the details of a specific shift.
-     * @param caller The user (e.g., manager) requesting to print the shift details.
-     * @param shift The shift whose details need to be printed.
+     * @param theCaller The user (e.g., manager) requesting to print the shift details.
+     * @param theShift The shift whose details need to be printed.
      */
-    void printShift(User caller, Shift shift);
+    void printShift(UserDTO theCaller, ShiftDTO theShift);
 
        /**
      * Removes a role from a shift.
-     * @param caller The user (e.g., manager) requesting the removal of the role.
-     * @param shift The shift from which the role is being removed.
+     * @param theCaller The user (e.g., manager) requesting the removal of the role.
+     * @param theShift The shift from which the role is being removed.
      */
-    void removeRoleFromShift(User caller, Shift shift);
+    void removeRoleFromShift(UserDTO theCaller, ShiftDTO theShift);
 }
