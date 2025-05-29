@@ -1,8 +1,13 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.InformationContactDTO;
+import DTO.SuppliedItemDTO;
+import DTO.SupplierDTO;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Supplier {
     private String supplierID;
@@ -128,6 +133,22 @@ public class Supplier {
         }
         this.paymentMethod = new PaymentMethod(paymentMethod);
     }
+
+    public SupplierDTO getSupplierDTO() {
+        List<InformationContactDTO> informationContactDTOList = new ArrayList<>();
+        for (InformationContact informationContact : this.informationContacts) {
+            informationContactDTOList.add(informationContact.getInformationContactDTO());
+        }
+        HashMap<String, SuppliedItemDTO> stringSuppliedItemDTOHashMap = new HashMap<>();
+        for (Map.Entry<String, SuppliedItem> entry : supplyProducts.entrySet()){
+            stringSuppliedItemDTOHashMap.put(entry.getKey(), entry.getValue().getSuppliedItemDTO());
+        }
+
+        return new SupplierDTO(this.supplierID, this.bank.getBankDTO(),
+                this.paymentMethod.getPaymentMethodDTO(), this.delivery.getDeliveryDTO(),
+                informationContactDTOList, stringSuppliedItemDTOHashMap);
+    }
+
 
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;

@@ -1,5 +1,7 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.DeliveryDTO;
+
 public  class Delivery {
     private final String arrivalDay;
     private String deliveryWay;
@@ -41,6 +43,10 @@ public  class Delivery {
 
     public String getArrivalDay() {
         return arrivalDay;
+    }
+
+    public DeliveryDTO getDeliveryDTO(){
+        return new DeliveryDTO(deliveryWay);
     }
 }
 

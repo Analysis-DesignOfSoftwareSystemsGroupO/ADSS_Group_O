@@ -1,5 +1,7 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.SuppliedItemDTO;
+
 public class SuppliedItem {
     private final int suppliedItemPrice;
     private final Product product;
@@ -15,6 +17,11 @@ public class SuppliedItem {
         this.suppliedItemPrice = suppliedItemPrice;
         this.product = product;
         this.suppliedItemID = product.getProductID();
+    }
+
+
+    public SuppliedItemDTO getSuppliedItemDTO() {
+        return new SuppliedItemDTO(suppliedItemPrice, product.ggetProductDTO());
     }
 
     public Product getProduct() {

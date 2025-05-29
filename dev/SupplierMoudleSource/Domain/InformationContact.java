@@ -1,5 +1,7 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.InformationContactDTO;
+
 public class InformationContact {
     private String contactName;
     private String contactPhone;
@@ -49,5 +51,9 @@ public class InformationContact {
     @Override
     public String toString() {
         return "ContactName: " + contactName + ", Phone: " + contactPhone + ", Title: " + title;
+    }
+
+    public InformationContactDTO getInformationContactDTO() {
+        return new InformationContactDTO(contactName, contactPhone, title);
     }
 }

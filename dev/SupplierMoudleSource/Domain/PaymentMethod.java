@@ -1,5 +1,7 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.PaymentMethodDTO;
+
 import java.util.Objects;
 
 public class PaymentMethod {
@@ -22,5 +24,10 @@ public class PaymentMethod {
     }
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+
+    public PaymentMethodDTO getPaymentMethodDTO() {
+        return new PaymentMethodDTO(paymentMethod);
     }
 }

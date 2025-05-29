@@ -25,9 +25,16 @@ public class Agreement {
 
     public AgreementDTO getAgreementDTO(){
         List<SuppliedItemDTO> supplierItemsList = new ArrayList<>();
-        List<DiscountDTO> discountDTOList = new ArrayList<>();
+        for (SuppliedItem suppliedItem : this.supplierItemsList) {
+            supplierItemsList.add(suppliedItem.getSuppliedItemDTO());
+        }
 
-        AgreementDTO agreementDTO = new AgreementDTO(this.supplier.getID(), this.Branch.getBranchID(), supplierItemsList, discountDTOList);
+        List<DiscountDTO> discountDTOList = new ArrayList<>();
+        for (Discount discount : this.discounts) {
+            discountDTOList.add(discount.getDiscountDTO());
+        }
+
+        return new AgreementDTO(this.supplier.getID(), this.Branch.getBranchID(), supplierItemsList, discountDTOList);
     }
 
 

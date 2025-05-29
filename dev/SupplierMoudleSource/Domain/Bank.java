@@ -1,5 +1,7 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.BankDTO;
+
 public class Bank {
     private final String bankAccount;
     private final String bankNumber;
@@ -28,5 +30,9 @@ public class Bank {
 
     public String toString() {
         return "Bank Account number: " + bankAccount + ", Bank Number: " + bankNumber + ", Bank Branch Number: " + bankBranch;
+    }
+
+    public BankDTO getBankDTO(){
+        return new BankDTO(bankAccount, bankNumber, bankBranch, ownerID);
     }
 }

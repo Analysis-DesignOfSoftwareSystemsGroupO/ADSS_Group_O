@@ -20,7 +20,6 @@ public class OrderDTO {
         this.orderClosed = true;
         this.branch = branch;
         this.suppler = supplier;
-
     }
 
     public String getOrderID() {

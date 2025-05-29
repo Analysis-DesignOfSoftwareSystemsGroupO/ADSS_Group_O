@@ -116,7 +116,10 @@ public class Order {
 
     public OrderDTO getOrderDTO(){
         Map<SuppliedItemDTO, Integer> suppliedItemsMap = new HashMap<>();
-
-        OrderDTO oDTO = new OrderDTO(this.orderID, this.orderDate, this.totalPrice, suppliedItemsMap, this.branch.getBranchID(), this.agreement.getSupplierID());
+        for (SuppliedItem item : suppliedItems.keySet()) {
+            suppliedItemsMap.put(item.getSuppliedItemDTO(), suppliedItems.get(item));
+        }
+        return new OrderDTO(this.orderID, this.orderDate, this.totalPrice, suppliedItemsMap, this.branch.getBranchID(), this.agreement.getSupplierID());
     }
+    
 }
