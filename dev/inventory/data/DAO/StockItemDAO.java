@@ -22,8 +22,8 @@ public class StockItemDAO {
     public void saveStockItem(StockItem stockItem) {
         String sql = """
                 INSERT INTO "Inventory"."Stock_Items" 
-                ("id", "name", "description", "price", "quantity", "category_id") 
-                VALUES (?, ?, ?, ?, ?, ?)
+                ("stock_id","quantity", "location", "expiry_date",  "status") 
+                VALUES (?, ?, ?, ?, ?)
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
@@ -34,7 +34,7 @@ public class StockItemDAO {
             statement.setString(3, stockItem.getLocation());
             statement.setDate(4, java.sql.Date.valueOf(stockItem.getExpiryDate()));
             statement.setString(5, stockItem.getStatus().toString());
-            statement.setString(6, stockItem.getProduct().getId());
+//            statement.setString(6, stockItem.getProduct().getId());
 
             statement.executeUpdate();
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package inventory.presentation;
 
 //import inventory.domain.Product;
 
+import inventory.data.connection.DatabaseInitializer;
 import inventory.domain.DiscountTargetType;
 import inventory.domain.DiscountType;
 import inventory.domain.StockItemStatus;
@@ -20,6 +21,8 @@ public class InventoryMenu {
         this.scanner = new Scanner(System.in);
         this.service = new UserApplication();
         this.dataLoaded = false;
+        DatabaseInitializer init = new DatabaseInitializer();
+        init.createAllTablesIfNotExists();
     }
 
     public void run() {
