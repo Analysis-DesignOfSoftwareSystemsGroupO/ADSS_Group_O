@@ -1,5 +1,7 @@
 package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.ShiftDAOImpl;
+import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.Week;
 import HR_Mudol.domain.*;
 import java.util.LinkedList;
@@ -56,8 +58,5 @@ public class WeekRepository {
     public Status getShiftStatus(int shiftId) {
         return shiftDAO.getShiftStatus(shiftId);
     }
-
-
-
 
 }

@@ -9,8 +9,8 @@ import java.util.List;
 public class ConstraintDAOImpl implements IConstraintDAO {
     private final Connection conn;
 
-    public ConstraintDAOImpl(Connection conn) {
-        this.conn = conn;
+    public ConstraintDAOImpl() throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();
     }
 
     @Override

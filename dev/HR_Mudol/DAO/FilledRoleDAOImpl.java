@@ -9,8 +9,8 @@ import java.util.List;
 public class FilledRoleDAOImpl implements IFilledRoleDAO {
     private final Connection conn;
 
-    public FilledRoleDAOImpl(Connection conn) {
-        this.conn = conn;
+    public FilledRoleDAOImpl() throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();
     }
 
     @Override

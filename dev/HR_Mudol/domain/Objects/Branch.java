@@ -1,7 +1,10 @@
 package HR_Mudol.domain.Objects;
-import HR_Mudol.DAO.RoleDAOImpl;
-import HR_Mudol.DAO.ShiftDAOImpl;
+import HR_Mudol.DAO.*;
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.repository.*;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Represents a Branch in the company, managing employees, users, weeks, and roles.
@@ -26,13 +29,20 @@ public class Branch {
     /**
      * Constructs an empty Branch with initialized repositories.
      */
-    public Branch(String district,String name) {
+    public Branch(String district,String name) throws SQLException {
         this.branchID = counter++;
-        this.employeeRepo = new EmployeeRepository();
-        this.roleRepo = new RoleRepository(new RoleDAOImpl ());
-        this.userRepo = new UserRepository();
-        this.weekRepo = new WeekRepository(new ShiftDAOImpl);
-        this.constraintRepository= new ConstraintRepository();
+
+        EmployeeDAOImpl employeeDAO=new EmployeeDAOImpl();
+        RoleDAOImpl roleDAO=new RoleDAOImpl();
+        ShiftDAOImpl shiftDAO=new ShiftDAOImpl();
+        UserDAOImpl userDAO=new UserDAOImpl();
+        ConstraintDAOImpl constraintDAO=new ConstraintDAOImpl();
+
+        this.employeeRepo = new EmployeeRepository(employeeDAO,constraintDAO);
+        this.roleRepo = new RoleRepository(roleDAO);
+        this.userRepo = new UserRepository(userDAO,employeeRepo);
+        this.weekRepo = new WeekRepository(shiftDAO);
+        this.constraintRepository= new ConstraintRepository(constraintDAO);
 
         this.name=name;
         this.district=district;

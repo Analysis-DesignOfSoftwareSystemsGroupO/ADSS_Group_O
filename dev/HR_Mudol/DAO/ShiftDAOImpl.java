@@ -10,8 +10,8 @@ import java.util.List;
 public class ShiftDAOImpl implements IShiftDAO {
     private final Connection conn;
 
-    public ShiftDAOImpl(Connection conn) {
-        this.conn = conn;
+    public ShiftDAOImpl() throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();
     }
 
     @Override

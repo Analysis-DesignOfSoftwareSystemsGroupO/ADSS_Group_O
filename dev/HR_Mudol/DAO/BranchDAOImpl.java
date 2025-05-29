@@ -2,6 +2,7 @@ package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.*;
 import java.sql.*;
+import HR_Mudol.DataBase.*;
 import java.util.List;
 
 public class BranchDAOImpl implements IBranchDAO {
@@ -10,8 +11,8 @@ public class BranchDAOImpl implements IBranchDAO {
     private final IEmployeeDAO employeeDAO;
     private final IRoleDAO roleDAO;
 
-    public BranchDAOImpl(Connection conn, IEmployeeDAO empDAO, IRoleDAO roleDAO) {
-        this.conn = conn;
+    public BranchDAOImpl(IEmployeeDAO empDAO, IRoleDAO roleDAO) throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();;
         this.employeeDAO = empDAO;
         this.roleDAO = roleDAO;
     }

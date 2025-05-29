@@ -9,8 +9,8 @@ import java.util.List;
 public class EmployeeDAOImpl implements IEmployeeDAO {
     private final Connection conn;
 
-    public EmployeeDAOImpl(Connection conn) {
-        this.conn = conn;
+    public EmployeeDAOImpl() throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();
     }
 
     @Override

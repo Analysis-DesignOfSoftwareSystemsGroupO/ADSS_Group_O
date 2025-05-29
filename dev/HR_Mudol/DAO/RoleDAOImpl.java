@@ -9,8 +9,8 @@ import java.util.List;
 public class RoleDAOImpl implements IRoleDAO {
     private final Connection conn;
 
-    public RoleDAOImpl(Connection conn) {
-        this.conn = conn;
+    public RoleDAOImpl() throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();
     }
 
     @Override

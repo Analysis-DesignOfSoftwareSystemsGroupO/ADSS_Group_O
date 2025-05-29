@@ -7,8 +7,8 @@ import java.sql.*;
 public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
     private final Connection conn;
 
-    public EmploymentContractDAOImpl(Connection conn) {
-        this.conn = conn;
+    public EmploymentContractDAOImpl() throws SQLException {
+        this.conn = DataBase.PostgresConnection.getConnection();
     }
 
     @Override
