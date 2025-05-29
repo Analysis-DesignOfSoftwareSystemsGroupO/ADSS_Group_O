@@ -67,4 +67,16 @@ public class UserDAOImpl implements IUserDAO {
         }
         return list;
     }
+
+    @Override
+    public boolean exists(int empId) throws SQLException {
+        String sql = "SELECT 1 FROM users WHERE user = ? LIMIT 1";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
+    }
+
+
 }

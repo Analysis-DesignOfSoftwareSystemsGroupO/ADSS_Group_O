@@ -11,4 +11,5 @@ public interface IUserDAO {
     void delete(int userId) throws SQLException;
     UserDTO get(int userId) throws SQLException;
     List<UserDTO> getAll() throws SQLException;
+    boolean exists(int empId) throws SQLException;
 }

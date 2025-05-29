@@ -1,16 +1,33 @@
 package HR_Mudol.domain.repository;
 
-import HR_Mudol.domain.Objects.Employee;
-import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DAO.*;
+import HR_Mudol.domain.Objects.*;
+import HR_Mudol.DTO.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class EmployeeRepository {
     private final Map<Integer, Employee> employeesById = new HashMap<>();
     private final List<Employee> oldEmployees = new LinkedList<>();
+    private final IEmployeeDAO employeeDAO;
 
-    public void addFromDTO(EmployeeDTO dto) {
-        Employee employee = new Employee(
+    public EmployeeRepository(IEmployeeDAO dao) {
+        this.employeeDAO = dao;
+    }
+
+    public Employee addFromDTO(EmployeeDTO dto) throws SQLException {
+        //RAM
+        Employee employee = mapFromDTO(dto);
+        employeesById.put(employee.getEmpId(), employee);
+
+        // DB
+        employeeDAO.insert(dto);
+        return employee;
+    }
+
+    private Employee mapFromDTO(EmployeeDTO dto) {
+        return new Employee(
                 dto.getFullName(),
                 dto.getEmployeeId(),
                 dto.getPassword(),
@@ -22,31 +39,93 @@ public class EmployeeRepository {
                 dto.getSickDays(),
                 dto.getDaysOff()
         );
-        employeesById.put(employee.getEmpId(), employee);
     }
 
-    public void archive(int id) {
-        Employee removed = employeesById.remove(id);
-        if (removed != null) oldEmployees.add(removed);
+    public void archive(int empId) throws SQLException {
+        // remove from RAM
+        Employee removed = employeesById.remove(empId);
+        if (removed != null) {
+            oldEmployees.add(removed);
+        }
+
+        // archive it on DB
+        employeeDAO.archive(empId);
     }
 
-    public boolean exists(int id) {
-        return employeesById.containsKey(id);
+
+    public boolean exists(int empId) {
+        if (employeesById.containsKey(empId)) return true;
+        return employeeDAO.exists(empId);
     }
 
-    public Employee getById(int id) {
-        return employeesById.get(id);
+
+    public Employee getById(int empId) {
+        if (employeesById.containsKey(empId))
+            return employeesById.get(empId);
+
+        EmployeeDTO dto = employeeDAO.getById(empId);
+        if (dto == null) return null;
+
+        Employee e = mapFromDTO(dto);
+        employeesById.put(empId, e);
+        return e;
     }
+
 
     public List<Employee> getAll() {
         return new ArrayList<>(employeesById.values());
     }
 
-    public List<Employee> getArchived() {
-        return new ArrayList<>(oldEmployees);
+    public void updateBankAccount(User caller, int empId, String newBankAccount) throws SQLException {
+        Employee e = getById(empId);
+        if (e == null) throw new IllegalArgumentException("Employee not found");
+
+        e.setEmpBankAccount(caller, newBankAccount); //RAM
+
+        employeeDAO.updateBankAccount(empId, newBankAccount); //DB
     }
 
-    public void remove(){}
+    public void updateSalary(User caller, int empId, int newSalary) throws SQLException {
+        Employee e = getById(empId);
+        if (e == null) throw new IllegalArgumentException("Employee not found");
 
-    public void archived(){}
+        e.setEmpSalary(caller, newSalary); // RAM
+        employeeDAO.updateSalary(empId, newSalary); // DB
+    }
+
+    public void updateMinDayShift(User caller, int empId, int newMinDay) throws SQLException {
+        Employee e = getById(empId);
+        if (e == null) throw new IllegalArgumentException("Employee not found");
+
+        e.setMinDayShift(caller, newMinDay); // RAM
+        employeeDAO.updateMinDayShift(empId, newMinDay); // DB
+    }
+
+    public void updateMinEveningShift(User caller, int empId, int newMinEvening) throws SQLException {
+        Employee e = getById(empId);
+        if (e == null) throw new IllegalArgumentException("Employee not found");
+
+        e.setMinEveninigShift(caller, newMinEvening); // RAM
+        employeeDAO.updateMinEveningShift(empId, newMinEvening); // DB
+    }
+
+    public void updateSickDays(User caller, int empId, int newSickDays) throws SQLException {
+        Employee e = getById(empId);
+        if (e == null) throw new IllegalArgumentException("Employee not found");
+
+        e.setSickDays(caller, newSickDays); // בזיכרון
+        employeeDAO.updateSickDays(empId, newSickDays); // בבסיס הנתונים
+    }
+
+    public void updateDaysOff(int empId, int daysOff) throws SQLException {
+        Employee e = getById(empId); // נטען מהזיכרון או DB
+        if (e != null) {
+            e.setDaysOff(null, daysOff); // null עבור caller כי זה רק לעדכון פנימי
+            employeeDAO.updateDaysOff(empId, daysOff); // עדכון ב־DB
+        }
+    }
+
+
+
+
 }

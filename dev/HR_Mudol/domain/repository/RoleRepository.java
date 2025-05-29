@@ -18,7 +18,7 @@ public class RoleRepository {
 
     public void add(Role role) {
         roles.add(role);
-        RoleDTO dto = new RoleDTO(role.getRoleNumber(), role.getDescription());
+        RoleDTO dto = toDTO(role);
         roleDAO.insert(dto);
     }
 
@@ -95,6 +95,7 @@ public class RoleRepository {
     }
 
     public List<Integer> getAllEmployeeIDsWithRoles() {
+
         return roleDAO.getAllEmployeeIDsWithRoles();
     }
 
@@ -104,13 +105,19 @@ public class RoleRepository {
         return new LinkedList<>(roles);
     }
 
-    public void clear() {
-        roles.clear();
-    }
     public void addFromDTO(RoleDTO dto) {
-        Role r = RoleMapper.fromDTO(dto);
+        Role r = fromDTO(dto);
         roles.add(r);
     }
+
+    private Role fromDTO(RoleDTO dto) {
+        return new Role(dto.getDescription());
+    }
+
+    private RoleDTO toDTO(Role role) {
+        return new RoleDTO(role.getRoleNumber(), role.getDescription());
+    }
+
 
 
 

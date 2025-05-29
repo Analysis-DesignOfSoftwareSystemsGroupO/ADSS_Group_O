@@ -4,6 +4,8 @@ import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
 
+import java.sql.SQLException;
+
 /**
  * Interface for managing employees within a branch.
  * Provides methods to add, remove, update, search, and display employees.
@@ -14,13 +16,13 @@ public interface IEmployeeController {
      * Adds a new employee to the system.
      * @param caller the user performing the operation (must be a manager)
      */
-    void addEmployee(User caller);
+    void addEmployee(User caller) throws SQLException;
 
     /**
      * Removes an employee from the system.
      * @param caller the user performing the operation (must be a manager)
      */
-    void removeEmployee(User caller);
+    void removeEmployee(User caller) throws SQLException;
 
     // --- Update employee details ---
 
@@ -28,37 +30,37 @@ public interface IEmployeeController {
      * Updates the bank account information of an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateBankAccount(User caller);
+    void updateBankAccount(User caller) throws SQLException;
 
     /**
      * Updates the salary of an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateSalary(User caller);
+    void updateSalary(User caller) throws SQLException;
 
     /**
      * Updates the minimum required number of day shifts for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateMinDayShift(User caller);
+    void updateMinDayShift(User caller) throws SQLException;
 
     /**
      * Updates the minimum required number of evening shifts for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void updateMinEveningShift(User caller);
+    void updateMinEveningShift(User caller) throws SQLException;
 
     /**
      * Sets the initial number of sick days for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void setInitialsickDays(User caller);
+    void setInitialsickDays(User caller) throws SQLException;
 
     /**
      * Sets the initial number of vacation days for an employee.
      * @param caller the user performing the operation (must be a manager)
      */
-    void setInitialdaysOff(User caller);
+    void setInitialdaysOff(User caller) throws SQLException;
 
     // --- Search and retrieval ---
 

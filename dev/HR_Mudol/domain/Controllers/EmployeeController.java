@@ -1,6 +1,8 @@
 package HR_Mudol.domain.Controllers;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 import HR_Mudol.DTO.EmployeeDTO;
@@ -20,11 +22,6 @@ public class EmployeeController implements IEmployeeController {
     private IRoleController roleManager;
     private Branch curBranch;
 
-    @Override
-    public Branch getBranch() {
-        return this.curBranch;
-    }
-
     public EmployeeController(Branch curBranch) {
         this.curBranch = curBranch;
     }
@@ -33,9 +30,13 @@ public class EmployeeController implements IEmployeeController {
         this.roleManager = roleManager;
     }
 
+    @Override
+    public Branch getBranch() {
+        return this.curBranch;
+    }
 
     @Override
-    public void addEmployee(User caller) {
+    public void addEmployee(User caller) throws SQLException {
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         String empName = getNonEmptyStringInput("Enter employee full name: ");
@@ -64,18 +65,192 @@ public class EmployeeController implements IEmployeeController {
         EmployeeDTO dto = new EmployeeDTO(empID, empName, empPassword, empBankAccount,
                 empSalary, empStartDate, minDay, minEvening, sicks, daysOff);
 
-        curBranch.getEmployeeRepo().addFromDTO(dto);
-        curBranch.getUserRepo().add(new User(curBranch.getEmployeeRepo().getById(empID), Level.regularEmp));
+        //add him
+        Employee created = curBranch.getEmployeeRepo().addFromDTO(dto);
+
+        //create his User with employee reference
+        curBranch.getUserRepo().add(new User(created, Level.regularEmp));
 
         System.out.println("Employee and user created successfully!");
     }
 
-    // שאר המתודות יעודכנו בהמשך באופן דומה לשימוש ב-repositories
+    @Override
+    public void removeEmployee(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID to remove: ");
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        Employee toRemove = curBranch.getEmployeeRepo().getById(empId);
+
+        for (Role role : roleManager.getAllRoles(caller)) {
+            roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
+        }
+
+        User user = curBranch.getUserRepo().getByEmployeeId(empId);
+        if (user != null) {
+            curBranch.getUserRepo().remove(user); // remove from DB
+        }
+
+        curBranch.getEmployeeRepo().archive(empId);
+
+        System.out.println("Employee removed successfully from system.");
+    }
+
+    @Override
+    public void updateBankAccount(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID: ");
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        String newBankAccount = getValidatedBankAccountInput("Enter new bank account (digits only): ");
+        curBranch.getEmployeeRepo().updateBankAccount(caller, empId, newBankAccount);
+
+        System.out.println("Bank account updated successfully.");
+    }
+
+    @Override
+    public void updateSalary(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID: ");
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        int newSalary = getIntInput("Enter new salary: ");
+        curBranch.getEmployeeRepo().updateSalary(caller, empId, newSalary);
+
+        System.out.println("Salary updated successfully.");
+    }
+
+    @Override
+    public void updateMinDayShift(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID: ");
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        int newNumber = getIntInput("Enter new minimum day shifts: ");
+        curBranch.getEmployeeRepo().updateMinDayShift(caller, empId, newNumber);
+
+        System.out.println("Minimum day shifts updated successfully.");
+    }
+
+    @Override
+    public void updateMinEveningShift(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID: ");
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        int newNumber = getIntInput("Enter new minimum evening shifts: ");
+        curBranch.getEmployeeRepo().updateMinEveningShift(caller, empId, newNumber);
+
+        System.out.println("Minimum evening shifts updated successfully.");
+    }
 
 
-    // שאר המתודות נשארות זמנית כמו שהן עד שנעדכן אותן
-    // (removeEmployee, getEmployeeById, updateSalary וכו')
+    @Override
+    public void setInitialsickDays(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
 
+        int empId = getIntInput("Enter employee ID: ");
+        if (!curBranch.getEmployeeRepo().exists(empId)) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        int number = getIntInput("Enter number of sick days: ");
+        curBranch.getEmployeeRepo().updateSickDays(caller, empId, number);
+
+        System.out.println("Sick days updated successfully.");
+    }
+
+    @Override
+    public void setInitialdaysOff(User caller) throws SQLException {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID: ");
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
+        if (e == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        int number = getIntInput("Enter number of vacation days: ");
+        e.setDaysOff(caller, number);
+
+        curBranch.getEmployeeRepo().updateDaysOff(empId, number);
+
+        System.out.println("Vacation days updated successfully.");
+    }
+
+
+    @Override
+    public Employee getEmployeeById(User caller, int empId) {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        if (String.valueOf(empId).length() != 9) {
+            System.out.println("Employee ID must be exactly 9 digits.");
+            return null;
+        }
+
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
+        if (e == null) {
+            System.out.println("Employee not found.");
+        }
+        return e;
+    }
+
+    @Override
+    public void printEmployees(User caller) {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        int empId = getIntInput("Enter employee ID: ");
+        if (String.valueOf(empId).length() != 9) {
+            System.out.println("Employee ID must be exactly 9 digits.");
+            return;
+        }
+
+        Employee e = curBranch.getEmployeeRepo().getById(empId);
+        if (e != null) {
+            System.out.println(e);
+        } else {
+            System.out.println("Employee not found.");
+        }
+    }
+
+    @Override
+    public void printAllEmployees(User caller) {
+        if (!caller.isManager()) throw new SecurityException("Access denied");
+
+        List<Employee> allEmployees = curBranch.getEmployeeRepo().getAll();
+        if (allEmployees.isEmpty()) {
+            System.out.println("No employees found.");
+            return;
+        }
+
+        for (Employee e : allEmployees) {
+            System.out.println(e);
+        }
+    }
+
+    //helpers
     private int getIntInput(String prompt) {
         int value;
         while (true) {
@@ -117,165 +292,6 @@ public class EmployeeController implements IEmployeeController {
         } while (input.isEmpty());
         return input;
     }
-
-    @Override
-    public void removeEmployee(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID to remove: ");
-        if (!curBranch.getEmployeeRepo().exists(empId)) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        Employee toRemove = curBranch.getEmployeeRepo().getById(empId);
-
-        for (Role role : roleManager.getAllRoles(caller)) {
-            roleManager.removeEmployeeFromRole(caller, role.getRoleNumber(), toRemove);
-        }
-
-        curBranch.getEmployeeRepo().archive(empId);
-
-        User userToRemove = null;
-        for (User u : curBranch.getUserRepo().getAll()) {
-            if (u.getUser().equals(toRemove)) {
-                userToRemove = u;
-                break;
-            }
-        }
-
-        if (userToRemove != null) {
-            curBranch.getUserRepo().remove(userToRemove);
-        }
-
-        System.out.println("Employee removed successfully from system.");
-    }
-    @Override
-    public void updateBankAccount(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        String newBankAccount = getValidatedBankAccountInput("Enter new bank account (digits only): ");
-        e.setEmpBankAccount(caller, newBankAccount);
-        System.out.println("Bank account updated successfully.");
-    }
-    @Override
-    public void updateSalary(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        int newSalary = getIntInput("Enter new salary: ");
-        e.setEmpSalary(caller, newSalary);
-        System.out.println("Salary updated successfully.");
-    }
-    @Override
-    public void updateMinDayShift(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        int newNumber = getIntInput("Enter new minimum day shifts: ");
-        e.setMinDayShift(caller, newNumber);
-        System.out.println("Minimum day shifts updated successfully.");
-    }
-    @Override
-    public void updateMinEveningShift(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        int newNumber = getIntInput("Enter new minimum evening shifts: ");
-        e.setMinEveninigShift(caller, newNumber);
-        System.out.println("Minimum evening shifts updated successfully.");
-    }
-    @Override
-    public void setInitialsickDays(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        int number = getIntInput("Enter number of sick days: ");
-        e.setSickDays(caller, number);
-        System.out.println("Sick days updated successfully.");
-    }
-    @Override
-    public void setInitialdaysOff(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        int number = getIntInput("Enter number of vacation days: ");
-        e.setDaysOff(caller, number);
-        System.out.println("Vacation days updated successfully.");
-    }
-
-
-    @Override
-    public Employee getEmployeeById(User caller, int empId) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        if (String.valueOf(empId).length() != 9) {
-            System.out.println("Employee ID must be exactly 9 digits.");
-            return null;
-        }
-
-        return curBranch.getEmployeeRepo().getById(empId);
-    }
-
-    @Override
-    public void printEmployees(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        int empId = getIntInput("Enter employee ID: ");
-        Employee e = curBranch.getEmployeeRepo().getById(empId);
-        if (e != null) {
-            System.out.println(e.toString());
-        } else {
-            System.out.println("Employee not found.");
-        }
-    }
-
-    @Override
-    public void printAllEmployees(User caller) {
-        if (!caller.isManager()) throw new SecurityException("Access denied");
-
-        for (Employee e : curBranch.getEmployeeRepo().getAll()) {
-            System.out.println(e.toString());
-        }
-    }
-
 
 
 
