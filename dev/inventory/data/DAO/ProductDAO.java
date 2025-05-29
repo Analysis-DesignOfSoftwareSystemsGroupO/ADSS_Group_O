@@ -135,10 +135,8 @@ public class ProductDAO implements ProductRepository {
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, id);
-            ResultSet res = statement.executeQuery();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet res = statement.executeQuery()) {
 
             while (res.next()) {
                 products.add(mapResultSetToProduct(res));
