@@ -88,10 +88,10 @@ public class HRControllerService implements IHRControllerService {
 
     // RoleController forwarding
     @Override public void createRole(User caller) { roleController.createRole(caller); }
-    @Override public void updateRoleDescription(User caller) { roleController.updateRoleDescription(caller); }
+    //@Override public void updateRoleDescription(User caller) { roleController.updateRoleDescription(caller); }
     @Override public void assignEmployeeToRole(User caller) { roleController.assignEmployeeToRole(caller); }
     @Override public void assignEmployeeToShiftManager(User caller) { roleController.assignEmployeeToShiftManager(caller); }
-    @Override public void removeEmployeeFromRole(User caller) { roleController.removeEmployeeFromRole(caller); }
+    @Override public void removeEmployeeFromALLRoles(User caller) { roleController.removeEmployeeFromALLRoles(caller); }
     @Override public void removeEmployeeFromRole(User caller, int roleNumber, Employee e) { roleController.removeEmployeeFromRole(caller, roleNumber, e); }
     @Override public List<Employee> getRelevantEmployees(User caller) { return roleController.getRelevantEmployees(caller); }
     @Override public List<Role> getAllRoles(User caller) { return roleController.getAllRoles(caller); }

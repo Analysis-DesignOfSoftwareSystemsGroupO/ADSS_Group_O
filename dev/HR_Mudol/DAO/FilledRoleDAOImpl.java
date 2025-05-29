@@ -15,14 +15,14 @@ public class FilledRoleDAOImpl implements IFilledRoleDAO {
 
     @Override
     public void insert(FilledRoleDTO dto) {
-        String sql = "INSERT INTO FilledRoles (shiftID, empId, roleNumber) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO FilledRoles (empId, roleNumber) VALUES (?, ?)";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, dto.getShiftId());
-            stmt.setInt(2, dto.getEmployeeId());
-            stmt.setInt(3, dto.getRoleId());
+            stmt.setInt(1, dto.getEmployeeId());
+            stmt.setInt(2, dto.getRoleId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to assign employee to role", e);
         }
     }
 

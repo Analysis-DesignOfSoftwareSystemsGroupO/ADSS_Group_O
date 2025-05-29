@@ -1,6 +1,6 @@
 package HR_Mudol.DAO;
 
-import HR_Mudol.DTO.RoleDTO;
+import HR_Mudol.DTO.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,24 +14,125 @@ public class RoleDAOImpl implements IRoleDAO {
     }
 
     @Override
-    public void insert(RoleDTO role) throws SQLException {
-        String sql = "INSERT INTO roles (roleNumber, description) VALUES (?, ?)";
+    public void insert(RoleDTO dto) {
+        String sql = "INSERT INTO Roles (roleNumber, description) VALUES (?, ?)";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, role.getRoleNumber());
-            stmt.setString(2, role.getDescription());
+            stmt.setInt(1, dto.getRoleNumber());
+            stmt.setString(2, dto.getDescription());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert new role to DB", e);
         }
     }
 
     @Override
-    public void update(RoleDTO role) throws SQLException {
-        String sql = "UPDATE roles SET description = ? WHERE roleNumber = ?";
+    public void updateDescription(RoleDTO dto) {
+        String sql = "UPDATE Roles SET description = ? WHERE roleNumber = ?";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, role.getDescription());
-            stmt.setInt(2, role.getRoleNumber());
+            stmt.setString(1, dto.getDescription());
+            stmt.setInt(2, dto.getRoleNumber());
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update role description", e);
         }
     }
+
+    @Override
+    public void assignEmployeeToRole(int empID, int roleNumber) {
+        String sql = "INSERT INTO EmployeeRole (empID, roleNumber) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empID);
+            stmt.setInt(2, roleNumber);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to assign employee to role", e);
+        }
+    }
+
+    @Override
+    public void removeEmployeeFromRole(int empID, int roleNumber) {
+        String sql = "DELETE FROM EmployeeRoles WHERE empID = ? AND roleNumber = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empID);
+            stmt.setInt(2, roleNumber);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to remove employee from role", e);
+        }
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployeeDTOsWithRoles() {
+        List<EmployeeDTO> employees = new ArrayList<>();
+        String sql = "SELECT DISTINCT e.* FROM Employees e JOIN EmployeeRoles er ON e.empID = er.empID";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                employees.add(new EmployeeDTO(
+                        rs.getInt("empID"),
+                        rs.getString("empName"),
+                        rs.getString("empPassword"),
+                        rs.getString("empBankAccount"),
+                        rs.getInt("empSalary"),
+                        rs.getDate("empStartDate").toLocalDate(),
+                        rs.getInt("maxDayShifts"),
+                        rs.getInt("maxEveningShifts"),
+                        rs.getInt("sickDays"),
+                        rs.getInt("vacationDays")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch employee DTOs with roles", e);
+        }
+
+        return employees;
+    }
+
+    @Override
+    public List<RoleDTO> getAll() {
+        List<RoleDTO> roles = new ArrayList<>();
+        String sql = "SELECT * FROM Roles";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                roles.add(new RoleDTO(
+                        rs.getInt("roleNumber"),
+                        rs.getString("description")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch roles", e);
+        }
+
+        return roles;
+    }
+
+    @Override
+    public RoleDTO getByNumber(int roleNumber) {
+        String sql = "SELECT * FROM Roles WHERE roleNumber = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, roleNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new RoleDTO(
+                        rs.getInt("roleNumber"),
+                        rs.getString("description")
+                );
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch role by number", e);
+        }
+    }
+
+
 
     @Override
     public void delete(int roleNumber) throws SQLException {
@@ -42,29 +143,5 @@ public class RoleDAOImpl implements IRoleDAO {
         }
     }
 
-    @Override
-    public RoleDTO get(int roleNumber) throws SQLException {
-        String sql = "SELECT * FROM roles WHERE roleNumber = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, roleNumber);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new RoleDTO(rs.getInt("roleNumber"), rs.getString("description"));
-            }
-        }
-        return null;
-    }
 
-    @Override
-    public List<RoleDTO> getAll() throws SQLException {
-        List<RoleDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM roles";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                list.add(new RoleDTO(rs.getInt("roleNumber"), rs.getString("description")));
-            }
-        }
-        return list;
-    }
 }

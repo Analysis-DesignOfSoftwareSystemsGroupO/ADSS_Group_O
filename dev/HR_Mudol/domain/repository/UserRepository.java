@@ -1,6 +1,5 @@
 package HR_Mudol.domain.repository;
 
-import HR_Mudol.DAO.IUserRepositoryDAO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.UserMapper;
 import HR_Mudol.domain.Objects.User;

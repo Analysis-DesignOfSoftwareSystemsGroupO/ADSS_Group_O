@@ -18,7 +18,7 @@ public class FilledRoleMapper {
 
     public static FilledRole fromDTO(FilledRoleDTO dto, EmployeeRepository employeeRepo, RoleRepository roleRepo) {
         Employee employee = employeeRepo.getById(dto.getEmployeeId());
-        Role role = roleRepo.getById(dto.getRoleId());
+        Role role = roleRepo.getRoleByNumber(dto.getRoleId());
         return new FilledRole(employee, role);
     }
 }

@@ -327,7 +327,7 @@ public class HRManagerMenu implements Menu{
         switch (choice) {
             case "1": hr.createRole(caller); break;
             case "2": hr.assignEmployeeToRole(caller); break;
-            case "3": hr.removeEmployeeFromRole(caller); break;
+            case "3": hr.removeEmployeeFromALLRoles(caller); break;
             case "4": hr.assignEmployeeToShiftManager(caller); break;
             case "5": hr.printAllRoles(caller); break;
             case "0": return;

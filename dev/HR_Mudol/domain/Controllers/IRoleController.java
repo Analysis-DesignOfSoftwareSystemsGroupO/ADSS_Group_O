@@ -50,7 +50,7 @@ public interface IRoleController {
      *
      * @param caller The user who is removing the employee from the role (typically an HR manager).
      */
-    void removeEmployeeFromRole(User caller);
+    void removeEmployeeFromALLRoles(User caller);
 
     /**
      * Removes an employee from a specific role.

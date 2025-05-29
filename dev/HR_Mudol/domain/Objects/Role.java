@@ -27,12 +27,6 @@ public class Role {
      * Should be used only by an HR Manager.
      * @param description The description of the role.
      */
-    public Role(String description, int roleNumber) {
-        this.roleNumber = roleNumber;
-        this.description = description;
-        this.relevantEmployees = new LinkedList<>();
-    }
-
 
     public Role(String description) {
         RoleCounter++;
@@ -60,56 +54,41 @@ public class Role {
     /**
      * Updates the description of the role.
      * Only managers are allowed to perform this action.
-     * @param caller The user attempting the update.
      * @param newDesc The new description for the role.
-     * @throws SecurityException if the caller is not a manager.
      */
-    public void SetDescription(User caller, String newDesc) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void setDescription(String newDesc) {
         description = newDesc;
     }
 
     /**
      * Returns the list of employees assigned to this role.
      * Only managers are allowed to view this information.
-     * @param caller The user requesting the list.
      * @return list of relevant employees
-     * @throws SecurityException if the caller is not a manager.
      */
-    public List<Employee> getRelevantEmployees(User caller) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public List<Employee> getRelevantEmployees() {
+
         return relevantEmployees;
     }
 
     /**
      * Adds a new employee to the list of employees assigned to this role.
      * Only managers are allowed to perform this action.
-     * @param caller The user attempting to add an employee.
      * @param employee The employee to add.
-     * @throws SecurityException if the caller is not a manager.
+
      */
-    public void addNewEmployee(User caller, Employee employee) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void addNewEmployee(Employee employee) {
+
         this.relevantEmployees.addLast(employee);
     }
 
     /**
      * Removes an employee from the list of employees assigned to this role.
      * Only managers are allowed to perform this action.
-     * @param caller The user attempting to remove an employee.
      * @param employee The employee to remove.
-     * @throws SecurityException if the caller is not a manager.
+
      */
-    public void removeEmployee(User caller, Employee employee) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied");
-        }
+    public void removeEmployee(Employee employee) {
+
         this.relevantEmployees.remove(employee);
     }
 

@@ -1,5 +1,6 @@
 package HR_Mudol.domain.Objects;
-
+import HR_Mudol.DAO.RoleDAOImpl;
+import HR_Mudol.DAO.ShiftDAOImpl;
 import HR_Mudol.domain.repository.*;
 
 /**
@@ -27,9 +28,9 @@ public class Branch {
     public Branch(String district,String name) {
         this.branchID = counter++;
         this.employeeRepo = new EmployeeRepository();
-        this.roleRepo = new RoleRepository();
+        this.roleRepo = new RoleRepository(new RoleDAOImpl ());
         this.userRepo = new UserRepository();
-        this.weekRepo = new WeekRepository();
+        this.weekRepo = new WeekRepository(new ShiftDAOImpl);
         this.name=name;
         this.district=district;
 
