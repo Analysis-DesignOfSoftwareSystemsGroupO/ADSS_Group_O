@@ -2,7 +2,6 @@ package DataAccess;
 
 import DTO.ProductDTO;
 import DTO.ProductListDocumentDto;
-import DTO.TransportDTO;
 import DataLayer.DataBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +96,7 @@ public class jdbcPLDDAO implements IPLDDAO{
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             return rs.next()
-                    ? Optional.of(new ProductListDocumentDto(id, rs.getInt("TransportID"), rs.getString("DestinationSiteName"), products, getWeightOfProducts(products), rs.getTime("aproximatedArrivaleTime").toLocalTime() ))
+                    ? Optional.of(new ProductListDocumentDto(id, rs.getInt("TransportID"), rs.getString("DestinationSiteName"), products, getWeightOfProducts(products),rs.getDate("Date").toLocalDate(), rs.getTime("aproximatedArrivaleTime").toLocalTime() ))
                     :Optional.empty();// return ProductDTo , if failed to find return empty Optional
 
         }

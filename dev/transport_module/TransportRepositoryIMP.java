@@ -25,7 +25,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
      * @throws ATransportModuleException
      */
     @Override
-    public Transport getTransportByid(int id) throws ATransportModuleException {
+    public Transport getTransportByid(int id)  {
         if( transports.get(id ) == null){ // if the transport is not in the mapper, look for it in the data base
             try {
                 Optional<TransportDTO> transportDTO = dao.getTransportByid(id);

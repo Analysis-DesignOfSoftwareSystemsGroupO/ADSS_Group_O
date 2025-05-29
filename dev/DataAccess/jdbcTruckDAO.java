@@ -15,6 +15,7 @@ import java.util.Optional;
 public class jdbcTruckDAO  implements ITruckDAO{
     private static final Logger log = LogManager.getLogger(jdbcTruckDAO.class);
 
+    //todo : write a static block or a constructor 
     @Override
     public void save(TruckDto dto) throws SQLException {
         log.info("jdbcTrucakDAO:: save() ");

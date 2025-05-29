@@ -37,19 +37,19 @@ public class ProductListDocument {
         } catch (DateTimeParseException e) {
             throw new InvalidDateFormatException();
         }
-
-
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
         } else {
             throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
         }
 
-        id = ++documentID; // give index to document
+        id = ++documentID; // give index to document todo: delete
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
+        this.transportId= -1;
         transport = null;
+        this.approximatedArriavaleTime = LocalTime.of(7,0); // By default
 
     }
     //****************************************************************************************************************** Get functions
@@ -89,6 +89,27 @@ public class ProductListDocument {
         return destination;
     }
 
+    /**
+     *
+     * @return Transport id, if non transport attached, return -1
+     */
+    public int getTransportId(){
+        return this.transportId;
+    }
+
+    public Map<Product, Integer> getProducts(){
+        return  productHashMap;
+    }
+
+    public void setArriavleTime(LocalTime time){
+        this.approximatedArriavaleTime = time;
+    }
+
+    public LocalTime getApproximatedArriavaleTime(){
+        return this.approximatedArriavaleTime;
+    }
+
+
 //********************************************************************************************************************** Set functions
 
 
@@ -97,7 +118,7 @@ public class ProductListDocument {
      * @param transport Transport to attach
      * @throws ATransportModuleException if transport is null or dates mismatch
      */
-    public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
+    public void  attachTransportToDocument(Transport transport) throws ATransportModuleException {
         if (transport == null || this.transport.equals(transport)) {
             throw new InvalidInputException();
         }
@@ -107,6 +128,7 @@ public class ProductListDocument {
         if (this.transport != null)
             this.realiseFromTransport(this.transport);
         this.transport = transport;
+        this.transportId = transport.getId();
     }
 
     /***
@@ -187,6 +209,7 @@ public class ProductListDocument {
     public void realiseFromTransport(Transport transport1) {
         if (this.transport.equals(transport1)) {
             this.transport = null;
+            this.transportId = -1 ;
             try {
                 transport1.removeDocumentFromTransport(this);
             } catch (ATransportModuleException e) {
@@ -194,6 +217,10 @@ public class ProductListDocument {
             }
         }
     }
+
+
+
+
 
 
     //****************************************************************************************************************** Print functions

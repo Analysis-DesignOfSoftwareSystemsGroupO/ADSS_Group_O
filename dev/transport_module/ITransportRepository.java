@@ -8,7 +8,7 @@ import java.util.Date;
 public interface ITransportRepository {
 
 
-    Transport getTransportByid(int id) throws ATransportModuleException;
+    Transport getTransportByid(int id) ;
 
     Transport[] getTransportsByDate(Date date);
 
