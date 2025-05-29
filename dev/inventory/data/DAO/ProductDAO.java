@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.nCopies;
+
 public class ProductDAO implements ProductRepository {
     // This class will handle database operations related to products,
 
@@ -187,9 +189,38 @@ public class ProductDAO implements ProductRepository {
             e.printStackTrace();
             return false;
         }
+    }
 
+    public List<Product> getProductsByCategoryNames(List<String> categoryNames) {
+        List<Product> products = new ArrayList<>();
+        if (categoryNames == null || categoryNames.isEmpty()) {
+            return products;
+        }
 
+        String placeholders = String.join(",", nCopies(categoryNames.size(), "?"));
+
+        String sql = """
+                SELECT p.*
+                FROM "Inventory"."Products" p
+                JOIN "Inventory"."Products_by_Categories" pc ON p.product_id = pc.product_id
+                JOIN "Inventory"."Categories" c ON pc.category_id = c.category_id
+                WHERE c.category_name IN (""" + placeholders + ")";
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            for (int i = 0; i < categoryNames.size(); i++) {
+                statement.setString(i + 1, categoryNames.get(i));
+            }
+
+            ResultSet res = statement.executeQuery();
+
+            while (res.next()) {
+                products.add(mapResultSetToProduct(res));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
     }
 }
-
-

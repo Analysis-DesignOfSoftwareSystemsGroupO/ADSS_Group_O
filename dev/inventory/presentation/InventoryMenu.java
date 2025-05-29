@@ -67,10 +67,10 @@ public class InventoryMenu {
 
     private void displayMenuForManager() {
         List<String> menuOptions = Arrays.asList(
-                "List Products",
+                "Reports",
                 "List Categories",
                 "Print Stock By Product",
-                "Reports",
+                "ReportsXXXXXX -need to remove",
                 "Add Stock",
                 "Update Stock",
                 "Delete Stock",
@@ -94,10 +94,10 @@ public class InventoryMenu {
 
     private void displayMenuForWorker() {
         List<String> menuOptions = Arrays.asList(
-                "List Products",
+                "Reports",
                 "List Categories",
                 "Print Stock By Product",
-                "Reports",
+                "ReportsXXXXX -need to remove",
                 "Add Stock",
                 "Update Stock",
                 "Delete Stock"
@@ -119,15 +119,36 @@ public class InventoryMenu {
             switch (choice) {
                 case 1:
                     // List Products
-                    displayProductsMenu();
-                    int productChoice = readIntInput("Please enter your choice: ");
-                    switch (productChoice) {
+                    System.out.println("\n***Reports***\n");
+                    displayReportsMenu();
+                    int reportChoice = readIntInput("Please enter your choice: ");
+                    switch (reportChoice) {
                         case 1:
+                            // Print Order List
+                            System.out.println("\n***Print Order List***\n");
+                            service.printOrderList();
+                            break;
+                        case 2:
+                            // Print Current Stock Report
+                            System.out.println("\n***Print Current Stock Report***\n");
+                            service.printCurrentStock();
+                            break;
+                        case 3:
+                            // Print Expired List (Product-Based)
+                            System.out.println("\n***Print Expired List***\n");
+                            service.printExpiredStockItems();
+                            break;
+                        case 4:
+                            // Print Defect List (Product-Based)
+                            System.out.println("\n***Print Defect List***\n");
+                            service.printDefectedStockItems();
+                            break;
+                        case 5:
                             // List All Products
                             System.out.println("\nListing all products...\n");
                             service.printAllProducts();
                             break;
-                        case 2:
+                        case 6:
                             // List Products By Category
                             System.out.println("\nListing products by category...\n");
                             ArrayList<String> categories = new ArrayList<>();
@@ -162,35 +183,6 @@ public class InventoryMenu {
                     break;
                 case 4:
                     // Reports
-                    System.out.println("\n***Reports***\n");
-                    displayReportsMenu();
-                    int reportChoice = readIntInput("Please enter your choice: ");
-
-                    switch (reportChoice) {
-                        case 1:
-                            // Print Order List
-                            System.out.println("\n***Print Order List***\n");
-                            service.printOrderList();
-                            break;
-                        case 2:
-                            // Print Current Stock Report
-                            System.out.println("\n***Print Current Stock Report***\n");
-                            service.printCurrentStock();
-                            break;
-                        case 3:
-                            // Print Expired List (Product-Based)
-                            System.out.println("\n***Print Expired List***\n");
-                            service.printExpiredStockItems();
-                            break;
-                        case 4:
-                            // Print Defect List (Product-Based)
-                            System.out.println("\n***Print Defect List***\n");
-                            service.printDefectedStockItems();
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Please try again.");
-                    }
-                    break;
                 case 5:
                     // Add Stock
                     System.out.println("\nStarting new Stock creation...\n");
@@ -395,17 +387,17 @@ public class InventoryMenu {
                     // Upload Test Data
                     if (dataLoaded) {
                         System.out.println("Test data already uploaded.");
-                    }
-                    else {
-                    System.out.println("Uploading test data...");
-                    service.uploadTestData();
-                    dataLoaded = true;
+                    } else {
+                        System.out.println("Uploading test data...");
+                        service.uploadTestData();
+                        dataLoaded = true;
                     }
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
     }
@@ -426,7 +418,10 @@ public class InventoryMenu {
                  1. Print Order List
                  2. Print Current Stock Report
                  3. Print Expired List (Product Based)
-                 4. Print Defect List (Product Based)""");
+                 4. Print Defect List (Product Based)
+                 5. All Products
+                 6. Products By Category (Enter multiple categories, 0 to return)""\");
+                """);
     }
 
 

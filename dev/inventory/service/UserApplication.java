@@ -200,8 +200,8 @@ public class UserApplication {
         inventoryController.removeDiscount(discountId);
     }
 
-    public void printProductsByCategories(ArrayList<String> categorynames) {
-        inventoryController.printProductsByCategories(categorynames);
+    public void printProductsByCategories(ArrayList<String> categoryNames) {
+        inventoryController.printProductsByCategories(categoryNames);
     }
 
     public void updateMinimumStockLevel(String productId,int newMinimumStockLevel){

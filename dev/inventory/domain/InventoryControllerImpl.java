@@ -664,17 +664,26 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void printProductsByCategories(ArrayList<String> categoryNames) {
         System.out.println("Products by categories:");
-        for (String categoryName : categoryNames) {
-            Category category = getCategoryById(getCategoryIdByName(categoryName));
-            if (category != null) {
-                System.out.println("Category: " + category.getName());
-                for (Product product : category.getProducts()) {
-                    System.out.println(product.toString());
-                }
-            } else {
-                System.out.println("Category with name " + categoryName + " not found.");
+//        for (String categoryName : categoryNames) {
+//            Category category = getCategoryById(getCategoryIdByName(categoryName));
+//            if (category != null) {
+//                System.out.println("Category: " + category.getName());
+//                for (Product product : category.getProducts()) {
+//                    System.out.println(product.toString());
+//                }
+//            } else {
+//                System.out.println("Category with name " + categoryName + " not found.");
+//            }
+//        }
+        List<Product> products = productDAO.getProductsByCategoryNames(categoryNames);
+        if (products.isEmpty()) {
+            System.out.println("No products found in the specified categories.");
+        } else {
+            for (Product product : products) {
+                System.out.println(product);
             }
         }
+
     }
 
     public void updateMinimumStockLevel(String productId, int newMinimumStockLevel) {
