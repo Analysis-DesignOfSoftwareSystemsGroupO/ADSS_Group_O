@@ -17,7 +17,7 @@ public class ProductDAO implements ProductRepository {
     @Override
     public void saveProduct(Product product) {
         String sql = """
-                INSERT INTO "Products" (
+                INSERT INTO "Inventory"."Products" (
                 product_id, product_name, product_manufacturer, 
                 cost_price, min_stock_level, group_id, location
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -44,7 +44,7 @@ public class ProductDAO implements ProductRepository {
     @Override
     public void updateProduct(Product product) {
         String sql = """
-                UPDATE "Products"
+                UPDATE "Inventory"."Products"
                 SET product_name = ?, product_manufacturer = ?, 
                     cost_price = ?, min_stock_level = ?, group_id = ?, 
                     location = ?
@@ -71,7 +71,10 @@ public class ProductDAO implements ProductRepository {
 
     @Override
     public void deleteProduct(String id) {
-        String sql = "DELETE FROM \"Products\" WHERE product_id = ?";
+        String sql = """
+                DELETE FROM "Inventory"."Products"
+                WHERE product_id = ?
+                """;
 
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

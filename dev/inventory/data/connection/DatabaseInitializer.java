@@ -46,7 +46,7 @@ public class DatabaseInitializer {
                 stock_id    TEXT PRIMARY KEY,
                 quantity    INTEGER NOT NULL,
                 location    TEXT NOT NULL,
-                expiry_date TEXT NOT NULL,
+                expiry_date DATE NOT NULL,
                 status      TEXT NOT NULL,
                 product_id  TEXT,
                 FOREIGN KEY (product_id) REFERENCES "Inventory"."Products"(product_id)
@@ -74,13 +74,13 @@ public class DatabaseInitializer {
                 discount_target_type TEXT NOT NULL,
                 discount_target_id   TEXT NOT NULL,
                 start_date           DATE NOT NULL,
-                end_date             TEXT NOT NULL,
+                end_date             DATE NOT NULL,
                 FOREIGN KEY (discount_id) REFERENCES "Inventory"."Discounts"(discount_id)
             );
 
             CREATE TABLE IF NOT EXISTS "Inventory"."Stock_Item_Orders" (
                 stock_id         TEXT PRIMARY KEY,
-                order_date       TEXT NOT NULL,
+                order_date       DATE NOT NULL,
                 supplier_id      TEXT NOT NULL,
                 product_id       TEXT NOT NULL,
                 total_cost_price DOUBLE PRECISION NOT NULL,

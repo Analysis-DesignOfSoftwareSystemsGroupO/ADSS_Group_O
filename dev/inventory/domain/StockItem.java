@@ -22,9 +22,16 @@ public class StockItem {
         this.location = locationStatus;
         this.status = status;
         this.expiryDate = expiryDate;
-
-
         // Getters and Setters
+    }
+
+    public StockItem(String stockItemId, Product product, int quantity, String location, LocalDate expiryDate, StockItemStatus status) {
+        this.stockItemId = stockItemId;
+        this.product = product;
+        setQuantity(quantity);
+        this.location = location;
+        this.expiryDate = expiryDate;
+        this.status = status;
     }
 
     public void setStatus(StockItemStatus status) {

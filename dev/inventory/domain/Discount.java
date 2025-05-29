@@ -15,7 +15,7 @@ public class Discount {
     private DiscountType discountType;
 
     public Discount(String description, DiscountTargetType targetType,
-                    String targetId, double discountPercentage, LocalDate startDate, LocalDate endDate,DiscountType discountType) {
+                    String targetId, double discountPercentage, LocalDate startDate, LocalDate endDate, DiscountType discountType) {
         Objects.requireNonNull(description, "Description cannot be null");
         Objects.requireNonNull(targetType, "Target type cannot be null");
         Objects.requireNonNull(targetId, "Target ID cannot be null");
@@ -34,7 +34,18 @@ public class Discount {
         this.discountType = discountType;
     }
 
-    public DiscountType getDiscountType(){
+    public Discount(String id, String description, DiscountTargetType targetType,
+                    String targetId, double discountPercentage, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.description = description;
+        this.targetType = targetType;
+        this.targetId = targetId;
+        this.discountPercentage = discountPercentage;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public DiscountType getDiscountType() {
         return discountType;
     }
 
@@ -71,7 +82,7 @@ public class Discount {
     }
 
     public void setDiscountPercentage(double discountPercentage) {
-        if(discountPercentage < 0 || discountPercentage > 100) {
+        if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100");
         }
         this.discountPercentage = discountPercentage;
@@ -107,8 +118,8 @@ public class Discount {
     @Override
     public String toString() {
         return "----- Discount ------" +
-                "\n\t id: '" + id  +
-                "\n\t description: '" + description  +
+                "\n\t id: '" + id +
+                "\n\t description: '" + description +
                 "\n\t targetType: " + targetType +
                 "\n\t targetId: '" + targetId +
                 "\n\t discountPercentage: " + discountPercentage +
