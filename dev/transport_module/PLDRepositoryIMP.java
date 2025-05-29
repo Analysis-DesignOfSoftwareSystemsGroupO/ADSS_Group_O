@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +25,20 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     private IPLDDAO dao;
     private static final Logger log = LogManager.getLogger(PLDRepositoryIMP.class);
     private ITransportRepository transportRep;
+    private int availableid;
+
+    public int getValidID(){
+        availableid ++;
+        return availableid;}
+
+    int initValidid()throws SQLException{
+        availableid = dao.getHieghestPLDID() + 1;
+        return availableid;
+    }
+
 
     @Override
-    public ProductListDocument getProductListDocumentByid(int id) { //todo
+    public ProductListDocument getProductListDocumentByid(int id) throws SQLException, TransportMismatchException, InvalidATransportException { //todo
         if (mapper.get(id) != null)
             return mapper.get(id); //return PLD if exsists in the mapper. else, Look for it in the data base
         ProductListDocument pld = null;
@@ -55,13 +67,15 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         }
         catch (SQLException e ) {
             log.error("SQL Exception in findByPLDID");
-            return null;
+            throw e;
         } catch (InvalidATransportException e) {
             log.error("Failed to find the transport of the PLD. InvalidATransportException catched with message: \" " + e.getMessage() + "\" . Deleting PLD from Data base.");
             deleteProductListDocument(id); //Delete this PLD
+            throw e;
         } catch (TransportMismatchException e) {
                 log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
                 deleteProductListDocument(id);
+                throw e;
         } catch (ATransportModuleException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -71,25 +85,36 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     }
 
     @Override
-    public void saveProductListDocument(ProductListDocumentDto pld) throws InvalidPLDException {
+    public void saveProductListDocument(ProductListDocumentDto pld) throws ATransportModuleException, SQLException {
         //check that the ProductListDocument is already exsists:
         if(mapper.get(pld.getId()) != null){
             throw new InvalidPLDException("Didn't added the ProductList Document to the system, A ProsuctLIstDocument with this id already exsists.");
-        }try {
-            dao.save(pld);
-            mapper.put(pld.getId(), getProductListDocumentByid(pld.getId()));
-        } catch (SQLException e) {
-            log.error("SQL failure while saving ProductListDocument");
         }
+        dao.save(pld);
+        mapper.put(pld.getId(), PLDdtoTOPLD(pld)); //COnvert the DTO to a ProductListDocument instance and puts in the mapper
+
+        log.error("SQL failure while saving ProductListDocument");
+
     }
 
+    /**
+     * delete ProductListDocument by the id of the document.
+     * @param pld
+     * @throws SQLException
+     */
     @Override
-    public void deleteProductListDocument(int pld) {
-
+    public void deleteProductListDocument(int pld) throws SQLException {
+        mapper.remove(pld); //delete PLD from mapper
+        dao.deletePLD(pld);
     }
 
+    /**
+     * @param dto
+     * @return A productListDocument
+     * @throws InvalidPLDException
+     */
     @Override
-    public ProductListDocument PLDdtoTOPLD(ProductListDocumentDto dto) throws InvalidPLDException {
+    public ProductListDocument PLDdtoTOPLD(ProductListDocumentDto dto) throws ATransportModuleException, SQLException {
         ProductListDocument pld= getProductListDocumentByid(dto.getId());
         if(pld.getDate() == dto.getDate() && pld.getDestination().getName() == dto.getSiteDes() && pld.getTransportId() == dto.getTransportID()){
             return pld;
@@ -97,6 +122,11 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         throw new InvalidPLDException("Product List Document doesnt match with exsists pld ") ;
     }
 
+    /**
+     *  recive a ProductListDocument and return a ProductListDocumentDTO
+     * @param pld
+     * @return
+     */
     @Override
     public ProductListDocumentDto pldToDTO(ProductListDocument pld) {
         List<ProductDTO> products = new ArrayList<>(); //get the Products -> quantety map of ProductListDocument
@@ -114,7 +144,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     }
 
     @Override
-    public List<ProductListDocument> getPLDByTransportID(int id)  {
+    public List<ProductListDocument> getPLDByTransportID(int id) throws InvalidATransportException, TransportMismatchException {
         List<ProductListDocument> plds= new ArrayList<>();
         try {
             List<Integer> pldIDs = dao.findByTransport(id);
@@ -128,5 +158,12 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             return null;
         }
         return plds;
+    }
+
+    @Override
+    public void setArriavleTime(int pldID, LocalTime time) throws SQLException , ATransportModuleException{
+        ProductListDocument p = getProductListDocumentByid(pldID);
+        p.setArriavleTime(time);
+        dao.setArriavleTime(pldID,time);
     }
 }

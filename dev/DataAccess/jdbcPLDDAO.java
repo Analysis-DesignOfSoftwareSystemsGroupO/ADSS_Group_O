@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +65,7 @@ public class jdbcPLDDAO implements IPLDDAO{
      * @throws SQLException
      */
     @Override
-    public int getHieghestTransportID() throws  SQLException{
+    public int getHieghestPLDID() throws  SQLException{
         log.info("jdbcPLDDAO :: getHieghestTransportID ()");
         String sql = "SELECT ProductListDocumentID FROM ProductListDocument ORDER BY ProductListDocumentID DESC LIMIT 1";
 
@@ -147,7 +148,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public List<Integer> findByTransport(int Tid) throws SQLException {
         log.info("jdbcPLDDAO ::findByTransport( " + Tid + ") ");
-        String sql = "SELECT ProductListDocumentId FROM Transports_ProductListDocument WHERE TransportId = ? ";
+        String sql = "SELECT ProductListDocumentId FROM Transports_ProductListDocument WHERE TransportId = ? ;";
         List<Integer> PLDids = new ArrayList<>();
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
             ps.setInt(1, Tid);
@@ -162,5 +163,18 @@ public class jdbcPLDDAO implements IPLDDAO{
         }
         return PLDids;
 
+    }
+    @Override
+    public void setArriavleTime(int pldID, LocalTime time) throws SQLException{
+        log.info("jdbcPLDDAO::setArrivaleTime( + " + pldID + " , " + time + " ) ");
+        String sql = "UPDATE ProductListDocument SET aproximatedArrivaleTime = ? WHERE ProductListDocumentID = ? ;";
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
+            ps.setTime(1,Time.valueOf(time));
+            ps.setInt(2, pldID);
+        }
+        catch (SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
     }
 }

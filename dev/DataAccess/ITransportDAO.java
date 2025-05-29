@@ -3,6 +3,7 @@ package DataAccess;
 import DTO.TransportDTO;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,5 +16,5 @@ public interface ITransportDAO {
     int getHieghestTransportID() throws  SQLException;
     List<TransportDTO> getTransportsWithoutTruck()throws SQLException;
     void assignTruckToTransport(int transportID, int truckPN) throws SQLException;
-
+    List<TransportDTO> getTransportsByDate(LocalDate date) throws SQLException;
 }
