@@ -23,6 +23,13 @@ public class Category {
         InMemoryCategoryRepository.saveCategory(this);
     }
 
+    public Category(String id, String name){
+        this.id = id;
+        this.name = name;
+        this.subCategories = new ArrayList<Category>();
+        this.products = new ArrayList<Product>();
+    }
+
 
     public String getId() {
         return id;

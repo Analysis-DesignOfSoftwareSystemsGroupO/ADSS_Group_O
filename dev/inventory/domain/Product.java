@@ -48,6 +48,22 @@ public class Product {
         this.discountSellingPrice = 0;
     }
 
+    public Product(String id, String name, String manufacturer, double costPrice, int minimumStockLevel, String location) {
+        Objects.requireNonNull(id, "Product ID cannot be null");
+        Objects.requireNonNull(name, "Product name cannot be null");
+        Objects.requireNonNull(manufacturer, "Manufacturer cannot be null");
+        Objects.requireNonNull(location, "Location cannot be null");
+        if (minimumStockLevel < 0) {
+            throw new IllegalArgumentException("Minimum stock level cannot be negative");
+        }
+        this.id = id;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.costPrice = costPrice;
+        this.minimumStockLevel = minimumStockLevel;
+        this.location = location;
+    }
+
 
     public void setMinimumStockLevel(int minimumStockLevel) {
         if (minimumStockLevel < 0) {
