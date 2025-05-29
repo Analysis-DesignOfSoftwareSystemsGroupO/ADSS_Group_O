@@ -1,26 +1,29 @@
 package SupplierMoudleSource.DataBase;
 
+import SupplierMoudleSource.DAO.OrderDAO;
 import SupplierMoudleSource.Domain.Order;
-import SupplierMoudleSource.Domain.Supplier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrderDataBase {
+public class OrderRepository {
     private Map<String, List<Order>> orders;
+    private OrderDAO orderDAO;
 
     //singleton database
-    private static OrderDataBase orderDataBase = null;
-    public static OrderDataBase getInstance() {
-        if (orderDataBase == null) {
-            orderDataBase = new OrderDataBase();
+    private static OrderRepository orderRepository = null;
+    public static OrderRepository getInstance() {
+        if (orderRepository == null) {
+            orderRepository = new OrderRepository();
         }
-        return orderDataBase;
+        return orderRepository;
     }
-    private OrderDataBase(){
+
+    private OrderRepository(){
         orders = new HashMap<>();
+        orderDAO = new OrderDAO();
     }
 
 
@@ -38,6 +41,7 @@ public class OrderDataBase {
             orderList.add(order);
             orders.put(supplierID, orderList);
         }
+        orderDAO.addOrder();
     }
 
     public List<Order> getOrdersBySupplier(String supplierID) {

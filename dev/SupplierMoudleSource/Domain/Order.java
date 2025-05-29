@@ -1,5 +1,8 @@
 package SupplierMoudleSource.Domain;
 
+import DTO.OrderDTO;
+import DTO.SuppliedItemDTO;
+
 import java.util.*;
 
 public class Order {
@@ -108,5 +111,12 @@ public class Order {
 
     public List<SuppliedItem> getSuppliedItems() {
         return new ArrayList<>(suppliedItems.keySet());
+    }
+
+
+    public OrderDTO getOrderDTO(){
+        Map<SuppliedItemDTO, Integer> suppliedItemsMap = new HashMap<>();
+
+        OrderDTO oDTO = new OrderDTO(this.orderID, this.orderDate, this.totalPrice, suppliedItemsMap, this.branch.getBranchID(), this.agreement.getSupplierID());
     }
 }

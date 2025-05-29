@@ -1,7 +1,7 @@
 package SupplierMoudleSource.Service;
 
 import SupplierMoudleSource.DataBase.BranchesDataBase;
-import SupplierMoudleSource.DataBase.OrderDataBase;
+import SupplierMoudleSource.DataBase.OrderRepository;
 import SupplierMoudleSource.DataBase.SuppliersDataBase;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
@@ -10,7 +10,7 @@ import SupplierMoudleSource.Domain.Order;
 import java.util.List;
 
 public class OrderService {
-    private static OrderDataBase orderDataBase = OrderDataBase.getInstance() ;
+    private static OrderRepository orderDataBase = OrderRepository.getInstance() ;
     private static SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
     private static BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
     //creates a new order, returns orderId as a string

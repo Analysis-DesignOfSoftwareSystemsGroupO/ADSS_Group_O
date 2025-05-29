@@ -1,8 +1,10 @@
 package SupplierMoudleSource.Domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import DTO.AgreementDTO;
+import DTO.DiscountDTO;
+import DTO.SuppliedItemDTO;
+
+import java.util.*;
 
 public class Agreement {
     private final Supplier supplier;
@@ -19,8 +21,15 @@ public class Agreement {
         this.Branch = branch;
         this.supplierItemsList = new ArrayList<SuppliedItem>();
         this.discounts = new ArrayList<Discount>();
-
     }
+
+    public AgreementDTO getAgreementDTO(){
+        List<SuppliedItemDTO> supplierItemsList = new ArrayList<>();
+        List<DiscountDTO> discountDTOList = new ArrayList<>();
+
+        AgreementDTO agreementDTO = new AgreementDTO(this.supplier.getID(), this.Branch.getBranchID(), supplierItemsList, discountDTOList);
+    }
+
 
     public Agreement(Agreement other) {
         this.supplier = new Supplier(other.supplier);
