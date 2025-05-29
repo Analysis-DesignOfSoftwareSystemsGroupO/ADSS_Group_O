@@ -15,5 +15,4 @@ public interface ProductRepository {
 
     List<Product> getAllProducts();
 
-    void printAllProducts();
 }

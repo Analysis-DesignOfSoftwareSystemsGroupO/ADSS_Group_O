@@ -22,8 +22,8 @@ public class StockItemDAO {
     public void saveStockItem(StockItem stockItem) {
         String sql = """
                 INSERT INTO "Inventory"."Stock_Items" 
-                ("stock_id","quantity", "location", "expiry_date",  "status") 
-                VALUES (?, ?, ?, ?, ?)
+                ("stock_id","quantity", "location", "expiry_date",  "status", "product_id") 
+                VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
@@ -34,7 +34,7 @@ public class StockItemDAO {
             statement.setString(3, stockItem.getLocation());
             statement.setDate(4, java.sql.Date.valueOf(stockItem.getExpiryDate()));
             statement.setString(5, stockItem.getStatus().toString());
-//            statement.setString(6, stockItem.getProduct().getId());
+            statement.setString(6, stockItem.getProduct().getId());
 
             statement.executeUpdate();
         } catch (Exception e) {
@@ -140,4 +140,37 @@ public class StockItemDAO {
         }
         return stockItems;
     }
+
+    public List<StockItem> getStockItemsByProductId(String productId) {
+        List<StockItem> stockItems = new ArrayList<>();
+        String sql = """
+                SELECT *
+                FROM "Inventory"."Stock_Items"
+                WHERE product_id = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, productId);
+            ResultSet res = statement.executeQuery();
+
+            while (res.next()) {
+                String id = res.getString("stock_id");
+                int quantity = res.getInt("quantity");
+                String location = res.getString("location");
+                LocalDate expiryDate = res.getDate("expiry_date").toLocalDate();
+                StockItemStatus status = StockItemStatus.valueOf(res.getString("status"));
+
+                Product product = productDAO.getProductById(productId);
+
+                StockItem stockItem = new StockItem(id, product, quantity, location, expiryDate, status);
+                stockItems.add(stockItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stockItems;
+    }
 }
+

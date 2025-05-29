@@ -34,12 +34,19 @@ public class UserApplication {
                 inventoryController.saveCategory(categoryInfo[i], categoryInfo[i - 1]);
             }
         }
-        inventoryController.addProduct(name, minimumStock, mainCategory, costPrice, location, manufacturer);
+
+        String groupId = inventoryController.getOrCreateCategoryGroup(categoryInfo[0], categoryInfo[1], categoryInfo[2]);
+
+        inventoryController.addProduct(name, minimumStock, groupId, costPrice, location, manufacturer);
         for (int i = 1; i <= 2; i++) {
             String categoryId = inventoryController.getCategoryIdByName(categoryInfo[i]);
             Category cat = inventoryController.getCategoryById(categoryId);
             cat.getProducts().add(inventoryController.getProductByName(name, manufacturer));
         }
+
+
+
+
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {

@@ -18,7 +18,7 @@ public class Product {
     private double discountCostPrice;
     private double discountSellingPrice;
     private int minimumStockLevel;
-    private Category category;
+    private String categoryGroupId;
     private String location;
     private boolean storeDiscountActive;
     private boolean manufacturerDiscountActive;
@@ -30,7 +30,8 @@ public class Product {
      * @param name              The display name of the product. (cannot be null)
      * @param minimumStockLevel The minimum amount of this product that should be in stock. (cannot be negative)
      */
-    public Product(String name, int minimumStockLevel, double costPrice, String location, String manufacturer) {
+    public Product(String name, int minimumStockLevel, double costPrice, String location,
+                   String manufacturer,String categoryGroupId) {
         Objects.requireNonNull(name, "Product name cannot be null");
         if (minimumStockLevel < 0) {
             throw new IllegalArgumentException("Minimum stock level cannot be negative");
@@ -46,9 +47,11 @@ public class Product {
         this.location = location;
         this.discountCostPrice = 0;
         this.discountSellingPrice = 0;
+        this.categoryGroupId = categoryGroupId;
     }
 
-    public Product(String id, String name, String manufacturer, double costPrice, int minimumStockLevel, String location) {
+    public Product(String id, String name, String manufacturer, int minimumStockLevel,
+                   String location, String categoryGroupId) {
         Objects.requireNonNull(id, "Product ID cannot be null");
         Objects.requireNonNull(name, "Product name cannot be null");
         Objects.requireNonNull(manufacturer, "Manufacturer cannot be null");
@@ -59,9 +62,9 @@ public class Product {
         this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;
-        this.costPrice = costPrice;
         this.minimumStockLevel = minimumStockLevel;
         this.location = location;
+        this.categoryGroupId = categoryGroupId;
     }
 
 
@@ -130,9 +133,11 @@ public class Product {
         return minimumStockLevel;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategoryGroupId() {
+        return categoryGroupId;
     }
+
+    public void setCategoryGroupId(String categoryGroupId) {}
 
     public double getDiscountCostPrice() {
         return discountCostPrice;
@@ -162,7 +167,7 @@ public class Product {
                 "\n\tid = '" + id + "'," +
                 "\n\tmanufacturer = '" + manufacturer + "'," +
                 "\n\tminimumStockLevel = " + minimumStockLevel + "'," +
-                "\n\tcategory = '" + category.getName() + "'" +
+                "\n\tcategoryId = '" + categoryGroupId + "'" +
                 "\n\tlocation = '" + location + "'";
         if (storeDiscountActive && manufacturerDiscountActive) {
             res += "\n\tCost Price = " + costPrice +
@@ -194,11 +199,6 @@ public class Product {
         return id.equals(product.id);
     }
 
-    public void setCategory(Category parentCategory) {
-        Objects.requireNonNull(parentCategory, "Parent category cannot be null");
-        this.category = parentCategory;
-        parentCategory.addProduct(this);
-    }
 
 
 }

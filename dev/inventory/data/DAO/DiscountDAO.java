@@ -21,9 +21,9 @@ public class DiscountDAO {
                 """;
 
         String insertTargetSql = """
-                INSERT INTO "Inventory"."Discount_Store_Targets" 
+                INSERT INTO "Inventory"."Discount_Store_Target" 
                 (discount_id, discount_target_type, discount_target_id , start_date, end_date)
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?,?)
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection()) {
@@ -32,8 +32,8 @@ public class DiscountDAO {
             try (PreparedStatement statement1 = connection.prepareStatement(insertDiscountSql);
                  PreparedStatement statement2 = connection.prepareStatement(insertTargetSql)) {
 
-                statement1.setString(1, discount.getDescription());
-                statement1.setString(2, discount.getId());
+                statement1.setString(1, discount.getId());
+                statement1.setString(2, discount.getDescription());
                 statement1.setDouble(3, (int) discount.getDiscountPercentage());
                 statement1.executeUpdate();
 
@@ -65,7 +65,7 @@ public class DiscountDAO {
                 """;
 
         String updateTargetSql = """
-                UPDATE "Inventory"."Discount_Store_Targets"
+                UPDATE "Inventory"."Discount_Store_Target"
                 SET discount_target_type = ?, discount_target_id = ?, start_date = ?, end_date = ?
                 WHERE discount_id = ?
                 """;
@@ -108,7 +108,7 @@ public class DiscountDAO {
                        dst.discount_target_type, dst.discount_target_id, 
                        dst.start_date, dst.end_date
                 FROM "Inventory"."Discounts" d
-                JOIN "Inventory"."Discount_Store_Targets" dst 
+                JOIN "Inventory"."Discount_Store_Target" dst 
                 ON d.discount_id = dst.discount_id
                 """;
 
@@ -138,7 +138,7 @@ public class DiscountDAO {
 
     public void deleteDiscount(String id) {
         String deleteTargetSql = """
-                DELETE FROM "Inventory"."Discount_Store_Targets"
+                DELETE FROM "Inventory"."Discount_Store_Target"
                 WHERE discount_id = ?
                 """;
         String deleteDiscountSql = """
@@ -169,6 +169,30 @@ public class DiscountDAO {
             e.printStackTrace();
             System.err.println("Error connecting to database: " + e.getMessage());
         }
+    }
+
+    public double getDiscountPercentageByProductId(String productId) {
+        String sql = """
+                SELECT d.discount_percentage
+                FROM "Inventory"."Selling_Prices" sp
+                JOIN "Inventory"."Discounts" d ON sp.discount_id = d.discount_id
+                WHERE sp.product_id = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, productId);
+            ResultSet res = statement.executeQuery();
+
+            if (res.next()) {
+                return res.getDouble("discount_percentage");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error retrieving discount percentage: " + e.getMessage());
+        }
+        return 0.0;
     }
 
 }

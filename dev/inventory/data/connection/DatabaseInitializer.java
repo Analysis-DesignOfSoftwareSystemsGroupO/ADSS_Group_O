@@ -35,11 +35,10 @@ public class DatabaseInitializer {
                 product_id           TEXT PRIMARY KEY,
                 product_name         TEXT NOT NULL,
                 product_manufacturer TEXT NOT NULL,
-                cost_price           DOUBLE PRECISION NOT NULL,
                 min_stock_level      INTEGER NOT NULL,
-                gorup_id             TEXT NOT NULL,
+                group_id             TEXT NOT NULL,
                 location             TEXT NOT NULL,
-                FOREIGN KEY (gorup_id) REFERENCES "Inventory"."Category_Groups"(group_id)
+                FOREIGN KEY (group_id) REFERENCES "Inventory"."Category_Groups"(group_id)
             );
 
             CREATE TABLE IF NOT EXISTS "Inventory"."Stock_Items" (
@@ -83,6 +82,7 @@ public class DatabaseInitializer {
                 order_date       DATE NOT NULL,
                 supplier_id      TEXT NOT NULL,
                 product_id       TEXT NOT NULL,
+                cost_price       DOUBLE PRECISION NOT NULL,
                 total_cost_price DOUBLE PRECISION NOT NULL,
                 FOREIGN KEY (stock_id) REFERENCES "Inventory"."Stock_Items"(stock_id),
                 FOREIGN KEY (product_id) REFERENCES "Inventory"."Products"(product_id)

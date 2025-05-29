@@ -73,4 +73,6 @@ public interface InventoryController {
     void printProductsByCategories(ArrayList<String> catagoryNames);
 
     void updateMinimumStockLevel(String productId,int newMinimumStockLevel);
+
+    String getOrCreateCategoryGroup(String s, String s1, String s2);
 }

@@ -30,34 +30,25 @@ public class InventoryControllerImpl implements InventoryController {
     public InventoryControllerImpl() {
     }
 
-    public void addProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer) {
-        Category prodParentCategory = getCategoryById(getCategoryIdByName(parentCategory));
-        if (prodParentCategory == null) {
-            throw new IllegalArgumentException("Parent category not found. Aborting product add operation.");
+    public void addProduct(String name, int minimumStock, String categoryGroupId, double costPrice, String location, String manufacturer) {
+        if (productDAO.productExists(name, manufacturer)) {
+            throw new IllegalArgumentException("Product with the same name and manufacturer already exists.");
+        } else {
+            Product productToAdd = new Product(name, minimumStock, costPrice, location, manufacturer, categoryGroupId);
+            productRepository.saveProduct(productToAdd);
+            productDAO.saveProduct(productToAdd);
         }
-
-        Product productToAdd = new Product(name, minimumStock, costPrice, location, manufacturer);
-        productToAdd.setCategory(prodParentCategory);
-        productRepository.saveProduct(productToAdd);
-        productDAO.saveProduct(productToAdd);
     }
 
     public void removeProduct(String id) {
         System.out.println("Removing product with ID: " + id);
-        Product productToRemove = productRepository.getProductById(id);
-        Objects.requireNonNull(productToRemove, "Product not found");
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
-        for (StockItem stockItem : stockItems) {
-            if (stockItem.getProduct().getId().equals(productToRemove.getId())) {
-                throw new IllegalArgumentException("Product is still in stock. Cannot delete product.");
-            }
+        List<StockItem> stockItems = stockItemDAO.getStockItemsByProductId(id);
+        if (!stockItems.isEmpty()) {
+            throw new IllegalArgumentException("Product has stock items. Cannot delete product.");
         }
-        List<Category> categories = InMemoryCategoryRepository.getAllCategories();
-        for (Category category : categories) {
-            if (category.getProducts().contains(productToRemove)) {
-                category.removeProduct(productToRemove);
-            }
-        }
+
+        productDAO.removeFromProductsByCategory(id);
+
         productRepository.deleteProduct(id);
         productDAO.deleteProduct(id);
     }
@@ -81,7 +72,7 @@ public class InventoryControllerImpl implements InventoryController {
 
     public List<Product> getAllProductsDefinitions() {
         System.out.println("Getting all products...");
-        return productRepository.getAllProducts();
+        return productDAO.getAllProducts();
     }
 
     public List<StockItem> getAllStockItems() {
@@ -90,7 +81,11 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void printAllProducts() {
-        productRepository.printAllProducts();
+        System.out.println("------- Product Report -------");
+        List<Product> products = productDAO.getAllProducts();
+        for (Product product : products) {
+            System.out.println(product);
+        }
     }
 
     public void printAllCategories() {
@@ -176,7 +171,11 @@ public class InventoryControllerImpl implements InventoryController {
         if (!parentCategoryName.isEmpty() && parentCategory == null) {
             throw new IllegalArgumentException("Parent category not found. Aborting category add operation.");
         }
+        if (categoryDAO.categoryExists(catName)) {
+            throw new IllegalArgumentException("Category with the same name already exists.");
+        }
         Category newCategory = new Category(catName);
+        categoryDAO.saveCategory(newCategory);
 
         newCategory.setParentCategory(parentCategory);
         if (parentCategory != null) {
@@ -187,6 +186,13 @@ public class InventoryControllerImpl implements InventoryController {
                 throw new IllegalArgumentException("Parent category not found");
             }
         }
+    }
+
+    public String getOrCreateCategoryGroup(String parentName, String subName, String subSubName) {
+        String parentId = categoryDAO.getCategoryByName(parentName).getId();
+        String subId = categoryDAO.getCategoryByName(subName).getId();
+        String subSubId = categoryDAO.getCategoryByName(subSubName).getId();
+        return categoryDAO.getOrCreateCategoryGroup(parentId, subId, subSubId);
     }
 
     public void updateInventoryWithDefects(Product product, String location, LocalDate expiryDate, int defectedAmount) {
@@ -504,6 +510,7 @@ public class InventoryControllerImpl implements InventoryController {
         Discount discount = new Discount(discountDescription, type, discountTargetId, discountPercentage,
                 discountStartDate, discountEndDate, discountType);
         discountRepository.saveDiscount(discount);
+        discountDAO.saveDiscount(discount);
     }
 
     public void listDiscounts() {
@@ -556,40 +563,14 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public double getDiscountByProductId(String productId) {
-        Product product = productRepository.getProductById(productId);
-        Objects.requireNonNull(product, "Product not found");
-        List<Discount> discounts = discountRepository.getAllDiscounts();
-
-        double currentPricePercentage = 1; // Will be reverted before returned
-        for (Discount discount : discounts) {
-            if (!discount.isActive()) {
-                continue;
-            }
-            if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
-                if (discount.getTargetId().equals(productId)) {
-                    currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
-                    break;
-                }
-            }
+        if (productId == null || productId.isEmpty()) {
+            throw new IllegalArgumentException("Product ID cannot be null or empty.");
         }
-
-        Category currCategory = product.getCategory();
-        while (currCategory != null) {
-            for (Discount discount : discounts) {
-                if (!discount.isActive()) {
-                    continue;
-                }
-                if (discount.getTargetType() == DiscountTargetType.CATEGORY) {
-                    if (discount.getTargetId().equals(currCategory.getId())) {
-                        currentPricePercentage *= 1 - (discount.getDiscountPercentage() / 100);
-                        break;
-                    }
-                }
-            }
-            currCategory = currCategory.getParentCategory();
+        Product product = productDAO.getProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting discount retrieval operation.");
         }
-
-        return 100 * (1 - currentPricePercentage);
+        return discountDAO.getDiscountPercentageByProductId(productId);
     }
 
     public Product getProductByName(String name, String manufacturer) {
@@ -696,7 +677,7 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void updateMinimumStockLevel(String productId,int newMinimumStockLevel){
+    public void updateMinimumStockLevel(String productId, int newMinimumStockLevel) {
         Product product = productRepository.getProductById(productId);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting update operation.");

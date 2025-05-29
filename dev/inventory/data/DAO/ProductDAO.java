@@ -19,8 +19,8 @@ public class ProductDAO implements ProductRepository {
         String sql = """
                 INSERT INTO "Inventory"."Products" (
                 product_id, product_name, product_manufacturer, 
-                cost_price, min_stock_level, group_id, location
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                min_stock_level, group_id, location
+                ) VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
@@ -29,10 +29,9 @@ public class ProductDAO implements ProductRepository {
             statement.setString(1, product.getId());
             statement.setString(2, product.getName());
             statement.setString(3, product.getManufacturer());
-            statement.setDouble(4, product.getCostPrice());
-            statement.setInt(5, product.getMinimumStockLevel());
-            statement.setString(6, product.getCategory().getId());
-            statement.setString(7, product.getLocation());
+            statement.setInt(4, product.getMinimumStockLevel());
+            statement.setString(5, product.getCategoryGroupId());
+            statement.setString(6, product.getLocation());
 
             statement.executeUpdate();
         } catch (Exception e) {
@@ -46,7 +45,7 @@ public class ProductDAO implements ProductRepository {
         String sql = """
                 UPDATE "Inventory"."Products"
                 SET product_name = ?, product_manufacturer = ?, 
-                    cost_price = ?, min_stock_level = ?, group_id = ?, 
+                    min_stock_level = ?, group_id = ?, 
                     location = ?
                 WHERE product_id = ?
                 """;
@@ -56,11 +55,10 @@ public class ProductDAO implements ProductRepository {
 
             statement.setString(1, product.getName());
             statement.setString(2, product.getManufacturer());
-            statement.setDouble(3, product.getCostPrice());
-            statement.setInt(4, product.getMinimumStockLevel());
-            statement.setString(5, product.getCategory().getId());
-            statement.setString(6, product.getLocation());
-            statement.setString(7, product.getId());
+            statement.setInt(3, product.getMinimumStockLevel());
+            statement.setString(4, product.getCategoryGroupId());
+            statement.setString(5, product.getLocation());
+            statement.setString(6, product.getId());
 
             statement.executeUpdate();
         } catch (Exception e) {
@@ -90,17 +88,8 @@ public class ProductDAO implements ProductRepository {
     @Override
     public Product getProductById(String id) {
         String sql = """
-                SELECT 
-                    p.*,
-                    cg.parent_category_id, cg.sub_category_id,    cg.sub_sub_category_id,
-                    c1.category_name AS parent_name,
-                    c2.category_name AS sub_name,
-                    c3.category_name AS sub_sub_name
-                FROM "inventory"."Products" p
-                JOIN "inventory"."CategoryGroups" cg ON p.group_id = cg.group_id
-                JOIN "inventory"."Categories" c1 ON cg.parent_category_id = c1.category_id
-                JOIN "inventory"."Categories" c2 ON cg.sub_category_id = c2.category_id
-                JOIN "inventory"."Categories" c3 ON cg.sub_category_id2 = c3.category_id
+                SELECT *
+                FROM "Inventory"."Products" p
                 WHERE p.product_id = ?
                 """;
 
@@ -123,18 +112,7 @@ public class ProductDAO implements ProductRepository {
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String sql = """
-                SELECT 
-                    p.*,
-                    cg.parent_category_id, cg.sub_category_id,    cg.sub_sub_category_id,
-                    c1.category_name AS parent_name,
-                    c2.category_name AS sub_name,
-                    c3.category_name AS sub_sub_name
-                FROM "inventory"."Products" p
-                JOIN "inventory"."CategoryGroups" cg ON p.group_id = cg.group_id
-                JOIN "inventory"."Categories" c1 ON cg.parent_category_id = c1.category_id
-                JOIN "inventory"."Categories" c2 ON cg.sub_category_id = c2.category_id
-                JOIN "inventory"."Categories" c3 ON cg.sub_category_id2 = c3.category_id
-                WHERE p.product_id = ?
+                SELECT * FROM "Inventory"."Products" p
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
@@ -155,35 +133,11 @@ public class ProductDAO implements ProductRepository {
             String id = res.getString("product_id");
             String name = res.getString("product_name");
             String manufacturer = res.getString("product_manufacturer");
-            double costPrice = res.getDouble("cost_price");
             int minimumStockLevel = res.getInt("min_stock_level");
-            String category_group = res.getString("group_id"); //TODO: Fetch categories by ID's
+            String category_group = res.getString("group_id");
             String location = res.getString("location");
 
-            Product product = new Product(id, name, manufacturer, costPrice, minimumStockLevel, location);
-
-            // Category mapping
-            String parentId = res.getString("parent_category_id");
-            String subId = res.getString("sub_category_id");
-            String subSubId = res.getString("sub_sub_category_id");
-
-            String parentName = res.getString("parent_name");
-            String subName = res.getString("sub_name");
-            String subSubName = res.getString("sub_sub_name");
-
-            Category parentCategory = new Category(parentId, parentName);
-            Category subCategory = new Category(subId, subName);
-            Category subSubCategory = new Category(subSubId, subSubName);
-
-            parentCategory.addSubCategory(subCategory);
-            subCategory.addSubCategory(subSubCategory);
-
-            product.setCategory(parentCategory);
-
-            parentCategory.addProduct(product);
-            subCategory.addProduct(product);
-            subSubCategory.addProduct(product);
-
+            Product product = new Product(id, name, manufacturer, minimumStockLevel, category_group, location);
 
             return product;
 
@@ -194,8 +148,48 @@ public class ProductDAO implements ProductRepository {
         }
     }
 
-    @Override
-    public void printAllProducts() {
-        System.out.println("All Products:");
+
+    public void removeFromProductsByCategory(String productId) {
+        String sql = """
+                DELETE FROM "Inventory"."Product_by_Category"
+                WHERE product_id = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, productId);
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error removing products by category: " + e.getMessage());
+        }
+    }
+
+    public boolean productExists(String name, String manufacturer) {
+        String sql = """
+                SELECT 1
+                FROM "Inventory"."Products"
+                WHERE product_name = ? AND product_manufacturer = ? 
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            statement.setString(2, manufacturer);
+            ResultSet res = statement.executeQuery();
+
+            return res.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
     }
 }
+
+
