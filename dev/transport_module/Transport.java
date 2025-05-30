@@ -81,6 +81,17 @@ public class Transport {
         return id;
     }
 
+    public Site getSource() {
+        return source;
+    }
+    public int getMaxWeight(){
+        return this.maxWeight;
+    }
+
+    public Driver getDriver(){
+        return this.driver;
+    }
+
     /***
      * @return true if the transport was already sent, false otherwise
      */

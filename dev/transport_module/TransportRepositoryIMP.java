@@ -35,7 +35,6 @@ public class TransportRepositoryIMP implements ITransportRepository{
             try {
                 Optional<TransportDTO> transportDTO = dao.getTransportByid(id);
                 if(transportDTO.isPresent()){
-                    //todo : Posposed because need to update Transport
                     TransportDTO dto = transportDTO.get();
                     DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
                     Site s = new Site(dto.getSiteName(), "DefaultArea"); // Area feature is posposed
@@ -105,7 +104,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
     @Override
     public Transport TransportDTOtoTransport(TransportDTO dto) throws SQLException, ATransportModuleException {
         Transport t = getTransportByid(dto.getId());
-        if(t.getDate() == dto.getDate() && t.getSource().getName() == dto.getSiteName() && t.getmaxWeight() == dto.getMaxWeight()){
+        if(t.getDate() == dto.getDate() && t.getSource().getName() == dto.getSiteName() && t.getMaxWeight() == dto.getMaxWeight()){
             if((t.getDriver() == null && Integer.valueOf(dto.getDriverID()) != -1 )|| t.getDriver().getId() == dto.getDriverID()){
                 throw new TransportMismatchException("Miss match data");
             }
@@ -116,12 +115,12 @@ public class TransportRepositoryIMP implements ITransportRepository{
 
     @Override
     public TransportDTO transportToTransportDTO(Transport transport) {
-        return new TransportDTO(transport.getId(), transport.getDate(), transport.isSent(), transport.getmaxWeight(),transport.getDriver().getId(), transport.getTruck().getPlateNumber(),transport.getSourceSiteName(), transport.getDeparture_time() );
+        return new TransportDTO(transport.getId(), transport.getDate(), transport.isSent(), transport.getMaxWeight() ,transport.getDriver().getId(), transport.getTruck().getPlateNumber(),transport.getSource().getName(), transport.getDeparture_time() );
     }
 
 
 
-    public TransportRepositoryIMP() throws SQLException, TransportMismatchException {
+    public TransportRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableId = dao.getHieghestTransportID() + 1;
         //set the mapper and fill it with transports:
         this.transports = new HashMap<>();
