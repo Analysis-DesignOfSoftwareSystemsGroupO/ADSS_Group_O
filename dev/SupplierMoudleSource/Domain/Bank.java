@@ -14,6 +14,12 @@ public class Bank {
         this.bankBranch = bankBranch;
         this.ownerID = ownerID;
     }
+    public Bank(BankDTO bankDTO) {
+        this.bankAccount = bankDTO.getBankAccount();
+        this.bankNumber = bankDTO.getBankNumber();
+        this.bankBranch = bankDTO.getBankBranch();
+        this.ownerID = bankDTO.getOwnerID();
+    }
 
     public Bank(Bank other) {
         this.bankAccount = other.bankAccount;

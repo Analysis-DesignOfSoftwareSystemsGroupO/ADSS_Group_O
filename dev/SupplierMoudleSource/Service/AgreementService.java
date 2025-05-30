@@ -5,7 +5,7 @@ import DTO.BranchDTO;
 import DTO.SupplierDTO;
 import SupplierMoudleSource.Repository.AgreementRepository;
 import SupplierMoudleSource.Repository.BranchesRepository;
-import SupplierMoudleSource.Repository.ProductDataBase;
+import SupplierMoudleSource.Repository.ProductRepository;
 import SupplierMoudleSource.Repository.SupplierRepository;
 import SupplierMoudleSource.Domain.*;
 
@@ -13,7 +13,7 @@ public class AgreementService {
     SupplierRepository supplierRepository = SupplierRepository.getInstance();
     AgreementRepository agreementRepository = AgreementRepository.getInstance();
     BranchesRepository branchesDataBase = BranchesRepository.getInstance();
-    ProductDataBase productDataBase = ProductDataBase.getInstance();
+    ProductRepository productRepository = ProductRepository.getInstance();
 
     //removes an agreement
     public void removeAgreement(String branchId, String supplierId) throws Exception {

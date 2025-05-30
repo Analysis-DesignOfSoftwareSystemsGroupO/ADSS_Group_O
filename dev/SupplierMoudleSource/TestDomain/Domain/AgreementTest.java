@@ -19,8 +19,8 @@ class AgreementTest {
                 "401", "Dudi", "0547559841",
                 "Manager", "Temporary Delivery", "");
          agreement = new Agreement(branch, supplier);
-         Product product = new Product("1", "Bamba", "Lulu");
-         Product product2 = new Product("2", "Bamba", "Osem");
+         Product product = new Product("1", "Bamba", "Lulu", 10);
+         Product product2 = new Product("2", "Bamba", "Osem", 10);
          suppliedItem2 = new SuppliedItem(25, product2);
          suppliedItem1 = new SuppliedItem(50, product);
          discount1 = new Discount(suppliedItem1, 5, 100);

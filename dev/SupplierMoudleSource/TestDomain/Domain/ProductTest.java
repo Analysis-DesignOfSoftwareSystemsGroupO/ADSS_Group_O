@@ -10,7 +10,7 @@ class ProductTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product("1", "Bamba", "Osem");
+        product = new Product("1", "Bamba", "Osem", 10);
     }
 
     @Test

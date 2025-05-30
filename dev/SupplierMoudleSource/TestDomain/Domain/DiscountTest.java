@@ -14,7 +14,7 @@ class DiscountTest {
 
     @BeforeEach
     void setUp() {
-         product = new Product("1", "Tuna", "RamiLevi");
+         product = new Product("1", "Tuna", "RamiLevi", 10);
          suppliedItem = new SuppliedItem(50, product);
          discount = new Discount(suppliedItem, 10, 5);
     }

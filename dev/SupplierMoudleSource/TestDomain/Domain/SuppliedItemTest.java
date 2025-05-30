@@ -10,7 +10,7 @@ class SuppliedItemTest {
     private Product product;
     @BeforeEach
     void setUp() {
-         product = new Product("1", "Bamba", "Lulu");
+         product = new Product("1", "Bamba", "Lulu", 10);
          suppliedItem = new SuppliedItem(15, product);
     }
 

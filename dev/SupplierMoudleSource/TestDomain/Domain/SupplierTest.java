@@ -52,7 +52,7 @@ class SupplierTest {
 
     @Test
     void addProduct() {
-        Product product = new Product("1", "Bamba", "osem");
+        Product product = new Product("1", "Bamba", "osem", 10);
         assertThrows(Exception.class, () -> supplier.addProduct(product, -15), "cannot insert negative price");
         assertThrows(Exception.class, () -> supplier.addProduct(null, 15), "cannot insert null product");
         supplier.addProduct(product, 15);

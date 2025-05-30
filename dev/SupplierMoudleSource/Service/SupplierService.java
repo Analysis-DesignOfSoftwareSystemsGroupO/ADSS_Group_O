@@ -2,7 +2,7 @@ package SupplierMoudleSource.Service;
 
 import DTO.*;
 import SupplierMoudleSource.Repository.AgreementRepository;
-import SupplierMoudleSource.Repository.ProductDataBase;
+import SupplierMoudleSource.Repository.ProductRepository;
 import SupplierMoudleSource.Repository.SupplierRepository;
 import SupplierMoudleSource.Domain.*;
 
@@ -11,28 +11,28 @@ import java.util.List;
 
 public class SupplierService {
     private final SupplierRepository supplierRepository = SupplierRepository.getInstance();
-    private ProductDataBase productDataBase = ProductDataBase.getInstance();
+    private ProductRepository productRepository = ProductRepository.getInstance();
     private AgreementRepository agreementRepository = AgreementRepository.getInstance();
 
     //this method creates a supplier
-    public void createSupplier(String id, String supplierName, String supplierPaymentMethod,
+    public void createSupplier(String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
-                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay, String dayOfWeek) throws Exception {
+                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay, String ownerId) throws Exception {
 
 
         supplierRepository.addSupplier(supplierName, new PaymentMethodDTO(supplierPaymentMethod),
-                new BankDTO(bankAccount, bankNumber, bankBranch, id), new InformationContactDTO(contactName, contactPhoneNumber, contactTitle), new DeliveryDTO(deliveryWay));
+                new BankDTO(bankAccount, bankNumber, bankBranch, ownerId), new InformationContactDTO(contactName, contactPhoneNumber, contactTitle), new DeliveryDTO(deliveryWay));
 
     }
 
     //adds a new product to an existing supplier
-    public void addNewProductToSupplier(String supplierId, String productId, String productName, String manufacturer, int price, int shelfLife) throws Exception {
+    public void addNewProductToSupplier(String supplierId, String productName, String manufacturer, int price, int shelfLife) throws Exception {
         if (supplierRepository.getSupplier(supplierId) == null) {
             throw new NullPointerException("Supplier does not exist");
         }
         //add product to product database handles multiple products in the db
-        Product p = new Product(productId, productName, manufacturer, shelfLife); //todo possibly get the product from the productRepository if exists
-        productDataBase.addProduct(p);
+
+        String productId = productRepository.addProduct(productName, manufacturer, shelfLife);
         //add product to supplier
         supplierRepository.addProduct(new SuppliedItemDTO(price, new ProductDTO(productId, productName, manufacturer, shelfLife)), supplierId);
     }
