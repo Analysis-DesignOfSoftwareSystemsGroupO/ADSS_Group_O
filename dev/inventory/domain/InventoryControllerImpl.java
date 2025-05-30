@@ -161,11 +161,11 @@ public class InventoryControllerImpl implements InventoryController {
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock status change operation.");
         }
-        String stockItemId = getStockItemByBatch(product, location, expiryDate, StockItemStatus.OK);
+        String stockItemId = stockItemDAO.getStockItemByBatch(product, location, expiryDate, StockItemStatus.OK);
         if (stockItemId == null) {
             throw new IllegalArgumentException("No stock item found with the specified batch and status.");
         }
-        StockItem originStockItem = getStockItemById(stockItemId);
+        StockItem originStockItem = stockItemDAO.getStockItemById(stockItemId);
         if (originStockItem.getQuantity() < defectedAmount) {
             throw new IllegalArgumentException("Defected amount exceeds available stock.");
         }
@@ -175,13 +175,14 @@ public class InventoryControllerImpl implements InventoryController {
             System.out.println(" ***** Warning: Product " + product.getName() +
                     " is below minimum stock level. Please restock. *****");
         }
+        stockItemDAO.updateStockItem(originStockItem);
     }
 
     public void changeStockItemStatus(StockItem stockItem, StockItemStatus newStatus) {
         System.out.println("Changing stock item status...");
         if (stockItem.getStatus() != newStatus) {
             stockItem.setStatus(newStatus);
-            stockItemRepository.saveStockItem(stockItem);
+            stockItemDAO.updateStockItem(stockItem);
         }
     }
 
@@ -218,7 +219,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public StockItem getStockItemById(String id) {
-        StockItem stockItem = stockItemRepository.getStockItemById(id);
+        StockItem stockItem = stockItemDAO.getStockItemById(id);
         if (stockItem == null) {
             throw new IllegalArgumentException("Stock item not found. Aborting stock move operation.");
         }
@@ -233,7 +234,7 @@ public class InventoryControllerImpl implements InventoryController {
             // Create a new StockItem since no matching one exists
             StockItem newStockItem = new StockItem(0, location, StockItemStatus.OK, expiryDate);
             newStockItem.setProduct(product);
-            stockItemRepository.saveStockItem(newStockItem);
+            stockItemDAO.saveStockItem(newStockItem);
             return newStockItem.getStockItemId();
         }
     }
@@ -244,7 +245,7 @@ public class InventoryControllerImpl implements InventoryController {
         origin.setQuantity(origin.getQuantity() - amount);
         destination.setQuantity(destination.getQuantity() + amount);
         if (origin.getQuantity() == 0) {
-            stockItemRepository.deleteStockItem(origin.getStockItemId());
+            stockItemDAO.deleteStockItem(origin.getStockItemId());
         }
     }
 
@@ -253,7 +254,7 @@ public class InventoryControllerImpl implements InventoryController {
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
         }
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         LocalDate maxDate = LocalDate.now().minusYears(100);
         String productToMove = null;
         for (StockItem stockItem : stockItems) {
@@ -275,7 +276,7 @@ public class InventoryControllerImpl implements InventoryController {
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock move operation.");
         }
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         LocalDate maxDate = LocalDate.now();
         String productToMove = null;
         for (StockItem stockItem : stockItems) {
@@ -297,7 +298,7 @@ public class InventoryControllerImpl implements InventoryController {
         } else if (location.equals("storage")) {
             stockItems = getStockItemsFromStorage();
         } else if (location.equals("all")) {
-            stockItems = stockItemRepository.getAllStockItems();
+            stockItems = stockItemDAO.getAllStockItems();
         } else {
             throw new IllegalArgumentException("Invalid location. Aborting stock move operation.");
         }
@@ -313,9 +314,9 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void removeStock(String id) {
         System.out.println("Removing stock item with ID: " + id);
-        StockItem stockItemToRemove = stockItemRepository.getStockItemById(id);
+        StockItem stockItemToRemove = stockItemDAO.getStockItemById(id);
         Objects.requireNonNull(stockItemToRemove, "Stock item not found");
-        stockItemRepository.deleteStockItem(id);
+        stockItemDAO.deleteStockItem(id);
         int itemQuantity = countProductQuantity(stockItemToRemove.getProduct().getId());
         int minQuantity = stockItemToRemove.getProduct().getMinimumStockLevel();
         if (itemQuantity <= minQuantity) {
@@ -376,7 +377,7 @@ public class InventoryControllerImpl implements InventoryController {
         if (product == null) {
             throw new IllegalArgumentException("Product not found.");
         }
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getProduct().getId().equals(product.getId())) {
                 System.out.println("Stock ID: " + stockItem.getStockItemId()
@@ -396,7 +397,7 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Product not found.");
         }
         int count = 0;
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getProduct().getId().equals(id) && stockItem.getLocation().equals("storage")) {
                 count += stockItem.getQuantity();
@@ -412,7 +413,7 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Product not found.");
         }
         int count = 0;
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getProduct().getId().equals(id) && stockItem.getStatus() == StockItemStatus.OK) {
                 count += stockItem.getQuantity();
@@ -428,7 +429,7 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Product not found.");
         }
         int count = 0;
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getProduct().getId().equals(id) && (stockItem.getStatus() != StockItemStatus.OK)) {
                 count += stockItem.getQuantity();
@@ -440,7 +441,7 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void printDefectedStockItems() {
         System.out.println("Defected stock items:");
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.DAMAGED) {
                 System.out.println(stockItem);
@@ -497,12 +498,12 @@ public class InventoryControllerImpl implements InventoryController {
             if (stockItem.getQuantity() >= remainingQuantity) {
                 stockItem.setQuantity(stockItem.getQuantity() - remainingQuantity);
                 if (stockItem.getQuantity() == 0) {
-                    stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+                    stockItemDAO.deleteStockItem(stockItem.getStockItemId());
                 }
                 break;
             } else {
                 remainingQuantity -= stockItem.getQuantity();
-                stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+                stockItemDAO.deleteStockItem(stockItem.getStockItemId());
             }
         }
 
@@ -536,7 +537,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public Product getProductByName(String name, String manufacturer) {
-        List<Product> products = productRepository.getAllProducts();
+        List<Product> products = productDAO.getAllProducts();
         for (Product product : products) {
             if (product.getName().equals(name) && product.getManufacturer().equals(manufacturer)) {
                 return product;
@@ -546,7 +547,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public List<StockItem> getStockItemsFromStorage() {
-        List<StockItem> allStockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> allStockItems = stockItemDAO.getAllStockItems();
         List<StockItem> storageItems = new ArrayList<>();
         for (StockItem stockItem : allStockItems) {
             if (stockItem.getLocation().equals("storage")) {
@@ -557,7 +558,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public List<StockItem> getStockItemsInStore() {
-        List<StockItem> allStockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> allStockItems = stockItemDAO.getAllStockItems();
         List<StockItem> storeItems = new ArrayList<>();
         for (StockItem stockItem : allStockItems) {
             if (!stockItem.getLocation().equals("storage")) {
@@ -588,7 +589,7 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void printExpiredStockItems() {
         System.out.println("Expired stock items:");
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.EXPIRED) {
                 System.out.println(stockItem);
@@ -598,20 +599,20 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void clearDefectedStockItems() {
         System.out.println("Clearing defected stock items...");
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.DAMAGED) {
-                stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+                stockItemDAO.deleteStockItem(stockItem.getStockItemId());
             }
         }
     }
 
     public void clearExpiredStock() {
         System.out.println("Clearing expired stock...");
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.EXPIRED) {
-                stockItemRepository.deleteStockItem(stockItem.getStockItemId());
+                stockItemDAO.deleteStockItem(stockItem.getStockItemId());
             }
         }
     }

@@ -140,7 +140,7 @@ public class ProductDAO implements ProductRepository {
             String category_group = res.getString("group_id");
             String location = res.getString("location");
 
-            Product product = new Product(id, name, manufacturer, minimumStockLevel, category_group, location);
+            Product product = new Product(id, name, manufacturer, minimumStockLevel, location, category_group);
 
             return product;
 

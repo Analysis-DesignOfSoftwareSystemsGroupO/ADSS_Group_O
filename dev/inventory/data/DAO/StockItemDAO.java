@@ -172,5 +172,33 @@ public class StockItemDAO {
         }
         return stockItems;
     }
+
+
+    public String getStockItemByBatch(Product product,String location,LocalDate expiryDate,StockItemStatus Status){
+        String sql = """
+                SELECT stock_id
+                FROM "Inventory"."Stock_Items"
+                WHERE product_id = ? AND location = ? AND expiry_date = ? AND status = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, product.getId());
+            statement.setString(2, location);
+            statement.setDate(3, java.sql.Date.valueOf(expiryDate));
+            statement.setString(4, Status.name());
+
+            ResultSet res = statement.executeQuery();
+
+            if (res.next()) {
+                return res.getString("stock_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 }
 
