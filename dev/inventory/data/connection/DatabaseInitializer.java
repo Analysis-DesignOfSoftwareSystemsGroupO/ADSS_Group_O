@@ -36,6 +36,7 @@ public class DatabaseInitializer {
                 product_name         TEXT NOT NULL,
                 product_manufacturer TEXT NOT NULL,
                 min_stock_level      INTEGER NOT NULL,
+                selling_price        DOUBLE PRECISION NOT NULL,
                 group_id             TEXT NOT NULL,
                 location             TEXT NOT NULL,
                 FOREIGN KEY (group_id) REFERENCES "Inventory"."Category_Groups"(group_id)
