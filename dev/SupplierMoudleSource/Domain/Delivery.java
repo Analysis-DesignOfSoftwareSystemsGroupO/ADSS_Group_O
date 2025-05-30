@@ -1,10 +1,11 @@
+
 package SupplierMoudleSource.Domain;
 
 import DTO.DeliveryDTO;
 
 public  class Delivery {
-    private final String arrivalDay;
     private String deliveryWay;
+    private String arrivalDay;
 
 
     //empty case used for diffrent methods of delivery
@@ -28,6 +29,10 @@ public  class Delivery {
         this.deliveryWay = deliveryWay;
         this.arrivalDay = arrivalDay;
     }
+    public Delivery(DeliveryDTO deliveryDTO) {
+        this.deliveryWay = deliveryDTO.getDeliveryWay();
+
+    }
     public String getDeliveryWay() {
         return deliveryWay;
     }
@@ -40,13 +45,10 @@ public  class Delivery {
         }
         return false;
     }
-
+    public DeliveryDTO getDeliveryDTO() {
+        return new DeliveryDTO(deliveryWay);
+    }
     public String getArrivalDay() {
         return arrivalDay;
     }
-
-    public DeliveryDTO getDeliveryDTO(){
-        return new DeliveryDTO(deliveryWay);
-    }
 }
-

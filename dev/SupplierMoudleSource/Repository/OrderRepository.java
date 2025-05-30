@@ -1,8 +1,10 @@
-package SupplierMoudleSource.DataBase;
+package SupplierMoudleSource.Repository;
 
+import DTO.OrderDTO;
 import SupplierMoudleSource.DAO.OrderDAO;
 import SupplierMoudleSource.Domain.Order;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +29,7 @@ public class OrderRepository {
     }
 
 
-    public void addOrder(String supplierID, Order order) {
+    public void addNewOrder(String supplierID, Order order) throws SQLException {
         if (supplierID == null || order == null){
             return;
         }
@@ -41,24 +43,41 @@ public class OrderRepository {
             orderList.add(order);
             orders.put(supplierID, orderList);
         }
-        orderDAO.addOrder();
     }
 
-    public List<Order> getOrdersBySupplier(String supplierID) {
+    //returns closed orders by supplier id
+    public List<OrderDTO> getOrdersBySupplier(String supplierID) throws SQLException {
         if (supplierID == null){
             throw new NullPointerException();
         }
-        if (!orders.containsKey(supplierID)) {
+        if (orderDAO.getOrdersBySupplierID(supplierID).isEmpty()) {
             throw new NullPointerException("Supplier Have No Orders");
         }
-        List<Order> copyOrders = orders.get(supplierID);
-        return copyOrders;
+        return orderDAO.getOrdersBySupplierID(supplierID);
     }
 
-    public void removeOrder(String supplierId, Order order) {
+    public void removeUnclosedOrder(String supplierId, Order order) {
         orders.get(supplierId).remove(order);
         if (orders.get(supplierId).isEmpty()){
             orders.remove(supplierId);
         }
+    }
+
+    public List<Order> getUnclosedOrdersBySupplier(String supplierID){
+        if (supplierID == null){
+            throw new NullPointerException("Supplier ID is null");
+        }
+        List<Order> allOrders = orders.get(supplierID);
+        List<Order> unclosedOrders = new ArrayList<>();
+
+        if (allOrders != null) {
+            for (Order order : allOrders) {
+                if (!order.isOrderClosed()) {
+                    unclosedOrders.add(order);
+                }
+            }
+        }
+
+        return unclosedOrders;
     }
 }

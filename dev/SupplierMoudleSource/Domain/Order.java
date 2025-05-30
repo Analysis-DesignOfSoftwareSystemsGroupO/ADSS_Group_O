@@ -1,7 +1,7 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.OrderDTO;
-import DTO.SuppliedItemDTO;
+import DTO.*;
+import SupplierMoudleSource.Repository.*;
 
 import java.util.*;
 
@@ -32,6 +32,44 @@ public class Order {
     private static int generateOrderID() {
         return ++idCounter;
     }
+
+
+    // Order constructor -> gets orderDTO and create Order
+    public Order(OrderDTO orderDTO) throws Exception {
+        if (orderDTO == null) {
+            throw new IllegalArgumentException("orderDTO is null");
+        }
+
+        Branch branch = new Branch(BranchesRepository.getInstance().getBranch(orderDTO.getBranchID()));
+        BranchDTO branchDTO = branch.getBranchDTO();
+        SupplierDTO supplierDTO = SupplierRepository.getInstance().getSupplier(orderDTO.getSupplierID());
+        AgreementDTO agreementDTO = AgreementRepository.getInstance().getAgreement(branchDTO.getBranchID(), supplierDTO.getSupplierID());
+        Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
+
+        if (agreement == null) {
+            throw new NullPointerException("Agreement is missing in memory");
+        }
+
+        Order order = new Order(agreement, branch);
+        order.totalPrice = orderDTO.getTotalPrice();
+        order.orderClosed = true;
+
+        for (Map.Entry<SuppliedItemDTO, Integer> entry : orderDTO.getSuppliedItems().entrySet()) {
+            SuppliedItemDTO itemDTO = entry.getKey();
+            int quantity = entry.getValue();
+
+            Product product = new Product(
+                    itemDTO.product.productID,
+                    itemDTO.product.productName,
+                    itemDTO.product.productManufacturer,
+                    itemDTO.product.shelfLifeDays
+            );
+
+            SuppliedItem item = new SuppliedItem(itemDTO.suppliedItemPrice, product);
+            order.suppliedItems.put(item, quantity);
+        }
+    }
+
 
     //adds item to an order
     public void addItemToOrder(String itemId, int quantity) throws Exception {
@@ -121,5 +159,4 @@ public class Order {
         }
         return new OrderDTO(this.orderID, this.orderDate, this.totalPrice, suppliedItemsMap, this.branch.getBranchID(), this.agreement.getSupplierID());
     }
-    
 }

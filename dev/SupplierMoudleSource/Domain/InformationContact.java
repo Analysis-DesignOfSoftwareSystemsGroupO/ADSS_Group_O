@@ -1,3 +1,4 @@
+
 package SupplierMoudleSource.Domain;
 
 import DTO.InformationContactDTO;
@@ -14,6 +15,11 @@ public class InformationContact {
         this.contactName = contactName;
         this.contactPhone = contactPhone;
         this.title = title;
+    }
+    public InformationContact(InformationContactDTO dto) {
+        this.contactName = dto.getContactName();
+        this.contactPhone = dto.getContactPhone();
+        this.title = dto.getTitle();
     }
 
     public String getContactName() {
@@ -48,12 +54,12 @@ public class InformationContact {
         this.title = title;
     }
 
+    public InformationContactDTO getInformationContactDTO() {
+        return new InformationContactDTO(contactName, contactPhone, title);
+    }
+
     @Override
     public String toString() {
         return "ContactName: " + contactName + ", Phone: " + contactPhone + ", Title: " + title;
-    }
-
-    public InformationContactDTO getInformationContactDTO() {
-        return new InformationContactDTO(contactName, contactPhone, title);
     }
 }

@@ -1,12 +1,12 @@
 package SupplierMoudleSource.Service;
 
-import SupplierMoudleSource.DataBase.BranchesDataBase;
+import SupplierMoudleSource.Repository.BranchesRepository;
 import SupplierMoudleSource.Domain.Branch;
 
 import java.util.ArrayList;
 
 public class BranchService {
-    private BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
+    private BranchesRepository branchesDataBase = BranchesRepository.getInstance();
 
     //method that checks if a branch id is valid
     public boolean isValidBranch(String branchId) {

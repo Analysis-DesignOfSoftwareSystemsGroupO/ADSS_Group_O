@@ -5,8 +5,6 @@ import SupplierMoudleSource.DAO.AgreementDAO;
 import SupplierMoudleSource.DAO.BranchDAO;
 import SupplierMoudleSource.DAO.ProductDAO;
 import SupplierMoudleSource.DAO.SupplierDAO;
-import SupplierMoudleSource.DataBase.*;
-import SupplierMoudleSource.Domain.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -1,6 +1,9 @@
 package SupplierMoudleSource.Domain;
 
 import DTO.DiscountDTO;
+import DTO.SuppliedItemDTO;
+
+import java.util.Objects;
 
 public class Discount {
     private SuppliedItem suppliedItem;
@@ -17,6 +20,18 @@ public class Discount {
         this.suppliedItem = suppliedItem;
         this.quantity = quantity;
         this.discount = discount;
+    }
+
+    public Discount(DiscountDTO discountDTO, SuppliedItemDTO suppliedItemDTO) {
+        if (discountDTO == null) {
+            throw new IllegalArgumentException("DiscountDTO cannot be null");
+        }
+        if (!Objects.equals(suppliedItemDTO.product.productID, discountDTO.suppliedItemid)){
+            throw new IllegalArgumentException("Cant build discount with unmatching productid");
+        }
+        this.suppliedItem = new SuppliedItem(suppliedItemDTO);
+        this.quantity = discountDTO.quantity;
+        this.discount = discountDTO.discount;
     }
 
     public DiscountDTO getDiscountDTO() {

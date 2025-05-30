@@ -8,9 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static DataBase.PostgresConnection.getConnection;
 
@@ -131,5 +129,78 @@ public class OrderDAO {
         }
         return oDTO;
     }
+
+    public List<OrderDTO> getOrdersBySupplierID(String supplierID) throws SQLException {
+        if (supplierID == null || supplierID.isEmpty()) {
+            throw new SQLException("Supplier ID is null or empty");
+        }
+        List<OrderDTO> ordersBySupplierDTOList = new ArrayList<>();
+        String sql = "SELECT * FROM supplierinventorydb.order WHERE supplierid = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, supplierID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String orderID = rs.getString("id");
+                Date oDate = rs.getDate("date");
+                int oTotalPrice = rs.getInt("totalPrice");
+                String oBranchID = rs.getString("branchID");
+
+                Map<SuppliedItemDTO, Integer> suppliedItems = new HashMap<>();
+
+                String sql2 = "SELECT * FROM supplierinventorydb.productsinorder WHERE orderid = ?";
+                try (Connection con2 = getConnection();
+                     PreparedStatement pstmt2 = con2.prepareStatement(sql2)) {
+                    pstmt2.setString(1, orderID);
+                    ResultSet rs2 = pstmt2.executeQuery();
+
+                    while (rs2.next()) {
+                        Integer quantity = rs2.getInt("quantity");
+                        String suppliedItemID = rs2.getString("suppliedItemID");
+
+                        String sql3 = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
+                        try (Connection con3 = getConnection();
+                             PreparedStatement pstmt3 = con3.prepareStatement(sql3)) {
+                            pstmt3.setString(1, suppliedItemID);
+                            ResultSet rs3 = pstmt3.executeQuery();
+
+                            if (rs3.next()) {
+                                int id = rs3.getInt("id");
+                                String name = rs3.getString("name");
+                                String manufacturer = rs3.getString("manufacturer");
+                                int shelfLife = rs3.getInt("shelfLifeDays");
+
+                                ProductDTO productDTO = new ProductDTO(Integer.toString(id), name, manufacturer, shelfLife);
+
+                                int price = 0;
+                                String sql4 = "SELECT price FROM supplierinventorydb.productinagreement WHERE productid = ? AND supplierid = ? AND branchid = ?";
+
+                                try (Connection con4 = getConnection();
+                                     PreparedStatement pstmt4 = con4.prepareStatement(sql4)) {
+
+                                    pstmt4.setInt(1, id);
+                                    pstmt4.setString(2, supplierID);
+                                    pstmt4.setString(3, oBranchID);
+
+                                    ResultSet rs4 = pstmt4.executeQuery();
+                                    if (rs4.next()) {
+                                        price = rs4.getInt("price");
+                                    }
+                                }
+                                SuppliedItemDTO suppliedItem = new SuppliedItemDTO(price, productDTO);
+                                suppliedItems.put(suppliedItem, quantity);
+                            }
+                        }
+                    }
+                }
+                OrderDTO orderDTO = new OrderDTO(orderID, oDate, oTotalPrice, suppliedItems, oBranchID, supplierID);
+                ordersBySupplierDTOList.add(orderDTO);
+            }
+        }
+        return ordersBySupplierDTOList;
+    }
+
 
 }

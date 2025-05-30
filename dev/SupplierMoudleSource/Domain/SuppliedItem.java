@@ -1,5 +1,7 @@
+
 package SupplierMoudleSource.Domain;
 
+import DTO.ProductDTO;
 import DTO.SuppliedItemDTO;
 
 public class SuppliedItem {
@@ -18,10 +20,17 @@ public class SuppliedItem {
         this.product = product;
         this.suppliedItemID = product.getProductID();
     }
-
+    public SuppliedItem(SuppliedItemDTO suppliedItemDTO) {
+        if (suppliedItemDTO == null) {
+            throw new IllegalArgumentException("Supplied item ID cannot be null");
+        }
+        this.suppliedItemPrice = suppliedItemDTO.suppliedItemPrice;
+        this.product = new Product(suppliedItemDTO.product);
+        this.suppliedItemID = product.getProductID();
+    }
 
     public SuppliedItemDTO getSuppliedItemDTO() {
-        return new SuppliedItemDTO(suppliedItemPrice, product.ggetProductDTO());
+        return new SuppliedItemDTO(suppliedItemPrice, product.transactionToDTO());
     }
 
     public Product getProduct() {

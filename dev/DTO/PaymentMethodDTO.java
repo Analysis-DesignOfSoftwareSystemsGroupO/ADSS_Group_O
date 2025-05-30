@@ -10,4 +10,5 @@ public class PaymentMethodDTO {
     public String getPaymentMethod() {
         return paymentMethod;
     }
+
 }

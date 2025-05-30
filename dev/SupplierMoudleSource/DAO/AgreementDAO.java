@@ -1,9 +1,6 @@
 package SupplierMoudleSource.DAO;
 
-import DTO.AgreementDTO;
-import DTO.DiscountDTO;
-import DTO.ProductDTO;
-import DTO.SuppliedItemDTO;
+import DTO.*;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Discount;
 import SupplierMoudleSource.Domain.SuppliedItem;
@@ -18,7 +15,7 @@ import java.util.List;
 import static DataBase.PostgresConnection.getConnection;
 
 public class AgreementDAO {
-    public void addAgreement(String branchid, String supplierid){
+    public void addAgreement(String branchid, String supplierid) throws Exception {
         String sql = "insert into supplierinventorydb.agreement (branchid, supplierid) values(?,?)";
         try (Connection con = getConnection()){
             PreparedStatement ps = con.prepareStatement(sql);
@@ -26,7 +23,7 @@ public class AgreementDAO {
             ps.setInt(2, Integer.parseInt(supplierid));
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new Exception("Agreement already exists");
         }
     }
 
@@ -53,7 +50,7 @@ public class AgreementDAO {
         }
     }
 
-    public void deleteAgreement(String branchid, String supplierid) throws SQLException {
+    public void removeAgreement(String branchid, String supplierid) throws SQLException {
         String sqlAgreement = "delete from supplierinventorydb.agreement where branchid = ? and supplierid = ?";
         String sqlProductInAgreement = "delete from supplierinventorydb.productinagreement where branchid = ? and supplierid = ?";
         try (Connection con = getConnection()){
@@ -133,8 +130,8 @@ public class AgreementDAO {
         try (Connection connection = getConnection()){
             //get all products in agreement
             PreparedStatement ps = connection.prepareStatement(getAllProductInAgreementSql);
-            ps.setString(1, branchId);
-            ps.setString(2, supplierId);
+            ps.setInt(1, Integer.parseInt(branchId));
+            ps.setInt(2, Integer.parseInt(supplierId));
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 int price = rs.getInt("price");
@@ -155,8 +152,8 @@ public class AgreementDAO {
 
             //get all discounts in agreement
             PreparedStatement ps2 = connection.prepareStatement(getAllDiscountSql);
-            ps2.setString(1, branchId);
-            ps2.setString(2, supplierId);
+            ps2.setInt(1, Integer.parseInt(branchId));
+            ps2.setInt(2, Integer.parseInt(supplierId));
             ResultSet rs2 = ps2.executeQuery();
             while(rs2.next()){
                 int productId = rs2.getInt("productid");
@@ -169,10 +166,6 @@ public class AgreementDAO {
 
         return new AgreementDTO(branchId, supplierId, suppliedItemDTOList, discountDTOList);
     }
-
-
-
-
 
 
     private boolean checkAgreement(String branchid, String supplierid) throws SQLException {

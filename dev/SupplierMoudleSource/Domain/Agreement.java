@@ -1,15 +1,13 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.AgreementDTO;
-import DTO.DiscountDTO;
-import DTO.SuppliedItemDTO;
+import DTO.*;
 
 import java.util.*;
 
 public class Agreement {
     private final Supplier supplier;
-    private final Branch Branch;
-    private List<SuppliedItem> supplierItemsList;
+    private final Branch branch;
+    private HashMap<String, SuppliedItem> supplierItemsList;
     private List<Discount> discounts;
 
 
@@ -18,32 +16,35 @@ public class Agreement {
             throw new NullPointerException("Supplier or branch is null");
         }
         this.supplier = supplier;
-        this.Branch = branch;
-        this.supplierItemsList = new ArrayList<SuppliedItem>();
+        this.branch = branch;
+        this.supplierItemsList = new HashMap<>();
         this.discounts = new ArrayList<Discount>();
     }
 
-    public AgreementDTO getAgreementDTO(){
-        List<SuppliedItemDTO> supplierItemsList = new ArrayList<>();
-        for (SuppliedItem suppliedItem : this.supplierItemsList) {
-            supplierItemsList.add(suppliedItem.getSuppliedItemDTO());
+    public Agreement(BranchDTO branchDTO, SupplierDTO supplier, AgreementDTO agreementDTO) {
+        if (branchDTO == null || supplier == null || agreementDTO == null) {
+            throw new NullPointerException("Supplier or branch is null");
         }
+        this.branch = new Branch(branchDTO);
+        this.supplier = new Supplier(supplier);
+        this.supplierItemsList = new HashMap<>();
+        for (SuppliedItemDTO supplierDTO : agreementDTO.getSupplierItemsList()){
+            supplierItemsList.put(supplierDTO.product.productID, new SuppliedItem(supplierDTO));
 
-        List<DiscountDTO> discountDTOList = new ArrayList<>();
-        for (Discount discount : this.discounts) {
-            discountDTOList.add(discount.getDiscountDTO());
         }
-
-        return new AgreementDTO(this.supplier.getID(), this.Branch.getBranchID(), supplierItemsList, discountDTOList);
+        this.discounts = new ArrayList<>();
+        for (DiscountDTO discountDTO : agreementDTO.getDiscounts()){
+            discounts.add(new Discount(discountDTO, supplierItemsList.get(discountDTO.suppliedItemid).getSuppliedItemDTO()));
+        }
     }
-
 
     public Agreement(Agreement other) {
         this.supplier = new Supplier(other.supplier);
-        this.Branch = other.Branch;
+        this.branch = other.branch;
         this.supplierItemsList = other.supplierItemsList;
         this.discounts = other.discounts;
     }
+
 
     public List<Discount> getDiscounts() {
         return discounts;
@@ -53,7 +54,7 @@ public class Agreement {
         if (suppliedItem == null) {
             throw new NullPointerException();
         }
-        for (SuppliedItem supplierItem : supplierItemsList){
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
             if (Objects.equals(suppliedItem.getProduct().getProductName(), supplierItem.getProduct().getProductName())){
                 throw new IllegalArgumentException(suppliedItem.getProduct().getProductName() +
                         " already exists in the agreement");
@@ -63,12 +64,12 @@ public class Agreement {
             throw new IllegalArgumentException("Supplier doesnt have this product (" +
                     suppliedItem.getProduct().getProductName() + ")");
         }
-        supplierItemsList.add(suppliedItem);
+        supplierItemsList.put(suppliedItem.getSuppliedItemID(), suppliedItem);
     }
 
     //return true if a product in an agreement
     public boolean productInAgreement(String productID){
-        for (SuppliedItem supplierItem : supplierItemsList){
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
             if (Objects.equals(productID, supplierItem.getProduct().getProductID())){
                 return true;
             }
@@ -86,7 +87,7 @@ public class Agreement {
             }
         }
 
-        for (SuppliedItem supplierItem : supplierItemsList){
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
             if (Objects.equals(supplierItem.getProduct().getProductID(), discount.getProductId())){
                 discounts.add(discount);
                 return;
@@ -100,13 +101,13 @@ public class Agreement {
     public String getSupplierID(){
         return this.supplier.getID();
     }
-    public String getBranchID(){ return this.Branch.getBranchID();}
+    public String getBranchID(){ return this.branch.getBranchID();}
 
     public void removeProduct(String productID){
         if (productID == null){
             throw new NullPointerException("Product id was null");
         }
-        for (SuppliedItem supplierItem : supplierItemsList){
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
             if (Objects.equals(productID, supplierItem.getProduct().getProductID())){
                 try {
                     this.removeDiscount(productID);
@@ -132,11 +133,11 @@ public class Agreement {
         throw new NullPointerException("Discount does not exist in the agreement");
     }
     public List<SuppliedItem> getSupplierItemsList() {
-        return supplierItemsList;
+        return new ArrayList<>(supplierItemsList.values());
     }
 
     public SuppliedItem getSupplierItem(String productID){
-        for (SuppliedItem supplierItem : supplierItemsList){
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
             if (Objects.equals(productID, supplierItem.getSuppliedItemID())){
                 return supplierItem;
             }
@@ -146,8 +147,8 @@ public class Agreement {
 
     public String toString(){
         StringBuilder returnString = new StringBuilder("Agreement between, " + "Supplier id: " + this.supplier.getID() +
-                ", Branch id : " + this.Branch.getBranchID() + "\n" + "Product List: \n");
-        for (SuppliedItem supplierItem : supplierItemsList){
+                ", Branch id : " + this.branch.getBranchID() + "\n" + "Product List: \n");
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
             returnString.append(supplierItem.toString()).append(" Price: ").append(supplierItem.getSuppliedItemPrice()).append("₪\n");
         }
 
@@ -155,6 +156,18 @@ public class Agreement {
             returnString.append(discount.toString()).append("\n");
         }
         return returnString.toString();
+    }
+
+    public AgreementDTO getAgreementDTO(){
+        List<SuppliedItemDTO> suppliedItemDTOList = new ArrayList<>();
+        List<DiscountDTO> discountDTOList = new ArrayList<>();
+        for (SuppliedItem supplierItem : supplierItemsList.values()){
+            suppliedItemDTOList.add(supplierItem.getSuppliedItemDTO());
+        }
+        for (Discount discount : discounts){
+            discountDTOList.add(discount.getDiscountDTO());
+        }
+        return new AgreementDTO(this.supplier.getID(), this.branch.getBranchID(), suppliedItemDTOList, discountDTOList);
     }
 
 }

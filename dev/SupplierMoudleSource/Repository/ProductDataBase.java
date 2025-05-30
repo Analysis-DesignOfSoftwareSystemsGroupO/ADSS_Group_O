@@ -1,4 +1,4 @@
-package SupplierMoudleSource.DataBase;
+package SupplierMoudleSource.Repository;
 
 
 import SupplierMoudleSource.Domain.Product;

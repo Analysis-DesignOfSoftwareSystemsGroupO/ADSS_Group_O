@@ -1,3 +1,4 @@
+
 package SupplierMoudleSource.Domain;
 
 import DTO.ProductDTO;
@@ -15,9 +16,17 @@ public class Product {
         this.productID = productID;
         this.productName = productName;
         this.productManufacturer = productManufacturer;
-        this.shelfLifeDays = 0;
+        this.shelfLifeDays = shelfLifeDays;
     }
-
+    public Product(ProductDTO productDTO) {
+        if (productDTO == null) {
+            throw new NullPointerException("Product Details cannot be null");
+        }
+        this.productID = productDTO.productID;
+        this.productName = productDTO.productName;
+        this.productManufacturer = productDTO.productManufacturer;
+        this.shelfLifeDays = productDTO.shelfLifeDays;
+    }
 
     public String getProductID() {
         return productID;
@@ -29,11 +38,9 @@ public class Product {
     public String getProductManufacturer() {
         return productManufacturer;
     }
-
-    public ProductDTO ggetProductDTO(){
+    public ProductDTO transactionToDTO(){
         return new ProductDTO(productID, productName, productManufacturer, shelfLifeDays);
     }
-
     public String toString(){
         return "Product ID: " + productID + ", Product Name: " + productName + ", Product Manufacturer: " + productManufacturer;
     }

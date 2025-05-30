@@ -1,53 +1,50 @@
 package SupplierMoudleSource.Service;
 
-import SupplierMoudleSource.DataBase.ProductDataBase;
-import SupplierMoudleSource.DataBase.SuppliersDataBase;
+import DTO.*;
+import SupplierMoudleSource.Repository.AgreementRepository;
+import SupplierMoudleSource.Repository.ProductDataBase;
+import SupplierMoudleSource.Repository.SupplierRepository;
 import SupplierMoudleSource.Domain.*;
 
 import java.util.List;
 
 
 public class SupplierService {
-    private final SuppliersDataBase suppliersDataBase = SuppliersDataBase.getInstance();
+    private final SupplierRepository supplierRepository = SupplierRepository.getInstance();
     private ProductDataBase productDataBase = ProductDataBase.getInstance();
+    private AgreementRepository agreementRepository = AgreementRepository.getInstance();
 
     //this method creates a supplier
-    public void createSupplier(String supplierID, String supplierName, String supplierPaymentMethod,
+    public void createSupplier(String id, String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
                                String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay, String dayOfWeek) throws Exception {
 
-            if (suppliersDataBase.getSupplier(supplierID) == null) {
-                Supplier newSupplier = new Supplier(supplierID, supplierName, supplierPaymentMethod, bankAccount,
-                        bankNumber, bankBranch, contactName, contactPhoneNumber, contactTitle, deliveryWay, dayOfWeek);
-                if (newSupplier.getID() != null) {
-                    suppliersDataBase.addSupplier(newSupplier);
-                }
-            }
-            else{
-                throw new Exception("Supplier already exists");
-            }
+
+        supplierRepository.addSupplier(supplierName, new PaymentMethodDTO(supplierPaymentMethod),
+                new BankDTO(bankAccount, bankNumber, bankBranch, id), new InformationContactDTO(contactName, contactPhoneNumber, contactTitle), new DeliveryDTO(deliveryWay));
+
     }
 
     //adds a new product to an existing supplier
-    public void addNewProductToSupplier(String supplierId, String productId, String productName, String manufacturer, int price) {
-        if (suppliersDataBase.getSupplier(supplierId) == null) {
+    public void addNewProductToSupplier(String supplierId, String productId, String productName, String manufacturer, int price, int shelfLife) throws Exception {
+        if (supplierRepository.getSupplier(supplierId) == null) {
             throw new NullPointerException("Supplier does not exist");
         }
         //add product to product database handles multiple products in the db
-        Product p = new Product(productId,productName, manufacturer);
+        Product p = new Product(productId, productName, manufacturer, shelfLife); //todo possibly get the product from the productRepository if exists
         productDataBase.addProduct(p);
         //add product to supplier
-        suppliersDataBase.getSupplier(supplierId).addProduct(p, price);
+        supplierRepository.addProduct(new SuppliedItemDTO(price, new ProductDTO(productId, productName, manufacturer, shelfLife)), supplierId);
     }
 
     //checks validity of the id of the supplier
-    public boolean validIdSupplier(String supplierId) {
-        return (suppliersDataBase.getSupplier(supplierId) != null);
+    public boolean validIdSupplier(String supplierId) throws Exception {
+        return (supplierRepository.getSupplier(supplierId) != null);
     }
 
     //prints all existing suppliers
     public void printAllSuppliers() {
-        List<Supplier> suppliers = suppliersDataBase.getAllSuppliers();
+        List<Supplier> suppliers = supplierRepository.getAllSuppliers();
         if(suppliers.isEmpty()) {
             throw new NullPointerException("No Suppliers in System");
         }
@@ -60,8 +57,8 @@ public class SupplierService {
 
     //prints the details of a specific supplier //todo
     public void printSupplier(String supplierId) throws Exception {
-        if (suppliersDataBase.getSupplier(supplierId) != null) {
-            System.out.println(suppliersDataBase.getSupplier(supplierId));
+        if (supplierRepository.getSupplier(supplierId) != null) {
+            System.out.println(supplierRepository.getSupplier(supplierId));
             return;
         }
         throw new Exception("Supplier doesn't exist");
@@ -70,94 +67,78 @@ public class SupplierService {
 
 
     //updates supplier phone number given supplierId
-    public void updateSupplierInformationContact(String supplierId, String contactName, String newTitle, String newPhoneNumber) {
-        Supplier supplier = suppliersDataBase.getSupplier(supplierId);
-        if (supplier != null) {
-            for (InformationContact infoContact : supplier.getInformationContacts()){
-                if (infoContact.getContactName().equals(contactName)) {
-                    infoContact.setContactPhone(newPhoneNumber);
-                    infoContact.setTitle(newTitle);
-                    return;
-                }
-            }
-            throw new NullPointerException("Contact does not exist");
+    public void updateSupplierInformationContact(String supplierId, String contactName, String newTitle, String newPhoneNumber) throws Exception {
+        SupplierDTO supplier1 = supplierRepository.getSupplier(supplierId);
+        if (supplier1 == null) {
+            throw new NullPointerException("Supplier does not exist");
         }
-        throw new NullPointerException("Supplier does not exist");
+        Supplier supplier = new Supplier(supplier1);
+        for (InformationContact infoContact : supplier.getInformationContacts()) {
+            if (infoContact.getContactName().equals(contactName)) {
+                infoContact.setContactPhone(newPhoneNumber);
+                infoContact.setTitle(newTitle);
+                supplierRepository.editInformationCotact(supplierId, new InformationContactDTO(contactName, newTitle, newPhoneNumber));
+                return;
+            }
+        }
+        throw new NullPointerException("Contact does not exist");
     }
 
     //updates supplier phone number given supplierId
-    public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber, String newBankBranch) {
-        if(suppliersDataBase.getSupplier(supplierID) != null) {
-            Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-            supplier.setNewBank(newBankAccount, newBankNumber, newBankBranch, supplierID);
-            return;
-        }
-        throw new NullPointerException("Supplier does not exist");
+    public void updateSupplierBankAccount(String supplierID, String newBankAccount, String newBankNumber, String newBankBranch) throws Exception {
+        supplierRepository.editBankInformation(supplierID, new BankDTO(newBankAccount, newBankNumber, newBankBranch, supplierID));
     }
 
     //updates a supplier name given a supplier id
-    public void updateSupplierName(String supplierID, String newName) {
-        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-        if (supplier != null) {
-            supplier.setSupplierName(newName);
-            return;
-        }
-        throw new NullPointerException("Supplier does not exist");
+    public void updateSupplierName(String supplierID, String newName) throws Exception {
+        supplierRepository.updateSupplierName(supplierID, newName);
     }
 
-    public void addNewInformationContact(String supplierID, String contactName, String newPhoneNumber, String newTitle) {
-        InformationContact infoContact = new InformationContact(contactName, newPhoneNumber, newTitle);
-        if (infoContact.getContactName() != null) {
-            Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-            if (supplier == null) {
-                throw new NullPointerException("Supplier doesn't exists");
-            }
-            supplier.addInformationContact(infoContact);
-        }
+    public void addNewInformationContact(String supplierID, String contactName, String newPhoneNumber, String newTitle) throws Exception {
+        supplierRepository.addNewInformationContact(supplierID, new InformationContactDTO(contactName, newPhoneNumber, newTitle));
 
     }
 
-    public void printAllInformationContacts(String supplierID){
-        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+
+
+    public void printAllInformationContacts(String supplierID) throws Exception {
+        SupplierDTO supplier = supplierRepository.getSupplier(supplierID);
         if (supplier == null) {
             throw new NullPointerException("Supplier doesn't exists");
         }
-        List<InformationContact> infoContacts = supplier.getInformationContacts();
-        for (InformationContact infoContact : infoContacts) {
-            System.out.println(infoContact);
+        List<InformationContactDTO> infoContacts = supplier.getInformationContacts();
+        for (InformationContactDTO infoContact : infoContacts) {
+            InformationContact informationContact = new InformationContact(infoContact);
+            System.out.println(infoContact.toString());
         }
     }
 
-    public void deleteSupplier(String supplierID) {
-        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
+    public void deleteSupplier(String supplierID) throws Exception {
+        SupplierDTO supplier = supplierRepository.getSupplier(supplierID);
         if (supplier == null) {
             throw new NullPointerException("Supplier not found");
         }
-        List<Agreement> agreements = suppliersDataBase.getAllAgreement();
-        for (Agreement agreement : agreements){
+        List<AgreementDTO> agreements = agreementRepository.getAllAgreement();
+        for (AgreementDTO agreement : agreements){
             if (agreement.getSupplierID().equals(supplierID)) {
-                suppliersDataBase.removeAgreement(agreement.getBranchID(), agreement.getSupplierID());
+                agreementRepository.removeAgreement(agreement.getBranchId(), agreement.getSupplierID());
             }
         }
-        suppliersDataBase.removeSupplier(supplierID);
+        supplierRepository.removeSupplier(supplierID);
     }
 
-    public void updateDeliveryMethod(String supplierId, String deliveryWay, String dayOfWeek) {
-        Supplier supplier = suppliersDataBase.getSupplier(supplierId);
+    public void updateDeliveryMethod(String supplierId, String deliveryWay, String dayOfWeek) throws Exception {
+        supplierRepository.editDeliveryMethod(supplierId, new DeliveryDTO(deliveryWay));
+    }
+
+    public void viewInformationContacts(String id) throws Exception {
+        SupplierDTO supplier = supplierRepository.getSupplier(id);
         if (supplier == null) {
             throw new NullPointerException("Supplier not found");
         }
-        Delivery delivery = new Delivery(deliveryWay, dayOfWeek);
-        supplier.setDelivery(delivery);
-    }
-
-    public void viewInformationContacts(String id) {
-        Supplier supplier = suppliersDataBase.getSupplier(id);
-        if (supplier == null) {
-            throw new NullPointerException("Supplier not found");
-        }
-        for (InformationContact infoContact : supplier.getInformationContacts()) {
-            System.out.println(infoContact);
+        for (InformationContactDTO infoContact : supplier.getInformationContacts()) {
+            InformationContact informationContact = new InformationContact(infoContact);
+            System.out.println(informationContact.toString());
         }
     }
 }

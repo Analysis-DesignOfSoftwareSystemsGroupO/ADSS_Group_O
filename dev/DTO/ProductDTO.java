@@ -4,7 +4,7 @@ public class ProductDTO {
     public final String productID;
     public final String productName;
     public final String productManufacturer;
-    private final int shelfLifeDays;
+    public final int shelfLifeDays;
 
     public ProductDTO(String productID, String productName, String productManufacturer, int shelfLifeDays) {
         this.productID = productID;

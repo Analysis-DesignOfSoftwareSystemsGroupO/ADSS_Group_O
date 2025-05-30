@@ -1,40 +1,47 @@
 package SupplierMoudleSource.Service;
 
-import SupplierMoudleSource.DataBase.BranchesDataBase;
-import SupplierMoudleSource.DataBase.ProductDataBase;
-import SupplierMoudleSource.DataBase.SuppliersDataBase;
+import DTO.AgreementDTO;
+import DTO.BranchDTO;
+import DTO.SupplierDTO;
+import SupplierMoudleSource.Repository.AgreementRepository;
+import SupplierMoudleSource.Repository.BranchesRepository;
+import SupplierMoudleSource.Repository.ProductDataBase;
+import SupplierMoudleSource.Repository.SupplierRepository;
 import SupplierMoudleSource.Domain.*;
 
 public class AgreementService {
-    SuppliersDataBase suppliersDataBase= SuppliersDataBase.getInstance();
-    BranchesDataBase branchesDataBase = BranchesDataBase.getInstance();
+    SupplierRepository supplierRepository = SupplierRepository.getInstance();
+    AgreementRepository agreementRepository = AgreementRepository.getInstance();
+    BranchesRepository branchesDataBase = BranchesRepository.getInstance();
     ProductDataBase productDataBase = ProductDataBase.getInstance();
 
     //removes an agreement
-public void removeAgreement(String branchId, String supplierId) {
-        suppliersDataBase.removeAgreement(branchId, supplierId);
+    public void removeAgreement(String branchId, String supplierId) throws Exception {
+        agreementRepository.removeAgreement(branchId, supplierId);
     }
     //creates new agreement
     public void createNewAgreement(String supplierID, String branchId) throws Exception {
-        if (suppliersDataBase.getAgreement(branchId, supplierID) != null){ // if an agreement exist throw
+        if (agreementRepository.getAgreement(branchId, supplierID) != null){ // if an agreement exist throw
             throw new Exception("Agreement already exist");
         }
-        Branch branch = branchesDataBase.getBranch(branchId);
-        Supplier supplier = suppliersDataBase.getSupplier(supplierID);
-        if (branch == null){
+        BranchDTO branchDTO = branchesDataBase.getBranch(branchId);
+        SupplierDTO supplierDTO = supplierRepository.getSupplier(supplierID);
+        if (branchDTO == null){
             throw new Exception("Branch does not exist");
         }
-        if (supplier == null){
+        if (supplierDTO == null){
             throw new Exception("Supplier does not exist");
         }
+        Supplier supplier = new Supplier(supplierDTO);
+        Branch branch = new Branch(branchDTO);
 
         Agreement agreement = new Agreement(branch, supplier);
-        suppliersDataBase.addAgreement(agreement);
-}
+        agreementRepository.addAgreement(agreement.getAgreementDTO());
+    }
 
     //print all agreement
-    public void viewAllAgreements() {
-        for (Agreement agreement : suppliersDataBase.getAllAgreement()){
+    public void viewAllAgreements() throws Exception {
+        for (AgreementDTO agreement : agreementRepository.getAllAgreement()){
             System.out.println("*********************************************************");
             System.out.println(agreement.toString());
         }
@@ -52,33 +59,23 @@ public void removeAgreement(String branchId, String supplierId) {
         }
 
         SuppliedItem suppliedItem = getProductFromSupplier(productID, supplierID);
-        suppliersDataBase.addProductToAgreement(suppliedItem, branchid, supplierID);
+        agreementRepository.addProductToAgreement(suppliedItem.getSuppliedItemDTO(), branchid, supplierID);
         if (quantity != null && discount != null){ //add discount if needed
             if ((price * quantity) < discount){
                 throw new Exception("Cannot confirm discount because discount will cause negative price");
             }
             Discount discount1 = new Discount(suppliedItem, quantity, discount);
-            suppliersDataBase.addDiscountToAgreement(branchid, supplierID, discount1);
+            agreementRepository.addDiscountToAgreement(branchid, supplierID, discount1.getDiscountDTO());
         }
 
     }
 
-    //checks if an agreement exists
-    public boolean agreementExists(String SupplierID, String branchid) {
-        return suppliersDataBase.getAgreement(branchid, SupplierID) != null;
-    }
-    //check if an item exists in an Agreement
-    public boolean productExistsInAgreement(String supplierID, String branchId, String productID) throws Exception {
-        Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
-        if (agreement == null) {
-            throw new Exception("no agreement");
-        }
-        return agreement.productInAgreement(productID);
-    }
+
+
     //views an agreement given branch id and supplier id (ued for creating a new order)
-    public void viewAgreement(String branchId, String supplierID) {
-        if (suppliersDataBase.getAgreement(branchId, supplierID) != null){
-            System.out.println(suppliersDataBase.getAgreement(branchId, supplierID).toString());
+    public void viewAgreement(String branchId, String supplierID) throws Exception {
+        if (agreementRepository.getAgreement(branchId, supplierID) != null){
+            System.out.println(agreementRepository.getAgreement(branchId, supplierID).toString());
         }
     }
     //removes a product from an existing agreement
@@ -107,25 +104,30 @@ public void removeAgreement(String branchId, String supplierId) {
 
 
     private Agreement getAgreement(String branchId, String supplierID) throws Exception {
-        Agreement agreement = suppliersDataBase.getAgreement(branchId, supplierID);
-        if (agreement == null) {
-            throw new Exception("agreement does not exist");
-        }
-        Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
-        if (supplier == null){
+
+        SupplierDTO supplierDTO =  supplierRepository.getSupplier(supplierID);
+        if (supplierDTO == null){
             throw new Exception("supplier does not exist");
         }
+        Supplier supplier = new Supplier(supplierDTO);
+
         if (!branchesDataBase.existsBranch(branchId)){
             throw new Exception("branch does not exist");
         }
-        return agreement;
+        AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
+        if (agreementDTO == null) {
+            throw new Exception("agreement does not exist");
+        }
+
+        BranchDTO branchDTO = branchesDataBase.getBranch(branchId); //todo get BranchDTO
     }
 
     private SuppliedItem getProductFromSupplier(String productID, String supplierID) throws Exception {
-        Supplier supplier =  suppliersDataBase.getSupplier(supplierID);
-        if (supplier == null){
+        SupplierDTO supplierDTO =  supplierRepository.getSupplier(supplierID);
+        if (supplierDTO == null){
             throw new Exception("supplier does not exist");
         }
+        Supplier supplier = new Supplier(supplierDTO);
         SuppliedItem product = supplier.getProduct(productID);
         if (product == null){
             throw new Exception("supplier does not have this product");
@@ -134,7 +136,7 @@ public void removeAgreement(String branchId, String supplierId) {
     }
 
     //checks if an agreement is empty
-    public boolean isAgreementEmpty(String branchId, String supplierId) {
-        return suppliersDataBase.getAgreement(branchId, supplierId).getSupplierItemsList().isEmpty();
+    public boolean isAgreementEmpty(String branchId, String supplierId) throws Exception {
+        return agreementRepository.getAgreement(branchId, supplierId).getSupplierItemsList().isEmpty();
     }
 }

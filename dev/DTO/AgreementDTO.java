@@ -6,6 +6,7 @@ import SupplierMoudleSource.Domain.SuppliedItem;
 import SupplierMoudleSource.Domain.Supplier;
 
 import java.util.List;
+import java.util.Map;
 
 public class AgreementDTO {
     private  String supplierID;
@@ -18,5 +19,16 @@ public class AgreementDTO {
         this.branchId = branchId;
         this.supplierItemsList = supplierItemsList;
         this.discounts = discounts;
+    }
+
+    public String getSupplierID() {
+        return supplierID;
+    }
+    public String getBranchId() {
+        return branchId;
+    }
+
+    public List<SuppliedItemDTO> getSupplierItemsList() {
+        return supplierItemsList;
     }
 }

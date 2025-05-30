@@ -10,8 +10,8 @@ import java.util.List;
 import static DataBase.PostgresConnection.getConnection;
 
 public class SupplierDAO {
-    public String addSupplier(String supplierName, BankDTO bank, String paymentMethod, DeliveryDTO delivery,
-                            List<InformationContactDTO> informationContacts) {
+    public String addSupplier(String supplierName, BankDTO bank, PaymentMethodDTO paymentMethod, DeliveryDTO delivery,
+                              InformationContactDTO informationContactDTO) {
 
         int supplierId;
 
@@ -21,7 +21,7 @@ public class SupplierDAO {
              PreparedStatement pstmt = con.prepareStatement(supplierSql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, supplierName);
-            pstmt.setString(2, paymentMethod);
+            pstmt.setString(2, paymentMethod.getPaymentMethod());
             pstmt.setString(3, delivery.getDeliveryWay());
             pstmt.executeUpdate();
 
@@ -64,13 +64,13 @@ public class SupplierDAO {
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            for (InformationContactDTO contact : informationContacts) {
-                pstmt.setInt(1, supplierId);
-                pstmt.setString(2, contact.getContactName());
-                pstmt.setString(3, contact.getContactPhone());
-                pstmt.setString(4, contact.getTitle());
-                pstmt.addBatch();
-            }
+
+            pstmt.setInt(1, supplierId);
+            pstmt.setString(2, informationContactDTO.getContactName());
+            pstmt.setString(3, informationContactDTO.getContactPhone());
+            pstmt.setString(4, informationContactDTO.getTitle());
+            pstmt.addBatch();
+
 
             pstmt.executeBatch();
 
@@ -83,7 +83,7 @@ public class SupplierDAO {
         return Integer.toString(supplierId);
     }
 
-    public boolean productexist(String supplierId, String productId) throws SQLException {
+    public boolean productExist(String supplierId, String productId) throws SQLException {
         String sql = "select * from supplierinventorydb.productofsupplier where supplierid = ? and productid = ?";
         try (Connection connection = getConnection()){
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -97,7 +97,7 @@ public class SupplierDAO {
         }
 
 
-        }
+    }
 
 
     public void removeSupplier(String supplierID){
@@ -184,7 +184,7 @@ public class SupplierDAO {
                 }
             }
         }
-        return new SupplierDTO(supplierID, bankDTO, paymentMethodDTO, deliveryDTO, informationContacts, supplyProducts);
+        return new SupplierDTO(supplierID, name, bankDTO, paymentMethodDTO, deliveryDTO, informationContacts, supplyProducts);
     }
 
 
@@ -225,7 +225,7 @@ public class SupplierDAO {
     }  // Step 3: Get contact list
 
 
-    public void addproduct(String supplierid, SuppliedItemDTO suppliedItemDTO) throws SQLException {
+    public void addProduct(String supplierid, SuppliedItemDTO suppliedItemDTO) throws SQLException {
         String sql = "INSERT INTO supplierinventorydb.productofsupplier (productid, supplierid, price) VALUES (?, ?, ?)";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -236,7 +236,7 @@ public class SupplierDAO {
         }
     }
 
-    public void editinformationcotact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
+    public void editInformationCotact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
         String sql = "UPDATE supplierinventorydb.informationcontact SET title=?, contactphone=? WHERE contactname=? and supplierid=?";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -248,7 +248,7 @@ public class SupplierDAO {
 
     }
 
-    public void addinformationcontact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
+    public void addInformationContact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
         String sql = "INSERT into supplierinventorydb.informationcontact (supplier, contactname, contactphone, title) VALUES (?, ?, ?, ?)";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -260,7 +260,7 @@ public class SupplierDAO {
         }
     }
 
-    public void editsuppliername(String supplierid, String name) throws SQLException {
+    public void editSupplierName(String supplierid, String name) throws SQLException {
         String sql = "UPDATE supplierinventorydb.supplier SET suppliername=? WHERE supplierid=?";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -270,7 +270,7 @@ public class SupplierDAO {
         }
     }
 
-    public void editbank(String supplierid, BankDTO bankDTO) throws SQLException {
+    public void editBank(String supplierid, BankDTO bankDTO) throws SQLException {
         String sql = "UPDATE supplierinventorydb.bank SET bankbranch=?, banknumber=?, bankaccountnumber=? WHERE supplierid=?";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -282,7 +282,7 @@ public class SupplierDAO {
         }
     }
 
-    public void editdelivery(String supplierid, DeliveryDTO deliveryDTO) throws SQLException {
+    public void editDelivery(String supplierid, DeliveryDTO deliveryDTO) throws SQLException {
         String sql = "UPDATE supplierinventorydb.supplier SET deliverymethod=? WHERE supplierid=?";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -293,6 +293,3 @@ public class SupplierDAO {
     }
 
 }
-
-
-

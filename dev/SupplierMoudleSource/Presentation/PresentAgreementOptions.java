@@ -45,7 +45,7 @@ public class PresentAgreementOptions {
                 System.out.println("Invalid option !");
             }
         }
-   }
+    }
 
 
     //add a new agreement
@@ -99,7 +99,11 @@ public class PresentAgreementOptions {
             String supplierID = "", branchId = "";
             if (choice == 4){return;}
             if (choice == 1 || choice == 2 || choice == 3) {
-                agreementController.viewAllAgreements();
+                try {
+                    agreementController.viewAllAgreements();
+
+                } catch (Exception e) {
+                }
                 System.out.println("Enter supplier ID: ");
                 supplierID = editAgreement.nextLine();
                 System.out.println("Enter branch Id: ");
@@ -117,7 +121,7 @@ public class PresentAgreementOptions {
                     this.addProductToAgreementP(supplierID, branchId);
                     break;
                 case 2:
-                   this.removeProductFromAgreementP(supplierID, branchId);
+                    this.removeProductFromAgreementP(supplierID, branchId);
                     break;
                 case 3:
                     this.editProductDiscount(supplierID, branchId);
@@ -174,10 +178,15 @@ public class PresentAgreementOptions {
 
     //removes a product from an existing agreement
     private void removeProductFromAgreementP(String supplierID, String branchId) {
-        if (agreementController.isAgreementEmpty(branchId, supplierID)){ // check if agreement has items
-            System.out.println("Agreement has no items");
-            return;
+        try {
+            if (agreementController.isAgreementEmpty(branchId, supplierID)){ // check if agreement has items
+                System.out.println("Agreement has no items");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product ID:");
         String productId = editAgreement.nextLine();
@@ -193,10 +202,15 @@ public class PresentAgreementOptions {
 
     //check if available to combine with add product
     private void editProductDiscount(String supplierID, String branchId) {
-        if (agreementController.isAgreementEmpty(branchId, supplierID)){ // check if agreement has items
-            System.out.println("Agreement has no items");
-            return;
+        try {
+            if (agreementController.isAgreementEmpty(branchId, supplierID)){ // check if agreement has items
+                System.out.println("Agreement has no items");
+                return;
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
+
         Scanner editAgreement = new Scanner(System.in);
         System.out.println("Enter product ID:");
         String productID = editAgreement.nextLine();

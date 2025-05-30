@@ -50,6 +50,11 @@ public class Supplier {
         this.supplied_product_id = other.supplied_product_id;
     }
 
+    public Supplier(SupplierDTO supplierDTO){
+        this.supplierID = supplierDTO.getSupplierID();
+        this.supplierName = supplierDTO.getSupplierName();
+    }
+
     public String getID() {
         return supplierID;
     }
@@ -144,11 +149,10 @@ public class Supplier {
             stringSuppliedItemDTOHashMap.put(entry.getKey(), entry.getValue().getSuppliedItemDTO());
         }
 
-        return new SupplierDTO(this.supplierID, this.bank.getBankDTO(),
+        return new SupplierDTO(this.supplierID, this.supplierName, this.bank.getBankDTO(),
                 this.paymentMethod.getPaymentMethodDTO(), this.delivery.getDeliveryDTO(),
                 informationContactDTOList, stringSuppliedItemDTOHashMap);
     }
-
 
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
