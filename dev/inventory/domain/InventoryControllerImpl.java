@@ -135,6 +135,7 @@ public class InventoryControllerImpl implements InventoryController {
             if (stockItem.getStatus() == StockItemStatus.OK && stockItem.getExpiryDate().isBefore(LocalDate.now())) {
                 System.out.println("Product " + stockItem.getProduct().getName() + " is expired.");
                 stockItem.setStatus(StockItemStatus.EXPIRED);
+                stockItemDAO.updateStockItem(stockItem);
             }
         }
     }
