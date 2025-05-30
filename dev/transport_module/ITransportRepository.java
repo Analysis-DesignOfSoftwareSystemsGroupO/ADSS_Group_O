@@ -12,7 +12,7 @@ import java.util.List;
 public interface ITransportRepository {
 
 
-    Transport getTransportByid(int id) throws SQLException;
+    Transport getTransportByid(int id) throws SQLException, ATransportModuleException;
 
     List<Transport> getTransportsByDate(LocalDate date) throws SQLException;
 
@@ -20,7 +20,7 @@ public interface ITransportRepository {
 
     void deleteTransport(int transportID ) throws  SQLException;
 
-    Transport TransportDTOtoTransport(TransportDTO dto ) throws SQLException, TransportMismatchException;
+    Transport TransportDTOtoTransport(TransportDTO dto ) throws SQLException, ATransportModuleException;
 
     TransportDTO transportToTransportDTO(Transport transport);
 

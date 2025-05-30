@@ -9,7 +9,8 @@ import java.util.*;
 import java.time.LocalDate;
 
 public class Transport {
-    private static int staticTransportID = 0;
+    public enum Status {waitForShipment, sent, delayed}
+
     private final int id;
     private LocalDate date; // field for date of the transport
     private LocalTime departure_time; // the hour of departure time
@@ -17,10 +18,9 @@ public class Transport {
     private Driver driver; // the driver that will drive in the truck
     private Site source; // the source site the transport is start
     private final Map<Site, ProductListDocument> destinations_document_map; // a map for each destination.
-    private boolean isSent;
     private int currWeight;
     private int maxWeight;
-
+    private Status status;
     private boolean isOutOfZone;
 
 
@@ -28,12 +28,14 @@ public class Transport {
      * Constructor for Transport
      * Initializes a new transport instance with given parameters and checks input validity.
      */
-    public Transport(String d, String time, Truck t, Site s) throws ATransportModuleException {
+    public Transport(int id, String d, String time, Site s) throws ATransportModuleException {
         // input check
-        if (time.isEmpty() || d.isEmpty() || t == null || s == null) {
+        if (time.isEmpty() || d.isEmpty() || s == null) {
             throw new InvalidInputException();
         }
-        driver = null;
+
+        driver = null;// no driver at this stage
+        truck = null; // no truck at this stage
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate parsedDate;
@@ -51,46 +53,29 @@ public class Transport {
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
-        if (hour < 1 || hour > 24) {
-            System.out.println("Hour is wrong - changed to default hour - 7");
-            hour = 7;
-        }
-        if (minute < 0 || minute > 59) {
-            System.out.println("Minutes is wrong - changed to default minutes - 00");
+        if (hour < 1 || hour > 24 || minute < 0 || minute > 59) {
+            throw new InvalidInputException("Hour is Invalid format. Please try again");
 
-            minute = 0;
         }
         departure_time = LocalTime.of(hour, minute); // set the hour
 
 
-        if (!t.getAvailablity(date))
-            throw new UnAvailableTruckException();
-        id = ++staticTransportID; // give index to transport
+        this.id = id; // give index to transport
 
-        truck = t; // save the truck as the original truck - not a copy of the truck.
-        truck.setDate(date); // set date at truck schedule
         currWeight = 0;
-        maxWeight = t.getMaxWeight();
+        maxWeight = 0;
         source = new Site(s); // save the source site as a copy of the site
         destinations_document_map = new HashMap<>();
         isOutOfZone = false;
-        isSent = false;
+        status = Status.waitForShipment;
+
 
     }
 
-    //todo
-    public int getmaxWeight(){
-        return 0 ;
-    }
-    public Truck getTruck(){
-        return this.truck;
-    }
-    public String getSourceSiteName(){
-        return this.source.getName();
-    }
     //****************************************************************************************************************** Get functions
 
-    /**@return Transport ID
+    /**
+     * @return Transport ID
      */
     public int getId() {
         return id;
@@ -100,7 +85,7 @@ public class Transport {
      * @return true if the transport was already sent, false otherwise
      */
     public boolean isSent() {
-        return isSent;
+        return status == Status.sent;
     }
 
     /***
@@ -112,12 +97,12 @@ public class Transport {
 
     /***
      * Gets the document associated with a specific destination site name.
-     * @param site_name Destination site name
+     * @param site Destination site name
      * @return ProductListDocument if exists, null otherwise
      */
-    public ProductListDocument getDocument(String site_name) {
+    public ProductListDocument getDocument(Site site) {
 
-        return destinations_document_map.get(site_name);
+        return destinations_document_map.get(site);
 
     }
 
@@ -127,15 +112,17 @@ public class Transport {
     public LocalDate getDate() {
         return date;
     }
-    public Driver getDriver(){
-        return this.driver;
+
+    public Status getStatus() {
+        return status;
     }
+
     /***
      * Checks if a site is one of the transport's destinations.
      * @param site Site name
      * @return true if site is destination, false otherwise
      */
-    public boolean isSiteIsDestination(String site) {
+    public boolean isSiteIsDestination(Site site) {
         return destinations_document_map.get(site) != null;
 
     }
@@ -159,25 +146,22 @@ public class Transport {
 
 
     }
+
+
     /***
      * Changes the truck assigned to this transport.
      * @param t New truck
      * @throws ATransportModuleException if the truck is unavailable or driver license mismatch occurs
      */
-    public void changeTruck(Truck t) throws ATransportModuleException {
+    public void assignTruck(Truck t) throws ATransportModuleException {
         if (t != this.truck && t != null) {
             if (!t.getAvailablity(date)) {
                 throw new UnAvailableTruckException();
 
             }
             if (driver != null) {
-                try {
-                    if (!t.confirmDriver(driver)) {
-                        throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
-                    }
-                } catch (ATransportModuleException e) {
-                    throw e;
-
+                if (!t.confirmDriver(driver)) {
+                    throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
                 }
             }
             truck.releaseTruck(date); // release the previous truck from transport
@@ -194,9 +178,10 @@ public class Transport {
      * @throws ATransportModuleException if transport cannot be sent
      */
     public void sendTransport() throws ATransportModuleException {
-        if (isSent) {
-            throw new TransportAlreadySentException();
+        if (isSent()) {
+            return;
         }
+        status = Status.delayed;
         if (driver == null) {
             throw new InvalidDriverException("Transport has no driver - please add driver first.");
         }
@@ -210,8 +195,13 @@ public class Transport {
 
         }
         truck.clear();
-        isSent = true;
+        status = Status.sent;
     }
+
+    public void setMaxWeight(int maxWeight){
+        this.maxWeight = maxWeight;
+    }
+
     /***
      * Loads a document to the transport after weight validation.
      * @param document ProductListDocument to load
@@ -221,10 +211,10 @@ public class Transport {
         if (document == null)
             throw new InvalidInputException();
         if (maxWeight < currWeight + document.getTotalWeight()) { // if truck is in Over Weight
-            throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
+//            throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
 
         } else {
-            if( destinations_document_map.get(document.getDestination())!= null){ // if destination is already a destination in transport - throw exception
+            if (destinations_document_map.get(document.getDestination()) != null) { // if destination is already a destination in transport - throw exception
                 throw new AlreadyExistDestinationException();
             }
             document.attachTransportToDocument(this);
@@ -235,7 +225,9 @@ public class Transport {
                 System.out.println("This destination is out of Area Zone, this is a special Transport");
                 isOutOfZone = true;
             }
+
         }
+
 
     }
 
@@ -247,30 +239,29 @@ public class Transport {
      * @param amount Amount to reduce
      * @throws ATransportModuleException if product cannot be reduced
      */
-    public void reduceAmountFromProduct(String destination, Product p, int amount) throws ATransportModuleException {
+    public void reduceAmountFromProduct(Site destination, Product p, int amount) throws ATransportModuleException {
         if (destinations_document_map.get(destination) != null) {
             destinations_document_map.get(destination).reduceAmountFromProduct(p, amount);
         }
     }
 
 
-    public void removeDocumentFromTransport(ProductListDocument document) throws ATransportModuleException{
-        if(document == null)
+    public void removeDocumentFromTransport(ProductListDocument document) throws ATransportModuleException {
+        if (document == null)
             throw new InvalidInputException();
-        if(destinations_document_map.get(document.getDestination().getName()) == null){
+        if (destinations_document_map.get(document.getDestination()) == null) {
             return;
         }
-        if(!destinations_document_map.get(document.getDestination().getName()).equals(document))
+        if (!destinations_document_map.get(document.getDestination()).equals(document))
             throw new InvalidInputException();
-        if(document.getTransport().equals(this)){
-            destinations_document_map.remove(document.getDestination().getName()); // remove document from map
-            currWeight-=document.getTotalWeight();// reduce weight from transport
+        if (document.getTransport().equals(this)) {
+            destinations_document_map.remove(document.getDestination()); // remove document from map
+            currWeight -= document.getTotalWeight();// reduce weight from transport
 
             document.realiseFromTransport(this);
         }
 
     }
-
 
 
     /***
@@ -289,7 +280,7 @@ public class Transport {
 
         if (parsedDate.isAfter(LocalDate.now())) {
             date = parsedDate;
-            for(Site site: destinations_document_map.keySet()){ // for each document in transport map - update their date
+            for (Site site : destinations_document_map.keySet()) { // for each document in transport map - update their date
                 destinations_document_map.get(site).changeDate(date);
             }
         } else {
@@ -320,6 +311,7 @@ public class Transport {
         System.out.println("Changed delivery time to: " + departure_time);
 
     }
+
     /***
      * Changes the source site of the transport.
      * @param s New source site
@@ -331,10 +323,8 @@ public class Transport {
     }
 
 
-
-
-
     //****************************************************************************************************************** Print functions
+
     /***
      * Builds a string of all destination site names.
      * @return String listing all destinations
@@ -360,7 +350,7 @@ public class Transport {
         if (driver == null)
             str.append("There is no driver\n"); // print all driver details
         else
-            str.append(driver.toString()).append("\n"); // print all driver details
+            str.append(driver).append("\n"); // print all driver details
 
         str.append("From: ").append(source.toString()).append("\n"); // print the source site details
         str.append("To: ").append(destinations_string()).append("\n"); // print all destination details

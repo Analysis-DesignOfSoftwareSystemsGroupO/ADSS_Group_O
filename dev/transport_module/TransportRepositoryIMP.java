@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneOffsetTransitionRule;
 import java.util.*;
 
 
@@ -28,13 +30,19 @@ public class TransportRepositoryIMP implements ITransportRepository{
      * @throws ATransportModuleException
      */
     @Override
-    public Transport getTransportByid(int id) throws SQLException {
+    public Transport getTransportByid(int id) throws SQLException, ATransportModuleException {
         if( transports.get(id ) == null){ // if the transport is not in the mapper, look for it in the data base
             try {
                 Optional<TransportDTO> transportDTO = dao.getTransportByid(id);
                 if(transportDTO.isPresent()){
                     //todo : Posposed because need to update Transport
-                    Transport t = new Transport()
+                    TransportDTO dto = transportDTO.get();
+                    DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
+                    Site s = new Site(dto.getSiteName(), "DefaultArea"); // Area feature is posposed
+                    //Get the time by String
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                    String time = timeFormatter.format(dto.getDepartureTime());
+                    Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
                     transports.put(t.getId(), t);
                     return t;
                 }
@@ -42,6 +50,9 @@ public class TransportRepositoryIMP implements ITransportRepository{
             }
             catch (SQLException e){
                 log.error("SQL exception in getTransportById()");
+                throw e;
+            }
+            catch (ATransportModuleException e){
                 throw e;
             }
         }
@@ -92,9 +103,9 @@ public class TransportRepositoryIMP implements ITransportRepository{
      * @throws TransportMismatchException if dto is miss match with the transport instance, throws an exception
      */
     @Override
-    public Transport TransportDTOtoTransport(TransportDTO dto) throws SQLException, TransportMismatchException {
+    public Transport TransportDTOtoTransport(TransportDTO dto) throws SQLException, ATransportModuleException {
         Transport t = getTransportByid(dto.getId());
-        if(t.getDate() == dto.getDate() && t.getSourceSiteName() == dto.getSiteName() && t.getmaxWeight() == dto.getMaxWeight()){
+        if(t.getDate() == dto.getDate() && t.getSource().getName() == dto.getSiteName() && t.getmaxWeight() == dto.getMaxWeight()){
             if((t.getDriver() == null && Integer.valueOf(dto.getDriverID()) != -1 )|| t.getDriver().getId() == dto.getDriverID()){
                 throw new TransportMismatchException("Miss match data");
             }
