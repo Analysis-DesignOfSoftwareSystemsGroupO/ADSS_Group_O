@@ -106,12 +106,13 @@ public class OrderService {
     }
 
     //method that finishes an orders (its point is to check if the order is empty, if it is throw an exception)
-    public void finishOrder(String supplierID, String orderID) throws SQLException {
+    public void finishOrder(String supplierID, String orderID) throws Exception {
         if (orderID == null || supplierID == null) {
-            throw new NullPointerException("Order ID is null");
+            throw new NullPointerException("Order ID or Supplier ID is null");
         }
-        for (Order order : orderRepository.getOrdersBySupplier(supplierID)) {
-            if (order.getOrderID().equals(orderID)) {
+        for (OrderDTO orderDTO : orderRepository.getOrdersBySupplier(supplierID)) {
+            if (orderDTO.getOrderID().equals(orderID)) {
+                Order order = new Order(orderDTO);
                 order.closeOrder();
             }
         }
@@ -122,14 +123,12 @@ public class OrderService {
         if (supplierID == null || supplierID.isEmpty() || orderId == null || orderId.isEmpty()) {
             throw new NullPointerException("Supplier ID and Order ID is null");
         }
-        List<Order> orders = orderRepository.getOrdersBySupplier(supplierID);
-        for (Order order : orders) {
-            if (order.getOrderID().equals(orderId)) {
-                return order.getBranch().getBranchID();
+        List<OrderDTO> ordersDTO = orderRepository.getOrdersBySupplier(supplierID);
+        for (OrderDTO orderDTO : ordersDTO) {
+            if (orderDTO.getOrderID().equals(orderId)) {
+                return orderDTO.getBranchID();
             }
         }
         return null;
     }
-
-
 }

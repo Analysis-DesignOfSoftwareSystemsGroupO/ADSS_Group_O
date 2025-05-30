@@ -40,19 +40,17 @@ public class Order {
             throw new IllegalArgumentException("orderDTO is null");
         }
 
-        Branch branch = new Branch(BranchesRepository.getInstance().getBranch(orderDTO.getBranchID()));
+        this.branch = new Branch(BranchesRepository.getInstance().getBranch(orderDTO.getBranchID()));
         BranchDTO branchDTO = branch.getBranchDTO();
         SupplierDTO supplierDTO = SupplierRepository.getInstance().getSupplier(orderDTO.getSupplierID());
         AgreementDTO agreementDTO = AgreementRepository.getInstance().getAgreement(branchDTO.getBranchID(), supplierDTO.getSupplierID());
-        Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
+        this.agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
 
-        if (agreement == null) {
-            throw new NullPointerException("Agreement is missing in memory");
-        }
-
-        Order order = new Order(agreement, branch);
-        order.totalPrice = orderDTO.getTotalPrice();
-        order.orderClosed = true;
+        this.suppliedItems = new HashMap<>();
+        this.orderID = orderDTO.getOrderID();
+        this.totalPrice = orderDTO.getTotalPrice();
+        this.orderClosed = true;
+        this.orderDate = orderDTO.getOrderDate();
 
         for (Map.Entry<SuppliedItemDTO, Integer> entry : orderDTO.getSuppliedItems().entrySet()) {
             SuppliedItemDTO itemDTO = entry.getKey();
@@ -66,7 +64,7 @@ public class Order {
             );
 
             SuppliedItem item = new SuppliedItem(itemDTO.suppliedItemPrice, product);
-            order.suppliedItems.put(item, quantity);
+            this.suppliedItems.put(item, quantity);
         }
     }
 
