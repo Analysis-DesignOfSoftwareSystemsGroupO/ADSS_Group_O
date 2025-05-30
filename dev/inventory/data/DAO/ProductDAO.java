@@ -88,14 +88,37 @@ public class ProductDAO implements ProductRepository {
         }
     }
 
+//    @Override
+//    public Product getProductById(String id) {
+//        String sql = """
+//                SELECT *
+//                FROM "Inventory"."Products" p
+//                WHERE p.product_id = ?
+//                """;
+//
+//        try (Connection connection = DataBaseConnector.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(sql)) {
+//
+//            statement.setString(1, id);
+//            ResultSet res = statement.executeQuery();
+//
+//            if (res.next()) {
+//                return mapResultSetToProduct(res);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null; // Placeholder return statement
+//    }
+
     @Override
     public Product getProductById(String id) {
         String sql = """
-                SELECT *
-                FROM "Inventory"."Products" p
-                WHERE p.product_id = ?
-                """;
-
+        SELECT p.*, COALESCE(sp.discount_selling_price, p.selling_price) AS effective_price
+        FROM "Inventory"."Products" p
+        LEFT JOIN "Inventory"."Selling_Prices" sp ON p.product_id = sp.product_id
+        WHERE p.product_id = ?
+        """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -108,15 +131,38 @@ public class ProductDAO implements ProductRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Placeholder return statement
+        return null;
     }
+
+
+//    @Override
+//    public List<Product> getAllProducts() {
+//        List<Product> products = new ArrayList<>();
+//        String sql = """
+//                SELECT * FROM "Inventory"."Products"
+//                """;
+//
+//        try (Connection connection = DataBaseConnector.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(sql);
+//             ResultSet res = statement.executeQuery()) {
+//
+//            while (res.next()) {
+//                products.add(mapResultSetToProduct(res));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return products;
+//    }
 
     @Override
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String sql = """
-                SELECT * FROM "Inventory"."Products"
-                """;
+        SELECT p.*, COALESCE(sp.discount_selling_price, p.selling_price) AS effective_price
+        FROM "Inventory"."Products" p
+        LEFT JOIN "Inventory"."Selling_Prices" sp ON p.product_id = sp.product_id
+        """;
 
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -131,6 +177,28 @@ public class ProductDAO implements ProductRepository {
         return products;
     }
 
+
+//    private Product mapResultSetToProduct(ResultSet res) {
+//        try {
+//            String id = res.getString("product_id");
+//            String name = res.getString("product_name");
+//            String manufacturer = res.getString("product_manufacturer");
+//            int minimumStockLevel = res.getInt("min_stock_level");
+//            String category_group = res.getString("group_id");
+//            String location = res.getString("location");
+//            double sellingPrice = res.getDouble("selling_price");
+//
+//            Product product = new Product(id, name, manufacturer, minimumStockLevel, location, category_group, sellingPrice);
+//
+//            return product;
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.err.println("Error mapping ResultSet to Product: " + e.getMessage());
+//            return null; // Return null if mapping fails
+//        }
+//    }
+
     private Product mapResultSetToProduct(ResultSet res) {
         try {
             String id = res.getString("product_id");
@@ -139,18 +207,17 @@ public class ProductDAO implements ProductRepository {
             int minimumStockLevel = res.getInt("min_stock_level");
             String category_group = res.getString("group_id");
             String location = res.getString("location");
-            double sellingPrice = res.getDouble("selling_price");
+            double sellingPrice = res.getDouble("effective_price"); // This uses the discount if exists
 
             Product product = new Product(id, name, manufacturer, minimumStockLevel, location, category_group, sellingPrice);
-
             return product;
-
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error mapping ResultSet to Product: " + e.getMessage());
-            return null; // Return null if mapping fails
+            return null;
         }
     }
+
 
 
     public void removeFromProductsByCategory(String productId) {

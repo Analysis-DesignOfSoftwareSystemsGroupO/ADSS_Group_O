@@ -118,10 +118,12 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void UpdateDiscounts() {
-        // Remove Expired and Apply Active to selling prices
-        discountDAO.updateAllDiscountsSellingPrices();
-        // Update all product selling prices
-        productDAO.updateAllProductSellingPricesInBulk();
+        System.out.println("Updating discounts...");
+        discountDAO.updateAllDiscountsAndSellingPrices();
+//        // Remove Expired and Apply Active to selling prices
+//        discountDAO.updateAllDiscountsSellingPrices();
+//        // Update all product selling prices
+//        productDAO.updateAllProductSellingPricesInBulk();
 
     }
 
