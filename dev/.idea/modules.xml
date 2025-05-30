@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Transport_Mudol/Transport_Mudol.iml" filepath="$PROJECT_DIR$/Transport_Mudol/Transport_Mudol.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dev.iml" filepath="$PROJECT_DIR$/dev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HR_Mudol/HR_Mudol.iml" filepath="$PROJECT_DIR$/HR_Mudol/HR_Mudol.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TRS_Mudol/TRS_Mudol.iml" filepath="$PROJECT_DIR$/TRS_Mudol/TRS_Mudol.iml" />
     </modules>
   </component>
 </project>

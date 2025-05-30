@@ -3,9 +3,10 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/HR_Mudol" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" packagePrefix="HR_Mudol" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="TRS_Mudol" />
   </component>
 </module>
