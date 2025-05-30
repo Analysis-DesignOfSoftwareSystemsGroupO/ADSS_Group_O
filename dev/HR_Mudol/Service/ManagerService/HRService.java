@@ -47,7 +47,6 @@ public class HRService implements IHRService {
         System.out.println("- Without roles: " + withoutRoles);
     }
 
-
     // EmployeeService forwarding:
 
     @Override
@@ -209,8 +208,25 @@ public class HRService implements IHRService {
         return weekController.hasUnassignedRoles(week); }
 
     @Override
-    public List<Shift> getShiftsForEmployee(EmployeeDTO employee, WeekDTO curWeek) {
+    public List<ShiftDTO> getShiftsForEmployee(EmployeeDTO employee, WeekDTO curWeek) {
         return weekController.getShiftsForEmployee(employee, curWeek); }
 
+    // ReportGenerator forwarding
+
+
+    @Override
+    public void generateEmployeeReport(UserDTO caller, int empId, WeekDTO curWeek) throws SQLException {
+        reportGenerator.generateEmployeeReport(caller, empId, curWeek);
+    }
+
+    @Override
+    public void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks) {
+        reportGenerator.generateWeeklyReport(caller, weeks);
+    }
+
+    @Override
+    public void generateShiftReport(UserDTO caller, WeekDTO curWeek) {
+        reportGenerator.generateShiftReport(caller, curWeek);
+    }
 
 }

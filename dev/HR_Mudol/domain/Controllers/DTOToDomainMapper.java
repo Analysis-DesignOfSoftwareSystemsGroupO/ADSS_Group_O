@@ -98,7 +98,7 @@ public class DTOToDomainMapper {
 
     // --- toDTO ---
 
-    public ShiftDTO toDTO(Shift shift) {
+    public static ShiftDTO toDTO(Shift shift) {
         List<EmployeeDTO> employeeDTOs = new ArrayList<>();
         for (Employee e : shift.getEmployees()) {
             employeeDTOs.add(toDTO(e));

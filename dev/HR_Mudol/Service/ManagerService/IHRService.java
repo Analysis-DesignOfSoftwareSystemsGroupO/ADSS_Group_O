@@ -92,5 +92,13 @@ public interface IHRService {
 
     int hasUnassignedRoles(WeekDTO week);
 
-    List<Shift> getShiftsForEmployee(EmployeeDTO employee, WeekDTO curWeek);
+    List<ShiftDTO> getShiftsForEmployee(EmployeeDTO employee, WeekDTO curWeek);
+
+    // ReportGenerator forwarding
+    void generateEmployeeReport(UserDTO caller, int empId, WeekDTO curWeek) throws SQLException;
+
+    void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks);
+
+    void generateShiftReport(UserDTO caller, WeekDTO curWeek);
+
 }
