@@ -1,0 +1,69 @@
+package transport_module;
+
+/***
+ * DrivingLicence class represents a type of driving licence.
+ * Each licence has a description (like "Medium truck") and a code (like "C1").
+ */
+public class DrivingLicence {
+    private  String code;
+
+    /***
+     * Constructor - creates a DrivingLicence with given description and code.
+     * @param code Licence code
+     */
+    public DrivingLicence( String code) {
+        this.code = code;
+
+    }
+
+    /***
+     * Copy constructor - creates a new DrivingLicence from another instance.
+     * @param other DrivingLicence instance to copy
+     */
+    public DrivingLicence(DrivingLicence other)
+    {
+        if(other!= null) {
+            this.code = other.code;
+        }
+    }
+//********************************************************************************************************************** Get functions
+
+    /***
+     * @return Licence code
+     */
+    public String getCode() {
+        return code;
+    }
+
+
+//********************************************************************************************************************** print functions
+
+    /***
+     * @return String representation of the DrivingLicence (code and description)
+     */
+    @Override
+    public String toString() {
+        return code;
+    }
+
+    /***
+     * Compares this DrivingLicence to another object based on the licence code.
+     * @param o Object to compare
+     * @return true if codes match, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DrivingLicence d = (DrivingLicence) o;
+        return code.equals(d.code);
+    }
+
+    /***
+     * @return Hash code based on the licence code
+     */
+    @Override
+    public final int hashCode() {
+        return this.code != null ? this.code.hashCode() : 0;
+    }
+}
