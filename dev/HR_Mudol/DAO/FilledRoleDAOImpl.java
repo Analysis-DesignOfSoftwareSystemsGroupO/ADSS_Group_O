@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.FilledRoleDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class FilledRoleDAOImpl implements IFilledRoleDAO {
     private final Connection conn;
 
     public FilledRoleDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override

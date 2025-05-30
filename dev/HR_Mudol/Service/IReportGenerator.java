@@ -1,8 +1,11 @@
 package HR_Mudol.Service;
 
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Week;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -19,7 +22,7 @@ public interface IReportGenerator {
      * @param caller The user requesting the report (e.g., HR manager or admin).
      * @param weeks  The list of weeks for which the report is generated.
      */
-    void generateWeeklyReport(User caller, List<Week> weeks);
+    void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks);
 
     /**
      * Generates a report for a specific employee for a given week.
@@ -29,7 +32,7 @@ public interface IReportGenerator {
      * @param empId  The employee ID for which the report is generated.
      * @param week   The specific week for which the report is generated.
      */
-    void generateEmployeeReport(User caller, int empId, Week week);
+    void generateEmployeeReport(UserDTO caller, int empId, WeekDTO week) throws SQLException;
 
     /**
      * Generates a shift report for the given week.
@@ -38,6 +41,6 @@ public interface IReportGenerator {
      * @param caller  The user requesting the report (e.g., HR manager or admin).
      * @param curWeek The current week for which the shift report is generated.
      */
-    void generateShiftReport(User caller, Week curWeek);
+    void generateShiftReport(UserDTO caller, WeekDTO curWeek);
 
 }

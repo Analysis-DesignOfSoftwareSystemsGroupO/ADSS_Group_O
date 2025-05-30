@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class UserDAOImpl implements IUserDAO {
     private final Connection conn;
 
     public UserDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override

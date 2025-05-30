@@ -1,6 +1,7 @@
 package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.*;
@@ -259,16 +260,16 @@ public class WeekController implements IWeekController {
      * @return A list of shifts assigned to the employee.
      */
     @Override
-    public List<Shift> getShiftsForEmployee(EmployeeDTO theEmployee, WeekDTO theWeek) {
+    public List<ShiftDTO> getShiftsForEmployee(EmployeeDTO theEmployee, WeekDTO theWeek) {
 
         Employee employee=mapper.fromDTO(theEmployee);
         Week curWeek=mapper.fromDTO(theWeek);
 
-        List<Shift> result = new ArrayList<>();
+        List<ShiftDTO> result = new ArrayList<>();
 
         for (Shift shift : curWeek.getShifts()) {
             if (curBranch.getWeekRepo().isEmployeeAssignedToShift(employee.getEmpId(), shift.getShiftID())) {
-                result.add(shift);
+                result.add(DTOToDomainMapper.toDTO(shift));
             }
         }
 

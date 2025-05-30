@@ -1,6 +1,7 @@
 package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.Employee;
@@ -60,7 +61,7 @@ public interface IWeekController {
      * @param theWeek The current theWeek object.
      * @return A list of shifts assigned to the employee for the current theWeek.
      */
-    List<Shift> getShiftsForEmployee(EmployeeDTO theEmployee, WeekDTO theWeek);
+    List<ShiftDTO> getShiftsForEmployee(EmployeeDTO theEmployee, WeekDTO theWeek);
 
     /**
      * Checks if there are any unassigned roles for the given theWeek.

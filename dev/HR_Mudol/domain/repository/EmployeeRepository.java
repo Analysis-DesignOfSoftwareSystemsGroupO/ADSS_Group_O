@@ -122,6 +122,10 @@ public class EmployeeRepository {
         employeeDAO.updatePassword(empId, newPassword);
     }
 
+    public int size(){
+        return employeesById.size();
+    }
+
 
 
 

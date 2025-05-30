@@ -1,11 +1,11 @@
 package HR_Mudol.Service;
 
-import HR_Mudol.domain.Controllers.EmployeeController;
-import HR_Mudol.domain.Objects.*;
-import HR_Mudol.domain.ShiftType;
-import HR_Mudol.domain.Controllers.WeekController;
-import HR_Mudol.domain.WeekDay;
+import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.*;
+import HR_Mudol.domain.*;
 
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.Scanner;
  */
 public class ReportGenerator implements IReportGenerator {
 
-    private EmployeeController empM;
-    private WeekController weekM;
+    private final IEmployeeController empM;
+    private final IWeekController weekM;
 
     /**
      * Constructor to initialize the ReportGenerator with necessary managers.
@@ -26,7 +26,7 @@ public class ReportGenerator implements IReportGenerator {
      * @param weekM The WeekManager used for week-related operations.
      * @param empM  The EmployeeManager used for employee-related operations.
      */
-    public ReportGenerator(WeekController weekM, EmployeeController empM) {
+    public ReportGenerator(IWeekController weekM, IEmployeeController empM) {
         this.weekM = weekM;
         this.empM = empM;
     }
@@ -40,7 +40,7 @@ public class ReportGenerator implements IReportGenerator {
      * @param weeks  The list of weeks to search for the required week.
      */
     @Override
-    public void generateWeeklyReport(User caller, List<Week> weeks) {
+    public void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks) {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate time = null;
@@ -56,11 +56,11 @@ public class ReportGenerator implements IReportGenerator {
             }
         }
 
-        Week targetWeek = null;
+        WeekDTO targetWeek = null;
 
         // חיפוש השבוע לפי תאריך
-        for (Week week : weeks) {
-            if (week.getConstraintDeadline().equals(time)) {
+        for (WeekDTO week : weeks) {
+            if (week.getConstraintDeadline().toLocalDate().equals(time)) {
                 targetWeek = week;
                 break;
             }
@@ -72,8 +72,13 @@ public class ReportGenerator implements IReportGenerator {
         }
 
         System.out.println("=== Weekly Report for Week - " + time + " ===");
-        for (Shift shift : targetWeek.getShifts()) {
-            System.out.println(shift);
+
+        for (ShiftDTO shift : targetWeek.getShifts()) {
+            System.out.println("Shift ID: " + shift.getShiftID());
+            System.out.println("Day: " + shift.getDay());
+            System.out.println("Type: " + shift.getType());
+            System.out.println("Status: " + shift.getStatus());
+            System.out.println("Manager ID: " + shift.getShiftManagerId());
             System.out.println("-------------------------------------------------");
         }
     }
@@ -88,29 +93,29 @@ public class ReportGenerator implements IReportGenerator {
      * @param curWeek The current week for which the employee's shift details are requested.
      */
     @Override
-    public void generateEmployeeReport(User caller, int empId, Week curWeek) {
-        Employee employee = empM.getEmployeeById(caller, empId);
+    public void generateEmployeeReport(UserDTO caller, int empId, WeekDTO curWeek) throws SQLException {
+        EmployeeDTO employee = empM.getEmployeeById(caller, empId);
         if (employee == null) {
             System.out.println("Employee with ID " + empId + " not found.");
             return;
         }
 
         System.out.println("===== Employee Report =====");
-        System.out.println("Name: " + employee.getEmpName());
-        System.out.println("ID: " + employee.getEmpId());
-        System.out.println("Bank Account: " + employee.getEmpBankAccount());
-        System.out.println("Salary: " + employee.getEmpSalary());
-        System.out.println("Start Date: " + employee.getEmpStartDate());
-        System.out.println("Vacation Days Left: " + employee.getDaysOff(caller));
-        System.out.println("Sick Days Left: " + employee.getSickDays(caller));
+        System.out.println("Name: " + employee.getFullName());
+        System.out.println("ID: " + employee.getEmployeeId());
+        System.out.println("Bank Account: " + employee.getBankAccount());
+        System.out.println("Salary: " + employee.getSalary());
+        System.out.println("Start Date: " + employee.getStartDate());
+        System.out.println("Vacation Days Left: " + employee.getDaysOff());
+        System.out.println("Sick Days Left: " + employee.getSickDays());
 
-        List<Shift> shifts = weekM.getShiftsForEmployee(employee,curWeek);
-        if (shifts.isEmpty()) {
+        List<ShiftDTO> shifts = weekM.getShiftsForEmployee(employee, curWeek);  // מקבל DTO של shift
+        if (shifts == null || shifts.isEmpty()) {
             System.out.println("No shifts assigned.");
         } else {
             System.out.println("Assigned Shifts:");
-            for (Shift s : shifts) {
-                System.out.println(" # Shift " + s.getType() + "-"+s.getDay());
+            for (ShiftDTO s : shifts) {
+                System.out.println(" # Shift " + s.getType() + " - " + s.getDay());
             }
         }
     }
@@ -123,7 +128,7 @@ public class ReportGenerator implements IReportGenerator {
      * @param curWeek The current week for which the shift report is generated.
      */
     @Override
-    public void generateShiftReport(User caller, Week curWeek) {
+    public void generateShiftReport(UserDTO caller, WeekDTO curWeek) {
 
         askAndGenerateShiftReport(caller, curWeek);
 
@@ -135,7 +140,7 @@ public class ReportGenerator implements IReportGenerator {
      * @param caller The user requesting the shift report.
      * @param curWeek The current week for which the shift report is generated.
      */
-    private static void askAndGenerateShiftReport(User caller, Week curWeek) {
+    private static void askAndGenerateShiftReport(UserDTO caller, WeekDTO curWeek) {
         Scanner scanner = new Scanner(System.in);
 
         // בחר יום
@@ -166,21 +171,28 @@ public class ReportGenerator implements IReportGenerator {
         shiftReport(type, day, curWeek);
     }
 
-    /**
-     * Generates the shift report for a specified day and shift type within a given week.
-     *
-     * @param type The type of shift (e.g., MORNING, EVENING).
-     * @param day The day of the week (e.g., SUNDAY, MONDAY, etc.).
-     * @param curWeek The week for which the shift report is generated.
-     */
-    private static void shiftReport(ShiftType type, WeekDay day, Week curWeek){
-
-        if (curWeek == null) {
-            System.out.println("No current week provided.");
+    private static void shiftReport(ShiftType type, WeekDay day, WeekDTO curWeek) {
+        if (curWeek == null || curWeek.getShifts() == null) {
+            System.out.println("Week or shifts are not available.");
             return;
         }
 
-        Shift foundShift = curWeek.getAShift(day, type);
+        ShiftDTO foundShift = null;
+
+        for (ShiftDTO shift : curWeek.getShifts()) {
+            try {
+                WeekDay shiftDay = WeekDay.valueOf(shift.getDay().toUpperCase());
+                ShiftType shiftType = ShiftType.valueOf(shift.getType().toUpperCase());
+
+                if (shiftDay == day && shiftType == type) {
+                    foundShift = shift;
+                    break;
+                }
+            } catch (IllegalArgumentException e) {
+                // אם הערך ב־DTO אינו חוקי כ־enum
+                System.out.println("Invalid shift data format in DTO.");
+            }
+        }
 
         if (foundShift == null) {
             System.out.println("No shift found on " + day + " - " + type);
@@ -193,14 +205,16 @@ public class ReportGenerator implements IReportGenerator {
         System.out.println("Status: " + foundShift.getStatus());
 
         System.out.println("\nRequired Roles:");
-        for (Role role : foundShift.getNecessaryRoles()) {
+        for (RoleDTO role : foundShift.getNecessaryRoles()) {
             System.out.println("- " + role.getDescription());
         }
 
         System.out.println("\nAssigned Employees:");
-        for (Employee emp : foundShift.getEmployees()) {
-            System.out.println("- " + emp.getEmpName());
+        for (EmployeeDTO emp : foundShift.getEmployees()) {
+            System.out.println("- " + emp.getFullName());
         }
     }
+
+
 
 }
