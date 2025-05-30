@@ -172,6 +172,33 @@ public class CategoryDAO {
         return groupIds;
     }
 
+
+    public List<String> getCategoriesByGroupId(String groupId) {
+        List<String> groupIds = new ArrayList<>();
+        String sql = """
+                SELECT  parent_category_id,sub_category_id,sub_sub_category_id
+                FROM "Inventory"."Category_Groups"
+                WHERE group_id = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, groupId);
+
+
+            ResultSet res = statement.executeQuery();
+
+            while (res.next()) {
+                groupIds.add(res.getString("group_id"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error retrieving category groups by category ID: " + e.getMessage());
+        }
+        return groupIds;
+    }
+
     public boolean categoryExists(String name) {
         String sql = """
                 SELECT 1 FROM "Inventory"."Categories"
@@ -190,6 +217,27 @@ public class CategoryDAO {
             System.err.println("Error checking if category exists: " + e.getMessage());
             return false;
         }
+    }
+
+    public void SaveCategoryByProductPair(String categoryId, String productId) {
+        String sql = """
+                    INSERT INTO "Inventory"."Products_by_Categories" 
+                        ("product_id", "category_id")
+                    VALUES (?, ?)
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, categoryId);
+            statement.setString(2, productId);
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error saving category by product: " + e.getMessage());
+        }
+
     }
 
 

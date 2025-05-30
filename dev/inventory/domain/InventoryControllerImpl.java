@@ -37,6 +37,10 @@ public class InventoryControllerImpl implements InventoryController {
             Product productToAdd = new Product(name, minimumStock, costPrice, location, manufacturer, categoryGroupId);
             productRepository.saveProduct(productToAdd);
             productDAO.saveProduct(productToAdd);
+            List<String> categories = categoryDAO.getCategoriesByGroupId(categoryGroupId);
+            for (String categoryId : categories) {
+                categoryDAO.SaveCategoryByProductPair(categoryId,productToAdd.getId());
+            }
         }
     }
 
@@ -77,7 +81,7 @@ public class InventoryControllerImpl implements InventoryController {
 
     public List<StockItem> getAllStockItems() {
         System.out.println("Getting all stock items...");
-        return stockItemRepository.getAllStockItems();
+        return stockItemDAO.getAllStockItems();
     }
 
     public void printAllProducts() {
@@ -91,7 +95,7 @@ public class InventoryControllerImpl implements InventoryController {
     public void printAllCategories() {
         InMemoryCategoryRepository.printAllCategories();
     }
-
+// toDo: update discount functionality
     public void UpdateDiscounts() {
         List<Discount> discounts = discountRepository.getAllDiscounts();
         for (Discount discount : discounts) {
@@ -126,7 +130,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void checkForExpiredStock() {
-        List<StockItem> stockItems = stockItemRepository.getAllStockItems();
+        List<StockItem> stockItems = stockItemDAO.getAllStockItems();
         for (StockItem stockItem : stockItems) {
             if (stockItem.getStatus() == StockItemStatus.OK && stockItem.getExpiryDate().isBefore(LocalDate.now())) {
                 System.out.println("Product " + stockItem.getProduct().getName() + " is expired.");
