@@ -26,6 +26,17 @@ public class ShiftDTO {
         this.necessaryRoles = necessaryRoles;
         this.filledRoles = filledRoles;
     }
+    public ShiftDTO(int shiftID, String day, String type, String status, int shiftManagerId) {
+        this.shiftID = shiftID;
+        this.day = day;
+        this.type = type;
+        this.status = status;
+        this.shiftManagerId = shiftManagerId;
+        this.employees = new ArrayList<>();
+        this.necessaryRoles = new ArrayList<>();
+        this.filledRoles = new ArrayList<>();
+    }
+
 
     public int getShiftID() {
         return shiftID;

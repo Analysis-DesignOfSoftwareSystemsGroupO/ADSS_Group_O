@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 import HR_Mudol.domain.Status;
 
 import java.sql.*;
@@ -11,7 +12,7 @@ public class ShiftDAOImpl implements IShiftDAO {
     private final Connection conn;
 
     public ShiftDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override

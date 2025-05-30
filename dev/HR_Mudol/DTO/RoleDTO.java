@@ -1,5 +1,6 @@
 package HR_Mudol.DTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoleDTO {
@@ -11,6 +12,11 @@ public class RoleDTO {
         this.roleNumber = roleNumber;
         this.description = description;
         this.relevantEmployees = relevantEmployees;
+    }
+    public RoleDTO(int roleNumber, String description) {
+        this.roleNumber = roleNumber;
+        this.description = description;
+        this.relevantEmployees = new ArrayList<>();
     }
 
     public int getRoleNumber() {

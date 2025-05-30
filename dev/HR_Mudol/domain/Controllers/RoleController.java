@@ -96,7 +96,7 @@ public class RoleController implements IRoleController {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee employee = employeeManager.getEmployeeById(theCaller, empId);
+        Employee employee = DTOToDomainMapper.fromDTO(employeeManager.getEmployeeById(theCaller, empId));
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
@@ -119,7 +119,7 @@ public class RoleController implements IRoleController {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID to promote to Shift Manager: ");
-        Employee employee = employeeManager.getEmployeeById(theCaller, empId);
+        Employee employee = DTOToDomainMapper.fromDTO(employeeManager.getEmployeeById(theCaller, empId));
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
@@ -141,7 +141,7 @@ public class RoleController implements IRoleController {
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID: ");
-        Employee employee = employeeManager.getEmployeeById(theCaller, empId);
+        Employee employee = DTOToDomainMapper.fromDTO(employeeManager.getEmployeeById(theCaller, empId));
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
