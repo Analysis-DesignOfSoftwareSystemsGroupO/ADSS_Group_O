@@ -195,4 +195,72 @@ public class DiscountDAO {
         return 0.0;
     }
 
+    public void updateAllDiscountsSellingPrices() {
+        try (Connection connection = DataBaseConnector.getConnection()) {
+            connection.setAutoCommit(false);
+
+            // 1. Remove expired discounts
+            String clearExpiredSql = """
+            UPDATE "Inventory"."Selling_Prices"
+            SET discount_id = NULL, discount_selling_price = NULL
+            WHERE discount_id IS NOT NULL
+              AND discount_id IN (
+                  SELECT discount_id
+                  FROM "Inventory"."Discount_Store_Target"
+                  WHERE NOW() NOT BETWEEN start_date AND end_date
+              )
+        """;
+
+            // 2. Apply active product-specific discounts
+            String productDiscountSql = """
+            UPDATE "Inventory"."Selling_Prices" sp
+            SET discount_id = dst.discount_id,
+                discount_selling_price = sp.selling_price * (1 - d.discount_percentage)
+            FROM "Inventory"."Discount_Store_Target" dst
+            JOIN "Inventory"."Discounts" d ON dst.discount_id = d.discount_id
+            WHERE dst.discount_target_type = 'product'
+              AND dst.discount_target_id = sp.product_id
+              AND NOW() BETWEEN dst.start_date AND dst.end_date
+        """;
+
+            // 3. Apply category-wide discounts to products without any discount
+            String categoryDiscountSql = """
+            UPDATE "Inventory"."Selling_Prices" sp
+            SET discount_id = dst.discount_id,
+                discount_selling_price = sp.selling_price * (1 - d.discount_percentage)
+            FROM "Inventory"."Discount_Store_Target" dst
+            JOIN "Inventory"."Discounts" d ON dst.discount_id = d.discount_id
+            JOIN "Inventory"."Products_by_Categories" pc ON pc.category_id = dst.discount_target_id
+            WHERE dst.discount_target_type = 'category'
+              AND pc.product_id = sp.product_id
+              AND sp.discount_id IS NULL
+              AND NOW() BETWEEN dst.start_date AND dst.end_date
+        """;
+
+            try (
+                    PreparedStatement clearStmt = connection.prepareStatement(clearExpiredSql);
+                    PreparedStatement productStmt = connection.prepareStatement(productDiscountSql);
+                    PreparedStatement categoryStmt = connection.prepareStatement(categoryDiscountSql)
+            ) {
+                clearStmt.executeUpdate();
+                productStmt.executeUpdate();
+                categoryStmt.executeUpdate();
+
+                connection.commit();
+                System.out.println("All active discounts applied successfully.");
+            } catch (Exception e) {
+                connection.rollback();
+                System.err.println("Error applying discounts: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            System.err.println("Database connection error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }

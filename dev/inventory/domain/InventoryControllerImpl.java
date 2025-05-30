@@ -30,17 +30,22 @@ public class InventoryControllerImpl implements InventoryController {
     public InventoryControllerImpl() {
     }
 
-    public void addProduct(String name, int minimumStock, String categoryGroupId, double costPrice, String location, String manufacturer) {
+    public void addProduct(String name, int minimumStock, String categoryGroupId, double sellingPrice, String location, String manufacturer) {
         if (productDAO.productExists(name, manufacturer)) {
             throw new IllegalArgumentException("Product with the same name and manufacturer already exists.");
         } else {
-            Product productToAdd = new Product(name, minimumStock, costPrice, location, manufacturer, categoryGroupId);
+            Product productToAdd = new Product(name, minimumStock,sellingPrice, location, manufacturer, categoryGroupId);
+            // Add to repository
             productRepository.saveProduct(productToAdd);
+            // Save to DB - category
             productDAO.saveProduct(productToAdd);
+            // Save to DB - categories by products
             List<String> categories = categoryDAO.getCategoriesByGroupId(categoryGroupId);
             for (String categoryId : categories) {
                 categoryDAO.SaveCategoryByProductPair(categoryId,productToAdd.getId());
             }
+            // Save to DB  - selling prices
+            productDAO.saveSellingPrice(productToAdd);
         }
     }
 
@@ -95,38 +100,13 @@ public class InventoryControllerImpl implements InventoryController {
     public void printAllCategories() {
         InMemoryCategoryRepository.printAllCategories();
     }
-// toDo: update discount functionality
+
     public void UpdateDiscounts() {
-        List<Discount> discounts = discountRepository.getAllDiscounts();
-        for (Discount discount : discounts) {
-            if (discount.getTargetType() == DiscountTargetType.PRODUCT) {
-                Product product = productRepository.getProductById(discount.getTargetId());
-                if (product != null) {
-                    if (discount.isActive()) {
-                        activateDiscount(product, discount);
-                    } else {
-                        deactivateDiscount(product, discount);
-                    }
-                } else {
-                    System.out.println("Product with ID " + discount.getTargetId() + " not found.");
-                }
-            } else if (discount.getTargetType() == DiscountTargetType.CATEGORY) {
-                Category category = getCategoryById(discount.getTargetId());
-                if (category != null) {
-                    for (Product product : category.getProducts()) {
-                        if (product != null) {
-                            if (discount.isActive()) {
-                                activateDiscount(product, discount);
-                            } else {
-                                deactivateDiscount(product, discount);
-                            }
-                        }
-                    }
-                } else {
-                    System.out.println("Category with ID " + discount.getTargetId() + " not found.");
-                }
-            }
-        }
+        // Remove Expired and Apply Active to selling prices
+        discountDAO.updateAllDiscountsSellingPrices();
+        // Update all product selling prices
+        productDAO.updateAllProductSellingPricesInBulk();
+
     }
 
     public void checkForExpiredStock() {
@@ -140,35 +120,13 @@ public class InventoryControllerImpl implements InventoryController {
         }
     }
 
-    public void activateDiscount(Product product, Discount discount) {
-        double newPrice;
-        if (!product.getStoreDiscountActive() && discount.getDiscountType() == DiscountType.STORE) {
-            newPrice = product.getSellingPrice() * (1 - discount.getDiscountPercentage() / 100);
-            product.setDiscountSellingPrice(Math.round(newPrice * 100.0) / 100.0);
-            product.setStoreDiscountActive(true);
-        } else if (!product.getManufacturerDiscountActive() && discount.getDiscountType() == DiscountType.MANUFACTURER) {
-            newPrice = product.getCostPrice() * (1 - discount.getDiscountPercentage() / 100);
-            product.setDiscountCostPrice(Math.round(newPrice * 100.0) / 100.0);
-            product.setManufacturerDiscountActive(true);
-        }
-    }
-
-    public void deactivateDiscount(Product product, Discount discount) {
-        if (product.getStoreDiscountActive() && discount.getDiscountType() == DiscountType.STORE) {
-            product.setDiscountSellingPrice(product.getSellingPrice());
-            product.setStoreDiscountActive(false);
-        } else if (product.getManufacturerDiscountActive() && discount.getDiscountType() == DiscountType.MANUFACTURER) {
-            product.setDiscountCostPrice(product.getCostPrice());
-            product.setManufacturerDiscountActive(false);
-        }
-    }
 
     public Category getCategoryById(String id) {
-        return InMemoryCategoryRepository.getCategoryById(id);
+        return categoryDAO.getCategoryById(id);
     }
 
     public String getCategoryIdByName(String name) {
-        return InMemoryCategoryRepository.getCategoryIdByName(name);
+        return categoryDAO.getCategoryByName(name).getId();
     }
 
     public void saveCategory(String catName, String parentCategoryName) {

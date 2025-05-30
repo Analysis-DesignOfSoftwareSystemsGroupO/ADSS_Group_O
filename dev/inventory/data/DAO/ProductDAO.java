@@ -223,4 +223,94 @@ public class ProductDAO implements ProductRepository {
         }
         return products;
     }
+
+    public void saveSellingPrice(Product product) {
+        String sql = """
+                INSERT INTO "Inventory"."Selling_Prices" (
+                product_id, selling_price
+                ) VALUES (?, ?)
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, product.getId());
+            statement.setDouble(2, product.getSellingPrice());
+
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error saving product: " + e.getMessage());
+        }
+
+    }
+
+    public void updateSellingPriceperProduct(Product product) {
+        String sql = """
+        UPDATE "Inventory"."Products" p
+        SET selling_price = sp.effective_price
+        FROM (
+            SELECT product_id,
+                   COALESCE(discount_selling_price, selling_price) AS effective_price
+            FROM "Inventory"."Selling_Prices"
+            WHERE product_id = ?
+        ) sp
+        WHERE p.product_id = sp.product_id
+          AND p.product_id = ?
+    """;
+
+        try (Connection connection = DataBaseConnector.getConnection()) {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, product.getId());
+                statement.setString(2, product.getId());
+
+                int rowsUpdated = statement.executeUpdate();
+                connection.commit();
+
+                if (rowsUpdated > 0) {
+                    System.out.println("Updated selling price for product " + product.getId());
+                } else {
+                    System.out.println("No update performed for product " + product.getId());
+                }
+            } catch (Exception e) {
+                connection.rollback();
+                System.err.println("Error updating selling price: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            System.err.println("Error connecting to database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public void updateAllProductSellingPricesInBulk() {
+        String sql = """
+        UPDATE "Inventory"."Products" p
+        SET selling_price = sp.effective_price
+        FROM (
+            SELECT product_id,
+                   COALESCE(discount_selling_price, selling_price) AS effective_price
+            FROM "Inventory"."Selling_Prices"
+        ) sp
+        WHERE p.product_id = sp.product_id
+          AND p.selling_price <> sp.effective_price
+    """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            int updatedRows = statement.executeUpdate();
+            System.out.println("Bulk update complete. Rows updated: " + updatedRows);
+
+        } catch (Exception e) {
+            System.err.println("Error during bulk selling price update.");
+            e.printStackTrace();
+        }
+    }
+
+
 }
