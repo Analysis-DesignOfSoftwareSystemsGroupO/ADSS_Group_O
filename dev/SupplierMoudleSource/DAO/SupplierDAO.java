@@ -101,7 +101,7 @@ public class SupplierDAO {
 
 
     public void removeSupplier(String supplierID){
-        String removeSupplierSql = "DELETE FROM supplierinventorydb.supplier WHERE supplierID=?";
+        String removeSupplierSql = "DELETE FROM supplierinventorydb.supplier WHERE id=?";
 
         try (Connection connection = getConnection()){
             PreparedStatement pstmt = connection.prepareStatement(removeSupplierSql);
@@ -227,7 +227,7 @@ public class SupplierDAO {
     }  // Step 3: Get contact list
 
 
-    public void addProduct(String supplierid, SuppliedItemDTO suppliedItemDTO) throws SQLException {
+    public void addProduct(String supplierid, SuppliedItemDTO suppliedItemDTO) throws Exception {
         String sql = "INSERT INTO supplierinventorydb.productofsupplier (productid, supplierid, price) VALUES (?, ?, ?)";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -235,6 +235,8 @@ public class SupplierDAO {
             pstmt.setInt(2, Integer.parseInt(supplierid));
             pstmt.setInt(3, suppliedItemDTO.suppliedItemPrice);
             pstmt.executeUpdate();
+        }catch (SQLException e) {
+            throw new Exception("Product already exists");
         }
     }
 
@@ -250,10 +252,18 @@ public class SupplierDAO {
 
     }
 
-    public void addInformationContact(String supplierid, InformationContactDTO informationContactDTO) throws SQLException {
-        String sql = "INSERT into supplierinventorydb.informationcontact (supplier, contactname, contactphone, title) VALUES (?, ?, ?, ?)";
+    public void addInformationContact(String supplierid, InformationContactDTO informationContactDTO) throws Exception {
+        String checksql = "SELECT * FROM supplierinventorydb.informationcontact where supplierid = ? and contactname = ?";
+        String sql = "INSERT into supplierinventorydb.informationcontact (supplierid, contactname, contactphone, title) VALUES (?, ?, ?, ?)";
         try (Connection con = getConnection();){
-            PreparedStatement pstmt = con.prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(checksql);
+            pstmt.setInt(1, Integer.parseInt(supplierid));
+            pstmt.setString(2, informationContactDTO.getContactName());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                throw new Exception("Contact name already exists");
+            }
+            pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, Integer.parseInt(supplierid));
             pstmt.setString(2, informationContactDTO.getContactName());
             pstmt.setString(3, informationContactDTO.getContactPhone());
@@ -263,7 +273,7 @@ public class SupplierDAO {
     }
 
     public void editSupplierName(String supplierid, String name) throws SQLException {
-        String sql = "UPDATE supplierinventorydb.supplier SET suppliername=? WHERE supplierid=?";
+        String sql = "UPDATE supplierinventorydb.supplier SET name=? WHERE id=?";
         try (Connection con = getConnection();){
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, name);

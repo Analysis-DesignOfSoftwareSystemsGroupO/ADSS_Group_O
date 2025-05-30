@@ -7,6 +7,7 @@ import SupplierMoudleSource.Repository.SupplierRepository;
 import SupplierMoudleSource.Domain.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class SupplierService {
@@ -17,11 +18,11 @@ public class SupplierService {
     //this method creates a supplier
     public void createSupplier(String supplierName, String supplierPaymentMethod,
                                String bankAccount, String bankNumber, String bankBranch,
-                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay, String ownerId) throws Exception {
+                               String contactName, String contactPhoneNumber, String contactTitle, String deliveryWay) throws Exception {
 
 
-        supplierRepository.addSupplier(supplierName, new PaymentMethodDTO(supplierPaymentMethod),
-                new BankDTO(bankAccount, bankNumber, bankBranch, ownerId), new InformationContactDTO(contactName, contactPhoneNumber, contactTitle), new DeliveryDTO(deliveryWay));
+        supplierRepository.addSupplier(supplierName, new PaymentMethod(supplierPaymentMethod),
+                new BankDTO(bankAccount, bankNumber, bankBranch, ""), new InformationContactDTO(contactName, contactPhoneNumber, contactTitle), new Delivery(deliveryWay));
 
     }
 
@@ -58,7 +59,7 @@ public class SupplierService {
     //prints the details of a specific supplier //todo
     public void printSupplier(String supplierId) throws Exception {
         if (supplierRepository.getSupplier(supplierId) != null) {
-            System.out.println(supplierRepository.getSupplier(supplierId));
+            System.out.println(new Supplier(supplierRepository.getSupplier(supplierId)).toString());
             return;
         }
         throw new Exception("Supplier doesn't exist");
@@ -109,7 +110,7 @@ public class SupplierService {
         List<InformationContactDTO> infoContacts = supplier.getInformationContacts();
         for (InformationContactDTO infoContact : infoContacts) {
             InformationContact informationContact = new InformationContact(infoContact);
-            System.out.println(infoContact.toString());
+            System.out.println(informationContact.toString());
         }
     }
 
@@ -118,17 +119,18 @@ public class SupplierService {
         if (supplier == null) {
             throw new NullPointerException("Supplier not found");
         }
-        List<AgreementDTO> agreements = agreementRepository.getAllAgreement();
-        for (AgreementDTO agreement : agreements){
-            if (agreement.getSupplierID().equals(supplierID)) {
-                agreementRepository.removeAgreement(agreement.getBranchId(), agreement.getSupplierID());
-            }
-        }
+//        List<AgreementDTO> agreements = agreementRepository.getAllAgreement();
+//        for (AgreementDTO agreement : agreements){
+//            if (agreement.getSupplierID().equals(supplierID)) {
+//                agreementRepository.removeAgreement(agreement.getBranchId(), agreement.getSupplierID());
+//            }
+//        }
         supplierRepository.removeSupplier(supplierID);
     }
 
-    public void updateDeliveryMethod(String supplierId, String deliveryWay, String dayOfWeek) throws Exception {
-        supplierRepository.editDeliveryMethod(supplierId, new DeliveryDTO(deliveryWay));
+    public void updateDeliveryMethod(String supplierId, String deliveryWay) throws Exception {
+
+        supplierRepository.editDeliveryMethod(supplierId, new Delivery(deliveryWay));
     }
 
     public void viewInformationContacts(String id) throws Exception {

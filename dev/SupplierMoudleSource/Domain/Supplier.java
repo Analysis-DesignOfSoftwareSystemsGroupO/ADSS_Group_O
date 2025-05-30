@@ -36,7 +36,7 @@ public class Supplier {
         this.supplierID = ID;
         this.supplierName = supplierName;
         this.supplyProducts = new HashMap<String, SuppliedItem>();
-        this.delivery = new Delivery(deliveryWay, dayOfWeek);
+        this.delivery = new Delivery(deliveryWay);
     }
 
     public Supplier(Supplier other) {
@@ -118,9 +118,6 @@ public class Supplier {
         }
         stringBuilder.append("\t").append(this.getBank().toString()).append("\n");
         stringBuilder.append("\t").append("Delivery Way: ").append(delivery.getDeliveryWay());
-        if (delivery.getDeliveryWay().equals("Constant Delivery")) {
-            stringBuilder.append(", At: ").append(delivery.getArrivalDay());
-        }
         return stringBuilder.toString();
     }
 

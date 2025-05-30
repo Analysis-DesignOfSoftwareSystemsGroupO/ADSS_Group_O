@@ -55,7 +55,7 @@ CREATE TABLE supplierinventorydb.agreement (
                                                supplierID integer NOT NULL,
                                                PRIMARY KEY (branchID, supplierID),
                                                FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
-                                               FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id)
+                                               FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id)  ON DELETE CASCADE
 );
 
 CREATE TABLE supplierinventorydb.bank (
@@ -63,7 +63,7 @@ CREATE TABLE supplierinventorydb.bank (
                                           bankAccountNumber character varying(50) NOT NULL,
                                           bankNumber character varying(50) NOT NULL,
                                           bankBranch character varying(50) NOT NULL,
-                                          FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id)
+                                          FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE
 );
 
 CREATE TABLE supplierinventorydb.discount (
@@ -74,7 +74,7 @@ CREATE TABLE supplierinventorydb.discount (
                                               branchID integer,
                                               PRIMARY KEY (branchID, supplierID, productID),
                                               FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
-                                              FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id),
+                                              FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                               FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
 );
 
@@ -83,7 +83,7 @@ CREATE TABLE supplierinventorydb.informationcontact (
                                                         contactName character varying(50) PRIMARY KEY,
                                                         contactPhone character varying(50),
                                                         title character varying(50),
-                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id)
+                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE
 );
 
 CREATE TABLE supplierinventorydb."order" (
@@ -104,7 +104,7 @@ CREATE TABLE supplierinventorydb.productOfSupplier (
                                                        supplierID integer,
                                                        price integer,
                                                        PRIMARY KEY (productID, supplierID),
-                                                       FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id),
+                                                       FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                        FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
 );
 
@@ -123,7 +123,7 @@ CREATE TABLE supplierinventorydb.productInAgreement (
                                                         supplierID integer,
                                                         PRIMARY KEY (productID, supplierID, branchID),
                                                         FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
-                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id),
+                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                         FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
 );
 

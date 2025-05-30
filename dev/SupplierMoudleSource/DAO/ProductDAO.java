@@ -12,7 +12,7 @@ import static DataBase.PostgresConnection.getConnection;
 public class ProductDAO {
 
     public String addProduct(String productName, String productManufacturer, int shelfLife) throws SQLException {
-        String checkSql = "SELECT * from supplierinventorydb.product where name=? and manufacturer=? and shelfLife=?";
+        String checkSql = "SELECT * from supplierinventorydb.product where name=? and manufacturer=? and shelflifedays=?";
         String sql = "INSERT INTO supplierinventorydb.product (name, manufacturer, shelfLifeDays) VALUES (?, ?, ?)";
         String productID;
 

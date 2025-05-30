@@ -33,7 +33,7 @@ public String addProduct(String productName, String manufacturer, int shelfLifeD
         }
         String id = "-1";
         try {
-            productDAO.addProduct(productName, manufacturer, shelfLifeDays);
+            id = productDAO.addProduct(productName, manufacturer, shelfLifeDays);
 
         }catch (Exception e){
 

@@ -5,29 +5,20 @@ import DTO.DeliveryDTO;
 
 public  class Delivery {
     private String deliveryWay;
-    private String arrivalDay;
 
 
     //empty case used for diffrent methods of delivery
     String[] daysOfWeek = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
-    public Delivery(String deliveryWay, String arrivalDay) {
+    public Delivery(String deliveryWay) {
         if (deliveryWay == null) {
             throw new IllegalArgumentException("deliveryWay is not valid");
         }
         if(!(deliveryWay.equals("Constant Delivery") || deliveryWay.equals("Temporary Delivery") || deliveryWay.equals("Self Pick Up"))) {
             throw new IllegalArgumentException("deliveryWay is not valid");
         }
-        if ((deliveryWay.equals("Constant Delivery") && !validDay(arrivalDay))) {
-            throw new IllegalArgumentException("arrivalDay is not valid");
-        }
-        else if (((deliveryWay.equals("Temporary Delivery") || deliveryWay.equals("Self Pick Up")) && !arrivalDay.isEmpty())) {
-            throw new IllegalArgumentException("arrivalDay is not valid");
-        }
-
-        this.deliveryWay = deliveryWay;
-        this.arrivalDay = arrivalDay;
+     this.deliveryWay = deliveryWay;
     }
     public Delivery(DeliveryDTO deliveryDTO) {
         this.deliveryWay = deliveryDTO.getDeliveryWay();
@@ -48,7 +39,5 @@ public  class Delivery {
     public DeliveryDTO getDeliveryDTO() {
         return new DeliveryDTO(deliveryWay);
     }
-    public String getArrivalDay() {
-        return arrivalDay;
-    }
+
 }

@@ -29,9 +29,9 @@ public class SupplierRepository {
     /**
      *Supplier Data Base Functions:
      */
-    public void addSupplier(String supplierName, PaymentMethodDTO supplierPaymentMethod,
-                            BankDTO bank, InformationContactDTO informationContactDTO, DeliveryDTO deliveryWay) {
-        supplierDAO.addSupplier(supplierName, bank, supplierPaymentMethod, deliveryWay, informationContactDTO);
+    public void addSupplier(String supplierName, PaymentMethod supplierPaymentMethod,
+                            BankDTO bank, InformationContactDTO informationContactDTO, Delivery deliveryWay) {
+        supplierDAO.addSupplier(supplierName, bank, supplierPaymentMethod.getPaymentMethodDTO(), deliveryWay.getDeliveryDTO(), informationContactDTO);
     }
 
 
@@ -76,15 +76,14 @@ public class SupplierRepository {
         if (suppliers.containsKey(supplierID)){
             suppliers.remove(supplierID);
         }
-        else {
-            try {
-                supplierDAO.removeSupplier(supplierID);
-            }
-            catch (Exception e){
-                throw new Exception("Supplier does not exist");
-            }
+        try {
+            supplierDAO.removeSupplier(supplierID);
+        }
+        catch (Exception e){
+            throw new Exception("Supplier does not exist");
         }
     }
+
 
     public void addProduct(SuppliedItemDTO suppliedItemDTO, String supplierId) throws Exception {
         if (suppliers.containsKey(supplierId)){
@@ -129,10 +128,10 @@ public class SupplierRepository {
         }
     }
 
-    public void editDeliveryMethod(String supplierID, DeliveryDTO deliveryDTO) throws Exception {
+    public void editDeliveryMethod(String supplierID, Delivery delivery) throws Exception {
         if (suppliers.containsKey(supplierID)){
             SupplierDTO supplierDTO = suppliers.get(supplierID);
-            supplierDTO.setDeliveryMethod(deliveryDTO);
+            supplierDTO.setDeliveryMethod(delivery.getDeliveryDTO());
         }
     }
 
@@ -151,6 +150,11 @@ public class SupplierRepository {
 
     public void addNewInformationContact(String supplierId, InformationContactDTO informationContactDTO) throws Exception {
         if (suppliers.containsKey(supplierId)){
+            for (InformationContactDTO informationContactDTO1 :suppliers.get(supplierId).getInformationContacts()){
+                if (informationContactDTO1.getContactName().equals(informationContactDTO.getContactName())) {
+                    throw new Exception("Contact already exists");
+                }
+            }
             suppliers.get(supplierId).getInformationContacts().add(informationContactDTO);
         }
         try {

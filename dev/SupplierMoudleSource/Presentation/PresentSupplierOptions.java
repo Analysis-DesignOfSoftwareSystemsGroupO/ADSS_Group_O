@@ -60,8 +60,6 @@ public class PresentSupplierOptions {
         String supplierBankBranchNumber = scanner.nextLine();
         System.out.println("Enter Supplier Bank Account Number: ");
         String supplierBankAccountNumber = scanner.nextLine();
-        System.out.println("Enter OwnerId: ");
-        String ownerId = scanner.nextLine();
         System.out.println("Define Supplier's Information Contact");
         System.out.println("** Supplier must have at least one information contact **");
         System.out.println("Enter Contact Name: ");
@@ -75,7 +73,7 @@ public class PresentSupplierOptions {
         try {
             supplierController.createSupplier(supplierName, supplierPaymentMethod,
                     supplierBankAccountNumber, supplierBankNumber, supplierBankBranchNumber, contactName,
-                    contactPhoneNumber, contactTitle, deliveryWay, ownerId);
+                    contactPhoneNumber, contactTitle, deliveryWay);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -146,8 +144,12 @@ public class PresentSupplierOptions {
         String productManufacturer = scanner.nextLine();
         System.out.println("Enter Product Price: ");
         int productPrice = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter shelf life days: ");
+        int shelfLifeDays = scanner.nextInt();
+        scanner.nextLine();
         try {
-            supplierController.addNewProductToSupplier(supplierId, productName, productManufacturer, productPrice, 0);
+            supplierController.addNewProductToSupplier(supplierId, productName, productManufacturer, productPrice, shelfLifeDays);
             System.out.println("Product added successfully");
         }
         catch (Exception e){
@@ -198,26 +200,14 @@ public class PresentSupplierOptions {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Delivery Way (Constant Delivery / Temporary Delivery / Self Pick Up): ");
         String deliveryWay = scanner.nextLine();
-        String dayOfWeek = "";
-        if (deliveryWay.equals("Constant Delivery")) {
-            while (true) {
-                System.out.println("Enter day of the week: Sunday / Monday / Tuesday / Wednesday / Thursday / Friday / Saturday ");
-                dayOfWeek = scanner.nextLine();
-                if (!validWeek(dayOfWeek)) {
-                    System.out.println("Invalid day of week");
-                    continue;
-                }
-                break;
-            }
-        }
         try {
-            supplierController.updateDeliveryMethod(supplierId, deliveryWay, dayOfWeek);
+            supplierController.updateDeliveryMethod(supplierId, deliveryWay);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
             return;
         }
-        System.out.println("Delivery method was changed succefully");
+        System.out.println("Delivery method was changed successfully");
     }
 
     //helper method to edit detail

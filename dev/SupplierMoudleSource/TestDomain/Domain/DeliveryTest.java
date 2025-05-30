@@ -11,25 +11,20 @@ class DeliveryTest {
     private Delivery delivery;
     @Test
     void testConstructor() {
-        assertThrows(Exception.class, ()-> new Delivery("NotVAlid", ""),
+        assertThrows(Exception.class, ()-> new Delivery("NotVAlid"),
                 "didnt throw when delivery way was not valid");
-        assertThrows(Exception.class, () -> new Delivery("Temporary Delivery", "NotVAlid"),
+        assertThrows(Exception.class, () -> new Delivery("Temporary Delivery"),
                 "didnt throw when arrival day was not valid");
-        assertThrows(Exception.class, () -> new Delivery("Self Pick Up", "NotVAlid"),
+        assertThrows(Exception.class, () -> new Delivery("Self Pick Up"),
                 "didnt throw when arrival day was not valid");
-        assertThrows(Exception.class, () -> new Delivery("Constant Delivery", "NotVAlid"),
+        assertThrows(Exception.class, () -> new Delivery("Constant Delivery"),
                 "didnt throw when arrival day was not valid");
-        assertDoesNotThrow(() -> new Delivery("Temporary Delivery", ""),
-                "Threw error when delivery way was valid");
-        assertDoesNotThrow(() -> new Delivery("Self Pick Up", ""),
-                "Threw error when delivery way was valid");
-        assertDoesNotThrow(() -> new Delivery("Constant Delivery", "Sunday"),
-                "Threw error when delivery way was valid");
+
     }
 
     @BeforeEach
     void setUp() {
-        delivery = new Delivery("Temporary Delivery", "");
+        delivery = new Delivery("Temporary Delivery");
     }
 
     @Test
