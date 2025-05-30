@@ -11,6 +11,8 @@ import inventory.service.UserApplication;
 import java.time.LocalDate;
 import java.util.*;
 
+import static inventory.data.connection.DatabaseInitializer.dropAllTables;
+
 public class InventoryMenu {
 
     private final Scanner scanner;
@@ -183,6 +185,7 @@ public class InventoryMenu {
                     break;
                 case 4:
                     // Reports
+                    dropAllTables();
                 case 5:
                     // Add Stock
                     System.out.println("\nStarting new Stock creation...\n");
@@ -233,7 +236,7 @@ public class InventoryMenu {
                             expiryDate = LocalDate.parse(scanner.nextLine());
                             System.out.println("Enter Current location (in store/ storage): ");
                             String currentLocation = scanner.nextLine();
-                            int defectedAmount = readIntInput("Enter amount of defected items: ");
+                            int defectedAmount = readIntInput("Enter amount of defected items:");
                             service.updateInventoryWithDefectiveItems(productName, productManufacturer, currentLocation, expiryDate, defectedAmount);
                             break;
                         case 3:

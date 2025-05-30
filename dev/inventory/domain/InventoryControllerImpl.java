@@ -41,7 +41,8 @@ public class InventoryControllerImpl implements InventoryController {
         String groupId = getOrCreateCategoryGroup(categoryInfo[0], categoryInfo[1], categoryInfo[2]);
 
         if (productDAO.productExists(name, manufacturer)) {
-            throw new IllegalArgumentException("Product with the same name and manufacturer already exists.");
+            System.out.println("Product already exists. Updating existing product.");
+            return;
         } else {
             Product productToAdd = new Product(name, minimumStock,sellingPrice, location, manufacturer, groupId);
             // Add to repository
@@ -51,7 +52,7 @@ public class InventoryControllerImpl implements InventoryController {
             // Save to DB - categories by products
             List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
             for (String categoryId : categories) {
-                categoryDAO.SaveCategoryByProductPair(categoryId,productToAdd.getId());
+                categoryDAO.SaveCategoryByProductPair(productToAdd.getId(), categoryId);
             }
             // Save to DB - selling prices
             productDAO.saveSellingPrice(productToAdd);
@@ -157,7 +158,9 @@ public class InventoryControllerImpl implements InventoryController {
         return categoryDAO.getOrCreateCategoryGroup(parentId, subId, subSubId);
     }
 
-    public void updateInventoryWithDefects(Product product, String location, LocalDate expiryDate, int defectedAmount) {
+    public void updateInventoryWithDefects(String productName, String productManufacturer, String location, LocalDate expiryDate, int defectedAmount) {
+        Product product = productDAO.getProductByNameAndManufacturer(productName, productManufacturer);
+
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting stock status change operation.");
         }
@@ -169,13 +172,16 @@ public class InventoryControllerImpl implements InventoryController {
         if (originStockItem.getQuantity() < defectedAmount) {
             throw new IllegalArgumentException("Defected amount exceeds available stock.");
         }
-        String targetStockItem = getTargetStockId(product, "storage", expiryDate, StockItemStatus.DAMAGED);
-        moveBatch(originStockItem, getStockItemById(targetStockItem), defectedAmount);
+        String targetStockItemId = getTargetStockId(product, "storage", expiryDate, StockItemStatus.DAMAGED);
+        StockItem targetStockItem = stockItemDAO.getStockItemById(targetStockItemId);
+        moveBatch(originStockItem, targetStockItem, defectedAmount);
+
+        stockItemDAO.updateStockItem(originStockItem);
+        stockItemDAO.updateStockItem(targetStockItem);
         if (countProductQuantity(product.getId()) <= product.getMinimumStockLevel()) {
             System.out.println(" ***** Warning: Product " + product.getName() +
                     " is below minimum stock level. Please restock. *****");
         }
-        stockItemDAO.updateStockItem(originStockItem);
     }
 
     public void changeStockItemStatus(StockItem stockItem, StockItemStatus newStatus) {
@@ -227,12 +233,12 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public String getTargetStockId(Product product, String location, LocalDate expiryDate, StockItemStatus status) {
-        String stockItemId = getStockItemByBatch(product, location, expiryDate, status);
+        String stockItemId = stockItemDAO.getStockItemByBatch(product, location, expiryDate, status);
         if (stockItemId != null) {
             return stockItemId;
         } else {
             // Create a new StockItem since no matching one exists
-            StockItem newStockItem = new StockItem(0, location, StockItemStatus.OK, expiryDate);
+            StockItem newStockItem = new StockItem(0, location, status , expiryDate);
             newStockItem.setProduct(product);
             stockItemDAO.saveStockItem(newStockItem);
             return newStockItem.getStockItemId();
@@ -352,7 +358,7 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void printCurrentStock() {
         System.out.println("------- Stock Report -------");
-        List<Product> products = productRepository.getAllProducts();
+        List<Product> products = productDAO.getAllProducts();
         for (Product product : products) {
             int inStorage = countProductInStorage(product.getId());
             int productQuantity = countProductQuantity(product.getId());
@@ -391,7 +397,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public int countProductInStorage(String id) {
-        Product product = productRepository.getProductById(id);
+        Product product = productDAO.getProductById(id);
         if (product == null) {
             System.out.println("Product not found.");
             throw new IllegalArgumentException("Product not found.");
@@ -407,7 +413,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public int countProductQuantity(String id) {
-        Product product = productRepository.getProductById(id);
+        Product product = productDAO.getProductById(id);
         if (product == null) {
             System.out.println("Product not found.");
             throw new IllegalArgumentException("Product not found.");
@@ -423,7 +429,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public int countDefectedProductQuantity(String id) {
-        Product product = productRepository.getProductById(id);
+        Product product = productDAO.getProductById(id);
         if (product == null) {
             System.out.println("Product not found.");
             throw new IllegalArgumentException("Product not found.");
@@ -458,7 +464,7 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Discount end date cannot be before start date.");
         }
         if (type == DiscountTargetType.PRODUCT) {
-            Product product = productRepository.getProductById(discountTargetId);
+            Product product = productDAO.getProductById(discountTargetId);
             if (product == null) {
                 throw new IllegalArgumentException("Product not found. Aborting discount add operation.");
             }
@@ -481,7 +487,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void sellProduct(String productId, int quantity) {
-        Product product = productRepository.getProductById(productId);
+        Product product = productDAO.getProductById(productId);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting sell operation.");
         }
@@ -570,7 +576,7 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void printOrderList() {
         System.out.println("Printing order list...");
-        List<Product> products = productRepository.getAllProducts();
+        List<Product> products = productDAO.getAllProducts();
         List<Product> orderList = new ArrayList<>();
         for (Product product : products) {
             if (countProductQuantity(product.getId()) < product.getMinimumStockLevel()) {
@@ -650,7 +656,7 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void updateMinimumStockLevel(String productId, int newMinimumStockLevel) {
-        Product product = productRepository.getProductById(productId);
+        Product product = productDAO.getProductById(productId);
         if (product == null) {
             throw new IllegalArgumentException("Product not found. Aborting update operation.");
         }

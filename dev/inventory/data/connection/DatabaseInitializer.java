@@ -99,4 +99,30 @@ public class DatabaseInitializer {
             e.printStackTrace();
         }
     }
+
+    public static void dropAllTables() {
+        String sql = """
+        DROP TABLE IF EXISTS 
+            "Inventory"."Products_by_Categories",
+            "Inventory"."Selling_Prices",
+            "Inventory"."Stock_Item_Orders",
+            "Inventory"."Stock_Items",
+            "Inventory"."Products",
+            "Inventory"."Discount_Store_Target",
+            "Inventory"."Discounts",
+            "Inventory"."Category_Groups",
+            "Inventory"."Categories"
+        CASCADE;
+        """;
+        try (Connection conn = DataBaseConnector.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("All Inventory tables dropped.");
+        } catch (SQLException e) {
+            System.err.println("Failed to drop inventory tables:");
+            e.printStackTrace();
+        }
+    }
+
+
 }

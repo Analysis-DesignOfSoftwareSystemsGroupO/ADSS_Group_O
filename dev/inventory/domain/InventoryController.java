@@ -48,7 +48,7 @@ public interface InventoryController {
 
     void moveStockItem(Product product, String newLocation, int amount, LocalDate expiryDate);
 
-    void updateInventoryWithDefects(Product product, String location, LocalDate expiryDate, int defectedAmount);
+    void updateInventoryWithDefects(String productName, String productManufacturer, String location, LocalDate expiryDate, int defectedAmount);
 
     void UpdateDiscounts();
 

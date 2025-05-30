@@ -115,7 +115,7 @@ public class ProductDAO implements ProductRepository {
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String sql = """
-                SELECT * FROM "Inventory"."Products" p
+                SELECT * FROM "Inventory"."Products"
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
@@ -139,8 +139,9 @@ public class ProductDAO implements ProductRepository {
             int minimumStockLevel = res.getInt("min_stock_level");
             String category_group = res.getString("group_id");
             String location = res.getString("location");
+            double sellingPrice = res.getDouble("selling_price");
 
-            Product product = new Product(id, name, manufacturer, minimumStockLevel, location, category_group);
+            Product product = new Product(id, name, manufacturer, minimumStockLevel, location, category_group, sellingPrice);
 
             return product;
 
@@ -247,7 +248,7 @@ public class ProductDAO implements ProductRepository {
 
     }
 
-    public void updateSellingPriceperProduct(Product product) {
+    public void updateSellingPricePerProduct(Product product) {
         String sql = """
         UPDATE "Inventory"."Products" p
         SET selling_price = sp.effective_price
@@ -311,6 +312,29 @@ public class ProductDAO implements ProductRepository {
             System.err.println("Error during bulk selling price update.");
             e.printStackTrace();
         }
+    }
+
+    public Product getProductByNameAndManufacturer(String name, String manufacturer) {
+        String sql = """
+                SELECT *
+                FROM "Inventory"."Products"
+                WHERE product_name = ? AND product_manufacturer = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            statement.setString(2, manufacturer);
+            ResultSet res = statement.executeQuery();
+
+            if (res.next()) {
+                return mapResultSetToProduct(res);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Placeholder return statement
     }
 
 

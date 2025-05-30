@@ -226,7 +226,7 @@ public class CategoryDAO {
         }
     }
 
-    public void SaveCategoryByProductPair(String categoryId, String productId) {
+    public void SaveCategoryByProductPair(String productId, String categoryId) {
         String sql = """
                     INSERT INTO "Inventory"."Products_by_Categories" 
                         ("product_id", "category_id")
@@ -236,8 +236,8 @@ public class CategoryDAO {
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, categoryId);
-            statement.setString(2, productId);
+            statement.setString(1, productId);
+            statement.setString(2, categoryId);
 
             statement.executeUpdate();
         } catch (Exception e) {

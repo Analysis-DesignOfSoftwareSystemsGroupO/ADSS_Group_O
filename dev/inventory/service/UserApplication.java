@@ -14,9 +14,7 @@ public class UserApplication {
     }
 
     public void updateInventoryWithDefectiveItems(String productName, String productManufacturer, String location, LocalDate expiryDate, int defectedAmount) {
-        Product product = inventoryController.getProductByName(productName, productManufacturer);
-
-        inventoryController.updateInventoryWithDefects(product, location, expiryDate, defectedAmount);
+        inventoryController.updateInventoryWithDefects(productName, productManufacturer, location, expiryDate, defectedAmount);
     }
 
     public void checkForExpiredStock() {

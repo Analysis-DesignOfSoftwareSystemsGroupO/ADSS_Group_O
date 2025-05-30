@@ -41,7 +41,7 @@ public class Product {
     }
 
     public Product(String id, String name, String manufacturer, int minimumStockLevel,
-                   String location, String categoryGroupId) {
+                   String location, String categoryGroupId, Double sellingPrice) {
         Objects.requireNonNull(id, "Product ID cannot be null");
         Objects.requireNonNull(name, "Product name cannot be null");
         Objects.requireNonNull(manufacturer, "Manufacturer cannot be null");
@@ -55,6 +55,7 @@ public class Product {
         this.minimumStockLevel = minimumStockLevel;
         this.location = location;
         this.categoryGroupId = categoryGroupId;
+        this.sellingPrice = sellingPrice;
     }
 
 
