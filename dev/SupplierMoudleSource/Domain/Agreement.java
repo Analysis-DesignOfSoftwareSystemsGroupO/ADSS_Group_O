@@ -145,6 +145,7 @@ public class Agreement {
         return null;
     }
 
+    @Override
     public String toString(){
         StringBuilder returnString = new StringBuilder("Agreement between, " + "Supplier id: " + this.supplier.getID() +
                 ", Branch id : " + this.branch.getBranchID() + "\n" + "Product List: \n");

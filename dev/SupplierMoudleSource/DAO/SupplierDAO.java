@@ -141,7 +141,7 @@ public class SupplierDAO {
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(bankSql)) {
 
-            pstmt.setString(1, supplierID);
+            pstmt.setInt(1, Integer.parseInt(supplierID));
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String bankBranch = rs.getString("bankbranch");
@@ -161,7 +161,7 @@ public class SupplierDAO {
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(catalogSql)) {
 
-            pstmt.setString(1, supplierID);
+            pstmt.setInt(1, Integer.parseInt(supplierID));
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 int price = rs.getInt("price");
@@ -174,7 +174,7 @@ public class SupplierDAO {
                     ResultSet rs2 = productStmt.executeQuery();
                     if (rs2.next()) {
                         String pname = rs2.getString("name");
-                        String manufacturer = rs2.getString("manafacturer");
+                        String manufacturer = rs2.getString("manufacturer");
                         int shelfLifeDays = rs2.getInt("shelflifedays");
                         String productString = Integer.toString(productId);
                         ProductDTO product = new ProductDTO(productString, pname, manufacturer, shelfLifeDays);
@@ -183,6 +183,8 @@ public class SupplierDAO {
                     }
                 }
             }
+        }catch (SQLException e) {
+
         }
         return new SupplierDTO(supplierID, name, bankDTO, paymentMethodDTO, deliveryDTO, informationContacts, supplyProducts);
     }

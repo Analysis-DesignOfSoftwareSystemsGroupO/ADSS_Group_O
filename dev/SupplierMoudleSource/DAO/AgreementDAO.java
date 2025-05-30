@@ -113,14 +113,13 @@ public class AgreementDAO {
                 AgreementDTO agreementDTO = getAgreement(branchid, supplierid);
                 agreements.add(agreementDTO);
             }
-
+            return agreements;
         }
-        return agreements;
     }
     public AgreementDTO getAgreement(String branchId, String supplierId) throws SQLException {
         //get all products in agreement
         String getAllProductInAgreementSql = "Select * from supplierinventorydb.productinagreement where branchid = ? and supplierid = ?";
-        String getProductSql = "Select * from supplierinventorydb.product where productid = ?";
+        String getProductSql = "Select * from supplierinventorydb.product where id = ?";
         String getAllDiscountSql = "Select * from supplierinventorydb.discount where branchid = ? and supplierid = ?";
 
         List<SuppliedItemDTO> suppliedItemDTOList = new ArrayList<>();
@@ -164,11 +163,11 @@ public class AgreementDAO {
             }
         }
 
-        return new AgreementDTO(branchId, supplierId, suppliedItemDTOList, discountDTOList);
+        return new AgreementDTO(supplierId, branchId, suppliedItemDTOList, discountDTOList);
     }
 
 
-    private boolean checkAgreement(String branchid, String supplierid) throws SQLException {
+    public boolean checkAgreement(String branchid, String supplierid) throws SQLException {
         String sql = "select * from supplierinventorydb.agreement where branchid = ? and supplierid = ?";
         try (Connection connection = getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -181,6 +180,5 @@ public class AgreementDAO {
             return false;
         }
     }
-
 
 }

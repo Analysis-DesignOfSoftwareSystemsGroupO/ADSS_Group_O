@@ -39,7 +39,6 @@ public class AgreementRepository {
             throw new Exception("Agreement does not exist");
         }
         throw new Exception("Agreement does not exist");
-
     }
 
     public void addAgreement(AgreementDTO agreement) throws Exception {
@@ -47,6 +46,11 @@ public class AgreementRepository {
         suppliersAgreements.put(supBKey, agreement);
         agreementDAO.addAgreement(agreement.getBranchId(), agreement.getSupplierID());
     }
+
+    public boolean isAgreementExist(String branchId, String supplierID) throws Exception {
+        return agreementDAO.checkAgreement(branchId, supplierID);
+    }
+
 
     public AgreementDTO getAgreement(String branchID, String supplierID) throws Exception {
         if (supplierID == null || branchID == null) {
@@ -99,7 +103,8 @@ public class AgreementRepository {
                 this.suppliersAgreements.put(new SupplierBranchKey(agreement.getSupplierID(), agreement.getBranchId()), agreement);
             }
         } catch (Exception e) {
-            throw new Exception("No agreements in system");
+            e.printStackTrace();
+            throw new Exception("Failed to get agreements: " + e.getMessage(), e);
         }
 
         return agreements;

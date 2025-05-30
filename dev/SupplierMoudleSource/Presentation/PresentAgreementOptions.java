@@ -43,6 +43,8 @@ public class PresentAgreementOptions {
             }
             catch (Exception e) {
                 System.out.println("Invalid option !");
+                System.out.println("Error: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

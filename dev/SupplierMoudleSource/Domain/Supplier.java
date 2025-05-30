@@ -1,3 +1,4 @@
+
 package SupplierMoudleSource.Domain;
 
 import DTO.InformationContactDTO;
@@ -16,7 +17,6 @@ public class Supplier {
     private PaymentMethod paymentMethod;
     private List<InformationContact> informationContacts;
     private HashMap<String, SuppliedItem> supplyProducts;
-    private int supplied_product_id = 0;
     private Delivery delivery;
 
     public Supplier(String ID, String supplierName, String paymentMethod, String bankAccount, String bankNumber,
@@ -47,12 +47,22 @@ public class Supplier {
         this.bank = new Bank(this.getBank());
         this.informationContacts = other.informationContacts;
         this.supplyProducts = other.supplyProducts;
-        this.supplied_product_id = other.supplied_product_id;
+
     }
 
     public Supplier(SupplierDTO supplierDTO){
         this.supplierID = supplierDTO.getSupplierID();
         this.supplierName = supplierDTO.getSupplierName();
+        this.bank = new Bank(supplierDTO.getBank());
+        this.informationContacts = new ArrayList<>();
+        for (InformationContactDTO informationContactDTO : supplierDTO.getInformationContacts()) {
+            informationContacts.add(new InformationContact(informationContactDTO));
+        }
+        this.supplyProducts = new HashMap<>();
+        for (SuppliedItemDTO suppliedItemDTO : supplierDTO.getSupplyProducts().values()){
+            this.supplyProducts.put(suppliedItemDTO.product.productID, new SuppliedItem(suppliedItemDTO));
+        }
+        this.delivery = new Delivery(supplierDTO.getDelivery());
     }
 
     public String getID() {
