@@ -88,8 +88,11 @@ public class AgreementService {
 
     //views an agreement given branch id and supplier id (ued for creating a new order)
     public void viewAgreement(String branchId, String supplierID) throws Exception {
-        if (agreementRepository.getAgreement(branchId, supplierID) != null){
-            System.out.println(agreementRepository.getAgreement(branchId, supplierID).toString());
+        AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
+        if (agreementDTO != null){
+            BranchDTO branchDTO = branchRepository.getBranch(agreementDTO.getBranchId());
+            SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
+            System.out.println(new Agreement(branchDTO, supplierDTO, agreementDTO).toString());
         }
     }
     //removes a product from an existing agreement

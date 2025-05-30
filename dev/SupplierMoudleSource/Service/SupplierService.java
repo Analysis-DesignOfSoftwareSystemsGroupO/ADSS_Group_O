@@ -119,12 +119,7 @@ public class SupplierService {
         if (supplier == null) {
             throw new NullPointerException("Supplier not found");
         }
-//        List<AgreementDTO> agreements = agreementRepository.getAllAgreement();
-//        for (AgreementDTO agreement : agreements){
-//            if (agreement.getSupplierID().equals(supplierID)) {
-//                agreementRepository.removeAgreement(agreement.getBranchId(), agreement.getSupplierID());
-//            }
-//        }
+        agreementRepository.removeAgreementOfSupplierLocally(supplierID);
         supplierRepository.removeSupplier(supplierID);
     }
 

@@ -72,8 +72,8 @@ public class OrderDAO {
             if (rs.next()) {
                 oDate = rs.getDate("date");
                 oTotalPrice = rs.getInt("totalPrice");
-                oBranchID = rs.getString("branchID");
-                oSupplierID = rs.getString("supplierID");
+                oBranchID = Integer.toString(rs.getInt("branchID"));
+                oSupplierID = Integer.toString(rs.getInt("supplierID"));
             }
 
             String sql2 = "SELECT * FROM supplierinventorydb.productsInOrder WHERE id = ?";
@@ -83,17 +83,17 @@ public class OrderDAO {
             try (Connection con2 = getConnection();
                  PreparedStatement pstmt2 = con2.prepareStatement(sql2)) {
 
-                pstmt2.setString(1, orderID);
+                pstmt2.setInt(1, Integer.parseInt(orderID));
                 ResultSet rs2 = pstmt2.executeQuery();
                 while (rs2.next()) {
                     Integer quantity = rs2.getInt("quantity");
-                    String suppliedItemID = rs2.getString("suppliedItemID");
+                    String suppliedItemID = Integer.toString(rs2.getInt("suppliedItemID"));
 
                     String sql3 = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
                     try (Connection con3 = getConnection();
                          PreparedStatement pstmt3 = con3.prepareStatement(sql3)) {
 
-                        pstmt3.setString(1, suppliedItemID);
+                        pstmt3.setInt(1, Integer.parseInt(suppliedItemID));
                         ResultSet rs3 = pstmt3.executeQuery();
 
 
@@ -112,8 +112,8 @@ public class OrderDAO {
                              PreparedStatement pstmt4 = con.prepareStatement(sql4)) {
 
                             pstmt4.setInt(1, pID);
-                            pstmt4.setString(2, oBranchID);
-                            pstmt4.setString(3, oSupplierID);
+                            pstmt4.setInt(2, Integer.parseInt(oBranchID));
+                            pstmt4.setInt(3,  Integer.parseInt(oSupplierID));
 
                             ResultSet rs4 = pstmt4.executeQuery();
                             if (rs4.next()) {
@@ -139,31 +139,31 @@ public class OrderDAO {
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, supplierID);
+            pstmt.setInt(1, Integer.parseInt(supplierID));
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                String orderID = rs.getString("id");
+                int orderID = rs.getInt("id");
                 Date oDate = rs.getDate("date");
                 int oTotalPrice = rs.getInt("totalPrice");
-                String oBranchID = rs.getString("branchID");
+                int oBranchID = rs.getInt("branchID");
 
                 Map<SuppliedItemDTO, Integer> suppliedItems = new HashMap<>();
 
                 String sql2 = "SELECT * FROM supplierinventorydb.productsinorder WHERE orderid = ?";
                 try (Connection con2 = getConnection();
                      PreparedStatement pstmt2 = con2.prepareStatement(sql2)) {
-                    pstmt2.setString(1, orderID);
+                    pstmt2.setInt(1, orderID);
                     ResultSet rs2 = pstmt2.executeQuery();
 
                     while (rs2.next()) {
-                        Integer quantity = rs2.getInt("quantity");
-                        String suppliedItemID = rs2.getString("suppliedItemID");
+                        int quantity = rs2.getInt("quantity");
+                        int suppliedItemID = rs2.getInt("suppliedItemID");
 
                         String sql3 = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
                         try (Connection con3 = getConnection();
                              PreparedStatement pstmt3 = con3.prepareStatement(sql3)) {
-                            pstmt3.setString(1, suppliedItemID);
+                            pstmt3.setInt(1, suppliedItemID);
                             ResultSet rs3 = pstmt3.executeQuery();
 
                             if (rs3.next()) {
@@ -181,8 +181,8 @@ public class OrderDAO {
                                      PreparedStatement pstmt4 = con4.prepareStatement(sql4)) {
 
                                     pstmt4.setInt(1, id);
-                                    pstmt4.setString(2, supplierID);
-                                    pstmt4.setString(3, oBranchID);
+                                    pstmt4.setInt(2, Integer.parseInt(supplierID));
+                                    pstmt4.setInt(3, oBranchID);
 
                                     ResultSet rs4 = pstmt4.executeQuery();
                                     if (rs4.next()) {
@@ -195,7 +195,8 @@ public class OrderDAO {
                         }
                     }
                 }
-                OrderDTO orderDTO = new OrderDTO(orderID, oDate, oTotalPrice, suppliedItems, oBranchID, supplierID);
+                OrderDTO orderDTO = new OrderDTO(Integer.toString(orderID), oDate, oTotalPrice, suppliedItems,
+                        Integer.toString(oBranchID), supplierID);
                 ordersBySupplierDTOList.add(orderDTO);
             }
         }

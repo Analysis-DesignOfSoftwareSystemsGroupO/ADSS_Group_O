@@ -117,4 +117,14 @@ public class AgreementRepository {
             return this.supplierID.equals(supplierID) && this.branchID.equals(branchID);
         }
     }
+
+    public void removeAgreementOfSupplierLocally(String supplierID) throws Exception {
+
+        for (SupplierBranchKey branchKey : suppliersAgreements.keySet()) {
+            if (Objects.equals(branchKey.branchID(), branchKey.supplierID())) {
+                suppliersAgreements.remove(branchKey);
+            }
+        }
+    }
+
 }
