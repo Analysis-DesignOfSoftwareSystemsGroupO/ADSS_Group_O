@@ -3,24 +3,24 @@ package HR_Mudol.presentation;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.User;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
-/**
- * LoginScreen class handles login and menu redirection based on user role.
- */
 public class LoginScreen {
 
-    /**
-     * Starts the login process, prompts for user credentials, and redirects to the appropriate menu
-     * based on the user role.
-     *
-     * @param curBranch The current branch object which contains the list of users.
-     */
-    public void start(Branch curBranch) {
+    private final List<Branch> allBranches;
+
+    public LoginScreen(List<Branch> branches) {
+        this.allBranches = branches;
+    }
+
+    public void start() throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            // שלב 1: התחברות
             System.out.print("Enter employee ID: ");
             String idInput = scanner.nextLine();
             int id;
@@ -35,36 +35,64 @@ public class LoginScreen {
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            User matched = findUser(id, password, curBranch.getUsers());
+            // שלב 2: חיפוש המשתמש בכל הסניפים
+            User matched = null;
+            Branch userBranch = null;
 
-            if (matched != null) {
-                if (matched.isManager()) {
-                    HRManagerMenu menu = new HRManagerMenu();
-                    boolean logout = menu.start(matched, matched.getUser(), curBranch);
-                    if (logout) continue; // Return to login
-                } else if (matched.isShiftManager()) {
-                    ShiftManagerMenu menu = new ShiftManagerMenu();
-                    boolean logout = menu.start(matched, matched.getUser(), curBranch);
-                    if (logout) continue; // Return to login
-                } else {
-                    EmployeeMenu menu = new EmployeeMenu();
-                    boolean logout = menu.start(matched, matched.getUser(), curBranch);
-                    if (logout) continue; // Return to login
+            for (Branch branch : allBranches) {
+                User u = branch.getUserRepo().getByCredentials(id, password);
+                if (u != null) {
+                    matched = u;
+                    userBranch = branch;
+                    break;
                 }
-            } else {
-                System.out.println("Invalid ID or password. Please try again.\n");
             }
+
+            if (matched == null) {
+                System.out.println("Invalid credentials. Please try again.\n");
+                continue;
+            }
+
+            // שלב 3: אימות מול סניפים מותרים ליוזר
+            List<Branch> userBranches = matched.isManager()
+                    ? allBranches
+                    : allBranches.stream()
+                    .filter(b -> {
+                        try {
+                            return b.getUserRepo().getAll().stream().anyMatch(u -> u.getUser().getEmpId() == id);
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+            Branch selectedBranch = selectBranch(scanner, userBranches);
+            if (selectedBranch == null) {
+                System.out.println("Invalid branch selection.");
+                continue;
+            }
+
+            // שלב 4: פתיחת תפריט
+            launchMenuForUser(matched, selectedBranch);
         }
     }
 
-    /**
-     * Finds a user by employee ID and password.
-     *
-     * @param id The employee ID.
-     * @param password The password entered by the user.
-     * @param users The list of users to search through.
-     * @return The matching user if found, or null if no match is found.
-     */
+    private Branch selectBranch(Scanner scanner, List<Branch> userBranches) {
+        System.out.println("Select your branch:");
+        for (int i = 0; i < userBranches.size(); i++) {
+            System.out.printf("%d. %s%n", i + 1, userBranches.get(i).getName());
+        }
+
+        System.out.print("Enter choice: ");
+        try {
+            int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
+            if (index >= 0 && index < userBranches.size()) {
+                return userBranches.get(index);
+            }
+        } catch (NumberFormatException ignored) {}
+        return null;
+    }
+
     private User findUser(int id, String password, List<User> users) {
         for (User u : users) {
             if (u.getUser().getEmpId() == id && u.getUser().getEmpPassword().equals(password)) {
@@ -74,4 +102,16 @@ public class LoginScreen {
         return null;
     }
 
+    private void launchMenuForUser(User matched, Branch curBranch) {
+        if (matched.isManager()) {
+            HRManagerMenu menu = new HRManagerMenu();
+            if (menu.start(matched, matched.getUser(), curBranch)) return;
+        } else if (matched.isShiftManager()) {
+            ShiftManagerMenu menu = new ShiftManagerMenu();
+            if (menu.start(matched, matched.getUser(), curBranch)) return;
+        } else {
+            EmployeeMenu menu = new EmployeeMenu();
+            if (menu.start(matched, matched.getUser(), curBranch)) return;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package HR_Mudol.DTO;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDTO {
@@ -35,6 +36,22 @@ public class EmployeeDTO {
         this.relevantRoleIds = relevantRoleIds;
         this.weeklyConstraints = weeklyConstraints;
     }
+    public EmployeeDTO(int employeeId, String fullName, String password, String bankAccount, int salary,
+                       LocalDate startDate, int minDayShift, int minEveningShift, int sickDays, int daysOff) {
+        this.employeeId = employeeId;
+        this.fullName = fullName;
+        this.password = password;
+        this.bankAccount = bankAccount;
+        this.salary = salary;
+        this.startDate = startDate;
+        this.minDayShift = minDayShift;
+        this.minEveningShift = minEveningShift;
+        this.sickDays = sickDays;
+        this.daysOff = daysOff;
+        this.relevantRoleIds = new ArrayList<>();
+        this.weeklyConstraints = new ArrayList<>();
+    }
+
 
     public int getEmployeeId() { return employeeId; }
     public String getFullName() { return fullName; }

@@ -80,6 +80,13 @@ public class UserRepository {
         }
         return new User(emp, Level.valueOf(dto.getLevel()));
     }
+    public User getByCredentials(int empId, String password) throws SQLException {
+        User user = getByEmployeeId(empId);
+        if (user != null && user.getUser().getEmpPassword().equals(password)) {
+            return user;
+        }
+        return null;
+    }
 
 
 }

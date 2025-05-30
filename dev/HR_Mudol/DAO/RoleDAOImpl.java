@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.*;
+import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class RoleDAOImpl implements IRoleDAO {
     private final Connection conn;
 
     public RoleDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override
@@ -159,5 +160,24 @@ public class RoleDAOImpl implements IRoleDAO {
         }
     }
 
+    @Override
+    public List<RoleDTO> getAllByBranch(int branchId) throws SQLException {
+        List<RoleDTO> roles = new ArrayList<>();
+        String sql = "SELECT * FROM roles WHERE branch_id = ?";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, branchId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                RoleDTO role = new RoleDTO(
+                        rs.getInt("role_number"),
+                        rs.getString("description")
+                );
+                roles.add(role);
+            }
+        }
+
+        return roles;
+    }
 }

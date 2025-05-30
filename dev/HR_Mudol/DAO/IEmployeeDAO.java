@@ -20,4 +20,6 @@ public interface IEmployeeDAO {
     void updateSickDays(int empId, int newSickDays) throws SQLException;
     void updateDaysOff(int empId, int daysOff) throws SQLException;
     void updatePassword(int empId, String newPassword);
+    List<EmployeeDTO> getAllByBranch(int branchId) throws SQLException;
+
 }

@@ -16,8 +16,8 @@ public class Branch {
 
     // Branch ID assigned at creation
     private int branchID;
-    private String district;
     private String name;
+
 
     // Repositories
     private EmployeeRepository employeeRepo;
@@ -45,7 +45,6 @@ public class Branch {
         this.constraintRepository= new ConstraintRepository(constraintDAO);
 
         this.name=name;
-        this.district=district;
 
         Role shiftManager = new Role("Shift Manager");
         Role Driver = new Role("Driver");
@@ -75,4 +74,10 @@ public class Branch {
     }
 
     public ConstraintRepository getConstraintRepo() {return constraintRepository; }
+    public String getName() {
+        return name;
+    }
+
+
+
 }

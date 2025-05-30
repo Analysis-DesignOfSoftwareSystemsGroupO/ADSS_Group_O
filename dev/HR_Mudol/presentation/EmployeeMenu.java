@@ -1,42 +1,37 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
-import HR_Mudol.domain.Objects.AbstractEmployee;
+import HR_Mudol.domain.Controllers.IEmployeeController;
 import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
-/**
- * This class represents the Employee menu that provides various options
- * for employees to interact with their system functionalities, such as viewing shifts,
- * submitting constraints, editing their details, and more.
- */
 public class EmployeeMenu implements Menu {
 
-    /**
-     * Starts the employee menu interface.
-     * It checks that the user has access to their own menu.
-     * @param caller The user initiating the menu interaction.
-     * @param self The employee object representing the caller.
-     * @param curBranch The current branch where the employee is working.
-     * @return boolean indicating if the menu interaction was completed successfully.
-     */
-    public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
-        // Ensure the caller can only access their own menu
-        if (!caller.isSameEmployee(self)) {
+    private final EmployeeService employeeService;
+    private final Scanner scanner;
+
+    public EmployeeMenu(IEmployeeController controller) {
+        this.employeeService = new EmployeeService(controller);
+        this.scanner = new Scanner(System.in);
+    }
+
+    @Override
+    public boolean start(User caller, HR_Mudol.domain.Objects.AbstractEmployee self, Branch branch) {
+        int empId = self.getEmpId();
+        WeekDTO currentWeek = branch.getWeekRepo().getCurrentWeekDTO();
+        UserDTO callerDTO = new UserDTO(caller.getUser().getEmpId(), caller.getLevel().name());
+
+        if (callerDTO.getUserId() != empId) {
             System.out.println("Access denied: You can only access your own menu.");
             return false;
         }
 
-        // Initialize scanner and employee system for user input
-        Scanner scanner = new Scanner(System.in);
-        EmployeeService employeeService = new EmployeeService();
-
-        // Infinite loop for continuous interaction with the employee menu
         while (true) {
-            // Display available options to the user
             System.out.println("\n=== Employee Menu ===");
             System.out.println("1. View my shifts");
             System.out.println("2. Submit weekly constraints");
@@ -48,43 +43,29 @@ public class EmployeeMenu implements Menu {
             System.out.println("8. Change my password");
             System.out.println("0. Exit");
 
-            // Capture the user's input
             String choice = scanner.nextLine().trim();
 
-            // Cast the AbstractEmployee to an Employee type to access specific employee methods
-            Employee selfEmp = (Employee) self;
-
-            // Process the user's choice
-            switch (choice) {
-                case "1":
-                    employeeService.viewMyShifts(caller, selfEmp, curBranch.getWeeks().getLast());
-                    break;
-                case "2":
-                    employeeService.submitConstraint(caller, selfEmp, curBranch.getWeeks().getLast());
-                    break;
-                case "3":
-                    employeeService.updateConstraint(caller, selfEmp, curBranch.getWeeks().getLast());
-                    break;
-                case "4":
-                    employeeService.viewMyConstraints(caller, selfEmp);
-                    break;
-                case "5":
-                    employeeService.viewContractDetails(caller, selfEmp);
-                    break;
-                case "6":
-                    employeeService.viewAvailableRoles(caller, selfEmp);
-                    break;
-                case "7":
-                    employeeService.viewPersonalDetails(caller, selfEmp);
-                    break;
-                case "8":
-                    employeeService.changePassword(caller, selfEmp);
-                    break;
-                case "0":
-                    return true;  // Exit the menu
-                default:
-                    // If the user provides an invalid option, prompt again
-                    System.out.println("Invalid option. Please try again.");
+            try {
+                switch (choice) {
+                    case "1" -> employeeService.viewMyShifts(callerDTO, empId, currentWeek);
+                    case "2" -> employeeService.submitConstraint(callerDTO, empId, currentWeek);
+                    case "3" -> employeeService.updateConstraint(callerDTO, empId, currentWeek);
+                    case "4" -> employeeService.viewMyConstraints(callerDTO, empId);
+                    case "5" -> employeeService.viewContractDetails(callerDTO, empId);
+                    case "6" -> employeeService.viewAvailableRoles(callerDTO, empId);
+                    case "7" -> employeeService.viewPersonalDetails(callerDTO, empId);
+                    case "8" -> employeeService.changePassword(callerDTO, empId);
+                    case "0" -> {
+                        return true;
+                    }
+                    default -> System.out.println("Invalid option. Please try again.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Database error: " + e.getMessage());
+            } catch (SecurityException se) {
+                System.out.println("Security error: " + se.getMessage());
+            } catch (Exception ex) {
+                System.out.println("Unexpected error: " + ex.getMessage());
             }
         }
     }

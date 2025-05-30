@@ -12,6 +12,8 @@ public interface IRoleDAO {
     List<EmployeeDTO> getAllEmployeeDTOsWithRoles();
     RoleDTO getByNumber(int roleNumber);
     List<Integer> getAllEmployeeIDsWithRoles();
+    List<RoleDTO> getAllByBranch(int branchId) throws SQLException;
+
 
 
 

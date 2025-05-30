@@ -79,4 +79,10 @@ public class User {
     public boolean isSameEmployee(AbstractEmployee employee) {
         return this.user != null && employee != null && this.user.getEmpId() == employee.getEmpId();
     }
+
+
+    public boolean isTransportManager() {
+        return level == Level.TransportManager;
+    }
+
 }

@@ -1,4 +1,4 @@
-package DataBase;
+package HR_Mudol.DataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

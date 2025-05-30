@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
     private final Connection conn;
 
     public EmployeeDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override
@@ -210,4 +211,34 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             throw new RuntimeException("Failed to check employee existence", e);
         }
     }
+
+    @Override
+    public List<EmployeeDTO> getAllByBranch(int branchId) throws SQLException {
+        List<EmployeeDTO> result = new ArrayList<>();
+        String sql = "SELECT * FROM Employees WHERE branch_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, branchId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(new EmployeeDTO(
+                        rs.getInt("employeeId"),
+                        rs.getString("fullName"),
+                        rs.getString("password"),
+                        rs.getString("bankAccount"),
+                        rs.getInt("salary"),
+                        rs.getDate("startDate").toLocalDate(),
+                        rs.getInt("minDayShift"),
+                        rs.getInt("minEveningShift"),
+                        rs.getInt("sickDays"),
+                        rs.getInt("daysOff")
+                ));
+            }
+        }
+
+        return result;
+    }
+
+
+
 }
