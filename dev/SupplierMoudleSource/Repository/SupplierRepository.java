@@ -46,9 +46,12 @@ public class SupplierRepository {
         else {
             try {
                 SupplierDTO supplierDTO = supplierDAO.getSupplier(supplierID);
-                suppliers.put(supplierID, supplierDTO);
-                return supplierDTO;
-
+                if (supplierDTO != null) {
+                    suppliers.put(supplierID, supplierDTO);
+                    return supplierDTO;
+                } else {
+                    throw new Exception("Supplier does not exist: " + supplierID);
+                }
             } catch (SQLException e) {
                 throw new Exception("Supplier does not exist");
             }

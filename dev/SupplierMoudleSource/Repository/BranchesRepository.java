@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class BranchesRepository {
     private Map<String, Branch> branches;
-    private BranchDAO branchDAO;
+    private BranchDAO branchDAO = new BranchDAO();
 
     //singleton database
     private static BranchesRepository branchesDataBase = null;
@@ -42,11 +42,11 @@ public class BranchesRepository {
         if (branches.containsKey(branchID)) {
             return branches.get(branchID).getBranchDTO();
         }
-        try {
-            branchDAO.getBranch(branchID);
-        }catch (Exception e){
-            throw new Exception("Branch does not exist");
+        BranchDTO branchDTO = branchDAO.getBranch(branchID);
+        if (branchDTO != null) {
+            return branchDTO;
+        } else {
+            throw new Exception("Branch with ID " + branchID + " does not exist in database.");
         }
-        return null;
     }
 }

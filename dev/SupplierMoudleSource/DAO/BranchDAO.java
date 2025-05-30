@@ -14,7 +14,6 @@ import static DataBase.PostgresConnection.getConnection;
 
 public class BranchDAO {
     public BranchDAO(){
-
     }
 
     public void addBranch(String branchCity, String branchAddress) throws SQLException {
