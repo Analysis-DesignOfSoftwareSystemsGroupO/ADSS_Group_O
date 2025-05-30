@@ -3,6 +3,7 @@ package transport_module;
 import DTO.ProductDTO;
 import DTO.ProductListDocumentDto;
 import DataAccess.IPLDDAO;
+import DataAccess.jdbcPLDDAO;
 import Transport_Module_Exceptions.ATransportModuleException;
 import Transport_Module_Exceptions.InvalidATransportException;
 import Transport_Module_Exceptions.InvalidPLDException;
@@ -14,18 +15,25 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class PLDRepositoryIMP implements IProductListDocumentRepository {
 
     private Map<Integer , ProductListDocument> mapper;
-    private IPLDDAO dao;
+    private static IPLDDAO dao = new jdbcPLDDAO();
     private static final Logger log = LogManager.getLogger(PLDRepositoryIMP.class);
-    private ITransportRepository transportRep;
+    private static ITransportRepository transportRep ;
     private int availableid;
+
+    public PLDRepositoryIMP() throws SQLException, InvalidATransportException, TransportMismatchException {
+        this.availableid = initValidid(); //init the availableID field
+        //fill the mapper with pld instances:
+        List<Integer> pldIDs = dao.getPLDsID(); //get id of plds from the data base
+        for (int id : pldIDs){ //for each id: get the ProductListDocument instance and add it to the mapper
+            ProductListDocument pld = getProductListDocumentByid(id);
+            mapper.put(id,pld); // add it to the mapper
+        }
+    }
 
     public int getValidID(){
         availableid ++;

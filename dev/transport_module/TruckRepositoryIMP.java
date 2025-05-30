@@ -2,7 +2,9 @@ package transport_module;
 
 import DTO.TruckDto;
 import DataAccess.ITruckDAO;
+import DataAccess.jdbcTruckDAO;
 import Transport_Module_Exceptions.ATransportModuleException;
+import Transport_Module_Exceptions.TruckNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,33 +19,35 @@ public class TruckRepositoryIMP implements  ITruckRepository{
 
     private static final Logger log =  LogManager.getLogger(TruckRepositoryIMP.class);
 
-    private HashMap<String , Truck> trucksHashMap ;
-    private ITruckDAO truckDAO;
+    private HashMap<String , Truck> mapper ;
+    private static ITruckDAO truckDAO = new jdbcTruckDAO();
 
     @Override
-    public void addTruck(TruckDto truck) throws ATransportModuleException {
+    public void addTruck(TruckDto truck) throws ATransportModuleException, SQLException {
         //Adding track to data base
         // if succesed :Add Truck to truckHashMap
-        if(trucksHashMap.get(truck.getPlateNumber()) != null) return;
+        if(mapper.get(truck.getPlateNumber()) != null) return;
+        truckDAO.save(truck);
         try {
-            truckDAO.save(truck);
-            log.info("Added Succesfuly Truck : " + truck.getPlateNumber());
-        }catch (SQLException e){
-            log.error("Failed To add the truck to the system due to SQL Exception ");
-            return;
+            Truck t = getTruckBYPlateNumber(Integer.valueOf(truck.getPlateNumber()));
+            mapper.put(t.getPlateNumber(), t);// add truck to mapper
         }
-
-
+        catch (Exception e){
+            truckDAO.deleteTruck(truck.getPlateNumber());
+            throw e;
+        }
+        log.info("Added Succesfuly Truck : " + truck.getPlateNumber());
     }
 
     @Override
     public Truck getTruckBYPlateNumber(int pn) throws ATransportModuleException {
-        if(trucksHashMap.get(pn ) != null) return trucksHashMap.get(pn);
+        if(mapper.get(pn ) != null) return mapper.get(pn);
         //if pn not found in the mapper
         try {
             Optional<TruckDto> truckDto = truckDAO.findByTruckPN(Integer.toString(pn)); //get Optional of truckDto from data base
             if(truckDto.isPresent()){
-                return DTOtoTruck(truckDto.get());
+                Truck t = DTOtoTruck(truckDto.get());
+                mapper.put( Integer.toString(pn) , t);
             }
             return null;
         }catch (SQLException e){
@@ -53,13 +57,14 @@ public class TruckRepositoryIMP implements  ITruckRepository{
     }
 
     @Override
-    public void deleteTruck(String pn ) throws ATransportModuleException {
-        trucksHashMap.remove(pn);
+    public void deleteTruck(String pn ) throws  SQLException {
+        mapper.remove(pn);
         try {
             truckDAO.deleteTruck(pn);
         }
         catch (SQLException e){
             log.error("Failed to delete Truck: " + pn + "  due to SQL Exception ");
+            throw e;
         }
     }
 
@@ -69,21 +74,18 @@ public class TruckRepositoryIMP implements  ITruckRepository{
      * @throws ATransportModuleException
      */
     @Override
-    public Truck DTOtoTruck(TruckDto dto) throws ATransportModuleException {
-        if(trucksHashMap.get(dto.getPlateNumber()) != null) return trucksHashMap.get(dto.getPlateNumber()); // get the Ttuck from the mapper.
-        HashMap<LocalDate, Boolean> availability = new HashMap<>();
+    public Truck DTOtoTruck(TruckDto dto) throws SQLException, ATransportModuleException {
+        if(mapper.get(dto.getPlateNumber()) != null) return mapper.get(dto.getPlateNumber()); // get the Ttuck from the mapper.
         try {
             List<LocalDate> dates = truckDAO.getListofOccupiedDates(dto.getPlateNumber()); // load the dates of that the truck is occupied
             Truck t = new Truck(new DrivingLicence(dto.getLiceenceReq()), dto.getMaxWeight(),dto.getPlateNumber() , dates);
-            trucksHashMap.put(t.getPlateNumber(), t);
+            mapper.put(t.getPlateNumber(), t);
             return  t;
         }
         catch (SQLException e){
             log.error("SQLException while trying to get the Trucks dates ,returning the trucks without the dates. ");
-
+            throw e;
         }
-        Truck t = new Truck(new DrivingLicence(dto.getLiceenceReq()), dto.getMaxWeight(),dto.getPlateNumber());
-        return t;
     }
 
     @Override
@@ -98,7 +100,7 @@ public class TruckRepositoryIMP implements  ITruckRepository{
      * @throws ATransportModuleException
      */
     @Override
-    public void AssignDateToTruck(LocalDate date, String plateNumber) throws ATransportModuleException {
+    public void AssignDateToTruck(LocalDate date, String plateNumber) throws ATransportModuleException, SQLException {
         int pn = 0;
         try { //check that the plate number is valid
             pn = Integer.valueOf(plateNumber);
@@ -109,12 +111,13 @@ public class TruckRepositoryIMP implements  ITruckRepository{
         }
         try {
             Truck t = getTruckBYPlateNumber(pn);
-            if(t == null) return;
+            if(t == null) throw new TruckNotFoundException("Did not found Truck with this pn");;
             truckDAO.assignTruckToDate(plateNumber, date);
             t.setDate(date); //set the date as unavailable
         }
         catch (SQLException e){
             log.error("Failed to set the date if the truck as unavailable");
+            throw e;
         }
 
     }

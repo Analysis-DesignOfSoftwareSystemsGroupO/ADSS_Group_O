@@ -177,4 +177,30 @@ public class jdbcPLDDAO implements IPLDDAO{
             throw e;
         }
     }
+
+    /**
+     *
+     * @return list of id PLD in the data base
+     * @throws SQLException
+     */
+    @Override
+    public List<Integer> getPLDsID() throws SQLException {
+        log.info("jdbcPLDDAO::getPLDs()");
+        String sql = "SELECT ProductListDocumentId FROM ProductListDocument;"; //SQL statement
+        List<Integer> idList = new ArrayList<>();
+        try(Statement st = DataBase.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                //add PLD to list
+                idList.add(rs.getInt("ProductListDocumentId"));
+            }
+        }catch (SQLException e) {
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw  e;
+        }
+        return idList;
+    }
 }

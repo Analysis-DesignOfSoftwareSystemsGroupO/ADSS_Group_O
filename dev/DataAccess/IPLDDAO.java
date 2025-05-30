@@ -17,5 +17,5 @@ public interface IPLDDAO {
     List<Integer> findByTransport(int Tid) throws SQLException;
     List<ProductDTO> getListOfProductsByPLDID(int pldID)throws  SQLException;
     void setArriavleTime(int pldID, LocalTime time) throws SQLException;
-
+    List<Integer> getPLDsID() throws SQLException;
 }

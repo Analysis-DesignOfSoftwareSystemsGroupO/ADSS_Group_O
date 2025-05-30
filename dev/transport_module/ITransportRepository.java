@@ -18,11 +18,15 @@ public interface ITransportRepository {
 
     void saveTransport(TransportDTO transport) throws ATransportModuleException, SQLException;
 
-    void deleteTransport(int transportID ) throws  ATransportModuleException;
+    void deleteTransport(int transportID ) throws  SQLException;
 
     Transport TransportDTOtoTransport(TransportDTO dto ) throws SQLException, TransportMismatchException;
 
     TransportDTO transportToTransportDTO(Transport transport);
 
     List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException;
+
+    int getAvailableid();
+
+
 }

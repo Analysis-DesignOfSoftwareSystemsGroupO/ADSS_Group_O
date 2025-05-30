@@ -70,6 +70,7 @@ public class jdbcTransportDAO implements ITransportDAO {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
+            throw  e;
         }
         return transports;
     }
@@ -172,6 +173,7 @@ public class jdbcTransportDAO implements ITransportDAO {
             }
             catch (Exception e) {
                 e.printStackTrace();
+                throw e;
             }
         }
 

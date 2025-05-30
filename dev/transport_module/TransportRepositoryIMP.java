@@ -2,6 +2,7 @@ package transport_module;
 
 import DTO.TransportDTO;
 import DataAccess.ITransportDAO;
+import DataAccess.jdbcTransportDAO;
 import DataAccess.jdbcTruckDAO;
 import Transport_Module_Exceptions.ATransportModuleException;
 import Transport_Module_Exceptions.InvalidATransportException;
@@ -16,8 +17,9 @@ import java.util.*;
 
 public class TransportRepositoryIMP implements ITransportRepository{
     private static final Logger log =  LogManager.getLogger(TransportRepositoryIMP.class);
-    HashMap<Integer, Transport> transports;
-    ITransportDAO dao;
+    private HashMap<Integer, Transport> transports;
+    private static ITransportDAO dao = new jdbcTransportDAO();
+    private int availableId;
 
     /**
      *
@@ -31,7 +33,8 @@ public class TransportRepositoryIMP implements ITransportRepository{
             try {
                 Optional<TransportDTO> transportDTO = dao.getTransportByid(id);
                 if(transportDTO.isPresent()){
-                    Transport t = TransportDTOtoTransport(transportDTO.get()); //get the transport Object from Dto
+                    //todo : Posposed because need to update Transport
+                    Transport t = new Transport()
                     transports.put(t.getId(), t);
                     return t;
                 }
@@ -43,6 +46,12 @@ public class TransportRepositoryIMP implements ITransportRepository{
             }
         }
         return transports.get(id);
+    }
+
+    @Override
+    public int getAvailableid() {
+        availableId++;
+        return availableId;
     }
 
     @Override
@@ -70,10 +79,18 @@ public class TransportRepositoryIMP implements ITransportRepository{
     }
 
     @Override
-    public void deleteTransport(int  transportID) throws ATransportModuleException {
-
+    public void deleteTransport(int  transportID) throws SQLException {
+        dao.deleteTransport(transportID); //remove record from data base
+        transports.remove(transportID);  //remove transport from mapper
     }
 
+    /**
+     *
+     * @param dto Dto of Transport
+     * @return Transport instance
+     * @throws SQLException
+     * @throws TransportMismatchException if dto is miss match with the transport instance, throws an exception
+     */
     @Override
     public Transport TransportDTOtoTransport(TransportDTO dto) throws SQLException, TransportMismatchException {
         Transport t = getTransportByid(dto.getId());
@@ -84,7 +101,6 @@ public class TransportRepositoryIMP implements ITransportRepository{
             return t;
         }
         throw new TransportMismatchException("Miss match data");
-
     }
 
     @Override
@@ -92,9 +108,19 @@ public class TransportRepositoryIMP implements ITransportRepository{
         return new TransportDTO(transport.getId(), transport.getDate(), transport.isSent(), transport.getmaxWeight(),transport.getDriver().getId(), transport.getTruck().getPlateNumber(),transport.getSourceSiteName(), transport.getDeparture_time() );
     }
 
-    public TransportRepositoryIMP(){
-        this.transports = new HashMap<>();
-    }
 
+
+    public TransportRepositoryIMP() throws SQLException, TransportMismatchException {
+        this.availableId = dao.getHieghestTransportID() + 1;
+        //set the mapper and fill it with transports:
+        this.transports = new HashMap<>();
+        List<TransportDTO> transportDTOS = dao.getTransports();
+        List<Transport> transportsList = new ArrayList<>();
+        for (TransportDTO dto : transportDTOS){ //for each transport dto
+            Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance
+            transports.put(t.getId(), t); //put in the mapper
+        }
+
+    }
 
 }
