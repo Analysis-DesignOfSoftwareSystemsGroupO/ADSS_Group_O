@@ -17,12 +17,12 @@ public class LoadData {
     private SupplierDAO suppliersDataBase = new SupplierDAO();
     private AgreementDAO agreementDAO = new AgreementDAO();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         LoadData loadData = new LoadData();
         loadData.LoadData();
     }
     //loads data to dataBase
-    public void LoadData() {
+    public void LoadData() throws Exception {
         //add branches
         String[][] branchData = {
                 { "Beer Sheva", "Rager 101"},
@@ -57,7 +57,8 @@ public class LoadData {
             InformationContactDTO informationContactDTO = new InformationContactDTO(data[6], data[7], data[8]);
             List<InformationContactDTO> informationContactDTOList = new ArrayList<>();
             informationContactDTOList.add(informationContactDTO);
-            suppliersDataBase.addSupplier(data[1], bankDTO, data[2], deliveryDTO, informationContactDTOList);
+            PaymentMethodDTO paymentMethodDTO = new PaymentMethodDTO(data[2]);
+            suppliersDataBase.addSupplier(data[1], bankDTO, paymentMethodDTO, deliveryDTO, informationContactDTO);
         }
 
         // add products
@@ -157,7 +158,7 @@ public class LoadData {
             try {
                 ProductDTO productDTO = productDataBase.getProduct(productID);
                 SuppliedItemDTO suppliedItemDTO = new SuppliedItemDTO(price, productDTO);
-                suppliersDataBase.addproduct(supplierId, suppliedItemDTO);
+                suppliersDataBase.addProduct(supplierId, suppliedItemDTO);
 
             }catch (Exception e) {
                 System.out.println(e.getMessage());

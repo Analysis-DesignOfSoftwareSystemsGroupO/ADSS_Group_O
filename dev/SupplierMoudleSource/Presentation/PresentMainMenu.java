@@ -15,7 +15,7 @@ public class PresentMainMenu {
         supplierOptions = new PresentSupplierOptions();
     }
 
-    public void runMainPresentation() {
+    public void runMainPresentation() throws Exception {
         while (true) {
             Scanner input = new Scanner(System.in);
             while (true) { //load data

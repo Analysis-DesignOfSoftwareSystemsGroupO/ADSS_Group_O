@@ -45,7 +45,7 @@ public class PresentSupplierOptions {
         }
     }
 
-    private void addSupplierPresentation() {
+    private void addSupplierPresentation() throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Starting Define New Supplier, Please Follow the Next Steps");
         System.out.println("Enter Supplier ID: ");
@@ -110,7 +110,7 @@ public class PresentSupplierOptions {
         }
         return false;
     }
-    private void editSupplierPresentation() {
+    private void editSupplierPresentation() throws Exception {
         Scanner scanner = new Scanner(System.in);
         try{
             supplierController.printAllSuppliers();
@@ -166,7 +166,7 @@ public class PresentSupplierOptions {
         System.out.println("Enter Product Price: ");
         int productPrice = scanner.nextInt();
         try {
-            supplierController.addNewProductToSupplier(supplierId, productID, productName, productManufacturer, productPrice);
+            supplierController.addNewProductToSupplier(supplierId, productID, productName, productManufacturer, productPrice, 0);
             System.out.println("Product added successfully");
         }
         catch (Exception e){
@@ -177,7 +177,7 @@ public class PresentSupplierOptions {
 
 
     //helper func to edit information contact
-    private void editInformationContact(String supplierid){
+    private void editInformationContact(String supplierid) throws Exception {
         Scanner scanner = new Scanner(System.in);
         supplierController.viewInformationContacts(supplierid);
         System.out.println("Enter information contact name: ");

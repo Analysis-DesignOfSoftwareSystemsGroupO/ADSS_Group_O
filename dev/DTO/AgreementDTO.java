@@ -31,4 +31,8 @@ public class AgreementDTO {
     public List<SuppliedItemDTO> getSupplierItemsList() {
         return supplierItemsList;
     }
+
+    public List<DiscountDTO> getDiscounts() {
+        return discounts;
+    }
 }

@@ -47,5 +47,6 @@ public class BranchesRepository {
         }catch (Exception e){
             throw new Exception("Branch does not exist");
         }
+        return null;
     }
 }

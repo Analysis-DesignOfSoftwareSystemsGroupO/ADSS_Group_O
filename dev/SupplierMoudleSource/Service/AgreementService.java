@@ -109,7 +109,6 @@ public class AgreementService {
         if (supplierDTO == null){
             throw new Exception("supplier does not exist");
         }
-        Supplier supplier = new Supplier(supplierDTO);
 
         if (!branchesDataBase.existsBranch(branchId)){
             throw new Exception("branch does not exist");
@@ -119,7 +118,8 @@ public class AgreementService {
             throw new Exception("agreement does not exist");
         }
 
-        BranchDTO branchDTO = branchesDataBase.getBranch(branchId); //todo get BranchDTO
+        BranchDTO branchDTO = branchesDataBase.getBranch(branchId);
+        return new Agreement(branchDTO, supplierDTO, agreementDTO);
     }
 
     private SuppliedItem getProductFromSupplier(String productID, String supplierID) throws Exception {
