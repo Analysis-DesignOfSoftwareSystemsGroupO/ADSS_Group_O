@@ -38,7 +38,6 @@ public class AgreementRepository {
         } catch (Exception e) {
             throw new Exception("Agreement does not exist");
         }
-        throw new Exception("Agreement does not exist");
     }
 
     public void addAgreement(AgreementDTO agreement) throws Exception {
