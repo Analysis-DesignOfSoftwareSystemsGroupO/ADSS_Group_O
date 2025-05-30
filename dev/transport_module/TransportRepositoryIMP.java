@@ -117,8 +117,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
         List<TransportDTO> transportDTOS = dao.getTransports();
         List<Transport> transportsList = new ArrayList<>();
         for (TransportDTO dto : transportDTOS){ //for each transport dto
-            Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance
-            transports.put(t.getId(), t); //put in the mapper
+            Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper
         }
 
     }

@@ -10,17 +10,24 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class TruckRepositoryIMP implements  ITruckRepository{
 
     private static final Logger log =  LogManager.getLogger(TruckRepositoryIMP.class);
 
-    private HashMap<String , Truck> mapper ;
+    private Map<String , Truck> mapper ;
     private static ITruckDAO truckDAO = new jdbcTruckDAO();
+
+    public TruckRepositoryIMP() throws SQLException, ATransportModuleException {
+        mapper = new HashMap<>();
+        //fill mapper with Trucks
+        List<TruckDto> truckDTOs = truckDAO.findAllTrucks();
+        for(TruckDto tDTO :truckDTOs){
+            Truck t = DTOtoTruck(tDTO); // also add this to the mapper/
+        }
+
+    }
 
     @Override
     public void addTruck(TruckDto truck) throws ATransportModuleException, SQLException {

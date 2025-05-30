@@ -30,8 +30,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         //fill the mapper with pld instances:
         List<Integer> pldIDs = dao.getPLDsID(); //get id of plds from the data base
         for (int id : pldIDs){ //for each id: get the ProductListDocument instance and add it to the mapper
-            ProductListDocument pld = getProductListDocumentByid(id);
-            mapper.put(id,pld); // add it to the mapper
+            ProductListDocument pld = getProductListDocumentByid(id); // This function will add the PLD to the mapper.
         }
     }
 

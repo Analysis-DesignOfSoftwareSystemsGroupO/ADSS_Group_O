@@ -65,8 +65,10 @@ public class jdbcTruckDAO  implements ITruckDAO{
         }
         catch (SQLException e) {
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
 
         return list;
