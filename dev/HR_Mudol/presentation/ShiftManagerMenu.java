@@ -1,80 +1,64 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.Service.ManagerService.HRControllerService;
-import HR_Mudol.domain.Objects.AbstractEmployee;
-import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.Objects.Week;
-import HR_Mudol.domain.Controllers.ShiftController;
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.Service.EmployeeService.EmployeeService;
+import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
+import HR_Mudol.domain.Controllers.ShiftController;
+import HR_Mudol.domain.Objects.Branch;
 
 import java.util.Scanner;
 
-/**
- * ShiftManagerMenu is the menu for shift managers, providing access to various shift management features.
- * It ensures that only shift managers can access this menu, and it offers the user options to manage shifts, profiles, and logout.
- */
 public class ShiftManagerMenu implements Menu {
 
-    /**
-     * Starts the Shift Manager menu for the caller (shift manager).
-     * This method will display the options for managing the profile or shifts and process the user's choice.
-     * @param caller The user initiating the menu interaction (must be a shift manager).
-     * @param self The AbstractEmployee object representing the caller's personal data.
-     * @param curBranch The branch where the caller works.
-     * @return boolean indicating whether the menu interaction was completed successfully (i.e., if the user logged out or not).
-     */
     @Override
-    public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
+    public boolean start(UserDTO caller, EmployeeDTO self, Branch curBranch) {
         if (!caller.isShiftManager()) {
             System.out.println("Access denied.");
             return false;
         }
 
         Scanner scanner = new Scanner(System.in);
-        HRControllerService hr = new HRControllerService(curBranch);
+        HRService hr = new HRService(curBranch);
 
         while (true) {
-            System.out.println("\n=== Employee Menu ===");
+            System.out.println("\n=== Shift Manager Menu ===");
             System.out.println("1. My profile management console");
             System.out.println("2. To Shift management console");
             System.out.println("0. Logout");
 
-            String choice = scanner.nextLine();
+            String choice = scanner.nextLine().trim();
 
             switch (choice) {
-                case "1":
-                    EmployeeMenu menu = new EmployeeMenu();
+                case "1" -> {
+                    EmployeeService empService = new EmployeeService(hr.getEmployeeController());
+                    EmployeeMenu menu = new EmployeeMenu(hr.getEmployeeController());
+                    WeekDTO currentWeek = curBranch.getWeekRepo().getCurrentWeekDTO();
                     menu.start(caller, self, curBranch);
-                    break;
-                case "2":
-                    manageShift(hr, curBranch, caller, scanner);
-                    break;
-                case "0":
+                }
+                case "2" -> manageShift(hr, curBranch, caller);
+                case "0" -> {
                     System.out.println("Logging out. Returning to login screen.");
                     return true;
-                default:
-                    System.out.println("Invalid option. Try again.");
+                }
+                default -> System.out.println("Invalid option. Try again.");
             }
         }
     }
-    /**
-     * Manages the shift assignments for the current week, such as adding/removing employees from shifts or handling shift cancellations.
-     * It allows the Shift Manager to interact with the system to manage shifts for employees.
-     * @param hr The HR system manager to interact with role management.
-     * @param branch The branch where the shift management takes place.
-     * @param caller The shift manager initiating the shift management actions.
-     * @param sc The scanner to capture user input.
-     */
-    private static void manageShift(HRControllerService hr, Branch branch, User caller, Scanner sc) {
-        Week currentWeek = branch.getWeeks().get(branch.getWeeks().size() - 1);
 
-        // יצירת ShiftManager (דורש IRoleManager שנמצא ב־HRSystemManager)
-        ShiftController shiftController = new ShiftController(hr.getRoleManager());
+    private static void manageShift(HRService hr, Branch branch, UserDTO callerDTO) {
+        WeekDTO currentWeekDTO = branch.getWeekRepo().getCurrentWeekDTO();
+        if (currentWeekDTO == null) {
+            System.out.println("No current week found.");
+            return;
+        }
 
-        // יצירת ShiftManagerSystem
-        ShiftManagerService shiftSys = new ShiftManagerService(currentWeek, branch, shiftController);
+        ShiftController shiftController = new ShiftController(branch, hr.getRoleController());
+        ShiftManagerService shiftSys = new ShiftManagerService(shiftController);
 
+        Scanner sc = new Scanner(System.in);
 
         while (true) {
             System.out.println("\n--- Shift Management ---");
@@ -83,22 +67,16 @@ public class ShiftManagerMenu implements Menu {
             System.out.println("3. Transfer cancellation card");
             System.out.println("0. Exit");
 
-            String choice = sc.nextLine();
+            String choice = sc.nextLine().trim();
 
             switch (choice) {
-                case "1":
-                    shiftSys.removeEmployeeFromShift(caller);
-                    break;
-                case "2":
-                    shiftSys.addEmployeeToShift(caller);
-                    break;
-                case "3":
-                    shiftSys.transferCancellationCard(caller);
-                    break;
-                case "0":
+                case "1" -> shiftSys.removeEmployeeFromShift(callerDTO);
+                case "2" -> shiftSys.addEmployeeToShift(callerDTO);
+                case "3" -> shiftSys.transferCancellationCard(callerDTO);
+                case "0" -> {
                     return;
-                default:
-                    System.out.println("Invalid option.");
+                }
+                default -> System.out.println("Invalid option.");
             }
         }
     }

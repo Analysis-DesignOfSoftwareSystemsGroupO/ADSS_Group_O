@@ -1,7 +1,8 @@
 package HR_Mudol.presentation;
-import HR_Mudol.domain.Objects.AbstractEmployee;
+
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.User;
 
 /**
  * The Menu interface defines the structure for all menus in the system.
@@ -12,10 +13,11 @@ public interface Menu {
     /**
      * Starts the menu interaction for the given user (caller).
      * This method will be implemented by all classes that represent different menus in the system.
-     * @param caller The user initiating the menu interaction (can be a manager, shift manager, or employee).
-     * @param self The AbstractEmployee object representing the caller's personal data.
+     *
+     * @param caller    The user initiating the menu interaction (can be a manager, shift manager, or employee).
+     * @param self      The EmployeeDTO object representing the caller's personal data.
      * @param curBranch The branch in which the caller works.
      * @return boolean indicating if the menu interaction was completed successfully (i.e., whether the user logged out or not).
      */
-    public abstract boolean start(User caller, AbstractEmployee self, Branch curBranch);
+    boolean start(UserDTO caller, EmployeeDTO self, Branch curBranch);
 }

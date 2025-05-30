@@ -1,6 +1,9 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
@@ -103,15 +106,37 @@ public class LoginScreen {
     }
 
     private void launchMenuForUser(User matched, Branch curBranch) {
+        // יצירת DTO עבור המשתמש
+        UserDTO userDTO = new UserDTO(matched.getUser().getEmpId(), matched.getLevel().name());
+
+        EmployeeDTO employeeDTO = null;
+        if (matched.getUser() instanceof Employee emp) {
+            employeeDTO = new EmployeeDTO(
+                    emp.getEmpId(),
+                    emp.getEmpName(),
+                    emp.getEmpPassword(),
+                    emp.getEmpBankAccount(),
+                    emp.getEmpSalary(),
+                    emp.getEmpStartDate(),
+                    emp.getMinDayShift(),
+                    emp.getMinEveninigShift(),
+                    emp.getSickDays(),
+                    emp.getDaysOff()
+            );
+        }
+
+        // מעבר לתפריט המתאים לפי סוג המשתמש
         if (matched.isManager()) {
             HRManagerMenu menu = new HRManagerMenu();
-            if (menu.start(matched, matched.getUser(), curBranch)) return;
+            if (menu.start(userDTO, employeeDTO, curBranch)) return;
         } else if (matched.isShiftManager()) {
             ShiftManagerMenu menu = new ShiftManagerMenu();
-            if (menu.start(matched, matched.getUser(), curBranch)) return;
+            if (menu.start(userDTO, employeeDTO, curBranch)) return;
         } else {
             EmployeeMenu menu = new EmployeeMenu();
-            if (menu.start(matched, matched.getUser(), curBranch)) return;
+            if (menu.start(userDTO, employeeDTO, curBranch)) return;
         }
     }
+
+
 }

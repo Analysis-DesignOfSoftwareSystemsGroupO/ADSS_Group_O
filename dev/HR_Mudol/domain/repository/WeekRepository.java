@@ -1,6 +1,7 @@
 package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.ShiftDAOImpl;
 import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.Week;
 import HR_Mudol.domain.*;
@@ -69,6 +70,22 @@ public class WeekRepository {
         }
         return null;
     }
+    public WeekDTO getCurrentWeekDTO() {
+        if (weeks.isEmpty()) {
+            throw new IllegalStateException("No weeks available");
+        }
 
+        Week current = weeks.get(weeks.size() - 1);
+        List<ShiftDTO> shiftDTOs = current.getShifts().stream()
+                .map(shift -> new ShiftDTO(
+                        shift.getShiftID(),
+                        shift.getDay().name(),
+                        shift.getType().name(),
+                        shift.getStatus().name(), // assuming getStatus() returns enum
+                        shift.getShiftManagerId() // assuming such getter exists
+                ))
+                .toList();
 
+        return new WeekDTO(current.getConstraintDeadline(), shiftDTOs);
+    }
 }

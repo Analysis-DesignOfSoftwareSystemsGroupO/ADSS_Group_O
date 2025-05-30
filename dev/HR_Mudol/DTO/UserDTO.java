@@ -23,7 +23,22 @@ public class UserDTO {
         this.level = level;
     }
 
-    public boolean isManager() {
-        return Objects.equals(this.level, "HRManager") || Objects.equals(this.level, "shiftManager");
+
+
+    public boolean isShiftManager() {
+        return "SHIFT_MANAGER".equalsIgnoreCase(level);
     }
+
+    public boolean isManager() {
+        return "HR_MANAGER".equalsIgnoreCase(level);
+    }
+
+    public boolean isTransportManager() {
+        return "TRANSPORT_MANAGER".equalsIgnoreCase(level);
+    }
+
+    public boolean isRegularEmployee() {
+        return "REGULAREMP".equalsIgnoreCase(level); // או השם התקני לפי Enum שלך
+    }
+
 }

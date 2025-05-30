@@ -1,43 +1,27 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.Service.ManagerService.HRControllerService;
-import HR_Mudol.domain.Objects.AbstractEmployee;
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.Objects.Week;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Scanner;
 
-/**
- * The HRManagerMenu class implements the Menu interface and provides various functionalities
- * for managing HR tasks such as employee management, shifts, roles, reports, and dashboards.
- * It allows shift managers to perform various HR-related tasks.
- */
-public class HRManagerMenu implements Menu{
+public class HRManagerMenu implements Menu {
 
-    /**
-     * Starts the HR manager menu, displaying options for managing employees, shifts, roles, and reports.
-     * Based on the user input, it redirects to the relevant action.
-     *
-     * @param caller The user calling the menu.
-     * @param self The current employee (used for role checking).
-     * @param curBranch The current branch the user is logged into.
-     * @return true if logout is successful, false if the session should continue.
-     */
-    public boolean start(User caller, AbstractEmployee self, Branch curBranch) {
+    @Override
+    public boolean start(UserDTO caller, EmployeeDTO self, Branch curBranch) {
         if (!caller.isManager()) {
             System.out.println("Access denied.");
             return false;
         }
 
         Scanner scanner = new Scanner(System.in);
-        HRControllerService hrSystemManager=new HRControllerService(curBranch);
+        HRService hr = new HRService(curBranch);
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");
-
             System.out.println("1. Manage Employees");
             System.out.println("2. View Shifts History");
             System.out.println("3. Generate Reports");
@@ -49,114 +33,41 @@ public class HRManagerMenu implements Menu{
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1": manageEmployees(hrSystemManager, caller, scanner); break;
-                case "2": viewShiftsHistory(hrSystemManager,curBranch.getWeeks()); break;
-                case "3": generateReports(hrSystemManager, caller, scanner,curBranch); break;
-                case "4": manageShift(hrSystemManager, curBranch.getWeeks(), caller, scanner); break;
-                case "5": manageRoles(hrSystemManager, caller, scanner); break;
-                case "6": hrSystemManager.displayDashboard(caller,curBranch); break;
-                case "0":
+                case "1" -> System.out.println("Not yet implemented");
+                case "2" -> System.out.println("Not yet implemented");
+                case "3" -> System.out.println("Not yet implemented");
+                case "4" -> manageShift(hr, curBranch, caller);
+                case "5" -> System.out.println("Not yet implemented");
+                case "6" -> {
+                    WeekDTO currentWeek = curBranch.getWeekRepo().getCurrentWeekDTO();
+                    if (currentWeek != null) {
+                        try {
+                            hr.displayDashboard(caller, currentWeek);
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("No current week available.");
+                    }
+                }
+                case "0" -> {
                     System.out.println("Logging out. Returning to login screen.");
                     return true;
-                default:
-                    System.out.println("Invalid option. Try again.");
-            }
-        }
-    }
-    /**
-     * Displays and manages the shift history based on user input (by week or date range).
-     *
-     * @param hr The HR system manager.
-     * @param weeks The list of available weeks for the shift history.
-     */
-    private static void viewShiftsHistory(HRControllerService hr, List<Week> weeks) {
-        if (weeks == null || weeks.isEmpty()) {
-            System.out.println("No weeks available.");
-            return;
-        }
-
-        Scanner scanner = new Scanner(System.in);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        System.out.print("Do you want to see only the last week? (Y/N): ");
-        String choice = scanner.nextLine().trim();
-
-        if (choice.equalsIgnoreCase("Y")) {
-            // מציאת השבוע האחרון ידנית
-            Week lastWeek = weeks.get(0);
-            for (int i = 1; i < weeks.size(); i++) {
-                if (weeks.get(i).getConstraintDeadline().isAfter(lastWeek.getConstraintDeadline())) {
-                    lastWeek = weeks.get(i);
                 }
-            }
-            System.out.println("Last week:");
-            hr.printWeek(lastWeek);
-            return;
-        }
-
-        // קבלת תאריכי התחלה וסיום
-        LocalDate fromDate = null;
-        LocalDate toDate = null;
-
-        while (fromDate == null) {
-            System.out.print("Enter start date (yyyy-MM-dd): ");
-            try {
-                fromDate = LocalDate.parse(scanner.nextLine(), formatter);
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Try again.");
-            }
-        }
-
-        while (toDate == null) {
-            System.out.print("Enter end date (yyyy-MM-dd): ");
-            try {
-                toDate = LocalDate.parse(scanner.nextLine(), formatter);
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Try again.");
-            }
-        }
-
-        // סינון שבועות בטווח באופן ידני
-        List<Week> filteredWeeks = new ArrayList<>();
-        for (int i = 0; i < weeks.size(); i++) {
-            LocalDate weekDate = weeks.get(i).getConstraintDeadline().toLocalDate();
-            if (!weekDate.isBefore(fromDate) && !weekDate.isAfter(toDate)) {
-                filteredWeeks.add(weeks.get(i));
-            }
-        }
-
-        // מיון ידני לפי תאריך
-        for (int i = 0; i < filteredWeeks.size() - 1; i++) {
-            for (int j = i + 1; j < filteredWeeks.size(); j++) {
-                LocalDate d1 = filteredWeeks.get(i).getConstraintDeadline().toLocalDate();
-                LocalDate d2 = filteredWeeks.get(j).getConstraintDeadline().toLocalDate();
-                if (d1.isAfter(d2)) {
-                    Week temp = filteredWeeks.get(i);
-                    filteredWeeks.set(i, filteredWeeks.get(j));
-                    filteredWeeks.set(j, temp);
-                }
-            }
-        }
-
-        if (filteredWeeks.isEmpty()) {
-            System.out.println("No weeks found in the selected range.");
-        } else {
-            System.out.println("Weeks in the selected range:");
-            for (Week week : filteredWeeks) {
-                hr.printWeek(week);
+                default -> System.out.println("Invalid option. Try again.");
             }
         }
     }
 
-    /**
-     * Manages the shifts, allowing assignment, editing, and other shift-related operations.
-     *
-     * @param hr The HR system manager.
-     * @param weeks The list of weeks for managing shifts.
-     * @param caller The user calling the menu.
-     * @param sc The scanner to capture user input.
-     */
-    private static void manageShift(HRControllerService hr, List<Week> weeks, User caller, Scanner sc) {
+    private static void manageShift(HRService hr, Branch branch, UserDTO callerDTO) {
+        WeekDTO currentWeekDTO = branch.getWeekRepo().getCurrentWeekDTO();
+        if (currentWeekDTO == null) {
+            System.out.println("No current week found.");
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+
         while (true) {
             System.out.println("\n--- Shift Management ---");
             System.out.println("1. Assigning roles to weekly shifts");
@@ -164,176 +75,51 @@ public class HRManagerMenu implements Menu{
             System.out.println("3. Edit shifts");
             System.out.println("0. Back to Main Menu");
 
-
             String choice = sc.nextLine();
-            switch (choice) {
-                case "1":
-                    try {
-                        hr.manageTheWeekRelevantRoles(caller, weeks.getLast());
+            try {
+                switch (choice) {
+                    case "1" -> hr.manageTheWeekRelevantRoles(callerDTO, currentWeekDTO);
+                    case "2" -> hr.assigningEmployToShifts(callerDTO, currentWeekDTO);
+                    case "3" -> editShifts(hr, callerDTO, currentWeekDTO);
+                    case "0" -> {
+                        return;
                     }
-                    catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case "2":
-                    hr.assigningEmployToShifts(caller, weeks.getLast());
-                case "3":
-                    editShifts(hr,caller,weeks.getLast());
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("Invalid option.");
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
 
-    /**
-     * Edits shifts by adding/removing employees or roles, or canceling a shift.
-     *
-     * @param hr The HR system manager.
-     * @param caller The user calling the menu.
-     * @param week The current week to edit shifts for.
-     */
-    public static void editShifts(HRControllerService hr, User caller, Week week) {
+    public static void editShifts(HRService hr, UserDTO caller, WeekDTO week) {
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            // הצגת אפשרויות לעריכת המשמרת
             System.out.println("Choose an action: ");
             System.out.println("1. Add employee");
             System.out.println("2. Remove employee");
             System.out.println("3. Add role");
             System.out.println("4. Remove role");
-            System.out.println("5. cancel a shift");
+            System.out.println("5. Cancel a shift");
             System.out.println("0. Back");
             String choice = scanner.nextLine();
-            switch (choice) {
-                case "1":
-                    hr.addEmployeeToShift(caller,week);
-                    break;
-                case "2":
-                    hr.removeRoleFromShift(caller,week);
-                    break;
-                case "3":
-                    hr.addARoleToShift(caller,week);
-                    break;
-                case "4":
-                    hr.removeRoleFromShift(caller,week);
-                    break;
-                case "5":
-                    hr.cancelShift(caller,week);
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("Invalid option.");
-            }
-        }
-
-
-    }
-
-    /**
-     * Manages employee actions, including adding, removing, or updating employee details.
-     *
-     * @param hr The HR system manager.
-     * @param caller The user calling the menu.
-     * @param sc The scanner to capture user input.
-     */
-    private static void manageEmployees(HRControllerService hr, User caller, Scanner sc) {
-        while (true) {
-            System.out.println("\n--- Employee Management ---");
-            System.out.println("1. Add Employee");
-            System.out.println("2. Remove Employee");
-            System.out.println("3. Update Bank Account");
-            System.out.println("4. Update Salary");
-            System.out.println("5. Print All Employees");
-            System.out.println("0. Back to Main Menu");
-
-            String choice = sc.nextLine();
-            switch (choice) {
-                case "1": hr.addEmployee(caller); break;
-                case "2": hr.removeEmployee(caller); break;
-                case "3": hr.updateBankAccount(caller); break;
-                case "4": hr.updateSalary(caller); break;
-                case "5": hr.printAllEmployees(caller); break;
-                case "0": return;
-                default: System.out.println("Invalid option.");
+            try {
+                switch (choice) {
+                    case "1" -> hr.addEmployeeToShift(caller, week);
+                    case "2" -> hr.removeEmployeeFromShift(caller, week);
+                    case "3" -> hr.addARoleToShift(caller, week);
+                    case "4" -> hr.removeRoleFromShift(caller, week);
+                    case "5" -> hr.cancelShift(caller, week);
+                    case "0" -> { return; }
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
-
-    /**
-     * Generates various types of reports such as weekly, employee, or shift reports.
-     *
-     * @param hr The HR system manager.
-     * @param caller The user calling the menu.
-     * @param sc The scanner to capture user input.
-     * @param curBranch The current branch to retrieve weeks and data from.
-     */
-    private static void generateReports(HRControllerService hr, User caller, Scanner sc, Branch curBranch) {
-        System.out.println("\n--- Report Generation ---");
-        System.out.println("1. Weekly Report");
-        System.out.println("2. Employee Report");
-        System.out.println("3. Shift Report");
-        System.out.println("0. Back to Main Menu");
-
-        String choice = sc.nextLine();
-        try {
-            switch (choice) {
-                case "1":
-                    hr.generateWeeklyReport(caller, curBranch.getWeeks());
-                    break;
-                case "2":
-                    System.out.print("Enter Employee ID: ");
-                    int empId = Integer.parseInt(sc.nextLine());
-                    hr.generateEmployeeReport(caller, empId,curBranch.getWeeks().getLast());
-                    break;
-                case "3":
-                    hr.generateShiftReport(caller, curBranch.getWeeks().getLast());
-                    break;
-                case "0": return;
-                default:
-                    System.out.println("Invalid option.");
-
-            }
-        } catch (Exception e) {
-            System.out.println("Failed to generate report.");
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Manages roles, including creating, assigning, and removing roles.
-     *
-     * @param hr The HR system manager.
-     * @param caller The user calling the menu.
-     * @param sc The scanner to capture user input.
-     */
-    private static void manageRoles(HRControllerService hr, User caller, Scanner sc) {
-        System.out.println("\n--- Role Management ---");
-        System.out.println("1. Create Role");
-        System.out.println("2. Assign Employee to Role");
-        System.out.println("3. Remove Employee from Role");
-        System.out.println("4. Assign employee to shift manager");
-        System.out.println("5. Print All Roles");
-        System.out.println("0. Back to Main Menu");
-
-        String choice = sc.nextLine();
-        switch (choice) {
-            case "1": hr.createRole(caller); break;
-            case "2": hr.assignEmployeeToRole(caller); break;
-            case "3": hr.removeEmployeeFromALLRoles(caller); break;
-            case "4": hr.assignEmployeeToShiftManager(caller); break;
-            case "5": hr.printAllRoles(caller); break;
-            case "0": return;
-            default: System.out.println("Invalid option.");
-        }
-    }
-
-
 }

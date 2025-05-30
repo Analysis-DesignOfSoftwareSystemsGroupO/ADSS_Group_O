@@ -199,4 +199,11 @@ public class Shift {
                 + "\nRoles: " + rolesStr
                 + "\nWorkers: " + employeesStr;
     }
+
+
+    public int getShiftManagerId() {
+        return (shiftManager != null) ? shiftManager.getEmpId() : -1;
+    }
+
+
 }

@@ -1,11 +1,11 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.IEmployeeController;
 import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -21,12 +21,11 @@ public class EmployeeMenu implements Menu {
     }
 
     @Override
-    public boolean start(User caller, HR_Mudol.domain.Objects.AbstractEmployee self, Branch branch) {
-        int empId = self.getEmpId();
+    public boolean start(UserDTO caller, EmployeeDTO self, Branch branch) {
+        int empId = self.getEmployeeId();
         WeekDTO currentWeek = branch.getWeekRepo().getCurrentWeekDTO();
-        UserDTO callerDTO = new UserDTO(caller.getUser().getEmpId(), caller.getLevel().name());
 
-        if (callerDTO.getUserId() != empId) {
+        if (caller.getUserId() != empId) {
             System.out.println("Access denied: You can only access your own menu.");
             return false;
         }
@@ -47,14 +46,14 @@ public class EmployeeMenu implements Menu {
 
             try {
                 switch (choice) {
-                    case "1" -> employeeService.viewMyShifts(callerDTO, empId, currentWeek);
-                    case "2" -> employeeService.submitConstraint(callerDTO, empId, currentWeek);
-                    case "3" -> employeeService.updateConstraint(callerDTO, empId, currentWeek);
-                    case "4" -> employeeService.viewMyConstraints(callerDTO, empId);
-                    case "5" -> employeeService.viewContractDetails(callerDTO, empId);
-                    case "6" -> employeeService.viewAvailableRoles(callerDTO, empId);
-                    case "7" -> employeeService.viewPersonalDetails(callerDTO, empId);
-                    case "8" -> employeeService.changePassword(callerDTO, empId);
+                    case "1" -> employeeService.viewMyShifts(caller, empId, currentWeek);
+                    case "2" -> employeeService.submitConstraint(caller, empId, currentWeek);
+                    case "3" -> employeeService.updateConstraint(caller, empId, currentWeek);
+                    case "4" -> employeeService.viewMyConstraints(caller, empId);
+                    case "5" -> employeeService.viewContractDetails(caller, empId);
+                    case "6" -> employeeService.viewAvailableRoles(caller, empId);
+                    case "7" -> employeeService.viewPersonalDetails(caller, empId);
+                    case "8" -> employeeService.changePassword(caller, empId);
                     case "0" -> {
                         return true;
                     }
@@ -69,5 +68,4 @@ public class EmployeeMenu implements Menu {
             }
         }
     }
-
 }

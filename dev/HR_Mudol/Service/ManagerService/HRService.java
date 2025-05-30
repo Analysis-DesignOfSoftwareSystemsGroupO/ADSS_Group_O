@@ -34,6 +34,10 @@ public class HRService implements IHRService {
         this.employeeService = new EmployeeService(this.employeeController);
         this.reportGenerator = new ReportGenerator(this.weekController,this.employeeController);
     }
+    public IEmployeeController getEmployeeController() {
+        return employeeController;
+    }
+
 
     @Override
     public void displayDashboard(UserDTO caller,WeekDTO currentWeek) throws SQLException {
@@ -228,5 +232,13 @@ public class HRService implements IHRService {
     public void generateShiftReport(UserDTO caller, WeekDTO curWeek) {
         reportGenerator.generateShiftReport(caller, curWeek);
     }
+    public IRoleController getRoleController() {
+        return roleController;
+    }
+
+
+
+
+
 
 }
