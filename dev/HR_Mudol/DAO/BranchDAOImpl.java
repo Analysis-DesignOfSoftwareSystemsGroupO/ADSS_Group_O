@@ -12,7 +12,7 @@ public class BranchDAOImpl implements IBranchDAO {
     private final IRoleDAO roleDAO;
 
     public BranchDAOImpl(IEmployeeDAO empDAO, IRoleDAO roleDAO) throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();;
+        this.conn = PostgresConnection.getConnection();;
         this.employeeDAO = empDAO;
         this.roleDAO = roleDAO;
     }

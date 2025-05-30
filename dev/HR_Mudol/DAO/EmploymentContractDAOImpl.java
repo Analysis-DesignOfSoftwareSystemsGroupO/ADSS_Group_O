@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.EmploymentContractDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 
@@ -8,7 +9,7 @@ public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
     private final Connection conn;
 
     public EmploymentContractDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override

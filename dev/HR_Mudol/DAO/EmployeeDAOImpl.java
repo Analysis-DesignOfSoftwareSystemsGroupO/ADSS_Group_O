@@ -2,6 +2,7 @@ package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ConstraintDTO;
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 import HR_Mudol.domain.Controllers.EmployeeController;
 
 import java.sql.*;
@@ -13,7 +14,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
 
     public EmployeeDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override

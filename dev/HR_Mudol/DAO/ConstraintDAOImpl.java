@@ -1,6 +1,7 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ConstraintDTO;
+import HR_Mudol.DataBase.PostgresConnection;
 import HR_Mudol.domain.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class ConstraintDAOImpl implements IConstraintDAO {
     private final Connection conn;
 
     public ConstraintDAOImpl() throws SQLException {
-        this.conn = DataBase.PostgresConnection.getConnection();
+        this.conn = PostgresConnection.getConnection();
     }
 
     @Override
