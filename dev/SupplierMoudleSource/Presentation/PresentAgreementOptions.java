@@ -103,8 +103,8 @@ public class PresentAgreementOptions {
             if (choice == 1 || choice == 2 || choice == 3) {
                 try {
                     agreementController.viewAllAgreements();
-
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                 }
                 System.out.println("Enter supplier ID: ");
                 supplierID = editAgreement.nextLine();

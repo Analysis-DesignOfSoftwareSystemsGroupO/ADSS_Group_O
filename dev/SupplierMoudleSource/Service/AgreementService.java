@@ -51,7 +51,7 @@ public class AgreementService {
             BranchDTO branchDTO = branchRepository.getBranch(agreementDTO.getBranchId());
             SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
             if (branchDTO == null){
-                throw new Exception("Branch does not exist");
+                throw new Exception("Branch does not exist!!");
             }
             if (supplierDTO == null){
                 throw new Exception("Supplier does not exist");
@@ -89,9 +89,14 @@ public class AgreementService {
     //views an agreement given branch id and supplier id (ued for creating a new order)
     public void viewAgreement(String branchId, String supplierID) throws Exception {
         if (agreementRepository.getAgreement(branchId, supplierID) != null){
-            System.out.println(agreementRepository.getAgreement(branchId, supplierID).toString());
+            AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
+            BranchDTO branchDTO = branchRepository.getBranch(agreementDTO.getBranchId());
+            SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
+            Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
+            System.out.println(agreement);
         }
     }
+
     //removes a product from an existing agreement
     public void removeProductFromAgreement(String supplierID, String branchId, String productID) throws Exception {
         Agreement agreement = getAgreement(branchId, supplierID);
@@ -99,6 +104,7 @@ public class AgreementService {
             throw new Exception("Agreement does not have this product");
         }
         agreement.removeProduct(productID);
+        agreementRepository.removeProductFromAgreement(productID, branchId, supplierID);
     }
 
     //edits a product discount from an existing agreement
@@ -118,21 +124,18 @@ public class AgreementService {
 
 
     private Agreement getAgreement(String branchId, String supplierID) throws Exception {
-
         SupplierDTO supplierDTO =  supplierRepository.getSupplier(supplierID);
         if (supplierDTO == null){
             throw new Exception("supplier does not exist");
         }
-
-        if (!branchRepository.existsBranch(branchId)){
-            throw new Exception("branch does not exist");
+        BranchDTO branchDTO = branchRepository.getBranch(branchId);
+        if (branchDTO ==null){
+            throw new Exception("branch does not exist!");
         }
         AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
         if (agreementDTO == null) {
             throw new Exception("agreement does not exist");
         }
-
-        BranchDTO branchDTO = branchRepository.getBranch(branchId);
         return new Agreement(branchDTO, supplierDTO, agreementDTO);
     }
 

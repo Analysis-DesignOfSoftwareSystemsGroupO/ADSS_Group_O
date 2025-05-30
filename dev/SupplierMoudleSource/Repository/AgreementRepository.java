@@ -40,6 +40,10 @@ public class AgreementRepository {
         }
     }
 
+    public void removeProductFromAgreement(String productID, String branchId, String supplierID) throws Exception {
+        agreementDAO.removeProductFromAgreement(branchId, supplierID, productID);
+    }
+
     public void addAgreement(AgreementDTO agreement) throws Exception {
         SupplierBranchKey supBKey = new SupplierBranchKey(agreement.getSupplierID(), agreement.getBranchId());
         suppliersAgreements.put(supBKey, agreement);
