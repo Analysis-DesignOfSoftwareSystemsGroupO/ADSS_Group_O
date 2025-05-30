@@ -20,6 +20,7 @@ import static java.lang.Object.*;
  * This class provides a simple text-based interface to interact with the BookingService.
  */
 public class BookingMenu {
+    // todo - ask for site name and area from user
 
     // Dependency on the BookingService to process transport requests
     private BookingControllerPL controller;

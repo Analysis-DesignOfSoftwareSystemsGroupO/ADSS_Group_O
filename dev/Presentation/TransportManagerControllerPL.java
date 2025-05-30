@@ -11,7 +11,7 @@ public class TransportManagerControllerPL {
     }
 
     public void requestDriversFromHR() throws Exception {
-        domainController.fetchAvailableDriversFromHR(); // פעולה שתעדכן את רשימת הנהגים הזמינים
+        domainController.fetchAvailableDriversFromHR();
     }
 
     public void assignDriverToTransport(String driverId, int transportId) throws Exception {

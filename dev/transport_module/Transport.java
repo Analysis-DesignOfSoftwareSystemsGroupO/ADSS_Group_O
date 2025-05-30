@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class Transport {
     public enum Status {waitForShipment, sent, delayed}
 
-    private static int staticTransportID = 0;
     private final int id;
     private LocalDate date; // field for date of the transport
     private LocalTime departure_time; // the hour of departure time
@@ -29,7 +28,7 @@ public class Transport {
      * Constructor for Transport
      * Initializes a new transport instance with given parameters and checks input validity.
      */
-    public Transport(String d, String time, Site s) throws ATransportModuleException {
+    public Transport(int id, String d, String time, Site s) throws ATransportModuleException {
         // input check
         if (time.isEmpty() || d.isEmpty() || s == null) {
             throw new InvalidInputException();
@@ -61,7 +60,7 @@ public class Transport {
         departure_time = LocalTime.of(hour, minute); // set the hour
 
 
-        id = ++staticTransportID; // give index to transport
+        this.id = id; // give index to transport
 
         currWeight = 0;
         maxWeight = 0;

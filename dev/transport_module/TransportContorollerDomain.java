@@ -1,5 +1,6 @@
 package transport_module;
 
+import DTO.ProductListDocumentDto;
 import DataAccess.*;
 import DTO.ProductDTO;
 import DTO.TransportReqDTO;
@@ -14,84 +15,54 @@ public class TransportContorollerDomain {
     private final IProductRepository productRepo;
     private final ISiteRepository siteRepo;
 
-    public TransportContorollerDomain(ITransportRepository transportRepo,
-                                     IProductListDocumentRepository documentRepo,
-                                     IProductRepository productRepo,
-                                     ISiteRepository siteRepo) {
-        this.transportRepo = transportRepo;
-        this.documentRepo = documentRepo;
-        this.productRepo = productRepo;
-        this.siteRepo = siteRepo;
+    public TransportContorollerDomain() {
+        this.transportRepo = new TransportRepositoryIMP();
+        this.documentRepo = new ProductListDocumentRepositoryIMP();
+        this.productRepo = ProductRepositoryIMP();
+        this.siteRepo = SiteRepositoryIMP();
     }
 
     /**
      * Creates a new Transport using data from DTO and saves it.
      */
     public int createTransport(TransportReqDTO dto) throws ATransportModuleException {
-        // Get source site from repository
-        // todo - ask for site name and area from user
-        // todo - posposed later will be integrated with more models ST site will have more functionality - right now just site name and area name
-        Site source = siteRepo.getSiteByName(dto.getSource());
-        if (source == null) throw new InvalidInputException("Source site not found");
-
-        // Convert date/time to strings for constructor
-        String dateStr = dto.date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String timeStr = dto.departureTime().toString(); // format: HH:mm
-
-        // Create and persist transport
-        // todo - send DTO to repository
-        Transport t = new Transport(dateStr, timeStr, source);
-
-        // todo use Repository getTransportID
-        return t.getId();
+        // try to create transport with Transport requeest DTO
+        return transportRepo.TransportDTOtoTransport(dto);
     }
 
     /**
      * Creates and saves a new delivery document.
      */
-    public int createProductListDocument(String destinationName, String time, String dateStr) throws ATransportModuleException {
-        Site destination = siteRepo.getSiteByName(destinationName);
-        if (destination == null) throw new InvalidInputException("Destination site not found");
+    public int createProductListDocument(ProductListDocumentDto dto) throws ATransportModuleException {
 
-        ProductListDocument doc = new ProductListDocument(destination, dateStr, time);
-        documentRepo.saveDocument(doc);
-        return doc.getId();
+        ProductListDocument productListDocument= productRepo.PLDdtoTOPLD(doc);
+        return productListDocument.getId();
     }
 
     /**
      * Adds a product to a delivery document.
      */
     public void addProductToDocument(ProductDTO dto, int docId) throws ATransportModuleException {
-        ProductListDocument doc = documentRepo.getDocumentById(docId);
-        if (doc == null) throw new InvalidInputException("Document not found");
 
-        Product p = productRepo.getProductById(dto.getProductId());
-        if (p == null) throw new InvalidInputException("Product not found");
-
-        doc.addProduct(p, dto.getAmount());
-        documentRepo.updateDocument(doc);
+        documentRepo.addProductToDocument(dto,docId);
     }
 
     /**
      * Attaches a document to a transport.
      */
     public void attachProductListDocumentToTransport(int docId, int transportId) throws ATransportModuleException {
-        ProductListDocument doc = documentRepo.getDocumentById(docId);
-        if (doc == null) throw new InvalidInputException("Document not found");
 
-        Transport transport = transportRepo.getTransportByid(transportId);
-        if (transport == null) throw new InvalidInputException("Transport not found");
-
-        transport.loadByDocument(doc);
-        transportRepo.updateTransport(transport);
+        // todo - check if repository updates the transport
+        transportRepo.attachProductListDocumentToTransport(docId, transportId);
     }
 
     public void fetchAvailableDriversFromHR() throws Exception {
-
+        // todo - check how to do it
         HRController.requestAvailableDrivers();
     }
 
     public void assignDriver(String driverId, int transportId) throws Exception {
+        // todo - check how to do it
         Driver driver = DriverRepository.getDriverById(driverId);
         Transport transport = TransportRepository.getTransportByid(transportId);
 

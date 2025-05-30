@@ -10,7 +10,6 @@ import java.util.Map;
 import Transport_Module_Exceptions.*;
 
 public class ProductListDocument {
-    public static int documentID = 0; // global variable for indexing documents.
     private final int id; // document id
     private Site destination; // document destination
     private final Map<Product, Integer> productHashMap; // a map of products and amount of each product
@@ -25,7 +24,7 @@ public class ProductListDocument {
      * @param d Date string in "dd/MM/yyyy" format
      * @throws ATransportModuleException if input is invalid
      */
-    public ProductListDocument(Site site, String d, String h) throws ATransportModuleException {
+    public ProductListDocument(int id, Site site, String d, String h) throws ATransportModuleException {
         if (site == null)
             throw new InvalidInputException(); // if the site is null - don't create a document
 
@@ -44,7 +43,7 @@ public class ProductListDocument {
             throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
         }
 
-        id = ++documentID; // give index to document
+        this.id = id; // give index to document
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
