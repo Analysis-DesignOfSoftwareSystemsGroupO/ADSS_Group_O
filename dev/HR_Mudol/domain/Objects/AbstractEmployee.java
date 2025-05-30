@@ -132,10 +132,8 @@ public abstract class AbstractEmployee {
      * @param caller The user attempting to make the change
      * @throws SecurityException if the caller is unauthorized
      */
-    public void setEmpPassword(String empPassword, User caller) {
-        if (!caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public void setEmpPassword(String empPassword) {
+
         this.empPassword = empPassword;
     }
 

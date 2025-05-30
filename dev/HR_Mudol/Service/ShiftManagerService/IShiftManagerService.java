@@ -1,21 +1,20 @@
 package HR_Mudol.Service.ShiftManagerService;
-
-import HR_Mudol.domain.Objects.User;
+import HR_Mudol.DTO.*;
 
 public interface IShiftManagerService {
 
     /**
      * Remove an employee from a selected shift in the current week.
      */
-    void removeEmployeeFromShift(User caller);
+    void removeEmployeeFromShift(UserDTO theCaller);
 
     /**
      * Add an employee to a selected shift in the current week.
      */
-    void addEmployeeToShift(User caller);
+    void addEmployeeToShift(UserDTO theCaller);
 
     /**
      * Transfer the cancellation card to the next shift manager.
      */
-    void transferCancellationCard(User caller);
+    void transferCancellationCard(UserDTO theCaller);
 }

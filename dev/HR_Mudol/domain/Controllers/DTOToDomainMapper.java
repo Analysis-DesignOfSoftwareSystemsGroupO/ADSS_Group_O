@@ -60,7 +60,7 @@ public class DTOToDomainMapper {
         return newRole;
     }
 
-    public Constraint fromDTO(ConstraintDTO dto) {
+    public static Constraint fromDTO(ConstraintDTO dto) {
         return new Constraint(
                 dto.getExplanation(),
                 WeekDay.valueOf(dto.getDay().toUpperCase()),
@@ -131,10 +131,42 @@ public class DTOToDomainMapper {
     }
 
     public static EmployeeDTO toDTO(Employee e) {
-        return new EmployeeDTO(e.getEmpId(), e.getEmpName(), e.getEmpPassword(), e.getEmpBankAccount(),e.getEmpStartDate(),e.getMinDayShift(),e.getMinDayShift(),e.getSickDays(),e.getDaysOff(),e.getRelevantRoles(),e.getWeeklyConstraints());
+
+        // המרת List<Role> ל־List<Integer>
+        List<Integer> roleIds = new ArrayList<>();
+        for (Role role : e.getRelevantRoles()) {
+            roleIds.add(role.getRoleNumber());
+        }
+
+        // המרת List<Constraint> ל־List<ConstraintDTO>
+        List<ConstraintDTO> constraintDTOs = new ArrayList<>();
+        for (Constraint c : e.getWeeklyConstraints()) {
+            constraintDTOs.add(new ConstraintDTO(
+                    e.getEmpId(),
+                    c.getExplanation(),
+                    c.getDay().name(),
+                    c.getType().name()
+            ));
+        }
+
+        return new EmployeeDTO(
+                e.getEmpId(),
+                e.getEmpName(),
+                e.getEmpPassword(),
+                e.getEmpBankAccount(),
+                e.getEmpSalary(),
+                e.getEmpStartDate(),
+                e.getMinDayShift(),
+                e.getMinEveninigShift(),
+                e.getSickDays(),
+                e.getDaysOff(),
+                roleIds,
+                constraintDTOs
+        );
+
     }
 
-    public RoleDTO toDTO(Role r) {
+    public static RoleDTO toDTO(Role r) {
         List<EmployeeDTO> relevantEmployees = new ArrayList<>();
         for (Employee e : r.getRelevantEmployees()) {
             relevantEmployees.add(toDTO(e));
@@ -142,4 +174,26 @@ public class DTOToDomainMapper {
 
         return new RoleDTO(r.getRoleNumber(), r.getDescription(), relevantEmployees);
     }
+
+    public static ConstraintDTO toDTO(Constraint c,int ID) {
+        return new ConstraintDTO(
+                ID,
+                c.getExplanation(),
+                c.getDay().name(),
+                c.getType().name()
+        );
+    }
+
+    public static EmploymentContractDTO toDTO(EmploymentContract contract, Employee employee) {
+        return new EmploymentContractDTO(
+                contract.getMinDayShift(employee),
+                contract.getMinEveninigShift(employee),
+                contract.getSickDays(employee),
+                contract.getDaysOff(employee),
+                employee.getEmpId()
+        );
+    }
+
+
+
 }

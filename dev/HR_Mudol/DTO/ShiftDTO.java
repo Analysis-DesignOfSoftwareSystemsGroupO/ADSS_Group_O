@@ -1,5 +1,6 @@
 package HR_Mudol.DTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShiftDTO {
@@ -69,4 +70,12 @@ public class ShiftDTO {
     public void setFilledRoles(List<FilledRoleDTO> filledRoles) {
         this.filledRoles = filledRoles;
     }
+    public List<Integer> getEmployeeIds() {
+        List<Integer> ids = new ArrayList<>();
+        for (EmployeeDTO e : employees) {
+            ids.add(e.getEmployeeId());
+        }
+        return ids;
+    }
+
 }

@@ -7,6 +7,7 @@ import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,6 +60,16 @@ public class ShiftController implements IShiftController {
 
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
+
+        if (!caller.isManager() && !caller.isShiftManager()) {
+            System.out.println("Access denied. Only shift managers can remove employees from shifts.");
+            return;
+        }
+
+        if (!isShiftManagerOfShift(caller, shift)) {
+            System.out.println("Access denied. You are not the shift manager of this shift.");
+            return;
+        }
 
         // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
@@ -307,4 +318,33 @@ public class ShiftController implements IShiftController {
 
         }
     }
+
+    private boolean isShiftManagerOfShift(User caller, Shift shift) {
+        return shift.getShiftManager() != null &&
+                caller.getUser().getEmpId() == shift.getShiftManager().getEmpId();
+    }
+
+    @Override
+    public List<ShiftDTO> getAllShiftDTOs() {
+        List<ShiftDTO> result = new ArrayList<>();
+
+        for (Week week : curBranch.getWeekRepo().getAll()) {
+            for (Shift shift : week.getShifts()) {
+                result.add(mapper.toDTO(shift));
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployeesAsDTOs() {
+        List<EmployeeDTO> result = new ArrayList<>();
+        for (Employee e : curBranch.getEmployeeRepo().getAll()) {
+            result.add(DTOToDomainMapper.toDTO(e));
+        }
+        return result;
+    }
+
+
 }

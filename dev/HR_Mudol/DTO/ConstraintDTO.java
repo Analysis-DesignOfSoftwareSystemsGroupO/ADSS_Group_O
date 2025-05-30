@@ -9,8 +9,8 @@ public class ConstraintDTO {
     private String day;   // e.g., "SUNDAY"
     private String type;  // e.g., "MORNING"
 
-    public ConstraintDTO(int empID, String explanation, String day, String type) {
-        this.empID = empID;
+    public ConstraintDTO(int ID, String explanation, String day, String type) {
+        this.empID=ID;
         this.explanation = explanation;
         this.day = day;
         this.type = type;

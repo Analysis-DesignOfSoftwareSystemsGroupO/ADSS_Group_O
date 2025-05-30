@@ -92,20 +92,15 @@ public class Employee extends AbstractEmployee {
     /**
      * Returns the list of morning shift constraints.
      */
-    public List<Constraint> getMorningConstraints(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public List<Constraint> getMorningConstraints() {
+
         return morningConstraints;
     }
 
     /**
      * Returns the list of evening shift constraints.
      */
-    public List<Constraint> getEveningConstraints(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public List<Constraint> getEveningConstraints() {
         return eveningConstraints;
     }
 
@@ -113,10 +108,8 @@ public class Employee extends AbstractEmployee {
      * Adds a new morning constraint.
      * @throws NullPointerException if constraint is null.
      */
-    public void addNewMorningConstraints(User caller, Constraint constraint) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public void addNewMorningConstraints( Constraint constraint) {
+
         if (constraint == null) {
             throw new NullPointerException("Constraint cannot be null");
         }
@@ -128,10 +121,8 @@ public class Employee extends AbstractEmployee {
      * Adds a new evening constraint.
      * @throws NullPointerException if constraint is null.
      */
-    public void addNewEveningConstraints(User caller, Constraint constraint) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public void addNewEveningConstraints(Constraint constraint) {
+
         if (constraint == null) {
             throw new NullPointerException("Constraint cannot be null");
         }
@@ -143,15 +134,12 @@ public class Employee extends AbstractEmployee {
      * Adds a new general weekly constraint.
      * Only the employee himself or a manager can add a constraint.
      *
-     * @param caller The user attempting to add the constraint.
      * @param constraint The constraint to add. Must not be null.
      * @throws SecurityException if the caller is unauthorized.
      * @throws NullPointerException if the constraint is null.
      */
-    public void addNewConstraints(User caller, Constraint constraint) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public void addNewConstraints( Constraint constraint) {
+
         if (constraint == null) {
             throw new NullPointerException("Constraint cannot be null");
         }
@@ -276,10 +264,8 @@ public class Employee extends AbstractEmployee {
     /**
      * Returns the employee's contract details.
      */
-    public EmploymentContract getContract(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied");
-        }
+    public EmploymentContract getContract() {
+
         return this.Contract;
     }
 
@@ -287,15 +273,12 @@ public class Employee extends AbstractEmployee {
      * Locks the weekly constraints into the locked constraints list,
      * clearing the weekly, morning, and evening constraints afterwards.
      */
-    public void lockWeeklyConstraints(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Only manager can lock constraints.");
-        }
+    public void lockWeeklyConstraints() {
 
         this.lockedConstraints = new ArrayList<>(this.getWeeklyConstraints());
         this.getWeeklyConstraints().clear();
-        this.getMorningConstraints(caller).clear();
-        this.getEveningConstraints(caller).clear();
+        this.getMorningConstraints().clear();
+        this.getEveningConstraints().clear();
     }
 
     /**

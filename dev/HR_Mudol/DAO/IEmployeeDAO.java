@@ -19,5 +19,5 @@ public interface IEmployeeDAO {
     void updateMinEveningShift(int empId, int newMinEveningShift) throws SQLException;
     void updateSickDays(int empId, int newSickDays) throws SQLException;
     void updateDaysOff(int empId, int daysOff) throws SQLException;
-
+    void updatePassword(int empId, String newPassword);
 }

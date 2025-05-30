@@ -2,12 +2,15 @@ package HR_Mudol.domain.Controllers;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.ShiftType;
+import HR_Mudol.domain.WeekDay;
 
 
 /**
@@ -23,7 +26,7 @@ public class EmployeeController implements IEmployeeController {
 
     public EmployeeController(Branch curBranch) {
         this.curBranch = curBranch;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+        this.mapper = new DTOToDomainMapper(curBranch.getUserRepo(), curBranch.getEmployeeRepo(), curBranch.getRoleRepo(), curBranch.getWeekRepo());
     }
 
     public void setRoleManager(IRoleController roleManager) {
@@ -37,7 +40,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void addEmployee(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         String empName = getNonEmptyStringInput("Enter employee full name: ");
@@ -77,7 +80,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void removeEmployee(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID to remove: ");
@@ -104,7 +107,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void updateBankAccount(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -121,7 +124,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void updateSalary(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -138,7 +141,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void updateMinDayShift(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -155,7 +158,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void updateMinEveningShift(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -173,7 +176,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void setInitialsickDays(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -190,7 +193,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void setInitialdaysOff(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -210,8 +213,8 @@ public class EmployeeController implements IEmployeeController {
 
 
     @Override
-    public Employee getEmployeeById(UserDTO theCaller, int empId) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+    public EmployeeDTO getEmployeeById(UserDTO theCaller, int empId) throws SQLException {
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         if (String.valueOf(empId).length() != 9) {
@@ -223,12 +226,12 @@ public class EmployeeController implements IEmployeeController {
         if (e == null) {
             System.out.println("Employee not found.");
         }
-        return e;
+        return DTOToDomainMapper.toDTO(e);
     }
 
     @Override
     public void printEmployees(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         int empId = getIntInput("Enter employee ID: ");
@@ -247,7 +250,7 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public void printAllEmployees(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied");
 
         List<Employee> allEmployees = curBranch.getEmployeeRepo().getAll();
@@ -292,6 +295,7 @@ public class EmployeeController implements IEmployeeController {
         return input;
     }
 
+
     private String getValidatedBankAccountInput(String prompt) {
         String input;
         do {
@@ -304,16 +308,179 @@ public class EmployeeController implements IEmployeeController {
         return input;
     }
 
+    @Override
+    public boolean verifyPassword(UserDTO caller, int empId, String password) {
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
 
+        // אם העובד לא קיים – החזרה של שגיאה/false
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return false;
+        }
 
+        // בדיקה של הרשאות – רק העובד עצמו יכול לאמת את הסיסמה שלו
+        if (caller.getUserId() != empId) {
+            System.out.println("Access denied.");
+            return false;
+        }
 
+        // בדיקת סיסמה – נניח שאין hash
+        return employee.getEmpPassword().equals(password);
+    }
 
+    @Override
+    public void updatePassword(UserDTO callerDTO, int empId, String newPassword) throws SQLException {
+        // שליפת האובייקט Employee
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
 
+        // שליפת אובייקט User מה־DTO
+        User caller = curBranch.getUserRepo().getByEmployeeId(callerDTO.getUserId());
+        if (caller == null || !caller.getUser().equals(employee)) {
+            throw new SecurityException("Access denied: You can only update your own password.");
+        }
 
+        // בדיקה שהסיסמה החדשה אינה ריקה
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty.");
+        }
 
+        curBranch.getEmployeeRepo().updatePassword(empId, newPassword);
 
+        System.out.println("Password updated successfully.");
+    }
 
+    @Override
+    public List<ConstraintDTO> getConstraintsByEmployeeId(int employeeId) {
+        Employee emp = curBranch.getEmployeeRepo().getById(employeeId);
+        if (emp == null) {
+            throw new IllegalArgumentException("Employee not found");
+        }
+
+        List<ConstraintDTO> result = new ArrayList<>();
+        List<Constraint> rawConstraints = emp.getWeeklyConstraints();
+
+        for (Constraint c : rawConstraints) {
+            ConstraintDTO dto = DTOToDomainMapper.toDTO(c, employeeId);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<RoleDTO> getRolesForEmployee(int employeeId) {
+        Employee emp = curBranch.getEmployeeRepo().getById(employeeId);
+        if (emp == null) {
+            throw new IllegalArgumentException("Employee not found");
+        }
+
+        List<RoleDTO> roleDTOs = new ArrayList<>();
+        for (Role role : emp.getRelevantRoles()) {
+            roleDTOs.add(DTOToDomainMapper.toDTO(role));
+        }
+
+        return roleDTOs;
+    }
+
+    @Override
+    public void lockWeeklyConstraints(int empId) {
+        Employee emp = curBranch.getEmployeeRepo().getById(empId);
+        if (emp == null) throw new IllegalArgumentException("Employee not found");
+        emp.lockWeeklyConstraints();
+    }
+
+    @Override
+    public int getMinDayShifts(int empId) {
+        Employee emp = curBranch.getEmployeeRepo().getById(empId);
+        if (emp == null) throw new IllegalArgumentException("Employee not found");
+        return emp.getContract().getMinDayShift(emp);
+    }
+
+    @Override
+    public int getMinEveningShifts(int empId) {
+        Employee emp = curBranch.getEmployeeRepo().getById(empId);
+        if (emp == null) throw new IllegalArgumentException("Employee not found");
+        return emp.getContract().getMinEveninigShift(emp);
+    }
+
+    @Override
+    public void submitConstraint(int empId, ConstraintDTO constraintDTO) throws SQLException {
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee not found with ID: " + empId);
+        }
+
+        // המרת DTO לאובייקט דומיין
+        Constraint constraint = DTOToDomainMapper.fromDTO(constraintDTO);
+
+        // שמירה ברמת העובד
+        employee.addNewConstraints(constraint);
+        if (constraint.getType() == ShiftType.MORNING) {
+            employee.addNewMorningConstraints(constraint);
+        } else {
+            employee.addNewEveningConstraints(constraint);
+        }
+
+        // שמירה ברמת הריפוזיטורי הכללי
+        curBranch.getConstraintRepo().save(empId, constraint);
+    }
+
+    @Override
+    public EmploymentContractDTO getContractDetails(UserDTO caller, int empId) {
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee == null) return null;
+
+        // בדיקת הרשאות – רק HR או העובד עצמו
+        if (!caller.getLevel().equals("HR_MANAGER") && caller.getUserId() != empId) {
+            throw new SecurityException("Access denied: Only HR or the employee may view the contract.");
+        }
+
+        EmploymentContract contract = employee.getContract();
+        return DTOToDomainMapper.toDTO(contract,employee);
+    }
+
+    @Override
+    public List<ConstraintDTO> getConstraintsByType(int empId, ShiftType type) {
+        List<Constraint> all = curBranch.getEmployeeRepo()
+                .getById(empId)
+                .getWeeklyConstraints();
+
+        List<ConstraintDTO> result = new ArrayList<>();
+        for (Constraint c : all) {
+            if (c.getType() == type) {
+                ConstraintDTO dto = DTOToDomainMapper.toDTO(c, empId);
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void updateConstraintExplanation(EmployeeDTO emp, ConstraintDTO constraintDTO, String newExplanation) {
+        Constraint constraint = curBranch.getConstraintRepo()
+                .getConstraint(emp.getEmployeeId(), WeekDay.valueOf(constraintDTO.getDay().toUpperCase()), ShiftType.valueOf(constraintDTO.getType().toUpperCase()));
+
+        if (constraint != null) {
+            constraint.setExplanation(DTOToDomainMapper.fromDTO(emp), newExplanation);
+
+            curBranch.getConstraintRepo().update(emp.getEmployeeId(), constraint);
+        }
+    }
+
+    @Override
+    public void removeConstraint(int empId, ConstraintDTO constraintDTO) {
+        WeekDay day = WeekDay.valueOf(constraintDTO.getDay().toUpperCase());
+        ShiftType type = ShiftType.valueOf(constraintDTO.getType().toUpperCase());
+
+        curBranch.getConstraintRepo().delete(empId, day, type);
+    }
 }
+
+
 
 
 

@@ -1,47 +1,56 @@
 package HR_Mudol.Service.EmployeeService;
 
+import HR_Mudol.DTO.ConstraintDTO;
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Week;
+import HR_Mudol.domain.ShiftType;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public interface IEmployeeService {
 
     /**
      * Display all upcoming shifts assigned to the given employee.
      */
-    void viewMyShifts(User caller, int empId, Week currentWeek);
+    void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
 
     /**
      * Allow the employee to submit a new constraint.
      */
-    void submitConstraint(User caller, int empId, Week currentWeek);
+    void submitConstraint(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
 
     /**
      * Allow the employee to update an existing constraint.
      */
-    void updateConstraint(User caller, int empId, Week currentWeek);
+    void updateConstraint(UserDTO caller, int empId, WeekDTO currentWeek);
 
     /**
      * Display personal details of the employee (e.g., name, role, salary).
      */
-    void viewPersonalDetails(User caller, int empId);
+    void viewPersonalDetails(UserDTO caller, int empId) throws SQLException;
 
     /**
      * View the list of constraints the employee has submitted for the current week.
      */
-    void viewMyConstraints(User caller, int empId);
+    void viewMyConstraints(UserDTO caller, int empId);
 
     /**
      * Allow the employee to change their account password.
      */
-    void changePassword(User caller, int empId);
+    void changePassword(UserDTO caller, int empId) throws SQLException;
 
     /**
      * Display the employment contract details of the employee.
      */
-    void viewContractDetails(User caller, int empId);
+    void viewContractDetails(UserDTO caller, int empId);
 
     /**
      * View the roles that the employee is eligible to perform.
      */
-    void viewAvailableRoles(User caller, int empId);
+    void viewAvailableRoles(UserDTO caller, int empId);
+
+
 }

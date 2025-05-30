@@ -135,7 +135,17 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             stmt.executeUpdate();
         }
     }
-
+    @Override
+    public void updatePassword(int empId, String newPassword) {
+        String sql = "UPDATE employees SET password = ? WHERE empId = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setInt(2, empId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update password", e);
+        }
+    }
 
     @Override
     public EmployeeDTO getById(int employeeId) {

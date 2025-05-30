@@ -10,8 +10,7 @@ public interface IConstraintDAO {
     void delete(int empID, String day, String type) throws SQLException;
 
     ConstraintDTO getConstraint(int empId, WeekDay day, ShiftType type);
-
-
     List<ConstraintDTO> getByEmployee(int empID) throws SQLException;
     List<ConstraintDTO> getAll() throws SQLException;
+    void update(int empId, ConstraintDTO dto);
 }

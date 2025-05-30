@@ -97,5 +97,21 @@ public class ConstraintDAOImpl implements IConstraintDAO {
         return null;
     }
 
+    @Override
+    public void update(int empId, ConstraintDTO dto) {
+        String sql = "UPDATE constraints SET explanation = ? WHERE employee_id = ? AND day = ? AND type = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, dto.getExplanation());
+            stmt.setInt(2, empId);
+            stmt.setString(3, dto.getDay());
+            stmt.setString(4, dto.getType());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update constraint", e);
+        }
+    }
 
 }

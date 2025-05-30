@@ -1,9 +1,9 @@
 package HR_Mudol.Service.ShiftManagerService;
 
-import HR_Mudol.domain.*;
+import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Controllers.IShiftController;
-import HR_Mudol.domain.Objects.*;
-
+import HR_Mudol.domain.*;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,56 +13,47 @@ import java.util.Scanner;
  */
 public class ShiftManagerService implements IShiftManagerService {
 
-    private final Week currentWeek;
-    private final Branch branch;
     private final IShiftController shiftController;
     private final Scanner scanner = new Scanner(System.in);
 
-    public ShiftManagerService(Week currentWeek, Branch branch, IShiftController shiftController) {
-        this.currentWeek = currentWeek;
-        this.branch = branch;
+    public ShiftManagerService(IShiftController shiftController) {
         this.shiftController = shiftController;
     }
 
     @Override
-    public void removeEmployeeFromShift(User caller) {
-        if (!caller.isManager() && !caller.isShiftManager()) {
-            System.out.println("Access denied. Only shift managers can remove employees from shifts.");
-            return;
+    public void removeEmployeeFromShift(UserDTO theCaller) {
+        ShiftDTO shiftDTO = chooseShiftDTO();
+        if (shiftDTO == null) return;
+        try
+        {
+        shiftController.removeEmployeeFromShift(theCaller, shiftDTO);
+        } catch (SQLException e) {
+            System.out.println("Error assigning employee to shift: " + e.getMessage());
         }
-
-        Shift shift = chooseShift();
-        if (shift == null) return;
-
-        if (!isShiftManagerOfShift(caller, shift)) {
-            System.out.println("Access denied. You are not the shift manager of this shift.");
-            return;
-        }
-
-        shiftController.removeEmployeeFromShift(caller, shift);
     }
 
     @Override
-    public void addEmployeeToShift(User caller) {
-        if (!caller.isManager() && !caller.isShiftManager()) {
+    public void addEmployeeToShift(UserDTO theCaller) {
+        if (!theCaller.getLevel().equals("HR_MANAGER") && !theCaller.getLevel().equals("SHIFT_MANAGER")) {
             System.out.println("Access denied. Only shift managers can add employees to shifts.");
             return;
         }
 
-        Shift shift = chooseShift();
-        if (shift == null) return;
+        ShiftDTO shiftDTO = chooseShiftDTO();
+        if (shiftDTO == null) return;
 
-        if (!isShiftManagerOfShift(caller, shift)) {
+        if (shiftDTO.getShiftManagerId() != theCaller.getUserId()) {
             System.out.println("Access denied. You are not the shift manager of this shift.");
             return;
         }
 
-        System.out.println("Available employees:");
-        List<Employee> employees = branch.getEmployeeRepo().getAll();
-        for (int i = 0; i < employees.size(); i++) {
-            Employee e = employees.get(i);
-            System.out.println((i + 1) + ". " + e.getEmpName() + " (ID: " + e.getEmpId() + ")");
+        List<EmployeeDTO> employeeDTOs = shiftController.getAllEmployeesAsDTOs();
+
+        for (int i = 0; i < employeeDTOs.size(); i++) {
+            EmployeeDTO e = employeeDTOs.get(i);
+            System.out.println((i + 1) + ". " + e.getFullName() + " (ID: " + e.getEmployeeId() + ")");
         }
+
 
         System.out.print("Select employee to add: ");
         String empInput = scanner.nextLine().trim();
@@ -70,7 +61,7 @@ public class ShiftManagerService implements IShiftManagerService {
 
         try {
             empIndex = Integer.parseInt(empInput) - 1;
-            if (empIndex < 0 || empIndex >= employees.size()) {
+            if (empIndex < 0 || empIndex >= employeeDTOs.size()) {
                 System.out.println("Invalid selection.");
                 return;
             }
@@ -79,24 +70,26 @@ public class ShiftManagerService implements IShiftManagerService {
             return;
         }
 
-        Employee toAdd = employees.get(empIndex);
+        EmployeeDTO toAdd = employeeDTOs.get(empIndex);
 
-        if (shift.getNotOccupiedRoles().isEmpty()) {
+        if (shiftDTO.getNecessaryRoles().isEmpty()) {
             System.out.println("All roles are already assigned in this shift.");
             return;
         }
 
-        shiftController.printShift(caller, shift);
+        RoleDTO roleDTO = chooseRoleDTOFromList(shiftDTO.getNecessaryRoles());
+        if (roleDTO == null) return;
 
-        Role role = chooseRoleFromList(shift.getNotOccupiedRoles());
-        if (role == null) return;
-
-        shiftController.assignEmployeeToShift(caller, shift, toAdd, role);
+        try {
+            shiftController.assignEmployeeToShift(theCaller, shiftDTO, toAdd, roleDTO);
+        } catch (SQLException e) {
+            System.out.println("Error assigning employee to shift: " + e.getMessage());
+        }
     }
 
     @Override
-    public void transferCancellationCard(User caller) {
-        if (!caller.isShiftManager()) {
+    public void transferCancellationCard(UserDTO theCaller) {
+        if (!theCaller.getLevel().equals("SHIFT_MANAGER")) {
             System.out.println("Access denied. Only shift managers can transfer the cancellation card.");
             return;
         }
@@ -104,51 +97,40 @@ public class ShiftManagerService implements IShiftManagerService {
         System.out.println("Item canceled.");
     }
 
-    private Shift chooseShift() {
-        try {
-            WeekDay selectedDay = chooseDay();
-            if (selectedDay == null) return null;
+    private ShiftDTO chooseShiftDTO() {
+        WeekDay day = chooseDay();
+        ShiftType type = chooseShiftType();
 
-            ShiftType selectedType = chooseShiftType();
-            if (selectedType == null) return null;
-
-            return currentWeek.getShifts().stream()
-                    .filter(s -> s.getDay() == selectedDay && s.getType() == selectedType)
-                    .findFirst()
-                    .orElse(null);
-
-        } catch (Exception e) {
-            System.out.println("Error choosing shift: " + e.getMessage());
-            return null;
+        List<ShiftDTO> shiftDTOs = shiftController.getAllShiftDTOs();
+        for (ShiftDTO dto : shiftDTOs) {
+            if (dto.getDay().equals(day.name()) && dto.getType().equals(type.name())) {
+                return dto;
+            }
         }
+        return null;
     }
 
     private WeekDay chooseDay() {
-        System.out.println("Select day of the week :");
+        System.out.println("Select day of the week:");
         WeekDay[] days = WeekDay.values();
         for (int i = 0; i < days.length; i++) {
             System.out.println((i + 1) + ". " + days[i]);
         }
 
-        String input = scanner.nextLine().trim();
         try {
-            int choice = Integer.parseInt(input);
-            if (choice < 1 || choice > days.length) {
-                System.out.println("Invalid day selection.");
-                return null;
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+            if (choice >= 1 && choice <= days.length) {
+                return days[choice - 1];
             }
-            return days[choice - 1];
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input.");
-            return null;
-        }
+        } catch (NumberFormatException ignored) {}
+        System.out.println("Invalid day selection.");
+        return null;
     }
 
     private ShiftType chooseShiftType() {
         System.out.println("Select shift type:");
         System.out.println("1. Morning");
         System.out.println("2. Evening");
-
         String input = scanner.nextLine().trim();
         return switch (input) {
             case "1" -> ShiftType.MORNING;
@@ -160,30 +142,22 @@ public class ShiftManagerService implements IShiftManagerService {
         };
     }
 
-    private Role chooseRoleFromList(List<Role> roles) {
+    private RoleDTO chooseRoleDTOFromList(List<RoleDTO> roles) {
         System.out.println("Available roles for this shift:");
         for (int i = 0; i < roles.size(); i++) {
-            Role r = roles.get(i);
-            System.out.println((i + 1) + ". " + r.getDescription());
+            System.out.println((i + 1) + ". " + roles.get(i).getDescription());
         }
 
-        System.out.print("Choose role number: ");
-        String input = scanner.nextLine().trim();
         try {
-            int index = Integer.parseInt(input);
-            if (index < 1 || index > roles.size()) {
-                System.out.println("Invalid role number.");
-                return null;
+            int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
+            if (index >= 0 && index < roles.size()) {
+                return roles.get(index);
             }
-            return roles.get(index - 1);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input.");
-            return null;
-        }
+        } catch (NumberFormatException ignored) {}
+
+        System.out.println("Invalid role number.");
+        return null;
     }
 
-    private boolean isShiftManagerOfShift(User caller, Shift shift) {
-        return shift.getShiftManager() != null &&
-                caller.getUser().getEmpId() == shift.getShiftManager().getEmpId();
-    }
+
 }

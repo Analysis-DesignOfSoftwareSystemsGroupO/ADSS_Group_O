@@ -27,4 +27,11 @@ public class WeekDTO {
     public void setShifts(List<ShiftDTO> shifts) {
         this.shifts = shifts;
     }
+
+    public boolean isConstraintSubmissionOpen() {
+        return LocalDateTime.now().isBefore(constraintDeadline);
+    }
+
+
+
 }

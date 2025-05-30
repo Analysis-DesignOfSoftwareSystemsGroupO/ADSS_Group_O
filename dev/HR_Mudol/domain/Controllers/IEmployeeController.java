@@ -1,11 +1,13 @@
 package HR_Mudol.domain.Controllers;
 
-import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.ShiftType;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Interface for managing employees within a branch.
@@ -71,7 +73,7 @@ public interface IEmployeeController {
      * @param ID the employee ID
      * @return the employee object if found, or null otherwise
      */
-    Employee getEmployeeById(UserDTO theCaller, int ID) throws SQLException;
+    EmployeeDTO getEmployeeById(UserDTO theCaller, int ID) throws SQLException;
 
     /**
      * Returns the branch associated with this employee manager.
@@ -91,4 +93,27 @@ public interface IEmployeeController {
      */
     void printAllEmployees(UserDTO theCaller) throws SQLException;
 
+    boolean verifyPassword(UserDTO caller, int empId, String password);
+
+    void updatePassword(UserDTO callerDTO, int empId, String newPassword) throws SQLException;
+
+    List<ConstraintDTO> getConstraintsByEmployeeId(int employeeId);
+
+    List<RoleDTO> getRolesForEmployee(int employeeId);
+
+    public void lockWeeklyConstraints(int empId);
+
+    public int getMinDayShifts(int empId);
+
+    public int getMinEveningShifts(int empId);
+
+    void submitConstraint(int empId, ConstraintDTO constraintDTO) throws SQLException;
+
+    EmploymentContractDTO getContractDetails(UserDTO caller, int empId);
+
+    List<ConstraintDTO> getConstraintsByType(int empId, ShiftType type);
+
+    void updateConstraintExplanation(EmployeeDTO emp, ConstraintDTO constraint, String newExplanation);
+
+    void removeConstraint(int empId, ConstraintDTO constraint);
 }

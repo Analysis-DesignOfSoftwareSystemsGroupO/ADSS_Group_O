@@ -111,6 +111,16 @@ public class EmployeeRepository {
         }
     }
 
+    public void updatePassword(int empId, String newPassword) {
+        // (RAM)
+        AbstractEmployee employee = employeesById.get(empId);
+        if (employee != null) {
+            employee.setEmpPassword(newPassword);
+        }
+
+        //DB
+        employeeDAO.updatePassword(empId, newPassword);
+    }
 
 
 

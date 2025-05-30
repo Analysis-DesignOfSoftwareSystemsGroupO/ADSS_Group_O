@@ -39,16 +39,14 @@ public class Constraint {
      * Sets a new explanation for the constraint.
      * Only the employee himself or a manager can update it.
      *
-     * @param caller The user attempting to set the explanation.
+
      * @param owner The employee who owns the constraint.
      * @param explanation The new explanation (must not be null).
      * @throws SecurityException if the caller is not authorized.
      * @throws NullPointerException if explanation is null.
      */
-    public void setExplanation(User caller, Employee owner, String explanation) {
-        if (!caller.isSameEmployee(owner) && !caller.isManager()) {
-            throw new SecurityException("Access denied.");
-        }
+    public void setExplanation(Employee owner, String explanation) {
+
         if (explanation == null) {
             throw new NullPointerException("Explanation cannot be null.");
         }

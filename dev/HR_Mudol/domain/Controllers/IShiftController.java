@@ -10,6 +10,7 @@ import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * This interface defines the contract for managing employee shifts within the system.
@@ -56,4 +57,7 @@ public interface IShiftController {
      * @param theShift The shift from which the role is being removed.
      */
     void removeRoleFromShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException;
+
+    List<ShiftDTO> getAllShiftDTOs();
+    List<EmployeeDTO> getAllEmployeesAsDTOs();
 }
