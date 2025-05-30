@@ -30,23 +30,38 @@ public class InventoryControllerImpl implements InventoryController {
     public InventoryControllerImpl() {
     }
 
-    public void addProduct(String name, int minimumStock, String categoryGroupId, double sellingPrice, String location, String manufacturer) {
+    public void addProduct(String name, int minimumStock, String[] categoryInfo,
+                           double sellingPrice, String location, String manufacturer) {
+        for (int i = 0; i <= 2; i++) {
+            if (!categoryDAO.categoryExists(categoryInfo[i])) {
+                saveCategory(categoryInfo[i], "");
+            }
+        }
+
+        String groupId = getOrCreateCategoryGroup(categoryInfo[0], categoryInfo[1], categoryInfo[2]);
+
         if (productDAO.productExists(name, manufacturer)) {
             throw new IllegalArgumentException("Product with the same name and manufacturer already exists.");
         } else {
-            Product productToAdd = new Product(name, minimumStock,sellingPrice, location, manufacturer, categoryGroupId);
+            Product productToAdd = new Product(name, minimumStock,sellingPrice, location, manufacturer, groupId);
             // Add to repository
             productRepository.saveProduct(productToAdd);
             // Save to DB - category
             productDAO.saveProduct(productToAdd);
             // Save to DB - categories by products
-            List<String> categories = categoryDAO.getCategoriesByGroupId(categoryGroupId);
+            List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
             for (String categoryId : categories) {
                 categoryDAO.SaveCategoryByProductPair(categoryId,productToAdd.getId());
             }
-            // Save to DB  - selling prices
+            // Save to DB - selling prices
             productDAO.saveSellingPrice(productToAdd);
         }
+        for (int i = 0; i <= 2; i++) {
+            String categoryId = getCategoryIdByName(categoryInfo[i]);
+            Category cat = getCategoryById(categoryId);
+            cat.getProducts().add(getProductByName(name, manufacturer));
+        }
+
     }
 
     public void removeProduct(String id) {
@@ -130,25 +145,9 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void saveCategory(String catName, String parentCategoryName) {
-        Category parentCategory = getCategoryById(getCategoryIdByName(parentCategoryName));
-        if (!parentCategoryName.isEmpty() && parentCategory == null) {
-            throw new IllegalArgumentException("Parent category not found. Aborting category add operation.");
-        }
-        if (categoryDAO.categoryExists(catName)) {
-            throw new IllegalArgumentException("Category with the same name already exists.");
-        }
         Category newCategory = new Category(catName);
         categoryDAO.saveCategory(newCategory);
 
-        newCategory.setParentCategory(parentCategory);
-        if (parentCategory != null) {
-            Category parent = this.getCategoryById(parentCategory.getId());
-            if (parent != null) {
-                parent.addSubCategory(newCategory);
-            } else {
-                throw new IllegalArgumentException("Parent category not found");
-            }
-        }
     }
 
     public String getOrCreateCategoryGroup(String parentName, String subName, String subSubName) {
@@ -655,7 +654,7 @@ public class InventoryControllerImpl implements InventoryController {
             throw new IllegalArgumentException("Product not found. Aborting update operation.");
         }
         product.setMinimumStockLevel(newMinimumStockLevel);
-        productRepository.saveProduct(product);
+        productDAO.updateProduct(product);
     }
 
 }

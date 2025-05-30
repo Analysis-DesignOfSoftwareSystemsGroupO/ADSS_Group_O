@@ -45,7 +45,7 @@ public class StockItemDAO {
     public void updateStockItem(StockItem stockItem) {
         String sql = """
                 UPDATE "Inventory"."Stock_Items"
-                SET "quantity" = ?, "location" = ?, "expiry_date" = ?, "product_id" = ? 
+                SET "quantity" = ?, "location" = ?, "expiry_date" = ?, status = ?, "product_id" = ? 
                 WHERE "stock_id" = ?
                 """;
 

@@ -9,20 +9,15 @@ import java.util.UUID;
  * Holds information common to all items of this type.
  */
 public class Product {
-    //TODO: change the cost price thing
     private String id;
     private String name;
     private String manufacturer;
-//    private double costPrice;
     private double sellingPrice;
-//    private double discountCostPrice;
-//    private double discountSellingPrice;
     private int minimumStockLevel;
     private String categoryGroupId;
     private String location;
     private boolean storeDiscountActive;
     private boolean manufacturerDiscountActive;
-//    private Discount discount;
 
     /**
      * Constructor for Product
@@ -41,11 +36,7 @@ public class Product {
         this.manufacturer = manufacturer;
         this.minimumStockLevel = minimumStockLevel;
         this.sellingPrice = sellingPrice;
-//        this.manufacturerDiscountActive = false;
-//        this.storeDiscountActive = false;
         this.location = location;
-//        this.discountCostPrice = 0;
-//        this.discountSellingPrice = 0;
         this.categoryGroupId = categoryGroupId;
     }
 
@@ -86,17 +77,6 @@ public class Product {
         this.storeDiscountActive = discountActive;
     }
 
-//    public void setManufacturerDiscountActive(boolean discountActive) {
-//        this.manufacturerDiscountActive = discountActive;
-//    }
-//
-//    public void setCostPrice(double costPrice) {
-//        if (costPrice < 0) {
-//            throw new IllegalArgumentException("Cost price cannot be negative");
-//        }
-//        this.costPrice = costPrice;
-//    }
-
     public void setSellingPrice(double sellingPrice) {
         if (sellingPrice < 0) {
             throw new IllegalArgumentException("Selling price cannot be negative");
@@ -120,9 +100,6 @@ public class Product {
         return manufacturer;
     }
 
-//    public double getCostPrice() {
-//        return costPrice;
-//    }
 
     public double getSellingPrice() {
         return sellingPrice;
@@ -138,27 +115,6 @@ public class Product {
 
     public void setCategoryGroupId(String categoryGroupId) {}
 
-//    public double getDiscountCostPrice() {
-//        return discountCostPrice;
-//    }
-//
-//    public double getDiscountSellingPrice() {
-//        return discountSellingPrice;
-//    }
-//
-//    public void setDiscountCostPrice(double discountCostPrice) {
-//        if (discountCostPrice < 0) {
-//            throw new IllegalArgumentException("Discount cost price cannot be negative");
-//        }
-//        this.discountCostPrice = discountCostPrice;
-//    }
-//
-//    public void setDiscountSellingPrice(double discountSellingPrice) {
-//        if (discountSellingPrice < 0) {
-//            throw new IllegalArgumentException("Discount selling price cannot be negative");
-//        }
-//        this.discountSellingPrice = discountSellingPrice;
-//    }
 
     @Override
     public String toString() {
@@ -168,22 +124,7 @@ public class Product {
                 "\n\tminimumStockLevel = " + minimumStockLevel + "'," +
                 "\n\tcategoryId = '" + categoryGroupId + "'" +
                 "\n\tlocation = '" + location + "'" +
-//        if (storeDiscountActive && manufacturerDiscountActive) {
-//            res += "\n\tCost Price = " + costPrice +
-//                    "\n\tDiscount Cost Price = " + discountCostPrice +
-//                    "\n\tSelling Price = " + sellingPrice +
-//                    "\n\tDiscount Selling Price = " + discountSellingPrice;
-//        } else if (storeDiscountActive) {
-//            res += "\n\tCost Price = " + costPrice +
-//                    "\n\tSelling Price = " + sellingPrice +
-//                    "\n\tDiscount Selling Price = " + discountSellingPrice;
-//        } else if (manufacturerDiscountActive) {
-//            res += "\n\tCost Price = " + costPrice +
-//                    "\n\tDiscount Cost Price = " + discountCostPrice +
-//                    "\n\tSelling Price = " + sellingPrice;
-//        } else {
-//            res += "\n\tCost Price = " + costPrice +
-                    "\n\tSelling Price = " + sellingPrice;
+                "\n\tSelling Price = " + sellingPrice;
 
 
         res += "\n ------------------------------------\n";

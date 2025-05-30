@@ -174,7 +174,7 @@ public class CategoryDAO {
 
 
     public List<String> getCategoriesByGroupId(String groupId) {
-        List<String> groupIds = new ArrayList<>();
+        List<String> categoryIds = new ArrayList<>();
         String sql = """
                 SELECT  parent_category_id,sub_category_id,sub_sub_category_id
                 FROM "Inventory"."Category_Groups"
@@ -190,13 +190,20 @@ public class CategoryDAO {
             ResultSet res = statement.executeQuery();
 
             while (res.next()) {
-                groupIds.add(res.getString("group_id"));
+                String parentCategoryId = res.getString("parent_category_id");
+                String subCategoryId = res.getString("sub_category_id");
+                String subSubCategoryId = res.getString("sub_sub_category_id");
+
+                if (parentCategoryId != null) categoryIds.add(parentCategoryId);
+                if (subCategoryId != null) categoryIds.add(subCategoryId);
+                if (subSubCategoryId != null) categoryIds.add(subSubCategoryId);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error retrieving category groups by category ID: " + e.getMessage());
         }
-        return groupIds;
+        return categoryIds;
     }
 
     public boolean categoryExists(String name) {

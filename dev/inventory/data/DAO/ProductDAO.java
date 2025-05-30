@@ -21,8 +21,8 @@ public class ProductDAO implements ProductRepository {
         String sql = """
                 INSERT INTO "Inventory"."Products" (
                 product_id, product_name, product_manufacturer, 
-                min_stock_level, group_id, location
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                min_stock_level, group_id, location, selling_price
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
                 """;
 
         try (Connection connection = DataBaseConnector.getConnection();
@@ -34,6 +34,7 @@ public class ProductDAO implements ProductRepository {
             statement.setInt(4, product.getMinimumStockLevel());
             statement.setString(5, product.getCategoryGroupId());
             statement.setString(6, product.getLocation());
+            statement.setDouble(7, product.getSellingPrice());
 
             statement.executeUpdate();
         } catch (Exception e) {

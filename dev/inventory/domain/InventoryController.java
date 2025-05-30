@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface InventoryController {
-    void addProduct(String name, int minimumStock, String parentCategory, double costPrice, String location, String manufacturer);
+    void addProduct(String name, int minimumStock, String[] categoryInfo, double sellingPrice, String location, String manufacturer);
 
     List<Product> getAllProductsDefinitions();
 
