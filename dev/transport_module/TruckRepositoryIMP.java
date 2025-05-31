@@ -18,13 +18,14 @@ public class TruckRepositoryIMP implements  ITruckRepository{
 
     private Map<String , Truck> mapper ;
     private static ITruckDAO truckDAO = new jdbcTruckDAO();
-
+    private List<Truck> trucks;
     public TruckRepositoryIMP() throws SQLException, ATransportModuleException {
         mapper = new HashMap<>();
         //fill mapper with Trucks
         List<TruckDto> truckDTOs = truckDAO.findAllTrucks();
         for(TruckDto tDTO :truckDTOs){
             Truck t = DTOtoTruck(tDTO); // also add this to the mapper/
+            trucks.add(t);
         }
 
     }
@@ -126,6 +127,10 @@ public class TruckRepositoryIMP implements  ITruckRepository{
             log.error("Failed to set the date if the truck as unavailable");
             throw e;
         }
+    }
 
+    @Override
+    public List<Truck> getAllTrucks() {
+        return trucks;
     }
 }

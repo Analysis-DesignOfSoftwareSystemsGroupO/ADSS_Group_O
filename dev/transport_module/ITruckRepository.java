@@ -20,9 +20,10 @@ public interface ITruckRepository {
     TruckDto truckToDTO(Truck truck);
 
     void AssignDateToTruck(LocalDate date , String pn) throws ATransportModuleException, SQLException;
-    //todo : get All trucks
 
-    //todo : get all trucks by date
+    List<Truck> getAllTrucks();
+
+
 
 
 

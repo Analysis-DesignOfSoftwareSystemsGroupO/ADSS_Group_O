@@ -26,7 +26,7 @@ public interface ITransportRepository {
 
     List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException;
 
-    void attachTrucktoTransport(int transportId , String pn) throws  SQLException;
+    void attachTrucktoTransport(int transportId , String pn) throws SQLException, ATransportModuleException;
 
     int getAvailableid();
 

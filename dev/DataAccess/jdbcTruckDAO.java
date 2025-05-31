@@ -144,7 +144,6 @@ public class jdbcTruckDAO  implements ITruckDAO{
         }
 
 
-
     /**
      * Assign truck to a date
      * @param truckPN

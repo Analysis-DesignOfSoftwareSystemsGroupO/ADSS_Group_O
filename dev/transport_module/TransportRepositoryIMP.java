@@ -2,6 +2,7 @@ package transport_module;
 
 import DTO.TransportDTO;
 import DataAccess.ITransportDAO;
+import DataAccess.ITruckDAO;
 import DataAccess.jdbcTransportDAO;
 import DataAccess.jdbcTruckDAO;
 import Transport_Module_Exceptions.ATransportModuleException;
@@ -22,6 +23,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
     private HashMap<Integer, Transport> transports;
     private static ITransportDAO dao = new jdbcTransportDAO();
     private int availableId;
+    private  ITruckRepository truckRepository;
 
     /**
      *
@@ -82,14 +84,18 @@ public class TransportRepositoryIMP implements ITransportRepository{
     }
 
     @Override
-    public void attachTrucktoTransport(int transportId, String pn) throws SQLException {
+    public void attachTrucktoTransport(int transportId, String pn) throws SQLException, ATransportModuleException {
         try {
+            Transport t = getTransportByid(transportId); //remove truck from Transport
             dao.assignTruckToTransport(transportId, Integer.parseInt(pn));
+            truckRepository.AssignDateToTruck(t.getDate(),pn);
         }
         catch (Exception e){
-            Transport t = getTransportByid(transportId);
-            t.setPlateNumber(null);
+            Transport t = getTransportByid(transportId); //remove truck from Transport
+            t.assignTruck(null);
+            throw e ;
         }
+
     }
 
     @Override
@@ -140,6 +146,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
         for (TransportDTO dto : transportDTOS){ //for each transport dto
             Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper
         }
+        truckRepository = new TruckRepositoryIMP();
 
     }
 
