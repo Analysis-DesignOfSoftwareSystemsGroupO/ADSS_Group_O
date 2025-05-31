@@ -1,12 +1,15 @@
 package inventory.presentation;
 
 //import inventory.domain.Product;
-
+import MainService.SupplierInventoryService;
+import SupplierMoudleSource.DTO.ConstantOrderDTO;
+import SupplierMoudleSource.Service.SupplierService;
 import inventory.data.connection.DatabaseInitializer;
 import inventory.domain.DiscountTargetType;
 import inventory.domain.DiscountType;
 import inventory.domain.StockItemStatus;
 import inventory.service.UserApplication;
+
 
 import java.time.LocalDate;
 import java.util.*;
@@ -18,6 +21,8 @@ public class InventoryMenu {
     private final Scanner scanner;
     private final UserApplication service;
     private boolean dataLoaded;
+    private final SupplierInventoryService supplierInventoryService = new SupplierInventoryService();
+
 
     public InventoryMenu() {
         this.scanner = new Scanner(System.in);
@@ -383,6 +388,10 @@ public class InventoryMenu {
                     int newMinimumStockLevel = readIntInput("Enter new minimum stock level: ");
                     service.updateMinimumStockLevel(productId, newMinimumStockLevel);
 
+                case 18:
+                    // create constant delivery:
+                    this.createConstantOrderMenu();
+                    break;
                 case 0:
                     // Return to worker selection
                     break;
@@ -402,6 +411,88 @@ public class InventoryMenu {
         } catch (
                 Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
+        }
+    }
+
+    private void createConstantOrderMenu() throws Exception {
+        System.out.println("Please Enter Branch ID: ");
+        String branchID = scanner.nextLine();
+        supplierInventoryService.getsPossibleConstantOrdersForBranch(branchID);
+        System.out.println("Please Enter Supplier ID To Order From: ");
+        String supplierID = scanner.nextLine();
+        System.out.println("Please Enter Day For Constant Order: ");
+        String day = scanner.nextLine();
+        ConstantOrderDTO constantOrderDTO = supplierInventoryService.createRequirementToConstantOrder(branchID, supplierID, day);
+
+        //order Loop
+        while (true){
+            //view the agreement of products
+            try {
+                System.out.println("*********************************************************");
+                supplierInventoryService.viewAgreement(branchID, supplierID);
+                System.out.println("*********************************************************");
+                supplierInventoryService.displayConstantOrder(constantOrderDTO);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                break;
+            }
+            System.out.println("To add product Enter the product ID");
+            System.out.println("To finalize order enter '*'");
+            System.out.println("To cancel the order press '-'");
+            System.out.println("Enter product ID: ");
+            try {
+                String choice = scanner.nextLine();
+                switch (choice) {
+                    case "*": // finish order choice
+                        try {
+                            supplierInventoryService.finishOrder(constantOrderDTO);
+                        }
+                        catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            continue;
+                        }
+                        System.out.println("Order finished Successfully !");
+                        return;
+                    case "-": //cancel existing order option
+                        while (true){
+                            System.out.println("Are you sure you want to cancel ? y/n");
+                            String res = scanner.nextLine();
+                            if (res.equals("y")) {
+                                try {
+                                    System.out.println("Order canceled");
+                                }
+                                catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                }
+                                return;
+                            } else if (res.equals("n")) {
+                                break;
+                            }
+                            else {
+                                System.out.println("Invalid option ! ");
+                            }
+                        }
+                        continue;
+                    default:
+                        try {
+                            System.out.println("Enter quantity:");
+                            int quantity = scanner.nextInt();
+                            supplierInventoryService.addProductToOrder(constantOrderDTO, choice, quantity);
+                        }
+                        catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
+                        System.out.println("Product added successfully !");
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("Invalid choice !");
+                return;
+            }
+            scanner.nextLine();
         }
     }
 

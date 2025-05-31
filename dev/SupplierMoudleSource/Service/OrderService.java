@@ -275,4 +275,9 @@ public class OrderService {
         ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
         constantOrder.closeConstantOrder();
     }
+
+    public void displayConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
+        ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
+        System.out.println(constantOrder);
+    }
 }
