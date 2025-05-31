@@ -1,6 +1,6 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.*;
+import SupplierMoudleSource.DTO.*;
 import SupplierMoudleSource.Repository.*;
 
 import java.util.*;

@@ -1,10 +1,10 @@
 
 package SupplierMoudleSource.LoadData;
-import DTO.*;
 import SupplierMoudleSource.DAO.AgreementDAO;
 import SupplierMoudleSource.DAO.BranchDAO;
 import SupplierMoudleSource.DAO.ProductDAO;
 import SupplierMoudleSource.DAO.SupplierDAO;
+import SupplierMoudleSource.DTO.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

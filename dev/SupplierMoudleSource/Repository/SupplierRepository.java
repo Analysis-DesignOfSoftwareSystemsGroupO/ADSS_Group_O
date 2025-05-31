@@ -1,7 +1,10 @@
 package SupplierMoudleSource.Repository;
 
-import DTO.*;
 import SupplierMoudleSource.DAO.SupplierDAO;
+import SupplierMoudleSource.DTO.BankDTO;
+import SupplierMoudleSource.DTO.InformationContactDTO;
+import SupplierMoudleSource.DTO.SuppliedItemDTO;
+import SupplierMoudleSource.DTO.SupplierDTO;
 import SupplierMoudleSource.Domain.*;
 
 import java.sql.SQLException;

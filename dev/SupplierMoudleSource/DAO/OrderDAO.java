@@ -1,6 +1,6 @@
 package SupplierMoudleSource.DAO;
 
-import DTO.*;
+import SupplierMoudleSource.DTO.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
