@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserApplication {
+    String branchId;
     InventoryController inventoryController;
 
-    public UserApplication() {
-        this.inventoryController = new InventoryControllerImpl();
+    public UserApplication(String branchId) {
+        this.branchId = branchId; // This can be set dynamically based on the branch
+
+        this.inventoryController = new InventoryControllerImpl(branchId);
     }
 
     public void updateInventoryWithDefectiveItems(String productName, String productManufacturer, String location, LocalDate expiryDate, int defectedAmount) {

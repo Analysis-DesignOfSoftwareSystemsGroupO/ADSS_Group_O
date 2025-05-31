@@ -1,7 +1,9 @@
 package inventory.presentation;
 
+
 //import inventory.domain.Product;
 
+import SupplierMoudleSource.Service.OrderService;
 import inventory.data.connection.DatabaseInitializer;
 import inventory.domain.DiscountTargetType;
 import inventory.domain.DiscountType;
@@ -14,14 +16,15 @@ import java.util.*;
 import static inventory.data.connection.DatabaseInitializer.dropAllTables;
 
 public class InventoryMenu {
-
+    private final String branchId;
     private final Scanner scanner;
     private final UserApplication service;
     private boolean dataLoaded;
 
-    public InventoryMenu() {
+    public InventoryMenu(String branchId) {
+        this.branchId = branchId;
         this.scanner = new Scanner(System.in);
-        this.service = new UserApplication();
+        this.service = new UserApplication(branchId);
         this.dataLoaded = false;
         DatabaseInitializer init = new DatabaseInitializer();
         init.createAllTablesIfNotExists();
@@ -85,7 +88,8 @@ public class InventoryMenu {
                 "List Discounts",
                 "Show discount for a product",
                 "Sell Product",
-                "Update Minimum Stock Level per Product");
+                "Update Minimum Stock Level per Product",
+                "Create Constant Order");
         System.out.println("\n---- Inventory Worker Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
             System.out.println((i + 1) + ".  " + menuOptions.get(i));
@@ -382,7 +386,7 @@ public class InventoryMenu {
                     productId = scanner.nextLine();
                     int newMinimumStockLevel = readIntInput("Enter new minimum stock level: ");
                     service.updateMinimumStockLevel(productId, newMinimumStockLevel);
-
+                    break;
                 case 0:
                     // Return to worker selection
                     break;
@@ -462,7 +466,7 @@ public class InventoryMenu {
     public static void main(String[] args) {
         // This is the main method where the program starts
         System.out.println("Hello, Inventory!");
-        InventoryMenu inventoryMenu = new InventoryMenu();
+        InventoryMenu inventoryMenu = new InventoryMenu("branch-1");
         inventoryMenu.run();
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class InventoryControllerImpl implements InventoryController {
+    private final String branchId; // Assuming branchId is constant for this controller
     // Assuming ProductRepository is a class that provides access to product data
     private final ProductRepository productRepository = new InMemoryProductRepository();
     private final StockItemRepository stockItemRepository = new InMemoryStockItemRepository();
@@ -27,7 +28,8 @@ public class InventoryControllerImpl implements InventoryController {
     private final CategoryDAO categoryDAO = new CategoryDAO();
 
 
-    public InventoryControllerImpl() {
+    public InventoryControllerImpl(String branchId) {
+        this.branchId = branchId;
     }
 
     public void addProduct(String name, int minimumStock, String[] categoryInfo,

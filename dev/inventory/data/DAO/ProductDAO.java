@@ -224,11 +224,11 @@ public class ProductDAO implements ProductRepository {
     @Override
     public Product getProductById(String id) {
         String sql = """
-        SELECT p.*, COALESCE(sp.discount_selling_price, p.selling_price) AS effective_price
-        FROM "Inventory"."Products" p
-        LEFT JOIN "Inventory"."Selling_Prices" sp ON p.product_id = sp.product_id
-        WHERE p.product_id = ?
-        """;
+                SELECT p.*, COALESCE(sp.discount_selling_price, p.selling_price) AS effective_price
+                FROM "Inventory"."Products" p
+                LEFT JOIN "Inventory"."Selling_Prices" sp ON p.product_id = sp.product_id
+                WHERE p.product_id = ?
+                """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -269,10 +269,10 @@ public class ProductDAO implements ProductRepository {
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String sql = """
-        SELECT p.*, COALESCE(sp.discount_selling_price, p.selling_price) AS effective_price
-        FROM "Inventory"."Products" p
-        LEFT JOIN "Inventory"."Selling_Prices" sp ON p.product_id = sp.product_id
-        """;
+                SELECT p.*, COALESCE(sp.discount_selling_price, p.selling_price) AS effective_price
+                FROM "Inventory"."Products" p
+                LEFT JOIN "Inventory"."Selling_Prices" sp ON p.product_id = sp.product_id
+                """;
 
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -332,7 +332,6 @@ public class ProductDAO implements ProductRepository {
             return null;
         }
     }
-
 
 
     public void removeFromProductsByCategory(String productId) {
@@ -432,17 +431,17 @@ public class ProductDAO implements ProductRepository {
 
     public void updateSellingPricePerProduct(Product product) {
         String sql = """
-        UPDATE "Inventory"."Products" p
-        SET selling_price = sp.effective_price
-        FROM (
-            SELECT product_id,
-                   COALESCE(discount_selling_price, selling_price) AS effective_price
-            FROM "Inventory"."Selling_Prices"
-            WHERE product_id = ?
-        ) sp
-        WHERE p.product_id = sp.product_id
-          AND p.product_id = ?
-    """;
+                    UPDATE "Inventory"."Products" p
+                    SET selling_price = sp.effective_price
+                    FROM (
+                        SELECT product_id,
+                               COALESCE(discount_selling_price, selling_price) AS effective_price
+                        FROM "Inventory"."Selling_Prices"
+                        WHERE product_id = ?
+                    ) sp
+                    WHERE p.product_id = sp.product_id
+                      AND p.product_id = ?
+                """;
 
         try (Connection connection = DataBaseConnector.getConnection()) {
             connection.setAutoCommit(false);
@@ -473,16 +472,16 @@ public class ProductDAO implements ProductRepository {
 
     public void updateAllProductSellingPricesInBulk() {
         String sql = """
-        UPDATE "Inventory"."Products" p
-        SET selling_price = sp.effective_price
-        FROM (
-            SELECT product_id,
-                   COALESCE(discount_selling_price, selling_price) AS effective_price
-            FROM "Inventory"."Selling_Prices"
-        ) sp
-        WHERE p.product_id = sp.product_id
-          AND p.selling_price <> sp.effective_price
-    """;
+                    UPDATE "Inventory"."Products" p
+                    SET selling_price = sp.effective_price
+                    FROM (
+                        SELECT product_id,
+                               COALESCE(discount_selling_price, selling_price) AS effective_price
+                        FROM "Inventory"."Selling_Prices"
+                    ) sp
+                    WHERE p.product_id = sp.product_id
+                      AND p.selling_price <> sp.effective_price
+                """;
 
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

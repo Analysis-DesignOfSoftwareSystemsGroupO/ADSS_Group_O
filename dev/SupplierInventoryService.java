@@ -17,7 +17,7 @@ public class SupplierInventoryService {
     }
 
     public void createConstantOrder(String branchId) {
-        orderService.createConstantOrder(branchId);
+        //orderService.createConstantOrder(branchId);
     }
 
     public void updateConstantOrder(String branchId) throws Exception {
