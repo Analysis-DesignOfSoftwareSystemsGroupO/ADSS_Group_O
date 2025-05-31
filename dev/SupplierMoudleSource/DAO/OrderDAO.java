@@ -27,7 +27,7 @@ public class OrderDAO {
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setInt(1, Integer.parseInt(orderID));
-            pstmt.setDate(2, (java.sql.Date) orderDate);
+            pstmt.setDate(2, new java.sql.Date(orderDate.getTime()));
             pstmt.setInt(3, totalPrice);
             pstmt.setInt(4, Integer.parseInt(branchID));
             pstmt.setInt(5, Integer.parseInt(supplierID));

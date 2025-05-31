@@ -14,6 +14,7 @@ public class OrderRepository {
     private Map<String, List<Order>> orders;
     private OrderDAO orderDAO;
 
+
     //singleton database
     private static OrderRepository orderRepository = null;
     public static OrderRepository getInstance() {
@@ -29,7 +30,7 @@ public class OrderRepository {
     }
 
 
-    public void addNewOrder(String supplierID, Order order) throws SQLException {
+    public void createNewOrder(String supplierID, Order order) throws SQLException {
         if (supplierID == null || order == null){
             return;
         }
@@ -63,6 +64,10 @@ public class OrderRepository {
         }
     }
 
+    public void saveOrder(Order order) throws SQLException {
+        orderDAO.addOrder(order.getOrderDTO());
+    }
+
     public List<Order> getUnclosedOrdersBySupplier(String supplierID){
         if (supplierID == null){
             throw new NullPointerException("Supplier ID is null");
@@ -80,4 +85,6 @@ public class OrderRepository {
 
         return unclosedOrders;
     }
+
+
 }

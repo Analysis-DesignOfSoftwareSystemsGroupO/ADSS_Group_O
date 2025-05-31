@@ -6,7 +6,6 @@ import DTO.OrderDTO;
 import DTO.SupplierDTO;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
-import SupplierMoudleSource.Domain.Supplier;
 import SupplierMoudleSource.Repository.AgreementRepository;
 import SupplierMoudleSource.Repository.BranchesRepository;
 import SupplierMoudleSource.Repository.OrderRepository;
@@ -39,7 +38,7 @@ public class OrderService {
         Branch branch = new Branch(branchDTO);
         Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
         Order newOrder = new Order(agreement, branch);
-        orderRepository.addNewOrder(agreement.getSupplierID(), newOrder);
+        orderRepository.createNewOrder(agreement.getSupplierID(), newOrder);
         return newOrder.getOrderID();
     }
 
@@ -99,6 +98,9 @@ public class OrderService {
             throw new NullPointerException("Supplier ID is null");
         }
         List<OrderDTO> ordersDTO = orderRepository.getOrdersBySupplier(supplierId);
+        if (ordersDTO.isEmpty()) {
+            throw new Exception("Supplier does not have orders");
+        }
         for (OrderDTO orderDTO : ordersDTO) {
             Order order = new Order(orderDTO);
             order.displayOrder();
@@ -110,25 +112,32 @@ public class OrderService {
         if (orderID == null || supplierID == null) {
             throw new NullPointerException("Order ID or Supplier ID is null");
         }
-        for (OrderDTO orderDTO : orderRepository.getOrdersBySupplier(supplierID)) {
-            if (orderDTO.getOrderID().equals(orderID)) {
-                Order order = new Order(orderDTO);
+        for (Order order : orderRepository.getUnclosedOrdersBySupplier(supplierID)) {
+            if (order.getOrderID().equals(orderID)) {
                 order.closeOrder();
+                try {
+                    orderRepository.saveOrder(order);
+                    return;
+                } catch (Exception e) {
+                    throw new Exception("Order not found");
+                }
             }
         }
     }
 
-    //getters of branch id and supplier id given an order id
-    public String getBranchId(String supplierID, String orderId) throws SQLException {
-        if (supplierID == null || supplierID.isEmpty() || orderId == null || orderId.isEmpty()) {
-            throw new NullPointerException("Supplier ID and Order ID is null");
-        }
-        List<OrderDTO> ordersDTO = orderRepository.getOrdersBySupplier(supplierID);
-        for (OrderDTO orderDTO : ordersDTO) {
-            if (orderDTO.getOrderID().equals(orderId)) {
-                return orderDTO.getBranchID();
+        //getters of branch id and supplier id given an order id
+        public String getBranchId (String supplierID, String orderId) throws SQLException {
+            if (supplierID == null || supplierID.isEmpty() || orderId == null || orderId.isEmpty()) {
+                throw new NullPointerException("Supplier ID and Order ID is null");
             }
+            List<OrderDTO> ordersDTO = orderRepository.getOrdersBySupplier(supplierID);
+            for (OrderDTO orderDTO : ordersDTO) {
+                if (orderDTO.getOrderID().equals(orderId)) {
+                    return orderDTO.getBranchID();
+                }
+            }
+            return null;
         }
-        return null;
-    }
+
+
 }
