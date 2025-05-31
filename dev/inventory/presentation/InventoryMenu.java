@@ -426,6 +426,7 @@ public class InventoryMenu {
                 case 4321:
                     // Reports
                     dropAllTables();
+                    System.exit(0);
                 case 0:
                     // Return to worker selection
                     break;

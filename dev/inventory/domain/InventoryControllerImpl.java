@@ -130,7 +130,12 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void UpdateDiscounts() {
         System.out.println("Updating discounts...");
-        discountDAO.updateAllDiscountsAndSellingPrices();
+        try {
+            discountDAO.updateAllDiscountsAndSellingPrices();
+        }
+        catch (Exception e) {
+            System.out.println("Error while updating discounts...");
+        }
 //        // Remove Expired and Apply Active to selling prices
 //        discountDAO.updateAllDiscountsSellingPrices();
 //        // Update all product selling prices
@@ -373,6 +378,7 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("------- Stock Report -------");
         List<Product> products = productDAO.getAllProducts();
         for (Product product : products) {
+            System.out.println(product);
             if (stockItemDAO.hasAnyStockItem(product.getId())) {
                 int inStorage = stockItemDAO.numInStorage(product.getId());
                 int inStore = stockItemDAO.numInStore(product.getId());
