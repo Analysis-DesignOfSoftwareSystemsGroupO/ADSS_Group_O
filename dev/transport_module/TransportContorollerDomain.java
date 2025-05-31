@@ -1,25 +1,25 @@
 package transport_module;
 
 import DTO.ProductListDocumentDto;
-import DataAccess.*;
 import DTO.ProductDTO;
-import DTO.TransportReqDTO;
+import DTO.TransportDTO;
 import Transport_Module_Exceptions.*;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransportContorollerDomain {
 
     private final ITransportRepository transportRepo;
     private final IProductListDocumentRepository documentRepo;
-    private final IProductRepository productRepo;
-    private final ISiteRepository siteRepo;
 
     public TransportContorollerDomain() {
         this.transportRepo = new TransportRepositoryIMP();
         this.documentRepo = new ProductListDocumentRepositoryIMP();
-        this.productRepo = ProductRepositoryIMP();
-        this.siteRepo = SiteRepositoryIMP();
+
     }
 
     /**
@@ -68,5 +68,32 @@ public class TransportContorollerDomain {
 
         transport.addDriver(driver);
         TransportRepository.saveTransport(transport);
+    }
+
+    public TransportDTO makeTransportDTOFromTransport(Transport transport) throws Exception{
+        int driverId = -1;
+        int truckId = -1;
+        if(transport.getTruck()!= null)
+            truckId = Integer.parseInt(transport.getTruck().getPlateNumber());
+        if ( transport.getDriver()!= null)
+            driverId = Integer.parseInt(transport.getDriver().getId());
+        return new TransportDTO(transport.getId(),transport.getDate().toString(), transport.isSent(), transport.getMaxWeight(),driverId,truckId,transport.getSource().getName());
+    }
+
+
+    public TransportDTO[] getWeeklyTransportsRequests(LocalDate date) throws Exception{
+        List<TransportDTO> transportList = new ArrayList<>();
+
+        LocalDate nextSunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        for (int i = 0; i < 7; i++) {
+            LocalDate day = nextSunday.plusDays(i);
+            List<TransportDTO> todaysList = transportRepo.getTransportsDTOByDate(day);
+            transportList.addAll(todaysList);
+        }
+        TransportDTO[] transportDTOS = new TransportDTO[transportList.size()];
+        for(int i=0; i<transportList.size();i++){
+            transportDTOS[i] = transportList.get(i);
+        }
+        return transportDTOS;
     }
 }

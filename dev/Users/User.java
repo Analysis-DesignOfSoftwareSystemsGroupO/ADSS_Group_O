@@ -47,5 +47,5 @@ public abstract class User {
         return (username + password).hashCode();
     }
 
-        public abstract void showMenu();
+    public abstract void showMenu();
 }

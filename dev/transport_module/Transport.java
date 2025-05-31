@@ -169,7 +169,7 @@ public class Transport {
      * @throws ATransportModuleException if the truck is unavailable or driver license mismatch occurs
      */
     public void assignTruck(Truck t) throws ATransportModuleException {
-        if (t != this.truck && t != null) {
+        if (t != this.truck) {
             if (!t.getAvailablity(date)) {
                 throw new UnAvailableTruckException();
 

@@ -4,9 +4,9 @@ import DTO.*;
 
 import Transport_Module_Exceptions.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.List;
+
 
 
 public class TruckControllerDomain {
@@ -43,7 +43,18 @@ public class TruckControllerDomain {
 
     }
     public static TruckDto[] getAllTrucks() throws Exception{
-        return truckRepository.getAllTrucks();
+        List<Truck> trucks =  truckRepository.getAllTrucks();
+
+        return turnTruckListToTruckDTOArray(trucks);
+    }
+
+    private static TruckDto[] turnTruckListToTruckDTOArray(List<Truck> trucks) throws Exception{
+        TruckDto[] truckDtos = new TruckDto[trucks.size()];
+        int i=0;
+        for(Truck truck: trucks){
+            truckDtos[i++] = makeDtoFromTruck(truck);
+        }
+        return truckDtos;
     }
 
     /** A function that creates DTO from truck*/
@@ -54,13 +65,7 @@ public class TruckControllerDomain {
         return new TruckDto(truck.getMaxWeight(),truck.getDrivingLicence().getCode(), truck.getPlateNumber());
     }
 
-    public static TruckDto[] getAllAvailableTrucks ( String date) throws Exception{
-        if(date.isEmpty())
-            throw new InvalidInputException("String is empty");
-        return truckRepository.getAllAvailableTrucks(date);
 
-
-    }
 
     public static void deleteTruck(String plate) throws Exception{
         if (plate.isEmpty())
@@ -69,14 +74,13 @@ public class TruckControllerDomain {
         truckRepository.deleteTruck(plate);
     }
 
-    public void assignTruckToTransport(int transportId, String plate) throws ATransportModuleException {
+    public static void assignTruckToTransport(int transportId, int plate) throws Exception {
 
-        Transport transport = transportRepository.findById(transportId); // create a transport
-        Truck truck = truckRepository.findByPlate(plate); // create a truck
+        Transport transport = transportRepository.getTransportByid(transportId); // create a transport
+        Truck truck = truckRepository.getTruckBYPlateNumber(plate); // create a truck
         transport.assignTruck(truck); // try to assign truck - if failed throw exception. otherwise, continue
-        // if truck assigned
-        // todo - update database that truck is in transport
-        truckRepository.updateTransport(transport);
+        TransportDTO transportDTO = new  TransportDTO(transport.getId(),transport.getDate().toString(), transport.isSent(), transport.getMaxWeight(),-1,Integer.parseInt(truck.getPlateNumber()),transport.getSource().getName());
+        transportRepository.saveTransport(transportDTO);
 
 
     }

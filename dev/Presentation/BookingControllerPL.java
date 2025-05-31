@@ -3,7 +3,6 @@ package Presentation;
 import DTO.ProductDTO;
 import DTO.ProductListDocumentDto;
 import DTO.TransportDTO;
-import DTO.TransportReqDTO;
 import Transport_Module_Exceptions.InvalidInputException;
 import transport_module.*;
 
@@ -60,5 +59,14 @@ public class BookingControllerPL {
             throw new InvalidInputException("Invalid IDs");
 
         domainController.attachProductListDocumentToTransport(docId, transportId);
+    }
+
+    public TransportDTO[] getWeeklyTransportsRequests() throws Exception{
+        int day = LocalDate.now().getDayOfMonth();
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        LocalDate today = LocalDate.of(year, month, day);
+        return domainController.getWeeklyTransportsRequests(today);
+
     }
 }

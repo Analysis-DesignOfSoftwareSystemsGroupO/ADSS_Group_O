@@ -1,12 +1,11 @@
 package Presentation;
 import DTO.TransportDTO;
-import DTO.TransportReqDTO;
 import DTO.TruckDto;
-import Service.TruckManagerService;
-import Transport_Module_Exceptions.ATransportModuleException;
+import transport_module.Truck;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -60,6 +59,7 @@ public class TruckManagerMenu {
     private void showAllTrucks(){
         try {
             // Get from controller all trucks
+
             TruckDto[] trucks = truckController.getAllTrucks();
 
             // for each truck - print its details
@@ -71,28 +71,6 @@ public class TruckManagerMenu {
     }
 
 
-    private void showavailableTrucks(){
-        System.out.println("Enter date (DD/MM/YYYY):");
-        String dateStr = scanner.nextLine();
-
-        // Parse date from string
-        try {
-            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            return;
-        }
-        try {
-            // get all trucks from controller
-            TruckDto[] trucks = truckController.getAllAvailableTrucks(dateStr);
-            printTrucksArrayOfDTO(trucks); // print all trucks
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-
-    }
 
     private void deleteTruck(){
         System.out.println("Enter plate number:");
@@ -107,33 +85,39 @@ public class TruckManagerMenu {
 
     }
 
-    private void attachTruckToTransport(){
-        String input;
-        TransportReqDTO[] transportReqDTO = bookingControllerPL.getWeeklyTransportsRequests();
+    private void showWeeklyTransports(){
+        try {
+            TransportDTO[] transportDTO = bookingControllerPL.getWeeklyTransportsRequests();
 
-        for(TransportReqDTO transportReq : transportReqDTO) // print all weekly transports
-            System.out.println(transportReq);
-
-        while (true) {
-            // show here all transports for next week functions - [transport id] [date] [hour] [source] [destination]
-            System.out.println("Please enter transport id");
-            String transportId = scanner.nextLine();
-
-            System.out.println("Please enter truck plate number");
-            String truckPlt = scanner.nextLine();
-
-            // Try to attach truck
-            try {
-                truckController.attachTruck(transportId, truckPlt);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            System.out.println("would you like to continue? [Y/N]");
-            input = scanner.nextLine();
-            if(Objects.equals(input, "N"))
-                break;
+            for (TransportDTO transportReq : transportDTO) // print all weekly transports
+                if(transportReq.getTruckPN() ==-1) // show weekly transports with no trucks
+                    System.out.println(transportReq);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
+
+    private void attachTruckToTransport(){
+        String input;
+
+        System.out.println("Please enter transport id");
+        String transportId = scanner.nextLine();
+
+        System.out.println("Please enter truck plate number");
+        String truckPlt = scanner.nextLine();
+
+        // Try to attach truck
+        try {
+            truckController.attachTruck(transportId, truckPlt);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+
+    }
+
 
     /**
      * Displays the truck manager menu and handles user input.
@@ -145,8 +129,8 @@ public class TruckManagerMenu {
             // Print menu options
             System.out.println("1. Add new Truck");
             System.out.println("2. Show all Trucks");
-            System.out.println("3. Show available Trucks by date");
-            System.out.println("4. Remove Truck");
+            System.out.println("3. Remove Truck");
+            System.out.println("4. Show Weekly Transports");
             System.out.println("5. Attach Truck to transport");
             System.out.println("E. Exit");
             String input = scanner.nextLine();
@@ -158,9 +142,9 @@ public class TruckManagerMenu {
 
                     case "2" -> showAllTrucks();
 
-                    case "3" -> showAllTrucks();
+                    case "3" -> deleteTruck();
 
-                    case "4" -> deleteTruck();
+                    case "4" -> showWeeklyTransports();
 
                     case "5" -> attachTruckToTransport();
 

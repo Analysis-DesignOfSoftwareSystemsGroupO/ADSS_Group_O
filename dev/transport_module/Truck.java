@@ -16,7 +16,7 @@ public class Truck {
     private int weight;
     private final int maxWeight;
     private final DrivingLicence liceenceReq;
-    private final String plateNumber;
+    private  String plateNumber;
     private final Map<LocalDate, Boolean> availablityCalander;
 
     /***
@@ -114,6 +114,10 @@ public class Truck {
         if (date != null) {
             availablityCalander.put(date, true);
         }
+    }
+
+    public void setPlateNumber(String newPlate){
+        plateNumber = newPlate;
     }
 
     /***
