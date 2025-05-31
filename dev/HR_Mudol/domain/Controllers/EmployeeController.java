@@ -21,11 +21,12 @@ public class EmployeeController implements IEmployeeController {
 
     private Scanner scanner = new Scanner(System.in);
     private IRoleController roleManager;
-    private BranchDTO curBranch;
+    private Branch curBranch;
     private DTOToDomainMapper mapper;
 
-    public EmployeeController(BranchDTO curBranch) {
-        this.curBranch = curBranch;
+    public EmployeeController(BranchDTO Branch) throws SQLException {
+
+        this.curBranch = DTOToDomainMapper.fromDTO(Branch);
         this.mapper = new DTOToDomainMapper(curBranch.getUserRepo(), curBranch.getEmployeeRepo(), curBranch.getRoleRepo(), curBranch.getWeekRepo());
     }
 
@@ -472,7 +473,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void removeConstraint(int empId, ConstraintDTO constraintDTO) {
+    public void removeConstraint(int empId, ConstraintDTO constraintDTO) throws SQLException {
         WeekDay day = WeekDay.valueOf(constraintDTO.getDay().toUpperCase());
         ShiftType type = ShiftType.valueOf(constraintDTO.getType().toUpperCase());
 

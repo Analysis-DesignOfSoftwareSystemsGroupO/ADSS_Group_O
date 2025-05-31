@@ -23,8 +23,8 @@ public class RoleController implements IRoleController {
     private IEmployeeController employeeManager;
     private DTOToDomainMapper mapper;
 
-    public RoleController(BranchDTO curBranch) {
-        this.curBranch = curBranch;
+    public RoleController(BranchDTO Branch) throws SQLException {
+        this.curBranch = DTOToDomainMapper.fromDTO(Branch);
         this.scanner = new Scanner(System.in);
         this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
@@ -219,8 +219,8 @@ public class RoleController implements IRoleController {
         List<Integer> empIDsWithRoles = curBranch.getRoleRepo().getAllEmployeeIDsWithRoles();
 
         int count = 0;
-        for (Employee emp : employeeList) {
-            if (!empIDsWithRoles.contains(emp.getEmpId())) {
+        for (EmployeeDTO emp : employeeList) {
+            if (!empIDsWithRoles.contains(emp.getEmployeeId())) {
                 count++;
             }
         }

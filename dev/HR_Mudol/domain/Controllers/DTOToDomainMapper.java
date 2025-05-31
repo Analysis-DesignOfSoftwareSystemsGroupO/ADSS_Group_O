@@ -13,8 +13,8 @@ import java.util.List;
 public class DTOToDomainMapper {
     private final UserRepository userRepository;
     private static EmployeeRepository employeeRepository = null;
-    private final RoleRepository roleRepository;
-    private WeekRepository weekRepository;
+    private static RoleRepository roleRepository= null;
+    private static WeekRepository weekRepository;
 
     public DTOToDomainMapper(UserRepository userRepository,
                              EmployeeRepository employeeRepository,
@@ -25,7 +25,7 @@ public class DTOToDomainMapper {
         this.weekRepository=weekRepository;
     }
 
-    public Week fromDTO(WeekDTO dto) {
+    public static Week fromDTO(WeekDTO dto) {
         Week week = new Week();
 
         for (ShiftDTO shiftDTO : dto.getShifts()) {
@@ -52,7 +52,7 @@ public class DTOToDomainMapper {
         return new Employee(dto.getFullName(),dto.getEmployeeId(),dto.getPassword(),dto.getBankAccount(),dto.getSalary(),dto.getStartDate(),dto.getSalary(),dto.getMinEveningShift(),dto.getSickDays(),dto.getDaysOff());
     }
 
-    public Role fromDTO(RoleDTO dto) {
+    public static Role fromDTO(RoleDTO dto) {
         Role role = roleRepository.getRoleByNumber(dto.getRoleNumber());
         if (role != null) return role;
 
@@ -68,7 +68,7 @@ public class DTOToDomainMapper {
         );
     }
 
-    public Shift fromDTO(ShiftDTO dto) {
+    public static Shift fromDTO(ShiftDTO dto) {
         Shift existing = weekRepository.getShiftById(dto.getShiftID());
         if (existing != null) return existing;
 
@@ -193,67 +193,37 @@ public class DTOToDomainMapper {
                 employee.getEmpId()
         );
     }
-    public Branch fromDTO(BranchDTO dto) throws SQLException {
-        Branch branch = new Branch("UNUSED_DISTRICT", dto.getName()); // district בוטל לפי context קודם
 
-        for (EmployeeDTO empDTO : dto.getEmployees()) {
-            Employee employee = fromDTO(empDTO);
-            branch.getEmployeeRepo().addFromDTO(employee);
+    public static Branch fromDTO(BranchDTO dto) throws SQLException {
+        // יוצרים את האובייקט עם name ו-district מתוך DTO
+        Branch branch = new Branch(dto.getDistrict(), dto.getName());
+
+        // שומרים על ה-ID המקורי של הסניף מה-DTO
+        branch.setBranchID(dto.getBranchID());
+
+        // מיפוי עובדים
+        if (dto.getEmployees() != null) {
+            for (EmployeeDTO empDTO : dto.getEmployees()) {
+                branch.getEmployeeRepo().addFromDTO(fromDTO(empDTO));
+            }
         }
 
-        for (RoleDTO roleDTO : dto.getRoles()) {
-            Role role = fromDTO(roleDTO);
-            branch.getRoleRepo().add(role);
+        // מיפוי תפקידים
+        if (dto.getRoles() != null) {
+            for (RoleDTO roleDTO : dto.getRoles()) {
+                branch.getRoleRepo().add(fromDTO(roleDTO));
+            }
         }
 
-        for (WeekDTO weekDTO : dto.getWeeks()) {
-            Week week = fromDTO(weekDTO);
-            branch.getWeekRepo().add(week);
+        // מיפוי שבועות
+        if (dto.getWeeks() != null) {
+            for (WeekDTO weekDTO : dto.getWeeks()) {
+                branch.getWeekRepo().add(fromDTO(weekDTO));
+            }
         }
 
         return branch;
     }
-
-    public BranchDTO toDTO(Branch branch) {
-        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
-        for (Employee e : branch.getEmployeeRepo().getAll()) {
-            employeeDTOs.add(toDTO(e));
-        }
-
-        List<RoleDTO> roleDTOs = new ArrayList<>();
-        for (Role r : branch.getRoleRepo().getAll()) {
-            roleDTOs.add(toDTO(r));
-        }
-
-        List<WeekDTO> weekDTOs = new ArrayList<>();
-        for (Week w : branch.getWeekRepo().getAll()) {
-            List<ShiftDTO> shiftDTOs = new ArrayList<>();
-            for (Shift s : w.getShifts()) {
-                shiftDTOs.add(toDTO(s));
-            }
-            weekDTOs.add(new WeekDTO(w.getConstraintDeadline(), shiftDTOs));
-        }
-
-        return new BranchDTO(
-                branch.getBranchID(),
-                branch.getName(),
-                employeeDTOs,
-                roleDTOs,
-                weekDTOs
-        );
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

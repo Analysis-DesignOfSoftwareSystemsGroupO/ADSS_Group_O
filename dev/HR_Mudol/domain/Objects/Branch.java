@@ -57,6 +57,10 @@ public class Branch {
         return branchID;
     }
 
+    public void setBranchID(int ID){
+        this.branchID =ID;
+    }
+
     public EmployeeRepository getEmployeeRepo() {
         return employeeRepo;
     }

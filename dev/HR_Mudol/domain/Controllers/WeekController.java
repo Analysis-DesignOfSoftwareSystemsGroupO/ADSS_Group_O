@@ -25,11 +25,11 @@ public class WeekController implements IWeekController {
      * Constructor for WeekManager.
      *
      * @param dependency The IShiftManager dependency used for shift management operations.
-     * @param curBranch The current branch being managed.
+     * @param Branch The current branch being managed.
      */
-    public WeekController(IShiftController dependency, BranchDTO curBranch, IRoleController roleController) {
+    public WeekController(IShiftController dependency, BranchDTO Branch, IRoleController roleController) throws SQLException {
         this.dependency = dependency;
-        this.curBranch=curBranch;
+        this.curBranch=DTOToDomainMapper.fromDTO(Branch);
         this.roleController=roleController;
         this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }

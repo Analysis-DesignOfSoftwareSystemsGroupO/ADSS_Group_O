@@ -115,7 +115,7 @@ public interface IEmployeeController {
 
     void updateConstraintExplanation(EmployeeDTO emp, ConstraintDTO constraint, String newExplanation);
 
-    void removeConstraint(int empId, ConstraintDTO constraint);
+    void removeConstraint(int empId, ConstraintDTO constraint) throws SQLException;
 
     /**
      * Returns the total number of employees in the branch.

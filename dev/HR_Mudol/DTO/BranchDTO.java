@@ -1,19 +1,23 @@
 package HR_Mudol.DTO;
 
-import HR_Mudol.domain.repository.WeekRepository;
-
 import java.util.List;
 
 public class BranchDTO {
     private int branchID;
     private String name;
+    private String district;
+
     private List<EmployeeDTO> employees;
     private List<RoleDTO> roles;
     private List<WeekDTO> weeks;
 
-    public BranchDTO(int branchID, String name, List<EmployeeDTO> employees, List<RoleDTO> roles, List<WeekDTO> weeks) {
+    public BranchDTO(int branchID, String name, String district,
+                     List<EmployeeDTO> employees,
+                     List<RoleDTO> roles,
+                     List<WeekDTO> weeks) {
         this.branchID = branchID;
         this.name = name;
+        this.district = district;
         this.employees = employees;
         this.roles = roles;
         this.weeks = weeks;
@@ -35,6 +39,14 @@ public class BranchDTO {
         this.name = name;
     }
 
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
     public List<EmployeeDTO> getEmployees() {
         return employees;
     }
@@ -51,7 +63,7 @@ public class BranchDTO {
         this.roles = roles;
     }
 
-    public List<WeekDTO> getWeekRepo() {
+    public List<WeekDTO> getWeeks() {
         return weeks;
     }
 
@@ -62,10 +74,6 @@ public class BranchDTO {
     public WeekDTO getCurrentWeekDTO() {
         if (weeks == null || weeks.isEmpty())
             return null;
-
         return weeks.get(weeks.size() - 1);
     }
-
-
-
 }

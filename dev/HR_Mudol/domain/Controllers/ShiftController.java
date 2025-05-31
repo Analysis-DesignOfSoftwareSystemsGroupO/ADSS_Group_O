@@ -22,8 +22,8 @@ public class ShiftController implements IShiftController {
      * Constructor for ShiftManager.
      * @param dependency The role manager dependency used for role-related operations.
      */
-    public ShiftController(BranchDTO curBranch, IRoleController dependency) {
-        this.curBranch=curBranch;
+    public ShiftController(BranchDTO Branch, IRoleController dependency) throws SQLException {
+        this.curBranch=DTOToDomainMapper.fromDTO(Branch);
         this.dependency = dependency;
         this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
