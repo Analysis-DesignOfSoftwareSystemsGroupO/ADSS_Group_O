@@ -12,39 +12,44 @@ public class DatabaseInitializer {
     private static final String USER = "postgres";
     private static final String PASSWORD = "Sansa1234";
 
-    private static final String SCHEMA_SQL_FILE = "projectData.sql";// path to your .sql file
-
-    public static void main(String[] args) {
+    // טוענת ומריצה את הקובץ.
+    private static void executeSQLFile(String filePath) {
         try {
-            // Read the entire SQL file as a string
-            String sql = new String(Files.readAllBytes(Paths.get(SCHEMA_SQL_FILE)));
+            String sql = new String(Files.readAllBytes(Paths.get(filePath)));
 
-            // ✅ Load PostgreSQL driver (required in non-Maven setups)
             Class.forName("org.postgresql.Driver");
 
-            // Connect to PostgreSQL
             try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
                  Statement stmt = conn.createStatement()) {
 
-                // Split SQL into statements using semicolon
                 for (String command : sql.split(";")) {
                     command = command.trim();
                     if (!command.isEmpty()) {
                         try {
                             stmt.execute(command + ";");
                         } catch (Exception e) {
-                            System.err.println("Skipping command:\n" + command + "\nCause: " + e.getMessage());
+                            System.err.println("⚠️ Skipping command:\n" + command + "\nCause: " + e.getMessage());
                         }
                     }
                 }
 
-                System.out.println("✅ Schema and tables applied successfully.");
+                System.out.println("✅ SQL script executed successfully: " + filePath);
             }
 
         } catch (Exception e) {
+            System.err.println("❌ Failed to execute SQL script: " + filePath);
             e.printStackTrace();
-            System.err.println("❌ Failed to initialize database.");
         }
     }
 
+    // בוחרת את הקובץ לפי הפרמטר.
+    public static void initialize(boolean withData) {
+        String sqlFile = withData ? "schema_with_data.sql" : "schema_only.sql";
+        executeSQLFile(sqlFile);
+    }
+
+    //רק בקריאה למחלקה
+    public static void main(String[] args) {
+        initialize(true); // או false
+    }
 }
