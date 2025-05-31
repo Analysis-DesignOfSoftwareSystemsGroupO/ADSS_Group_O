@@ -8,57 +8,49 @@ import transport_module.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class BookingControllerPL {
 
     private final TransportContorollerDomain domainController;
 
 
-    public BookingControllerPL() {
+    public BookingControllerPL()throws Exception {
         this.domainController = new TransportContorollerDomain();
     }
 
     /**
      * Creates a new transport request
      */
-    public int createTransport(LocalDate date, LocalTime outtime, String source,String area, int maxWeight) throws Exception {
-        if (date == null || outtime == null || source == null || source.isEmpty() ||  maxWeight<0)
-            throw new InvalidInputException("Missing input for transport request");
+    public int createTransport(LocalDate date, String source, int maxWeight) throws Exception {
+
         int transportId = domainController.getNewTransportId();
-        // todo - add area name to TransportReqDTO
-        TransportReqDTO transportDTO = new TransportReqDTO(transportId,date,maxWeight,source,outtime);
-        return domainController.createTransport(transportDTO);
+
+        TransportDTO transportDTO = new TransportDTO(transportId,date.toString(),false,maxWeight,-1,-1,source);
+
+        domainController.createTransport(transportDTO);
+        return  transportId;
     }
 
     /**
      * Creates a delivery document and returns its ID
      */
-    public int createProductListDocument(String destination, String time, String dateStr, int transportId) throws Exception {
-        if (destination == null || destination.isEmpty() || time == null || time.isEmpty() || dateStr == null || dateStr.isEmpty())
-            throw new InvalidInputException("Missing input for delivery document");
-        int nextPLDId = domainController.getNewPDLId();
-        ProductListDocumentDto dto = new ProductListDocumentDto(nextPLDId,transportId,destination,null,0,time);
-        return domainController.createProductListDocument(dto);
+    public int createProductListDocument(String destination, List<ProductDTO> productDTOList, int totalweight, LocalDate date, LocalTime hour) throws Exception {
+
+        int nextPLDId = domainController.getValidID(); // get the next valid input of PLD
+        ProductListDocumentDto dto = new ProductListDocumentDto(nextPLDId,-1,destination,productDTOList,totalweight,date,hour);
+        domainController.createProductListDocument(dto);
+        return nextPLDId;
     }
 
-    /**
-     * Adds a product to a specific delivery document
-     */
-    public void addProductToDocument(String product_name, int weight, int amount,ProductDTO productDTO, int docId) throws Exception {
-        if (productDTO == null || docId < 0)
-            throw new InvalidInputException("Invalid product or document ID");
-        ProductDTO dto = new ProductDTO(product_name,weight,amount);
-        domainController.addProductToDocument(productDTO, docId);
-    }
+
 
     /**
      * Attaches a document to a transport by their IDs
      */
-    public void attachProductListDocumentToTransport(int docId, int transportId) throws Exception {
-        if (docId < 0 || transportId < 0)
-            throw new InvalidInputException("Invalid IDs");
+    public void attachProductListDocumentsToTransport(List<Integer> PLDIdList, int transportId) throws Exception {
 
-        domainController.attachProductListDocumentToTransport(docId, transportId);
+        domainController.attachProductListDocumentsToTransport(PLDIdList, transportId);
     }
 
     public TransportDTO[] getWeeklyTransportsRequests() throws Exception{

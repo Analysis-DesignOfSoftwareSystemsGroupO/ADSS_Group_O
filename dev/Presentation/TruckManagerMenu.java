@@ -23,7 +23,7 @@ public class TruckManagerMenu {
     /**
      * Constructs the TruckManagerMenu with the provided service instance.
      */
-    public TruckManagerMenu() {
+    public TruckManagerMenu() throws Exception{
         this.truckController = new TruckControllerPL();
         this.bookingControllerPL = new BookingControllerPL();
     }

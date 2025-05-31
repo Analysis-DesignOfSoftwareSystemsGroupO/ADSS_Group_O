@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class TransportManagerUser extends User {
     private final TransportManagerMenu managerMenu;
     private final TruckManagerMenu truckManagerMenu;
-    public TransportManagerUser(String username, String password) {
+    public TransportManagerUser(String username, String password) throws Exception {
         super(username,password);
         this.managerMenu = new TransportManagerMenu();
         this.truckManagerMenu = new TruckManagerMenu();

@@ -7,17 +7,27 @@ import Users.User;
 
 public class Main {
 
-    private static void init_useres(Map<String, User> users){
-        users.put("TransportManager",new TransportManagerUser("TransportManager","1234"));
-        users.put("User",new BookingUser("User","1234"));
-        users.put("TruckManagerUser",new TruckManagerUser("TruckManagerUser","1234"));
+    private static void init_useres(Map<String, User> users) throws Exception {
+
+            users.put("TransportManager", new TransportManagerUser("TransportManager", "1234"));
+            users.put("User", new BookingUser("User", "1234"));
+            users.put("TruckManagerUser", new TruckManagerUser("TruckManagerUser", "1234"));
+
+
     }
+
 
 
     public static void main(String[] args) {
 
         Map<String, User> users = new HashMap<>();
-        init_useres(users);
+        try {
+            init_useres(users);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
         Scanner scanner = new Scanner(System.in);
         int attempts = 3;
         User user;

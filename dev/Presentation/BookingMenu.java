@@ -2,6 +2,7 @@ package Presentation;
 
 import DTO.ProductDTO;
 import Transport_Module_Exceptions.ATransportModuleException;
+import Transport_Module_Exceptions.InvalidInputException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static java.lang.Object.*;
 
 /**
  * Console-based presentation layer for customers to request new transports.
@@ -32,7 +32,7 @@ public class BookingMenu {
     /**
      * Constructs a new BookingMenu instance with the provided BookingService.
      */
-    public BookingMenu() {
+    public BookingMenu() throws Exception{
 
         controller = new BookingControllerPL();
         this.controller = controller;
@@ -85,20 +85,11 @@ public class BookingMenu {
         try {
 
             // Ask user for transport details
-            System.out.println("Enter delivery date (dd/MM/yyyy):");
+            System.out.println("Enter delivery date (DD/MM/YYYY): ");
             String datestr = scanner.nextLine();
-            LocalDate date;
-            try
-            {
-                date = LocalDate.parse(datestr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.getMessage());
-                return;
-            }
+            LocalDate date = LocalDate.parse(datestr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-            System.out.println("Enter delivery time (HH:mm):");
+            System.out.println("Enter delivery time (HH:MM): ");
             String outtime = scanner.nextLine();
 
             String[] parts = outtime.split(":");
@@ -107,27 +98,29 @@ public class BookingMenu {
             LocalTime departure_time = LocalTime.of(hour, minute); // set the hour
 
 
-            System.out.println("Enter source site name:");
+            System.out.println("Enter source site name: ");
             String source = scanner.nextLine();
+
 
             // let the user choose if send it empty or not
             System.out.println("Press 1 To add Products to transport");
-            System.out.println("Press any key to return to Booking Transport Menu");
+            System.out.println("Press any key to return to Booking Transport Menu ");
             String input = scanner.nextLine();
             if(Objects.equals(input, "1")){
-                ProductListDocumentMenu();
+                ProductListDocumentMenu(date);
             }
             else {
-                productsDocumentIdList.add(createEmptyProductListDocument());
+                productsDocumentIdList.add(createEmptyProductListDocument(date));
             }
 
 
             // Submit the transport request to the service
-            this.transportId = controller.createTransport(date,departure_time,source,maxWeight);
+
+            this.transportId = controller.createTransport(date,source,maxWeight);
             this.d = datestr;
 
-            for (int ProductListDocumentId : productsDocumentIdList) // attach each product list document to transport( even if its empty one)
-                controller.attachProductListDocumentToTransport(ProductListDocumentId, transportId);
+            // attach each product list document to transport( even if its empty one)
+            controller.attachProductListDocumentsToTransport(productsDocumentIdList, transportId);
 
 
 
@@ -138,14 +131,17 @@ public class BookingMenu {
             // Catch all other unexpected errors
             System.out.println("Unexpected error: " + e.getMessage());
         }
+
+        // Clear all data for next booking
         productsDocumentIdList.clear();
         transportId = -1;
         d = "";
+        maxWeight = 0;
     }
 
 
 
-    private void ProductListDocumentMenu(){
+    private void ProductListDocumentMenu(LocalDate date) throws Exception{
         boolean running = true;
         while (running){
             System.out.println("Welcome to Delivery document!");
@@ -155,7 +151,7 @@ public class BookingMenu {
             switch (input){
                 case "1"-> {
                     try {
-                        productsDocumentIdList.add(createProductListDocument());
+                        productsDocumentIdList.add(createProductListDocument(date));
 
                     }
                     catch (Exception e){
@@ -169,29 +165,43 @@ public class BookingMenu {
                 default -> System.out.println("Invalid input. Please try again");
             }
         }
+        if(productsDocumentIdList.isEmpty()){ // if user didn't put any PLD - create empty one
+            productsDocumentIdList.add(createEmptyProductListDocument(date));
+        }
     }
 
 
-    private int createEmptyProductListDocument() throws Exception{
-        System.out.println("Please enter your site destination");
+    private int createEmptyProductListDocument(LocalDate date) throws Exception{
+        System.out.println("Please enter your site destination: ");
         String site = scanner.nextLine();
-        System.out.println("Please enter wanted hour ");
+        System.out.println("Please enter wanted hour in HH:MM format: ");
         String wantedhour = scanner.nextLine();
-        int ProductListDocumentId = 0;
-        ProductListDocumentId = controller.createProductListDocument(site, wantedhour, d);
+        String[] parts = wantedhour.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
 
-        return ProductListDocumentId;
+        LocalTime departure_time = LocalTime.of(hour, minute); // set the hour
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        return controller.createProductListDocument(site,productDTOList,0,date,departure_time);
+
+
 
     }
 
-    private int createProductListDocument() throws Exception{
+    private int createProductListDocument(LocalDate date) throws Exception{
         boolean running = true;
-        System.out.println("Please enter your site destination");
+        System.out.println("Please enter your site destination: ");
         String site = scanner.nextLine();
-        System.out.println("Please enter wanted hour ");
+        System.out.println("Please enter wanted hour in HH:MM format: ");
         String wantedhour = scanner.nextLine();
-        int ProductListDocumentId = 0;
-        ProductListDocumentId = controller.createProductListDocument(site, wantedhour, d);
+        String[] parts = wantedhour.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+
+        LocalTime departure_time = LocalTime.of(hour, minute); // set the hour
+
+        int totalWeight = 0;
+        List<ProductDTO> productDTOS = new ArrayList<>();
         while (running) {
             System.out.println("Press 1 to add Product");
             System.out.println("Press E to return");
@@ -204,7 +214,8 @@ public class BookingMenu {
                     int amount = Integer.parseInt(scanner.nextLine());
                     ProductDTO productDTO = new ProductDTO(productId,5, amount);
                     try {
-                        controller.addProductToDocument(productDTO, ProductListDocumentId);
+                        productDTOS.add(productDTO);
+                        totalWeight+=5;
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
@@ -218,7 +229,9 @@ public class BookingMenu {
             }
         }
 
-        maxWeight+= controller.getProductListDocumentWeight(ProductListDocumentId); // add the weight to total weight
+        int ProductListDocumentId = controller.createProductListDocument(site,productDTOS,totalWeight,date,departure_time);
+
+        maxWeight+= totalWeight; // add the weight to total weight
         return ProductListDocumentId;
 
     }

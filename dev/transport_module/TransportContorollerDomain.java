@@ -16,44 +16,43 @@ public class TransportContorollerDomain {
     private final ITransportRepository transportRepo;
     private final IProductListDocumentRepository documentRepo;
 
-    public TransportContorollerDomain() {
+    public TransportContorollerDomain() throws Exception{
         this.transportRepo = new TransportRepositoryIMP();
-        this.documentRepo = new ProductListDocumentRepositoryIMP();
+        this.documentRepo = new PLDRepositoryIMP();
 
     }
 
     /**
      * Creates a new Transport using data from DTO and saves it.
      */
-    public int createTransport(TransportReqDTO dto) throws ATransportModuleException {
+    public void createTransport(TransportDTO dto) throws Exception {
         // try to create transport with Transport requeest DTO
-        return transportRepo.TransportDTOtoTransport(dto);
+         transportRepo.TransportDTOtoTransport(dto);
     }
 
     /**
      * Creates and saves a new delivery document.
      */
-    public int createProductListDocument(ProductListDocumentDto dto) throws ATransportModuleException {
+    public void createProductListDocument(ProductListDocumentDto dto) throws Exception {
 
-        ProductListDocument productListDocument= productRepo.PLDdtoTOPLD(doc);
-        return productListDocument.getId();
+        documentRepo.saveProductListDocument(dto);
     }
 
-    /**
-     * Adds a product to a delivery document.
-     */
-    public void addProductToDocument(ProductDTO dto, int docId) throws ATransportModuleException {
 
-        documentRepo.addProductToDocument(dto,docId);
-    }
 
     /**
      * Attaches a document to a transport.
      */
-    public void attachProductListDocumentToTransport(int docId, int transportId) throws ATransportModuleException {
+    public void attachProductListDocumentsToTransport(List<Integer> docId, int transportId) throws Exception {
 
-        // todo - check if repository updates the transport
-        transportRepo.attachProductListDocumentToTransport(docId, transportId);
+        Transport transport = transportRepo.getTransportByid(transportId);
+        for(int PLDId : docId){
+            ProductListDocument PLD = documentRepo.getProductListDocumentByid(PLDId);
+            transport.loadByDocument(PLD);
+        }
+        TransportDTO transportDTO = transportRepo.transportToTransportDTO(transport);
+        transportRepo.saveTransport(transportDTO);
+
     }
 
     public void fetchAvailableDriversFromHR() throws Exception {
@@ -95,5 +94,13 @@ public class TransportContorollerDomain {
             transportDTOS[i] = transportList.get(i);
         }
         return transportDTOS;
+    }
+
+    public int getValidID() throws Exception{ // get PLD next id
+        return documentRepo.getValidID();
+    }
+
+    public int getNewTransportId(){
+        return transportRepo.getAvailableid();
     }
 }
