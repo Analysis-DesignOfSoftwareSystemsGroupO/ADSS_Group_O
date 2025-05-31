@@ -40,7 +40,7 @@ public class HRManagerMenu implements Menu {
                 case "4" -> manageShift(hr, curBranch, caller);
                 case "5" -> System.out.println("Not yet implemented");
                 case "6" -> {
-                    WeekDTO currentWeek = getCurrentWeek(curBranch);
+                    WeekDTO currentWeek = curBranch.getCurrentWeekDTO();
                     if (currentWeek != null) {
                         try {
                             hr.displayDashboard(caller, currentWeek);
@@ -61,7 +61,7 @@ public class HRManagerMenu implements Menu {
     }
 
     private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) {
-        WeekDTO currentWeekDTO = getCurrentWeek(branch);
+        WeekDTO currentWeekDTO = branch.getCurrentWeekDTO();
         if (currentWeekDTO == null) {
             System.out.println("No current week found.");
             return;
@@ -126,9 +126,5 @@ public class HRManagerMenu implements Menu {
         }
     }
 
-    private static WeekDTO getCurrentWeek(BranchDTO branchDTO) {
-        List<WeekDTO> weeks = branchDTO.getWeeks();
-        if (weeks == null || weeks.isEmpty()) return null;
-        return weeks.get(weeks.size() - 1); // הנחה: האחרון הוא הנוכחי
-    }
+
 }

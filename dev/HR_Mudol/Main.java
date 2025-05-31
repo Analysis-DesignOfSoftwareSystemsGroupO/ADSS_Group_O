@@ -1,15 +1,12 @@
 package HR_Mudol;
 
-import HR_Mudol.DAO.BranchDAOImpl;
+import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Controllers.EmployeeController;
 import HR_Mudol.domain.Level;
-import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.Employee;
-import HR_Mudol.domain.Objects.Role;
-import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.repository.BranchRepository;
+import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.repository.*;
 import HR_Mudol.presentation.LoginScreen;
 
 import java.sql.SQLException;
@@ -30,39 +27,46 @@ public class Main {
             System.out.print("Choose option [1/2]: ");
             String choice = scanner.nextLine().trim();
 
-            BranchRepository branchRepo = new BranchRepository(new BranchDAOImpl());
+            // DAO instantiation
+            IEmployeeDAO employeeDAO = new EmployeeDAOImpl();
+            IConstraintDAO constraintDAO = new ConstraintDAOImpl();
+            IUserDAO userDAO = new UserDAOImpl();
+            IRoleDAO roleDAO = new RoleDAOImpl();
+            IShiftDAO shiftDAO = new ShiftDAOImpl();
+
+            EmployeeRepository empRepo = new EmployeeRepository(employeeDAO, constraintDAO);
+            RoleRepository roleRepo = new RoleRepository((RoleDAOImpl) roleDAO);
+            WeekRepository weekRepo = new WeekRepository((ShiftDAOImpl) shiftDAO);
+            UserRepository userRepo = new UserRepository(userDAO, empRepo);
+
+            BranchDAOImpl branchDAO = new BranchDAOImpl(employeeDAO, roleDAO);
+            BranchRepository branchRepo = new BranchRepository(branchDAO);
+
+            DTOToDomainMapper mapper;
 
             if (choice.equals("1")) {
-                // Load from DB
                 allBranches = branchRepo.getAll();
                 if (allBranches.isEmpty()) {
                     System.out.println("⚠ No branches found in the database.");
                     return;
                 }
             } else if (choice.equals("2")) {
-                // Start fresh
                 Branch newBranch = new Branch("center", "Main Branch");
-                addAdminUserIfNeeded(newBranch); // <- הוספת אדמין
+                addAdminUserIfNeeded(newBranch);
                 addDefaultRoles(newBranch);
-                allBranches = new ArrayList<>();
-                allBranches.add(newBranch);
 
-                // אפשר לשקול לשמור אותו גם ל-DB כאן, אם תרצי לשמר את זה
-                branchRepo.add(newBranch);
+                mapper = new DTOToDomainMapper(userRepo, empRepo, roleRepo, weekRepo);
+                BranchDTO dto = mapper.toDTO(newBranch);
+                allBranches = new ArrayList<>();
+                allBranches.add(dto);
+                branchRepo.add(dto);
             } else {
                 System.out.println("Invalid option.");
                 return;
             }
 
-            // נשתמש ב־branch הראשון לצורך יצירת ה־controller
-            Branch primaryBranch = allBranches.get(0);
-
-            DTOToDomainMapper mapper = new DTOToDomainMapper(
-                    primaryBranch.getUserRepo(),
-                    primaryBranch.getEmployeeRepo(),
-                    primaryBranch.getRoleRepo(),
-                    primaryBranch.getWeekRepo()
-            );
+            mapper = new DTOToDomainMapper(userRepo, empRepo, roleRepo, weekRepo);
+            Branch primaryBranch = mapper.fromDTO(allBranches.get(0));
 
             EmployeeController employeeController = new EmployeeController(
                     primaryBranch.getEmployeeRepo(),
@@ -78,7 +82,6 @@ public class Main {
         }
     }
 
-    // הוספת יוזר admin אם לא קיים כבר
     private static void addAdminUserIfNeeded(Branch branch) throws SQLException {
         int adminId = 999999999;
         if (!branch.getUserRepo().exists(adminId)) {
@@ -91,7 +94,6 @@ public class Main {
         }
     }
 
-    // יצירת תפקידים בסיסיים (אופציונלי)
     private static void addDefaultRoles(Branch branch) {
         String[] roles = {"Cashier", "Driver", "Technician", "Warehouse", "Cleaner"};
         for (String name : roles) {
