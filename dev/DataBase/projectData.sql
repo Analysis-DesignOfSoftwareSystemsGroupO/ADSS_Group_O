@@ -128,15 +128,15 @@ CREATE TABLE supplierinventorydb.productInAgreement (
 );
 
 CREATE TABLE supplierinventorydb.constantorders (
-                                                    branchID integer,
-                                                    supplierID integer,
-                                                    suppliedItemID integer,
-                                                    quantity integer check ( quantity > 0 ) ,
-                                                    dayOfWeek character varying(50),
-                                                    PRIMARY KEY (branchID, supplierID, suppliedItemID),
-                                                    FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
-                                                    FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
-                                                    FOREIGN KEY (suppliedItemID) REFERENCES supplierinventorydb.product(id)
+    branchID integer,
+    supplierID integer,
+    suppliedItemID integer,
+    quantity integer check ( quantity > 0 ) ,
+    dayOfWeek character varying(50),
+    PRIMARY KEY (branchID, supplierID, suppliedItemID),
+    FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
+    FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
+    FOREIGN KEY (suppliedItemID) REFERENCES supplierinventorydb.product(id)
 );
 
 -- DEFAULT ID VALUES
