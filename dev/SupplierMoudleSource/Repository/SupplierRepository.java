@@ -169,6 +169,15 @@ public class SupplierRepository {
     }
 
 
+    public List<SupplierDTO> getAllConstantDeliverySuppliers() throws Exception {
+        List<SupplierDTO> supplierDTOS;
+        try {
+            supplierDTOS = supplierDAO.getAllConstantDeliverySuppliers();
 
+        }catch (Exception e){
+            throw new Exception("Suppliers Support Constant Delivery Are Not Exist");
+        }
+        return supplierDTOS;
+    }
 
 }

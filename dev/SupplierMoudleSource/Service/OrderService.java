@@ -131,4 +131,12 @@ public class OrderService {
         }
         return null;
     }
+
+    public void getsPossibleConstantOrdersForBranch(String branchID) throws Exception {
+        if (branchID == null || branchID.isEmpty()) {
+            throw new NullPointerException("Branch ID is null");
+        }
+        List<SupplierDTO> supplierDTOS = supplierRepository.getAllConstantDeliverySuppliers();
+
+    }
 }

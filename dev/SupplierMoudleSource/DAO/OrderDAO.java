@@ -3,6 +3,7 @@ package SupplierMoudleSource.DAO;
 import DTO.OrderDTO;
 import DTO.ProductDTO;
 import DTO.SuppliedItemDTO;
+import DTO.SupplierDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -201,6 +202,5 @@ public class OrderDAO {
         }
         return ordersBySupplierDTOList;
     }
-
 
 }

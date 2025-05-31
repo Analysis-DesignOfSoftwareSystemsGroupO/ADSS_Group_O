@@ -41,8 +41,15 @@ public class AgreementDAO {
 
     public void removeProductFromAgreement(String branchid, String supplierid, String productID) throws SQLException {
         String sql = "delete from supplierinventorydb.productinagreement where branchid = ? and supplierid = ? and productid = ?" ;
+        String sql2 = "delete from supplierinventorydb.discount where branchid = ? and supplierid = ? and productid = ?" ;
+
         try (Connection con = getConnection()){
             PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(branchid));
+            ps.setInt(2, Integer.parseInt(supplierid));
+            ps.setInt(3, Integer.parseInt(productID));
+            ps.executeUpdate();
+            ps = con.prepareStatement(sql2);
             ps.setInt(1, Integer.parseInt(branchid));
             ps.setInt(2, Integer.parseInt(supplierid));
             ps.setInt(3, Integer.parseInt(productID));
@@ -53,12 +60,17 @@ public class AgreementDAO {
     public void removeAgreement(String branchid, String supplierid) throws SQLException {
         String sqlAgreement = "delete from supplierinventorydb.agreement where branchid = ? and supplierid = ?";
         String sqlProductInAgreement = "delete from supplierinventorydb.productinagreement where branchid = ? and supplierid = ?";
+        String sqlDiscount = "delete from supplierinventorydb.discount where branchid = ? and supplierid = ?";
         try (Connection con = getConnection()){
             PreparedStatement ps = con.prepareStatement(sqlAgreement);
             ps.setInt(1, Integer.parseInt(branchid));
             ps.setInt(2, Integer.parseInt(supplierid));
             ps.executeUpdate();
             ps = con.prepareStatement(sqlProductInAgreement);
+            ps.setInt(1, Integer.parseInt(branchid));
+            ps.setInt(2, Integer.parseInt(supplierid));
+            ps.executeUpdate();
+            ps = con.prepareStatement(sqlDiscount);
             ps.setInt(1, Integer.parseInt(branchid));
             ps.setInt(2, Integer.parseInt(supplierid));
             ps.executeUpdate();
@@ -181,4 +193,24 @@ public class AgreementDAO {
         }
     }
 
+    public List<AgreementDTO> getAllAgreementForConstantOrder(String branchID, List<SupplierDTO> suppliersDTOList) throws SQLException {
+        List<AgreementDTO> agreements = new ArrayList<>();
+        String sql = "select * from supplierinventorydb.agreement where branchid = ? and supplierid = ?";
+
+        try (Connection connection = getConnection()){
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for (SupplierDTO supplierDTO : suppliersDTOList) {
+                ps.setInt(1, Integer.parseInt(branchID));
+                ps.setInt(2, Integer.parseInt(supplierDTO.getSupplierID()));  // ← זה חשוב!
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        AgreementDTO agreementDTO = getAgreement(branchID, supplierDTO.getSupplierID());
+                        agreements.add(agreementDTO);
+                    }
+                }
+            }
+        }
+        return agreements;
+    }
 }

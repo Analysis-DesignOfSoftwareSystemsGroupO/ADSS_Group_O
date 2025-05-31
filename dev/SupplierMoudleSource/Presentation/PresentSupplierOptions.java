@@ -311,8 +311,6 @@ public class PresentSupplierOptions {
         }
         System.out.println("Supplier was deleted successfully");
     }
-
-
 }
 
 
