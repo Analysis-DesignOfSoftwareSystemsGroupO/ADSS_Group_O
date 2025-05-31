@@ -1,5 +1,7 @@
 package inventory.service;
 
+import MainService.SupplierInventoryService;
+import inventory.data.DTO.ImmediateOrderDemand;
 import inventory.domain.*;
 
 import java.time.LocalDate;
@@ -9,6 +11,7 @@ import java.util.List;
 public class UserApplication {
     String branchId;
     InventoryController inventoryController;
+    SupplierInventoryService supplierInventoryService = new SupplierInventoryService();
 
     public UserApplication(String branchId) {
         this.branchId = branchId; // This can be set dynamically based on the branch
@@ -142,12 +145,16 @@ public class UserApplication {
                 discountStartDate, discountEndDate, discountType);
     }
 
-    public void CheckAndCreateImmediateOrder(){
-        //inventoryController.CheckAndCreateImmediateOrder();
+    public void checkAndCreateImmediateOrder() throws Exception {
+        List<ImmediateOrderDemand> orderList = inventoryController.checkAndCreateImmediateOrder();
+        for (ImmediateOrderDemand order : orderList) {
+            System.out.println("Immediate Order Demand: " + order);
+            supplierInventoryService.createImmediateOrder(this.branchId, order.getProductName(), order.getManufacturer(), order.getAmountToOrder());
+        }
     }
 
     public void createConstantOrder(String productId, int quantity, String location) {
-        //inventoryController.createConstantOrder(productId, quantity, location);
+        //inventoryController.createConstantOrder(productId, quantity, location);//TODO implement
     }
 
     public void listDiscounts() {
