@@ -1,9 +1,9 @@
 
 package SupplierMoudleSource.Domain;
 
-import DTO.InformationContactDTO;
-import DTO.SuppliedItemDTO;
-import DTO.SupplierDTO;
+import SupplierMoudleSource.DTO.InformationContactDTO;
+import SupplierMoudleSource.DTO.SuppliedItemDTO;
+import SupplierMoudleSource.DTO.SupplierDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;

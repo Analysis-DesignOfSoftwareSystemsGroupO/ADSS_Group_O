@@ -1,6 +1,6 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.PaymentMethodDTO;
+import SupplierMoudleSource.DTO.PaymentMethodDTO;
 
 import java.util.Objects;
 

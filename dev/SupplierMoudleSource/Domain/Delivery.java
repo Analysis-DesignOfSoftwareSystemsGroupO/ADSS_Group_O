@@ -1,7 +1,7 @@
 
 package SupplierMoudleSource.Domain;
 
-import DTO.DeliveryDTO;
+import SupplierMoudleSource.DTO.DeliveryDTO;
 
 public  class Delivery {
     private String deliveryWay;

@@ -1,6 +1,4 @@
-package DTO;
-
-import SupplierMoudleSource.Domain.*;
+package SupplierMoudleSource.DTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,12 +1,11 @@
 package SupplierMoudleSource.Repository;
 
 
-import DTO.ProductDTO;
+import SupplierMoudleSource.DTO.ProductDTO;
 import SupplierMoudleSource.DAO.ProductDAO;
 import SupplierMoudleSource.Domain.Product;
 
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 

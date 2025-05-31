@@ -1,7 +1,6 @@
 package SupplierMoudleSource.DAO;
 
-import DTO.BranchDTO;
-import SupplierMoudleSource.Domain.Branch;
+import SupplierMoudleSource.DTO.BranchDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

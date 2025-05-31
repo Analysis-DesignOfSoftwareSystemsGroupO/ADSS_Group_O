@@ -1,6 +1,6 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.BankDTO;
+import SupplierMoudleSource.DTO.BankDTO;
 
 public class Bank {
     private final String bankAccount;

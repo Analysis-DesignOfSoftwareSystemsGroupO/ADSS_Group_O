@@ -1,7 +1,7 @@
 
 package SupplierMoudleSource.Domain;
 
-import DTO.ProductDTO;
+import SupplierMoudleSource.DTO.ProductDTO;
 
 public class Product {
     private final String productID;

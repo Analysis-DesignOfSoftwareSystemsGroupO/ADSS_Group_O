@@ -1,4 +1,4 @@
-package DTO;
+package SupplierMoudleSource.DTO;
 
 public class DeliveryDTO {
     private String deliveryWay;

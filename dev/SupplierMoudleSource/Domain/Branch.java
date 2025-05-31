@@ -1,6 +1,6 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.BranchDTO;
+import SupplierMoudleSource.DTO.BranchDTO;
 
 public class Branch {
     private String branchID;

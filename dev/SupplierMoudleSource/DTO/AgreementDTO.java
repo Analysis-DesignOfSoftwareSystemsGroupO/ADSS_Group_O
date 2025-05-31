@@ -1,12 +1,6 @@
-package DTO;
-
-import SupplierMoudleSource.Domain.Branch;
-import SupplierMoudleSource.Domain.Discount;
-import SupplierMoudleSource.Domain.SuppliedItem;
-import SupplierMoudleSource.Domain.Supplier;
+package SupplierMoudleSource.DTO;
 
 import java.util.List;
-import java.util.Map;
 
 public class AgreementDTO {
     private  String supplierID;

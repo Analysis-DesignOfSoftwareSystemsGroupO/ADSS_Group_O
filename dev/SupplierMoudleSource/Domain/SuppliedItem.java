@@ -1,8 +1,7 @@
 
 package SupplierMoudleSource.Domain;
 
-import DTO.ProductDTO;
-import DTO.SuppliedItemDTO;
+import SupplierMoudleSource.DTO.SuppliedItemDTO;
 
 public class SuppliedItem {
     private final int suppliedItemPrice;
