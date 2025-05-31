@@ -26,7 +26,7 @@ public class HRService implements IHRService {
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
 
-    public HRService(BranchDTO curBranch) {
+    public HRService(BranchDTO curBranch) throws SQLException {
         this.roleController = new RoleController(curBranch);
         this.employeeController = new EmployeeController(curBranch);
         this.shiftController = new ShiftController(curBranch, this.roleController);

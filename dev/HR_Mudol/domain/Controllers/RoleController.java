@@ -164,8 +164,8 @@ public class RoleController implements IRoleController {
             return;
         }
         try {
-            role.removeEmployee(employee); //update RAM
-            curBranch.getRoleRepo().removeEmployeeFromRole(employee, role); //update DB
+            role.removeEmployee(mapper.fromDTO(employee)); //update RAM
+            curBranch.getRoleRepo().removeEmployeeFromRole(mapper.fromDTO(employee), role); //update DB
 
             System.out.println("Employee removed from role: " + role.getDescription());
         } catch (SecurityException e) {
