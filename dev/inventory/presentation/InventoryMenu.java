@@ -429,14 +429,14 @@ public class InventoryMenu {
                     service.updateMinimumStockLevel(productId, newMinimumStockLevel);
                     break;
 
+                case 8:
+                    // create constant delivery:
+                    this.createConstantOrderMenu();
+                    break;
                 case 4321:
                     // Reports
                     dropAllTables();
                     System.exit(0);
-                case 18:
-                    // create constant delivery:
-                    this.createConstantOrderMenu();
-                    break;
                 case 0:
                     // Return to worker selection
                     break;

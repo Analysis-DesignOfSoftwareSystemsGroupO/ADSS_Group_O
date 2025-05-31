@@ -2,6 +2,7 @@ package inventory.data.DAO;
 
 import inventory.data.connection.DataBaseConnector;
 import inventory.domain.Category;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -154,31 +155,31 @@ public class CategoryDAO {
         return null;
     }
 
-    public String getOrCreateCategoryGroup(String parentId, String subId, String subSubId){
+    public String getOrCreateCategoryGroup(String parentId, String subId, String subSubId) {
         String sql = """
                 SELECT group_id FROM "Inventory"."Category_Groups"
                 WHERE parent_category_id = ? AND sub_category_id = ? AND sub_sub_category_id = ?
                 """;
         try (Connection connection = DataBaseConnector.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-                statement.setString(1, parentId);
-                statement.setString(2, subId);
-                statement.setString(3, subSubId);
+            statement.setString(1, parentId);
+            statement.setString(2, subId);
+            statement.setString(3, subSubId);
 
-                ResultSet res = statement.executeQuery();
+            ResultSet res = statement.executeQuery();
 
-                if (res.next()) {
-                    return res.getString("group_id");
-                } else {
-                    String newGroupId = java.util.UUID.randomUUID().toString();
-                    saveCategoryGroup(newGroupId, getCategoryById(parentId), getCategoryById(subId), getCategoryById(subSubId));
-                    return newGroupId;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Error retrieving or creating category group: " + e.getMessage());
+            if (res.next()) {
+                return res.getString("group_id");
+            } else {
+                String newGroupId = java.util.UUID.randomUUID().toString();
+                saveCategoryGroup(newGroupId, getCategoryById(parentId), getCategoryById(subId), getCategoryById(subSubId));
+                return newGroupId;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error retrieving or creating category group: " + e.getMessage());
+        }
         return null;
     }
 
@@ -285,8 +286,26 @@ public class CategoryDAO {
     }
 
 
-
-
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        String sql = """
+                    SELECT category_id, category_name
+                    FROM "Inventory"."Categories"
+                """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                String id = rs.getString("category_id");
+                String name = rs.getString("category_name");
+                categories.add(new Category(id, name));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error retrieving all categories: " + e.getMessage());
+        }
+        return categories;
+    }
 
 
 }

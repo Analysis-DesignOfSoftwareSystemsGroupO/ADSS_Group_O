@@ -132,8 +132,7 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("Updating discounts...");
         try {
             discountDAO.updateAllDiscountsAndSellingPrices();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error while updating discounts...");
         }
 //        // Remove Expired and Apply Active to selling prices
@@ -654,17 +653,6 @@ public class InventoryControllerImpl implements InventoryController {
 
     public void printProductsByCategories(ArrayList<String> categoryNames) {
         System.out.println("Products by categories:");
-//        for (String categoryName : categoryNames) {
-//            Category category = getCategoryById(getCategoryIdByName(categoryName));
-//            if (category != null) {
-//                System.out.println("Category: " + category.getName());
-//                for (Product product : category.getProducts()) {
-//                    System.out.println(product.toString());
-//                }
-//            } else {
-//                System.out.println("Category with name " + categoryName + " not found.");
-//            }
-//        }
         List<Product> products = productDAO.getProductsByCategoryNames(categoryNames);
         if (products.isEmpty()) {
             System.out.println("No products found in the specified categories.");
@@ -684,5 +672,7 @@ public class InventoryControllerImpl implements InventoryController {
         product.setMinimumStockLevel(newMinimumStockLevel);
         productDAO.updateProduct(product);
     }
+
+
 
 }
