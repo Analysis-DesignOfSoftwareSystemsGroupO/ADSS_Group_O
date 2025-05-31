@@ -62,7 +62,7 @@ public interface IRoleController {
      * @param roleNumber The identifier for the role.
      * @param e The employee to be removed from the role.
      */
-    void removeEmployeeFromRole(UserDTO theCaller, int roleNumber, Employee e) throws SQLException;
+    void removeEmployeeFromRole(UserDTO theCaller, int roleNumber, EmployeeDTO e) throws SQLException;
 
     /**
      * Finds all employees who have been assigned to any role.

@@ -71,7 +71,7 @@ public class EmployeeMenu implements Menu {
     }
 
     private WeekDTO getCurrentWeek(BranchDTO branchDTO) {
-        List<WeekDTO> weeks = branchDTO.getWeeks();
+        List<WeekDTO> weeks = branchDTO.getWeekRepo();
         if (weeks == null || weeks.isEmpty()) return null;
         return weeks.get(weeks.size() - 1); // הנחה: השבוע האחרון הוא השבוע הנוכחי
     }

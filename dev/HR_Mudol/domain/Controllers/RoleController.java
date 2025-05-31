@@ -154,7 +154,7 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void removeEmployeeFromRole(UserDTO theCaller, int roleId, Employee employee) throws SQLException {
+    public void removeEmployeeFromRole(UserDTO theCaller, int roleId, EmployeeDTO employee) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
