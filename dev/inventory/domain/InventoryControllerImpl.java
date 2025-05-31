@@ -68,36 +68,18 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void removeProduct(String id) {
-        System.out.println("Removing product with ID: " + id);
-        List<StockItem> stockItems = stockItemDAO.getStockItemsByProductId(id);
-        if (!stockItems.isEmpty()) {
-            throw new IllegalArgumentException("Product has stock items. Cannot delete product.");
+        if (productDAO.productExistsById(id)) {
+            System.out.println("Removing product with ID: " + id);
+            List<StockItem> stockItems = stockItemDAO.getStockItemsByProductId(id);
+            if (!stockItems.isEmpty()) {
+                throw new IllegalArgumentException("Product has stock items. Cannot delete product.");
+            }
+            productDAO.deleteProduct2(id);
+        } else {
+            System.out.println("Product with ID: " + id + " does not exist.");
         }
-        productDAO.deleteProduct2(id);
-        discountDAO.cleanupInvalidDiscounts();
-//        productDAO.removeFromProductsByCategory(id);
-//        //todo: check for discount before deleting
-//        String groupId = productDAO.getProductById(id).getCategoryGroupId();
-//        productDAO.deleteFromSellingPrices(id);
-//        productRepository.deleteProduct(id);
-//        productDAO.deleteProduct(id);
-//        if (productDAO.getProductsByGroupId(groupId).isEmpty()) {
-//            List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
-//            categoryDAO.deleteCategoryGroup(groupId);
-//            for (String categoryId : categories) {
-//                if (categoryDAO.getCategoryGroupsByCategoryId(categoryId).size()==1) {
-//                    categoryDAO.deleteCategoryFromCategories(categoryId);
-//                }
-//            }
-//        }
-//        else {
-//            productDAO.deleteFromSellingPrices(id);
-//            productRepository.deleteProduct(id);
-//            productDAO.deleteProduct(id);
-//        }
-
-
     }
+
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
         Product product = getProductByName(productName, productManufacturer);

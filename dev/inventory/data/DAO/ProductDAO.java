@@ -117,7 +117,38 @@ public class ProductDAO implements ProductRepository {
                 }
             }
 
-            // 2. Delete product-related rows
+            // 2. Delete discounts (and discount targets) for this product
+            // (a) By productId
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM \"Inventory\".\"Discount_Store_Target\" WHERE discount_target_type = 'PRODUCT' AND discount_target_id = ?")) {
+                ps.setString(1, productId);
+                ps.executeUpdate();
+            }
+            // (b) By each deleted category
+            for (String catId : categoryIds) {
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "DELETE FROM \"Inventory\".\"Discount_Store_Target\" WHERE discount_target_type = 'CATEGORY' AND discount_target_id = ?")) {
+                    ps.setString(1, catId);
+                    ps.executeUpdate();
+                }
+            }
+
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "UPDATE \"Inventory\".\"Selling_Prices\" " +
+                            "SET discount_id = NULL, discount_selling_price = NULL " +
+                            "WHERE discount_id IS NOT NULL " +
+                            "AND discount_id NOT IN (SELECT discount_id FROM \"Inventory\".\"Discount_Store_Target\")"
+            )) {
+                ps.executeUpdate();
+            }
+
+            // Remove discounts that have no more targets (safe to do now)
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM \"Inventory\".\"Discounts\" WHERE discount_id NOT IN (SELECT discount_id FROM \"Inventory\".\"Discount_Store_Target\")")) {
+                ps.executeUpdate();
+            }
+
+            // 3. Delete product-related rows
             try (PreparedStatement ps = connection.prepareStatement(
                     "DELETE FROM \"Inventory\".\"Products_by_Categories\" WHERE product_id = ?")) {
                 ps.setString(1, productId);
@@ -139,7 +170,7 @@ public class ProductDAO implements ProductRepository {
                 ps.executeUpdate();
             }
 
-            // 3. Delete the category group if no product uses it anymore
+            // 4. Delete the category group if no product uses it anymore
             boolean groupUsed = false;
             if (groupId != null) {
                 try (PreparedStatement ps = connection.prepareStatement(
@@ -157,7 +188,7 @@ public class ProductDAO implements ProductRepository {
                 }
             }
 
-            // 4. For each category in the group: Delete it ONLY if not referenced in Products_by_Categories AND Category_Groups
+            // 5. For each category in the group: Delete it ONLY if not referenced in Products_by_Categories AND Category_Groups
             for (String catId : categoryIds) {
                 boolean referencedInProducts = false;
                 boolean referencedInGroups = false;
@@ -198,28 +229,6 @@ public class ProductDAO implements ProductRepository {
         }
     }
 
-//    @Override
-//    public Product getProductById(String id) {
-//        String sql = """
-//                SELECT *
-//                FROM "Inventory"."Products" p
-//                WHERE p.product_id = ?
-//                """;
-//
-//        try (Connection connection = DataBaseConnector.getConnection();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//
-//            statement.setString(1, id);
-//            ResultSet res = statement.executeQuery();
-//
-//            if (res.next()) {
-//                return mapResultSetToProduct(res);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null; // Placeholder return statement
-//    }
 
     @Override
     public Product getProductById(String id) {
@@ -245,25 +254,6 @@ public class ProductDAO implements ProductRepository {
     }
 
 
-//    @Override
-//    public List<Product> getAllProducts() {
-//        List<Product> products = new ArrayList<>();
-//        String sql = """
-//                SELECT * FROM "Inventory"."Products"
-//                """;
-//
-//        try (Connection connection = DataBaseConnector.getConnection();
-//             PreparedStatement statement = connection.prepareStatement(sql);
-//             ResultSet res = statement.executeQuery()) {
-//
-//            while (res.next()) {
-//                products.add(mapResultSetToProduct(res));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return products;
-//    }
 
     @Override
     public List<Product> getAllProducts() {
@@ -287,27 +277,6 @@ public class ProductDAO implements ProductRepository {
         return products;
     }
 
-
-//    private Product mapResultSetToProduct(ResultSet res) {
-//        try {
-//            String id = res.getString("product_id");
-//            String name = res.getString("product_name");
-//            String manufacturer = res.getString("product_manufacturer");
-//            int minimumStockLevel = res.getInt("min_stock_level");
-//            String category_group = res.getString("group_id");
-//            String location = res.getString("location");
-//            double sellingPrice = res.getDouble("selling_price");
-//
-//            Product product = new Product(id, name, manufacturer, minimumStockLevel, location, category_group, sellingPrice);
-//
-//            return product;
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.err.println("Error mapping ResultSet to Product: " + e.getMessage());
-//            return null; // Return null if mapping fails
-//        }
-//    }
 
     private Product mapResultSetToProduct(ResultSet res) {
         try {
@@ -373,6 +342,26 @@ public class ProductDAO implements ProductRepository {
             return false;
         }
     }
+
+    public boolean productExistsById(String productId) {
+        String sql = """
+            SELECT 1
+            FROM "Inventory"."Products"
+            WHERE product_id = ?
+            LIMIT 1
+            """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public List<Product> getProductsByCategoryNames(List<String> categoryNames) {
         List<Product> products = new ArrayList<>();
