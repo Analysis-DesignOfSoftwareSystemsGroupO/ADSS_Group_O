@@ -5,6 +5,8 @@ import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
 
+import java.sql.SQLException;
+
 /**
  * The Menu interface defines the structure for all menus in the system.
  * Any menu (e.g., HR Manager Menu, Shift Manager Menu, etc.) must implement this interface to standardize the start method.
@@ -20,5 +22,5 @@ public interface Menu {
      * @param curBranch The branch in which the caller works.
      * @return boolean indicating if the menu interaction was completed successfully (i.e., whether the user logged out or not).
      */
-    boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch);
+    boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException;
 }

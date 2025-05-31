@@ -9,12 +9,13 @@ import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
 import HR_Mudol.domain.Controllers.ShiftController;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ShiftManagerMenu implements Menu {
 
     @Override
-    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) {
+    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException {
         if (!caller.isShiftManager()) {
             System.out.println("Access denied.");
             return false;
@@ -48,7 +49,7 @@ public class ShiftManagerMenu implements Menu {
         }
     }
 
-    private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) {
+    private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) throws SQLException {
         WeekDTO currentWeekDTO = branch.getCurrentWeekDTO();
         if (currentWeekDTO == null) {
             System.out.println("No current week found.");
