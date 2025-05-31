@@ -48,12 +48,24 @@ public String addProduct(String productName, String manufacturer, int shelfLifeD
         if (products.get(productID) != null) {
             return new Product(products.get(productID));
         }
-        ;
+
         ProductDTO productDTO;
         try {
             productDTO = productDAO.getProduct(productID);
 
         } catch (Exception e) {
+            throw new Exception("Product does not exist");
+        }
+        return new Product(productDTO);
+    }
+    public Product getProduct(String productName, String manufacturer) throws Exception {
+        for (ProductDTO productDTO : products.values()) {
+            if (productName.equals(productDTO.productName) && productDTO.productManufacturer.equals(manufacturer)) {
+                return new Product(productDTO);
+            }
+        }
+        ProductDTO productDTO = productDAO.getProduct(productName, manufacturer);
+        if (productDTO == null){
             throw new Exception("Product does not exist");
         }
         return new Product(productDTO);

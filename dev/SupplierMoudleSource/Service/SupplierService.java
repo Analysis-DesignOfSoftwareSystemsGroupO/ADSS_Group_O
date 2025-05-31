@@ -138,4 +138,5 @@ public class SupplierService {
             System.out.println(informationContact.toString());
         }
     }
+
 }

@@ -6,13 +6,11 @@ import DTO.OrderDTO;
 import DTO.SupplierDTO;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
-import SupplierMoudleSource.Repository.AgreementRepository;
-import SupplierMoudleSource.Repository.BranchesRepository;
-import SupplierMoudleSource.Repository.OrderRepository;
+import SupplierMoudleSource.Repository.*;
 import SupplierMoudleSource.Domain.Order;
-import SupplierMoudleSource.Repository.SupplierRepository;
 
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +19,7 @@ public class OrderService {
     private static AgreementRepository agreementRepository = AgreementRepository.getInstance();
     private static BranchesRepository branchesRepository = BranchesRepository.getInstance();
     private static SupplierRepository supplierRepository = SupplierRepository.getInstance();
+    private static ProductRepository productRepository = ProductRepository.getInstance();
 
     //creates a new order, returns orderId as a string
     public String createOrder(String branchId, String supplierId) throws Exception {
@@ -142,7 +141,8 @@ public class OrderService {
 
 
 
-        public void createImmediateOrder(String branchID, String productID, int quantity) throws Exception {
+        public void createImmediateOrder(String branchID, String productName, String manufacturer, int quantity) throws Exception {
+            String productID = productRepository.getProduct(productName, manufacturer).getProductID();
             List<Agreement> agreement = castAgreementDTOtoAgreement(agreementRepository.getAllAgreement()); //get all agreements
             Agreement bestAgreement = null;
             int minPrice = -1;
@@ -155,23 +155,15 @@ public class OrderService {
                     }
                 }
             }
+            if (minPrice == -1) {
+                throw new Exception("No immediate order found");
+            }
             Order order = new Order(bestAgreement, new Branch(branchesRepository.getBranch(branchID)));
             order.addItemToOrder(productID, quantity);
             order.closeOrder();
             orderRepository.saveOrder(order);
         }
 
-        public List<OrderDTO> getConstantOrder(String dayOfWeek){
-            //todo
-        }
-
-        public List<OrderDTO> getConstantOrder(String productID){
-            //todo
-        }
-
-        public void updateConstantOrder(OrderDTO orderDTO){
-            //todo
-        }
 
 
         private List <Agreement> castAgreementDTOtoAgreement(List<AgreementDTO> agreementDTOS) throws Exception {
@@ -179,7 +171,7 @@ public class OrderService {
             for (AgreementDTO agreementDTO : agreementDTOS) {
                 BranchDTO branchDTO = branchesRepository.getBranch(agreementDTO.getBranchId());
                 SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
-                agreements.add(new Agreement(branchDTO, supplierDTO, agreementDTO );
+                agreements.add(new Agreement(branchDTO, supplierDTO, agreementDTO ));
             }
             return agreements;
         }

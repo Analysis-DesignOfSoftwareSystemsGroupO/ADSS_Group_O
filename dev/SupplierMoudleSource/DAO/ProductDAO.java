@@ -67,4 +67,18 @@ public class ProductDAO {
             return pDTO;
         }
     }
+
+    public ProductDTO getProduct(String productName, String manufacturer) throws SQLException {
+        String sql = "SELECT * FROM supplierinventorydb.product WHERE name = ? and manufacturer = ?";
+        try (Connection con = getConnection();
+        PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, productName);
+            pstmt.setString(2, manufacturer);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new ProductDTO(Integer.toString(rs.getInt(1)), rs.getString(2), rs.getString(3), rs.getInt(4));
+            }
+            return null;
+        }
+    }
 }
