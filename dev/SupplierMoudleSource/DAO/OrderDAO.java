@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static DataBase.PostgresConnection.getConnection;
+import static SupplierMoudleSource.DataBase.PostgresConnection.getConnection;
 
 public class OrderDAO {
 
@@ -359,4 +359,25 @@ public class OrderDAO {
         return orderDTOList;
     }
 
+    public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception
+    {
+        String getProductIdSql = "Select * from supplierinventorydb.product where name = ? and manufacturer = ?";
+        String updateNewQuantitySql = "Update supplierinventorydb.constantorders set quantity = ? where productid = ?";
+        try (Connection connection = getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(getProductIdSql);
+            pstmt.setString(1, productName);
+            pstmt.setString(2, manufacturer);
+            ResultSet rs = pstmt.executeQuery();
+            int productId;
+            if (rs.next()) {
+                productId = rs.getInt("id");
+            } else {
+                throw new Exception("Product does not exist");
+            }
+            pstmt = connection.prepareStatement(updateNewQuantitySql);
+            pstmt.setInt(1, newQuantity);
+            pstmt.setInt(2, productId);
+            pstmt.executeUpdate();
+        }
+    }
 }

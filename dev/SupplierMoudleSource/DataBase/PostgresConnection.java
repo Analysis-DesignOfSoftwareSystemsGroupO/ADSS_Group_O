@@ -1,9 +1,9 @@
-package DataBase;
+package SupplierMoudleSource.DataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import static DataBase.Config.Password;
+import static SupplierMoudleSource.DataBase.Config.Password;
 
 
 public class PostgresConnection {

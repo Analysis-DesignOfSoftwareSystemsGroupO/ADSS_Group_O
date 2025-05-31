@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static DataBase.PostgresConnection.getConnection;
+import static SupplierMoudleSource.DataBase.PostgresConnection.getConnection;
 
 public class BranchDAO {
     public BranchDAO(){

@@ -1,5 +1,6 @@
 package SupplierMoudleSource.Service;
 
+import MainService.SupplierInventoryService;
 import SupplierMoudleSource.DTO.*;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
@@ -8,10 +9,8 @@ import SupplierMoudleSource.Domain.Order;
 import SupplierMoudleSource.Repository.*;
 
 import java.sql.SQLException;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -24,6 +23,7 @@ public class OrderService {
     private static BranchesRepository branchesRepository = BranchesRepository.getInstance();
     private static SupplierRepository supplierRepository = SupplierRepository.getInstance();
     private static ProductRepository productRepository = ProductRepository.getInstance();
+    private SupplierInventoryService supplierInventoryService = new SupplierInventoryService(this);
 
     //creates a new order, returns orderId as a string
     public String createOrder(String branchId, String supplierId) throws Exception {
@@ -175,26 +175,38 @@ public class OrderService {
             LocalDate today = LocalDate.now();
             DayOfWeek dayOfWeek = today.getDayOfWeek();
             try {
-                createAllOrdersForToday(dayOfWeek.toString().substring(0, 3)); // your real logic
+                createAllOrdersForToday(dayOfWeek.toString().substring(0, 3));
             } catch (Exception e) {
-                throw new RuntimeException("Error while creating all constant orders ", e);
+                throw new RuntimeException("Error while creating all constant orders", e);
             }
         };
 
-        long delay = getDelayUntilMidnightInMillis(); //todo change for local class time
-        long period = TimeUnit.DAYS.toMillis(1); // 24 hours
+        long delay = getDelayUntilTargetTimeInMillis(supplierInventoryService.getTime());
+        long period = TimeUnit.DAYS.toMillis(1);
 
         scheduler.scheduleAtFixedRate(task, delay, period, TimeUnit.MILLISECONDS);
     }
-    private static long getDelayUntilMidnightInMillis() {
+
+    private static long getDelayUntilTargetTimeInMillis(Time targetTime) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime nextMidnight = now.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-        Duration duration = Duration.between(now, nextMidnight);
+        LocalTime targetLocalTime = targetTime.toLocalTime();
+        LocalDateTime targetDateTime = now.withHour(targetLocalTime.getHour())
+                .withMinute(targetLocalTime.getMinute())
+                .withSecond(targetLocalTime.getSecond())
+                .withNano(0);
+
+        // If the time today has already passed, schedule it for tomorrow
+        if (targetDateTime.isBefore(now)) {
+            targetDateTime = targetDateTime.plusDays(1);
+        }
+
+        Duration duration = Duration.between(now, targetDateTime);
         return duration.toMillis();
     }
 
+
     private void createAllOrdersForToday(String dayOfWeek) throws Exception {
-        List<requirementToConstantOrderDTO> requirementToConstantOrderDTOS = orderRepository.getRequirementToConstantOrderDTOByDay(dayOfWeek);
+        List<requirementToConstantOrderDTO> requirementToConstantOrderDTOS = orderRepository.getToConstantOrderDTOByDay(dayOfWeek);
         for (requirementToConstantOrderDTO requirementDTO : requirementToConstantOrderDTOS) {
             Agreement agreement = castAgreementDTOtoAgreement(agreementRepository.getAgreement(requirementDTO.getBranchID(),
                                                                 requirementDTO.getSupplierID()));
@@ -207,6 +219,15 @@ public class OrderService {
             order.closeOrder();
             orderRepository.saveOrder(order);
         }
+    }
+
+    public List<requirementToConstantOrderDTO> getConstantOrdersByDayOfWeek(String dayOfWeek) throws SQLException {
+        return orderRepository.getToConstantOrderDTOByDay(dayOfWeek);
+    }
+
+    public List<requirementToConstantOrderDTO>
+        getConstantOrdersByProductNameAndManufacturer(String productName, String manufacturer) throws Exception {
+        return orderRepository.getToConstantOrderDTOByNameAndManufacturer(productName, manufacturer);
     }
 
 
@@ -274,5 +295,9 @@ public class OrderService {
     public void closeConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
         ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
         constantOrder.closeConstantOrder();
+    }
+
+    public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception {
+        orderRepository.updateExistingConstantOrder(branchId, supplierId, productName, manufacturer, newQuantity);
     }
 }

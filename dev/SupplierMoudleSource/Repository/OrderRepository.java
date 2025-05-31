@@ -98,11 +98,15 @@ public class OrderRepository {
     }
 
 
-    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOByDay(String dayOfWeek) throws SQLException {
+    public List<requirementToConstantOrderDTO> getToConstantOrderDTOByDay(String dayOfWeek) throws SQLException {
         return orderDAO.getRequirementToConstantOrderDTO(dayOfWeek);
     }
 
-    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOById(String name, String manufacturer) throws Exception {
+    public List<requirementToConstantOrderDTO> getToConstantOrderDTOByNameAndManufacturer(String name, String manufacturer) throws Exception {
         return orderDAO.getRequirementToConstantOrderDTOById(name, manufacturer);
+    }
+
+    public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception {
+        orderDAO.updateExistingConstantOrder(branchId, supplierId, productName, manufacturer, newQuantity);
     }
 }

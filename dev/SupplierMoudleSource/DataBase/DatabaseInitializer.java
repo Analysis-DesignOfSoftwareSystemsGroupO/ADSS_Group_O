@@ -1,20 +1,22 @@
-package DataBase;
+package SupplierMoudleSource.DataBase;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import static DataBase.Config.Password;
+import static SupplierMoudleSource.DataBase.Config.Db_URL;
+import static SupplierMoudleSource.DataBase.Config.Password;
+
 
 public class DatabaseInitializer {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String DB_URL = Db_URL;
     private static final String USER = "postgres";
     private static final String PASSWORD = Password;
 
-    private static final String SCHEMA_SQL_FILE = "projectData.sql";// path to your .sql file
-    private static final String DROP_DATA_SQL_FILE = "dropTables.sql";
+    private static final String SCHEMA_SQL_FILE = "dev/SupplierMoudleSource/DataBase/projectData.sql";// path to your .sql file
+    private static final String DROP_DATA_SQL_FILE = "dev/SupplierMoudleSource/DataBase/dropTables.sql";
     public static void createSupplierTables() {
         try {
             // Read the entire SQL file as a string

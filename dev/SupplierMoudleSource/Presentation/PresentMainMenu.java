@@ -1,7 +1,10 @@
 package SupplierMoudleSource.Presentation;
 
 import java.util.Scanner;
-import SupplierMoudleSource.LoadData.LoadData;
+import SupplierMoudleSource.DataBase.LoadData.LoadData;
+
+import static SupplierMoudleSource.DataBase.DatabaseInitializer.createSupplierTables;
+import static SupplierMoudleSource.DataBase.DatabaseInitializer.dropAllTables;
 
 public class PresentMainMenu {
 
@@ -18,23 +21,39 @@ public class PresentMainMenu {
     public void runMainPresentation() throws Exception {
         while (true) {
             Scanner input = new Scanner(System.in);
-            while (true) { //load data
+            boolean outer = true;
+            while (outer) { //load data
                 System.out.println("Welcome to Supplier Module !");
                 System.out.println("1.Load Data");
                 System.out.println("2.Empty Data");
-                System.out.println("3.Exit");
+                System.out.println("3.Existing Data");
+                System.out.println("4.Exit");
                 System.out.println("Enter your choice");
                 int choice = input.nextInt();
-                if (choice == 1) {
-                    LoadData loadData = new LoadData();
-                    loadData.LoadData();
-                    break;
-                } else if (choice == 2) {
-                    break;
-                } else if (choice == 3) {
-                    return;
+                input.nextLine();
+                switch (choice) {
+                    case 1:
+                        dropAllTables();
+                        createSupplierTables();
+                        LoadData loadData = new LoadData();
+                        loadData.LoadData();
+                        outer = false;
+                        break;
+                    case 2:
+                        dropAllTables();
+                        createSupplierTables();
+                        outer = false;
+                        break;
+                    case 3:
+                        outer = false;
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        System.out.println("Invalid choice !");
+                        break;
+
                 }
-                System.out.println("Invalid choice !");
             }
             while (true) {
                 System.out.println("1.Supplier options");

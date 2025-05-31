@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static DataBase.PostgresConnection.getConnection;
+import static SupplierMoudleSource.DataBase.PostgresConnection.getConnection;
 
 public class ProductDAO {
 
