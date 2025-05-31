@@ -174,7 +174,7 @@ public class StockItemDAO {
     }
 
 
-    public String getStockItemByBatch(Product product,String location,LocalDate expiryDate,StockItemStatus Status){
+    public String getStockItemByBatch(Product product, String location, LocalDate expiryDate, StockItemStatus Status) {
         String sql = """
                 SELECT stock_id
                 FROM "Inventory"."Stock_Items"
@@ -202,10 +202,10 @@ public class StockItemDAO {
 
     public int numInStorage(String productId) {
         String sql = """
-        SELECT COALESCE(SUM(quantity), 0) AS total
-        FROM "Inventory"."Stock_Items"
-        WHERE product_id = ? AND location = 'storage'
-    """;
+                    SELECT COALESCE(SUM(quantity), 0) AS total
+                    FROM "Inventory"."Stock_Items"
+                    WHERE product_id = ? AND location = 'storage'
+                """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, productId);
@@ -221,10 +221,10 @@ public class StockItemDAO {
 
     public int numInStore(String productId) {
         String sql = """
-        SELECT COALESCE(SUM(quantity), 0) AS total
-        FROM "Inventory"."Stock_Items"
-        WHERE product_id = ? AND location != 'storage'
-    """;
+                    SELECT COALESCE(SUM(quantity), 0) AS total
+                    FROM "Inventory"."Stock_Items"
+                    WHERE product_id = ? AND location != 'storage'
+                """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, productId);
@@ -240,10 +240,10 @@ public class StockItemDAO {
 
     public int numOfExpired(String productId) {
         String sql = """
-        SELECT COALESCE(SUM(quantity), 0) AS total
-        FROM "Inventory"."Stock_Items"
-        WHERE product_id = ? AND status = 'EXPIRED'
-    """;
+                    SELECT COALESCE(SUM(quantity), 0) AS total
+                    FROM "Inventory"."Stock_Items"
+                    WHERE product_id = ? AND status = 'EXPIRED'
+                """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, productId);
@@ -259,10 +259,10 @@ public class StockItemDAO {
 
     public int numOfDamaged(String productId) {
         String sql = """
-        SELECT COALESCE(SUM(quantity), 0) AS total
-        FROM "Inventory"."Stock_Items"
-        WHERE product_id = ? AND status = 'DAMAGED'
-    """;
+                    SELECT COALESCE(SUM(quantity), 0) AS total
+                    FROM "Inventory"."Stock_Items"
+                    WHERE product_id = ? AND status = 'DAMAGED'
+                """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, productId);
@@ -278,11 +278,11 @@ public class StockItemDAO {
 
     public boolean hasAnyStockItem(String productId) {
         String sql = """
-        SELECT 1
-        FROM "Inventory"."Stock_Items"
-        WHERE product_id = ?
-        LIMIT 1
-    """;
+                    SELECT 1
+                    FROM "Inventory"."Stock_Items"
+                    WHERE product_id = ?
+                    LIMIT 1
+                """;
         try (Connection connection = DataBaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, productId);
@@ -292,6 +292,26 @@ public class StockItemDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    public int numOfOk(String productId) {
+        String sql = """
+                    SELECT COALESCE(SUM(quantity), 0) AS total
+                    FROM "Inventory"."Stock_Items"
+                    WHERE product_id = ? AND status = 'OK'
+                """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 
