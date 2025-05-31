@@ -42,5 +42,10 @@ public abstract class User {
         return Objects.equals(((User) other).password, password) &&  Objects.equals(((User) other).username, username);
     }
 
-    public abstract void showMenu();
+    @Override
+    public final int hashCode() {
+        return (username + password).hashCode();
+    }
+
+        public abstract void showMenu();
 }

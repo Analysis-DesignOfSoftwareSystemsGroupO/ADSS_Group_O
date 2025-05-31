@@ -5,9 +5,9 @@ import Presentation.BookingMenu;
 public class BookingUser extends User {
     private final BookingMenu bookingMenu;
 
-    public BookingUser(String username,String password, BookingMenu menu) {
+    public BookingUser(String username,String password) {
         super(username,password);
-        this.bookingMenu = menu;
+        this.bookingMenu = new BookingMenu();
     }
 
     @Override

@@ -5,9 +5,9 @@ import Presentation.TruckManagerMenu;
 public class TruckManagerUser extends User{
         private final TruckManagerMenu managerMenu;
 
-        public TruckManagerUser(String username, String password,TruckManagerMenu menu) {
+        public TruckManagerUser(String username, String password) {
             super(username,password);
-            this.managerMenu = menu;
+            this.managerMenu = new TruckManagerMenu();
         }
 
         @Override
