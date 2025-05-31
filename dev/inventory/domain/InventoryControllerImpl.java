@@ -394,7 +394,7 @@ public class InventoryControllerImpl implements InventoryController {
             if (stockItemDAO.hasAnyStockItem(product.getId())) {
                 int inStorage = stockItemDAO.numInStorage(product.getId());
                 int inStore = stockItemDAO.numInStore(product.getId());
-                int defectedProductQuantity = stockItemDAO.numOfDamaged(product.getId()) + stockItemDAO.numOfExpired(product.getId());
+                int defectedAndExpiredProductQuantity = stockItemDAO.numOfDamaged(product.getId()) + stockItemDAO.numOfExpired(product.getId());
                 System.out.println("Product: " + product.getName()
                         + "\nProduct ID: " + product.getId()
                         + "\nProduct Manufacturer: " + product.getManufacturer()
@@ -402,7 +402,7 @@ public class InventoryControllerImpl implements InventoryController {
                         + "\nProduct Quantity: " + (inStore + inStore)
                         + "\nAmount of product in Storage: " + inStorage
                         + "\nAmount of Product in Store: " + inStore
-                        + "\nDamaged/Expired Product Quantity: " + defectedProductQuantity
+                        + "\nDamaged/Expired Product Quantity: " + defectedAndExpiredProductQuantity
                         + "\nLocation: " + product.getLocation() +
                         "\n------------------------------\n");
             }
