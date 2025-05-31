@@ -100,7 +100,7 @@ public class DatabaseInitializer {
         }
     }
 
-    public static void dropAllTables() {
+    public static void dropAllInventoryTables() {
         String sql = """
         DROP TABLE IF EXISTS 
             "Inventory"."Products_by_Categories",

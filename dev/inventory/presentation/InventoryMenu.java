@@ -17,7 +17,8 @@ import inventory.service.UserApplication;
 import java.time.LocalDate;
 import java.util.*;
 
-import static inventory.data.connection.DatabaseInitializer.dropAllTables;
+import static inventory.data.connection.DatabaseInitializer.dropAllInventoryTables;
+
 
 public class InventoryMenu {
     private final String branchId;
@@ -435,7 +436,7 @@ public class InventoryMenu {
                     break;
                 case 4321:
                     // Reports
-                    dropAllTables();
+                    dropAllInventoryTables();
                     System.exit(0);
                 case 0:
                     // Return to worker selection
