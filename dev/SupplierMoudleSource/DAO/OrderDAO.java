@@ -205,6 +205,7 @@ public class OrderDAO {
         if (constantOrderDTO == null) {
             throw new NullPointerException("Constant Order is null");
         }
+
         String sql = "INSERT INTO supplierinventorydb.constantorders (branchid , supplierid, supplieditemid, quantity, dayofweek) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = getConnection();
@@ -231,14 +232,13 @@ public class OrderDAO {
             ps.executeBatch();
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to save constant order: " + e.getMessage(), e);
+            throw new RuntimeException("Constant Order Already Exist");
         }
     }
 
     public List<ConstantOrderDTO> getConstantOrderDTO(String dayOfWeek) throws SQLException {
         String sql = "SELECT * FROM supplierinventorydb.constantorders WHERE dayofweek = ? ORDER BY supplierid, branchid";
-        String getSql = "SELECT * FROM supplierinventorydb.productinagreement WHERE branchid = ? AND supplierid = ? AND suppliediteid = ?";
+        String getSql = "SELECT * FROM supplierinventorydb.productinagreement WHERE branchid = ? AND supplierid = ? AND productid = ?";
         String getProductSql = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
         List<ConstantOrderDTO> orderDTOList = new ArrayList<>();
 
@@ -362,7 +362,7 @@ public class OrderDAO {
     public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception
     {
         String getProductIdSql = "Select * from supplierinventorydb.product where name = ? and manufacturer = ?";
-        String updateNewQuantitySql = "Update supplierinventorydb.constantorders set quantity = ? where productid = ?";
+        String updateNewQuantitySql = "Update supplierinventorydb.constantorders set quantity = ? where supplieditemid = ?";
         try (Connection connection = getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(getProductIdSql);
             pstmt.setString(1, productName);
@@ -379,5 +379,69 @@ public class OrderDAO {
             pstmt.setInt(2, productId);
             pstmt.executeUpdate();
         }
+    }
+
+    public void deleteConstantOrder(String branchId, String supplierId, String productName, String manufacturer) throws Exception {
+        String getProductIdSql = "Select * from supplierinventorydb.product where name = ? and manufacturer = ?";
+        String deleteConstantOrderSql = "Delete from supplierinventorydb.constantorders where supplieditemid = ? and branchid = ? and supplierid = ?";
+        try (Connection connection = getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(getProductIdSql);
+            pstmt.setString(1, productName);
+            pstmt.setString(2, manufacturer);
+            ResultSet rs = pstmt.executeQuery();
+            int productId;
+            if (rs.next()) {
+                productId = rs.getInt("id");
+            } else {
+                throw new Exception("Product does not exist");
+            }
+            pstmt = connection.prepareStatement(deleteConstantOrderSql);
+            pstmt.setInt(1, productId);
+            pstmt.setInt(2, Integer.parseInt(branchId));
+            pstmt.setInt(3, Integer.parseInt(supplierId));
+            pstmt.executeUpdate();
+        }
+    }
+
+    public List<ConstantOrderDTO> getConstantOrdersBySupplierId(String branchId, String supplierId) {
+        String sql = "SELECT * FROM supplierinventorydb.constantorders WHERE branchid = ? AND supplierid = ?";
+        List<ConstantOrderDTO> constantOrderDTOList = new ArrayList<>();
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, Integer.parseInt(branchId));
+            pstmt.setInt(2, Integer.parseInt(supplierId));
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String dayOfWeek = rs.getString("dayofweek");
+                int suppliedItemId = rs.getInt("supplieditemid");
+                int quantity = rs.getInt("quantity");
+
+                String getProductSql = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
+                try (PreparedStatement productStmt = con.prepareStatement(getProductSql)) {
+                    productStmt.setInt(1, suppliedItemId);
+                    ResultSet productRs = productStmt.executeQuery();
+
+                    if (productRs.next()) {
+                        String productName = productRs.getString("name");
+                        String manufacturer = productRs.getString("manufacturer");
+                        int shelfLifeDays = productRs.getInt("shelflifedays");
+
+                        ProductDTO productDTO = new ProductDTO(Integer.toString(suppliedItemId), productName, manufacturer, shelfLifeDays);
+                        SuppliedItemDTO suppliedItemDTO = new SuppliedItemDTO(rs.getInt("price"), productDTO);
+
+                        Map<SuppliedItemDTO, Integer> suppliedItems = new HashMap<>();
+                        suppliedItems.put(suppliedItemDTO, quantity);
+
+                        ConstantOrderDTO constantOrderDTO = new ConstantOrderDTO(branchId, supplierId, suppliedItems, dayOfWeek);
+                        constantOrderDTOList.add(constantOrderDTO);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return constantOrderDTOList;
     }
 }

@@ -78,5 +78,7 @@ public interface InventoryController {
 
     String getOrCreateCategoryGroup(String s, String s1, String s2);
 
-    List<ImmediateOrderDemand> checkAndCreateImmediateOrder();
+    List<ImmediateOrderDemand> checkAndCreateImmediateOrderDemands();
+
+    int getAmountToOrder(String productName, String productManufacturer);
 }

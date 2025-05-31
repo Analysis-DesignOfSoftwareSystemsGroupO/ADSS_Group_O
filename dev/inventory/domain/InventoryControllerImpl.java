@@ -673,29 +673,41 @@ public class InventoryControllerImpl implements InventoryController {
         productDAO.updateProduct(product);
     }
 
-    public List<ImmediateOrderDemand> checkAndCreateImmediateOrder() {
+    public List<ImmediateOrderDemand> checkAndCreateImmediateOrderDemands() {
         List<ImmediateOrderDemand> orderList = new ArrayList<>();
         List<Product> products = productDAO.getAllProducts();
         for (Product product : products) {
             int minStock = product.getMinimumStockLevel();
             int currentStock = stockItemDAO.numOfOk(product.getId());
 
+            if (currentStock >= minStock) {
+                continue; // No need to order if current stock is above minimum
+            }
 
             int daysUntilNextOrder = 1;  // TODO get the number of days from suppliers
-            if (daysUntilNextOrder <= 0) daysUntilNextOrder = 1;
 
-            int amountToOrder = minStock * daysUntilNextOrder - currentStock;
+            int amountToOrder = (minStock * daysUntilNextOrder - currentStock);
             if (amountToOrder > 0) {
                 orderList.add(new ImmediateOrderDemand(
                         product.getName(),
                         product.getManufacturer(),
                         amountToOrder
                 ));
-            } else {
-                System.out.println("Product " + product.getName() + " is sufficient in stock.");
             }
         }
         return orderList;
+    }
+
+    public int getAmountToOrder(String productName, String manufacturer) {
+        Product product = productDAO.getProductByNameAndManufacturer(productName, manufacturer);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting amount calculation.");
+        }
+        int minStock = product.getMinimumStockLevel();
+        int currentStock = stockItemDAO.numOfOk(product.getId());
+
+        return (minStock * 7 - currentStock);
+
     }
 }
 

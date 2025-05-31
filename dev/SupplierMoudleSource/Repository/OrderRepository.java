@@ -109,4 +109,12 @@ public class OrderRepository {
     public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception {
         orderDAO.updateExistingConstantOrder(branchId, supplierId, productName, manufacturer, newQuantity);
     }
+    public void deleteConstantOrder(String branchId, String supplierId, String productName, String manufacturer) throws Exception
+    {
+        orderDAO.deleteConstantOrder(branchId, supplierId, productName, manufacturer);
+    }
+
+    public List<ConstantOrderDTO> getConstantOrdersBySupplierId(String branchId, String supplierId) {
+        return orderDAO.getConstantOrdersBySupplierId(branchId, supplierId);
+    }
 }
