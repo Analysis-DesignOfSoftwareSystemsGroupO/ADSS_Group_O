@@ -33,7 +33,6 @@ public class DatabaseInitializer {
                         try {
                             stmt.execute(command + ";");
                         } catch (Exception e) {
-                            System.err.println("Skipping command:\n" + command + "\nCause: " + e.getMessage());
                         }
                     }
                 }

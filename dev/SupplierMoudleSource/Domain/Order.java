@@ -55,7 +55,6 @@ public class Order {
         for (Map.Entry<SuppliedItemDTO, Integer> entry : orderDTO.getSuppliedItems().entrySet()) {
             SuppliedItemDTO itemDTO = entry.getKey();
             int quantity = entry.getValue();
-
             Product product = new Product(
                     itemDTO.product.productID,
                     itemDTO.product.productName,

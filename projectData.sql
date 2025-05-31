@@ -102,7 +102,7 @@ ALTER SEQUENCE supplierinventorydb.order_id_seq OWNED BY supplierinventorydb."or
 CREATE TABLE supplierinventorydb.productOfSupplier (
                                                        productID integer,
                                                        supplierID integer,
-                                                       price integer,
+                                                       price integer check ( price > 0 ),
                                                        PRIMARY KEY (productID, supplierID),
                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                        FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
@@ -117,7 +117,7 @@ CREATE TABLE supplierinventorydb.productsinorder (
 );
 
 CREATE TABLE supplierinventorydb.productInAgreement (
-                                                        price integer,
+                                                        price integer check ( price > 0 ),
                                                         productID integer,
                                                         branchID integer,
                                                         supplierID integer,
@@ -126,6 +126,17 @@ CREATE TABLE supplierinventorydb.productInAgreement (
                                                         FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                         FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
 );
+
+CREATE TABLE supplierinventorydb.produtinconstantorder (
+    branchID integer,
+    supplierID integer,
+    suppliedItemID integer,
+    quantity integer check ( quantity > 0 ) ,
+    dayOfWeek varying(50),
+    FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
+    FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
+    FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
+)
 
 -- DEFAULT ID VALUES
 ALTER TABLE ONLY supplierinventorydb.branch ALTER COLUMN id SET DEFAULT nextval('supplierinventorydb.branch_id_seq');

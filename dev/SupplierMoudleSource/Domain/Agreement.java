@@ -45,7 +45,19 @@ public class Agreement {
         this.discounts = other.discounts;
     }
 
-
+    public int getPriceForProduct(String productid, int quantity) {
+       SuppliedItem suppliedItem = supplierItemsList.get(productid);
+       if (suppliedItem == null) {
+           return -1;
+       }
+       int price = suppliedItem.getSuppliedItemPrice() * quantity;
+       for (Discount discount : discounts) {
+           if (discount.getProductId().equals(productid) && discount.getQuantity() <= quantity) {
+               price -= discount.getDiscount();
+           }
+       }
+       return price;
+    }
     public List<Discount> getDiscounts() {
         return discounts;
     }

@@ -13,6 +13,7 @@ import SupplierMoudleSource.Domain.Order;
 import SupplierMoudleSource.Repository.SupplierRepository;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderService {
@@ -137,6 +138,49 @@ public class OrderService {
                 }
             }
             return null;
+        }
+
+
+
+        public void createImmediateOrder(String branchID, String productID, int quantity) throws Exception {
+            List<Agreement> agreement = castAgreementDTOtoAgreement(agreementRepository.getAllAgreement()); //get all agreements
+            Agreement bestAgreement = null;
+            int minPrice = -1;
+            for (Agreement a : agreement) {
+                if (a.getBranchID().equals(branchID)) {
+                    int curPrice = a.getPriceForProduct(productID, quantity);
+                    if (curPrice != -1 && curPrice < minPrice ) {
+                        minPrice = curPrice;
+                        bestAgreement = a;
+                    }
+                }
+            }
+            Order order = new Order(bestAgreement, new Branch(branchesRepository.getBranch(branchID)));
+            order.addItemToOrder(productID, quantity);
+            orderRepository.saveOrder(order);
+        }
+
+        public List<OrderDTO> getConstantOrder(String dayOfWeek){
+            //todo
+        }
+
+        public List<OrderDTO> getConstantOrder(String productID){
+            //todo
+        }
+
+        public void updateConstantOrder(OrderDTO orderDTO){
+            //todo
+        }
+
+
+        private List <Agreement> castAgreementDTOtoAgreement(List<AgreementDTO> agreementDTOS) throws Exception {
+            List<Agreement> agreements = new ArrayList<Agreement>();
+            for (AgreementDTO agreementDTO : agreementDTOS) {
+                BranchDTO branchDTO = branchesRepository.getBranch(agreementDTO.getBranchId());
+                SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
+                agreements.add(new Agreement(branchDTO, supplierDTO, agreementDTO );
+            }
+            return agreements;
         }
 
 
