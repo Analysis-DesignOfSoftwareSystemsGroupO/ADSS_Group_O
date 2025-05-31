@@ -469,6 +469,4 @@ public class InventoryMenu {
         InventoryMenu inventoryMenu = new InventoryMenu("branch-1");
         inventoryMenu.run();
     }
-
-
 }

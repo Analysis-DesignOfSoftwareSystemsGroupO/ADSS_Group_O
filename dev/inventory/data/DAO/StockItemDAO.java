@@ -198,7 +198,102 @@ public class StockItemDAO {
             e.printStackTrace();
         }
         return null;
-
     }
+
+    public int numInStorage(String productId) {
+        String sql = """
+        SELECT COALESCE(SUM(quantity), 0) AS total
+        FROM "Inventory"."Stock_Items"
+        WHERE product_id = ? AND location = 'storage'
+    """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int numInStore(String productId) {
+        String sql = """
+        SELECT COALESCE(SUM(quantity), 0) AS total
+        FROM "Inventory"."Stock_Items"
+        WHERE product_id = ? AND location != 'storage'
+    """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int numOfExpired(String productId) {
+        String sql = """
+        SELECT COALESCE(SUM(quantity), 0) AS total
+        FROM "Inventory"."Stock_Items"
+        WHERE product_id = ? AND status = 'EXPIRED'
+    """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int numOfDamaged(String productId) {
+        String sql = """
+        SELECT COALESCE(SUM(quantity), 0) AS total
+        FROM "Inventory"."Stock_Items"
+        WHERE product_id = ? AND status = 'DAMAGED'
+    """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public boolean hasAnyStockItem(String productId) {
+        String sql = """
+        SELECT 1
+        FROM "Inventory"."Stock_Items"
+        WHERE product_id = ?
+        LIMIT 1
+    """;
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productId);
+            ResultSet rs = statement.executeQuery();
+            return rs.next(); // returns true if there is at least one stock item for this product
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
 

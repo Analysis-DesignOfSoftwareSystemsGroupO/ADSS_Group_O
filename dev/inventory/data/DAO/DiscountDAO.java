@@ -376,4 +376,47 @@ public class DiscountDAO {
             e.printStackTrace();
         }
     }
+
+    public void cleanupInvalidDiscounts() {
+        try (Connection connection = DataBaseConnector.getConnection()) {
+            // Delete discounts with invalid PRODUCT target
+            String sqlProduct = """
+            DELETE FROM "Inventory"."Discounts"
+            WHERE discount_id IN (
+                SELECT d.discount_id
+                FROM "Inventory"."Discounts" d
+                JOIN "Inventory"."Discount_Store_Target" dst ON d.discount_id = dst.discount_id
+                WHERE dst.discount_target_type = 'PRODUCT'
+                  AND dst.discount_target_id NOT IN (
+                      SELECT product_id FROM "Inventory"."Products"
+                  )
+            )
+            """;
+            try (PreparedStatement ps = connection.prepareStatement(sqlProduct)) {
+                ps.executeUpdate();
+            }
+
+            // Delete discounts with invalid CATEGORY target
+            String sqlCategory = """
+            DELETE FROM "Inventory"."Discounts"
+            WHERE discount_id IN (
+                SELECT d.discount_id
+                FROM "Inventory"."Discounts" d
+                JOIN "Inventory"."Discount_Store_Target" dst ON d.discount_id = dst.discount_id
+                WHERE dst.discount_target_type = 'CATEGORY'
+                  AND dst.discount_target_id NOT IN (
+                      SELECT category_id FROM "Inventory"."Categories"
+                  )
+            )
+            """;
+            try (PreparedStatement ps = connection.prepareStatement(sqlCategory)) {
+                ps.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error cleaning up invalid discounts: " + e.getMessage());
+        }
+    }
+
 }

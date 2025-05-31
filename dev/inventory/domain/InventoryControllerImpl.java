@@ -46,7 +46,7 @@ public class InventoryControllerImpl implements InventoryController {
             System.out.println("Product already exists. Updating existing product.");
             return;
         } else {
-            Product productToAdd = new Product(name, minimumStock,sellingPrice, location, manufacturer, groupId);
+            Product productToAdd = new Product(name, minimumStock, sellingPrice, location, manufacturer, groupId);
             // Add to repository
             productRepository.saveProduct(productToAdd);
             // Save to DB - category
@@ -73,27 +73,28 @@ public class InventoryControllerImpl implements InventoryController {
         if (!stockItems.isEmpty()) {
             throw new IllegalArgumentException("Product has stock items. Cannot delete product.");
         }
-
-        productDAO.removeFromProductsByCategory(id);
-        //todo: check for discount before deleting
-        String groupId = productDAO.getProductById(id).getCategoryGroupId();
-        productDAO.deleteFromSellingPrices(id);
-        productRepository.deleteProduct(id);
-        productDAO.deleteProduct(id);
-        if (productDAO.getProductsByGroupId(groupId).isEmpty()) {
-            List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
-            categoryDAO.deleteCategoryGroup(groupId);
-            for (String categoryId : categories) {
-                if (categoryDAO.getCategoryGroupsByCategoryId(categoryId).size()==1) {
-                    categoryDAO.deleteCategoryFromCategories(categoryId);
-                }
-            }
-        }
-        else {
-            productDAO.deleteFromSellingPrices(id);
-            productRepository.deleteProduct(id);
-            productDAO.deleteProduct(id);
-        }
+        productDAO.deleteProduct2(id);
+        discountDAO.cleanupInvalidDiscounts();
+//        productDAO.removeFromProductsByCategory(id);
+//        //todo: check for discount before deleting
+//        String groupId = productDAO.getProductById(id).getCategoryGroupId();
+//        productDAO.deleteFromSellingPrices(id);
+//        productRepository.deleteProduct(id);
+//        productDAO.deleteProduct(id);
+//        if (productDAO.getProductsByGroupId(groupId).isEmpty()) {
+//            List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
+//            categoryDAO.deleteCategoryGroup(groupId);
+//            for (String categoryId : categories) {
+//                if (categoryDAO.getCategoryGroupsByCategoryId(categoryId).size()==1) {
+//                    categoryDAO.deleteCategoryFromCategories(categoryId);
+//                }
+//            }
+//        }
+//        else {
+//            productDAO.deleteFromSellingPrices(id);
+//            productRepository.deleteProduct(id);
+//            productDAO.deleteProduct(id);
+//        }
 
 
     }
@@ -134,7 +135,15 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void printAllCategories() {
-        InMemoryCategoryRepository.printAllCategories();
+        System.out.println("------- Category Report -------");
+        List<Category> categories = categoryDAO.getAllCategories();
+        for (Category category : categories) {
+            System.out.println("------------------------------" +
+                    "\nCategory: " + category.getName() +
+                    "\nID: " + category.getId() +
+                    "\n------------------------------\n");
+        }
+
     }
 
     public void UpdateDiscounts() {
@@ -260,7 +269,7 @@ public class InventoryControllerImpl implements InventoryController {
             return stockItemId;
         } else {
             // Create a new StockItem since no matching one exists
-            StockItem newStockItem = new StockItem(0, location, status , expiryDate);
+            StockItem newStockItem = new StockItem(0, location, status, expiryDate);
             newStockItem.setProduct(product);
             stockItemDAO.saveStockItem(newStockItem);
             return newStockItem.getStockItemId();
@@ -382,19 +391,21 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("------- Stock Report -------");
         List<Product> products = productDAO.getAllProducts();
         for (Product product : products) {
-            int inStorage = countProductInStorage(product.getId());
-            int productQuantity = countProductQuantity(product.getId());
-            int defectedProductQuantity = countDefectedProductQuantity(product.getId());
-            System.out.println("Product: " + product.getName()
-                    + "\nProduct ID: " + product.getId()
-                    + "\nProduct Manufacturer: " + product.getManufacturer()
-                    + "\nProduct Minimum Stock Level: " + product.getMinimumStockLevel()
-                    + "\nProduct Quantity: " + productQuantity
-                    + "\nAmount of product in Storage: " + inStorage
-                    + "\nAmount of Product in Store: " + (productQuantity + defectedProductQuantity - inStorage)
-                    + "\nDamaged/Expired Product Quantity: " + defectedProductQuantity
-                    + "\nLocation: " + product.getLocation() +
-                    "\n------------------------------\n");
+            if (stockItemDAO.hasAnyStockItem(product.getId())) {
+                int inStorage = stockItemDAO.numInStorage(product.getId());
+                int inStore = stockItemDAO.numInStore(product.getId());
+                int defectedProductQuantity = stockItemDAO.numOfDamaged(product.getId()) + stockItemDAO.numOfExpired(product.getId());
+                System.out.println("Product: " + product.getName()
+                        + "\nProduct ID: " + product.getId()
+                        + "\nProduct Manufacturer: " + product.getManufacturer()
+                        + "\nProduct Minimum Stock Level: " + product.getMinimumStockLevel()
+                        + "\nProduct Quantity: " + (inStore + inStore)
+                        + "\nAmount of product in Storage: " + inStorage
+                        + "\nAmount of Product in Store: " + inStore
+                        + "\nDamaged/Expired Product Quantity: " + defectedProductQuantity
+                        + "\nLocation: " + product.getLocation() +
+                        "\n------------------------------\n");
+            }
         }
     }
 

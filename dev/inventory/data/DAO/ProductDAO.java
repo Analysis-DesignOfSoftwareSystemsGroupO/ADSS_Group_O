@@ -90,111 +90,111 @@ public class ProductDAO implements ProductRepository {
     }
 
 
-    public void deleteProduct2(String id) {
-
+    public void deleteProduct2(String productId) {
         try (Connection connection = DataBaseConnector.getConnection()) {
             connection.setAutoCommit(false);
 
-
-            String clearProductFromProdByCategory = """
-                                    DELETE FROM "Inventory"."Products_by_Categories"
-                                    WHERE product_id = ?
-                    """;
-
-            String getGroupId = """
-                    SELECT p.group_id
-                    FROM "Inventory"."Products" p
-                    WHERE p.product_id = ?
-                    """;
-
-            String getProductByGroupId = """
-                    UPDATE "Inventory"."Selling_Prices"
-                    SET discount_id = NULL, discount_selling_price = NULL
-                    WHERE product_id NOT IN (
-                            SELECT DISTINCT 
-                                CASE 
-                                    WHEN dst.discount_target_type = 'product' THEN dst.discount_target_id
-                                    WHEN dst.discount_target_type = 'category' THEN pbc.product_id
-                                END
-                            FROM "Inventory"."Discount_Store_Target" dst
-                            LEFT JOIN "Inventory"."Products_by_Categories" pbc 
-                                ON dst.discount_target_type = 'category' AND pbc.category_id = dst.discount_target_id
-                            WHERE CURRENT_DATE BETWEEN dst.start_date AND dst.end_date
-                      )
-                      AND discount_selling_price IS NOT NULL
-                    """;
-
-            try (
-                    PreparedStatement clearExpiredStmt = connection.prepareStatement(clearProductFromProdByCategory);
-                    PreparedStatement getActiveDiscountsStmt = connection.prepareStatement(getGroupId);
-                    PreparedStatement clearNoActiveDiscountsStmt = connection.prepareStatement(getProductByGroupId);
-            ) {
-                clearExpiredStmt.executeUpdate();
-
-                try (ResultSet res = getActiveDiscountsStmt.executeQuery()) {
-                    while (res.next()) {
-                        String discountId = res.getString("discount_id");
-                        double discountPercentage = res.getDouble("discount_percentage");
-                        String targetType = res.getString("discount_target_type");
-                        String targetId = res.getString("discount_target_id");
-
-                        List<String> productIds = new ArrayList<>();
-
-                        if ("product".equalsIgnoreCase(targetType)) {
-                            productIds.add(targetId);
-                        } else if ("category".equalsIgnoreCase(targetType)) {
-                            String getProducts = """
-                                    
-                                        SELECT product_id 
-                                    FROM "Inventory"."Products_by_Categories" 
-                                    WHERE category_id = ?
-                                    
-                                    """;
-                            try (PreparedStatement ps2 = connection.prepareStatement(getProducts
-                            )) {
-                                ps2.setString(1, targetId);
-                                try (
-                                        ResultSet rs2 = ps2.executeQuery
-                                                ()) {
-                                    while (rs2.next()) {
-                                        productIds.add(rs2.getString(
-
-                                                "product_id"));
-                                    }
-                                }
-                            }
-                        }
-
-                        for (String productId : productIds) {
-                            String updatePriceSql = """
-                                    UPDATE "Inventory"."Selling_Prices"
-                                    SET discount_selling_price = selling_price * (1 - ? / 100),
-                                        discount_id = ?
-                                    WHERE product_id = ?
-                                    """;
-
-                            try (PreparedStatement ps3 = connection.prepareStatement(updatePriceSql)) {
-                                ps3.setDouble(1, discountPercentage);
-                                ps3.setString(2, discountId);
-                                ps3.setString(3, productId);
-                                ps3.executeUpdate();
-                            }
-                        }
+            // 1. Get the group_id for this product
+            String groupId = null;
+            List<String> categoryIds = new ArrayList<>();
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "SELECT group_id FROM \"Inventory\".\"Products\" WHERE product_id = ?")) {
+                ps.setString(1, productId);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) groupId = rs.getString("group_id");
+            }
+            if (groupId != null) {
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "SELECT parent_category_id, sub_category_id, sub_sub_category_id " +
+                                "FROM \"Inventory\".\"Category_Groups\" WHERE group_id = ?")) {
+                    ps.setString(1, groupId);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        if (rs.getString(1) != null) categoryIds.add(rs.getString(1));
+                        if (rs.getString(2) != null) categoryIds.add(rs.getString(2));
+                        if (rs.getString(3) != null) categoryIds.add(rs.getString(3));
                     }
                 }
-                clearNoActiveDiscountsStmt.executeUpdate();
-                connection.commit();
-
-                System.out.println("All discounts and selling prices updated successfully.");
-
-            } catch (Exception e) {
-                connection.rollback();
-                System.err.println("Error updating discounts and selling prices: " + e.getMessage());
-                e.printStackTrace();
             }
+
+            // 2. Delete product-related rows
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM \"Inventory\".\"Products_by_Categories\" WHERE product_id = ?")) {
+                ps.setString(1, productId);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM \"Inventory\".\"Selling_Prices\" WHERE product_id = ?")) {
+                ps.setString(1, productId);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM \"Inventory\".\"Stock_Items\" WHERE product_id = ?")) {
+                ps.setString(1, productId);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM \"Inventory\".\"Products\" WHERE product_id = ?")) {
+                ps.setString(1, productId);
+                ps.executeUpdate();
+            }
+
+            // 3. Delete the category group if no product uses it anymore
+            boolean groupUsed = false;
+            if (groupId != null) {
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "SELECT 1 FROM \"Inventory\".\"Products\" WHERE group_id = ? LIMIT 1")) {
+                    ps.setString(1, groupId);
+                    ResultSet rs = ps.executeQuery();
+                    groupUsed = rs.next(); // true if there is still a product using this group
+                }
+                if (!groupUsed) {
+                    try (PreparedStatement ps = connection.prepareStatement(
+                            "DELETE FROM \"Inventory\".\"Category_Groups\" WHERE group_id = ?")) {
+                        ps.setString(1, groupId);
+                        ps.executeUpdate();
+                    }
+                }
+            }
+
+            // 4. For each category in the group: Delete it ONLY if not referenced in Products_by_Categories AND Category_Groups
+            for (String catId : categoryIds) {
+                boolean referencedInProducts = false;
+                boolean referencedInGroups = false;
+
+                // Check Products_by_Categories
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "SELECT 1 FROM \"Inventory\".\"Products_by_Categories\" WHERE category_id = ? LIMIT 1")) {
+                    ps.setString(1, catId);
+                    ResultSet rs = ps.executeQuery();
+                    referencedInProducts = rs.next();
+                }
+
+                // Check Category_Groups
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "SELECT 1 FROM \"Inventory\".\"Category_Groups\" " +
+                                "WHERE parent_category_id = ? OR sub_category_id = ? OR sub_sub_category_id = ? LIMIT 1")) {
+                    ps.setString(1, catId);
+                    ps.setString(2, catId);
+                    ps.setString(3, catId);
+                    ResultSet rs = ps.executeQuery();
+                    referencedInGroups = rs.next();
+                }
+
+                // Only delete if not referenced anywhere
+                if (!referencedInProducts && !referencedInGroups) {
+                    try (PreparedStatement del = connection.prepareStatement(
+                            "DELETE FROM \"Inventory\".\"Categories\" WHERE category_id = ?")) {
+                        del.setString(1, catId);
+                        del.executeUpdate();
+                    }
+                }
+            }
+
+            connection.commit();
         } catch (Exception e) {
-            System.err.println("Database connection error: " + e.getMessage());
             e.printStackTrace();
+            System.err.println("Error deleting product: " + e.getMessage());
         }
     }
 
