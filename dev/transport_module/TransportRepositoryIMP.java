@@ -65,7 +65,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
     }
 
     @Override
-    public List<Transport> getTransportsByDate(LocalDate date) throws SQLException {
+    public List<Transport> getTransportsByDate(LocalDate date) throws SQLException, ATransportModuleException {
         List<TransportDTO> transportsDTO =  getTransportsDTOByDate(date);
         List<Transport> transports = new ArrayList<>();
         for(TransportDTO tDTO :transportsDTO){ // for each DTO , if finds it ,add to transports list and return
@@ -79,6 +79,17 @@ public class TransportRepositoryIMP implements ITransportRepository{
     public List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException{
         List<TransportDTO > transportDTOS = dao.getTransportsByDate(date);//get DTO of all transports that day
         return transportDTOS;
+    }
+
+    @Override
+    public void attachTrucktoTransport(int transportId, String pn) throws SQLException {
+        try {
+            dao.assignTruckToTransport(transportId, Integer.parseInt(pn));
+        }
+        catch (Exception e){
+            Transport t = getTransportByid(transportId);
+            t.setPlateNumber(null);
+        }
     }
 
     @Override

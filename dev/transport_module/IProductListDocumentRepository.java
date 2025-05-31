@@ -28,4 +28,6 @@ public interface IProductListDocumentRepository {
     void setArriavleTime(int pldID, LocalTime time) throws SQLException , ATransportModuleException;
 
     int getValidID();
+
+    List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException;
 }

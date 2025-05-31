@@ -17,5 +17,4 @@ public interface ITruckDAO {
     boolean checkAvailabilityOfTruck(String truckPN, LocalDate date)throws SQLException;
     void assignTruckToDate(String truckPN, LocalDate date)throws SQLException, UnAvailableTruckException;
     List<LocalDate> getListofOccupiedDates(String truckPn) throws SQLException;
-
 }

@@ -38,6 +38,11 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         availableid ++;
         return availableid;}
 
+    @Override
+    public List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException {
+        return getPLDByTransportID(-1);
+    }
+
     int initValidid()throws SQLException{
         availableid = dao.getHieghestPLDID() + 1;
         return availableid;

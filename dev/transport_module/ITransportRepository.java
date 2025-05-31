@@ -14,7 +14,7 @@ public interface ITransportRepository {
 
     Transport getTransportByid(int id) throws SQLException, ATransportModuleException;
 
-    List<Transport> getTransportsByDate(LocalDate date) throws SQLException;
+    List<Transport> getTransportsByDate(LocalDate date) throws SQLException, ATransportModuleException;
 
     void saveTransport(TransportDTO transport) throws ATransportModuleException, SQLException;
 
@@ -25,6 +25,8 @@ public interface ITransportRepository {
     TransportDTO transportToTransportDTO(Transport transport);
 
     List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException;
+
+    void attachTrucktoTransport(int transportId , String pn) throws  SQLException;
 
     int getAvailableid();
 

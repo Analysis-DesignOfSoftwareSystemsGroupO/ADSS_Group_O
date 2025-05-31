@@ -137,6 +137,10 @@ public class Transport {
         return destinations_document_map.get(site) != null;
 
     }
+
+    public Truck getTruck(){
+        return truck;
+    }
     //****************************************************************************************************************** Set functions
 
     /***
