@@ -492,6 +492,8 @@ public class InventoryMenu {
                 switch (choice) {
                     case "*": // finish order choice
                         try {
+                            System.out.println("Finished adding product to the order. ");
+                            supplierInventoryService.displayConstantOrder(constantOrderDTO);
                             supplierInventoryService.finishOrder(constantOrderDTO);
                         }
                         catch (Exception e) {
@@ -524,7 +526,7 @@ public class InventoryMenu {
                         try {
                             System.out.println("Enter quantity:");
                             int quantity = scanner.nextInt();
-                            supplierInventoryService.addProductToOrder(constantOrderDTO, choice, quantity);
+                            constantOrderDTO = supplierInventoryService.addProductToOrder(constantOrderDTO, choice, quantity);
                         }
                         catch (Exception e) {
                             System.out.println(e.getMessage());

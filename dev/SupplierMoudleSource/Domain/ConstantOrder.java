@@ -9,6 +9,7 @@ import SupplierMoudleSource.Repository.SupplierRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RecursiveTask;
 
 public class ConstantOrder {
     private Map<SuppliedItem, Integer> suppliedItems;
@@ -70,14 +71,18 @@ public class ConstantOrder {
             }
         }
 
-        for (SuppliedItem item : agreement.getSupplierItemsList()){
+        System.out.println("Trying to add item: " + itemId);
+        for (SuppliedItem item : agreement.getSupplierItemsList()) {
+            System.out.println("- Comparing to: " + item.getSuppliedItemID());
             if (item.getSuppliedItemID().equals(itemId)) {
+                System.out.println("Match found – adding to order");
                 suppliedItems.put(item, quantity);
-                this.totalPrice = this.getTotalPrice();
                 return;
             }
-            throw new Exception("Invalid item, " + itemId + " doesnt exist in the agreement, enter valid ID");
         }
+        System.out.println("Item not found in agreement – throw exception");
+
+        throw new Exception("Invalid item, " + itemId + " doesnt exist in the agreement, enter valid ID");
     }
 
     // returns total price of the order
@@ -106,7 +111,20 @@ public class ConstantOrder {
     }
 
     public void closeConstantOrder() {
-
         OrderRepository.getInstance().closeConstantOrder(this);
     }
+
+    @Override
+    public String toString() {
+        System.out.println("Total Price: " + this.totalPrice + "₪");
+        System.out.println("Items: ");
+        for (SuppliedItem item : suppliedItems.keySet()) {
+            System.out.println("Item id: " + item.getSuppliedItemID() + ", Name: " + item.getProduct().getProductName() +
+                    " price: " + item.getSuppliedItemPrice() + "₪");
+            System.out.println("\tquantity: " + this.suppliedItems.get(item));
+        }
+        System.out.println("*********************************************************");
+        return "";
+    }
+
 }

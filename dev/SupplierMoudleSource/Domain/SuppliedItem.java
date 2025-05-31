@@ -47,4 +47,17 @@ public class SuppliedItem {
     public String toString(){
         return product.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        SuppliedItem other = (SuppliedItem) obj;
+        return this.suppliedItemID.equals(other.suppliedItemID);
+    }
+
+    @Override
+    public int hashCode() {
+        return suppliedItemID.hashCode();
+    }
 }

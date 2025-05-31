@@ -266,6 +266,12 @@ public class OrderService {
     }
 
     public ConstantOrderDTO createRequirementToConstantOrder(String branchID, String supplierID, String day) throws Exception {
+        if (day == null || day.isEmpty()) {
+            throw new NullPointerException("Day is null");
+        }
+        if (!(day.equals("Sunday") || day.equals("Monday") || day.equals("Tuesday") || day.equals("Wednesday") || day.equals("Thursday") || day.equals("Friday") || day.equals("Saturday"))) {
+            throw new NullPointerException("Day should be Sunday or Monday or Tuesday or Wednesday or Thursday or Friday or Saturday");
+        }
         if (branchID == null || branchID.isEmpty()) {
             throw new NullPointerException("Branch ID is null");
         }
@@ -287,9 +293,10 @@ public class OrderService {
     }
 
     //adds a product to the constant order, use doesProductExistsInAgreementFunc in AgreementService
-    public void addProductToConstantOrder(ConstantOrderDTO constantOrderDTO, String productId, int quantity) throws Exception {
+    public ConstantOrderDTO addProductToConstantOrder(ConstantOrderDTO constantOrderDTO, String productId, int quantity) throws Exception {
        ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
         constantOrder.addItemToOrder(productId, quantity);
+        return constantOrder.getConstantOrderDTO();
     }
 
     public void closeConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {

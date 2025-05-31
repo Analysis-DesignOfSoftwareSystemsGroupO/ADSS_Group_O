@@ -17,12 +17,14 @@ public class SupplierInventoryService {
         LocalTime localTime = LocalTime.of(12, 0); // 12:00 PM
         time = Time.valueOf(localTime);
         this.orderService = orderService;
+        this.agreementService = new AgreementService();
     }
 
     public SupplierInventoryService() {
         LocalTime localTime = LocalTime.of(12, 0); // 12:00 PM
         time = Time.valueOf(localTime);
         this.orderService = new OrderService();
+        this.agreementService = new AgreementService();
     }
 
     public void createImmediateOrder(String branchId, String productName, String manufacturer, int quantity) throws Exception {
@@ -53,8 +55,9 @@ public class SupplierInventoryService {
         orderService.closeConstantOrder(constantOrderDTO);
     }
 
-    public void addProductToOrder(ConstantOrderDTO constantOrderDTO, String productID, int quantity) throws Exception {
-        orderService.addProductToConstantOrder(constantOrderDTO, productID, quantity);
+    public ConstantOrderDTO addProductToOrder(ConstantOrderDTO constantOrderDTO, String productID, int quantity) throws Exception {
+        constantOrderDTO = orderService.addProductToConstantOrder(constantOrderDTO, productID, quantity);
+        return constantOrderDTO;
     }
 
     public List<ConstantOrderDTO> getOrdersByNameAndManufacturer(String productName, String manufacturer) throws Exception {
@@ -63,6 +66,8 @@ public class SupplierInventoryService {
     public Time getTime () {
         return time;
     }
+
+
     public void displayConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
         orderService.displayConstantOrder(constantOrderDTO);
     }
