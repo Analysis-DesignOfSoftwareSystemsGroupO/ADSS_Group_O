@@ -3,6 +3,8 @@ package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
+
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import java.util.LinkedList;
@@ -16,7 +18,7 @@ public class RoleRepository {
         this.roleDAO = roleDAO;
     }
 
-    public void add(Role role) {
+    public void add(Role role) throws SQLException {
         roles.add(role);
         RoleDTO dto = toDTO(role);
         roleDAO.insert(dto);
@@ -71,7 +73,7 @@ public class RoleRepository {
                 )).collect(Collectors.toList());
     }
 
-    public List<Role> getAllRoles() {
+    public List<Role> getAllRoles() throws SQLException {
         List<RoleDTO> dtos = roleDAO.getAll();  // ← שליפה מה־DB
         return dtos.stream()
                 .map(dto -> new Role( dto.getDescription()))

@@ -15,9 +15,9 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
     }
 
     @Override
-    public void insert(EmployeeDTO dto) {
-        String sql = "INSERT INTO Employees (employeeId, fullName, password, bankAccount, salary, startDate, " +
-                "minDayShift, minEveningShift, sickDays, daysOff) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void insert(EmployeeDTO dto, int brunchID) {
+        String sql = "INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, " +
+                "minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, dto.getEmployeeId());
@@ -30,6 +30,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             stmt.setInt(8, dto.getMinEveningShift());
             stmt.setInt(9, dto.getSickDays());
             stmt.setInt(10, dto.getDaysOff());
+            stmt.setInt(11, brunchID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert employee", e);
@@ -38,32 +39,26 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void update(EmployeeDTO emp) throws SQLException {
-        String sql = "UPDATE employees SET empName = ?, empPassword = ?, empBankAccount = ?, empSalary = ?, empStartDate = ? WHERE empID = ?";
+        String sql = "UPDATE Employees SET empName = ?, empPassword = ?, empBankAccount = ?, empSalary = ?, empStartDate = ?, minDayShift = ?, minEveningShift = ?, sickDays = ?, daysOff = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, emp.getFullName());
             stmt.setString(2, emp.getPassword());
             stmt.setString(3, emp.getBankAccount());
             stmt.setInt(4, emp.getSalary());
             stmt.setDate(5, Date.valueOf(emp.getStartDate()));
-            stmt.setInt(6, emp.getEmployeeId());
-            stmt.executeUpdate();
-        }
-
-        String contractSql = "UPDATE contract SET daysOff = ?, sickDays = ?, minEveningShift = ?, minDayShift = ? WHERE empID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(contractSql)) {
-            stmt.setInt(1, emp.getDaysOff());
-            stmt.setInt(2, emp.getSickDays());
-            stmt.setInt(3, emp.getMinEveningShift());
-            stmt.setInt(4, emp.getMinDayShift());
-            stmt.setInt(5, emp.getEmployeeId());
+            stmt.setInt(6, emp.getMinDayShift());
+            stmt.setInt(7, emp.getMinEveningShift());
+            stmt.setInt(8, emp.getSickDays());
+            stmt.setInt(9, emp.getDaysOff());
+            stmt.setInt(10, emp.getEmployeeId());
             stmt.executeUpdate();
         }
     }
 
     @Override
     public void archive(int empId) throws SQLException {
-        String insertSQL = "INSERT INTO archived_employees SELECT * FROM employees WHERE id = ?";
-        String deleteSQL = "DELETE FROM employees WHERE id = ?";
+        String insertSQL = "INSERT INTO Archived_Employees (empID, archiveDate) SELECT empID, CURRENT_DATE FROM Employees WHERE empID = ?";
+        String deleteSQL = "DELETE FROM Employees WHERE empID = ?";
 
         try (
                 PreparedStatement insertStmt = conn.prepareStatement(insertSQL);
@@ -79,7 +74,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void updateBankAccount(int empId, String newBankAccount) throws SQLException {
-        String sql = "UPDATE employees SET bank_account = ? WHERE id = ?";
+        String sql = "UPDATE Employees SET empBankAccount = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newBankAccount);
             stmt.setInt(2, empId);
@@ -89,7 +84,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void updateSalary(int empId, int newSalary) throws SQLException {
-        String sql = "UPDATE employees SET salary = ? WHERE id = ?";
+        String sql = "UPDATE Employees SET empSalary = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, newSalary);
             stmt.setInt(2, empId);
@@ -99,7 +94,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void updateMinDayShift(int empId, int newMinDayShift) throws SQLException {
-        String sql = "UPDATE employees SET min_day_shift = ? WHERE id = ?";
+        String sql = "UPDATE Employees SET minDayShift = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, newMinDayShift);
             stmt.setInt(2, empId);
@@ -109,7 +104,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void updateMinEveningShift(int empId, int newMinEveningShift) throws SQLException {
-        String sql = "UPDATE employees SET min_evening_shift = ? WHERE id = ?";
+        String sql = "UPDATE Employees SET minEveningShift = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, newMinEveningShift);
             stmt.setInt(2, empId);
@@ -119,7 +114,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void updateSickDays(int empId, int newSickDays) throws SQLException {
-        String sql = "UPDATE employees SET sick_days = ? WHERE id = ?";
+        String sql = "UPDATE Employees SET sickDays = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, newSickDays);
             stmt.setInt(2, empId);
@@ -129,16 +124,17 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public void updateDaysOff(int empId, int daysOff) throws SQLException {
-        String sql = "UPDATE employees SET days_off = ? WHERE id = ?";
+        String sql = "UPDATE Employees SET daysOff = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, daysOff);
             stmt.setInt(2, empId);
             stmt.executeUpdate();
         }
     }
+
     @Override
     public void updatePassword(int empId, String newPassword) {
-        String sql = "UPDATE employees SET password = ? WHERE empId = ?";
+        String sql = "UPDATE Employees SET empPassword = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newPassword);
             stmt.setInt(2, empId);
@@ -150,18 +146,18 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public EmployeeDTO getById(int employeeId) {
-        String sql = "SELECT * FROM Employees WHERE employeeId = ?";
+        String sql = "SELECT * FROM Employees WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, employeeId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new EmployeeDTO(
-                        rs.getInt("employeeId"),
-                        rs.getString("fullName"),
-                        rs.getString("password"),
-                        rs.getString("bankAccount"),
-                        rs.getInt("salary"),
-                        rs.getDate("startDate").toLocalDate(),
+                        rs.getInt("empID"),
+                        rs.getString("empName"),
+                        rs.getString("empPassword"),
+                        rs.getString("empBankAccount"),
+                        rs.getInt("empSalary"),
+                        rs.getDate("empStartDate").toLocalDate(),
                         rs.getInt("minDayShift"),
                         rs.getInt("minEveningShift"),
                         rs.getInt("sickDays"),
@@ -182,12 +178,12 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result.add(new EmployeeDTO(
-                        rs.getInt("employeeId"),
-                        rs.getString("fullName"),
-                        rs.getString("password"),
-                        rs.getString("bankAccount"),
-                        rs.getInt("salary"),
-                        rs.getDate("startDate").toLocalDate(),
+                        rs.getInt("empID"),
+                        rs.getString("empName"),
+                        rs.getString("empPassword"),
+                        rs.getString("empBankAccount"),
+                        rs.getInt("empSalary"),
+                        rs.getDate("empStartDate").toLocalDate(),
                         rs.getInt("minDayShift"),
                         rs.getInt("minEveningShift"),
                         rs.getInt("sickDays"),
@@ -202,7 +198,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     public boolean exists(int employeeId) {
-        String sql = "SELECT 1 FROM Employees WHERE employeeId = ?";
+        String sql = "SELECT 1 FROM Employees WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, employeeId);
             ResultSet rs = stmt.executeQuery();
@@ -215,19 +211,19 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
     @Override
     public List<EmployeeDTO> getAllByBranch(int branchId) throws SQLException {
         List<EmployeeDTO> result = new ArrayList<>();
-        String sql = "SELECT * FROM Employees WHERE branch_id = ?";
+        String sql = "SELECT * FROM Employees WHERE branchID = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, branchId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result.add(new EmployeeDTO(
-                        rs.getInt("employeeId"),
-                        rs.getString("fullName"),
-                        rs.getString("password"),
-                        rs.getString("bankAccount"),
-                        rs.getInt("salary"),
-                        rs.getDate("startDate").toLocalDate(),
+                        rs.getInt("empID"),
+                        rs.getString("empName"),
+                        rs.getString("empPassword"),
+                        rs.getString("empBankAccount"),
+                        rs.getInt("empSalary"),
+                        rs.getDate("empStartDate").toLocalDate(),
                         rs.getInt("minDayShift"),
                         rs.getInt("minEveningShift"),
                         rs.getInt("sickDays"),
@@ -238,7 +234,4 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
         return result;
     }
-
-
-
 }

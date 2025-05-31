@@ -29,10 +29,32 @@ CREATE TABLE EmployeeRole (
     PRIMARY KEY (empID, roleNumber)
 );
 
+CREATE TABLE EmploymentContracts (
+    contractID INT PRIMARY KEY,
+    minDayShift INT,
+    minEveningShift INT,
+    sickDays INT,
+    daysOff INT,
+    ownerID INT REFERENCES Employees(empID)
+);
+
 CREATE TABLE Users (
-    userID INT PRIMARY KEY,
-    level VARCHAR(255),
-    empID INT REFERENCES Employees(empID)
+    userID INT PRIMARY KEY REFERENCES Employees(empID),
+    level VARCHAR(255)
+);
+
+CREATE TABLE EmployeeRole (
+    empID INT REFERENCES Employees(empID),
+    roleNumber INT REFERENCES Roles(roleNumber),
+    PRIMARY KEY (empID, roleNumber)
+);
+
+CREATE TABLE Constraints (
+    constraintID SERIAL PRIMARY KEY,
+    empID INT REFERENCES Employees(empID),
+    ShiftType VARCHAR(255),
+    WeekDay VARCHAR(255),
+    explanation TEXT
 );
 
 CREATE TABLE Shifts (
@@ -43,15 +65,6 @@ CREATE TABLE Shifts (
     type VARCHAR(255),
     status VARCHAR(255),
     shiftManager INT REFERENCES Employees(empID)
-);
-
-CREATE TABLE Constraints (
-    constraintID SERIAL PRIMARY KEY,
-    empID INT REFERENCES Employees(empID),
-    weekID INT,
-    ShiftType VARCHAR(255),
-    WeekDay VARCHAR(255),
-    explanation TEXT
 );
 
 CREATE TABLE RequiredRoles (

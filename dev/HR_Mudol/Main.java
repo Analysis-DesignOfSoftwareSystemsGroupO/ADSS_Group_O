@@ -12,6 +12,7 @@ import HR_Mudol.presentation.LoginScreen;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
-            List<BranchDTO> allBranches;
+            Collection<Branch> allBranches;
 
             System.out.println("=== Welcome to the Workforce System ===");
             System.out.println("1. Load data from database");
@@ -39,13 +40,13 @@ public class Main {
             WeekRepository weekRepo = new WeekRepository((ShiftDAOImpl) shiftDAO);
             UserRepository userRepo = new UserRepository(userDAO, empRepo);
 
-            BranchDAOImpl branchDAO = new BranchDAOImpl(employeeDAO, roleDAO);
+            BranchDAOImpl branchDAO = new BranchDAOImpl();
             BranchRepository branchRepo = new BranchRepository(branchDAO);
 
             DTOToDomainMapper mapper;
 
             if (choice.equals("1")) {
-                allBranches = branchRepo.getAll();
+                allBranches = branchRepo.getAllBranches();
                 if (allBranches.isEmpty()) {
                     System.out.println("⚠ No branches found in the database.");
                     return;

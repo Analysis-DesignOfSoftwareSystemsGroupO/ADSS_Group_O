@@ -9,7 +9,7 @@ public interface IEmployeeDAO {
 
     EmployeeDTO getById(int employeeId);
     boolean exists(int employeeId);
-    void insert(EmployeeDTO employee) throws SQLException;
+    void insert(EmployeeDTO dto, int brunchID) throws SQLException;
     void update(EmployeeDTO employee) throws SQLException;
     List<EmployeeDTO> getAll() throws SQLException;
     void archive(int empId) throws SQLException;

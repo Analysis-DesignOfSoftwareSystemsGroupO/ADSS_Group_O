@@ -1,6 +1,9 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.FilledRoleDTO;
+import HR_Mudol.DTO.RoleDTO;
 import HR_Mudol.DataBase.PostgresConnection;
 import HR_Mudol.domain.Status;
 
@@ -43,32 +46,28 @@ public class ShiftDAOImpl implements IShiftDAO {
 
     @Override
     public void delete(int shiftId) {
-        String deleteAssignedEmployees = "DELETE FROM AssignedEmployeesToShifts WHERE shiftId = ?";
-        String deleteRequiredRoles = "DELETE FROM RequiredRolesInShifts WHERE shiftId = ?";
+        String deleteAssignments = "DELETE FROM ShiftAssignments WHERE shiftId = ?";
+        String deleteRequired = "DELETE FROM RequiredRoles WHERE shiftId = ?";
         String deleteShift = "DELETE FROM Shifts WHERE shiftId = ?";
 
         try (
-                PreparedStatement stmt1 = conn.prepareStatement(deleteAssignedEmployees);
-                PreparedStatement stmt2 = conn.prepareStatement(deleteRequiredRoles);
+                PreparedStatement stmt1 = conn.prepareStatement(deleteAssignments);
+                PreparedStatement stmt2 = conn.prepareStatement(deleteRequired);
                 PreparedStatement stmt3 = conn.prepareStatement(deleteShift)
         ) {
-            // מחיקה מטבלת השיבוצים
             stmt1.setInt(1, shiftId);
             stmt1.executeUpdate();
 
-            // מחיקה מטבלת התפקידים הנדרשים
             stmt2.setInt(1, shiftId);
             stmt2.executeUpdate();
 
-            // מחיקת המשמרת עצמה
             stmt3.setInt(1, shiftId);
             stmt3.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fully delete shift with ID: " + shiftId, e);
+            throw new RuntimeException("Failed to delete shift with ID: " + shiftId, e);
         }
     }
-
 
     @Override
     public ShiftDTO get(int shiftID) throws SQLException {
@@ -82,7 +81,10 @@ public class ShiftDAOImpl implements IShiftDAO {
                         rs.getString("day"),
                         rs.getString("type"),
                         rs.getString("status"),
-                        rs.getInt("shiftManager")
+                        rs.getInt("shiftManager"),
+                        null, // employees
+                        null, // necessaryRoles
+                        null  // filledRoles
                 );
             }
         }
@@ -101,7 +103,10 @@ public class ShiftDAOImpl implements IShiftDAO {
                         rs.getString("day"),
                         rs.getString("type"),
                         rs.getString("status"),
-                        rs.getInt("shiftManager")
+                        rs.getInt("shiftManager"),
+                        null,
+                        null,
+                        null
                 ));
             }
         }
@@ -109,26 +114,25 @@ public class ShiftDAOImpl implements IShiftDAO {
     }
 
     @Override
-    public void insertEmpToShift(int brunchID, int empNum, int shiftID, int roleNumber) {
-        String sql = "INSERT INTO ShiftAssignments (brunchID, shiftID, empNum, roleNumber) VALUES (?, ?, ?, ?)";
+    public void insertEmpToShift(int branchID, int empID, int shiftID, int roleNumber) {
+        String sql = "INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, brunchID);
+            stmt.setInt(1, branchID);
             stmt.setInt(2, shiftID);
-            stmt.setInt(3, empNum);
+            stmt.setInt(3, empID);
             stmt.setInt(4, roleNumber);
-
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to insert employee to shift", e);
+            throw new RuntimeException("Failed to assign employee to shift", e);
         }
     }
 
     @Override
-    public void removeEmpFromShift(int shiftID, int empNum) {
-        String sql = "DELETE FROM ShiftAssignments WHERE shiftID = ? AND empNum = ?";
+    public void removeEmpFromShift(int shiftID, int empID) {
+        String sql = "DELETE FROM ShiftAssignments WHERE shiftID = ? AND empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shiftID);
-            stmt.setInt(2, empNum);
+            stmt.setInt(2, empID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to remove employee from shift", e);
@@ -137,15 +141,14 @@ public class ShiftDAOImpl implements IShiftDAO {
 
     @Override
     public void decrementOrRemove(int branchID, int shiftID, int roleNumber) {
-        String getSql = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
-        String updateSql = "UPDATE RequiredRoles SET counter = counter - 1 WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
-        String deleteSql = "DELETE FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
+        String select = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
+        String update = "UPDATE RequiredRoles SET counter = counter - 1 WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
+        String delete = "DELETE FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(getSql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(select)) {
             stmt.setInt(1, branchID);
             stmt.setInt(2, shiftID);
             stmt.setInt(3, roleNumber);
-
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -153,14 +156,14 @@ public class ShiftDAOImpl implements IShiftDAO {
                 rs.close();
 
                 if (count > 1) {
-                    try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                    try (PreparedStatement updateStmt = conn.prepareStatement(update)) {
                         updateStmt.setInt(1, branchID);
                         updateStmt.setInt(2, shiftID);
                         updateStmt.setInt(3, roleNumber);
                         updateStmt.executeUpdate();
                     }
                 } else {
-                    try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                    try (PreparedStatement deleteStmt = conn.prepareStatement(delete)) {
                         deleteStmt.setInt(1, branchID);
                         deleteStmt.setInt(2, shiftID);
                         deleteStmt.setInt(3, roleNumber);
@@ -169,25 +172,24 @@ public class ShiftDAOImpl implements IShiftDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to update RequiredRoles", e);
+            throw new RuntimeException("Failed to update/remove required role", e);
         }
     }
 
     @Override
     public void insertOrIncrementRequiredRole(int branchID, int shiftID, int roleNumber, int count) {
-        String selectSql = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
-        String updateSql = "UPDATE RequiredRoles SET counter = counter + ? WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
-        String insertSql = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES (?, ?, ?, ?)";
+        String select = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
+        String update = "UPDATE RequiredRoles SET counter = counter + ? WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
+        String insert = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
+        try (PreparedStatement selectStmt = conn.prepareStatement(select)) {
             selectStmt.setInt(1, branchID);
             selectStmt.setInt(2, shiftID);
             selectStmt.setInt(3, roleNumber);
-
             ResultSet rs = selectStmt.executeQuery();
+
             if (rs.next()) {
-                // already exists → increment
-                try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                try (PreparedStatement updateStmt = conn.prepareStatement(update)) {
                     updateStmt.setInt(1, count);
                     updateStmt.setInt(2, branchID);
                     updateStmt.setInt(3, shiftID);
@@ -195,8 +197,7 @@ public class ShiftDAOImpl implements IShiftDAO {
                     updateStmt.executeUpdate();
                 }
             } else {
-                // doesn't exist → insert
-                try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                try (PreparedStatement insertStmt = conn.prepareStatement(insert)) {
                     insertStmt.setInt(1, branchID);
                     insertStmt.setInt(2, shiftID);
                     insertStmt.setInt(3, roleNumber);
@@ -209,6 +210,7 @@ public class ShiftDAOImpl implements IShiftDAO {
         }
     }
 
+    @Override
     public void updateStatus(int shiftId, String newStatus) {
         String sql = "UPDATE Shifts SET status = ? WHERE shiftID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -222,37 +224,30 @@ public class ShiftDAOImpl implements IShiftDAO {
 
     @Override
     public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
-        String sql = "SELECT 1 FROM AssignedEmployeesToShifts WHERE empId = ? AND shiftId = ?";
-
+        String sql = "SELECT 1 FROM ShiftAssignments WHERE empID = ? AND shiftID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empId);
             stmt.setInt(2, shiftId);
-
             ResultSet rs = stmt.executeQuery();
-            return rs.next(); // מחזיר true אם נמצא תוצאה
+            return rs.next();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to check if employee is assigned to shift", e);
+            throw new RuntimeException("Failed to check assignment", e);
         }
     }
 
     @Override
     public Status getShiftStatus(int shiftId) {
         String sql = "SELECT status FROM Shifts WHERE shiftId = ?";
-
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shiftId);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
-                String statusStr = rs.getString("status");
-                return Status.valueOf(statusStr.toUpperCase());
+                return Status.valueOf(rs.getString("status").toUpperCase());
             } else {
-                throw new RuntimeException("No shift found with ID: " + shiftId);
+                throw new RuntimeException("Shift not found");
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch shift status", e);
+            throw new RuntimeException("Failed to get shift status", e);
         }
     }
-
 }

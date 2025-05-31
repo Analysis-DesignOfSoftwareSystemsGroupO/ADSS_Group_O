@@ -17,8 +17,7 @@ public class BranchDAOImpl implements IBranchDAO {
     @Override
     public List<BranchDTO> getAll() {
         List<BranchDTO> branches = new ArrayList<>();
-
-        String sql = "SELECT branchID, name, district FROM Branches"; // שם הטבלה לפי התמונה
+        String sql = "SELECT branchID, name, district FROM Branches";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -28,15 +27,15 @@ public class BranchDAOImpl implements IBranchDAO {
                         rs.getInt("branchID"),
                         rs.getString("name"),
                         rs.getString("district"),
-                        null,   // employees לא נטענים בשלב זה
-                        null,   // roles
-                        null    // weeks
+                        null, // employees
+                        null, // roles
+                        null  // weeks
                 );
                 branches.add(dto);
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to load branches from DB", e);
+            throw new RuntimeException("❌ Failed to fetch branches from database", e);
         }
 
         return branches;

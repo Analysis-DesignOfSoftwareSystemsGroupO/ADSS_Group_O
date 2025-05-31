@@ -4,6 +4,8 @@ import HR_Mudol.DTO.EmploymentContractDTO;
 import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
     private final Connection conn;
@@ -13,51 +15,24 @@ public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
     }
 
     @Override
-    public void insert(EmploymentContractDTO dto) {
-        String sql = "INSERT INTO EmploymentContracts (empId, minDayShift, minEveningShift, sickDays, daysOff) VALUES (?, ?, ?, ?, ?)";
+    public void insert(EmploymentContractDTO contract) throws SQLException {
+        String sql = "INSERT INTO EmploymentContracts (minDayShift, minEveningShift, sickDays, daysOff, ownerID) " +
+                "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, dto.getOwnerId());
-            stmt.setInt(2, dto.getMinDayShift());
-            stmt.setInt(3, dto.getMinEveningShift());
-            stmt.setInt(4, dto.getSickDays());
-            stmt.setInt(5, dto.getDaysOff());
+            stmt.setInt(1, contract.getMinDayShift());
+            stmt.setInt(2, contract.getMinEveningShift());
+            stmt.setInt(3, contract.getSickDays());
+            stmt.setInt(4, contract.getDaysOff());
+            stmt.setInt(5, contract.getOwnerId());
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to insert EmploymentContract", e);
         }
     }
 
     @Override
-    public void update(EmploymentContractDTO dto) {
-        String sql = "UPDATE EmploymentContracts SET minDayShift = ?, minEveningShift = ?, sickDays = ?, daysOff = ? WHERE empId = ?";
+    public EmploymentContractDTO findByEmpId(int ownerId) throws SQLException {
+        String sql = "SELECT * FROM EmploymentContracts WHERE ownerID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, dto.getMinDayShift());
-            stmt.setInt(2, dto.getMinEveningShift());
-            stmt.setInt(3, dto.getSickDays());
-            stmt.setInt(4, dto.getDaysOff());
-            stmt.setInt(5, dto.getOwnerId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to update EmploymentContract", e);
-        }
-    }
-
-    @Override
-    public void delete(int empId) {
-        String sql = "DELETE FROM EmploymentContracts WHERE empId = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to delete EmploymentContract", e);
-        }
-    }
-
-    @Override
-    public EmploymentContractDTO findByEmpId(int empId) {
-        String sql = "SELECT * FROM EmploymentContracts WHERE empId = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
+            stmt.setInt(1, ownerId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new EmploymentContractDTO(
@@ -65,12 +40,51 @@ public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
                         rs.getInt("minEveningShift"),
                         rs.getInt("sickDays"),
                         rs.getInt("daysOff"),
-                        rs.getInt("empId")
+                        rs.getInt("ownerID")
                 );
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to find EmploymentContract", e);
         }
         return null;
+    }
+
+    @Override
+    public void update(EmploymentContractDTO contract) throws SQLException {
+        String sql = "UPDATE EmploymentContracts SET minDayShift = ?, minEveningShift = ?, sickDays = ?, daysOff = ? WHERE ownerID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, contract.getMinDayShift());
+            stmt.setInt(2, contract.getMinEveningShift());
+            stmt.setInt(3, contract.getSickDays());
+            stmt.setInt(4, contract.getDaysOff());
+            stmt.setInt(5, contract.getOwnerId());
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void delete(int ownerId) throws SQLException {
+        String sql = "DELETE FROM EmploymentContracts WHERE ownerID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, ownerId);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<EmploymentContractDTO> getAll() throws SQLException {
+        List<EmploymentContractDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM EmploymentContracts";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new EmploymentContractDTO(
+                        rs.getInt("minDayShift"),
+                        rs.getInt("minEveningShift"),
+                        rs.getInt("sickDays"),
+                        rs.getInt("daysOff"),
+                        rs.getInt("ownerID")
+                ));
+            }
+        }
+        return list;
     }
 }
