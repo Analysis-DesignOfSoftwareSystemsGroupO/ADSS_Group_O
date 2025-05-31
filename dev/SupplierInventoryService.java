@@ -16,6 +16,14 @@ public class SupplierInventoryService {
         orderService.createImmediateOrder(branchId, productName, manufacturer, quantity);
     }
 
+    public void createConstantOrder(String branchId) {
+        orderService.createConstantOrder(branchId);
+    }
+
+    public void updateConstantOrder(String branchId) throws Exception {
+        //TODO: implementthe logic to update constant order
+    }
+
     public Time getTime(){
         return time;
     }
