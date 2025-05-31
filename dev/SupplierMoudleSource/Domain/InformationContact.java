@@ -1,7 +1,7 @@
 
 package SupplierMoudleSource.Domain;
 
-import DTO.InformationContactDTO;
+import SupplierMoudleSource.DTO.InformationContactDTO;
 
 public class InformationContact {
     private String contactName;

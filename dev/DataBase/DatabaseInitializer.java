@@ -5,21 +5,21 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import static DataBase.Config.Password;
 
 public class DatabaseInitializer {
 
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "020100";
+    private static final String PASSWORD = Password;
 
     private static final String SCHEMA_SQL_FILE = "projectData.sql";// path to your .sql file
-
-    public static void main(String[] args) {
+    private static final String DROP_DATA_SQL_FILE = "dropTables.sql";
+    public static void createSupplierTables() {
         try {
             // Read the entire SQL file as a string
             String sql = new String(Files.readAllBytes(Paths.get(SCHEMA_SQL_FILE)));
 
-            // ✅ Load PostgreSQL driver (required in non-Maven setups)
             Class.forName("org.postgresql.Driver");
 
             // Connect to PostgreSQL
@@ -33,7 +33,6 @@ public class DatabaseInitializer {
                         try {
                             stmt.execute(command + ";");
                         } catch (Exception e) {
-                            System.err.println("Skipping command:\n" + command + "\nCause: " + e.getMessage());
                         }
                     }
                 }
@@ -44,6 +43,23 @@ public class DatabaseInitializer {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("❌ Failed to initialize database.");
+        }
+    }
+    public static void dropAllTables() {
+        try {
+            String sql = new String(Files.readAllBytes(Paths.get(DROP_DATA_SQL_FILE)));
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("✅ All tables dropped successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("❌ Failed to drop tables.");
+        }
+    }catch (Exception e){
+            e.printStackTrace();
+            System.err.println("❌ Failed to drop tables.");
         }
     }
 

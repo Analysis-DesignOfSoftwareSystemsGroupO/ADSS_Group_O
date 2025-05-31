@@ -1,6 +1,6 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.*;
+import SupplierMoudleSource.DTO.*;
 import SupplierMoudleSource.Repository.AgreementRepository;
 import SupplierMoudleSource.Repository.BranchesRepository;
 import SupplierMoudleSource.Repository.OrderRepository;

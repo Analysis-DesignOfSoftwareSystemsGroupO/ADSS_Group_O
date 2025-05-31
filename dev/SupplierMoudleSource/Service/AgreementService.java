@@ -1,8 +1,8 @@
 package SupplierMoudleSource.Service;
 
-import DTO.AgreementDTO;
-import DTO.BranchDTO;
-import DTO.SupplierDTO;
+import SupplierMoudleSource.DTO.AgreementDTO;
+import SupplierMoudleSource.DTO.BranchDTO;
+import SupplierMoudleSource.DTO.SupplierDTO;
 import SupplierMoudleSource.Repository.AgreementRepository;
 import SupplierMoudleSource.Repository.BranchesRepository;
 import SupplierMoudleSource.Repository.ProductRepository;

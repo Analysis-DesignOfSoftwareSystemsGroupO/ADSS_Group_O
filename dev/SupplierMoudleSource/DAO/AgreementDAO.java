@@ -1,9 +1,6 @@
 package SupplierMoudleSource.DAO;
 
-import DTO.*;
-import SupplierMoudleSource.Domain.Agreement;
-import SupplierMoudleSource.Domain.Discount;
-import SupplierMoudleSource.Domain.SuppliedItem;
+import SupplierMoudleSource.DTO.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,7 +1,7 @@
 package SupplierMoudleSource.Domain;
 
-import DTO.DiscountDTO;
-import DTO.SuppliedItemDTO;
+import SupplierMoudleSource.DTO.DiscountDTO;
+import SupplierMoudleSource.DTO.SuppliedItemDTO;
 
 import java.util.Objects;
 

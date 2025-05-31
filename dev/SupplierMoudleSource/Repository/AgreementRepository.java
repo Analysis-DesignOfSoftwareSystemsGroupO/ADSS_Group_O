@@ -1,9 +1,9 @@
 package SupplierMoudleSource.Repository;
 
-import DTO.AgreementDTO;
-import DTO.DiscountDTO;
-import DTO.SuppliedItemDTO;
-import DTO.SupplierDTO;
+import SupplierMoudleSource.DTO.AgreementDTO;
+import SupplierMoudleSource.DTO.DiscountDTO;
+import SupplierMoudleSource.DTO.SuppliedItemDTO;
+import SupplierMoudleSource.DTO.SupplierDTO;
 import SupplierMoudleSource.DAO.AgreementDAO;
 
 import java.sql.SQLException;

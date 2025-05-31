@@ -1,8 +1,8 @@
 package SupplierMoudleSource.Repository;
 
-import DTO.ConstantOrderDTO;
-import DTO.OrderDTO;
-import DTO.requirementToConstantOrderDTO;
+import SupplierMoudleSource.DTO.ConstantOrderDTO;
+import SupplierMoudleSource.DTO.OrderDTO;
+import SupplierMoudleSource.DTO.requirementToConstantOrderDTO;
 import SupplierMoudleSource.DAO.OrderDAO;
 import SupplierMoudleSource.Domain.ConstantOrder;
 import SupplierMoudleSource.Domain.Order;

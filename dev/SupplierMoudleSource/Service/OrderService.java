@@ -1,6 +1,6 @@
 package SupplierMoudleSource.Service;
 
-import DTO.*;
+import SupplierMoudleSource.DTO.*;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
 import SupplierMoudleSource.Domain.ConstantOrder;
@@ -8,12 +8,10 @@ import SupplierMoudleSource.Domain.Order;
 import SupplierMoudleSource.Repository.*;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -276,5 +274,10 @@ public class OrderService {
     public void closeConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
         ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
         constantOrder.closeConstantOrder();
+    }
+
+    public void displayConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
+        ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
+        System.out.println(constantOrder);
     }
 }
