@@ -1,9 +1,6 @@
 package SupplierMoudleSource.DAO;
 
-import DTO.OrderDTO;
-import DTO.ProductDTO;
-import DTO.SuppliedItemDTO;
-import DTO.requirementToConstantOrderDTO;
+import DTO.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -204,7 +201,40 @@ public class OrderDAO {
         return ordersBySupplierDTOList;
     }
 
+    public void saveConstantOrder(ConstantOrderDTO constantOrderDTO) {
+        if (constantOrderDTO == null) {
+            throw new NullPointerException("Constant Order is null");
+        }
+        String sql = "INSERT INTO supplierinventorydb.constantorders (branchid , supplierid, supplieditemid, quantity, dayofweek) VALUES (?, ?, ?, ?, ?)";
 
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            String branchId = constantOrderDTO.getBranchID();
+            String supplierId = constantOrderDTO.getSupplierID();
+            String dayOfWeek = constantOrderDTO.getDayOfWeek();
+
+            for (Map.Entry<SuppliedItemDTO, Integer> entry : constantOrderDTO.getSuppliedItems().entrySet()) {
+                SuppliedItemDTO item = entry.getKey();
+                Integer quantity = entry.getValue();
+
+                if (item == null || item.product == null || item.product.productID == null || quantity == null) {
+                    throw new IllegalArgumentException("Invalid item or quantity in constant order");
+                }
+                ps.setInt(1, Integer.parseInt(branchId));
+                ps.setInt(2, Integer.parseInt(supplierId));
+                ps.setInt(3, Integer.parseInt(item.product.productID));  // supplieditemid = product id
+                ps.setInt(4, quantity);
+                ps.setString(5, dayOfWeek);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to save constant order: " + e.getMessage(), e);
+        }
+    }
 
     public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTO(String dayOfWeek) throws SQLException {
         String sql = "SELECT * FROM supplierinventorydb.constantorders WHERE dayofweek = ? ORDER BY supplierid, branchid";

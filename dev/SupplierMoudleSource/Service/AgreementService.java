@@ -88,11 +88,12 @@ public class AgreementService {
 
     //views an agreement given branch id and supplier id (ued for creating a new order)
     public void viewAgreement(String branchId, String supplierID) throws Exception {
-        AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
-        if (agreementDTO != null){
+        if (agreementRepository.getAgreement(branchId, supplierID) != null){
+            AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
             BranchDTO branchDTO = branchRepository.getBranch(agreementDTO.getBranchId());
             SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
-            System.out.println(new Agreement(branchDTO, supplierDTO, agreementDTO).toString());
+            Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
+            System.out.println(agreement);
         }
     }
     //removes a product from an existing agreement
@@ -102,6 +103,7 @@ public class AgreementService {
             throw new Exception("Agreement does not have this product");
         }
         agreement.removeProduct(productID);
+        agreementRepository.removeProductFromAgreement(productID, branchId, supplierID);
     }
 
     //edits a product discount from an existing agreement
@@ -126,16 +128,14 @@ public class AgreementService {
         if (supplierDTO == null){
             throw new Exception("supplier does not exist");
         }
-
-        if (!branchRepository.existsBranch(branchId)){
-            throw new Exception("branch does not exist");
+        BranchDTO branchDTO = branchRepository.getBranch(branchId);
+        if (branchDTO ==null){
+            throw new Exception("branch does not exist!");
         }
         AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
         if (agreementDTO == null) {
             throw new Exception("agreement does not exist");
         }
-
-        BranchDTO branchDTO = branchRepository.getBranch(branchId);
         return new Agreement(branchDTO, supplierDTO, agreementDTO);
     }
 

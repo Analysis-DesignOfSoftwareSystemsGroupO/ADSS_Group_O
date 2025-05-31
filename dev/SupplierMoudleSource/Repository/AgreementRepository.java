@@ -3,6 +3,7 @@ package SupplierMoudleSource.Repository;
 import DTO.AgreementDTO;
 import DTO.DiscountDTO;
 import DTO.SuppliedItemDTO;
+import DTO.SupplierDTO;
 import SupplierMoudleSource.DAO.AgreementDAO;
 
 import java.sql.SQLException;
@@ -38,6 +39,10 @@ public class AgreementRepository {
         } catch (Exception e) {
             throw new Exception("Agreement does not exist");
         }
+    }
+
+    public void removeProductFromAgreement(String productID, String branchId, String supplierID) throws Exception {
+        agreementDAO.removeProductFromAgreement(branchId, supplierID, productID);
     }
 
     public void addAgreement(AgreementDTO agreement) throws Exception {
@@ -117,6 +122,19 @@ public class AgreementRepository {
             return this.supplierID.equals(supplierID) && this.branchID.equals(branchID);
         }
     }
+
+    public List<AgreementDTO> getAllAgreementForConstantOrder(String branchID, List<SupplierDTO> suppliersDTOList) throws SQLException {
+        List<AgreementDTO> agreements;
+        try{
+            agreements = agreementDAO.getAllAgreementForConstantOrder(branchID, suppliersDTOList);
+        }
+        catch (Exception e){
+            throw new SQLException("Agreements With Constant Delivery Suppliers does not exist");
+        }
+
+        return agreements;
+    }
+
 
     public void removeAgreementOfSupplierLocally(String supplierID) throws Exception {
 

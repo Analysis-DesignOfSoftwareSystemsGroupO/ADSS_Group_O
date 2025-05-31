@@ -1,8 +1,10 @@
 package SupplierMoudleSource.Repository;
 
+import DTO.ConstantOrderDTO;
 import DTO.OrderDTO;
 import DTO.requirementToConstantOrderDTO;
 import SupplierMoudleSource.DAO.OrderDAO;
+import SupplierMoudleSource.Domain.ConstantOrder;
 import SupplierMoudleSource.Domain.Order;
 
 import java.sql.SQLException;
@@ -14,7 +16,6 @@ import java.util.Map;
 public class OrderRepository {
     private Map<String, List<Order>> orders;
     private OrderDAO orderDAO;
-
 
     //singleton database
     private static OrderRepository orderRepository = null;
@@ -83,7 +84,17 @@ public class OrderRepository {
                 }
             }
         }
+
         return unclosedOrders;
+    }
+
+
+    public void closeConstantOrder(ConstantOrder constantOrder) {
+        if (constantOrder == null){
+            throw new NullPointerException("Constant Order is null");
+        }
+        ConstantOrderDTO constantOrderDTO = constantOrder.getConstantOrderDTO();
+        orderDAO.saveConstantOrder(constantOrderDTO);
     }
 
 

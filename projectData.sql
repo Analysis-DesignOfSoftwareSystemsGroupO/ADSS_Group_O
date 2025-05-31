@@ -102,7 +102,7 @@ ALTER SEQUENCE supplierinventorydb.order_id_seq OWNED BY supplierinventorydb."or
 CREATE TABLE supplierinventorydb.productOfSupplier (
                                                        productID integer,
                                                        supplierID integer,
-                                                       price integer check ( price > 0 ),
+                                                       price integer,
                                                        PRIMARY KEY (productID, supplierID),
                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                        FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
@@ -117,7 +117,7 @@ CREATE TABLE supplierinventorydb.productsinorder (
 );
 
 CREATE TABLE supplierinventorydb.productInAgreement (
-                                                        price integer check ( price > 0 ),
+                                                        price integer,
                                                         productID integer,
                                                         branchID integer,
                                                         supplierID integer,

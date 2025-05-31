@@ -3,8 +3,9 @@ package SupplierMoudleSource.Service;
 import DTO.*;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
-import SupplierMoudleSource.Repository.*;
+import SupplierMoudleSource.Domain.ConstantOrder;
 import SupplierMoudleSource.Domain.Order;
+import SupplierMoudleSource.Repository.*;
 
 import java.sql.SQLException;
 import java.sql.Time;
@@ -12,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -129,22 +131,6 @@ public class OrderService {
         }
     }
 
-        //getters of branch id and supplier id given an order id
-        public String getBranchId (String supplierID, String orderId) throws SQLException {
-            if (supplierID == null || supplierID.isEmpty() || orderId == null || orderId.isEmpty()) {
-                throw new NullPointerException("Supplier ID and Order ID is null");
-            }
-            List<OrderDTO> ordersDTO = orderRepository.getOrdersBySupplier(supplierID);
-            for (OrderDTO orderDTO : ordersDTO) {
-                if (orderDTO.getOrderID().equals(orderId)) {
-                    return orderDTO.getBranchID();
-                }
-            }
-            return null;
-        }
-
-
-
         public void createImmediateOrder(String branchID, String productName, String manufacturer, int quantity) throws Exception {
             String productID = productRepository.getProduct(productName, manufacturer).getProductID();
             List<Agreement> agreement = castAgreementDTOStoAgreement(agreementRepository.getAllAgreement()); //get all agreements
@@ -225,4 +211,70 @@ public class OrderService {
         }
     }
 
+
+    //getters of branch id and supplier id given an order id
+    public String getBranchId(String supplierID, String orderId) throws SQLException {
+        if (supplierID == null || supplierID.isEmpty() || orderId == null || orderId.isEmpty()) {
+            throw new NullPointerException("Supplier ID and Order ID is null");
+        }
+        List<OrderDTO> ordersDTO = orderRepository.getOrdersBySupplier(supplierID);
+        for (OrderDTO orderDTO : ordersDTO) {
+            if (orderDTO.getOrderID().equals(orderId)) {
+                return orderDTO.getBranchID();
+            }
+        }
+        return null;
+    }
+
+    public void getsPossibleConstantOrdersForBranch(String branchID) throws Exception {
+        if (branchID == null || branchID.isEmpty()) {
+            throw new NullPointerException("Branch ID is null");
+        }
+        List<SupplierDTO> supplierDTOS = supplierRepository.getAllConstantDeliverySuppliers();
+        List<AgreementDTO> agreementDTOS = agreementRepository.getAllAgreementForConstantOrder(branchID, supplierDTOS);
+        for (AgreementDTO agreementDTO : agreementDTOS) {
+            BranchDTO branchDTO = branchesRepository.getBranch(agreementDTO.getBranchId());
+            SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
+            if (branchDTO == null){
+                throw new Exception("Branch does not exist");
+            }
+            if (supplierDTO == null){
+                throw new Exception("Supplier does not exist");
+            }
+            Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
+            System.out.println(agreement);
+        }
+    }
+
+    public ConstantOrderDTO createRequirementToConstantOrder(String branchID, String supplierID, String day) throws Exception {
+        if (branchID == null || branchID.isEmpty()) {
+            throw new NullPointerException("Branch ID is null");
+        }
+        if (supplierID == null || supplierID.isEmpty()) {
+            throw new NullPointerException("Supplier ID is null");
+        }
+        AgreementDTO agreementDTO = agreementRepository.getAgreement(branchID, supplierID);
+        if (agreementDTO == null) {
+            throw new NullPointerException("Agreement Is Not Found");
+        }
+        else if (agreementDTO.getSupplierItemsList().isEmpty()){
+            throw new NullPointerException("Agreement has no items");
+        }
+        SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
+        BranchDTO branchDTO = branchesRepository.getBranch(agreementDTO.getBranchId());
+        Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);
+        ConstantOrder newConstantOrder = new ConstantOrder(agreement, day);
+        return newConstantOrder.getConstantOrderDTO();
+    }
+
+    //adds a product to the constant order, use doesProductExistsInAgreementFunc in AgreementService
+    public void addProductToConstantOrder(ConstantOrderDTO constantOrderDTO, String productId, int quantity) throws Exception {
+       ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
+        constantOrder.addItemToOrder(productId, quantity);
+    }
+
+    public void closeConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
+        ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
+        constantOrder.closeConstantOrder();
+    }
 }

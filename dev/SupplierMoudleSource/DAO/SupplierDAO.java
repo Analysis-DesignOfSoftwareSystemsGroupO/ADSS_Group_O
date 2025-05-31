@@ -208,7 +208,7 @@ public class SupplierDAO {
         return suppliers;
     }
 
-    public   List<InformationContactDTO> getInformationContacts(String supplierID) throws SQLException {
+    public List<InformationContactDTO> getInformationContacts(String supplierID) throws SQLException {
         List<InformationContactDTO> informationContacts = new ArrayList<>();
         String contactSql = "SELECT * FROM supplierinventorydb.informationcontact WHERE supplierid = ?";
         try (Connection con = getConnection();
@@ -303,5 +303,25 @@ public class SupplierDAO {
             pstmt.executeUpdate();
         }
     }
+
+
+    public List<SupplierDTO> getAllConstantDeliverySuppliers() throws SQLException {
+        List<SupplierDTO> supplierDTOList = new ArrayList<>();
+        String sql = "SELECT id FROM supplierinventorydb.supplier where deliverymethod=?";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, "Constant Delivery");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String supplierId = Integer.toString(rs.getInt("id"));
+                    SupplierDTO supplierDTO = getSupplier(supplierId);
+                    supplierDTOList.add(supplierDTO);
+                }
+            }
+        }
+        return supplierDTOList;
+    }
+
 
 }
