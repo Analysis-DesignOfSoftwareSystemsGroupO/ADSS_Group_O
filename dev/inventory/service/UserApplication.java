@@ -142,6 +142,14 @@ public class UserApplication {
                 discountStartDate, discountEndDate, discountType);
     }
 
+    public void CheckAndCreateImmediateOrder(){
+        //inventoryController.CheckAndCreateImmediateOrder();
+    }
+
+    public void createConstantOrder(String productId, int quantity, String location) {
+        //inventoryController.createConstantOrder(productId, quantity, location);
+    }
+
     public void listDiscounts() {
         inventoryController.listDiscounts();
     }
