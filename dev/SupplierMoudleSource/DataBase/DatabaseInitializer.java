@@ -47,7 +47,7 @@ public class DatabaseInitializer {
             System.err.println("❌ Failed to initialize database.");
         }
     }
-    public static void dropAllTables() {
+    public static void dropAllSupplierTable() {
         try {
             String sql = new String(Files.readAllBytes(Paths.get(DROP_DATA_SQL_FILE)));
 

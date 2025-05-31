@@ -3,7 +3,6 @@ package inventory.presentation;
 //import inventory.domain.Product;
 import MainService.SupplierInventoryService;
 import SupplierMoudleSource.DTO.ConstantOrderDTO;
-import SupplierMoudleSource.Service.SupplierService;
 import inventory.data.connection.DatabaseInitializer;
 import inventory.domain.DiscountTargetType;
 import inventory.domain.DiscountType;
@@ -14,7 +13,7 @@ import inventory.service.UserApplication;
 import java.time.LocalDate;
 import java.util.*;
 
-import static inventory.data.connection.DatabaseInitializer.dropAllTables;
+import static inventory.data.connection.DatabaseInitializer.dropAllInventoryTables;
 
 public class InventoryMenu {
 
@@ -190,7 +189,7 @@ public class InventoryMenu {
                     break;
                 case 4:
                     // Reports
-                    dropAllTables();
+                    dropAllInventoryTables();
                 case 5:
                     // Add Stock
                     System.out.println("\nStarting new Stock creation...\n");

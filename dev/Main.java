@@ -1,12 +1,20 @@
+import SupplierMoudleSource.DataBase.LoadData.LoadData;
 import SupplierMoudleSource.Presentation.PresentMainMenu;
 import inventory.presentation.InventoryMenu;
+import inventory.service.UserApplication;
 
 import java.util.Scanner;
+
+import static SupplierMoudleSource.DataBase.DatabaseInitializer.createSupplierTables;
+import static SupplierMoudleSource.DataBase.DatabaseInitializer.dropAllSupplierTable;
+import static inventory.data.connection.DatabaseInitializer.createAllTablesIfNotExists;
+import static inventory.data.connection.DatabaseInitializer.dropAllInventoryTables;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         PresentMainMenu supplierMenu = new PresentMainMenu();
         InventoryMenu inventoryMenu = new InventoryMenu();
+        loadData();
         int choice = readIntInput("Welcome to the Application!\n" +
                 "1. Supplier Module\n" +
                 "2. Inventory Module\n" +
@@ -28,6 +36,52 @@ public class Main {
                 return;
             default:
                 System.out.println("Invalid choice! Please try again.");
+        }
+    }
+
+    private static void loadData() throws Exception {
+        while (true) {
+            Scanner input = new Scanner(System.in);
+            boolean outer = true;
+            while (outer) { //load data
+                System.out.println("Welcome to Supplier Module !");
+                System.out.println("1.Load Data");
+                System.out.println("2.Empty Data");
+                System.out.println("3.Existing Data");
+                System.out.println("4.Exit");
+                System.out.println("Enter your choice");
+                int choice = input.nextInt();
+                input.nextLine();
+                switch (choice) {
+                    case 1:
+                        dropAllSupplierTable();
+                        createSupplierTables();
+                        dropAllInventoryTables();
+                        createAllTablesIfNotExists();
+                        UserApplication service = new UserApplication();
+                        service.uploadTestData();
+                        LoadData loadData = new LoadData();
+                        loadData.LoadData();
+                        outer = false;
+                        break;
+                    case 2:
+                        dropAllSupplierTable();
+                        createSupplierTables();
+                        dropAllInventoryTables();
+                        createAllTablesIfNotExists();
+                        outer = false;
+                        break;
+                    case 3:
+                        outer = false;
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        System.out.println("Invalid choice !");
+                        break;
+
+                }
+            }
         }
     }
 

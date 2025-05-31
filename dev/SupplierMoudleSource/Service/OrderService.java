@@ -294,7 +294,7 @@ public class OrderService {
 
     public void closeConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
         ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
-        constantOrder.closeConstantOrder();
+        orderRepository.closeConstantOrder(constantOrder);
     }
 
     public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception {
