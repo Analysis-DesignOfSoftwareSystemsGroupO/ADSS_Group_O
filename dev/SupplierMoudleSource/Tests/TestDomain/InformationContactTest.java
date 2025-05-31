@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.InformationContactDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import SupplierMoudleSource.Domain.InformationContact;
@@ -47,5 +48,11 @@ class InformationContactTest {
         informationContact.setTitle("Teacher");
         assertEquals("Teacher", informationContact.getTitle());
         assertThrows(NullPointerException.class, () -> informationContact.setTitle(null));
+    }
+
+    @Test
+    void getDTO() {
+        InformationContactDTO informationContactDTO = informationContact.getInformationContactDTO();
+        assertEquals("Maxim", informationContactDTO.getContactName());
     }
 }

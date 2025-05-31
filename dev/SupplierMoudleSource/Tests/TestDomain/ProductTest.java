@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.ProductDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import SupplierMoudleSource.Domain.Product;
@@ -26,5 +27,10 @@ class ProductTest {
     @Test
     void getProductManufacturer() {
         assertEquals("Osem", product.getProductManufacturer());
+    }
+
+    @Test void getDTO() {
+        ProductDTO productDTO = product.transactionToDTO();
+        assertEquals(productDTO.productID, product.getProductID());
     }
 }

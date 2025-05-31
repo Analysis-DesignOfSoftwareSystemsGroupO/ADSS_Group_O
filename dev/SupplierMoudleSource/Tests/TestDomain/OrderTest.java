@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.OrderDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import SupplierMoudleSource.Domain.*;
@@ -80,5 +81,11 @@ class OrderTest {
     @Test
     void getBranch() {
         assertEquals(order.getBranch(), branch, "didnt get the branch");
+    }
+
+    @Test
+    void getDTO(){
+        OrderDTO orderDTO = order.getOrderDTO();
+        assertEquals(orderDTO.getOrderID(), order.getOrderID());
     }
 }

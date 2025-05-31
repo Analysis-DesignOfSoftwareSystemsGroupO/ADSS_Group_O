@@ -54,6 +54,7 @@ public class Agreement {
        for (Discount discount : discounts) {
            if (discount.getProductId().equals(productid) && discount.getQuantity() <= quantity) {
                price -= discount.getDiscount();
+               break;
            }
        }
        return price;
@@ -125,7 +126,7 @@ public class Agreement {
                     this.removeDiscount(productID);
                 }catch (NullPointerException _){
                 }
-                supplierItemsList.remove(supplierItem);
+                supplierItemsList.remove(supplierItem.getSuppliedItemID());
                 return;
             }
         }

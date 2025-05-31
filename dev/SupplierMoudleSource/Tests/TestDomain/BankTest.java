@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.BankDTO;
 import SupplierMoudleSource.Domain.Bank;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,5 +17,12 @@ class BankTest {
     @Test
     void getOwnerID() {
         assertEquals(bank.getOwnerID(), "211587951");
+    }
+
+    @Test void getBankDTO(){
+        BankDTO bankDTO = bank.getBankDTO();
+        assertEquals(bankDTO.getBankAccount(), "55");
+        assertEquals(bankDTO.getOwnerID(), "211587951");
+
     }
 }

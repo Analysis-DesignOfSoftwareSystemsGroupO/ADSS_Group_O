@@ -1,4 +1,5 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
+import SupplierMoudleSource.DTO.AgreementDTO;
 import SupplierMoudleSource.Domain.*;
 import java.util.List;
 
@@ -111,6 +112,31 @@ class AgreementTest {
         assertEquals(agreement.getSupplierItem(suppliedItem1.getSuppliedItemID()), suppliedItem1, "Supplier item " +
                 "was not returned");
         assertNull(agreement.getSupplierItem(suppliedItem2.getSuppliedItemID()), "Supplier that didnt exist was returned");
+    }
+
+    @org.junit.jupiter.api.Test
+    void getPriceForProduct() {
+        assertEquals(-1, agreement.getPriceForProduct("nonexistent", 5), "Price should be -1 for non-existing product");
+
+        agreement.addItem(suppliedItem1);
+        int expectedPrice = 50 * 5; // no discount yet
+        assertEquals(expectedPrice, agreement.getPriceForProduct(suppliedItem1.getProduct().getProductID(), 5), "Incorrect price without discount");
+
+        agreement.addDiscount(discount1);
+        int discountedPrice = (50 * 5) - discount1.getDiscount();
+        assertEquals(discountedPrice, agreement.getPriceForProduct(suppliedItem1.getProduct().getProductID(), 5), "Incorrect price with discount");
+    }
+
+    @org.junit.jupiter.api.Test
+    void getAgreementDTO() {
+        agreement.addItem(suppliedItem1);
+        agreement.addDiscount(discount1);
+        AgreementDTO dto = agreement.getAgreementDTO();
+
+        assertEquals(supplier.getID(), dto.getSupplierID());
+        assertEquals(branch.getBranchID(), dto.getBranchId());
+        assertEquals(1, dto.getSupplierItemsList().size(), "Supplied item list size mismatch");
+        assertEquals(1, dto.getDiscounts().size(), "Discount list size mismatch");
     }
 
 }

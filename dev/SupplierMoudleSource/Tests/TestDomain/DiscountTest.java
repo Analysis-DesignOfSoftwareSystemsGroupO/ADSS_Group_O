@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.DiscountDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import SupplierMoudleSource.Domain.*;
@@ -39,5 +40,11 @@ class DiscountTest {
     @Test
     void getProductId() {
         assertEquals("1", discount.getProductId());
+    }
+
+    @Test
+    void getDiscountDTO() {
+        DiscountDTO discountDTO = discount.getDiscountDTO();
+        assertEquals(discountDTO.discount, discount.getDiscount());
     }
 }

@@ -137,7 +137,7 @@ public class OrderService {
             for (Agreement a : agreement) {
                 if (a.getBranchID().equals(branchID)) {
                     int curPrice = a.getPriceForProduct(productID, quantity);
-                    if (curPrice != -1 && curPrice < minPrice ) {
+                    if (curPrice != -1 && (curPrice < minPrice || minPrice == -1) ) {
                         minPrice = curPrice;
                         bestAgreement = a;
                     }

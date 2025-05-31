@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.SuppliedItemDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import SupplierMoudleSource.Domain.*;
@@ -35,5 +36,11 @@ class SuppliedItemTest {
     @Test
     void getSuppliedItemPrice() {
         assertEquals(15, suppliedItem.getSuppliedItemPrice());
+    }
+
+    @Test
+    void getDTO(){
+        SuppliedItemDTO suppliedItemDTO = suppliedItem.getSuppliedItemDTO();
+        assertEquals(suppliedItemDTO.suppliedItemPrice, suppliedItem.getSuppliedItemPrice());
     }
 }

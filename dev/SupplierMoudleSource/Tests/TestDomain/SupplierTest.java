@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.SupplierDTO;
 import SupplierMoudleSource.Domain.InformationContact;
 import SupplierMoudleSource.Domain.Product;
 import SupplierMoudleSource.Domain.Supplier;
@@ -59,5 +60,9 @@ class SupplierTest {
         assertEquals(supplier.getProduct("1").getProduct(), product);
     }
 
-
+    @Test
+    void getDTO(){
+        SupplierDTO supplierDTO = supplier.getSupplierDTO();
+        assertEquals(supplierDTO.getSupplierID(), supplier.getID());
+    }
 }

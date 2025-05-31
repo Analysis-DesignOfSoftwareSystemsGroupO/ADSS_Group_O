@@ -131,11 +131,12 @@ public class LoadData {
 
     //add products to agreements
         Object[][] items = {
-                { 17, "1", "3", "1"},
+                { 17, "1", "3", "1" },
+                { 16, "1", "3", "2" },
                 { 14, "2", "7", "2" },
-                { 22, "3", "1", "4"},
+                { 22, "3", "1", "4" },
                 { 27, "4", "8", "3" },
-                { 10, "5", "6", "5"},
+                { 10, "5", "6", "5" },
                 { 24, "6", "9", "2" },
                 { 19, "7", "2", "1" },
                 { 11, "8", "5", "3" },
@@ -143,7 +144,7 @@ public class LoadData {
                 { 29, "10", "7", "1" },
                 { 9,  "11", "1", "5" },
                 { 20, "12", "3", "5" },
-                { 25, "13", "6", "4"},
+                { 25, "13", "6", "4" },
                 { 15, "14", "9", "4" },
                 { 12, "15", "2", "1" },
                 { 18, "16", "8", "3" }
@@ -190,8 +191,9 @@ public class LoadData {
                 e.printStackTrace();
                 System.out.println("error int adding items to agreement");
             }
-            System.out.println("✅ Data loaded successfully.");
+
 
         }
+        System.out.println("✅ Data loaded successfully.");
     }
 }

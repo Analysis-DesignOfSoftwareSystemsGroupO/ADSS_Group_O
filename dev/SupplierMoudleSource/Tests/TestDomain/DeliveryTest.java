@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.DeliveryDTO;
 import SupplierMoudleSource.Domain.Delivery;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +14,6 @@ class DeliveryTest {
     void testConstructor() {
         assertThrows(Exception.class, ()-> new Delivery("NotVAlid"),
                 "didnt throw when delivery way was not valid");
-        assertThrows(Exception.class, () -> new Delivery("Temporary Delivery"),
-                "didnt throw when arrival day was not valid");
-        assertThrows(Exception.class, () -> new Delivery("Self Pick Up"),
-                "didnt throw when arrival day was not valid");
-        assertThrows(Exception.class, () -> new Delivery("Constant Delivery"),
-                "didnt throw when arrival day was not valid");
 
     }
 
@@ -30,6 +25,11 @@ class DeliveryTest {
     @Test
     void getDeliveryWay() {
         assertEquals("Temporary Delivery", delivery.getDeliveryWay());
+    }
+
+    @Test void testSetDeliveryWayDTO() {
+        DeliveryDTO deliveryDTO = delivery.getDeliveryDTO();
+        assertEquals("Temporary Delivery", deliveryDTO.getDeliveryWay());
     }
 
 }

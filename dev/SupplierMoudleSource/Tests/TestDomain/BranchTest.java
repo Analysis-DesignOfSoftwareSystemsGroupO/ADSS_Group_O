@@ -1,5 +1,6 @@
-package Domain;
+package SupplierMoudleSource.Tests.TestDomain;
 
+import SupplierMoudleSource.DTO.BranchDTO;
 import SupplierMoudleSource.Domain.Branch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,5 +28,12 @@ class BranchTest {
     @Test
     void getBranchCity() {
         assertEquals(branch.getBranchCity(), "Lehavim");
+    }
+
+    @Test
+    void getBranchDTO() {
+        BranchDTO branchDTO = branch.getBranchDTO();
+        assertEquals(branchDTO.getAddress(), "Hagefen 12");
+        assertEquals(branchDTO.getCity(), "Lehavim");
     }
 }
