@@ -7,23 +7,16 @@ import Users.User;
 
 public class Main {
 
-    private static void init_useres(ArrayList<User> users){
-        users.add(new TransportManagerUser("TransportManager","1234"));
-        users.add(new BookingUser("User","1234"));
-        users.add(new TruckManagerUser("admin","1234"));
-    }
-    private static User search_user(ArrayList<User> users, String name){
-        for (User user: users){
-            if(user.getUsername().equalsIgnoreCase(name))
-                return user;
-        }
-        return null;
+    private static void init_useres(Map<String, User> users){
+        users.put("TransportManager",new TransportManagerUser("TransportManager","1234"));
+        users.put("User",new BookingUser("User","1234"));
+        users.put("TruckManagerUser",new TruckManagerUser("TruckManagerUser","1234"));
     }
 
 
     public static void main(String[] args) {
 
-        ArrayList<User> users = new ArrayList<>();
+        Map<String, User> users = new HashMap<>();
         init_useres(users);
         Scanner scanner = new Scanner(System.in);
         int attempts = 3;
@@ -33,7 +26,7 @@ public class Main {
         while (true){
             System.out.println("Please enter user name: ");
             String name = scanner.nextLine();
-            user = search_user(users,name);
+            user = users.get(name.toLowerCase());
             if (user == null){
                 System.out.println("User is not exist. Please try again");
             }
@@ -50,7 +43,7 @@ public class Main {
             }
             System.out.println("Please enter password: ");
             String password = scanner.nextLine();
-            if(user.comparePassord(password)){
+            if(user.comparePassword(password)){
                 break;
             }
             else{

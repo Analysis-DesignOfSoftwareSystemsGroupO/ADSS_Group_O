@@ -30,7 +30,7 @@ public abstract class User {
     public String getUsername(){
         return username;
     }
-    public boolean comparePassord(String password){
+    public boolean comparePassword(String password){
         return  Objects.equals(this.password, password);
     }
 
