@@ -1,3 +1,92 @@
+CREATE TABLE Branches (
+    branchID INT PRIMARY KEY,
+    name VARCHAR(255),
+    district VARCHAR(255)
+);
+
+CREATE TABLE Employees (
+    empID INT PRIMARY KEY,
+    empName VARCHAR(255),
+    empPassword VARCHAR(255),
+    empBankAccount VARCHAR(255),
+    empSalary INT,
+    empStartDate DATE,
+    minDayShift INT,
+    minEveningShift INT,
+    sickDays INT,
+    daysOff INT,
+    branchID INT REFERENCES Branches(branchID)
+);
+
+CREATE TABLE Roles (
+    roleNumber INT PRIMARY KEY,
+    description VARCHAR(255)
+);
+
+CREATE TABLE EmployeeRole (
+    empID INT REFERENCES Employees(empID),
+    roleNumber INT REFERENCES Roles(roleNumber),
+    PRIMARY KEY (empID, roleNumber)
+);
+
+CREATE TABLE EmploymentContracts (
+    contractID INT PRIMARY KEY,
+    minDayShift INT,
+    minEveningShift INT,
+    sickDays INT,
+    daysOff INT,
+    ownerID INT REFERENCES Employees(empID)
+);
+
+CREATE TABLE Users (
+    userID INT PRIMARY KEY REFERENCES Employees(empID),
+    level VARCHAR(255)
+);
+
+CREATE TABLE EmployeeRole (
+    empID INT REFERENCES Employees(empID),
+    roleNumber INT REFERENCES Roles(roleNumber),
+    PRIMARY KEY (empID, roleNumber)
+);
+
+CREATE TABLE Constraints (
+    constraintID SERIAL PRIMARY KEY,
+    empID INT REFERENCES Employees(empID),
+    ShiftType VARCHAR(255),
+    WeekDay VARCHAR(255),
+    explanation TEXT
+);
+
+CREATE TABLE Shifts (
+    shiftID INT PRIMARY KEY,
+    branchID INT REFERENCES Branches(branchID),
+    deadline DATE,
+    day VARCHAR(255),
+    type VARCHAR(255),
+    status VARCHAR(255),
+    shiftManager INT REFERENCES Employees(empID)
+);
+
+CREATE TABLE RequiredRoles (
+    branchID INT REFERENCES Branches(branchID),
+    shiftID INT REFERENCES Shifts(shiftID),
+    roleNumber INT REFERENCES Roles(roleNumber),
+    counter INT
+);
+
+CREATE TABLE ShiftAssignments (
+    branchID INT REFERENCES Branches(branchID),
+    shiftID INT REFERENCES Shifts(shiftID),
+    empID INT REFERENCES Employees(empID),
+    roleNumber INT REFERENCES Roles(roleNumber)
+);
+
+CREATE TABLE Archived_Employees (
+    empID INT PRIMARY KEY,
+    archiveDate DATE
+);
+
+-- Insert data into Branches
 INSERT INTO Branches (branchID, name, district) VALUES
 (1, 'Branch 1', 'North'),
 (2, 'Branch 2', 'Center'),
@@ -9,46 +98,43 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (8, 'Branch 8', 'Center'),
 (9, 'Branch 9', 'South');
 
-INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
-(100000001, 'Alice Levi', 'pass123', '123-456', 10000, '2022-01-15', 2, 2, 5, 3, 1),
-(100000002, 'David Cohen', 'pass456', '789-101', 9500, '2021-03-10', 3, 2, 2, 2, 1),
-(100000003, 'Sara Azulai', 'pass789', '202-303', 10500, '2023-07-01', 2, 1, 4, 5, 2);
-
+-- Additional data for demonstration
 INSERT INTO Roles (roleNumber, description) VALUES
-(1, 'Shift Manager'),
-(2, 'Cashier'),
-(3, 'Stocker'),
-(4, 'Driver');
+(101, 'Manager'),
+(102, 'Cashier'),
+(103, 'Stocker');
+
+INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
+(1, 'Alice Cohen', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1),
+(2, 'Boaz Levi', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 2),
+(3, 'Dana Shalev', 'pass789', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3);
 
 INSERT INTO EmployeeRole (empID, roleNumber) VALUES
-(100000001, 1),
-(100000001, 2),
-(100000002, 2),
-(100000003, 3);
+(1, 101),
+(2, 102),
+(3, 103);
 
-INSERT INTO Users (userID, level, empID) VALUES
-(1, 'HR_MANAGER', 100000001),
-(2, 'SHIFT_MANAGER', 100000002),
-(3, 'EMPLOYEE', 100000003);
+INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickDays, daysOff, ownerID) VALUES
+(1, 4, 2, 10, 12, 1),
+(2, 3, 3, 8, 10, 2),
+(3, 5, 1, 5, 14, 3);
+
+INSERT INTO Users (userID, level) VALUES
+(1, 'Admin'),
+(2, 'Manager'),
+(3, 'Employee');
 
 INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
-(501, 1, '2025-04-25', 'SUNDAY', 'MORNING', 'PLANNED', 100000001),
-(502, 1, '2025-04-25', 'MONDAY', 'EVENING', 'OPEN', 100000002),
-(503, 2, '2025-04-25', 'TUESDAY', 'MORNING', 'CONFIRMED', 100000001);
-
-INSERT INTO Constraints (empID, weekID, ShiftType, WeekDay, explanation) VALUES
-(100000001, 1, 'MORNING', 'SUNDAY', 'Doctor appointment'),
-(100000002, 1, 'EVENING', 'MONDAY', 'Family event');
+(1001, 1, '2024-06-10', 'Monday', 'Morning', 'Planned', 1),
+(1002, 2, '2024-06-11', 'Tuesday', 'Evening', 'Planned', 2);
 
 INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
-(1, 501, 2, 2),
-(1, 502, 3, 1),
-(2, 503, 4, 1);
+(1, 1001, 102, 2),
+(2, 1002, 103, 1);
 
 INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
-(1, 501, 100000001, 2),
-(1, 502, 100000002, 3),
-(2, 503, 100000003, 4);
+(1, 1001, 2, 102),
+(2, 1002, 3, 103);
 
 INSERT INTO Archived_Employees (empID, archiveDate) VALUES
-(999, '2023-12-31');
+(4, '2023-12-31');
