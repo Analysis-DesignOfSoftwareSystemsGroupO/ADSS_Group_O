@@ -40,4 +40,18 @@ public class BranchDAOImpl implements IBranchDAO {
 
         return branches;
     }
+
+    @Override
+    public void insert(BranchDTO dto) throws SQLException {
+        String sql = "INSERT INTO Branches (branchID, name, district) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, dto.getBranchID());
+            stmt.setString(2, dto.getName());
+            stmt.setString(3, dto.getDistrict());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to insert new branch into database", e);
+        }
+    }
+
 }

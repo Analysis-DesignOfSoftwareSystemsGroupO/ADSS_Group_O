@@ -16,8 +16,8 @@ public class EmployeeMenu implements Menu {
     private final EmployeeService employeeService;
     private final Scanner scanner;
 
-    public EmployeeMenu(IEmployeeController controller) {
-        this.employeeService = new EmployeeService(controller);
+    public EmployeeMenu(EmployeeService employeeService) {
+        this.employeeService = employeeService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -69,6 +69,4 @@ public class EmployeeMenu implements Menu {
             }
         }
     }
-
-
 }

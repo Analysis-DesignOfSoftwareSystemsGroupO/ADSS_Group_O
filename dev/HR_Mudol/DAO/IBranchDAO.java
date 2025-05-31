@@ -8,5 +8,6 @@ public interface IBranchDAO {
 
 
     List<BranchDTO> getAll();
+    void insert(BranchDTO dto) throws SQLException;
 
 }

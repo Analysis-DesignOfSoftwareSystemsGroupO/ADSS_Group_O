@@ -12,7 +12,11 @@ public class DatabaseInitializer {
     private static final String USER = "postgres";
     private static final String PASSWORD = "Sansa1234";
 
-    // טוענת ומריצה את הקובץ.
+    public static void initialize(boolean withData) {
+        String sqlFile = withData ? "dev/sql/schema_with_data.sql" : "dev/sql/schema_only.sql";
+        executeSQLFile(sqlFile);
+    }
+
     private static void executeSQLFile(String filePath) {
         try {
             String sql = new String(Files.readAllBytes(Paths.get(filePath)));
@@ -40,16 +44,5 @@ public class DatabaseInitializer {
             System.err.println("❌ Failed to execute SQL script: " + filePath);
             e.printStackTrace();
         }
-    }
-
-    // בוחרת את הקובץ לפי הפרמטר.
-    public static void initialize(boolean withData) {
-        String sqlFile = withData ? "schema_with_data.sql" : "schema_only.sql";
-        executeSQLFile(sqlFile);
-    }
-
-    //רק בקריאה למחלקה
-    public static void main(String[] args) {
-        initialize(true); // או false
     }
 }

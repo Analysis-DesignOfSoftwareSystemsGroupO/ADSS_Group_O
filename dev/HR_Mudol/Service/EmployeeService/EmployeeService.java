@@ -1,7 +1,10 @@
+
 package HR_Mudol.Service.EmployeeService;
 
 import HR_Mudol.DTO.*;
-import HR_Mudol.domain.Controllers.IEmployeeController;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
+import HR_Mudol.domain.Controllers.EmployeeController;
+import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
 
@@ -10,17 +13,17 @@ import java.util.*;
 
 public class EmployeeService implements IEmployeeService {
 
-    private Scanner scanner;
-    private final IEmployeeController empController;
+    private final Scanner scanner;
+    private final EmployeeController empController;
 
-    public EmployeeService(IEmployeeController empController) {
-        this.empController = empController;
+    public EmployeeService(Branch branch) throws SQLException {
         this.scanner = new Scanner(System.in);
+        this.empController = new EmployeeController(DTOToDomainMapper.toDTO(branch));
     }
 
     @Override
     public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
-        EmployeeDTO employee = empController.getEmployeeById(caller,empId);
+        EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null || currentWeek == null) {
             System.out.println("Error: employee or current week not available.");
             return;
@@ -41,7 +44,6 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void submitConstraint(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
-
         if (!currentWeek.isConstraintSubmissionOpen()) {
             empController.lockWeeklyConstraints(empId);
             System.out.println("Constraint submission is now closed.");
@@ -81,7 +83,7 @@ public class EmployeeService implements IEmployeeService {
             System.out.println("Enter explanation:");
             String explanation = scanner.nextLine().trim();
 
-            ConstraintDTO constraint = new ConstraintDTO(empId,explanation, day.name(), type.name());
+            ConstraintDTO constraint = new ConstraintDTO(empId, explanation, day.name(), type.name());
             empController.submitConstraint(empId, constraint);
             submitted.add(constraint);
             shiftCount++;
@@ -106,7 +108,7 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void changePassword(UserDTO caller, int empId) throws SQLException {
-        EmployeeDTO employee = empController.getEmployeeById(caller,empId);
+        EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
@@ -119,7 +121,7 @@ public class EmployeeService implements IEmployeeService {
         System.out.print("Enter current password: ");
         String currentPassword = scanner.nextLine().trim();
 
-        if (!empController.verifyPassword(caller,empId, currentPassword)) {
+        if (!empController.verifyPassword(caller, empId, currentPassword)) {
             System.out.println("Incorrect current password. Password change aborted.");
             return;
         }
@@ -159,9 +161,65 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
+    public void viewMyConstraints(UserDTO caller, int employeeId) {
+        List<ConstraintDTO> constraints = empController.getConstraintsByEmployeeId(employeeId);
+        if (constraints.isEmpty()) {
+            System.out.println("No constraints found.");
+            return;
+        }
+
+        System.out.println("--- Current Constraints ---");
+        for (int i = 0; i < constraints.size(); i++) {
+            ConstraintDTO c = constraints.get(i);
+            System.out.println((i + 1) + ". " + c.getDay() + " - " + c.getType() + " - " + c.getExplanation());
+        }
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() throws SQLException {
+        return empController.getAllEmployees();
+    }
+
+    @Override
+    public int getTotalEmployeeCount() throws SQLException {
+        return empController.getAllEmployees().size();
+    }
+
+
+    @Override
+    public void viewPersonalDetails(UserDTO caller, int employeeId) throws SQLException {
+        if (!caller.isManager()) {
+            throw new SecurityException("Access denied: Only HR managers can view other employees' personal details.");
+        }
+
+        EmployeeDTO employee = empController.getEmployeeById(caller, employeeId);
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        System.out.println("\n--- Employee Personal Details ---");
+        System.out.println(employee);
+    }
+
+    @Override
+    public void viewAvailableRoles(UserDTO caller, int employeeId) {
+        List<RoleDTO> roles = empController.getRolesForEmployee(employeeId);
+        if (roles.isEmpty()) {
+            System.out.println("No roles available.");
+            return;
+        }
+
+        System.out.println("--- Available Roles ---");
+        for (RoleDTO role : roles) {
+            System.out.println(role.getRoleNumber() + ": " + role.getDescription());
+        }
+    }
+
+    @Override
     public void updateConstraint(UserDTO caller, int empId, WeekDTO currentWeek) {
         try {
-            EmployeeDTO employee = empController.getEmployeeById(caller,empId);
+            EmployeeDTO employee = empController.getEmployeeById(caller, empId);
             if (employee == null) {
                 System.out.println("Employee not found.");
                 return;
@@ -220,7 +278,7 @@ public class EmployeeService implements IEmployeeService {
                         else if (selected.getExplanation().contains("day off"))
                             newExp += " (used day off)";
 
-                        empController.updateConstraintExplanation(empController.getEmployeeById(caller,empId), selected, newExp);
+                        empController.updateConstraintExplanation(employee, selected, newExp);
                     } else {
                         empController.removeConstraint(empId, selected);
                         constraints.remove(index);
@@ -274,62 +332,6 @@ public class EmployeeService implements IEmployeeService {
             System.out.println((i + 1) + ". " + c.getDay() + " - " + c.getExplanation());
         }
     }
-
-
-    @Override
-    public void viewPersonalDetails(UserDTO caller, int employeeId) throws SQLException {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied: Only HR managers can view other employees' personal details.");
-        }
-
-        EmployeeDTO employee = empController.getEmployeeById(caller,employeeId);
-        if (employee == null) {
-            System.out.println("Employee not found.");
-            return;
-        }
-
-        System.out.println("\n--- Employee Personal Details ---");
-        System.out.println(employee);
-    }
-
-    @Override
-    public void viewMyConstraints(UserDTO caller, int employeeId) {
-        List<ConstraintDTO> constraints = empController.getConstraintsByEmployeeId(employeeId);
-        if (constraints.isEmpty()) {
-            System.out.println("No constraints found.");
-            return;
-        }
-
-        System.out.println("--- Current Constraints ---");
-        for (int i = 0; i < constraints.size(); i++) {
-            ConstraintDTO c = constraints.get(i);
-            System.out.println((i + 1) + ". " + c.getDay() + " - " + c.getType() + " - " + c.getExplanation());
-        }
-    }
-
-    @Override
-    public void viewAvailableRoles(UserDTO caller, int employeeId) {
-        List<RoleDTO> roles = empController.getRolesForEmployee(employeeId);
-        if (roles.isEmpty()) {
-            System.out.println("No roles available.");
-            return;
-        }
-
-        System.out.println("--- Available Roles ---");
-        for (RoleDTO role : roles) {
-            System.out.println(role.getRoleNumber() + ": " + role.getDescription());
-        }
-    }
-    @Override
-    public List<EmployeeDTO> getAllEmployees() throws SQLException {
-        return empController.getAllEmployees();
-    }
-
-    @Override
-    public int getTotalEmployeeCount() throws SQLException {
-        return empController.getAllEmployees().size();
-    }
-
 
 
 }

@@ -1,34 +1,32 @@
 package HR_Mudol.Service.ShiftManagerService;
 
 import HR_Mudol.DTO.*;
-import HR_Mudol.domain.Controllers.IShiftController;
-import HR_Mudol.domain.*;
+import HR_Mudol.domain.Controllers.ShiftController;
+import HR_Mudol.domain.Controllers.IRoleController;
+import HR_Mudol.domain.WeekDay;
+import HR_Mudol.domain.ShiftType;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * System for shift managers to manage employees' assignments to shifts.
- * Provides functionality to add/remove employees and transfer cancellation cards.
- */
 public class ShiftManagerService implements IShiftManagerService {
 
-    private final IShiftController shiftController;
+    private final ShiftController shiftController;
     private final Scanner scanner = new Scanner(System.in);
 
-    public ShiftManagerService(IShiftController shiftController) {
-        this.shiftController = shiftController;
+    public ShiftManagerService(BranchDTO branchDTO, IRoleController roleController) throws SQLException {
+        this.shiftController = new ShiftController(branchDTO, roleController);
     }
 
     @Override
     public void removeEmployeeFromShift(UserDTO theCaller) {
         ShiftDTO shiftDTO = chooseShiftDTO();
         if (shiftDTO == null) return;
-        try
-        {
-        shiftController.removeEmployeeFromShift(theCaller, shiftDTO);
+        try {
+            shiftController.removeEmployeeFromShift(theCaller, shiftDTO);
         } catch (SQLException e) {
-            System.out.println("Error assigning employee to shift: " + e.getMessage());
+            System.out.println("Error removing employee from shift: " + e.getMessage());
         }
     }
 
@@ -48,12 +46,10 @@ public class ShiftManagerService implements IShiftManagerService {
         }
 
         List<EmployeeDTO> employeeDTOs = shiftController.getAllEmployeesAsDTOs();
-
         for (int i = 0; i < employeeDTOs.size(); i++) {
             EmployeeDTO e = employeeDTOs.get(i);
             System.out.println((i + 1) + ". " + e.getFullName() + " (ID: " + e.getEmployeeId() + ")");
         }
-
 
         System.out.print("Select employee to add: ");
         String empInput = scanner.nextLine().trim();
@@ -158,6 +154,4 @@ public class ShiftManagerService implements IShiftManagerService {
         System.out.println("Invalid role number.");
         return null;
     }
-
-
 }

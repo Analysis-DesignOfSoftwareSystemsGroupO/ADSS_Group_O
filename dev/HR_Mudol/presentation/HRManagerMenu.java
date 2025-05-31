@@ -7,10 +7,15 @@ import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.ManagerService.HRService;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
 public class HRManagerMenu implements Menu {
+
+    private final HRService hr;
+
+    public HRManagerMenu(HRService hrService) {
+        this.hr = hrService;
+    }
 
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException {
@@ -20,7 +25,6 @@ public class HRManagerMenu implements Menu {
         }
 
         Scanner scanner = new Scanner(System.in);
-        HRService hr = new HRService(curBranch);
 
         while (true) {
             System.out.println("\n=== HR Management Console ===");
@@ -126,6 +130,5 @@ public class HRManagerMenu implements Menu {
             }
         }
     }
-
 
 }

@@ -226,4 +226,37 @@ public class DTOToDomainMapper {
     }
 
 
+    public static BranchDTO toDTO(Branch branch) {
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee employee : branch.getEmployeeRepo().getAll()) {
+            employeeDTOs.add(toDTO(employee));
+        }
+
+        List<RoleDTO> roleDTOs = new ArrayList<>();
+        for (Role role : branch.getRoleRepo().getAll()) {
+            roleDTOs.add(toDTO(role));
+        }
+
+        List<WeekDTO> weekDTOs = new ArrayList<>();
+        for (Week week : branch.getWeekRepo().getAll()) {
+            List<ShiftDTO> shiftDTOs = new ArrayList<>();
+            for (Shift shift : week.getShifts()) {
+                shiftDTOs.add(toDTO(shift));
+            }
+            WeekDTO weekDTO = new WeekDTO(week.getConstraintDeadline(), shiftDTOs);
+            weekDTOs.add(weekDTO);
+        }
+
+        return new BranchDTO(
+                branch.getBranchID(),
+                branch.getName(),
+                "district", // אם יש לך שדה מחלקתי ל-district אפשר לשלוף אותו כאן במקום מחרוזת קבועה
+                employeeDTOs,
+                roleDTOs,
+                weekDTOs
+        );
+    }
+
+
+
 }

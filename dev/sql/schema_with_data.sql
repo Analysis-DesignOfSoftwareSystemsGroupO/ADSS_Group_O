@@ -120,9 +120,10 @@ INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickD
 (3, 5, 1, 5, 14, 3);
 
 INSERT INTO Users (userID, level) VALUES
-(1, 'Admin'),
-(2, 'Manager'),
-(3, 'Employee');
+(1, 'HR_MANAGER'),
+(2, 'SHIFT_MANAGER'),
+(3, 'REGULAR_EMP');
+
 
 INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
 (1001, 1, '2024-06-10', 'Monday', 'Morning', 'Planned', 1),

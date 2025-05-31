@@ -12,15 +12,22 @@ public class PostgresConnection {
 
     static {
         try {
-            // Load the PostgreSQL JDBC driver
             Class.forName("org.postgresql.Driver");
+            System.out.println("✅ PostgreSQL JDBC Driver loaded successfully.");
         } catch (ClassNotFoundException e) {
-            System.err.println("⚠️ PostgreSQL JDBC Driver not found.");
+            System.err.println("❌ PostgreSQL JDBC Driver not found in classpath.");
             e.printStackTrace();
         }
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+            System.out.println("✅ Connected to PostgreSQL database.");
+            return conn;
+        } catch (SQLException e) {
+            System.err.println("❌ Failed to connect to database: " + DB_URL);
+            throw e;
+        }
     }
 }

@@ -3,7 +3,13 @@ package HR_Mudol.presentation;
 import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.domain.Controllers.IEmployeeController;
+import HR_Mudol.Service.EmployeeService.EmployeeService;
+import HR_Mudol.Service.ManagerService.HRService;
+import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,12 +17,10 @@ import java.util.Scanner;
 
 public class LoginScreen {
 
-    private final IEmployeeController employeeController;
     private final List<BranchDTO> allBranches;
 
-    public LoginScreen(List<BranchDTO> branches, IEmployeeController employeeController) {
+    public LoginScreen(List<BranchDTO> branches) {
         this.allBranches = branches;
-        this.employeeController = employeeController;
     }
 
     public void start() throws SQLException {
@@ -37,37 +41,26 @@ public class LoginScreen {
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            // חיפוש העובד המתאים לפי סיסמה
-            EmployeeDTO matched = null;
-            BranchDTO userBranch = null;
-
-            for (BranchDTO branch : allBranches) {
-                for (EmployeeDTO e : branch.getEmployees()) {
-                    if (e.getEmployeeId() == id && e.getPassword().equals(password)) {
-                        matched = e;
-                        userBranch = branch;
-                        break;
-                    }
-                }
-                if (matched != null) break;
-            }
-
-            if (matched == null) {
-                System.out.println("Invalid credentials. Please try again.\n");
-                continue;
-            }
-
             BranchDTO selectedBranch = selectBranch(scanner, allBranches);
             if (selectedBranch == null) {
                 System.out.println("Invalid branch selection.");
                 continue;
             }
 
-            // שליפת רמת גישה אמיתית מהמערכת
-            String level = employeeController.getUserLevel(matched.getEmployeeId());
+            Branch curBranch = DTOToDomainMapper.fromDTO(selectedBranch);
+            EmployeeService employeeService = new EmployeeService(curBranch);
+            User user = curBranch.getUserRepo().getByCredentials(id, password);
+
+            if (user == null || !(user.getUser() instanceof Employee emp)) {
+                System.out.println("Invalid credentials. Please try again.\n");
+                continue;
+            }
+
+            EmployeeDTO matched = DTOToDomainMapper.toDTO(emp);
+            String level = user.getLevel().name();
             UserDTO userDTO = new UserDTO(matched.getEmployeeId(), level);
 
-            launchMenuForUser(userDTO, matched, selectedBranch);
+            launchMenuForUser(userDTO, matched, selectedBranch, curBranch);
         }
     }
 
@@ -87,16 +80,20 @@ public class LoginScreen {
         return null;
     }
 
-    private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranch) throws SQLException {
+    private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranchDTO, Branch curBranch) throws SQLException {
         if (userDTO.getLevel().equalsIgnoreCase("HRManager")) {
-            HRManagerMenu menu = new HRManagerMenu();
-            if (menu.start(userDTO, employeeDTO, curBranch)) return;
+            HRService hrService = new HRService(curBranch);
+            HRManagerMenu menu = new HRManagerMenu(hrService);
+            if (menu.start(userDTO, employeeDTO, curBranchDTO)) return;
         } else if (userDTO.getLevel().equalsIgnoreCase("shiftManager")) {
+            HRService hrService = new HRService(curBranch);
+            ShiftManagerService shiftService = new ShiftManagerService(DTOToDomainMapper.toDTO(curBranch), hrService.getRoleController());
             ShiftManagerMenu menu = new ShiftManagerMenu();
-            if (menu.start(userDTO, employeeDTO, curBranch)) return;
+            if (menu.start(userDTO, employeeDTO, curBranchDTO)) return;
         } else {
-            EmployeeMenu menu = new EmployeeMenu(employeeController);
-            if (menu.start(userDTO, employeeDTO, curBranch)) return;
+            EmployeeService employeeService = new EmployeeService(curBranch);
+            EmployeeMenu menu = new EmployeeMenu(employeeService);
+            if (menu.start(userDTO, employeeDTO, curBranchDTO)) return;
         }
     }
 }

@@ -13,18 +13,20 @@ public class EmployeeRepository {
     private final List<Employee> oldEmployees = new LinkedList<>();
     private final IEmployeeDAO employeeDAO;
     private final IConstraintDAO constraintDAO;
+    private final int branchID; // ✅ סניף קבוע לרפוזיטורי
 
-    public EmployeeRepository(IEmployeeDAO edao, IConstraintDAO cdao) {
+    public EmployeeRepository(IEmployeeDAO edao, IConstraintDAO cdao, int branchID) {
         this.employeeDAO = edao;
-        this.constraintDAO=cdao;
+        this.constraintDAO = cdao;
+        this.branchID = branchID;
     }
 
     public void addFromDTO(Employee emp) throws SQLException {
-        //RAM
+        // RAM
         employeesById.put(emp.getEmpId(), emp);
 
         // DB
-        employeeDAO.insert(DTOToDomainMapper.toDTO(emp));
+        employeeDAO.insert(DTOToDomainMapper.toDTO(emp), branchID);
     }
 
     public void archive(int empId) throws SQLException {
@@ -34,16 +36,14 @@ public class EmployeeRepository {
             oldEmployees.add(removed);
         }
 
-        // archive it on DB
+        // archive in DB
         employeeDAO.archive(empId);
     }
-
 
     public boolean exists(int empId) {
         if (employeesById.containsKey(empId)) return true;
         return employeeDAO.exists(empId);
     }
-
 
     public Employee getById(int empId) {
         if (employeesById.containsKey(empId))
@@ -57,7 +57,6 @@ public class EmployeeRepository {
         return e;
     }
 
-
     public List<Employee> getAll() {
         return new ArrayList<>(employeesById.values());
     }
@@ -66,9 +65,8 @@ public class EmployeeRepository {
         Employee e = getById(empId);
         if (e == null) throw new IllegalArgumentException("Employee not found");
 
-        e.setEmpBankAccount(caller, newBankAccount); //RAM
-
-        employeeDAO.updateBankAccount(empId, newBankAccount); //DB
+        e.setEmpBankAccount(caller, newBankAccount); // RAM
+        employeeDAO.updateBankAccount(empId, newBankAccount); // DB
     }
 
     public void updateSalary(User caller, int empId, int newSalary) throws SQLException {
@@ -99,35 +97,28 @@ public class EmployeeRepository {
         Employee e = getById(empId);
         if (e == null) throw new IllegalArgumentException("Employee not found");
 
-        e.setSickDays(newSickDays); // בזיכרון
-        employeeDAO.updateSickDays(empId, newSickDays); // בבסיס הנתונים
+        e.setSickDays(newSickDays); // RAM
+        employeeDAO.updateSickDays(empId, newSickDays); // DB
     }
 
     public void updateDaysOff(int empId, int daysOff) throws SQLException {
-        Employee e = getById(empId); // נטען מהזיכרון או DB
+        Employee e = getById(empId);
         if (e != null) {
-            e.setDaysOff(null, daysOff); // null עבור caller כי זה רק לעדכון פנימי
-            employeeDAO.updateDaysOff(empId, daysOff); // עדכון ב־DB
+            e.setDaysOff(null, daysOff); // RAM
+            employeeDAO.updateDaysOff(empId, daysOff); // DB
         }
     }
 
     public void updatePassword(int empId, String newPassword) {
-        // (RAM)
         AbstractEmployee employee = employeesById.get(empId);
         if (employee != null) {
-            employee.setEmpPassword(newPassword);
+            employee.setEmpPassword(newPassword); // RAM
         }
 
-        //DB
-        employeeDAO.updatePassword(empId, newPassword);
+        employeeDAO.updatePassword(empId, newPassword); // DB
     }
 
-    public int size(){
+    public int size() {
         return employeesById.size();
     }
-
-
-
-
-
 }

@@ -33,4 +33,12 @@ public class BranchRepository {
     public Collection<Branch> getAllBranches() {
         return branchCache.values();
     }
+
+
+    public void add(BranchDTO dto) throws SQLException {
+        dao.insert(dto); // הוספה למסד הנתונים
+        Branch branch = DTOToDomainMapper.fromDTO(dto);
+        branchCache.put(dto.getBranchID(), branch); // הוספה לזיכרון
+    }
+
 }

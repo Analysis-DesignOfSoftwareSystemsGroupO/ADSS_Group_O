@@ -7,7 +7,9 @@ import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Controllers.ShiftController;
+import HR_Mudol.domain.Objects.Branch;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -22,7 +24,11 @@ public class ShiftManagerMenu implements Menu {
         }
 
         Scanner scanner = new Scanner(System.in);
-        HRService hr = new HRService(curBranch);
+        Branch branch = DTOToDomainMapper.fromDTO(curBranch);
+
+        // שירותים
+        EmployeeService employeeService = new EmployeeService(branch);
+        HRService hrService = new HRService(branch);
 
         while (true) {
             System.out.println("\n=== Shift Manager Menu ===");
@@ -34,12 +40,10 @@ public class ShiftManagerMenu implements Menu {
 
             switch (choice) {
                 case "1" -> {
-                    EmployeeService empService = new EmployeeService(hr.getEmployeeController());
-                    EmployeeMenu menu = new EmployeeMenu(hr.getEmployeeController());
-                    WeekDTO currentWeek = curBranch.getCurrentWeekDTO();
+                    EmployeeMenu menu = new EmployeeMenu(employeeService);
                     menu.start(caller, self, curBranch);
                 }
-                case "2" -> manageShift(hr, curBranch, caller);
+                case "2" -> manageShift(hrService, curBranch, caller);
                 case "0" -> {
                     System.out.println("Logging out. Returning to login screen.");
                     return true;
@@ -56,8 +60,7 @@ public class ShiftManagerMenu implements Menu {
             return;
         }
 
-        ShiftController shiftController = new ShiftController(branch, hr.getRoleController());
-        ShiftManagerService shiftSys = new ShiftManagerService(shiftController);
+        ShiftManagerService shiftSys = new ShiftManagerService(branch, hr.getRoleController());
 
         Scanner sc = new Scanner(System.in);
 

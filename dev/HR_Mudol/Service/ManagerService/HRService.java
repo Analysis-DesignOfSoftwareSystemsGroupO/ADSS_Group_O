@@ -6,6 +6,7 @@ import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
+import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
@@ -26,13 +27,14 @@ public class HRService implements IHRService {
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
 
-    public HRService(BranchDTO curBranch) throws SQLException {
+    public HRService(Branch branch) throws SQLException {
+        BranchDTO curBranch = DTOToDomainMapper.toDTO(branch);
         this.roleController = new RoleController(curBranch);
         this.employeeController = new EmployeeController(curBranch);
         this.shiftController = new ShiftController(curBranch, this.roleController);
         this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
 
-        this.employeeService = new EmployeeService(this.employeeController);
+        this.employeeService = new EmployeeService(branch);
         this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController);
     }
 

@@ -38,7 +38,7 @@ public class Branch {
         UserDAOImpl userDAO=new UserDAOImpl();
         ConstraintDAOImpl constraintDAO=new ConstraintDAOImpl();
 
-        this.employeeRepo = new EmployeeRepository(employeeDAO,constraintDAO);
+        this.employeeRepo = new EmployeeRepository(employeeDAO,constraintDAO,branchID);
         this.roleRepo = new RoleRepository(roleDAO);
         this.userRepo = new UserRepository(userDAO,employeeRepo);
         this.weekRepo = new WeekRepository(shiftDAO);
