@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static DataBase.PostgresConnection.getConnection;
+import static SupplierMoudleSource.DataBase.PostgresConnection.getConnection;
 
 public class OrderDAO {
 
@@ -236,11 +236,11 @@ public class OrderDAO {
         }
     }
 
-    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTO(String dayOfWeek) throws SQLException {
+    public List<ConstantOrderDTO> getConstantOrderDTO(String dayOfWeek) throws SQLException {
         String sql = "SELECT * FROM supplierinventorydb.constantorders WHERE dayofweek = ? ORDER BY supplierid, branchid";
         String getSql = "SELECT * FROM supplierinventorydb.productinagreement WHERE branchid = ? AND supplierid = ? AND suppliediteid = ?";
         String getProductSql = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
-        List<requirementToConstantOrderDTO> orderDTOList = new ArrayList<>();
+        List<ConstantOrderDTO> orderDTOList = new ArrayList<>();
 
         try (Connection connection = getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -259,7 +259,7 @@ public class OrderDAO {
 
                 // If we moved to a new group
                 if ((branchId != prevBranchId || supplierId != prevSupplierId) && !suppliedItems.isEmpty()) {
-                    orderDTOList.add(new requirementToConstantOrderDTO(Integer.toString(prevBranchId),
+                    orderDTOList.add(new ConstantOrderDTO(Integer.toString(prevBranchId),
                             Integer.toString(prevSupplierId), suppliedItems, dayOfWeek));
                     suppliedItems = new HashMap<>();
                 }
@@ -301,7 +301,7 @@ public class OrderDAO {
 
             // Add the last group
             if (!suppliedItems.isEmpty()) {
-                orderDTOList.add(new requirementToConstantOrderDTO(Integer.toString(prevBranchId),
+                orderDTOList.add(new ConstantOrderDTO(Integer.toString(prevBranchId),
                         Integer.toString(prevSupplierId), suppliedItems, dayOfWeek));
             }
 
@@ -310,11 +310,11 @@ public class OrderDAO {
         return orderDTOList;
     }
 
-    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOById(String productName, String manufacturer) throws Exception {
+    public List<ConstantOrderDTO> getConstantOrderDTOById(String productName, String manufacturer) throws Exception {
         String getProductSql = "Select * from supplierinventorydb.product where name = ? and manufacturer = ?";
         String getFromSuppliedItem = "Select * from supplierinventorydb.productinagreement where productid = ?";
         String getConstantOrderSql = "Select * from supplierinventorydb.constantorders where supplieditemid = ?";
-        List<requirementToConstantOrderDTO> orderDTOList = new ArrayList<>();
+        List<ConstantOrderDTO> orderDTOList = new ArrayList<>();
 
         try (Connection connection = getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(getProductSql);
@@ -350,7 +350,7 @@ public class OrderDAO {
                     int quantity = rs3.getInt("quantity");
                     suppliedItems.put(suppliedItem, quantity);
                     String dayofWeek = rs3.getString("dayofweek");
-                    orderDTOList.add(new requirementToConstantOrderDTO(Integer.toString(branchid), Integer.toString(supplierid),
+                    orderDTOList.add(new ConstantOrderDTO(Integer.toString(branchid), Integer.toString(supplierid),
                             suppliedItems, dayofWeek));
                 }
             }
@@ -359,4 +359,25 @@ public class OrderDAO {
         return orderDTOList;
     }
 
+    public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception
+    {
+        String getProductIdSql = "Select * from supplierinventorydb.product where name = ? and manufacturer = ?";
+        String updateNewQuantitySql = "Update supplierinventorydb.constantorders set quantity = ? where productid = ?";
+        try (Connection connection = getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(getProductIdSql);
+            pstmt.setString(1, productName);
+            pstmt.setString(2, manufacturer);
+            ResultSet rs = pstmt.executeQuery();
+            int productId;
+            if (rs.next()) {
+                productId = rs.getInt("id");
+            } else {
+                throw new Exception("Product does not exist");
+            }
+            pstmt = connection.prepareStatement(updateNewQuantitySql);
+            pstmt.setInt(1, newQuantity);
+            pstmt.setInt(2, productId);
+            pstmt.executeUpdate();
+        }
+    }
 }

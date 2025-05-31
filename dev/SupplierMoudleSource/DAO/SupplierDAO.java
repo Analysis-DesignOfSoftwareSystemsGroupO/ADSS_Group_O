@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static DataBase.PostgresConnection.getConnection;
+import static SupplierMoudleSource.DataBase.PostgresConnection.getConnection;
 
 public class SupplierDAO {
     public String addSupplier(String supplierName, BankDTO bank, PaymentMethodDTO paymentMethod, DeliveryDTO delivery,

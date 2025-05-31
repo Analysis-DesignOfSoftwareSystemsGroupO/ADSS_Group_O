@@ -11,7 +11,7 @@ public class Main {
                 "1. Supplier Module\n" +
                 "2. Inventory Module\n" +
                 "3. Exit\n" +
-                "Please enter your choice: ");
+                "Please enter your choice: \n");
 
         switch (choice) {
             case 1:

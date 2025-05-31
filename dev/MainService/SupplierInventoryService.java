@@ -6,16 +6,23 @@ import SupplierMoudleSource.Service.OrderService;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.List;
 
 public class SupplierInventoryService {
     private Time time;
     private OrderService orderService;
     private AgreementService agreementService;
 
+    public SupplierInventoryService(OrderService orderService) {
+        LocalTime localTime = LocalTime.of(12, 0); // 12:00 PM
+        time = Time.valueOf(localTime);
+        this.orderService = orderService;
+    }
+
     public SupplierInventoryService() {
         LocalTime localTime = LocalTime.of(12, 0); // 12:00 PM
         time = Time.valueOf(localTime);
-        orderService = new OrderService();
+        this.orderService = new OrderService();
     }
 
     public void createImmediateOrder(String branchId, String productName, String manufacturer, int quantity) throws Exception {
@@ -30,8 +37,16 @@ public class SupplierInventoryService {
         return orderService.createRequirementToConstantOrder(branchID, supplierID, day);
     }
 
+    public void updateConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception {
+        orderService.updateExistingConstantOrder(branchId, supplierId, productName, manufacturer, newQuantity);
+    }
+
     public void viewAgreement(String branchID, String supplierID) throws Exception {
         agreementService.viewAgreement(branchID, supplierID);
+    }
+
+    public List<ConstantOrderDTO> getOrdersByDayOfWeek(String dayOfWeek) throws Exception {
+        return orderService.getConstantOrdersByDayOfWeek(dayOfWeek);
     }
 
     public void finishOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
@@ -42,17 +57,11 @@ public class SupplierInventoryService {
         orderService.addProductToConstantOrder(constantOrderDTO, productID, quantity);
     }
 
-    public void updateConstantOrder(String branchId) throws Exception {
-        //TODO: implementthe logic to update constant order
+    public List<ConstantOrderDTO> getOrdersByNameAndManufacturer(String productName, String manufacturer) throws Exception {
+        return orderService.getConstantOrdersByProductNameAndManufacturer(productName, manufacturer);
     }
-
-    public Time getTime(){
+    public Time getTime () {
         return time;
-    }
-
-
-    public void displayConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
-        orderService.displayConstantOrder(constantOrderDTO);
     }
 }
 

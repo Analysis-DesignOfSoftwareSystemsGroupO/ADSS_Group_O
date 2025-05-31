@@ -2,7 +2,7 @@ package SupplierMoudleSource.Repository;
 
 import SupplierMoudleSource.DTO.ConstantOrderDTO;
 import SupplierMoudleSource.DTO.OrderDTO;
-import SupplierMoudleSource.DTO.requirementToConstantOrderDTO;
+import SupplierMoudleSource.DTO.ConstantOrderDTO;
 import SupplierMoudleSource.DAO.OrderDAO;
 import SupplierMoudleSource.Domain.ConstantOrder;
 import SupplierMoudleSource.Domain.Order;
@@ -98,11 +98,15 @@ public class OrderRepository {
     }
 
 
-    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOByDay(String dayOfWeek) throws SQLException {
-        return orderDAO.getRequirementToConstantOrderDTO(dayOfWeek);
+    public List<ConstantOrderDTO> getToConstantOrderDTOByDay(String dayOfWeek) throws SQLException {
+        return orderDAO.getConstantOrderDTO(dayOfWeek);
     }
 
-    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOById(String name, String manufacturer) throws Exception {
-        return orderDAO.getRequirementToConstantOrderDTOById(name, manufacturer);
+    public List<ConstantOrderDTO> getToConstantOrderDTOByNameAndManufacturer(String name, String manufacturer) throws Exception {
+        return orderDAO.getConstantOrderDTOById(name, manufacturer);
+    }
+
+    public void updateExistingConstantOrder(String branchId, String supplierId, String productName, String manufacturer, int newQuantity) throws Exception {
+        orderDAO.updateExistingConstantOrder(branchId, supplierId, productName, manufacturer, newQuantity);
     }
 }

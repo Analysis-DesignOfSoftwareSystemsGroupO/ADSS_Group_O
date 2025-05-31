@@ -1,5 +1,5 @@
 
-package SupplierMoudleSource.LoadData;
+package SupplierMoudleSource.DataBase.LoadData;
 import SupplierMoudleSource.DAO.AgreementDAO;
 import SupplierMoudleSource.DAO.BranchDAO;
 import SupplierMoudleSource.DAO.ProductDAO;
@@ -190,6 +190,7 @@ public class LoadData {
                 e.printStackTrace();
                 System.out.println("error int adding items to agreement");
             }
+            System.out.println("✅ Data loaded successfully.");
 
         }
     }
