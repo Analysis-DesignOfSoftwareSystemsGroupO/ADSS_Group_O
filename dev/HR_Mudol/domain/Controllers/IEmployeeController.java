@@ -127,4 +127,13 @@ public interface IEmployeeController {
      */
     List<EmployeeDTO> getAllEmployees() throws SQLException;
 
+
+    /**
+     * Returns the access level of the user (e.g., HRManager, shiftManager, regularEmp)
+     * @param employeeId the employee ID
+     * @return String representing the level
+     */
+    String getUserLevel(int employeeId) throws SQLException;
+
+
 }
