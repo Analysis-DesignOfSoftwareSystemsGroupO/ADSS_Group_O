@@ -22,11 +22,11 @@ public class BookingControllerPL {
     /**
      * Creates a new transport request
      */
-    public int createTransport(LocalDate date, String source, int maxWeight) throws Exception {
+    public int createTransport(LocalDate date, String source, int maxWeight,LocalTime hour) throws Exception {
 
         int transportId = domainController.getNewTransportId();
 
-        TransportDTO transportDTO = new TransportDTO(transportId,date.toString(),false,maxWeight,-1,-1,source);
+        TransportDTO transportDTO = new TransportDTO(transportId,date,false,maxWeight,"-1","-1",source,hour);
 
         domainController.createTransport(transportDTO);
         return  transportId;

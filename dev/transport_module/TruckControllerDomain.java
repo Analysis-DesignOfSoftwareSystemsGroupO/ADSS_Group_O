@@ -9,17 +9,18 @@ import java.util.List;
 
 
 
-public class TruckControllerDomain {
+public class TruckControllerDomain  {
 
-    private static ITruckRepository truckRepository= new TruckRepositoryIMP();
-    private static ITransportRepository transportRepository = new TransportRepositoryIMP() {
-    };
+    private  ITruckRepository truckRepository;
+    private  ITransportRepository transportRepository;
 
-    public TruckControllerDomain(){
 
+    public TruckControllerDomain() throws Exception{
+        truckRepository= new TruckRepositoryIMP();
+        transportRepository = new TransportRepositoryIMP();
     }
     /** A function that creates truck instance from Truck DTO*/
-    public static Truck getTruckFromDto(TruckDto truckDto) throws Exception{
+    public Truck getTruckFromDto(TruckDto truckDto) throws Exception{
         // send DTO to TruckRepositoryIMP
 
         if( truckDto == null)
@@ -31,10 +32,10 @@ public class TruckControllerDomain {
         String liceenceReq = truckDto.getLiceenceReq();
         String plateNumber = truckDto.getPlateNumber();
 
-        return truckRepository.getTruckBYPlateNumber(plateNumber);
+        return truckRepository.getTruckBYPlateNumber(Integer.parseInt(plateNumber));
 
     }
-    public static void addTruck(TruckDto truckDto) throws Exception{
+    public void addTruck(TruckDto truckDto) throws Exception{
         // send DTO to TruckRepositoryIMP
         if (truckDto == null)
             throw new InvalidInputException();
@@ -42,13 +43,13 @@ public class TruckControllerDomain {
 
 
     }
-    public static TruckDto[] getAllTrucks() throws Exception{
+    public TruckDto[] getAllTrucks() throws Exception{
         List<Truck> trucks =  truckRepository.getAllTrucks();
 
         return turnTruckListToTruckDTOArray(trucks);
     }
 
-    private static TruckDto[] turnTruckListToTruckDTOArray(List<Truck> trucks) throws Exception{
+    private TruckDto[] turnTruckListToTruckDTOArray(List<Truck> trucks) throws Exception{
         TruckDto[] truckDtos = new TruckDto[trucks.size()];
         int i=0;
         for(Truck truck: trucks){
@@ -58,7 +59,7 @@ public class TruckControllerDomain {
     }
 
     /** A function that creates DTO from truck*/
-    public static TruckDto makeDtoFromTruck(Truck truck) throws Exception{
+    public TruckDto makeDtoFromTruck(Truck truck) throws Exception{
         if (truck == null )
             throw new InvalidInputException();
         // Create and return a DTO with trucks arguments
@@ -67,19 +68,19 @@ public class TruckControllerDomain {
 
 
 
-    public static void deleteTruck(String plate) throws Exception{
+    public void deleteTruck(String plate) throws Exception{
         if (plate.isEmpty())
             throw new InvalidInputException("Plate is empty");
 
         truckRepository.deleteTruck(plate);
     }
 
-    public static void assignTruckToTransport(int transportId, int plate) throws Exception {
+    public void assignTruckToTransport(int transportId, int plate) throws Exception {
 
         Transport transport = transportRepository.getTransportByid(transportId); // create a transport
         Truck truck = truckRepository.getTruckBYPlateNumber(plate); // create a truck
         transport.assignTruck(truck); // try to assign truck - if failed throw exception. otherwise, continue
-        TransportDTO transportDTO = new  TransportDTO(transport.getId(),transport.getDate().toString(), transport.isSent(), transport.getMaxWeight(),-1,Integer.parseInt(truck.getPlateNumber()),transport.getSource().getName());
+        TransportDTO transportDTO = new  TransportDTO(transport.getId(),transport.getDate(), transport.isSent(), transport.getMaxWeight(),"-1",truck.getPlateNumber(),transport.getSource().getName(),transport.getDeparture_time());
         transportRepository.saveTransport(transportDTO);
 
 

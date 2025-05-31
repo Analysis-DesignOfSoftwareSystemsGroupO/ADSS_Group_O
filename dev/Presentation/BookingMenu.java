@@ -114,7 +114,7 @@ public class BookingMenu {
 
             // Submit the transport request to the service
 
-            this.transportId = controller.createTransport(date,source,maxWeight);
+            this.transportId = controller.createTransport(date,source,maxWeight,departure_time);
             this.d = datestr;
 
             // attach each product list document to transport( even if its empty one)

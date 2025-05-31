@@ -6,18 +6,20 @@ import transport_module.TruckControllerDomain;
 import java.time.LocalDate;
 
 public class TruckControllerPL {
+    private final TruckControllerDomain truckControllerDomain;
 
-    public TruckControllerPL() {
+    public TruckControllerPL() throws Exception{
+        truckControllerDomain = new TruckControllerDomain();
     }
 
     public void addTruck(String plate, int maxWeight, String licenceCode) throws Exception{
 
         TruckDto truckDto = new TruckDto(maxWeight,licenceCode,plate);
-        TruckControllerDomain.addTruck(truckDto);
+        truckControllerDomain.addTruck(truckDto);
     }
     public TruckDto[] getAllTrucks() throws Exception{
 
-        return TruckControllerDomain.getAllTrucks();
+        return truckControllerDomain.getAllTrucks();
     }
 
 
@@ -25,14 +27,14 @@ public class TruckControllerPL {
     public void deleteTruck(String plate) throws Exception{
         if(plate.isEmpty())
             throw new InvalidInputException("plate is Empty String");
-        TruckControllerDomain.deleteTruck(plate);
+        truckControllerDomain.deleteTruck(plate);
 
     }
 
      // Attach truck - aopplu attach truck in domain
     public void attachTruck(String transportId, String truckPlt) throws Exception{
 
-        TruckControllerDomain.assignTruckToTransport(Integer.parseInt( transportId),Integer.parseInt(truckPlt));
+        truckControllerDomain.assignTruckToTransport(Integer.parseInt( transportId),Integer.parseInt(truckPlt));
     }
 
 
