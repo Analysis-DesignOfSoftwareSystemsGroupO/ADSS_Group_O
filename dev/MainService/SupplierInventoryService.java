@@ -63,5 +63,8 @@ public class SupplierInventoryService {
     public Time getTime () {
         return time;
     }
+    public void displayConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
+        orderService.displayConstantOrder(constantOrderDTO);
+    }
 }
 
