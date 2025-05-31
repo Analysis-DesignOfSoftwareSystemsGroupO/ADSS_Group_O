@@ -157,6 +157,7 @@ public class OrderService {
             }
             Order order = new Order(bestAgreement, new Branch(branchesRepository.getBranch(branchID)));
             order.addItemToOrder(productID, quantity);
+            order.closeOrder();
             orderRepository.saveOrder(order);
         }
 
