@@ -42,8 +42,7 @@ public class Main {
     private static void loadData() throws Exception {
         while (true) {
             Scanner input = new Scanner(System.in);
-            boolean outer = true;
-            while (outer) { //load data
+            while (true) { //load data
                 System.out.println("Welcome to Supplier Module !");
                 System.out.println("1.Load Data");
                 System.out.println("2.Empty Data");
@@ -62,18 +61,16 @@ public class Main {
                         service.uploadTestData();
                         LoadData loadData = new LoadData();
                         loadData.LoadData();
-                        outer = false;
-                        break;
+
+                        return;
                     case 2:
                         dropAllSupplierTable();
                         createSupplierTables();
                         dropAllInventoryTables();
                         createAllTablesIfNotExists();
-                        outer = false;
-                        break;
+                        return;
                     case 3:
-                        outer = false;
-                        break;
+                        return;
                     case 4:
                         return;
                     default:
