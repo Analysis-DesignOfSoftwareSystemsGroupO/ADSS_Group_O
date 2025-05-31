@@ -1,9 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
-import HR_Mudol.DTO.EmployeeDTO;
-import HR_Mudol.DTO.RoleDTO;
-import HR_Mudol.DTO.ShiftDTO;
-import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
 
 import java.sql.SQLException;
@@ -25,7 +22,7 @@ public class ShiftController implements IShiftController {
      * Constructor for ShiftManager.
      * @param dependency The role manager dependency used for role-related operations.
      */
-    public ShiftController(Branch curBranch,IRoleController dependency) {
+    public ShiftController(BranchDTO curBranch, IRoleController dependency) {
         this.curBranch=curBranch;
         this.dependency = dependency;
         this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());

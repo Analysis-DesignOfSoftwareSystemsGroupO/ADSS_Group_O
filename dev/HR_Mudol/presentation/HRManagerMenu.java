@@ -1,17 +1,18 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.ManagerService.HRService;
-import HR_Mudol.domain.Objects.Branch;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class HRManagerMenu implements Menu {
 
     @Override
-    public boolean start(UserDTO caller, EmployeeDTO self, Branch curBranch) {
+    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) {
         if (!caller.isManager()) {
             System.out.println("Access denied.");
             return false;
@@ -39,7 +40,7 @@ public class HRManagerMenu implements Menu {
                 case "4" -> manageShift(hr, curBranch, caller);
                 case "5" -> System.out.println("Not yet implemented");
                 case "6" -> {
-                    WeekDTO currentWeek = curBranch.getWeekRepo().getCurrentWeekDTO();
+                    WeekDTO currentWeek = getCurrentWeek(curBranch);
                     if (currentWeek != null) {
                         try {
                             hr.displayDashboard(caller, currentWeek);
@@ -59,8 +60,8 @@ public class HRManagerMenu implements Menu {
         }
     }
 
-    private static void manageShift(HRService hr, Branch branch, UserDTO callerDTO) {
-        WeekDTO currentWeekDTO = branch.getWeekRepo().getCurrentWeekDTO();
+    private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) {
+        WeekDTO currentWeekDTO = getCurrentWeek(branch);
         if (currentWeekDTO == null) {
             System.out.println("No current week found.");
             return;
@@ -114,12 +115,20 @@ public class HRManagerMenu implements Menu {
                     case "3" -> hr.addARoleToShift(caller, week);
                     case "4" -> hr.removeRoleFromShift(caller, week);
                     case "5" -> hr.cancelShift(caller, week);
-                    case "0" -> { return; }
+                    case "0" -> {
+                        return;
+                    }
                     default -> System.out.println("Invalid option.");
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+    }
+
+    private static WeekDTO getCurrentWeek(BranchDTO branchDTO) {
+        List<WeekDTO> weeks = branchDTO.getWeeks();
+        if (weeks == null || weeks.isEmpty()) return null;
+        return weeks.get(weeks.size() - 1); // הנחה: האחרון הוא הנוכחי
     }
 }

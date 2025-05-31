@@ -1,9 +1,9 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
-import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -107,5 +107,5 @@ public interface IRoleController {
      * @param employeeList The list of all employees in the system.
      * @return The number of employees who do not have any roles.
      */
-    int countEmployeesWithoutRoles(UserDTO theCaller, List<Employee> employeeList) throws SQLException;
+    int countEmployeesWithoutRoles(UserDTO theCaller, List<EmployeeDTO> employeeList) throws SQLException;
         }

@@ -1,5 +1,6 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
@@ -19,5 +20,5 @@ public interface Menu {
      * @param curBranch The branch in which the caller works.
      * @return boolean indicating if the menu interaction was completed successfully (i.e., whether the user logged out or not).
      */
-    boolean start(UserDTO caller, EmployeeDTO self, Branch curBranch);
+    boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch);
 }

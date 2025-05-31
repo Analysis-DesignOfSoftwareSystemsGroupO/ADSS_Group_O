@@ -1,5 +1,7 @@
 package HR_Mudol.DTO;
 
+import HR_Mudol.domain.repository.WeekRepository;
+
 import java.util.List;
 
 public class BranchDTO {
@@ -49,11 +51,21 @@ public class BranchDTO {
         this.roles = roles;
     }
 
-    public List<WeekDTO> getWeeks() {
+    public List<WeekDTO> getWeekRepo() {
         return weeks;
     }
 
     public void setWeeks(List<WeekDTO> weeks) {
         this.weeks = weeks;
     }
+
+    public WeekDTO getCurrentWeekDTO() {
+        if (weeks == null || weeks.isEmpty())
+            return null;
+
+        return weeks.get(weeks.size() - 1);
+    }
+
+
+
 }

@@ -320,6 +320,15 @@ public class EmployeeService implements IEmployeeService {
             System.out.println(role.getRoleNumber() + ": " + role.getDescription());
         }
     }
+    @Override
+    public List<EmployeeDTO> getAllEmployees() throws SQLException {
+        return empController.getAllEmployees();
+    }
+
+    @Override
+    public int getTotalEmployeeCount() throws SQLException {
+        return empController.getAllEmployees().size();
+    }
 
 
 

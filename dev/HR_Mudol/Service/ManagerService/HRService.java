@@ -6,7 +6,9 @@ import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
-import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -24,25 +26,25 @@ public class HRService implements IHRService {
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
 
-    public HRService(Branch curBranch){
-
+    public HRService(BranchDTO curBranch) {
         this.roleController = new RoleController(curBranch);
         this.employeeController = new EmployeeController(curBranch);
-        this.shiftController = new ShiftController(curBranch,this.roleController);
-        this.weekController = new WeekController( this.shiftController,curBranch,this.roleController);
+        this.shiftController = new ShiftController(curBranch, this.roleController);
+        this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
 
         this.employeeService = new EmployeeService(this.employeeController);
-        this.reportGenerator = new ReportGenerator(this.weekController,this.employeeController);
+        this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController);
     }
+
     public IEmployeeController getEmployeeController() {
         return employeeController;
     }
 
-
     @Override
-    public void displayDashboard(UserDTO caller,WeekDTO currentWeek) throws SQLException {
-        int totalEmployees=this.employeeController.getBranch().getEmployeeRepo().size();
-        int withoutRoles=this.roleController.countEmployeesWithoutRoles(caller,this.employeeController.getBranch().getEmployeeRepo().getAll());
+    public void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException {
+        int totalEmployees = employeeService.getTotalEmployeeCount();
+        int withoutRoles = roleController.countEmployeesWithoutRoles(caller, employeeService.getAllEmployees());
+
         System.out.println("\uD83D\uDCC5 Week starting " + currentWeek.getConstraintDeadline());
         System.out.println("\uD83D\uDEA8 " + hasUnassignedRoles(currentWeek) + " shifts are required attention!");
 
@@ -52,7 +54,6 @@ public class HRService implements IHRService {
     }
 
     // EmployeeService forwarding:
-
     @Override
     public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
         employeeService.viewMyShifts(caller, empId, currentWeek);
@@ -94,75 +95,91 @@ public class HRService implements IHRService {
     }
 
     // RoleController forwarding:
-
     @Override
     public void createRole(UserDTO caller) throws SQLException {
         roleController.createRole(caller);
     }
+
     @Override
     public void updateRoleDescription(UserDTO caller) throws SQLException {
-        roleController.updateRoleDescription(caller); }
+        roleController.updateRoleDescription(caller);
+    }
 
     @Override
     public void assignEmployeeToRole(UserDTO caller) throws SQLException {
-        roleController.assignEmployeeToRole(caller); }
+        roleController.assignEmployeeToRole(caller);
+    }
 
     @Override
     public void assignEmployeeToShiftManager(UserDTO caller) throws SQLException {
-        roleController.assignEmployeeToShiftManager(caller); }
+        roleController.assignEmployeeToShiftManager(caller);
+    }
 
     @Override
     public void removeEmployeeFromALLRoles(UserDTO caller) throws SQLException {
-        roleController.removeEmployeeFromALLRoles(caller); }
+        roleController.removeEmployeeFromALLRoles(caller);
+    }
 
     @Override
-    public void removeEmployeeFromRole(UserDTO caller, int roleNumber, Employee e) throws SQLException {
-        roleController.removeEmployeeFromRole(caller, roleNumber, e); }
+    public void removeEmployeeFromRole(UserDTO caller, int roleNumber, EmployeeDTO e) throws SQLException {
+        roleController.removeEmployeeFromRole(caller, roleNumber, e);
+    }
 
     @Override
     public List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException {
-        return roleController.getRelevantEmployees(caller); }
+        return roleController.getRelevantEmployees(caller);
+    }
 
     @Override
     public List<Role> getAllRoles(UserDTO caller) throws SQLException {
-        return roleController.getAllRoles(caller); }
+        return roleController.getAllRoles(caller);
+    }
 
     @Override
     public void printAllRoles(UserDTO caller) throws SQLException {
-        roleController.printAllRoles(caller); }
+        roleController.printAllRoles(caller);
+    }
 
     @Override
     public Role getRoleByNumber(int roleNumber) {
-        return roleController.getRoleByNumber(roleNumber); }
+        return roleController.getRoleByNumber(roleNumber);
+    }
 
     @Override
-    public int countEmployeesWithoutRoles(UserDTO caller, List<Employee> employeeList) throws SQLException {
-        return roleController.countEmployeesWithoutRoles(caller, employeeList); }
+    public int countEmployeesWithoutRoles(UserDTO caller, List<EmployeeDTO> employeeList) throws SQLException {
+        return roleController.countEmployeesWithoutRoles(caller, employeeList);
+    }
 
     // ShiftController forwarding
     @Override
     public void assignEmployeeToShift(UserDTO caller, ShiftDTO shift, EmployeeDTO employee, RoleDTO role) throws SQLException {
-        shiftController.assignEmployeeToShift(caller, shift, employee, role); }
+        shiftController.assignEmployeeToShift(caller, shift, employee, role);
+    }
 
     @Override
     public void removeEmployeeFromShift(UserDTO caller, ShiftDTO shift) throws SQLException {
-        shiftController.removeEmployeeFromShift(caller, shift); }
+        shiftController.removeEmployeeFromShift(caller, shift);
+    }
 
     @Override
     public void chooseRelevantRoleForShift(UserDTO caller, ShiftDTO shift) throws SQLException {
-        shiftController.chooseRelevantRoleForShift(caller, shift); }
+        shiftController.chooseRelevantRoleForShift(caller, shift);
+    }
 
     @Override
     public void printShift(UserDTO caller, ShiftDTO shift) throws SQLException {
-        shiftController.printShift(caller, shift); }
+        shiftController.printShift(caller, shift);
+    }
 
     @Override
     public void addEmployeeToShift(UserDTO caller, ShiftDTO shift, EmployeeDTO employee, RoleDTO role) throws SQLException {
-        shiftController.assignEmployeeToShift(caller, shift, employee, role); }
+        shiftController.assignEmployeeToShift(caller, shift, employee, role);
+    }
 
     @Override
     public void removeRoleFromShift(UserDTO caller, ShiftDTO shift) throws SQLException {
-        shiftController.removeRoleFromShift(caller, shift); }
+        shiftController.removeRoleFromShift(caller, shift);
+    }
 
     // WeekController forwarding:
     @Override
@@ -177,47 +194,55 @@ public class HRService implements IHRService {
 
     @Override
     public void cancelShift(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.cancelShift(caller, week); }
+        weekController.cancelShift(caller, week);
+    }
 
     @Override
     public void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.manageTheWeekRelevantRoles(caller, week); }
+        weekController.manageTheWeekRelevantRoles(caller, week);
+    }
 
     @Override
     public void assigningEmployToShifts(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.assigningEmployToShifts(caller, week); }
+        weekController.assigningEmployToShifts(caller, week);
+    }
 
     @Override
     public void printWeek(WeekDTO week) {
-        weekController.printWeek(week); }
+        weekController.printWeek(week);
+    }
 
     @Override
     public void removeEmployeeFromShift(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.removeEmployeeFromShift(caller, week); }
+        weekController.removeEmployeeFromShift(caller, week);
+    }
 
     @Override
     public void removeRoleFromShift(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.removeRoleFromShift(caller, week); }
+        weekController.removeRoleFromShift(caller, week);
+    }
 
     @Override
     public void addARoleToShift(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.addARoleToShift(caller, week); }
+        weekController.addARoleToShift(caller, week);
+    }
 
     @Override
     public void addEmployeeToShift(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.addEmployeeToShift(caller, week); }
+        weekController.addEmployeeToShift(caller, week);
+    }
 
     @Override
     public int hasUnassignedRoles(WeekDTO week) {
-        return weekController.hasUnassignedRoles(week); }
+        return weekController.hasUnassignedRoles(week);
+    }
 
     @Override
     public List<ShiftDTO> getShiftsForEmployee(EmployeeDTO employee, WeekDTO curWeek) {
-        return weekController.getShiftsForEmployee(employee, curWeek); }
+        return weekController.getShiftsForEmployee(employee, curWeek);
+    }
 
     // ReportGenerator forwarding
-
-
     @Override
     public void generateEmployeeReport(UserDTO caller, int empId, WeekDTO curWeek) throws SQLException {
         reportGenerator.generateEmployeeReport(caller, empId, curWeek);
@@ -232,13 +257,8 @@ public class HRService implements IHRService {
     public void generateShiftReport(UserDTO caller, WeekDTO curWeek) {
         reportGenerator.generateShiftReport(caller, curWeek);
     }
+
     public IRoleController getRoleController() {
         return roleController;
     }
-
-
-
-
-
-
 }

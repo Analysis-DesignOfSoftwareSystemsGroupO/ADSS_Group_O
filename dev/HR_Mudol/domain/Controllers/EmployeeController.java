@@ -21,10 +21,10 @@ public class EmployeeController implements IEmployeeController {
 
     private Scanner scanner = new Scanner(System.in);
     private IRoleController roleManager;
-    private Branch curBranch;
+    private BranchDTO curBranch;
     private DTOToDomainMapper mapper;
 
-    public EmployeeController(Branch curBranch) {
+    public EmployeeController(BranchDTO curBranch) {
         this.curBranch = curBranch;
         this.mapper = new DTOToDomainMapper(curBranch.getUserRepo(), curBranch.getEmployeeRepo(), curBranch.getRoleRepo(), curBranch.getWeekRepo());
     }
@@ -478,6 +478,21 @@ public class EmployeeController implements IEmployeeController {
 
         curBranch.getConstraintRepo().delete(empId, day, type);
     }
+
+    @Override
+    public int getEmployeeCount() {
+        return curBranch.getEmployeeRepo().size();
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() throws SQLException {
+        List<EmployeeDTO> dtos = new ArrayList<>();
+        for (Employee e : curBranch.getEmployeeRepo().getAll()) {
+            dtos.add(DTOToDomainMapper.toDTO(e));
+        }
+        return dtos;
+    }
+
 }
 
 

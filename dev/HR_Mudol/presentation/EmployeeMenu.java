@@ -1,13 +1,14 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.IEmployeeController;
-import HR_Mudol.domain.Objects.Branch;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeMenu implements Menu {
@@ -21,9 +22,9 @@ public class EmployeeMenu implements Menu {
     }
 
     @Override
-    public boolean start(UserDTO caller, EmployeeDTO self, Branch branch) {
+    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO branch) {
         int empId = self.getEmployeeId();
-        WeekDTO currentWeek = branch.getWeekRepo().getCurrentWeekDTO();
+        WeekDTO currentWeek = getCurrentWeek(branch);
 
         if (caller.getUserId() != empId) {
             System.out.println("Access denied: You can only access your own menu.");
@@ -67,5 +68,11 @@ public class EmployeeMenu implements Menu {
                 System.out.println("Unexpected error: " + ex.getMessage());
             }
         }
+    }
+
+    private WeekDTO getCurrentWeek(BranchDTO branchDTO) {
+        List<WeekDTO> weeks = branchDTO.getWeeks();
+        if (weeks == null || weeks.isEmpty()) return null;
+        return weeks.get(weeks.size() - 1); // הנחה: השבוע האחרון הוא השבוע הנוכחי
     }
 }

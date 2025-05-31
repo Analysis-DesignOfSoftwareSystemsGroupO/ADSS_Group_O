@@ -193,6 +193,66 @@ public class DTOToDomainMapper {
                 employee.getEmpId()
         );
     }
+    public Branch fromDTO(BranchDTO dto) throws SQLException {
+        Branch branch = new Branch("UNUSED_DISTRICT", dto.getName()); // district בוטל לפי context קודם
+
+        for (EmployeeDTO empDTO : dto.getEmployees()) {
+            Employee employee = fromDTO(empDTO);
+            branch.getEmployeeRepo().addFromDTO(employee);
+        }
+
+        for (RoleDTO roleDTO : dto.getRoles()) {
+            Role role = fromDTO(roleDTO);
+            branch.getRoleRepo().add(role);
+        }
+
+        for (WeekDTO weekDTO : dto.getWeeks()) {
+            Week week = fromDTO(weekDTO);
+            branch.getWeekRepo().add(week);
+        }
+
+        return branch;
+    }
+
+    public BranchDTO toDTO(Branch branch) {
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee e : branch.getEmployeeRepo().getAll()) {
+            employeeDTOs.add(toDTO(e));
+        }
+
+        List<RoleDTO> roleDTOs = new ArrayList<>();
+        for (Role r : branch.getRoleRepo().getAll()) {
+            roleDTOs.add(toDTO(r));
+        }
+
+        List<WeekDTO> weekDTOs = new ArrayList<>();
+        for (Week w : branch.getWeekRepo().getAll()) {
+            List<ShiftDTO> shiftDTOs = new ArrayList<>();
+            for (Shift s : w.getShifts()) {
+                shiftDTOs.add(toDTO(s));
+            }
+            weekDTOs.add(new WeekDTO(w.getConstraintDeadline(), shiftDTOs));
+        }
+
+        return new BranchDTO(
+                branch.getBranchID(),
+                branch.getName(),
+                employeeDTOs,
+                roleDTOs,
+                weekDTOs
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

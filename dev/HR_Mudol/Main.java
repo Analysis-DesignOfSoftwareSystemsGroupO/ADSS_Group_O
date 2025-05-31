@@ -1,77 +1,101 @@
 package HR_Mudol;
 
-import HR_Mudol.domain.*;
+import HR_Mudol.DAO.BranchDAOImpl;
+import HR_Mudol.DTO.BranchDTO;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
+import HR_Mudol.domain.Controllers.EmployeeController;
+import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.repository.BranchRepository;
 import HR_Mudol.presentation.LoginScreen;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Create a new branch
-        Branch curBranch = new Branch();
+        try {
+            Scanner scanner = new Scanner(System.in);
+            List<BranchDTO> allBranches;
 
-        // Create HR Manager
-        Employee hrManager = new Employee(
-                "Rami levi",
-                111111111,
-                "admin",
-                "IL1234567890",
-                15000,
-                LocalDate.now(),
-                3, 3, 10, 10
-        );
-        User hrManagerUser = new User(hrManager, Level.HRManager);
-        curBranch.getEmployees().add(hrManager);
-        curBranch.getUsers().add(hrManagerUser);
+            System.out.println("=== Welcome to the Workforce System ===");
+            System.out.println("1. Load data from database");
+            System.out.println("2. Start with a fresh (empty) system");
+            System.out.print("Choose option [1/2]: ");
+            String choice = scanner.nextLine().trim();
 
-        // Create 9 regular employees
-        for (int i = 0; i <= 15; i++) {
-            Employee employee = new Employee(
-                    "Employee" + (i + 1),
-                    200000000 + i,
-                    "pass" ,
-                    "IL987654321" + i,
-                    8000 + i * 100,
-                    LocalDate.now().minusDays(i * 10),
-                    2, 2, 5, 5
+            BranchRepository branchRepo = new BranchRepository(new BranchDAOImpl());
+
+            if (choice.equals("1")) {
+                // Load from DB
+                allBranches = branchRepo.getAll();
+                if (allBranches.isEmpty()) {
+                    System.out.println("⚠ No branches found in the database.");
+                    return;
+                }
+            } else if (choice.equals("2")) {
+                // Start fresh
+                Branch newBranch = new Branch("center", "Main Branch");
+                addAdminUserIfNeeded(newBranch); // <- הוספת אדמין
+                addDefaultRoles(newBranch);
+                allBranches = new ArrayList<>();
+                allBranches.add(newBranch);
+
+                // אפשר לשקול לשמור אותו גם ל-DB כאן, אם תרצי לשמר את זה
+                branchRepo.add(newBranch);
+            } else {
+                System.out.println("Invalid option.");
+                return;
+            }
+
+            // נשתמש ב־branch הראשון לצורך יצירת ה־controller
+            Branch primaryBranch = allBranches.get(0);
+
+            DTOToDomainMapper mapper = new DTOToDomainMapper(
+                    primaryBranch.getUserRepo(),
+                    primaryBranch.getEmployeeRepo(),
+                    primaryBranch.getRoleRepo(),
+                    primaryBranch.getWeekRepo()
             );
-            User user = new User(employee, Level.regularEmp);
-            curBranch.getEmployees().add(employee);
-            curBranch.getUsers().add(user);
+
+            EmployeeController employeeController = new EmployeeController(
+                    primaryBranch.getEmployeeRepo(),
+                    primaryBranch.getConstraintRepo(),
+                    mapper
+            );
+
+            LoginScreen login = new LoginScreen(allBranches, employeeController);
+            login.start();
+
+        } catch (SQLException e) {
+            System.out.println("❌ System error: " + e.getMessage());
         }
+    }
 
-        // Create 1 Shift Manager
-        Employee shiftManager = new Employee(
-                "Yossi cohen",
-                222222222,
-                "shiftadmin",
-                "IL1234598760",
-                10000,
-                LocalDate.now().minusMonths(2),
-                3, 3, 7, 7
-        );
-        User shiftManagerUser = new User(shiftManager, Level.shiftManager);
-
-        curBranch.getEmployees().add(shiftManager);
-        curBranch.getUsers().add(shiftManagerUser);
-        shiftManager.getRelevantRoles(hrManagerUser).add(curBranch.getRoles().get(0));
-        // Create 10 roles with real English names
-        String[] roleNames = {
-                "Cashier", "Driver", "Warehouse Worker", "Receptionist", "Loader",
-                "Cleaner", "Customer Service Representative", "Technician", "Maintenance Worker"
-        };
-
-        for (String roleName : roleNames) {
-            Role role = new Role(roleName);
-            curBranch.getRoles().add(role);
+    // הוספת יוזר admin אם לא קיים כבר
+    private static void addAdminUserIfNeeded(Branch branch) throws SQLException {
+        int adminId = 999999999;
+        if (!branch.getUserRepo().exists(adminId)) {
+            Employee admin = new Employee("System Admin", adminId, "admin123",
+                    "IL0000000000", 20000, LocalDate.now(), 2, 2, 10, 10);
+            User adminUser = new User(admin, Level.HRManager);
+            branch.getEmployeeRepo().addFromDTO(admin);
+            branch.getUserRepo().add(adminUser);
+            System.out.println("✅ Admin user created with ID: " + adminId + ", password: admin123");
         }
+    }
 
-        // Launch login screen
-        LoginScreen login = new LoginScreen();
-        login.start(curBranch);
+    // יצירת תפקידים בסיסיים (אופציונלי)
+    private static void addDefaultRoles(Branch branch) {
+        String[] roles = {"Cashier", "Driver", "Technician", "Warehouse", "Cleaner"};
+        for (String name : roles) {
+            branch.getRoleRepo().add(new Role(name));
+        }
     }
 }

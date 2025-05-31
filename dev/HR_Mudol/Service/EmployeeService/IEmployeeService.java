@@ -1,11 +1,8 @@
 package HR_Mudol.Service.EmployeeService;
 
-import HR_Mudol.DTO.ConstraintDTO;
+import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
-import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.Objects.Week;
-import HR_Mudol.domain.ShiftType;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -51,6 +48,11 @@ public interface IEmployeeService {
      * View the roles that the employee is eligible to perform.
      */
     void viewAvailableRoles(UserDTO caller, int empId);
+
+    List<EmployeeDTO> getAllEmployees() throws SQLException;
+
+    int getTotalEmployeeCount() throws SQLException;
+
 
 
 }

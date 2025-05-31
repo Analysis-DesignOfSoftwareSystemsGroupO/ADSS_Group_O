@@ -1,5 +1,6 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
@@ -7,14 +8,13 @@ import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
 import HR_Mudol.domain.Controllers.ShiftController;
-import HR_Mudol.domain.Objects.Branch;
 
 import java.util.Scanner;
 
 public class ShiftManagerMenu implements Menu {
 
     @Override
-    public boolean start(UserDTO caller, EmployeeDTO self, Branch curBranch) {
+    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) {
         if (!caller.isShiftManager()) {
             System.out.println("Access denied.");
             return false;
@@ -35,7 +35,7 @@ public class ShiftManagerMenu implements Menu {
                 case "1" -> {
                     EmployeeService empService = new EmployeeService(hr.getEmployeeController());
                     EmployeeMenu menu = new EmployeeMenu(hr.getEmployeeController());
-                    WeekDTO currentWeek = curBranch.getWeekRepo().getCurrentWeekDTO();
+                    WeekDTO currentWeek = curBranch.getCurrentWeekDTO();
                     menu.start(caller, self, curBranch);
                 }
                 case "2" -> manageShift(hr, curBranch, caller);
@@ -48,8 +48,8 @@ public class ShiftManagerMenu implements Menu {
         }
     }
 
-    private static void manageShift(HRService hr, Branch branch, UserDTO callerDTO) {
-        WeekDTO currentWeekDTO = branch.getWeekRepo().getCurrentWeekDTO();
+    private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) {
+        WeekDTO currentWeekDTO = branch.getCurrentWeekDTO();
         if (currentWeekDTO == null) {
             System.out.println("No current week found.");
             return;

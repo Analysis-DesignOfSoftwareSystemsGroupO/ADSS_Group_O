@@ -1,10 +1,9 @@
 package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.DTO.*;
-import HR_Mudol.Service.EmployeeService.*;
-import HR_Mudol.Service.*;
-import HR_Mudol.domain.Controllers.*;
-import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public interface IHRService {
 
-    void displayDashboard(UserDTO caller,WeekDTO currentWeek) throws SQLException;
+    void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException;
 
     // EmployeeService forwarding
     void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
@@ -46,7 +45,7 @@ public interface IHRService {
 
     void removeEmployeeFromALLRoles(UserDTO caller) throws SQLException;
 
-    void removeEmployeeFromRole(UserDTO caller, int roleNumber, Employee e) throws SQLException;
+    void removeEmployeeFromRole(UserDTO caller, int roleNumber, EmployeeDTO employee) throws SQLException;
 
     List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException;
 
@@ -56,7 +55,7 @@ public interface IHRService {
 
     Role getRoleByNumber(int roleNumber);
 
-    int countEmployeesWithoutRoles(UserDTO caller, List<Employee> employeeList) throws SQLException;
+    int countEmployeesWithoutRoles(UserDTO caller, List<EmployeeDTO> employees) throws SQLException;
 
     // ShiftController forwarding
     void assignEmployeeToShift(UserDTO caller, ShiftDTO shift, EmployeeDTO employee, RoleDTO role) throws SQLException;
@@ -100,5 +99,4 @@ public interface IHRService {
     void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks);
 
     void generateShiftReport(UserDTO caller, WeekDTO curWeek);
-
 }

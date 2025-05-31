@@ -1,29 +1,30 @@
 package HR_Mudol.presentation;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Controllers.IEmployeeController;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class LoginScreen {
 
-    private final List<Branch> allBranches;
+    private final IEmployeeController employeeController;
+    private final List<BranchDTO> allBranches;
 
-    public LoginScreen(List<Branch> branches) {
+    public LoginScreen(List<BranchDTO> branches, IEmployeeController employeeController) {
         this.allBranches = branches;
+        this.employeeController = employeeController;
     }
 
-    public void start() throws SQLException {
+    public void start() {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            // שלב 1: התחברות
             System.out.print("Enter employee ID: ");
             String idInput = scanner.nextLine();
             int id;
@@ -38,17 +39,19 @@ public class LoginScreen {
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
 
-            // שלב 2: חיפוש המשתמש בכל הסניפים
-            User matched = null;
-            Branch userBranch = null;
+            // חיפוש העובד המתאים לפי סיסמה
+            EmployeeDTO matched = null;
+            BranchDTO userBranch = null;
 
-            for (Branch branch : allBranches) {
-                User u = branch.getUserRepo().getByCredentials(id, password);
-                if (u != null) {
-                    matched = u;
-                    userBranch = branch;
-                    break;
+            for (BranchDTO branch : allBranches) {
+                for (EmployeeDTO e : branch.getEmployees()) {
+                    if (e.getEmployeeId() == id && e.getPassword().equals(password)) {
+                        matched = e;
+                        userBranch = branch;
+                        break;
+                    }
                 }
+                if (matched != null) break;
             }
 
             if (matched == null) {
@@ -56,31 +59,19 @@ public class LoginScreen {
                 continue;
             }
 
-            // שלב 3: אימות מול סניפים מותרים ליוזר
-            List<Branch> userBranches = matched.isManager()
-                    ? allBranches
-                    : allBranches.stream()
-                    .filter(b -> {
-                        try {
-                            return b.getUserRepo().getAll().stream().anyMatch(u -> u.getUser().getEmpId() == id);
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .collect(Collectors.toList());
-
-            Branch selectedBranch = selectBranch(scanner, userBranches);
+            BranchDTO selectedBranch = selectBranch(scanner, allBranches);
             if (selectedBranch == null) {
                 System.out.println("Invalid branch selection.");
                 continue;
             }
 
-            // שלב 4: פתיחת תפריט
-            launchMenuForUser(matched, selectedBranch);
+            // פתיחת תפריט לפי DTO
+            UserDTO userDTO = new UserDTO(matched.getEmployeeId(), "regularEmp"); // דרגת גישה בסיסית - שדרג לפי צורך
+            launchMenuForUser(userDTO, matched, selectedBranch);
         }
     }
 
-    private Branch selectBranch(Scanner scanner, List<Branch> userBranches) {
+    private BranchDTO selectBranch(Scanner scanner, List<BranchDTO> userBranches) {
         System.out.println("Select your branch:");
         for (int i = 0; i < userBranches.size(); i++) {
             System.out.printf("%d. %s%n", i + 1, userBranches.get(i).getName());
@@ -96,47 +87,17 @@ public class LoginScreen {
         return null;
     }
 
-    private User findUser(int id, String password, List<User> users) {
-        for (User u : users) {
-            if (u.getUser().getEmpId() == id && u.getUser().getEmpPassword().equals(password)) {
-                return u;
-            }
-        }
-        return null;
-    }
-
-    private void launchMenuForUser(User matched, Branch curBranch) {
-        // יצירת DTO עבור המשתמש
-        UserDTO userDTO = new UserDTO(matched.getUser().getEmpId(), matched.getLevel().name());
-
-        EmployeeDTO employeeDTO = null;
-        if (matched.getUser() instanceof Employee emp) {
-            employeeDTO = new EmployeeDTO(
-                    emp.getEmpId(),
-                    emp.getEmpName(),
-                    emp.getEmpPassword(),
-                    emp.getEmpBankAccount(),
-                    emp.getEmpSalary(),
-                    emp.getEmpStartDate(),
-                    emp.getMinDayShift(),
-                    emp.getMinEveninigShift(),
-                    emp.getSickDays(),
-                    emp.getDaysOff()
-            );
-        }
-
+    private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranch) {
         // מעבר לתפריט המתאים לפי סוג המשתמש
-        if (matched.isManager()) {
+        if (userDTO.getLevel().equalsIgnoreCase("HRManager")) {
             HRManagerMenu menu = new HRManagerMenu();
             if (menu.start(userDTO, employeeDTO, curBranch)) return;
-        } else if (matched.isShiftManager()) {
+        } else if (userDTO.getLevel().equalsIgnoreCase("shiftManager")) {
             ShiftManagerMenu menu = new ShiftManagerMenu();
             if (menu.start(userDTO, employeeDTO, curBranch)) return;
         } else {
-            EmployeeMenu menu = new EmployeeMenu();
+            EmployeeMenu menu = new EmployeeMenu(employeeController);
             if (menu.start(userDTO, employeeDTO, curBranch)) return;
         }
     }
-
-
 }

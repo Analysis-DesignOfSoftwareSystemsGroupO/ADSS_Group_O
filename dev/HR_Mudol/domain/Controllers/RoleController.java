@@ -1,16 +1,16 @@
 package HR_Mudol.domain.Controllers;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import HR_Mudol.DTO.BranchDTO;
+import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.repository.RoleRepository;
 
 /**
  * Manages roles within a branch: creation, assignment, removal, and description updates.
@@ -23,7 +23,7 @@ public class RoleController implements IRoleController {
     private IEmployeeController employeeManager;
     private DTOToDomainMapper mapper;
 
-    public RoleController(Branch curBranch) {
+    public RoleController(BranchDTO curBranch) {
         this.curBranch = curBranch;
         this.scanner = new Scanner(System.in);
         this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
@@ -212,7 +212,7 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public int countEmployeesWithoutRoles(UserDTO theCaller, List<Employee> employeeList) throws SQLException {
+    public int countEmployeesWithoutRoles(UserDTO theCaller, List<EmployeeDTO> employeeList) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 

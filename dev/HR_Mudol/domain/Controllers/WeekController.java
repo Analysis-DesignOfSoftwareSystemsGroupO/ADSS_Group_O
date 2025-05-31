@@ -1,9 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
-import HR_Mudol.DTO.EmployeeDTO;
-import HR_Mudol.DTO.ShiftDTO;
-import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.Status;
 
@@ -30,7 +27,7 @@ public class WeekController implements IWeekController {
      * @param dependency The IShiftManager dependency used for shift management operations.
      * @param curBranch The current branch being managed.
      */
-    public WeekController(IShiftController dependency, Branch curBranch, IRoleController roleController) {
+    public WeekController(IShiftController dependency, BranchDTO curBranch, IRoleController roleController) {
         this.dependency = dependency;
         this.curBranch=curBranch;
         this.roleController=roleController;
