@@ -75,19 +75,22 @@ public class InventoryMenu {
                 "Reports",
                 "List Categories",
                 "Print Stock By Product",
-                "ReportsXXXXXX -need to remove",
-                "Add Stock",
-                "Update Stock",
-                "Delete Stock",
-                "Add Product",
-                "Delete Product",
-                "Clear Stock (Expired/Defected)",
-                "Delete Category",
-                "Add Discount",
-                "Delete Discount",
-                "List Discounts",
-                "Show discount for a product",
-                "Sell Product",
+//                "ReportsXXXXXX -need to remove",
+                "Stock Operations",
+                "Product Operations",
+//                "Add Stock",
+//                "Update Stock",
+//                "Delete Stock",
+//                "Add Product",
+//                "Delete Product",
+//                "Clear Stock (Expired/Defected)",
+//                "Delete Category",
+                "Discount Operations",
+//                "Add Discount",
+//                "Delete Discount",
+//                "List Discounts",
+//                "Show discount for a product",
+//                "Sell Product",
                 "Update Minimum Stock Level per Product",
                 "Create Constant Order");
         System.out.println("\n---- Inventory Worker Management Menu: ----");
@@ -150,6 +153,8 @@ public class InventoryMenu {
                             service.printDefectedStockItems();
                             break;
                         case 5:
+
+
                             // List All Products
                             System.out.println("\nListing all products...\n");
                             service.printAllProducts();
@@ -187,206 +192,240 @@ public class InventoryMenu {
                     System.out.println("\n");
                     service.printStockItemByProductByName(productName, productManufacturer);
                     break;
+
                 case 4:
-                    // Reports
-                    dropAllTables();
-                case 5:
-                    // Add Stock
-                    System.out.println("\nStarting new Stock creation...\n");
-                    System.out.print("Enter product name: ");
-                    productName = scanner.nextLine();
-                    System.out.print("Enter product manufacturer: ");
-                    productManufacturer = scanner.nextLine();
-                    int stockQuantity = readIntInput("Enter stock quantity: ");
-                    System.out.print("Enter stock date (YYYY-MM-DD): ");
-                    LocalDate stockDate = LocalDate.parse(scanner.nextLine());
-                    System.out.print("Enter stock location (in store, storage): ");
-                    String stockLocation = scanner.nextLine();
-                    System.out.print("Enter stock condition (OK, DEFECT, EXPIRED): ");
-                    StockItemStatus stockStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
-                    service.saveStockItem(productName, productManufacturer, stockQuantity, stockLocation, stockStatus, stockDate);
-                    System.out.println("Stock added successfully!");
-                    break;
-                case 6:
-                    // Update Stock
-                    displayStockUpdateMenu();
-                    int updateChoice = readIntInput("Please enter your choice: ");
-                    switch (updateChoice) {
-                        case 1:
-                            // Move Items
-                            System.out.println("\n***Move Items***\n");
-                            System.out.print("Enter Product name: ");
-                            productName = scanner.nextLine();
-                            System.out.print("Enter product manufacturer: ");
-                            productManufacturer = scanner.nextLine();
-                            System.out.print("Enter new location (in store/ storage): ");
-                            String newLocation = scanner.nextLine();
-                            LocalDate expiryDate = null;
-                            if (Objects.equals(newLocation, "storage")) {
-                                System.out.println("Enter expiry date (YYYY-MM-DD): ");
-                                expiryDate = LocalDate.parse(scanner.nextLine());
-                            }
-                            int amount = readIntInput("Enter amount to move: ");
-                            service.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate);
-                            break;
-                        case 2:
-                            // Update Defected Items
-                            System.out.println("\n***Update Defected Items***\n");
-                            System.out.print("Enter Product name: ");
-                            productName = scanner.nextLine();
-                            System.out.print("Enter product manufacturer: ");
-                            productManufacturer = scanner.nextLine();
-                            System.out.print("Enter expiry date (YYYY-MM-DD): ");
-                            expiryDate = LocalDate.parse(scanner.nextLine());
-                            System.out.println("Enter Current location (in store/ storage): ");
-                            String currentLocation = scanner.nextLine();
-                            int defectedAmount = readIntInput("Enter amount of defected items:");
-                            service.updateInventoryWithDefectiveItems(productName, productManufacturer, currentLocation, expiryDate, defectedAmount);
-                            break;
-                        case 3:
-                            // Check for expired items
-                            System.out.println("\nChecking for expired items...\n");
-                            service.checkForExpiredStock();
-                            System.out.println("Expired items updated successfully!");
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Please try again.");
-                    }
-                    break;
-                case 7:
-                    // Delete Stock
-                    System.out.println("\n***Delete Stock***\n");
-                    System.out.print("Enter Stock ID you'd like to delete: ");
-                    String id = scanner.nextLine();
-                    service.removeStock(id);
-                    break;
-                case 8:
-                    // Add Product
-                    System.out.print("Enter product name: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Enter product's main Category name: ");
-                    String prodMainCat = scanner.nextLine();
-                    System.out.println("Enter product's sub-Category name: ");
-                    String prodSubCat = scanner.nextLine();
-                    System.out.println("Enter product's size: ");
-                    String prodSizeCat = scanner.nextLine();
-                    String[] categoryInfo = {prodMainCat, prodSubCat, prodSizeCat};
-                    int minimumStock = readIntInput("Enter minimum stock: ");
-                    double costPrice = readDoubleInput("Enter product cost price: ");
-                    System.out.print("Enter product location: ");
-                    String location = scanner.nextLine();
-                    System.out.print("Enter product Manufacturer: ");
-                    String manufacturer = scanner.nextLine();
-                    // Assuming InventoryController is a class that handles product operations
-                    service.saveProduct(name, minimumStock, categoryInfo, costPrice, location, manufacturer);
-                    System.out.println("Product added successfully!");
-                    break;
-                case 9:
-                    // Delete Product
-                    System.out.print("Enter product ID to delete: ");
-                    String productIdToDelete = scanner.nextLine();
-                    service.removeProduct(productIdToDelete);
-                    break;
-                case 10:
-                    // Clear Stock (Expired/Defected)
+                    // Stock Operations
                     System.out.println("Choose which of the following you wold like to do: ");
-                    System.out.println("1. Clear Expired Items");
-                    System.out.println("2. Clear Defected Items");
-                    System.out.println("3. Clear All Items (Expired and Defected)");
-                    int clearChoice = readIntInput("Please enter your choice: ");
-                    switch (clearChoice) {
+                    System.out.println("1. Add Stock");
+                    System.out.println("2. Update Stock");
+                    System.out.println("3. Delete Stock");
+                    System.out.println("4. Clear Stock (Expired/Defected)");
+                    int stockChoice = readIntInput("Please enter your choice: ");
+                    switch (stockChoice) {
                         case 1:
-                            System.out.println("Clearing expired items...");
-                            service.clearExpiredStock();
+                            // Add Stock
+                            System.out.println("\nStarting new Stock creation...\n");
+                            System.out.print("Enter product name: ");
+                            productName = scanner.nextLine();
+                            System.out.print("Enter product manufacturer: ");
+                            productManufacturer = scanner.nextLine();
+                            int stockQuantity = readIntInput("Enter stock quantity: ");
+                            System.out.print("Enter stock date (YYYY-MM-DD): ");
+                            LocalDate stockDate = LocalDate.parse(scanner.nextLine());
+                            System.out.print("Enter stock location (in store, storage): ");
+                            String stockLocation = scanner.nextLine();
+                            System.out.print("Enter stock condition (OK, DEFECT, EXPIRED): ");
+                            StockItemStatus stockStatus = StockItemStatus.valueOf(scanner.nextLine().toUpperCase());
+                            service.saveStockItem(productName, productManufacturer, stockQuantity, stockLocation, stockStatus, stockDate);
+                            System.out.println("Stock added successfully!");
                             break;
                         case 2:
-                            System.out.println("Clearing defected items...");
-                            service.clearDefectedStockItems();
+                            // Update Stock
+                            displayStockUpdateMenu();
+                            int updateChoice = readIntInput("Please enter your choice: ");
+                            switch (updateChoice) {
+                                case 1:
+                                    // Move Items
+                                    System.out.println("\n***Move Items***\n");
+                                    System.out.print("Enter Product name: ");
+                                    productName = scanner.nextLine();
+                                    System.out.print("Enter product manufacturer: ");
+                                    productManufacturer = scanner.nextLine();
+                                    System.out.print("Enter new location (in store/ storage): ");
+                                    String newLocation = scanner.nextLine();
+                                    LocalDate expiryDate = null;
+                                    if (Objects.equals(newLocation, "storage")) {
+                                        System.out.println("Enter expiry date (YYYY-MM-DD): ");
+                                        expiryDate = LocalDate.parse(scanner.nextLine());
+                                    }
+                                    int amount = readIntInput("Enter amount to move: ");
+                                    service.moveStockItem(productName, productManufacturer, newLocation, amount, expiryDate);
+                                    break;
+                                case 2:
+                                    // Update Defected Items
+                                    System.out.println("\n***Update Defected Items***\n");
+                                    System.out.print("Enter Product name: ");
+                                    productName = scanner.nextLine();
+                                    System.out.print("Enter product manufacturer: ");
+                                    productManufacturer = scanner.nextLine();
+                                    System.out.print("Enter expiry date (YYYY-MM-DD): ");
+                                    expiryDate = LocalDate.parse(scanner.nextLine());
+                                    System.out.println("Enter Current location (in store/ storage): ");
+                                    String currentLocation = scanner.nextLine();
+                                    int defectedAmount = readIntInput("Enter amount of defected items:");
+                                    service.updateInventoryWithDefectiveItems(productName, productManufacturer, currentLocation, expiryDate, defectedAmount);
+                                    break;
+                                case 3:
+                                    // Check for expired items
+                                    System.out.println("\nChecking for expired items...\n");
+                                    service.checkForExpiredStock();
+                                    System.out.println("Expired items updated successfully!");
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice. Please try again.");
+                            }
                             break;
                         case 3:
-                            System.out.println("Clearing all items...");
-                            service.clearExpiredStock();
-                            service.clearDefectedStockItems();
+                            // Delete Stock
+                            System.out.println("\n***Delete Stock***\n");
+                            System.out.print("Enter Stock ID you'd like to delete: ");
+                            String id = scanner.nextLine();
+                            service.removeStock(id);
                             break;
-                        default:
-                            System.out.println("Invalid choice. Please try again.");
+                        case 4:
+                            // Clear Stock (Expired/Defected)
+                            System.out.println("Choose which of the following you wold like to do: ");
+                            System.out.println("1. Clear Expired Items");
+                            System.out.println("2. Clear Defected Items");
+                            System.out.println("3. Clear All Items (Expired and Defected)");
+                            int clearChoice = readIntInput("Please enter your choice: ");
+                            switch (clearChoice) {
+                                case 1:
+                                    System.out.println("Clearing expired items...");
+                                    service.clearExpiredStock();
+                                    break;
+                                case 2:
+                                    System.out.println("Clearing defected items...");
+                                    service.clearDefectedStockItems();
+                                    break;
+                                case 3:
+                                    System.out.println("Clearing all items...");
+                                    service.clearExpiredStock();
+                                    service.clearDefectedStockItems();
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice. Please try again.");
+                            }
+                            break;
                     }
                     break;
-                case 11:
-                    // Delete Category
-                    System.out.print("Enter category ID: ");
-                    String toRemoveCatId = scanner.nextLine();
-                    service.deleteCategory(toRemoveCatId);
-                    System.out.println("Category added successfully!");
-                    break;
-                case 12:
-                    // Add Discount
-                    System.out.print("Enter 1 for a product discount and 2 for a category discount: ");
-                    DiscountTargetType type;
-                    DiscountType discountType;
-                    String discountChoiceInput = scanner.nextLine();
-                    if (discountChoiceInput.equals("1")) {
-                        type = DiscountTargetType.PRODUCT;
-                    } else if (discountChoiceInput.equals("2")) {
-                        type = DiscountTargetType.CATEGORY;
-                    } else {
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
+
+                case 5:
+                    // Product Operations
+                    // Stock Operations
+                    System.out.println("Choose which of the following you wold like to do: ");
+                    System.out.println("1. Add Product");
+                    System.out.println("2. Delete Product");
+                    System.out.println("3. Sell Product");
+                    int ProductChoice = readIntInput("Please enter your choice: ");
+                    switch (ProductChoice) {
+                        case 1:
+                            // Add Product
+                            System.out.print("Enter product name: ");
+                            String name = scanner.nextLine();
+                            System.out.print("Enter product's main Category name: ");
+                            String prodMainCat = scanner.nextLine();
+                            System.out.println("Enter product's sub-Category name: ");
+                            String prodSubCat = scanner.nextLine();
+                            System.out.println("Enter product's size: ");
+                            String prodSizeCat = scanner.nextLine();
+                            String[] categoryInfo = {prodMainCat, prodSubCat, prodSizeCat};
+                            int minimumStock = readIntInput("Enter minimum stock: ");
+                            double costPrice = readDoubleInput("Enter product cost price: ");
+                            System.out.print("Enter product location: ");
+                            String location = scanner.nextLine();
+                            System.out.print("Enter product Manufacturer: ");
+                            String manufacturer = scanner.nextLine();
+                            // Assuming InventoryController is a class that handles product operations
+                            service.saveProduct(name, minimumStock, categoryInfo, costPrice, location, manufacturer);
+                            System.out.println("Product added successfully!");
+                            break;
+                        case 2:
+                            // Delete Product
+                            // Delete Product
+                            System.out.print("Enter product ID to delete: ");
+                            String productIdToDelete = scanner.nextLine();
+                            service.removeProduct(productIdToDelete);
+                            break;
+                        case 3:
+                            // Sell Product
+                            System.out.println("Enter product ID: ");
+                            productId = scanner.nextLine();
+                            int sellAmount = readIntInput("Enter Sell amount: ");
+                            service.sellProduct(productId, sellAmount);
+                            break;
                     }
-                    double discountPercentage = readDoubleInput("Enter discount percentage: ");
-                    System.out.print("Enter discount description: ");
-                    String discountDescription = scanner.nextLine();
-                    System.out.print("Enter target ID (product or category ID): ");
-                    String targetID = scanner.nextLine();
-                    System.out.print("Enter discount start date (in the format of YYYY-MM-DD): ");
-                    LocalDate discountStartDate = LocalDate.parse(scanner.nextLine());
-                    System.out.print("Enter discount end date (in the format of YYYY-MM-DD): ");
-                    LocalDate discountEndDate = LocalDate.parse(scanner.nextLine());
-                    System.out.println("What is the discount type? (Manufacturer/Store): ");
-                    String discountTypeChoice = scanner.nextLine();
-                    if (discountTypeChoice.equalsIgnoreCase("manufacturer")) {
-                        discountType = DiscountType.MANUFACTURER;
-                    } else if (discountTypeChoice.equalsIgnoreCase("store")) {
-                        discountType = DiscountType.STORE;
-                    } else {
-                        System.out.println("Invalid choice. Please try again.");
-                        break;
+                    break;
+
+                case 6:
+                    // Discount Operations
+                    System.out.println("Choose which of the following you wold like to do: ");
+                    System.out.println("1. Add Discount");
+                    System.out.println("2. Delete Discount");
+                    System.out.println("3. List Discounts");
+                    System.out.println("4. Show discount for a product");
+                    int discountChoice = readIntInput("Please enter your choice: ");
+                    switch(discountChoice){
+                        case 1:
+                            // Add Discount
+                            System.out.print("Enter 1 for a product discount and 2 for a category discount: ");
+                            DiscountTargetType type;
+                            DiscountType discountType;
+                            String discountChoiceInput = scanner.nextLine();
+                            if (discountChoiceInput.equals("1")) {
+                                type = DiscountTargetType.PRODUCT;
+                            } else if (discountChoiceInput.equals("2")) {
+                                type = DiscountTargetType.CATEGORY;
+                            } else {
+                                System.out.println("Invalid choice. Please try again.");
+                                break;
+                            }
+                            double discountPercentage = readDoubleInput("Enter discount percentage: ");
+                            System.out.print("Enter discount description: ");
+                            String discountDescription = scanner.nextLine();
+                            System.out.print("Enter target ID (product or category ID): ");
+                            String targetID = scanner.nextLine();
+                            System.out.print("Enter discount start date (in the format of YYYY-MM-DD): ");
+                            LocalDate discountStartDate = LocalDate.parse(scanner.nextLine());
+                            System.out.print("Enter discount end date (in the format of YYYY-MM-DD): ");
+                            LocalDate discountEndDate = LocalDate.parse(scanner.nextLine());
+                            System.out.println("What is the discount type? (Manufacturer/Store): ");
+                            String discountTypeChoice = scanner.nextLine();
+                            if (discountTypeChoice.equalsIgnoreCase("manufacturer")) {
+                                discountType = DiscountType.MANUFACTURER;
+                            } else if (discountTypeChoice.equalsIgnoreCase("store")) {
+                                discountType = DiscountType.STORE;
+                            } else {
+                                System.out.println("Invalid choice. Please try again.");
+                                break;
+                            }
+                            service.addDiscount(targetID, discountPercentage, discountDescription, type,
+                                    discountStartDate, discountEndDate, discountType);
+                            System.out.println("Discount added successfully!");
+                            break;
+                        case 2:
+                            //Delete Discount
+                            System.out.print("Enter discount ID: ");
+                            String discountId = scanner.nextLine();
+                            service.removeDiscount(discountId);
+                            break;
+                        case 3:
+                            //List Discount
+                            System.out.println("Printing All Discounts.... ");
+                            service.listDiscounts();
+                            break;
+                        case 4:
+                            // Show discount for a product
+                            System.out.print("Enter product ID: ");
+                            productId = scanner.nextLine();
+                            double discountPercentageForProduct = service.getDiscountByProductId(productId);
+                            System.out.println("Discount percentage for product " + productId + ": " + Math.round(discountPercentageForProduct) + "%");
+                            break;
+
                     }
-                    service.addDiscount(targetID, discountPercentage, discountDescription, type,
-                            discountStartDate, discountEndDate, discountType);
-                    System.out.println("Discount added successfully!");
                     break;
-                case 13:
-                    //Delete Discount
-                    System.out.print("Enter discount ID: ");
-                    String discountId = scanner.nextLine();
-                    service.removeDiscount(discountId);
-                    break;
-                case 14:
-                    //List Discount
-                    service.listDiscounts();
-                    break;
-                case 15:
-                    // Show discount for a product
-                    System.out.print("Enter product ID: ");
-                    productId = scanner.nextLine();
-                    double discountPercentageForProduct = service.getDiscountByProductId(productId);
-                    System.out.println("Discount percentage for product " + productId + ": " + Math.round(discountPercentageForProduct) + "%");
-                    break;
-                case 16:
-                    //Sell Product
-                    System.out.println("Enter product ID: ");
-                    productId = scanner.nextLine();
-                    int sellAmount = readIntInput("Enter Sell amount: ");
-                    service.sellProduct(productId, sellAmount);
-                    break;
-                case 17:
+
+                case 7:
                     // update Minimum stock level
                     System.out.println("Enter product ID: ");
                     productId = scanner.nextLine();
                     int newMinimumStockLevel = readIntInput("Enter new minimum stock level: ");
                     service.updateMinimumStockLevel(productId, newMinimumStockLevel);
                     break;
+
+                case 4321:
+                    // Reports
+                    dropAllTables();
                 case 0:
                     // Return to worker selection
                     break;
