@@ -1,7 +1,9 @@
 package SupplierMoudleSource.Repository;
 
+import DTO.ConstantOrderDTO;
 import DTO.OrderDTO;
 import SupplierMoudleSource.DAO.OrderDAO;
+import SupplierMoudleSource.Domain.ConstantOrder;
 import SupplierMoudleSource.Domain.Order;
 
 import java.sql.SQLException;
@@ -81,5 +83,11 @@ public class OrderRepository {
     }
 
 
-
+    public void closeConstantOrder(ConstantOrder constantOrder) {
+        if (constantOrder == null){
+            throw new NullPointerException("Constant Order is null");
+        }
+        ConstantOrderDTO constantOrderDTO = constantOrder.getConstantOrderDTO();
+        orderDAO.saveConstantOrder(constantOrderDTO);
+    }
 }

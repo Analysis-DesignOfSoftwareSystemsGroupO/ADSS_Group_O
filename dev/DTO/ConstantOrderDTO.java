@@ -2,13 +2,13 @@ package DTO;
 
 import java.util.Map;
 
-public class requirementToConstantOrderDTO {
+public class ConstantOrderDTO {
     private Map<SuppliedItemDTO, Integer> suppliedItems;
     private String branchID;
     private String supplerID;
     private String dayOfWeek;
 
-    public requirementToConstantOrderDTO(String branchID, String  supplierID, Map<SuppliedItemDTO, Integer> suppliedItems, String dayOfWeek) {
+    public ConstantOrderDTO(String branchID, String supplierID, Map<SuppliedItemDTO, Integer> suppliedItems, String dayOfWeek) {
         this.branchID = branchID;
         this.supplerID = supplierID;
         this.suppliedItems = suppliedItems;

@@ -102,7 +102,7 @@ ALTER SEQUENCE supplierinventorydb.order_id_seq OWNED BY supplierinventorydb."or
 CREATE TABLE supplierinventorydb.productOfSupplier (
                                                        productID integer,
                                                        supplierID integer,
-                                                       price integer,
+                                                       price integer check ( price > 0 ),
                                                        PRIMARY KEY (productID, supplierID),
                                                        FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                        FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
@@ -117,7 +117,7 @@ CREATE TABLE supplierinventorydb.productsinorder (
 );
 
 CREATE TABLE supplierinventorydb.productInAgreement (
-                                                        price integer,
+                                                        price integer check ( price > 0 ),
                                                         productID integer,
                                                         branchID integer,
                                                         supplierID integer,
@@ -125,6 +125,18 @@ CREATE TABLE supplierinventorydb.productInAgreement (
                                                         FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
                                                         FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
                                                         FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
+);
+
+CREATE TABLE supplierinventorydb.constantorders (
+                                                                   branchID integer,
+                                                                   supplierID integer,
+                                                                   suppliedItemID integer,
+                                                                   quantity integer check ( quantity > 0 ) ,
+                                                                   dayOfWeek character varying(50),
+                                                                   PRIMARY KEY (branchID, supplierID, suppliedItemID),
+                                                                   FOREIGN KEY (branchID) REFERENCES supplierinventorydb.branch(id),
+                                                                   FOREIGN KEY (supplierID) REFERENCES supplierinventorydb.supplier(id) ON DELETE CASCADE,
+                                                                   FOREIGN KEY (suppliedItemID) REFERENCES supplierinventorydb.product(id)
 );
 
 -- DEFAULT ID VALUES
