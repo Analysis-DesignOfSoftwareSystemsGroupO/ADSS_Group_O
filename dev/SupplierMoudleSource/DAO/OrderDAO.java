@@ -3,6 +3,7 @@ package SupplierMoudleSource.DAO;
 import DTO.OrderDTO;
 import DTO.ProductDTO;
 import DTO.SuppliedItemDTO;
+import DTO.requirementToConstantOrderDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -203,5 +204,129 @@ public class OrderDAO {
         return ordersBySupplierDTOList;
     }
 
+
+
+    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTO(String dayOfWeek) throws SQLException {
+        String sql = "SELECT * FROM supplierinventorydb.constantorders WHERE dayofweek = ? ORDER BY supplierid, branchid";
+        String getSql = "SELECT * FROM supplierinventorydb.productinagreement WHERE branchid = ? AND supplierid = ? AND suppliediteid = ?";
+        String getProductSql = "SELECT * FROM supplierinventorydb.product WHERE id = ?";
+        List<requirementToConstantOrderDTO> orderDTOList = new ArrayList<>();
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, dayOfWeek);
+            ResultSet rs = pstmt.executeQuery();
+
+            int prevBranchId = -1;
+            int prevSupplierId = -1;
+            Map<SuppliedItemDTO, Integer> suppliedItems = new HashMap<>();
+
+            while (rs.next()) {
+                int branchId = rs.getInt("branchid");
+                int supplierId = rs.getInt("supplierid");
+                int quantity = rs.getInt("quantity");
+                int suppliedItemId = rs.getInt("supplieditemid");
+
+                // If we moved to a new group
+                if ((branchId != prevBranchId || supplierId != prevSupplierId) && !suppliedItems.isEmpty()) {
+                    orderDTOList.add(new requirementToConstantOrderDTO(Integer.toString(prevBranchId),
+                            Integer.toString(prevSupplierId), suppliedItems, dayOfWeek));
+                    suppliedItems = new HashMap<>();
+                }
+
+                // Get price from productInAgreement
+                PreparedStatement statement = connection.prepareStatement(getSql);
+                statement.setInt(1, branchId);
+                statement.setInt(2, supplierId);
+                statement.setInt(3, suppliedItemId);
+                ResultSet rs1 = statement.executeQuery();
+
+                int price = 0;
+                if (rs1.next()) {
+                    price = rs1.getInt("price");
+                }
+
+                // Get product info
+                statement = connection.prepareStatement(getProductSql);
+                statement.setInt(1, suppliedItemId);
+                ResultSet rs2 = statement.executeQuery();
+
+                String productName = "";
+                String productManufacturer = "";
+                int shelfLife = 0;
+
+                if (rs2.next()) {
+                    productName = rs2.getString("productName");
+                    productManufacturer = rs2.getString("manufacturer");
+                    shelfLife = rs2.getInt("shelflifedays");
+                }
+
+                ProductDTO product = new ProductDTO(Integer.toString(suppliedItemId), productName, productManufacturer, shelfLife);
+                SuppliedItemDTO suppliedItem = new SuppliedItemDTO(price, product);
+                suppliedItems.put(suppliedItem, quantity);
+
+                prevBranchId = branchId;
+                prevSupplierId = supplierId;
+            }
+
+            // Add the last group
+            if (!suppliedItems.isEmpty()) {
+                orderDTOList.add(new requirementToConstantOrderDTO(Integer.toString(prevBranchId),
+                        Integer.toString(prevSupplierId), suppliedItems, dayOfWeek));
+            }
+
+        }
+
+        return orderDTOList;
+    }
+
+    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOById(String productName, String manufacturer) throws Exception {
+        String getProductSql = "Select * from supplierinventorydb.product where name = ? and manufacturer = ?";
+        String getFromSuppliedItem = "Select * from supplierinventorydb.productinagreement where productid = ?";
+        String getConstantOrderSql = "Select * from supplierinventorydb.constantorders where supplieditemid = ?";
+        List<requirementToConstantOrderDTO> orderDTOList = new ArrayList<>();
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(getProductSql);
+            pstmt.setString(1, productName);
+            pstmt.setString(2, manufacturer);
+            ResultSet rs = pstmt.executeQuery();
+            ProductDTO productDTO;
+            String productId;
+
+            if (rs.next()) {
+                productId = Integer.toString(rs.getInt(1));
+                productDTO = new ProductDTO(productId, productName, manufacturer, rs.getInt("shelflifedays"));
+            } else { // case when no products are in constant order
+                throw new Exception("Product doesnt exist");
+            }
+
+            pstmt = connection.prepareStatement(getFromSuppliedItem);
+            pstmt.setInt(1, Integer.parseInt(productId));
+            ResultSet rs2 = pstmt.executeQuery();
+
+            while (rs2.next()) { //get all products that are in a constant order
+                int branchid = rs2.getInt("branchid");
+                int supplierid = rs2.getInt("supplierid");
+                int price = rs2.getInt("price");
+
+                SuppliedItemDTO suppliedItem = new SuppliedItemDTO(price, productDTO);
+                Map<SuppliedItemDTO, Integer> suppliedItems = new HashMap<>();
+
+                PreparedStatement pstmt2 = connection.prepareStatement(getConstantOrderSql);
+                pstmt2.setInt(1, Integer.parseInt(productId));
+                ResultSet rs3 = pstmt2.executeQuery();
+                while (rs3.next()) {
+                    int quantity = rs3.getInt("quantity");
+                    suppliedItems.put(suppliedItem, quantity);
+                    String dayofWeek = rs3.getString("dayofweek");
+                    orderDTOList.add(new requirementToConstantOrderDTO(Integer.toString(branchid), Integer.toString(supplierid),
+                            suppliedItems, dayofWeek));
+                }
+            }
+        }
+
+        return orderDTOList;
+    }
 
 }

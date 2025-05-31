@@ -1,9 +1,6 @@
 package SupplierMoudleSource.Service;
 
-import DTO.AgreementDTO;
-import DTO.BranchDTO;
-import DTO.OrderDTO;
-import DTO.SupplierDTO;
+import DTO.*;
 import SupplierMoudleSource.Domain.Agreement;
 import SupplierMoudleSource.Domain.Branch;
 import SupplierMoudleSource.Repository.*;
@@ -11,8 +8,15 @@ import SupplierMoudleSource.Domain.Order;
 
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class OrderService {
     private static OrderRepository orderRepository = OrderRepository.getInstance() ;
@@ -143,7 +147,7 @@ public class OrderService {
 
         public void createImmediateOrder(String branchID, String productName, String manufacturer, int quantity) throws Exception {
             String productID = productRepository.getProduct(productName, manufacturer).getProductID();
-            List<Agreement> agreement = castAgreementDTOtoAgreement(agreementRepository.getAllAgreement()); //get all agreements
+            List<Agreement> agreement = castAgreementDTOStoAgreement(agreementRepository.getAllAgreement()); //get all agreements
             Agreement bestAgreement = null;
             int minPrice = -1;
             for (Agreement a : agreement) {
@@ -166,15 +170,59 @@ public class OrderService {
 
 
 
-        private List <Agreement> castAgreementDTOtoAgreement(List<AgreementDTO> agreementDTOS) throws Exception {
-            List<Agreement> agreements = new ArrayList<Agreement>();
-            for (AgreementDTO agreementDTO : agreementDTOS) {
-                BranchDTO branchDTO = branchesRepository.getBranch(agreementDTO.getBranchId());
-                SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
-                agreements.add(new Agreement(branchDTO, supplierDTO, agreementDTO ));
-            }
-            return agreements;
+    private List <Agreement> castAgreementDTOStoAgreement(List<AgreementDTO> agreementDTOS) throws Exception {
+        List<Agreement> agreements = new ArrayList<Agreement>();
+        for (AgreementDTO agreementDTO : agreementDTOS) {
+            agreements.add(castAgreementDTOtoAgreement(agreementDTO));
         }
+        return agreements;
+    }
 
+    private Agreement castAgreementDTOtoAgreement(AgreementDTO agreementDTO) throws Exception {
+        BranchDTO branchDTO = branchesRepository.getBranch(agreementDTO.getBranchId());
+        SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
+        return new Agreement(branchDTO, supplierDTO, agreementDTO );
+    }
+
+    public void scheduleDailyOrderCheck() {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+        Runnable task = () -> {
+            LocalDate today = LocalDate.now();
+            DayOfWeek dayOfWeek = today.getDayOfWeek();
+            try {
+                createAllOrdersForToday(dayOfWeek.toString().substring(0, 3)); // your real logic
+            } catch (Exception e) {
+                throw new RuntimeException("Error while creating all constant orders ", e);
+            }
+        };
+
+        long delay = getDelayUntilMidnightInMillis(); //todo change for local class time
+        long period = TimeUnit.DAYS.toMillis(1); // 24 hours
+
+        scheduler.scheduleAtFixedRate(task, delay, period, TimeUnit.MILLISECONDS);
+    }
+    private static long getDelayUntilMidnightInMillis() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextMidnight = now.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        Duration duration = Duration.between(now, nextMidnight);
+        return duration.toMillis();
+    }
+
+    private void createAllOrdersForToday(String dayOfWeek) throws Exception {
+        List<requirementToConstantOrderDTO> requirementToConstantOrderDTOS = orderRepository.getRequirementToConstantOrderDTOByDay(dayOfWeek);
+        for (requirementToConstantOrderDTO requirementDTO : requirementToConstantOrderDTOS) {
+            Agreement agreement = castAgreementDTOtoAgreement(agreementRepository.getAgreement(requirementDTO.getBranchID(),
+                                                                requirementDTO.getSupplierID()));
+
+            Branch branch = new Branch(branchesRepository.getBranch(requirementDTO.getBranchID()));
+            Order order = new Order(agreement, branch);
+            for (SuppliedItemDTO suppliedItemDTO : requirementDTO.getSuppliedItems().keySet()){
+                order.addItemToOrder(suppliedItemDTO.product.productID, requirementDTO.getSuppliedItems().get(suppliedItemDTO));
+            }
+            order.closeOrder();
+            orderRepository.saveOrder(order);
+        }
+    }
 
 }

@@ -1,6 +1,7 @@
 package SupplierMoudleSource.Repository;
 
 import DTO.OrderDTO;
+import DTO.requirementToConstantOrderDTO;
 import SupplierMoudleSource.DAO.OrderDAO;
 import SupplierMoudleSource.Domain.Order;
 
@@ -82,9 +83,15 @@ public class OrderRepository {
                 }
             }
         }
-
         return unclosedOrders;
     }
 
 
+    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOByDay(String dayOfWeek) throws SQLException {
+        return orderDAO.getRequirementToConstantOrderDTO(dayOfWeek);
+    }
+
+    public List<requirementToConstantOrderDTO> getRequirementToConstantOrderDTOById(String name, String manufacturer) throws Exception {
+        return orderDAO.getRequirementToConstantOrderDTOById(name, manufacturer);
+    }
 }

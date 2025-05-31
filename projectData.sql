@@ -127,7 +127,7 @@ CREATE TABLE supplierinventorydb.productInAgreement (
                                                         FOREIGN KEY (productID) REFERENCES supplierinventorydb.product(id)
 );
 
-CREATE TABLE supplierinventorydb.produtinrequiredconstantorder (
+CREATE TABLE supplierinventorydb.constantorders (
     branchID integer,
     supplierID integer,
     suppliedItemID integer,
