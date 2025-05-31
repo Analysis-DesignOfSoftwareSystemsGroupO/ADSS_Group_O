@@ -30,6 +30,43 @@ public class CategoryDAO {
         }
     }
 
+    public void deleteCategoryFromCategories(String id) {
+        String sql = """
+                DELETE FROM "Inventory"."Categories"
+                WHERE category_id = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error deleting product: " + e.getMessage());
+        }
+
+
+    }
+
+    public void deleteCategoryGroup(String id) {
+        String sql = """
+                DELETE FROM "Inventory"."Category_Groups"
+                WHERE group_id = ?
+                """;
+
+        try (Connection connection = DataBaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error deleting product: " + e.getMessage());
+        }
+
+    }
+
     public void saveCategoryGroup(String groupId, Category parentCategory, Category subCategory,
                                   Category subSubCategory) {
         String sql = """

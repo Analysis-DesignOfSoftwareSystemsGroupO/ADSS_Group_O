@@ -73,9 +73,27 @@ public class InventoryControllerImpl implements InventoryController {
         }
 
         productDAO.removeFromProductsByCategory(id);
-
+        //todo: check for discount before deleting
+        String groupId = productDAO.getProductById(id).getCategoryGroupId();
+        productDAO.deleteFromSellingPrices(id);
         productRepository.deleteProduct(id);
         productDAO.deleteProduct(id);
+        if (productDAO.getProductsByGroupId(groupId).isEmpty()) {
+            List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
+            categoryDAO.deleteCategoryGroup(groupId);
+            for (String categoryId : categories) {
+                if (categoryDAO.getCategoryGroupsByCategoryId(categoryId).size()==1) {
+                    categoryDAO.deleteCategoryFromCategories(categoryId);
+                }
+            }
+        }
+        else {
+            productDAO.deleteFromSellingPrices(id);
+            productRepository.deleteProduct(id);
+            productDAO.deleteProduct(id);
+        }
+
+
     }
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
