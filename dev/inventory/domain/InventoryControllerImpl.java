@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class InventoryControllerImpl implements InventoryController {
+    private final String branchId; // Assuming branchId is constant for this controller
     // Assuming ProductRepository is a class that provides access to product data
     private final ProductRepository productRepository = new InMemoryProductRepository();
     private final StockItemRepository stockItemRepository = new InMemoryStockItemRepository();
@@ -27,7 +28,8 @@ public class InventoryControllerImpl implements InventoryController {
     private final CategoryDAO categoryDAO = new CategoryDAO();
 
 
-    public InventoryControllerImpl() {
+    public InventoryControllerImpl(String branchId) {
+        this.branchId = branchId;
     }
 
     public void addProduct(String name, int minimumStock, String[] categoryInfo,
@@ -44,7 +46,7 @@ public class InventoryControllerImpl implements InventoryController {
             System.out.println("Product already exists. Updating existing product.");
             return;
         } else {
-            Product productToAdd = new Product(name, minimumStock,sellingPrice, location, manufacturer, groupId);
+            Product productToAdd = new Product(name, minimumStock, sellingPrice, location, manufacturer, groupId);
             // Add to repository
             productRepository.saveProduct(productToAdd);
             // Save to DB - category
@@ -66,35 +68,18 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void removeProduct(String id) {
-        System.out.println("Removing product with ID: " + id);
-        List<StockItem> stockItems = stockItemDAO.getStockItemsByProductId(id);
-        if (!stockItems.isEmpty()) {
-            throw new IllegalArgumentException("Product has stock items. Cannot delete product.");
-        }
-
-        productDAO.removeFromProductsByCategory(id);
-        //todo: check for discount before deleting
-        String groupId = productDAO.getProductById(id).getCategoryGroupId();
-        productDAO.deleteFromSellingPrices(id);
-        productRepository.deleteProduct(id);
-        productDAO.deleteProduct(id);
-        if (productDAO.getProductsByGroupId(groupId).isEmpty()) {
-            List<String> categories = categoryDAO.getCategoriesByGroupId(groupId);
-            categoryDAO.deleteCategoryGroup(groupId);
-            for (String categoryId : categories) {
-                if (categoryDAO.getCategoryGroupsByCategoryId(categoryId).size()==1) {
-                    categoryDAO.deleteCategoryFromCategories(categoryId);
-                }
+        if (productDAO.productExistsById(id)) {
+            System.out.println("Removing product with ID: " + id);
+            List<StockItem> stockItems = stockItemDAO.getStockItemsByProductId(id);
+            if (!stockItems.isEmpty()) {
+                throw new IllegalArgumentException("Product has stock items. Cannot delete product.");
             }
+            productDAO.deleteProduct2(id);
+        } else {
+            System.out.println("Product with ID: " + id + " does not exist.");
         }
-        else {
-            productDAO.deleteFromSellingPrices(id);
-            productRepository.deleteProduct(id);
-            productDAO.deleteProduct(id);
-        }
-
-
     }
+
 
     public void saveStockItem(String productName, String productManufacturer, int quantity, String location, StockItemStatus status, LocalDate expiryDate) {
         Product product = getProductByName(productName, productManufacturer);
@@ -132,12 +117,25 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void printAllCategories() {
-        InMemoryCategoryRepository.printAllCategories();
+        System.out.println("------- Category Report -------");
+        List<Category> categories = categoryDAO.getAllCategories();
+        for (Category category : categories) {
+            System.out.println("------------------------------" +
+                    "\nCategory: " + category.getName() +
+                    "\nID: " + category.getId() +
+                    "\n------------------------------\n");
+        }
+
     }
 
     public void UpdateDiscounts() {
         System.out.println("Updating discounts...");
-        discountDAO.updateAllDiscountsAndSellingPrices();
+        try {
+            discountDAO.updateAllDiscountsAndSellingPrices();
+        }
+        catch (Exception e) {
+            System.out.println("Error while updating discounts...");
+        }
 //        // Remove Expired and Apply Active to selling prices
 //        discountDAO.updateAllDiscountsSellingPrices();
 //        // Update all product selling prices
@@ -258,7 +256,7 @@ public class InventoryControllerImpl implements InventoryController {
             return stockItemId;
         } else {
             // Create a new StockItem since no matching one exists
-            StockItem newStockItem = new StockItem(0, location, status , expiryDate);
+            StockItem newStockItem = new StockItem(0, location, status, expiryDate);
             newStockItem.setProduct(product);
             stockItemDAO.saveStockItem(newStockItem);
             return newStockItem.getStockItemId();
@@ -380,19 +378,22 @@ public class InventoryControllerImpl implements InventoryController {
         System.out.println("------- Stock Report -------");
         List<Product> products = productDAO.getAllProducts();
         for (Product product : products) {
-            int inStorage = countProductInStorage(product.getId());
-            int productQuantity = countProductQuantity(product.getId());
-            int defectedProductQuantity = countDefectedProductQuantity(product.getId());
-            System.out.println("Product: " + product.getName()
-                    + "\nProduct ID: " + product.getId()
-                    + "\nProduct Manufacturer: " + product.getManufacturer()
-                    + "\nProduct Minimum Stock Level: " + product.getMinimumStockLevel()
-                    + "\nProduct Quantity: " + productQuantity
-                    + "\nAmount of product in Storage: " + inStorage
-                    + "\nAmount of Product in Store: " + (productQuantity + defectedProductQuantity - inStorage)
-                    + "\nDamaged/Expired Product Quantity: " + defectedProductQuantity
-                    + "\nLocation: " + product.getLocation() +
-                    "\n------------------------------\n");
+            System.out.println(product);
+            if (stockItemDAO.hasAnyStockItem(product.getId())) {
+                int inStorage = stockItemDAO.numInStorage(product.getId());
+                int inStore = stockItemDAO.numInStore(product.getId());
+                int defectedAndExpiredProductQuantity = stockItemDAO.numOfDamaged(product.getId()) + stockItemDAO.numOfExpired(product.getId());
+                System.out.println("Product: " + product.getName()
+                        + "\nProduct ID: " + product.getId()
+                        + "\nProduct Manufacturer: " + product.getManufacturer()
+                        + "\nProduct Minimum Stock Level: " + product.getMinimumStockLevel()
+                        + "\nProduct Quantity: " + (inStore + inStore)
+                        + "\nAmount of product in Storage: " + inStorage
+                        + "\nAmount of Product in Store: " + inStore
+                        + "\nDamaged/Expired Product Quantity: " + defectedAndExpiredProductQuantity
+                        + "\nLocation: " + product.getLocation() +
+                        "\n------------------------------\n");
+            }
         }
     }
 

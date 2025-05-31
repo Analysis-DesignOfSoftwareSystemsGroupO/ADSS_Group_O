@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         PresentMainMenu supplierMenu = new PresentMainMenu();
-        InventoryMenu inventoryMenu = new InventoryMenu();
+        InventoryMenu inventoryMenu = new InventoryMenu("branch-1");
         int choice = readIntInput("Welcome to the Application!\n" +
                 "1. Supplier Module\n" +
                 "2. Inventory Module\n" +
