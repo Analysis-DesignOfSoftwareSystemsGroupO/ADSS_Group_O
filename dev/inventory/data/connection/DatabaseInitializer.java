@@ -93,7 +93,6 @@ public class DatabaseInitializer {
         try (Connection conn = DataBaseConnector.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Inventory schema and tables created.");
         } catch (SQLException e) {
             System.err.println("Failed to initialize database:");
             e.printStackTrace();

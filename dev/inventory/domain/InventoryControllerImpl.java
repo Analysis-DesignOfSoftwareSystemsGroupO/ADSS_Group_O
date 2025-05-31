@@ -129,7 +129,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void UpdateDiscounts() {
-        System.out.println("Updating discounts...");
         try {
             discountDAO.updateAllDiscountsAndSellingPrices();
         } catch (Exception e) {

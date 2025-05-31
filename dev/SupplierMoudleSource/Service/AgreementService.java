@@ -1,3 +1,4 @@
+
 package SupplierMoudleSource.Service;
 
 import SupplierMoudleSource.DTO.AgreementDTO;
@@ -88,8 +89,8 @@ public class AgreementService {
 
     //views an agreement given branch id and supplier id (ued for creating a new order)
     public void viewAgreement(String branchId, String supplierID) throws Exception {
-        if (agreementRepository.getAgreement(branchId, supplierID) != null){
-            AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
+        AgreementDTO agreementDTO = agreementRepository.getAgreement(branchId, supplierID);
+        if (agreementDTO != null){
             BranchDTO branchDTO = branchRepository.getBranch(agreementDTO.getBranchId());
             SupplierDTO supplierDTO = supplierRepository.getSupplier(agreementDTO.getSupplierID());
             Agreement agreement = new Agreement(branchDTO, supplierDTO, agreementDTO);

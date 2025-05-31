@@ -364,7 +364,6 @@ public class DiscountDAO {
                 clearNoActiveDiscountsStmt.executeUpdate();
                 connection.commit();
 
-                System.out.println("All discounts and selling prices updated successfully.");
 
             } catch (Exception e) {
                 connection.rollback();
