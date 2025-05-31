@@ -69,15 +69,7 @@ public class TransportContorollerDomain {
         TransportRepository.saveTransport(transport);
     }
 
-    public TransportDTO makeTransportDTOFromTransport(Transport transport) throws Exception{
-        int driverId = -1;
-        int truckId = -1;
-        if(transport.getTruck()!= null)
-            truckId = Integer.parseInt(transport.getTruck().getPlateNumber());
-        if ( transport.getDriver()!= null)
-            driverId = Integer.parseInt(transport.getDriver().getId());
-        return new TransportDTO(transport.getId(),transport.getDate().toString(), transport.isSent(), transport.getMaxWeight(),driverId,truckId,transport.getSource().getName());
-    }
+
 
 
     public TransportDTO[] getWeeklyTransportsRequests(LocalDate date) throws Exception{
@@ -100,7 +92,7 @@ public class TransportContorollerDomain {
         return documentRepo.getValidID();
     }
 
-    public int getNewTransportId(){
+    public int getNewTransportId() throws Exception{
         return transportRepo.getAvailableid();
     }
 }

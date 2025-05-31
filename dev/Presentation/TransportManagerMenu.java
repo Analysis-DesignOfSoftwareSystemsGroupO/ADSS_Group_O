@@ -17,7 +17,7 @@ public class TransportManagerMenu {
     private final TransportManagerControllerPL controller;
     private final Scanner scanner = new Scanner(System.in);
 
-    public TransportManagerMenu() {
+    public TransportManagerMenu() throws Exception {
         this.controller = new TransportManagerControllerPL();
     }
 

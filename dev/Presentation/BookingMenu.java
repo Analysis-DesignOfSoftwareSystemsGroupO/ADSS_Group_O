@@ -2,7 +2,6 @@ package Presentation;
 
 import DTO.ProductDTO;
 import Transport_Module_Exceptions.ATransportModuleException;
-import Transport_Module_Exceptions.InvalidInputException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,7 +17,6 @@ import java.util.Scanner;
  * This class provides a simple text-based interface to interact with the BookingService.
  */
 public class BookingMenu {
-    // todo - ask for site name and area from user
 
     // Dependency on the BookingService to process transport requests
     private BookingControllerPL controller;
