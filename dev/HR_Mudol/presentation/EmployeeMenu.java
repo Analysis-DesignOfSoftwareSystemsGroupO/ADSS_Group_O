@@ -24,7 +24,7 @@ public class EmployeeMenu implements Menu {
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO branch) {
         int empId = self.getEmployeeId();
-        WeekDTO currentWeek = getCurrentWeek(branch);
+        WeekDTO currentWeek = branch.getCurrentWeekDTO();
 
         if (caller.getUserId() != empId) {
             System.out.println("Access denied: You can only access your own menu.");
@@ -70,9 +70,5 @@ public class EmployeeMenu implements Menu {
         }
     }
 
-    private WeekDTO getCurrentWeek(BranchDTO branchDTO) {
-        List<WeekDTO> weeks = branchDTO.getWeekRepo();
-        if (weeks == null || weeks.isEmpty()) return null;
-        return weeks.get(weeks.size() - 1); // הנחה: השבוע האחרון הוא השבוע הנוכחי
-    }
+
 }

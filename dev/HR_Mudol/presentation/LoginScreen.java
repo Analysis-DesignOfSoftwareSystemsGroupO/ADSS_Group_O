@@ -4,8 +4,6 @@ import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Controllers.IEmployeeController;
-import HR_Mudol.domain.Objects.Employee;
-import HR_Mudol.domain.Objects.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,7 +19,7 @@ public class LoginScreen {
         this.employeeController = employeeController;
     }
 
-    public void start() {
+    public void start() throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -65,8 +63,10 @@ public class LoginScreen {
                 continue;
             }
 
-            // פתיחת תפריט לפי DTO
-            UserDTO userDTO = new UserDTO(matched.getEmployeeId(), "regularEmp"); // דרגת גישה בסיסית - שדרג לפי צורך
+            // שליפת רמת גישה אמיתית מהמערכת
+            String level = employeeController.getUserLevel(matched.getEmployeeId());
+            UserDTO userDTO = new UserDTO(matched.getEmployeeId(), level);
+
             launchMenuForUser(userDTO, matched, selectedBranch);
         }
     }
@@ -87,8 +87,7 @@ public class LoginScreen {
         return null;
     }
 
-    private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranch) {
-        // מעבר לתפריט המתאים לפי סוג המשתמש
+    private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranch) throws SQLException {
         if (userDTO.getLevel().equalsIgnoreCase("HRManager")) {
             HRManagerMenu menu = new HRManagerMenu();
             if (menu.start(userDTO, employeeDTO, curBranch)) return;

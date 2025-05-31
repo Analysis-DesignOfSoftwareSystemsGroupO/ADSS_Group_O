@@ -9,7 +9,12 @@ import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.repository.*;
 import HR_Mudol.presentation.LoginScreen;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +22,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "Sansa1234";
+
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -27,6 +37,16 @@ public class Main {
             System.out.println("2. Start with a fresh (empty) system");
             System.out.print("Choose option [1/2]: ");
             String choice = scanner.nextLine().trim();
+
+            // Run schema according to choice
+            if (choice.equals("1")) {
+                initializeDatabase("schema_with_data.sql");
+            } else if (choice.equals("2")) {
+                initializeDatabase("schema_only.sql");
+            } else {
+                System.out.println("Invalid option.");
+                return;
+            }
 
             // DAO instantiation
             IEmployeeDAO employeeDAO = new EmployeeDAOImpl();
@@ -51,7 +71,7 @@ public class Main {
                     System.out.println("⚠ No branches found in the database.");
                     return;
                 }
-            } else if (choice.equals("2")) {
+            } else {
                 Branch newBranch = new Branch("center", "Main Branch");
                 addAdminUserIfNeeded(newBranch);
                 addDefaultRoles(newBranch);
@@ -61,9 +81,6 @@ public class Main {
                 allBranches = new ArrayList<>();
                 allBranches.add(dto);
                 branchRepo.add(dto);
-            } else {
-                System.out.println("Invalid option.");
-                return;
             }
 
             mapper = new DTOToDomainMapper(userRepo, empRepo, roleRepo, weekRepo);
@@ -80,6 +97,8 @@ public class Main {
 
         } catch (SQLException e) {
             System.out.println("❌ System error: " + e.getMessage());
+        } catch (Exception ex) {
+            System.out.println("❌ Initialization failed: " + ex.getMessage());
         }
     }
 
@@ -100,5 +119,25 @@ public class Main {
         for (String name : roles) {
             branch.getRoleRepo().add(new Role(name));
         }
+    }
+
+    private static void initializeDatabase(String sqlFile) throws Exception {
+        System.out.println("🛠 Initializing database from: " + sqlFile);
+        String sql = new String(Files.readAllBytes(Paths.get(sqlFile)));
+        Class.forName("org.postgresql.Driver");
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement()) {
+            for (String command : sql.split(";")) {
+                command = command.trim();
+                if (!command.isEmpty()) {
+                    try {
+                        stmt.execute(command + ";");
+                    } catch (Exception e) {
+                        System.err.println("⚠ Skipping command:\n" + command + "\nCause: " + e.getMessage());
+                    }
+                }
+            }
+        }
+        System.out.println("✅ Database initialized.");
     }
 }

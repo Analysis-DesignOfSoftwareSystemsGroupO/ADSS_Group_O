@@ -6,13 +6,14 @@ import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.Service.ManagerService.HRService;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 public class HRManagerMenu implements Menu {
 
     @Override
-    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) {
+    public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException {
         if (!caller.isManager()) {
             System.out.println("Access denied.");
             return false;

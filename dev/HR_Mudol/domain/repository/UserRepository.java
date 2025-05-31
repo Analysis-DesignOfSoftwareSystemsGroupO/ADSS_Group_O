@@ -87,6 +87,12 @@ public class UserRepository {
         }
         return null;
     }
+    public Level getLevelById(int employeeId) {
+        User user = usersByEmployeeId.get(employeeId);
+        if (user == null) throw new IllegalArgumentException("User not found");
+        return user.getLevel();
+    }
+
 
 
 }

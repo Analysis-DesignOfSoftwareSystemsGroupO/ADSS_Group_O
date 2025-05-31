@@ -494,6 +494,12 @@ public class EmployeeController implements IEmployeeController {
         return dtos;
     }
 
+    @Override
+    public String getUserLevel(int employeeId) throws SQLException {
+        return curBranch.getUserRepo().getLevelById(employeeId).name();
+    }
+
+
 }
 
 
