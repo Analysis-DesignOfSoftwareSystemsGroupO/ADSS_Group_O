@@ -69,7 +69,7 @@ public class HRManagerMenu implements Menu {
             String choice = sc.nextLine();
             try {
                 switch (choice) {
-                    case "1" -> System.out.println("Not yet implemented");
+                    case "1" -> hr.addEmployee(caller);
                     case "2" -> hr.removeEmployeeFromALLRoles(caller);
                     case "3" -> hr.viewMyConstraints(caller, caller.getUserId());
                     case "4" -> hr.viewPersonalDetails(caller, caller.getUserId());

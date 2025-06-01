@@ -206,6 +206,12 @@ public class HRService implements IHRService {
         }
     }
 
+
+    public void addEmployee(UserDTO caller) throws SQLException {
+        employeeController.addEmployee(caller);
+    }
+
+
     @Override
     public void cancelShift(UserDTO caller, WeekDTO week) throws SQLException {
         weekController.cancelShift(caller, week);
