@@ -1,4 +1,6 @@
-import transport_module.*;
+import TransportModule.transport_module.Product;
+import TransportModule.transport_module.ProductListDocument;
+import TransportModule.transport_module.Site;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

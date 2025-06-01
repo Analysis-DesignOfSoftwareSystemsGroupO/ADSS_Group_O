@@ -1,5 +1,8 @@
-import Transport_Module_Exceptions.*;
-import transport_module.*;
+import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
+import TransportModule.Transport_Module_Exceptions.InvalidAmountException;
+import TransportModule.Transport_Module_Exceptions.OverWeightException;
+import TransportModule.Transport_Module_Exceptions.TransportAlreadySentException;
+import TransportModule.transport_module.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

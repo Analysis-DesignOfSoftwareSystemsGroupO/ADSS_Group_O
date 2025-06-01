@@ -1,4 +1,6 @@
-import transport_module.*;
+import TransportModule.transport_module.Driver;
+import TransportModule.transport_module.DrivingLicence;
+import TransportModule.transport_module.Truck;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

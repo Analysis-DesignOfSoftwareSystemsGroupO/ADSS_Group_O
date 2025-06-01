@@ -1,5 +1,6 @@
 
-import transport_module.*;
+import TransportModule.transport_module.DrivingLicence;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 public class DrivingLicenceTest {
