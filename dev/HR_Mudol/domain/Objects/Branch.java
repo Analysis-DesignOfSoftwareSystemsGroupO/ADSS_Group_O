@@ -46,10 +46,10 @@ public class Branch {
 
         this.name=name;
 
-        Role shiftManager = new Role("Shift Manager");
-        Role Driver = new Role("Driver");
-        roleRepo.add(shiftManager);
-        roleRepo.add(Driver);
+//        Role shiftManager = new Role("Shift Manager");
+//        Role Driver = new Role("Driver");
+//        roleRepo.add(shiftManager);
+//        roleRepo.add(Driver);
         weekRepo.add(new Week());
     }
 
