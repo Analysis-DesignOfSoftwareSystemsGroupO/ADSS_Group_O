@@ -9,7 +9,6 @@ import java.util.List;
 
 public class BranchDAOImpl extends BaseDAO implements IBranchDAO {
 
-
     public BranchDAOImpl() throws SQLException {
         super();
     }

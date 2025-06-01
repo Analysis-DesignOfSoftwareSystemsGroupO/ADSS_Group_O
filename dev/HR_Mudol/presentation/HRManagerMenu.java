@@ -58,6 +58,7 @@ public class HRManagerMenu implements Menu {
                 }
                 case "0" -> {
                     System.out.println("Logging out. Returning to login screen.");
+                    hr.close();
                     return true;
                 }
                 default -> System.out.println("Invalid option. Try again.");

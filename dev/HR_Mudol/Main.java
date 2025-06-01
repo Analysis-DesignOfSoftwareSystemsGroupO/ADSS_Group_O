@@ -3,6 +3,7 @@ package HR_Mudol;
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DataBase.DatabaseInitializer;
+import HR_Mudol.DataBase.PostgresConnection;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.Branch;
@@ -90,12 +91,14 @@ public class Main {
             BranchDTO selectedBranchDTO = DTOToDomainMapper.toDTO(selectedBranch);
             LoginScreen login = new LoginScreen(selectedBranchDTO, user);
             login.start();
+            PostgresConnection.closeConnection();
 
 
         } catch (Exception ex) {
             System.out.println("❌ Initialization failed: " + ex.getMessage());
             ex.printStackTrace();
         }
+
     }
 
     private static void addAdminUserIfNeeded(Collection<Branch> branches) throws Exception {
