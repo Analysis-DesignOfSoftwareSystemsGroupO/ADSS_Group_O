@@ -49,7 +49,18 @@ public class DTOToDomainMapper {
         Employee emp = employeeRepository.getById(dto.getEmployeeId());
         if (emp != null) return emp;
 
-        return new Employee(dto.getFullName(),dto.getEmployeeId(),dto.getPassword(),dto.getBankAccount(),dto.getSalary(),dto.getStartDate(),dto.getSalary(),dto.getMinEveningShift(),dto.getSickDays(),dto.getDaysOff());
+        return new Employee(
+                dto.getFullName(),
+                dto.getEmployeeId(),
+                dto.getPassword(),
+                dto.getBankAccount(),
+                dto.getSalary(),
+                dto.getStartDate(),
+                dto.getMinDayShift(),
+                dto.getMinEveningShift(),
+                dto.getSickDays(),
+                dto.getDaysOff()
+        );
     }
 
     public static Role fromDTO(RoleDTO dto) {

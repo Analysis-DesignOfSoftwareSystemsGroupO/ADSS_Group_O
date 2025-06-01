@@ -120,6 +120,14 @@ public class RoleRepository {
         return new RoleDTO(role.getRoleNumber(), role.getDescription());
     }
 
+    public Role getByName(String name) {
+        for (Role r : roles) {
+            if (r.getDescription().equalsIgnoreCase(name)) {
+                return r;
+            }
+        }
+        return null;
+    }
 
 
 
