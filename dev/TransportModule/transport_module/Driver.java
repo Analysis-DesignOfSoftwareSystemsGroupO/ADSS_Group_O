@@ -1,27 +1,24 @@
 package TransportModule.transport_module;
 
+import HR_Mudol.domain.Objects.Employee;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Driver {
+public class Driver extends Employee{
     private ArrayList<DrivingLicence> licencs;
-    private final String name;
-    private final String id;
-    private Map<LocalDate, Boolean> availablityCalander;
 
     /***
      * Constructor - creates a Driver with given name, ID and a copy of provided licenses.
      */
-    public Driver(String name, String id, ArrayList<DrivingLicence> licencs) {
-        this.name = name;
-        this.id = id;
+    public Driver( String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff, ArrayList<DrivingLicence> licencs) {
+       super( empName, empId, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveninigShift, sickDays, daysOff);
         this.licencs = new ArrayList<>();
         for (DrivingLicence licence : licencs) {
             this.licencs.add(new DrivingLicence(licence));
         }
-        availablityCalander = new HashMap<>();
     }
 
 
@@ -39,28 +36,7 @@ public class Driver {
         return cpy;
     }
 
-    /***
-     * @return Driver's ID
-     */
-    public String getId() {
-        return id;
-    }
 
-    /***
-     * @return Driver's name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /***
-     * Checks if the driver is available on a specific date.
-     * @param date Date to check
-     * @return true if available, false if already assigned
-     */
-    public boolean isavailable(LocalDate date) {
-        return availablityCalander.get(date) == null;
-    }
 
 
     /***
@@ -82,23 +58,9 @@ public class Driver {
 
 //*********************************************************************************************************************** Set functions
 
-    /***
-     * Assigns the driver to a mission on a specific date (makes him unavailable).
-     * @param date Date to assign
-     */
-    public void assignToMission(LocalDate date) {
-        availablityCalander.put(date, true);
 
-    }
 
-    /***
-     * Releases the driver from a mission on a specific date (makes him available again).
-     * @param date Date to release
-     */
-    public void release(LocalDate date) {
-        availablityCalander.remove(date);
 
-    }
 
 //*********************************************************************************************************************** print functions
 
@@ -107,11 +69,7 @@ public class Driver {
      */
     @Override
     public String toString() {
-        return "Driver{" +
-                "name='" + name + '\'' +
-                ", id='" + id + '\'' +
-                ", licenses=" + licencs +
-                '}';
+        return super() +", licenses=" + licencs;
     }
 
     /***
@@ -126,7 +84,7 @@ public class Driver {
         if (obj == null || getClass() != obj.getClass())
             return false;
         Driver other = (Driver) obj;
-        return this.id.equals(other.id);
+        return this.getEmpId() == other.getEmpId();
     }
 
     /***
@@ -134,7 +92,7 @@ public class Driver {
      */
     @Override
     public final int hashCode() {
-        return this.id != null ? this.id.hashCode() : 0;
+        return  this.getEmpId();
     }
 
 }

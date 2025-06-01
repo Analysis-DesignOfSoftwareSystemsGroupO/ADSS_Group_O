@@ -3,7 +3,7 @@ package TransportModule.transport_module;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 import TransportModule.Transport_Module_Exceptions.InvalidATransportException;
-import Transport_Module_Exceptions.InvalidPLDException;
+import TransportModule.Transport_Module_Exceptions.InvalidPLDException;
 import TransportModule.Transport_Module_Exceptions.TransportMismatchException;
 
 import java.sql.SQLException;

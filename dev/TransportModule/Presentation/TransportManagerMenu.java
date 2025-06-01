@@ -21,41 +21,20 @@ public class TransportManagerMenu {
     public void showMenu() {
         boolean running = true;
         while (running) {
+
             System.out.println("\nWelcome to Transport Manager Menu");
-            System.out.println("1. Request available drivers from HR");
-            System.out.println("2. Assign driver to transport");
             System.out.println("E. Exit");
 
             String input = scanner.nextLine();
+
             switch (input) {
-                case "1" -> requestDriversFromHR();
-                case "2" -> assignDriverToTransport();
                 case "E", "e" -> running = false;
                 default -> System.out.println("Invalid option, try again.");
             }
         }
     }
 
-    private void requestDriversFromHR() {
-        try {
-            controller.requestDriversFromHR();
-        } catch (Exception e) {
-            System.out.println("Failed to request drivers: " + e.getMessage());
-        }
-    }
 
-    private void assignDriverToTransport() {
-        try {
-            System.out.println("Enter driver ID:");
-            String driverId = scanner.nextLine();
 
-            System.out.println("Enter transport ID:");
-            int transportId = Integer.parseInt(scanner.nextLine());
 
-            controller.assignDriverToTransport(driverId, transportId);
-            System.out.println("Driver assigned successfully.");
-        } catch (Exception e) {
-            System.out.println("Error assigning driver: " + e.getMessage());
-        }
-    }
 }

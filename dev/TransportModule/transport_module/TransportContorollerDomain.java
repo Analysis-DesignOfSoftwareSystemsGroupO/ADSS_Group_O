@@ -1,8 +1,8 @@
 package TransportModule.transport_module;
 
+import HR_Mudol.domain.repository.EmployeeRepository;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
-import Transport_Module_Exceptions.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -10,16 +10,57 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransportContorollerDomain {
+public class TransportContorollerDomain implements ITransportController {
 
     private final ITransportRepository transportRepo;
-    private final IProductListDocumentRepository documentRepo;
+    private final IProductListDocumentRepository ProductListDocumentRepo;
+    private final EmployeeRepository employeeRepository;
 
     public TransportContorollerDomain() throws Exception{
         this.transportRepo = new TransportRepositoryIMP();
-        this.documentRepo = new PLDRepositoryIMP();
+        this.ProductListDocumentRepo = new PLDRepositoryIMP();
+        this.employeeRepository = new EmployeeRepository(); // todo - check with Dekel how to get the repo
 
     }
+
+    public List<TransportDTO> getTransportNextWeek() throws Exception{
+        int day = LocalDate.now().getDayOfMonth();
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        LocalDate today = LocalDate.of(year, month, day);
+
+        List<TransportDTO> transportList = new ArrayList<>();
+
+        LocalDate nextSunday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        for (int i = 0; i < 7; i++) {
+            LocalDate nextday = nextSunday.plusDays(i);
+            List<TransportDTO> todaysList = transportRepo.getTransportsDTOByDate(nextday);
+            transportList.addAll(todaysList);
+        }
+
+        return transportList;
+    }
+
+    public List<ProductListDocumentDto> getPLDbyTransportID(String transportID) throws Exception{
+        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+        List<ProductListDocument> PLDList = transport.getAllPLD();
+        List<ProductListDocumentDto> PLDDTOList = new ArrayList<>();
+        for(ProductListDocument pld : PLDList){
+            PLDDTOList.add(ProductListDocumentRepo.pldToDTO(pld));
+        }
+        return PLDDTOList;
+    }
+
+    public void assignDriverTransport(String driverID, String transportID) throws Exception{
+        Driver driver =(Driver) employeeRepository.getById(Integer.parseInt(driverID));
+        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+
+        // try to assign driver
+        transport.addDriver(driver);
+        // try to save transport in DB
+        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
+    }
+
 
     /**
      * Creates a new Transport using data from DTO and saves it.
@@ -34,7 +75,7 @@ public class TransportContorollerDomain {
      */
     public void createProductListDocument(ProductListDocumentDto dto) throws Exception {
 
-        documentRepo.saveProductListDocument(dto);
+        ProductListDocumentRepo.saveProductListDocument(dto);
     }
 
 
@@ -46,7 +87,7 @@ public class TransportContorollerDomain {
 
         Transport transport = transportRepo.getTransportByid(transportId);
         for(int PLDId : docId){
-            ProductListDocument PLD = documentRepo.getProductListDocumentByid(PLDId);
+            ProductListDocument PLD = ProductListDocumentRepo.getProductListDocumentByid(PLDId);
             transport.loadByDocument(PLD);
         }
         TransportDTO transportDTO = transportRepo.transportToTransportDTO(transport);
@@ -54,41 +95,10 @@ public class TransportContorollerDomain {
 
     }
 
-    public void fetchAvailableDriversFromHR() throws Exception {
-        // todo - check how to do it
-        HRController.requestAvailableDrivers();
-    }
 
-    public void assignDriver(String driverId, int transportId) throws Exception {
-        // todo - check how to do it
-        Driver driver = DriverRepository.getDriverById(driverId);
-        Transport transport = TransportRepository.getTransportByid(transportId);
-
-        transport.addDriver(driver);
-        TransportRepository.saveTransport(transport);
-    }
-
-
-
-
-    public TransportDTO[] getWeeklyTransportsRequests(LocalDate date) throws Exception{
-        List<TransportDTO> transportList = new ArrayList<>();
-
-        LocalDate nextSunday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-        for (int i = 0; i < 7; i++) {
-            LocalDate day = nextSunday.plusDays(i);
-            List<TransportDTO> todaysList = transportRepo.getTransportsDTOByDate(day);
-            transportList.addAll(todaysList);
-        }
-        TransportDTO[] transportDTOS = new TransportDTO[transportList.size()];
-        for(int i=0; i<transportList.size();i++){
-            transportDTOS[i] = transportList.get(i);
-        }
-        return transportDTOS;
-    }
 
     public int getValidID() throws Exception{ // get PLD next id
-        return documentRepo.getValidID();
+        return ProductListDocumentRepo.getValidID();
     }
 
     public int getNewTransportId() throws Exception{

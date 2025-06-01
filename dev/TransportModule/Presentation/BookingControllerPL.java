@@ -53,12 +53,9 @@ public class BookingControllerPL {
         domainController.attachProductListDocumentsToTransport(PLDIdList, transportId);
     }
 
-    public TransportDTO[] getWeeklyTransportsRequests() throws Exception{
-        int day = LocalDate.now().getDayOfMonth();
-        int month = LocalDate.now().getMonthValue();
-        int year = LocalDate.now().getYear();
-        LocalDate today = LocalDate.of(year, month, day);
-        return domainController.getWeeklyTransportsRequests(today);
+    public List<TransportDTO> getWeeklyTransportsRequests() throws Exception{
+
+        return domainController.getTransportNextWeek();
 
     }
 }

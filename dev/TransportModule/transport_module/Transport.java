@@ -1,7 +1,6 @@
 package TransportModule.transport_module;
 
 import TransportModule.Transport_Module_Exceptions.*;
-import Transport_Module_Exceptions.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -141,6 +140,15 @@ public class Transport {
 
     public Truck getTruck(){
         return truck;
+    }
+
+
+    public List<ProductListDocument> getAllPLD(){
+        List<ProductListDocument> PLDList = new ArrayList<>();
+        for(Site site: destinations_document_map.keySet()){
+            PLDList.add(destinations_document_map.get(site));
+        }
+        return PLDList;
     }
     //****************************************************************************************************************** Set functions
 

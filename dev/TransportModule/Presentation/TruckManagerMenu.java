@@ -2,6 +2,7 @@ package TransportModule.Presentation;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.DTO.TruckDto;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -82,7 +83,8 @@ public class TruckManagerMenu {
 
     private void showWeeklyTransports(){
         try {
-            TransportDTO[] transportDTO = bookingControllerPL.getWeeklyTransportsRequests();
+            List<TransportDTO> transportDTOList = bookingControllerPL.getWeeklyTransportsRequests();
+//            TransportDTO[] transportDTO = bookingControllerPL.getWeeklyTransportsRequests();
 
             for (TransportDTO transportReq : transportDTO) // print all weekly transports
                 if(transportReq.getTruckPN() ==-1) // show weekly transports with no trucks
