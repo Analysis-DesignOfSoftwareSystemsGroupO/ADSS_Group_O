@@ -1,10 +1,10 @@
-CREATE TABLE Branches (
+CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
     district VARCHAR(255)
 );
 
-CREATE TABLE Employees (
+CREATE TABLE IF NOT EXISTS Employees (
     empID INT PRIMARY KEY,
     empName VARCHAR(255),
     empPassword VARCHAR(255),
@@ -18,18 +18,18 @@ CREATE TABLE Employees (
     branchID INT REFERENCES Branches(branchID)
 );
 
-CREATE TABLE Roles (
+CREATE TABLE IF NOT EXISTS Roles (
     roleNumber INT PRIMARY KEY,
     description VARCHAR(255)
 );
 
-CREATE TABLE EmployeeRole (
+CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID INT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
 
-CREATE TABLE EmploymentContracts (
+CREATE TABLE IF NOT EXISTS EmploymentContracts (
     contractID INT PRIMARY KEY,
     minDayShift INT,
     minEveningShift INT,
@@ -38,18 +38,18 @@ CREATE TABLE EmploymentContracts (
     ownerID INT REFERENCES Employees(empID)
 );
 
-CREATE TABLE Users (
+CREATE TABLE IF NOT EXISTS Users (
     userID INT PRIMARY KEY REFERENCES Employees(empID),
     level VARCHAR(255)
 );
 
-CREATE TABLE EmployeeRole (
+CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID INT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
 
-CREATE TABLE Constraints (
+CREATE TABLE IF NOT EXISTS Constraints (
     constraintID SERIAL PRIMARY KEY,
     empID INT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
@@ -57,7 +57,7 @@ CREATE TABLE Constraints (
     explanation TEXT
 );
 
-CREATE TABLE Shifts (
+CREATE TABLE IF NOT EXISTS Shifts (
     shiftID INT PRIMARY KEY,
     branchID INT REFERENCES Branches(branchID),
     deadline DATE,
@@ -67,21 +67,21 @@ CREATE TABLE Shifts (
     shiftManager INT REFERENCES Employees(empID)
 );
 
-CREATE TABLE RequiredRoles (
+CREATE TABLE IF NOT EXISTS RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),
     counter INT
 );
 
-CREATE TABLE ShiftAssignments (
+CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     empID INT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber)
 );
 
-CREATE TABLE Archived_Employees (
+CREATE TABLE IF NOT EXISTS Archived_Employees (
     empID INT PRIMARY KEY,
     archiveDate DATE
 );
@@ -95,4 +95,12 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (6, 'Branch 6', 'South'),
 (7, 'Branch 7', 'North'),
 (8, 'Branch 8', 'Center'),
-(9, 'Branch 9', 'South');
+(9, 'Branch 9', 'South')
+ON CONFLICT (branchID) DO NOTHING;
+
+-- Additional data for demonstration
+INSERT INTO Roles (roleNumber, description) VALUES
+(101, 'Shift Manager'),
+(102, 'Warehouse'),
+(103, 'Driver')
+ON CONFLICT (roleNumber) DO NOTHING;

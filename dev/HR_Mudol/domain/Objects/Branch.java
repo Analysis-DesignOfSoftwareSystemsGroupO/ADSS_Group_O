@@ -45,11 +45,6 @@ public class Branch {
         this.constraintRepository= new ConstraintRepository(constraintDAO);
 
         this.name=name;
-
-//        Role shiftManager = new Role("Shift Manager");
-//        Role Driver = new Role("Driver");
-//        roleRepo.add(shiftManager);
-//        roleRepo.add(Driver);
         weekRepo.add(new Week());
     }
 

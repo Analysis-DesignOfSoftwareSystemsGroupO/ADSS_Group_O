@@ -101,7 +101,7 @@ ON CONFLICT (branchID) DO NOTHING;
 
 -- Additional data for demonstration
 INSERT INTO Roles (roleNumber, description) VALUES
-(101, 'Manager'),
+(101, 'Shift Manager'),
 (102, 'Cashier'),
 (103, 'Stocker')
 ON CONFLICT (roleNumber) DO NOTHING;
@@ -124,11 +124,15 @@ INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickD
 (3, 5, 1, 5, 14, 3)
 ON CONFLICT (contractID) DO NOTHING;
 
-INSERT INTO Users (userID, level) VALUES
-(1, 'HR_MANAGER'),
-(2, 'SHIFT_MANAGER'),
-(3, 'REGULAR_EMP')
-ON CONFLICT (userID) DO NOTHING;
+-- Additional data for demonstration
+INSERT INTO Roles (roleNumber, description) VALUES
+(101, 'Shift Manager'),
+(102, 'Cashier'),
+(103, 'Warehouse'),
+(104, 'Technician'),
+(105, 'Cleaner'),
+(106, 'Driver')
+ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
 (1001, 1, '2024-06-10', 'Monday', 'Morning', 'Planned', 1),

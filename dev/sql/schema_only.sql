@@ -97,3 +97,10 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (8, 'Branch 8', 'Center'),
 (9, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
+
+-- Additional data for demonstration
+INSERT INTO Roles (roleNumber, description) VALUES
+(101, 'Shift Manager'),
+(102, 'Warehouse'),
+(103, 'Driver')
+ON CONFLICT (roleNumber) DO NOTHING;
