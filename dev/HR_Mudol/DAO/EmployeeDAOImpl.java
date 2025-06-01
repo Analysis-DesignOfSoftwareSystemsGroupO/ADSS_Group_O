@@ -7,17 +7,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeDAOImpl implements IEmployeeDAO {
-    private final Connection conn;
+public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
+
 
     public EmployeeDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override
     public void insert(EmployeeDTO dto, int brunchID) {
         String sql = "INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, " +
-                "minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "minDayShift, minEveningShift, sickDays, daysOff, branchID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT (empID) DO NOTHING";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, dto.getEmployeeId());

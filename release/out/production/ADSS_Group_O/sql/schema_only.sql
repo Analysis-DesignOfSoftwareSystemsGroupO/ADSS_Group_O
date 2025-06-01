@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Branches (
 );
 
 CREATE TABLE IF NOT EXISTS Employees (
-    empID INT PRIMARY KEY,
+    empID BIGINT PRIMARY KEY,
     empName VARCHAR(255),
     empPassword VARCHAR(255),
     empBankAccount VARCHAR(255),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Roles (
 );
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
@@ -35,23 +35,18 @@ CREATE TABLE IF NOT EXISTS EmploymentContracts (
     minEveningShift INT,
     sickDays INT,
     daysOff INT,
-    ownerID INT REFERENCES Employees(empID)
+    ownerID BIGINT REFERENCES Employees(empID)
 );
 
 CREATE TABLE IF NOT EXISTS Users (
-    userID INT PRIMARY KEY REFERENCES Employees(empID),
+    userID BIGINT PRIMARY KEY REFERENCES Employees(empID),
     level VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
-    roleNumber INT REFERENCES Roles(roleNumber),
-    PRIMARY KEY (empID, roleNumber)
-);
 
 CREATE TABLE IF NOT EXISTS Constraints (
     constraintID SERIAL PRIMARY KEY,
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
     explanation TEXT
@@ -64,7 +59,7 @@ CREATE TABLE IF NOT EXISTS Shifts (
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
-    shiftManager INT REFERENCES Employees(empID)
+    shiftManager BIGINT REFERENCES Employees(empID)
 );
 
 CREATE TABLE IF NOT EXISTS RequiredRoles (
@@ -77,12 +72,12 @@ CREATE TABLE IF NOT EXISTS RequiredRoles (
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Archived_Employees (
-    empID INT PRIMARY KEY,
+    empID BIGINT PRIMARY KEY,
     archiveDate DATE
 );
 

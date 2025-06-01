@@ -17,6 +17,7 @@ public class Branch {
     // Branch ID assigned at creation
     private int branchID;
     private String name;
+    private String district;
 
 
     // Repositories
@@ -26,17 +27,24 @@ public class Branch {
     private WeekRepository weekRepo;
     private ConstraintRepository constraintRepository;
 
+    //DAO
+    private EmployeeDAOImpl employeeDAO;
+    private RoleDAOImpl roleDAO;
+    private ShiftDAOImpl shiftDAO;
+    private UserDAOImpl userDAO;
+    private ConstraintDAOImpl constraintDAO;
+
     /**
      * Constructs an empty Branch with initialized repositories.
      */
     public Branch(String district,String name) throws SQLException {
         this.branchID = counter++;
 
-        EmployeeDAOImpl employeeDAO=new EmployeeDAOImpl();
-        RoleDAOImpl roleDAO=new RoleDAOImpl();
-        ShiftDAOImpl shiftDAO=new ShiftDAOImpl();
-        UserDAOImpl userDAO=new UserDAOImpl();
-        ConstraintDAOImpl constraintDAO=new ConstraintDAOImpl();
+        this.employeeDAO=new EmployeeDAOImpl();
+        this.roleDAO=new RoleDAOImpl();
+        this.shiftDAO=new ShiftDAOImpl();
+        this.userDAO=new UserDAOImpl();
+        this.constraintDAO=new ConstraintDAOImpl();
 
         this.employeeRepo = new EmployeeRepository(employeeDAO,constraintDAO,branchID);
         this.roleRepo = new RoleRepository(roleDAO);
@@ -45,11 +53,16 @@ public class Branch {
         this.constraintRepository= new ConstraintRepository(constraintDAO);
 
         this.name=name;
+        this.district=district;
         weekRepo.add(new Week());
     }
 
     public int getBranchID() {
-        return branchID;
+        return this.branchID;
+    }
+
+    public String getDistrict(){
+        return this.district;
     }
 
     public void setBranchID(int ID){
@@ -73,10 +86,17 @@ public class Branch {
     }
 
     public ConstraintRepository getConstraintRepo() {return constraintRepository; }
+
     public String getName() {
         return name;
     }
 
-
+    public void close() throws Exception {
+        if (employeeDAO != null) employeeDAO.close();
+        if (roleDAO != null) roleDAO.close();
+        if (shiftDAO != null) shiftDAO.close();
+        if (userDAO != null) userDAO.close();
+        if (constraintDAO != null) constraintDAO.close();
+    }
 
 }

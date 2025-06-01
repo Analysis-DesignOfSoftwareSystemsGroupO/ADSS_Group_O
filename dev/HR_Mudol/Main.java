@@ -8,12 +8,9 @@ import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.repository.*;
-import HR_Mudol.Service.EmployeeService.EmployeeService;
-import HR_Mudol.Service.ManagerService.HRService;
+import HR_Mudol.domain.repository.BranchRepository;
 import HR_Mudol.presentation.LoginScreen;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -22,8 +19,6 @@ public class Main {
     public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
-            BranchDTO primaryBranchDTO;
-            int branchID;
 
             System.out.println("=== Welcome to the Workforce System ===");
             System.out.println("1. Load data from database");
@@ -31,105 +26,71 @@ public class Main {
             System.out.print("Choose option [1/2]: ");
             String choice = scanner.nextLine().trim();
 
-            if (choice.equals("1")) {
-                DatabaseInitializer.initialize(true);
-            } else if (choice.equals("2")) {
-                DatabaseInitializer.initialize(false);
-            } else {
+            boolean loadFromDatabase = choice.equals("1");
+            if (!loadFromDatabase && !choice.equals("2")) {
                 System.out.println("Invalid option.");
                 return;
             }
 
-            // DAO instantiation
-            IEmployeeDAO employeeDAO = new EmployeeDAOImpl();
-            IConstraintDAO constraintDAO = new ConstraintDAOImpl();
-            IUserDAO userDAO = new UserDAOImpl();
-            IRoleDAO roleDAO = new RoleDAOImpl();
-            IShiftDAO shiftDAO = new ShiftDAOImpl();
-            IBranchDAO branchDAO = new BranchDAOImpl();
+            DatabaseInitializer.initialize(loadFromDatabase);
 
-            // Repository for loading branches
+            // DAO and Repositories
+            IBranchDAO branchDAO = new BranchDAOImpl();
             BranchRepository branchRepo = new BranchRepository(branchDAO);
             Branch selectedBranch;
+            User user = null;
 
-            if (choice.equals("1")) {
-                Collection<Branch> branches = branchRepo.getAllBranches();
+            if (loadFromDatabase) {
+                List<Branch> branches = new ArrayList<>(branchRepo.getAllBranches());
                 if (branches.isEmpty()) {
                     System.out.println("⚠ No branches found in the database.");
                     return;
                 }
 
-                List<Branch> branchList = new ArrayList<>(branches);
-
-                // ✅ הוספת אדמין לכל הסניפים
-                addAdminUserIfNeeded(branchList);
+                addAdminUserIfNeeded(branches);
 
                 System.out.println("\nAvailable Branches:");
-                for (int i = 0; i < branchList.size(); i++) {
-                    System.out.printf("%d. %s\n", i + 1, branchList.get(i).getName());
+                for (int i = 0; i < branches.size(); i++) {
+                    System.out.printf("%d. %s\n", i + 1, branches.get(i).getName());
                 }
-
-                selectedBranch = null;
-                User user = null;
 
                 while (true) {
                     System.out.print("Select your branch by number: ");
-                    String input = scanner.nextLine().trim();
-
                     try {
-                        int branchIndex = Integer.parseInt(input) - 1;
-                        if (branchIndex < 0 || branchIndex >= branchList.size()) {
+                        int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                        if (index < 0 || index >= branches.size()) {
                             System.out.println("Invalid branch selection.");
                             continue;
                         }
 
-                        selectedBranch = branchList.get(branchIndex);
+                        selectedBranch = branches.get(index);
 
                         System.out.print("Enter your employee ID: ");
-                        int userId = Integer.parseInt(scanner.nextLine().trim());
+                        int empId = Integer.parseInt(scanner.nextLine().trim());
 
-                        if (employeeDAO.isEmployeeInBranch(userId, selectedBranch.getBranchID())) {
-                            user = selectedBranch.getUserRepo().getByEmployeeId(userId);
-                            break;
-                        } else {
-                            System.out.println("❌ You are not associated with this branch. Please choose again.");
+                        if (!new EmployeeDAOImpl().isEmployeeInBranch(empId, selectedBranch.getBranchID())) {
+                            System.out.println("❌ You are not associated with this branch. Please try again.");
+                            continue;
                         }
 
+                        user = selectedBranch.getUserRepo().getByEmployeeId(empId);
+                        break;
+
                     } catch (Exception e) {
-                        System.out.println("Invalid input. Please try again.");
+                        System.out.println(e.getMessage());
                     }
                 }
 
             } else {
                 selectedBranch = new Branch("center", "Main Branch");
                 addAdminUserIfNeeded(Collections.singletonList(selectedBranch));
-                BranchDTO newBranchDTO = DTOToDomainMapper.toDTO(selectedBranch);
-                branchRepo.add(newBranchDTO);
+                branchRepo.add(DTOToDomainMapper.toDTO(selectedBranch));
             }
 
-            // Extract branchID
-            branchID = selectedBranch.getBranchID();
-            primaryBranchDTO = DTOToDomainMapper.toDTO(selectedBranch);
-
-            // Repositories with branchID
-            EmployeeRepository empRepo = new EmployeeRepository(employeeDAO, constraintDAO, branchID);
-            RoleRepository roleRepo = new RoleRepository((RoleDAOImpl) roleDAO);
-            WeekRepository weekRepo = new WeekRepository((ShiftDAOImpl) shiftDAO);
-            UserRepository userRepo = new UserRepository(userDAO, empRepo);
-
-            // Mapper
-            DTOToDomainMapper mapper = new DTOToDomainMapper(userRepo, empRepo, roleRepo, weekRepo);
-
-            // Service Layer
-            EmployeeService employeeService = new EmployeeService(selectedBranch);
-            HRService hrService = new HRService(selectedBranch);
-
-            // Presentation Layer
-            List<BranchDTO> allDTOs = new ArrayList<>();
-            allDTOs.add(primaryBranchDTO);
-
-            LoginScreen login = new LoginScreen(allDTOs);
+            BranchDTO selectedBranchDTO = DTOToDomainMapper.toDTO(selectedBranch);
+            LoginScreen login = new LoginScreen(selectedBranchDTO, user);
             login.start();
+
 
         } catch (Exception ex) {
             System.out.println("❌ Initialization failed: " + ex.getMessage());
@@ -139,7 +100,6 @@ public class Main {
 
     private static void addAdminUserIfNeeded(Collection<Branch> branches) throws Exception {
         int adminId = 999999999;
-
         for (Branch branch : branches) {
             if (!branch.getUserRepo().exists(adminId)) {
                 Employee admin = new Employee("System Admin", adminId, "admin123",
@@ -151,5 +111,4 @@ public class Main {
             }
         }
     }
-
 }

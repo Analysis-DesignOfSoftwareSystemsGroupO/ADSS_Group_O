@@ -13,12 +13,20 @@ import java.util.*;
 
 public class EmployeeService implements IEmployeeService {
 
+    private BranchDTO branchDTO;
     private final Scanner scanner;
     private final EmployeeController empController;
 
-    public EmployeeService(Branch branch) throws SQLException {
+    public EmployeeService(BranchDTO branch) throws SQLException {
+
+        this.branchDTO=branch;
         this.scanner = new Scanner(System.in);
-        this.empController = new EmployeeController(DTOToDomainMapper.toDTO(branch));
+        this.empController = new EmployeeController(branch);
+    }
+
+    @Override
+    public void close() {
+        empController.close();
     }
 
     @Override
@@ -188,7 +196,7 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void viewPersonalDetails(UserDTO caller, int employeeId) throws SQLException {
-        if (!caller.isManager()) {
+        if (!caller.isRegularEmployee()) {
             throw new SecurityException("Access denied: Only HR managers can view other employees' personal details.");
         }
 

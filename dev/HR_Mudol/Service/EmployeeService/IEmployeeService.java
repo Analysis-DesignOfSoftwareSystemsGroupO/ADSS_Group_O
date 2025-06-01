@@ -54,6 +54,8 @@ public interface IEmployeeService {
 
     int getTotalEmployeeCount() throws SQLException;
 
+    public void close();
+
 
 
 }

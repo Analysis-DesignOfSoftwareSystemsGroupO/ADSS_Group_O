@@ -25,7 +25,23 @@ public class ShiftController implements IShiftController {
     public ShiftController(BranchDTO Branch, IRoleController dependency) throws SQLException {
         this.curBranch=DTOToDomainMapper.fromDTO(Branch);
         this.dependency = dependency;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+        DTOToDomainMapper.initialize(
+                curBranch.getUserRepo(),
+                curBranch.getEmployeeRepo(),
+                curBranch.getRoleRepo(),
+                curBranch.getWeekRepo()
+        );
+
+        //this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+    }
+    @Override
+    public void close() {
+        try {
+            curBranch.close();
+        } catch (Exception e) {
+            System.out.println("❌ Failed to close branch resources: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override

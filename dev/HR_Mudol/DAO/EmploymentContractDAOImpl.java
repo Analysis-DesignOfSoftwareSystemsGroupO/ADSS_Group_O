@@ -7,11 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
-    private final Connection conn;
+public class EmploymentContractDAOImpl extends BaseDAO implements IEmploymentContractDAO {
 
     public EmploymentContractDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override

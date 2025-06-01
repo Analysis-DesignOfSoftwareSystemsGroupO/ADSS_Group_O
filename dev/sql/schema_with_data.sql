@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Branches (
 );
 
 CREATE TABLE IF NOT EXISTS Employees (
-    empID INT PRIMARY KEY,
+    empID BIGINT PRIMARY KEY,
     empName VARCHAR(255),
     empPassword VARCHAR(255),
     empBankAccount VARCHAR(255),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Roles (
 );
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
@@ -35,23 +35,16 @@ CREATE TABLE IF NOT EXISTS EmploymentContracts (
     minEveningShift INT,
     sickDays INT,
     daysOff INT,
-    ownerID INT REFERENCES Employees(empID)
+    ownerID BIGINT REFERENCES Employees(empID)
 );
-
 CREATE TABLE IF NOT EXISTS Users (
-    userID INT PRIMARY KEY REFERENCES Employees(empID),
+    userID BIGINT PRIMARY KEY REFERENCES Employees(empID),
     level VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
-    roleNumber INT REFERENCES Roles(roleNumber),
-    PRIMARY KEY (empID, roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Constraints (
     constraintID SERIAL PRIMARY KEY,
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
     explanation TEXT
@@ -64,7 +57,7 @@ CREATE TABLE IF NOT EXISTS Shifts (
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
-    shiftManager INT REFERENCES Employees(empID)
+    shiftManager BIGINT REFERENCES Employees(empID)
 );
 
 CREATE TABLE IF NOT EXISTS RequiredRoles (
@@ -77,14 +70,15 @@ CREATE TABLE IF NOT EXISTS RequiredRoles (
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Archived_Employees (
-    empID INT PRIMARY KEY,
+    empID BIGINT PRIMARY KEY,
     archiveDate DATE
 );
+
 
 -- Insert data into Branches
 INSERT INTO Branches (branchID, name, district) VALUES
@@ -99,7 +93,6 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (9, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
--- Additional data for demonstration
 INSERT INTO Roles (roleNumber, description) VALUES
 (101, 'Shift Manager'),
 (102, 'Cashier'),
@@ -107,15 +100,15 @@ INSERT INTO Roles (roleNumber, description) VALUES
 ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
-(1, 'Alice Cohen', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1),
-(2, 'Boaz Levi', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 2),
-(3, 'Dana Shalev', 'pass789', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3)
+(100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1),
+(200000002, 'Boaz shiftManager', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 2),
+(300000003, 'Dana the emp', 'pass789', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3)
 ON CONFLICT (empID) DO NOTHING;
 
 INSERT INTO EmployeeRole (empID, roleNumber) VALUES
-(1, 101),
-(2, 102),
-(3, 103)
+(100000001, 102),
+(200000002, 101),
+(300000003, 103)
 ON CONFLICT (empID, roleNumber) DO NOTHING;
 
 INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickDays, daysOff, ownerID) VALUES
@@ -123,16 +116,6 @@ INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickD
 (2, 3, 3, 8, 10, 2),
 (3, 5, 1, 5, 14, 3)
 ON CONFLICT (contractID) DO NOTHING;
-
--- Additional data for demonstration
-INSERT INTO Roles (roleNumber, description) VALUES
-(101, 'Shift Manager'),
-(102, 'Cashier'),
-(103, 'Warehouse'),
-(104, 'Technician'),
-(105, 'Cleaner'),
-(106, 'Driver')
-ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
 (1001, 1, '2024-06-10', 'Monday', 'Morning', 'Planned', 1),
@@ -142,13 +125,19 @@ ON CONFLICT (shiftID) DO NOTHING;
 INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
 (1, 1001, 102, 2),
 (2, 1002, 103, 1)
-ON CONFLICT DO NOTHING; -- אין מפתח ראשי בטבלה הזו, אז זה כללי
+ON CONFLICT DO NOTHING;
 
 INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
-(1, 1001, 2, 102),
-(2, 1002, 3, 103)
-ON CONFLICT DO NOTHING; -- גם כאן אין מפתח ראשי – או שהוא משולב
+(1, 1001, 200000002, 102),
+(2, 1002, 300000003, 103)
+ON CONFLICT DO NOTHING;
 
 INSERT INTO Archived_Employees (empID, archiveDate) VALUES
-(4, '2023-12-31')
+(400000004, '2023-12-31')
 ON CONFLICT (empID) DO NOTHING;
+
+INSERT INTO Users (userID, level) VALUES
+(100000001, 'HRManager'),
+(200000002, 'shiftManager'),
+(300000003, 'regularEmp')
+ON CONFLICT (userID) DO NOTHING;

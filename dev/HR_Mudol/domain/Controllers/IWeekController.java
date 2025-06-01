@@ -17,6 +17,8 @@ import java.util.List;
  */
 public interface IWeekController {
 
+    void close();
+
     /**
      * Creates instances of new shifts for each day of the theWeek (Sunday to Friday).
      * The user performing this action must be authorized to manage the theWeek's shifts.

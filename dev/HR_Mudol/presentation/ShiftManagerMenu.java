@@ -18,17 +18,16 @@ public class ShiftManagerMenu implements Menu {
 
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException {
-        if (!caller.isShiftManager()) {
+        if (!caller.isSHManager()) {
             System.out.println("Access denied.");
             return false;
         }
 
         Scanner scanner = new Scanner(System.in);
-        Branch branch = DTOToDomainMapper.fromDTO(curBranch);
 
         // שירותים
-        EmployeeService employeeService = new EmployeeService(branch);
-        HRService hrService = new HRService(branch);
+        EmployeeService employeeService = new EmployeeService(curBranch);
+        HRService hrService = new HRService(curBranch);
 
         while (true) {
             System.out.println("\n=== Shift Manager Menu ===");
@@ -46,6 +45,8 @@ public class ShiftManagerMenu implements Menu {
                 case "2" -> manageShift(hrService, curBranch, caller);
                 case "0" -> {
                     System.out.println("Logging out. Returning to login screen.");
+                    hrService.close();
+                    employeeService.close();
                     return true;
                 }
                 default -> System.out.println("Invalid option. Try again.");

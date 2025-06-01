@@ -1,63 +1,58 @@
 package HR_Mudol.domain.Controllers;
+
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.ShiftType;
+import HR_Mudol.domain.Status;
+import HR_Mudol.domain.WeekDay;
 import HR_Mudol.domain.repository.*;
-import HR_Mudol.domain.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DTOToDomainMapper {
-    private final UserRepository userRepository;
-    private static EmployeeRepository employeeRepository = null;
-    private static RoleRepository roleRepository= null;
+
+    private static UserRepository userRepository;
+    private static EmployeeRepository employeeRepository;
+    private static RoleRepository roleRepository;
     private static WeekRepository weekRepository;
 
-    public DTOToDomainMapper(UserRepository userRepository,
-                             EmployeeRepository employeeRepository,
-                             RoleRepository roleRepository, WeekRepository weekRepository) {
-        this.userRepository = userRepository;
-        this.employeeRepository = employeeRepository;
-        this.roleRepository = roleRepository;
-        this.weekRepository=weekRepository;
+    public static void initialize(UserRepository userRepo,
+                                  EmployeeRepository empRepo,
+                                  RoleRepository roleRepo,
+                                  WeekRepository weekRepo) {
+        userRepository = userRepo;
+        employeeRepository = empRepo;
+        roleRepository = roleRepo;
+        weekRepository = weekRepo;
     }
 
-    public static Week fromDTO(WeekDTO dto) {
-        Week week = new Week();
-
-        for (ShiftDTO shiftDTO : dto.getShifts()) {
-            Shift shift = fromDTO(shiftDTO);
-            week.addShift(shift);
-        }
-
-        return week;
-    }
-
-    public User fromDTO(UserDTO dto) throws SQLException {
-        User user = userRepository.getByEmployeeId(dto.getUserId());
-        if (user != null) return user;
+    public static User fromDTO(UserDTO dto) throws SQLException {
 
         Employee employee = employeeRepository.getById(dto.getUserId());
-        User newUser = new User(employee, Level.valueOf(dto.getLevel()));
-        return newUser;
+        return new User(employee, Level.valueOf(dto.getLevel()));
     }
 
     public static Employee fromDTO(EmployeeDTO dto) {
-        Employee emp = employeeRepository.getById(dto.getEmployeeId());
-        if (emp != null) return emp;
-
-        return new Employee(dto.getFullName(),dto.getEmployeeId(),dto.getPassword(),dto.getBankAccount(),dto.getSalary(),dto.getStartDate(),dto.getSalary(),dto.getMinEveningShift(),dto.getSickDays(),dto.getDaysOff());
+        return new Employee(
+                dto.getFullName(),
+                dto.getEmployeeId(),
+                dto.getPassword(),
+                dto.getBankAccount(),
+                dto.getSalary(),
+                dto.getStartDate(),
+                dto.getMinDayShift(),
+                dto.getMinEveningShift(),
+                dto.getSickDays(),
+                dto.getDaysOff()
+        );
     }
 
     public static Role fromDTO(RoleDTO dto) {
-        Role role = roleRepository.getRoleByNumber(dto.getRoleNumber());
-        if (role != null) return role;
 
-        Role newRole = new Role(dto.getDescription());
-        return newRole;
+        return new Role(dto.getDescription());
     }
 
     public static Constraint fromDTO(ConstraintDTO dto) {
@@ -69,8 +64,6 @@ public class DTOToDomainMapper {
     }
 
     public static Shift fromDTO(ShiftDTO dto) {
-        Shift existing = weekRepository.getShiftById(dto.getShiftID());
-        if (existing != null) return existing;
 
         Shift shift = new Shift(
                 WeekDay.valueOf(dto.getDay().toUpperCase()),
@@ -81,16 +74,14 @@ public class DTOToDomainMapper {
         Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
         shift.setShiftManager(shiftManager);
 
-        // הוספת תפקידים דרושים
         for (RoleDTO roleDTO : dto.getNecessaryRoles()) {
             shift.addNecessaryRoles(fromDTO(roleDTO));
         }
 
-        // הוספת תפקידי מילוי (FilledRoles)
         for (FilledRoleDTO filledRoleDTO : dto.getFilledRoles()) {
             Employee employee = employeeRepository.getById(filledRoleDTO.getEmployeeId());
-            Role role=roleRepository.getRoleByNumber(filledRoleDTO.getRoleId());
-            shift.addEmployee(employee,role);
+            Role role = roleRepository.getRoleByNumber(filledRoleDTO.getRoleId());
+            shift.addEmployee(employee, role);
         }
 
         return shift;
@@ -131,14 +122,11 @@ public class DTOToDomainMapper {
     }
 
     public static EmployeeDTO toDTO(Employee e) {
-
-        // המרת List<Role> ל־List<Integer>
         List<Integer> roleIds = new ArrayList<>();
         for (Role role : e.getRelevantRoles()) {
             roleIds.add(role.getRoleNumber());
         }
 
-        // המרת List<Constraint> ל־List<ConstraintDTO>
         List<ConstraintDTO> constraintDTOs = new ArrayList<>();
         for (Constraint c : e.getWeeklyConstraints()) {
             constraintDTOs.add(new ConstraintDTO(
@@ -163,7 +151,6 @@ public class DTOToDomainMapper {
                 roleIds,
                 constraintDTOs
         );
-
     }
 
     public static RoleDTO toDTO(Role r) {
@@ -175,7 +162,7 @@ public class DTOToDomainMapper {
         return new RoleDTO(r.getRoleNumber(), r.getDescription(), relevantEmployees);
     }
 
-    public static ConstraintDTO toDTO(Constraint c,int ID) {
+    public static ConstraintDTO toDTO(Constraint c, int ID) {
         return new ConstraintDTO(
                 ID,
                 c.getExplanation(),
@@ -195,27 +182,21 @@ public class DTOToDomainMapper {
     }
 
     public static Branch fromDTO(BranchDTO dto) throws SQLException {
-        // יוצרים את האובייקט עם name ו-district מתוך DTO
         Branch branch = new Branch(dto.getDistrict(), dto.getName());
-
-        // שומרים על ה-ID המקורי של הסניף מה-DTO
         branch.setBranchID(dto.getBranchID());
 
-        // מיפוי עובדים
         if (dto.getEmployees() != null) {
             for (EmployeeDTO empDTO : dto.getEmployees()) {
                 branch.getEmployeeRepo().addFromDTO(fromDTO(empDTO));
             }
         }
 
-        // מיפוי תפקידים
         if (dto.getRoles() != null) {
             for (RoleDTO roleDTO : dto.getRoles()) {
                 branch.getRoleRepo().add(fromDTO(roleDTO));
             }
         }
 
-        // מיפוי שבועות
         if (dto.getWeeks() != null) {
             for (WeekDTO weekDTO : dto.getWeeks()) {
                 branch.getWeekRepo().add(fromDTO(weekDTO));
@@ -224,7 +205,6 @@ public class DTOToDomainMapper {
 
         return branch;
     }
-
 
     public static BranchDTO toDTO(Branch branch) {
         List<EmployeeDTO> employeeDTOs = new ArrayList<>();
@@ -243,20 +223,26 @@ public class DTOToDomainMapper {
             for (Shift shift : week.getShifts()) {
                 shiftDTOs.add(toDTO(shift));
             }
-            WeekDTO weekDTO = new WeekDTO(week.getConstraintDeadline(), shiftDTOs);
-            weekDTOs.add(weekDTO);
+            weekDTOs.add(new WeekDTO(week.getConstraintDeadline(), shiftDTOs));
         }
 
         return new BranchDTO(
                 branch.getBranchID(),
                 branch.getName(),
-                "district", // אם יש לך שדה מחלקתי ל-district אפשר לשלוף אותו כאן במקום מחרוזת קבועה
+                branch.getDistrict(),
                 employeeDTOs,
                 roleDTOs,
                 weekDTOs
         );
     }
+    public static Week fromDTO(WeekDTO dto) {
+        Week week = new Week();
 
+        for (ShiftDTO shiftDTO : dto.getShifts()) {
+            Shift shift = fromDTO(shiftDTO);
+            week.addShift(shift);
+        }
 
-
+        return week;
+    }
 }

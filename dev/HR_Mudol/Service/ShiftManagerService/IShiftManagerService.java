@@ -17,4 +17,6 @@ public interface IShiftManagerService {
      * Transfer the cancellation card to the next shift manager.
      */
     void transferCancellationCard(UserDTO theCaller);
+
+    public void close();
 }

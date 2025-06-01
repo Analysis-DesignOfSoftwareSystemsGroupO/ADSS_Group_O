@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class HRService implements IHRService {
 
+    private BranchDTO branchDTO;
     private IRoleController roleController;
     private IEmployeeController employeeController;
     private IShiftController shiftController;
@@ -27,19 +28,21 @@ public class HRService implements IHRService {
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
 
-    public HRService(Branch branch) throws SQLException {
-        BranchDTO curBranch = DTOToDomainMapper.toDTO(branch);
+    public HRService(BranchDTO curBranch) throws SQLException {
+
+        this.branchDTO=curBranch;
         this.roleController = new RoleController(curBranch);
         this.employeeController = new EmployeeController(curBranch);
         this.shiftController = new ShiftController(curBranch, this.roleController);
         this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
 
-        this.employeeService = new EmployeeService(branch);
+        this.employeeService = new EmployeeService(curBranch);
         this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController);
     }
 
-    public IEmployeeController getEmployeeController() {
-        return employeeController;
+    @Override
+    public void close() {
+        roleController.close();
     }
 
     @Override
@@ -186,7 +189,7 @@ public class HRService implements IHRService {
     // WeekController forwarding:
     @Override
     public Week createNewWeek(UserDTO caller) {
-        if (caller.isManager())
+        if (caller.isHRManager())
             return weekController.createNewWeek();
         else {
             System.out.println("Access denied");

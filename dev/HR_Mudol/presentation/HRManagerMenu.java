@@ -19,7 +19,7 @@ public class HRManagerMenu implements Menu {
 
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException {
-        if (!caller.isManager()) {
+        if (!caller.isHRManager()) {
             System.out.println("Access denied.");
             return false;
         }
@@ -88,6 +88,7 @@ public class HRManagerMenu implements Menu {
                     case "2" -> hr.assigningEmployToShifts(callerDTO, currentWeekDTO);
                     case "3" -> editShifts(hr, callerDTO, currentWeekDTO);
                     case "0" -> {
+                        hr.close();
                         return;
                     }
                     default -> System.out.println("Invalid option.");
@@ -99,7 +100,7 @@ public class HRManagerMenu implements Menu {
     }
 
     public static void editShifts(HRService hr, UserDTO caller, WeekDTO week) {
-        if (!caller.isManager()) {
+        if (!caller.isHRManager()) {
             throw new SecurityException("Access denied.");
         }
         Scanner scanner = new Scanner(System.in);

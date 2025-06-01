@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface IRoleController {
 
+    void close();
+
     /**
      * Creates a new role in the system.
      * This operation is typically performed by an authorized user (e.g., HR or admin).

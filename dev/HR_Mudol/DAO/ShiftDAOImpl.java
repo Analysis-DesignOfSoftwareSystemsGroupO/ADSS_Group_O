@@ -11,11 +11,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShiftDAOImpl implements IShiftDAO {
-    private final Connection conn;
+public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
     public ShiftDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override

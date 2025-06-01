@@ -99,4 +99,6 @@ public interface IHRService {
     void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks);
 
     void generateShiftReport(UserDTO caller, WeekDTO curWeek);
+
+    public void close();
 }

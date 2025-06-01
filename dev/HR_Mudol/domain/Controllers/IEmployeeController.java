@@ -75,6 +75,8 @@ public interface IEmployeeController {
      */
     EmployeeDTO getEmployeeById(UserDTO theCaller, int ID) throws SQLException;
 
+    void close();
+
     /**
      * Returns the branch associated with this employee manager.
      * @return the current branch

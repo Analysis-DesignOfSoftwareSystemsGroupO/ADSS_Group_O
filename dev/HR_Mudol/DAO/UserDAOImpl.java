@@ -7,11 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOImpl implements IUserDAO {
-    private final Connection conn;
+public class UserDAOImpl extends BaseDAO implements IUserDAO {
 
     public UserDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override
@@ -47,10 +46,10 @@ public class UserDAOImpl implements IUserDAO {
     public UserDTO get(int userId) throws SQLException {
         String sql = "SELECT * FROM users WHERE userID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
+            stmt.setLong(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new UserDTO(rs.getInt("userID"), rs.getString("level"));
+                return new UserDTO(rs.getLong("userID"), rs.getString("level"));
             }
         }
         return null;

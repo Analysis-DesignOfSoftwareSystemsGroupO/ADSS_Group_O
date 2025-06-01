@@ -56,6 +56,7 @@ public class EmployeeMenu implements Menu {
                     case "7" -> employeeService.viewPersonalDetails(caller, empId);
                     case "8" -> employeeService.changePassword(caller, empId);
                     case "0" -> {
+                        employeeService.close();
                         return true;
                     }
                     default -> System.out.println("Invalid option. Please try again.");

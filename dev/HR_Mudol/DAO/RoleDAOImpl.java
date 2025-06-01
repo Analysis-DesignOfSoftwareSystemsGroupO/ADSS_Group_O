@@ -8,11 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoleDAOImpl implements IRoleDAO {
-    private final Connection conn;
+public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
 
     public RoleDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override

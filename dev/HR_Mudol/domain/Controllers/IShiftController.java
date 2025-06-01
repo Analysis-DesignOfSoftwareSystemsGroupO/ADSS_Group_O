@@ -21,6 +21,8 @@ import java.util.List;
  */
 public interface IShiftController {
 
+    void close();
+
     /**
      * Assigns an employee to a specific shift with a particular role.
      * @param theCaller The user (e.g., manager) requesting the assignment.

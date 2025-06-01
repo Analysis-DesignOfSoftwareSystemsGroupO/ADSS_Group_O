@@ -9,11 +9,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConstraintDAOImpl implements IConstraintDAO {
-    private final Connection conn;
+public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
     public ConstraintDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override
