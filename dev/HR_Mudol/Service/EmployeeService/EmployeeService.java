@@ -223,7 +223,6 @@ public class EmployeeService implements IEmployeeService {
             System.out.println(role.getRoleNumber() + ": " + role.getDescription());
         }
     }
-
     @Override
     public void updateConstraint(UserDTO caller, int empId, WeekDTO currentWeek) {
         try {
@@ -237,17 +236,19 @@ public class EmployeeService implements IEmployeeService {
                 throw new SecurityException("Employees may only edit their own constraints.");
             }
 
-            while (true) {
-                ShiftType selectedType = promptShiftType();
-                if (selectedType == null) return;
+            boolean continueEditing = true;
 
-                List<ConstraintDTO> constraints = empController.getConstraintsByType(empId, selectedType);
-                if (constraints.isEmpty()) {
-                    System.out.println("No constraints found for " + selectedType + " shifts.");
-                    continue;
-                }
+            while (continueEditing) {
+                ShiftType selectedType = promptShiftType();
+                if (selectedType == null) break;
 
                 while (true) {
+                    List<ConstraintDTO> constraints = empController.getConstraintsByType(empId, selectedType);
+                    if (constraints.isEmpty()) {
+                        System.out.println("No constraints found for " + selectedType + " shifts.");
+                        break;
+                    }
+
                     printConstraints(constraints, selectedType.name());
 
                     System.out.println("\nSelect an action:");
@@ -287,19 +288,35 @@ public class EmployeeService implements IEmployeeService {
                             newExp += " (used day off)";
 
                         empController.updateConstraintExplanation(employee, selected, newExp);
+                        System.out.println("✅ Explanation updated successfully.");
                     } else {
                         empController.removeConstraint(empId, selected);
                         constraints.remove(index);
+                        System.out.println("✅ Constraint removed.");
+
+                        if (constraints.isEmpty()) {
+                            System.out.println("No more constraints left for " + selectedType + " shifts.");
+                            break;
+                        } else {
+                            printConstraints(constraints, selectedType.name());
+                        }
                     }
 
-                    if (constraints.isEmpty()) break;
+                    System.out.println("\nDo you want to continue editing constraints of this type? (yes/no)");
+                    String cont = scanner.nextLine().trim().toLowerCase();
+                    if (!cont.equals("yes")) break;
                 }
+
+                System.out.println("\nDo you want to continue editing other shift types? (yes/no)");
+                String more = scanner.nextLine().trim().toLowerCase();
+                if (!more.equals("yes")) continueEditing = false;
             }
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
     }
+
 
     private ShiftType promptShiftType() {
         while (true) {

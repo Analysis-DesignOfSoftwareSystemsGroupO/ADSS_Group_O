@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS Constraints (
     empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
-    explanation TEXT
+    explanation TEXT,
+    date_created DATE DEFAULT  CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (
@@ -102,7 +103,7 @@ ON CONFLICT (roleNumber) DO NOTHING;
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
 (100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1),
 (200000002, 'Boaz shiftManager', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 2),
-(300000003, 'Dana the emp', 'pass789', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3)
+(300000003, 'Dana the emp', 'shay', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3)
 ON CONFLICT (empID) DO NOTHING;
 
 INSERT INTO EmployeeRole (empID, roleNumber) VALUES

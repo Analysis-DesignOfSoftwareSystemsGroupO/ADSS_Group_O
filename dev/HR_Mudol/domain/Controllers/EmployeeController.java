@@ -231,7 +231,6 @@ public class EmployeeController implements IEmployeeController {
     @Override
     public EmployeeDTO getEmployeeById(UserDTO theCaller, int empId) throws SQLException {
         User caller = mapper.fromDTO(theCaller);
-        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         if (String.valueOf(empId).length() != 9) {
             System.out.println("Employee ID must be exactly 9 digits.");
@@ -366,7 +365,6 @@ public class EmployeeController implements IEmployeeController {
 
         curBranch.getEmployeeRepo().updatePassword(empId, newPassword);
 
-        System.out.println("Password updated successfully.");
     }
 
     @Override

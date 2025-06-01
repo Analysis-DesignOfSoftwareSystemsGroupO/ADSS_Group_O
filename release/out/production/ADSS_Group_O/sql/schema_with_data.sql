@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS Constraints (
     empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
-    explanation TEXT
+    explanation TEXT,
+    date_created DATE DEFAULT  CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (

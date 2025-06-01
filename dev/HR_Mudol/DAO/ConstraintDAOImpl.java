@@ -17,12 +17,12 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
     @Override
     public void insert(ConstraintDTO c) throws SQLException {
-        String sql = "INSERT INTO Constraints (empID, weekID, WeekDay, ShiftType, explanation) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Constraints (empID, WeekDay, ShiftType, explanation, date_created) VALUES (?, ?, ?, ?, CURRENT_DATE)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, c.getEmpID());
-            stmt.setString(3, c.getDay());
-            stmt.setString(4, c.getType());
-            stmt.setString(5, c.getExplanation());
+            stmt.setString(2, c.getDay());
+            stmt.setString(3, c.getType());
+            stmt.setString(4, c.getExplanation());
             stmt.executeUpdate();
         }
     }
@@ -30,7 +30,7 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
     @Override
     public void delete(int empID, String day, String type) throws SQLException {
-        String sql = "DELETE FROM Constraints WHERE empID = ? AND WeekDay = ? AND ShiftType = ? AND weekID = ?";
+        String sql = "DELETE FROM Constraints WHERE empID = ? AND WeekDay = ? AND ShiftType = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empID);
             stmt.setString(2, day);
@@ -38,6 +38,7 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
             stmt.executeUpdate();
         }
     }
+
 
     @Override
     public List<ConstraintDTO> getByEmployee(int empID) throws SQLException {
@@ -78,7 +79,7 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
     @Override
     public ConstraintDTO getConstraint(int empId, WeekDay day, ShiftType type) {
-        String sql = "SELECT explanation FROM Constraints WHERE empID = ? AND WeekDay = ? AND ShiftType = ? AND weekID = ?";
+        String sql = "SELECT explanation FROM Constraints WHERE empID = ? AND WeekDay = ? AND ShiftType = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empId);
             stmt.setString(2, day.name());
@@ -93,9 +94,10 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
         return null;
     }
 
+
     @Override
     public void update(int empId, ConstraintDTO dto) {
-        String sql = "UPDATE Constraints SET explanation = ? WHERE empID = ? AND WeekDay = ? AND ShiftType = ? AND weekID = ?";
+        String sql = "UPDATE Constraints SET explanation = ? WHERE empID = ? AND WeekDay = ? AND ShiftType = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dto.getExplanation());
             stmt.setInt(2, empId);
@@ -106,4 +108,5 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
             throw new RuntimeException("Failed to update constraint", e);
         }
     }
+
 }
