@@ -4,6 +4,7 @@ import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,17 +154,35 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
             stmt.setInt(1, employeeId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                int empSalary = rs.getInt("empSalary");
+                if (rs.wasNull()) empSalary = 0;
+
+                Date startDateRaw = rs.getDate("empStartDate");
+                LocalDate empStartDate = (startDateRaw != null) ? startDateRaw.toLocalDate() : LocalDate.now();
+
+                int minDayShift = rs.getInt("minDayShift");
+                if (rs.wasNull()) minDayShift = 0;
+
+                int minEveningShift = rs.getInt("minEveningShift");
+                if (rs.wasNull()) minEveningShift = 0;
+
+                int sickDays = rs.getInt("sickDays");
+                if (rs.wasNull()) sickDays = 0;
+
+                int daysOff = rs.getInt("daysOff");
+                if (rs.wasNull()) daysOff = 0;
+
                 return new EmployeeDTO(
                         rs.getInt("empID"),
                         rs.getString("empName"),
                         rs.getString("empPassword"),
                         rs.getString("empBankAccount"),
-                        rs.getInt("empSalary"),
-                        rs.getDate("empStartDate").toLocalDate(),
-                        rs.getInt("minDayShift"),
-                        rs.getInt("minEveningShift"),
-                        rs.getInt("sickDays"),
-                        rs.getInt("daysOff")
+                        empSalary,
+                        empStartDate,
+                        minDayShift,
+                        minEveningShift,
+                        sickDays,
+                        daysOff
                 );
             }
             return null;
@@ -171,6 +190,7 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
             throw new RuntimeException("Failed to fetch employee", e);
         }
     }
+
 
     @Override
     public List<EmployeeDTO> getAll() {

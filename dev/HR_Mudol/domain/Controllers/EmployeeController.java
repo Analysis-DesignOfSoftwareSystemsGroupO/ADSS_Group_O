@@ -521,7 +521,8 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public UserDTO getUserById(int empId) throws SQLException {
-        return DTOToDomainMapper.toDTO(curBranch.getUserRepo().getByEmployeeId(empId));
+        User user= curBranch.getUserRepo().getByEmployeeId(empId);
+        return DTOToDomainMapper.toDTO(user);
     }
 
 

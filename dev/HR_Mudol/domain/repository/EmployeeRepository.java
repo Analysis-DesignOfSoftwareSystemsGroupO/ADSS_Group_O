@@ -123,8 +123,7 @@ public class EmployeeRepository {
     }
 
     public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException {
-        List<EmployeeDTO> employeesInBranch = employeeDAO.getAllByBranch(branchId);
-        return employeesInBranch.stream().anyMatch(e -> e.getEmployeeId() == empId);
+        return employeeDAO.isEmployeeInBranch(empId,branchId);
     }
 
 
