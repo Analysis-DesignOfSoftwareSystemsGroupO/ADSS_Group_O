@@ -98,9 +98,14 @@ public class SupplierInventoryService {
 
     public void checkAndCreateImmediateOrder() throws Exception {
         List<ImmediateOrderDemand> orderList = inventoryService.checkAndCreateImmediateOrderDemands();
-        for (ImmediateOrderDemand order : orderList) {
-            System.out.println("Immediate Order Demand: " + order);
-//            createImmediateOrder(inventoryService.branchId, order.getProductName(), order.getManufacturer(), order.getAmountToOrder());
+
+        for (ImmediateOrderDemand immediateOrder : orderList) {
+            System.out.println("Immediate Order Demand: " + immediateOrder);
+            try {
+                createImmediateOrder(inventoryService.branchId, immediateOrder.getProductName(), immediateOrder.getManufacturer(), immediateOrder.getAmountToOrder());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
