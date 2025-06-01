@@ -1,5 +1,7 @@
 package inventory.domain;
 
+import inventory.data.DTO.ImmediateOrderDemand;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,4 +77,8 @@ public interface InventoryController {
     void updateMinimumStockLevel(String productId,int newMinimumStockLevel);
 
     String getOrCreateCategoryGroup(String s, String s1, String s2);
+
+    List<ImmediateOrderDemand> checkAndCreateImmediateOrderDemands();
+
+    int getAmountToOrder(String productName, String productManufacturer);
 }

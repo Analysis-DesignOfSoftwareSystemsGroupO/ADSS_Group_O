@@ -5,6 +5,7 @@ import inventory.data.DAO.CategoryDAO;
 import inventory.data.DAO.DiscountDAO;
 import inventory.data.DAO.ProductDAO;
 import inventory.data.DAO.StockItemDAO;
+import inventory.data.DTO.ImmediateOrderDemand;
 import inventory.data.Repositories.InMemoryCategoryRepository;
 import inventory.data.Repositories.InMemoryDiscountRepository;
 import inventory.data.Repositories.InMemoryProductRepository;
@@ -129,7 +130,6 @@ public class InventoryControllerImpl implements InventoryController {
     }
 
     public void UpdateDiscounts() {
-        System.out.println("Updating discounts...");
         try {
             discountDAO.updateAllDiscountsAndSellingPrices();
         } catch (Exception e) {
@@ -673,6 +673,45 @@ public class InventoryControllerImpl implements InventoryController {
         productDAO.updateProduct(product);
     }
 
+    public List<ImmediateOrderDemand> checkAndCreateImmediateOrderDemands() {
+        List<ImmediateOrderDemand> orderList = new ArrayList<>();
+        List<Product> products = productDAO.getAllProducts();
+        for (Product product : products) {
+            int minStock = product.getMinimumStockLevel();
+            int currentStock = stockItemDAO.numOfOk(product.getId());
 
+            if (currentStock >= minStock) {
+                continue; // No need to order if current stock is above minimum
+            }
 
+            int daysUntilNextOrder = 1;  // TODO get the number of days from suppliers
+
+            int amountToOrder = (minStock * daysUntilNextOrder - currentStock);
+            if (amountToOrder > 0) {
+                orderList.add(new ImmediateOrderDemand(
+                        product.getName(),
+                        product.getManufacturer(),
+                        amountToOrder
+                ));
+            }
+        }
+        return orderList;
+    }
+
+    public int getAmountToOrder(String productName, String manufacturer) {
+        Product product = productDAO.getProductByNameAndManufacturer(productName, manufacturer);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found. Aborting amount calculation.");
+        }
+        int minStock = product.getMinimumStockLevel();
+        int currentStock = stockItemDAO.numOfOk(product.getId());
+
+        return (minStock * 7 - currentStock);
+
+    }
 }
+
+//    public void createConstantOrder(String productId, int quantity, String location){
+//
+//    }
+

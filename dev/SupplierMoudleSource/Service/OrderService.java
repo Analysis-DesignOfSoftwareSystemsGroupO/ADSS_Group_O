@@ -128,6 +128,13 @@ public class OrderService {
             }
         }
     }
+    public void deleteConstantOrder(String branchId, String supplierId, String productName, String manufacturer) throws Exception
+    {
+        if (branchId == null || supplierId == null || productName == null || manufacturer == null) {
+            throw new NullPointerException("Branch ID, Supplier ID, Product Name or Manufacturer is null");
+        }
+        orderRepository.deleteConstantOrder(branchId, supplierId, productName, manufacturer);
+    }
 
         public void createImmediateOrder(String branchID, String productName, String manufacturer, int quantity) throws Exception {
             String productID = productRepository.getProduct(productName, manufacturer).getProductID();
@@ -292,9 +299,10 @@ public class OrderService {
         return newConstantOrder.getConstantOrderDTO();
     }
 
+
     //adds a product to the constant order, use doesProductExistsInAgreementFunc in AgreementService
     public ConstantOrderDTO addProductToConstantOrder(ConstantOrderDTO constantOrderDTO, String productId, int quantity) throws Exception {
-       ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
+        ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
         constantOrder.addItemToOrder(productId, quantity);
         return constantOrder.getConstantOrderDTO();
     }
@@ -311,5 +319,9 @@ public class OrderService {
     public void displayConstantOrder(ConstantOrderDTO constantOrderDTO) throws Exception {
         ConstantOrder constantOrder = new ConstantOrder(constantOrderDTO);
         System.out.println(constantOrder);
+    }
+
+    public List<ConstantOrderDTO> getConstantOrdersBySupplierId(String branchId, String supplierId) {
+        return orderRepository.getConstantOrdersBySupplierId(branchId, supplierId);
     }
 }

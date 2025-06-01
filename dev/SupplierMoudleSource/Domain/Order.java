@@ -92,8 +92,8 @@ public class Order {
                 this.totalPrice = this.getTotalPrice();
                 return;
             }
-            throw new Exception("Invalid item, " + itemId + " doesnt exist in the agreement, enter valid ID");
         }
+        throw new Exception("Invalid item, Product ID: " + itemId + " doesnt exist in the agreement, enter valid ID");
     }
     // returns total price of the order
     public int getTotalPrice() {

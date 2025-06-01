@@ -12,6 +12,7 @@ import inventory.domain.DiscountTargetType;
 import inventory.domain.DiscountType;
 import inventory.domain.StockItemStatus;
 import inventory.service.UserApplication;
+import org.postgresql.core.QueryExecutorCloseAction;
 
 
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ public class InventoryMenu {
 
     public void run() {
         System.out.println("\nWelcome to the inventory Management Menu!");
+        supplierInventoryService.startScheduledTask();
         int worker = 0;
         int choice = 0;
         do {
@@ -82,24 +84,12 @@ public class InventoryMenu {
                 "Reports",
                 "List Categories",
                 "Print Stock By Product",
-//                "ReportsXXXXXX -need to remove",
                 "Stock Operations",
                 "Product Operations",
-//                "Add Stock",
-//                "Update Stock",
-//                "Delete Stock",
-//                "Add Product",
-//                "Delete Product",
-//                "Clear Stock (Expired/Defected)",
-//                "Delete Category",
                 "Discount Operations",
-//                "Add Discount",
-//                "Delete Discount",
-//                "List Discounts",
-//                "Show discount for a product",
-//                "Sell Product",
                 "Update Minimum Stock Level per Product",
-                "Create Constant Order");
+                "Create Constant Order"
+                );
         System.out.println("\n---- Inventory Worker Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
             System.out.println((i + 1) + ".  " + menuOptions.get(i));
@@ -113,10 +103,7 @@ public class InventoryMenu {
                 "Reports",
                 "List Categories",
                 "Print Stock By Product",
-                "ReportsXXXXX -need to remove",
-                "Add Stock",
-                "Update Stock",
-                "Delete Stock"
+                "Stock Operations"
         );
         System.out.println("\n---- Inventory Management Menu: ----");
         for (int i = 0; i < menuOptions.size(); i++) {
@@ -460,22 +447,21 @@ public class InventoryMenu {
         }
     }
 
+
     private void createConstantOrderMenu() throws Exception {
-        System.out.println("Please Enter Branch ID: ");
-        String branchID = scanner.nextLine();
-        supplierInventoryService.getsPossibleConstantOrdersForBranch(branchID);
+        supplierInventoryService.getsPossibleConstantOrdersForBranch(this.branchId);
         System.out.println("Please Enter Supplier ID To Order From: ");
         String supplierID = scanner.nextLine();
         System.out.println("Please Enter Day For Constant Order: ");
         String day = scanner.nextLine();
-        ConstantOrderDTO constantOrderDTO = supplierInventoryService.createRequirementToConstantOrder(branchID, supplierID, day);
+        ConstantOrderDTO constantOrderDTO = supplierInventoryService.createRequirementToConstantOrder(this.branchId, supplierID, day);
 
         //order Loop
         while (true){
             //view the agreement of products
             try {
                 System.out.println("*********************************************************");
-                supplierInventoryService.viewAgreement(branchID, supplierID);
+                supplierInventoryService.viewAgreement(this.branchId, supplierID);
                 System.out.println("*********************************************************");
                 supplierInventoryService.displayConstantOrder(constantOrderDTO);
             }
@@ -543,7 +529,6 @@ public class InventoryMenu {
             scanner.nextLine();
         }
     }
-
     public void displayStockUpdateMenu() {
         System.out.println("""
                 Choose which of the following you wold like to do:\
