@@ -18,9 +18,9 @@ import java.util.Scanner;
 public class LoginScreen {
 
     private final BranchDTO branchDTO;
-    private final User user;
+    private final UserDTO user;
 
-    public LoginScreen(BranchDTO branchDTO, User user) {
+    public LoginScreen(BranchDTO branchDTO, UserDTO user) {
         this.branchDTO = branchDTO;
         this.user = user;
     }

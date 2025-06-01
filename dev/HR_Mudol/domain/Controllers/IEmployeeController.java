@@ -138,4 +138,7 @@ public interface IEmployeeController {
     String getUserLevel(int employeeId) throws SQLException;
 
 
+    boolean isEmployeeInBranch(int empId, int branchId) throws SQLException;
+
+    UserDTO getUserById(int empId) throws SQLException;
 }

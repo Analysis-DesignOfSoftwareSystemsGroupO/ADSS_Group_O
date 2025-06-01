@@ -17,6 +17,12 @@ public interface IHRService {
 
     void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException;
 
+    // EmployeeService forwarding:
+    UserDTO getUserById(int empId) throws SQLException;
+
+    // EmployeeService forwarding:
+    boolean isEmployeeInBranch(int empId, int branchId) throws SQLException;
+
     // EmployeeService forwarding
     void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
 

@@ -6,7 +6,6 @@ import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
-import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
@@ -59,6 +58,16 @@ public class HRService implements IHRService {
     }
 
     // EmployeeService forwarding:
+    @Override
+    public UserDTO getUserById(int empId) throws SQLException {
+        return employeeController.getUserById(empId);
+    }
+
+    @Override
+    public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException{
+        return employeeController.isEmployeeInBranch(empId,branchId);
+    }
+
     @Override
     public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
         employeeService.viewMyShifts(caller, empId, currentWeek);

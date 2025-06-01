@@ -514,6 +514,16 @@ public class EmployeeController implements IEmployeeController {
         return curBranch.getUserRepo().getLevelById(employeeId).name();
     }
 
+    @Override
+    public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException{
+        return curBranch.getEmployeeRepo().isEmployeeInBranch(empId,branchId);
+    }
+
+    @Override
+    public UserDTO getUserById(int empId) throws SQLException {
+        return DTOToDomainMapper.toDTO(curBranch.getUserRepo().getByEmployeeId(empId));
+    }
+
 
 }
 

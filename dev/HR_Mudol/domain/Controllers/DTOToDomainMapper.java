@@ -245,4 +245,14 @@ public class DTOToDomainMapper {
 
         return week;
     }
+
+    public static UserDTO toDTO(User user) {
+        if (user == null || user.getUser() == null || user.getLevel() == null)
+            throw new IllegalArgumentException("User or user details cannot be null");
+
+        long userId = user.getUser().getEmpId();
+        String level = user.getLevel().name();
+        return new UserDTO(userId, level);
+    }
+
 }
