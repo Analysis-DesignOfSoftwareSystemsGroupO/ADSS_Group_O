@@ -121,4 +121,11 @@ public class EmployeeRepository {
     public int size() {
         return employeesById.size();
     }
+    public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException {
+        List<EmployeeDTO> employeesInBranch = employeeDAO.getAllByBranch(branchId);
+        return employeesInBranch.stream().anyMatch(e -> e.getEmployeeId() == empId);
+    }
+
+
+
 }

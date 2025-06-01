@@ -21,5 +21,7 @@ public interface IEmployeeDAO {
     void updateDaysOff(int empId, int daysOff) throws SQLException;
     void updatePassword(int empId, String newPassword);
     List<EmployeeDTO> getAllByBranch(int branchId) throws SQLException;
+    boolean isEmployeeInBranch(int empId, int branchId) throws SQLException;
+
 
 }

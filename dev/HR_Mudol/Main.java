@@ -60,6 +60,10 @@ public class Main {
                 }
 
                 List<Branch> branchList = new ArrayList<>(branches);
+
+                // ✅ הוספת אדמין לכל הסניפים
+                addAdminUserIfNeeded(branchList);
+
                 System.out.println("\nAvailable Branches:");
                 for (int i = 0; i < branchList.size(); i++) {
                     System.out.printf("%d. %s\n", i + 1, branchList.get(i).getName());
@@ -80,14 +84,15 @@ public class Main {
                         }
 
                         selectedBranch = branchList.get(branchIndex);
+
                         System.out.print("Enter your employee ID: ");
                         int userId = Integer.parseInt(scanner.nextLine().trim());
 
-                        if (!selectedBranch.getUserRepo().exists(userId)) {
-                            System.out.println("❌ You are not associated with this branch. Please choose again.");
-                        } else {
+                        if (employeeDAO.isEmployeeInBranch(userId, selectedBranch.getBranchID())) {
                             user = selectedBranch.getUserRepo().getByEmployeeId(userId);
                             break;
+                        } else {
+                            System.out.println("❌ You are not associated with this branch. Please choose again.");
                         }
 
                     } catch (Exception e) {
@@ -97,8 +102,7 @@ public class Main {
 
             } else {
                 selectedBranch = new Branch("center", "Main Branch");
-                addAdminUserIfNeeded(selectedBranch);
-                addDefaultRoles(selectedBranch);
+                addAdminUserIfNeeded(Collections.singletonList(selectedBranch));
                 BranchDTO newBranchDTO = DTOToDomainMapper.toDTO(selectedBranch);
                 branchRepo.add(newBranchDTO);
             }
@@ -133,22 +137,19 @@ public class Main {
         }
     }
 
-    private static void addAdminUserIfNeeded(Branch branch) throws Exception {
+    private static void addAdminUserIfNeeded(Collection<Branch> branches) throws Exception {
         int adminId = 999999999;
-        if (!branch.getUserRepo().exists(adminId)) {
-            Employee admin = new Employee("System Admin", adminId, "admin123",
-                    "IL0000000000", 20000, LocalDate.now(), 2, 2, 10, 10);
-            User adminUser = new User(admin, Level.HRManager);
-            branch.getEmployeeRepo().addFromDTO(admin);
-            branch.getUserRepo().add(adminUser);
-            System.out.println("✅ Admin user created with ID: " + adminId + ", password: admin123");
+
+        for (Branch branch : branches) {
+            if (!branch.getUserRepo().exists(adminId)) {
+                Employee admin = new Employee("System Admin", adminId, "admin123",
+                        "IL0000000000", 20000, LocalDate.now(), 2, 2, 10, 10);
+                User adminUser = new User(admin, Level.HRManager);
+                branch.getEmployeeRepo().addFromDTO(admin);
+                branch.getUserRepo().add(adminUser);
+                System.out.println("✅ Admin user added to branch: " + branch.getName());
+            }
         }
     }
 
-    private static void addDefaultRoles(Branch branch) throws SQLException {
-        String[] roles = {"Cashier", "Driver", "Technician", "Warehouse", "Cleaner"};
-        for (String name : roles) {
-            branch.getRoleRepo().add(new HR_Mudol.domain.Objects.Role(name));
-        }
-    }
 }

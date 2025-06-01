@@ -234,4 +234,19 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
         return result;
     }
+    @Override
+    public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Employees WHERE empID = ? AND branchID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empId);
+            stmt.setInt(2, branchId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
 }
