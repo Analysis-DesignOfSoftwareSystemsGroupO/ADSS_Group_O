@@ -59,8 +59,7 @@ public class InventoryMenu {
                 handleMenuChoice(choice);
             }
         } while (worker != 0);
-        System.out.println("Exiting the inventory Management Menu. Goodbye!");
-
+        System.out.println("Return To Main Menu");
     }
 
     private int chooseWorkerType() {

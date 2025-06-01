@@ -15,28 +15,35 @@ public class Main {
         PresentMainMenu supplierMenu = new PresentMainMenu();
         InventoryMenu inventoryMenu = new InventoryMenu("1");
         loadData();
-        int choice = readIntInput("Welcome to the Application!\n" +
-                "1. Supplier Module\n" +
-                "2. Inventory Module\n" +
-                "3. Exit\n" +
-                "Please enter your choice: \n");
 
-        switch (choice) {
-            case 1:
-                // Run Supplier Module
-                supplierMenu.runMainPresentation();
-                break;
-            case 2:
-                // Run Inventory Module
-                inventoryMenu.run();
-                break;
-            case 3:
-                // Exit the application
-                System.out.println("Exiting the application. Goodbye!");
-                return;
-            default:
-                System.out.println("Invalid choice! Please try again.");
-        }
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do {
+            choice = readIntInput("Welcome to the Application!\n" +
+                    "1. Supplier Module\n" +
+                    "2. Inventory Module\n" +
+                    "3. Exit\n" +
+                    "Please enter your choice: \n");
+
+            switch (choice) {
+                case 1:
+                    // Run Supplier Module
+                    supplierMenu.runMainPresentation();
+                    break;
+                case 2:
+                    // Run Inventory Module
+                    inventoryMenu.run();
+                    break;
+                case 3:
+                    // Exit the application
+                    System.out.println("Exiting the application. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        } while (choice != 3);
+
+        scanner.close();
     }
 
     private static void loadData() throws Exception {
@@ -92,5 +99,5 @@ public class Main {
             }
         }
     }
-
 }
+

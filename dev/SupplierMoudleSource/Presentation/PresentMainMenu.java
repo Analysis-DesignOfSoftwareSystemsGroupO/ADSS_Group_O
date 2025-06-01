@@ -20,7 +20,7 @@ public class PresentMainMenu {
                 System.out.println("1.Supplier options");
                 System.out.println("2.Order options");
                 System.out.println("3.Agreement options");
-                System.out.println("4.Exit");
+                System.out.println("4.Return To Main Menu");
                 System.out.println("Please select an option: ");
 
                 try {
