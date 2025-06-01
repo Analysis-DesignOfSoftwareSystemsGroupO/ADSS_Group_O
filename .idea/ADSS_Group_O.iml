@@ -27,29 +27,10 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="junit.jupiter" level="project" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/postgresql-42.7.6.jar!/" />
-          <root url="jar://$USER_HOME$/Downloads/postgresql-42.7.5 (1).jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../postgresql-42.7.5.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/postgresql-42.7.5.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/postgresql-42.7.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

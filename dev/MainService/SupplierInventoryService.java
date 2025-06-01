@@ -119,7 +119,7 @@ public class SupplierInventoryService {
 //                System.out.println("Updating constant orders...");
                 //todo scheduled constant orders
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
         }, 0, 24, TimeUnit.HOURS);
     }

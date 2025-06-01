@@ -38,9 +38,13 @@ public class InventoryMenu {
         init.createAllTablesIfNotExists();
     }
 
-    public void run() {
-        System.out.println("\nWelcome to the inventory Management Menu!");
+    public void StartTaskClock(){
         supplierInventoryService.startScheduledTask();
+    }
+
+    public void run() {
+//        supplierInventoryService.startScheduledTask();
+        System.out.println("\nWelcome to the inventory Management Menu!");
         int worker = 0;
         int choice = 0;
         do {
@@ -546,7 +550,8 @@ public class InventoryMenu {
                  3. Print Expired List (Product Based)
                  4. Print Defect List (Product Based)
                  5. All Products
-                 6. Products By Category (Enter multiple categories, 0 to return)""\");
+                 6. Products By Category (Enter multiple categories, 0 to return)
+                
                 """);
     }
 

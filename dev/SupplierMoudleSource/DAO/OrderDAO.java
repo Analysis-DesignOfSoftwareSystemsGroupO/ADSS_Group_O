@@ -31,6 +31,9 @@ public class OrderDAO {
             pstmt.setInt(5, Integer.parseInt(supplierID));
             pstmt.executeUpdate();
         }
+        catch (SQLException e) {
+            throw new SQLException("Order Is Already Added - Aborting Order Creation");
+        }
         String sql2 = "INSERT INTO supplierinventorydb.productsinorder (quantity, orderID, suppliedItemID) VALUES (?, ?, ?)";
         Map<SuppliedItemDTO, Integer> suppliedItems = order.getSuppliedItems();
 

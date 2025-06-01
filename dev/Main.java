@@ -18,6 +18,9 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         int choice;
+        System.out.println("*****Checking for Immediate Orders*****");
+        inventoryMenu.StartTaskClock();
+        Thread.sleep(22000);
         do {
             choice = readIntInput("Welcome to the Application!\n" +
                     "1. Supplier Module\n" +
