@@ -275,4 +275,14 @@ public class HRService implements IHRService {
     public IRoleController getRoleController() {
         return roleController;
     }
+
+    public void removeEmployeeFromRole(UserDTO theCaller, int roleNumber, int empId) throws SQLException {
+        EmployeeDTO employeeDTO = employeeController.getEmployeeById(theCaller, empId); // ← או דרך EmployeeService
+        if (employeeDTO == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
+        roleController.removeEmployeeFromRole(theCaller, roleNumber, employeeDTO);
+    }
+
 }

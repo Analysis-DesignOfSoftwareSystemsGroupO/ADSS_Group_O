@@ -1,13 +1,15 @@
 package HR_Mudol.presentation;
 
-import HR_Mudol.DTO.BranchDTO;
-import HR_Mudol.DTO.EmployeeDTO;
-import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.DTO.*;
 import HR_Mudol.Service.ManagerService.HRService;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
+import HR_Mudol.domain.Controllers.RoleController;
+import HR_Mudol.domain.Objects.Employee;
 
 import java.sql.SQLException;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class HRManagerMenu implements Menu {
 
@@ -21,8 +23,7 @@ public class HRManagerMenu implements Menu {
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO curBranch) throws SQLException {
         if (!caller.isHRManager()) {
             System.out.println("Access denied.");
-            return false;
-        }
+            return false;        }
 
         Scanner scanner = new Scanner(System.in);
 
@@ -39,23 +40,12 @@ public class HRManagerMenu implements Menu {
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1" -> System.out.println("Not yet implemented");
-                case "2" -> System.out.println("Not yet implemented");
-                case "3" -> System.out.println("Not yet implemented");
-                case "4" -> manageShift(hr, curBranch, caller);
-                case "5" -> System.out.println("Not yet implemented");
-                case "6" -> {
-                    WeekDTO currentWeek = curBranch.getCurrentWeekDTO();
-                    if (currentWeek != null) {
-                        try {
-                            hr.displayDashboard(caller, currentWeek);
-                        } catch (Exception e) {
-                            System.out.println("Error: " + e.getMessage());
-                        }
-                    } else {
-                        System.out.println("No current week available.");
-                    }
-                }
+                case "1" -> manageEmployees(caller);
+                case "2" -> viewShiftsHistory(caller, curBranch);
+                case "3" -> generateReports(caller, curBranch);
+                case "4" -> manageShift(caller, curBranch);
+                case "5" -> manageRoles(caller);
+                case "6" -> displayDashboard(caller, curBranch);
                 case "0" -> {
                     System.out.println("Logging out. Returning to login screen.");
                     hr.close();
@@ -66,10 +56,142 @@ public class HRManagerMenu implements Menu {
         }
     }
 
-    private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) {
-        WeekDTO currentWeekDTO = branch.getCurrentWeekDTO();
-        if (currentWeekDTO == null) {
-            System.out.println("No current week found.");
+    private void manageEmployees(UserDTO caller) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n--- Employee Management ---");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Remove Employee from ALL Roles");
+            System.out.println("3. View My Constraints");
+            System.out.println("4. View Personal Details");
+            System.out.println("0. Back");
+
+            String choice = sc.nextLine();
+            try {
+                switch (choice) {
+                    case "1" -> System.out.println("Not yet implemented");
+                    case "2" -> hr.removeEmployeeFromALLRoles(caller);
+                    case "3" -> hr.viewMyConstraints(caller, caller.getUserId());
+                    case "4" -> hr.viewPersonalDetails(caller, caller.getUserId());
+                    case "0" -> { return; }
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    private void viewShiftsHistory(UserDTO caller, BranchDTO branch) {
+        List<WeekDTO> weeks = branch.getWeeks();
+        if (weeks == null || weeks.isEmpty()) {
+            System.out.println("No weeks available.");
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.print("Do you want to see only the last week? (Y/N): ");
+        String choice = sc.nextLine().trim();
+
+        if (choice.equalsIgnoreCase("Y")) {
+            hr.printWeek(weeks.get(weeks.size() - 1));
+            return;
+        }
+
+        LocalDate from = null, to = null;
+        try {
+            System.out.print("Enter start date (yyyy-MM-dd): ");
+            from = LocalDate.parse(sc.nextLine(), formatter);
+            System.out.print("Enter end date (yyyy-MM-dd): ");
+            to = LocalDate.parse(sc.nextLine(), formatter);
+        } catch (Exception e) {
+            System.out.println("Invalid input: " + e.getMessage());
+            return;
+        }
+
+        for (WeekDTO week : weeks) {
+            LocalDate deadline = week.getConstraintDeadline().toLocalDate();
+            if (!deadline.isBefore(from) && !deadline.isAfter(to)) {
+                hr.printWeek(week);
+            }
+        }
+    }
+
+    private void generateReports(UserDTO caller, BranchDTO branch) {
+        Scanner sc = new Scanner(System.in);
+        List<WeekDTO> weeks = branch.getWeeks();
+        if (weeks == null || weeks.isEmpty()) {
+            System.out.println("No weeks available.");
+            return;
+        }
+        WeekDTO last = weeks.get(weeks.size() - 1);
+
+        System.out.println("\n--- Report Generation ---");
+        System.out.println("1. Weekly Report");
+        System.out.println("2. Employee Report");
+        System.out.println("3. Shift Report");
+        System.out.println("0. Back");
+
+        String choice = sc.nextLine();
+        try {
+            switch (choice) {
+                case "1" -> hr.generateWeeklyReport(caller, weeks);
+                case "2" -> {
+                    System.out.print("Enter Employee ID: ");
+                    int empId = Integer.parseInt(sc.nextLine());
+                    hr.generateEmployeeReport(caller, empId, last);
+                }
+                case "3" -> hr.generateShiftReport(caller, last);
+                case "0" -> {
+                    return;
+                }
+                default -> System.out.println("Invalid option.");
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to generate report: " + e.getMessage());
+        }
+    }
+
+    private void manageRoles(UserDTO caller) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n--- Role Management ---");
+            System.out.println("1. Create Role");
+            System.out.println("2. Assign Employee to Role");
+            System.out.println("3. Remove Employee from Role");
+            System.out.println("4. Assign Employee to Shift Manager");
+            System.out.println("5. Print All Roles");
+            System.out.println("0. Back");
+
+            String choice = sc.nextLine();
+            try {
+                switch (choice) {
+                    case "1" -> hr.createRole(caller);
+                    case "2" -> hr.assignEmployeeToRole(caller);
+                    case "3" -> {
+                        System.out.print("Enter role number: ");
+                        int roleNum = Integer.parseInt(sc.nextLine());
+                        System.out.print("Enter employee ID: ");
+                        int empId = Integer.parseInt(sc.nextLine());
+                        hr.removeEmployeeFromRole(caller, roleNum, empId);
+                    }
+                    case "4" -> hr.assignEmployeeToShiftManager(caller);
+                    case "5" -> hr.printAllRoles(caller);
+                    case "0" -> { return; }
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    private void manageShift(UserDTO caller, BranchDTO branch) {
+        WeekDTO week = branch.getCurrentWeekDTO();
+        if (week == null) {
+            System.out.println("No current week available.");
             return;
         }
 
@@ -80,18 +202,15 @@ public class HRManagerMenu implements Menu {
             System.out.println("1. Assigning roles to weekly shifts");
             System.out.println("2. Assigning employees to weekly shifts");
             System.out.println("3. Edit shifts");
-            System.out.println("0. Back to Main Menu");
+            System.out.println("0. Back");
 
             String choice = sc.nextLine();
             try {
                 switch (choice) {
-                    case "1" -> hr.manageTheWeekRelevantRoles(callerDTO, currentWeekDTO);
-                    case "2" -> hr.assigningEmployToShifts(callerDTO, currentWeekDTO);
-                    case "3" -> editShifts(hr, callerDTO, currentWeekDTO);
-                    case "0" -> {
-                        hr.close();
-                        return;
-                    }
+                    case "1" -> hr.manageTheWeekRelevantRoles(caller, week);
+                    case "2" -> hr.assigningEmployToShifts(caller, week);
+                    case "3" -> editShifts(caller, week);
+                    case "0" -> { return; }
                     default -> System.out.println("Invalid option.");
                 }
             } catch (Exception e) {
@@ -100,10 +219,7 @@ public class HRManagerMenu implements Menu {
         }
     }
 
-    public static void editShifts(HRService hr, UserDTO caller, WeekDTO week) {
-        if (!caller.isHRManager()) {
-            throw new SecurityException("Access denied.");
-        }
+    private void editShifts(UserDTO caller, WeekDTO week) throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -115,22 +231,28 @@ public class HRManagerMenu implements Menu {
             System.out.println("5. Cancel a shift");
             System.out.println("0. Back");
             String choice = scanner.nextLine();
-            try {
-                switch (choice) {
-                    case "1" -> hr.addEmployeeToShift(caller, week);
-                    case "2" -> hr.removeEmployeeFromShift(caller, week);
-                    case "3" -> hr.addARoleToShift(caller, week);
-                    case "4" -> hr.removeRoleFromShift(caller, week);
-                    case "5" -> hr.cancelShift(caller, week);
-                    case "0" -> {
-                        return;
-                    }
-                    default -> System.out.println("Invalid option.");
-                }
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+            switch (choice) {
+                case "1" -> hr.addEmployeeToShift(caller, week);
+                case "2" -> hr.removeEmployeeFromShift(caller, week);
+                case "3" -> hr.addARoleToShift(caller, week);
+                case "4" -> hr.removeRoleFromShift(caller, week);
+                case "5" -> hr.cancelShift(caller, week);
+                case "0" -> { return; }
+                default -> System.out.println("Invalid option.");
             }
         }
     }
 
+    private void displayDashboard(UserDTO caller, BranchDTO branch) {
+        WeekDTO week = branch.getCurrentWeekDTO();
+        if (week == null) {
+            System.out.println("No current week available.");
+            return;
+        }
+        try {
+            hr.displayDashboard(caller, week);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 }
