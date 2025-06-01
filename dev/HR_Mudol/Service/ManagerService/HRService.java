@@ -10,6 +10,7 @@ import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
+import TransportModule.transport_module.ITransportController;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,16 +28,17 @@ public class HRService implements IHRService {
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
 
-    public HRService(Branch branch) throws SQLException {
+    public HRService(Branch branch, ITransportController transportController) throws SQLException {
         BranchDTO curBranch = DTOToDomainMapper.toDTO(branch);
         this.roleController = new RoleController(curBranch);
         this.employeeController = new EmployeeController(curBranch);
-        this.shiftController = new ShiftController(curBranch, this.roleController);
+        this.shiftController = new ShiftController(curBranch, this.roleController, transportController); // 👈 עדכון
         this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
 
         this.employeeService = new EmployeeService(branch);
         this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController);
     }
+
 
     public IEmployeeController getEmployeeController() {
         return employeeController;

@@ -10,6 +10,7 @@ import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
+import TransportModule.transport_module.ITransportController;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -81,13 +82,14 @@ public class LoginScreen {
     }
 
     private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranchDTO, Branch curBranch) throws SQLException {
+        ITransportController transportController = new TransportController(); // ← לפי השם שהגדרת למימוש
         if (userDTO.getLevel().equalsIgnoreCase("HRManager")) {
-            HRService hrService = new HRService(curBranch);
+            HRService hrService = new HRService(curBranch,transportController);
             HRManagerMenu menu = new HRManagerMenu(hrService);
             if (menu.start(userDTO, employeeDTO, curBranchDTO)) return;
         } else if (userDTO.getLevel().equalsIgnoreCase("shiftManager")) {
-            HRService hrService = new HRService(curBranch);
-            ShiftManagerService shiftService = new ShiftManagerService(DTOToDomainMapper.toDTO(curBranch), hrService.getRoleController());
+            HRService hrService = new HRService(curBranch,transportController);
+            ShiftManagerService shiftService = new ShiftManagerService(DTOToDomainMapper.toDTO(curBranch), hrService.getRoleController(),transportController);
             ShiftManagerMenu menu = new ShiftManagerMenu();
             if (menu.start(userDTO, employeeDTO, curBranchDTO)) return;
         } else {

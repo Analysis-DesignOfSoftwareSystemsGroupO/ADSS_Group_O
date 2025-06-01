@@ -10,6 +10,7 @@ import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Controllers.ShiftController;
 import HR_Mudol.domain.Objects.Branch;
+import TransportModule.transport_module.ITransportController;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -28,7 +29,9 @@ public class ShiftManagerMenu implements Menu {
 
         // שירותים
         EmployeeService employeeService = new EmployeeService(branch);
-        HRService hrService = new HRService(branch);
+        ITransportController transportController = new TransportController(); // או RealTransportController
+        HRService hrService = new HRService(branch, transportController);
+
 
         while (true) {
             System.out.println("\n=== Shift Manager Menu ===");

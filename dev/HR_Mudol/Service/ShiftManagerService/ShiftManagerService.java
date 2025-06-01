@@ -5,6 +5,7 @@ import HR_Mudol.domain.Controllers.ShiftController;
 import HR_Mudol.domain.Controllers.IRoleController;
 import HR_Mudol.domain.WeekDay;
 import HR_Mudol.domain.ShiftType;
+import TransportModule.transport_module.ITransportController;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,8 +16,8 @@ public class ShiftManagerService implements IShiftManagerService {
     private final ShiftController shiftController;
     private final Scanner scanner = new Scanner(System.in);
 
-    public ShiftManagerService(BranchDTO branchDTO, IRoleController roleController) throws SQLException {
-        this.shiftController = new ShiftController(branchDTO, roleController);
+    public ShiftManagerService(BranchDTO branchDTO, IRoleController roleController, ITransportController transportController) throws SQLException {
+        this.shiftController = new ShiftController(branchDTO, roleController, transportController); // 👈 עדכון
     }
 
     @Override
