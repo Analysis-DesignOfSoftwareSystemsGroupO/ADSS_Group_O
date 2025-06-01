@@ -18,14 +18,15 @@ import java.util.Scanner;
 public class LoginScreen {
 
     private final BranchDTO branchDTO;
-    private final UserDTO user;
+    private final User user;
 
-    public LoginScreen(BranchDTO branchDTO, UserDTO user) {
+    public LoginScreen(BranchDTO branchDTO, User user) {
         this.branchDTO = branchDTO;
         this.user = user;
     }
 
     public void start() throws SQLException {
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter password: ");
@@ -46,6 +47,7 @@ public class LoginScreen {
         UserDTO userDTO = new UserDTO(matched.getEmployeeId(), level);
 
         launchMenuForUser(userDTO, matched, branchDTO);
+
     }
 
     private void launchMenuForUser(UserDTO userDTO, EmployeeDTO employeeDTO, BranchDTO curBranch) throws SQLException {

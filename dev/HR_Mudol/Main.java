@@ -2,6 +2,7 @@ package HR_Mudol;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.DataBase.*;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.repository.BranchRepository;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.presentation.LoginScreen;
@@ -34,51 +35,62 @@ public class Main {
             BranchRepository branchRepo = new BranchRepository();
             List<BranchDTO> branches = branchRepo.getAllBranches();
 
-            System.out.println("\nAvailable Branches:");
-            for (int i = 0; i < branches.size(); i++) {
-                System.out.printf("%d. %s\n", i + 1, branches.get(i).getName());
-            }
+            boolean keepRunning = true;
 
-            BranchDTO selectedBranch;
-            UserDTO user;
+            while (keepRunning) {
+                System.out.println("\nAvailable Branches:");
+                for (int i = 0; i < branches.size(); i++) {
+                    System.out.printf("%d. %s\n", i + 1, branches.get(i).getName());
+                }
 
-            while (true) {
-                try {
-                    System.out.print("Select your branch by number: ");
-                    int branchIndex = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                BranchDTO selectedBranch;
+                UserDTO user;
 
-                    if (branchIndex < 0 || branchIndex >= branches.size()) {
-                        System.out.println("Invalid branch selection.");
-                        continue;
+                while (true) {
+                    try {
+                        System.out.print("Select your branch by number: ");
+                        int branchIndex = Integer.parseInt(scanner.nextLine().trim()) - 1;
+
+                        if (branchIndex < 0 || branchIndex >= branches.size()) {
+                            System.out.println("Invalid branch selection.");
+                            continue;
+                        }
+
+                        selectedBranch = branches.get(branchIndex);
+
+                        System.out.print("Enter your employee ID: ");
+                        int empId = Integer.parseInt(scanner.nextLine().trim());
+
+                        HRService hrService = new HRService(selectedBranch);
+                        if (!hrService.isEmployeeInBranch(empId, selectedBranch.getBranchID())) {
+                            System.out.println("❌ You are not associated with this branch. Please try again.");
+                            continue;
+                        }
+
+                        user = hrService.getUserById(empId);
+                        if (user == null) {
+                            System.out.println("❌ User not found.");
+                            continue;
+                        }
+
+                        break;
+
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
                     }
+                }
 
-                    selectedBranch = branches.get(branchIndex);
+                LoginScreen login = new LoginScreen(selectedBranch, DTOToDomainMapper.fromDTO(user));
+                login.start();
 
-                    System.out.print("Enter your employee ID: ");
-                    int empId = Integer.parseInt(scanner.nextLine().trim());
-
-                    HRService hrService = new HRService(selectedBranch);
-                    if (!hrService.isEmployeeInBranch(empId, selectedBranch.getBranchID())) {
-                        System.out.println("❌ You are not associated with this branch. Please try again.");
-                        continue;
-                    }
-
-                    user = hrService.getUserById(empId);
-                    if (user == null) {
-                        System.out.println("❌ User not found.");
-                        continue;
-                    }
-
-                    break;
-
-                } catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
+                System.out.print("🔄 Do you want to log in again? [y/n]: ");
+                String again = scanner.nextLine().trim().toLowerCase();
+                if (!again.equals("y")) {
+                    keepRunning = false;
                 }
             }
 
-            // Launch Login Screen
-            LoginScreen login = new LoginScreen(selectedBranch, user);
-            login.start();
+            System.out.println("👋 Exiting the Workforce System. Goodbye!");
 
         } catch (Exception ex) {
             System.out.println("❌ Initialization failed: " + ex.getMessage());
