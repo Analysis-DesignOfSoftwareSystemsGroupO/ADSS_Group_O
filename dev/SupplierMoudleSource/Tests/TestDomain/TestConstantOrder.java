@@ -49,10 +49,9 @@ public class TestConstantOrder {
         String day = dayOfWeek.name();
         String formatDayTomorrow = day.substring(0, 1) + day.substring(1).toLowerCase();
 
-        ConstantOrderDTO constantOrderDTO = supplierInventoryService.createRequirementToConstantOrder("1","3", formatDayTomorrow);
-        constantOrderDTO = supplierInventoryService.addProductToOrder(constantOrderDTO, "4", 5);
-        constantOrderDTO = supplierInventoryService.addProductToOrder(constantOrderDTO, "16", 1);
-        constantOrderDTO = supplierInventoryService.addProductToOrder(constantOrderDTO, "8", 4);
+        ConstantOrderDTO constantOrderDTO = supplierInventoryService.createRequirementToConstantOrder("1","6", formatDayTomorrow);
+        constantOrderDTO = supplierInventoryService.addProductToOrder(constantOrderDTO, "16", 5);
+        constantOrderDTO = supplierInventoryService.addProductToOrder(constantOrderDTO, "13", 1);
         supplierInventoryService.finishOrder(constantOrderDTO);
         orderService.scheduleDailyOrderCheck();
 
@@ -61,7 +60,7 @@ public class TestConstantOrder {
             try (Connection connection = getConnection()) {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setInt(1, 1); //branch id = 1
-                preparedStatement.setInt(2, 3);  // supplier id = 3
+                preparedStatement.setInt(2, 6);  // supplier id = 3
                 ResultSet rs = preparedStatement.executeQuery();
                 if (!rs.next()) {
                     assertTrue(false, "constant order is not found"); //fail the test if not found
@@ -71,7 +70,7 @@ public class TestConstantOrder {
             String sql2 = "SELECT * FROM supplierinventorydb.productsinorder where supplieditemid=? and quantity=?";
             try (Connection connection = getConnection()) {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql2);
-                preparedStatement.setInt(1, 4); // productID
+                preparedStatement.setInt(1, 16); // productID
                 preparedStatement.setInt(2, 5); // quantity
                 ResultSet rs = preparedStatement.executeQuery();
                 if (!rs.next()) {
@@ -90,7 +89,7 @@ public class TestConstantOrder {
                 Date date = rs2.getDate("date");
                 int supplierid = rs2.getInt("supplierid");
                 assertEquals(1, branchid, "correct branch id");
-                assertEquals(3, supplierid, "correct supplier id");
+                assertEquals(6, supplierid, "correct supplier id");
                 LocalDate expectedDate = LocalDate.now();  // today's date
                 LocalDate actualDate = date.toLocalDate();
                 assertEquals(expectedDate, actualDate);

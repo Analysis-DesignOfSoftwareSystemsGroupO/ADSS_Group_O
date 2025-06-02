@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/dev/inventory/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/dev/inventory/tests/inventory" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/dev/inventory/tests/inventory/domain" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

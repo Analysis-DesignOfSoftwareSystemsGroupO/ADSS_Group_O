@@ -45,10 +45,14 @@ public class LoadData {
         // add suppliers with full data for the constructor
         String[][] supplierData = {
                 {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager", "Temporary Delivery", ""},
-                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales", "Self Pick Up", ""},
+                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales", "Temporary Delivery", ""},
                 {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk", "Temporary Delivery", ""},
-                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant", "Constant Delivery", ""},
-                {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor", "Constant Delivery", ""}
+                {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant", "Temporary Delivery", ""},
+                {"5", "Moshe", "CreditCard", "14", "888", "105", "Elina", "0539998877", "Supervisor", "Temporary Delivery", ""},
+                {"6", "Ady", "CreditCard", "14", "888", "105", "Eyal", "0531425877", "Supervisor", "Constant Delivery", ""},
+                {"7", "Shay", "CreditCard", "14", "888", "105", "Golan", "0539944877", "Supervisor", "Constant Delivery", ""},
+                {"8", "Shir", "CreditCard", "14", "888", "105", "Or", "0539996877", "Supervisor", "Constant Delivery", ""}
+
         };
 
         for (String[] data : supplierData) {
@@ -121,7 +125,10 @@ public class LoadData {
                 { "9", "3" },
                 { "9", "4" },
                 { "4", "4" },
-                { "5", "5" }
+                { "5", "5" },
+                { "1", "6" },
+                { "1", "7" },
+                { "1", "8" }
         };
 
         for (String[] data : agreementData) {
@@ -147,7 +154,15 @@ public class LoadData {
                 { 25, "13", "1", "4"},
                 { 15, "14", "1", "4"},
                 { 12, "15", "1", "1"},
-                { 18, "16", "1", "3"}
+                { 18, "16", "1", "6"},
+                { 18, "13", "1", "6"},
+                { 18, "14", "1", "7"},
+                { 18, "12", "1", "7"},
+                { 18, "11", "1", "8"},
+                { 18, "6", "1", "8"},
+                { 18, "5", "1", "6"},
+                { 18, "1", "1", "7"},
+
         };
 
 
