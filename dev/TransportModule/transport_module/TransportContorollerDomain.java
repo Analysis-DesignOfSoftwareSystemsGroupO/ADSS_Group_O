@@ -23,6 +23,7 @@ public class TransportContorollerDomain implements ITransportController {
 
     }
 
+
     public List<TransportDTO> getTransportNextWeek() throws Exception{
         int day = LocalDate.now().getDayOfMonth();
         int month = LocalDate.now().getMonthValue();
@@ -50,18 +51,18 @@ public class TransportContorollerDomain implements ITransportController {
         }
         return PLDDTOList;
     }
-
-    public void assignDriverTransport(String driverID, String transportID) throws Exception{
-        //Driver driver =(Driver) employeeRepository.getById(Integer.parseInt(driverID)); todo
-        Driver driver = new Driver(driverID, Integer.parseInt(transportID));
-        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
-
-        // try to assign driver
-        transport.addDriver(driver);
-        // try to save transport in DB
-        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
-    }
-
+    public void assignDriverTransport(String driverID, String transportID) throws Exception{} //todo delete
+//
+//    public void assignDriverTransport(String driverID, String transportID) throws Exception{
+//        Driver driver =(Driver) employeeRepository.getById(Integer.parseInt(driverID)); todo
+//        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+//
+//        // try to assign driver
+//        transport.addDriver(driver);
+//        // try to save transport in DB
+//        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
+//    }
+//
 
     /**
      * Creates a new Transport using data from DTO and saves it.

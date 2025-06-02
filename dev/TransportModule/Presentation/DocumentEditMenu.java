@@ -5,8 +5,6 @@ import TransportModule.Transport_Module_Exceptions.InvalidDocumentException;
 import TransportModule.Transport_Module_Exceptions.InvalidProductException;
 import TransportModule.transport_module.Product;
 import TransportModule.transport_module.ProductListDocument;
-import Transport_Module_Exceptions.*;
-import transport_module.*;
 
 import java.util.Map;
 import java.util.Scanner;
