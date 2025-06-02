@@ -38,9 +38,6 @@ public class DrivingLicence {
     /***
      * @return Licence description
      */
-    public String getDescription() {
-        return description;
-    }
 //********************************************************************************************************************** print functions
 
     /***
@@ -48,7 +45,7 @@ public class DrivingLicence {
      */
     @Override
     public String toString() {
-        return code + " : " + description;
+        return code + " : " ;
     }
 
     /***
