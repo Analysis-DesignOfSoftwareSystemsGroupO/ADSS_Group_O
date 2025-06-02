@@ -27,7 +27,6 @@ public class TruckRepositoryIMP implements  ITruckRepository{
             Truck t = DTOtoTruck(tDTO); // also add this to the mapper/
             trucks.add(t);
         }
-
     }
 
     @Override

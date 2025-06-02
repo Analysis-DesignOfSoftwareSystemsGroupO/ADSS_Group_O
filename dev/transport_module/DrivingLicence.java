@@ -5,7 +5,6 @@ package transport_module;
  * Each licence has a description (like "Medium truck") and a code (like "C1").
  */
 public class DrivingLicence {
-    private  String description;
     private  String code;
 
     /***
