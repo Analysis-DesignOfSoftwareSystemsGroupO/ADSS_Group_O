@@ -309,4 +309,20 @@ public class Employee extends AbstractEmployee {
     public void setLockedConstraints(List<Constraint> lockedConstraints) {
         this.lockedConstraints = lockedConstraints;
     }
+
+    public void removeConstraint(WeekDay day, ShiftType type) {
+        // הסרה מהרשימה הכללית
+        weeklyConstraints.removeIf(c -> c.getDay() == day && c.getType() == type);
+
+        // הסרה מהרשימה הספציפית לסוג המשמרת
+        switch (type) {
+            case MORNING:
+                morningConstraints.removeIf(c -> c.getDay() == day);
+                break;
+            case EVENING:
+                eveningConstraints.removeIf(c -> c.getDay() == day);
+                break;
+        }
+    }
+
 }

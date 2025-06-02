@@ -76,10 +76,13 @@ public class ConstraintRepository {
 
     public void delete(int empId, WeekDay day, ShiftType type) throws SQLException {
         String key = buildKey(empId, day, type);
+
+        // 1. הסר מה־cache הכללי
         constraintCache.remove(key);
+
+        // 2. הסר מה־DB
         constraintDAO.delete(empId, type.name(), day.name());
     }
-
 
 
 }

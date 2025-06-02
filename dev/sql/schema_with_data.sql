@@ -43,12 +43,13 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 
 CREATE TABLE IF NOT EXISTS Constraints (
-    constraintID SERIAL PRIMARY KEY,
+    constraintID SERIAL,
     empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
     explanation TEXT,
-    date_created DATE DEFAULT  CURRENT_TIMESTAMP
+    date_created DATE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (empID, WeekDay, ShiftType)
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (

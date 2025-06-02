@@ -504,7 +504,13 @@ public class EmployeeController implements IEmployeeController {
         WeekDay day = WeekDay.valueOf(constraintDTO.getDay().toUpperCase());
         ShiftType type = ShiftType.valueOf(constraintDTO.getType().toUpperCase());
 
-        curBranch.getConstraintRepo().delete(empId, day, type);
+        curBranch.getConstraintRepo().delete(empId, day, type); //מסיר מהריפוזיטורי של אילוצים ומהדאטה בייס
+
+        // 3. הסר מהאובייקט של העובד בריפוזיטורי של עובדים
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee != null) {
+            employee.removeConstraint(day, type);
+        }
     }
 
     @Override
