@@ -107,10 +107,12 @@ public class DTOToDomainMapper {
                 WeekDay.valueOf(dto.getDay().toUpperCase()),
                 ShiftType.valueOf(dto.getType().toUpperCase())
         );
-        shift.updateStatus(Status.valueOf(dto.getStatus().toUpperCase()));
+        shift.updateStatus(Status.valueOf(dto.getStatus()));
 
-        Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
-        shift.setShiftManager(shiftManager);
+        if (!Status.valueOf(dto.getStatus()).equals(Status.Empty)) {
+            Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
+            shift.setShiftManager(shiftManager);
+        }
 
         for (RoleDTO roleDTO : dto.getNecessaryRoles()) {
             shift.addNecessaryRoles(fromDTO(roleDTO));
@@ -278,7 +280,7 @@ public class DTOToDomainMapper {
         return branch;
     }
 
-    public static BranchDTO toDTO(Branch branch) {
+    public static BranchDTO toDTO(Branch branch) throws SQLException {
         List<EmployeeDTO> employeeDTOs = new ArrayList<>();
         for (Employee employee : branch.getEmployeeRepo().getAll()) {
             employeeDTOs.add(toDTO(employee));
@@ -309,6 +311,7 @@ public class DTOToDomainMapper {
     }
     public static Week fromDTO(WeekDTO dto) {
         Week week = new Week();
+
 
         for (ShiftDTO shiftDTO : dto.getShifts()) {
             Shift shift = fromDTO(shiftDTO);

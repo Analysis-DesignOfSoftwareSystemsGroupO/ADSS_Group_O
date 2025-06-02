@@ -31,7 +31,7 @@ public class BranchRepository {
         return branchCache.get(branchId);
     }
 
-    public List<BranchDTO> getAllBranches() {
+    public List<BranchDTO> getAllBranches() throws SQLException {
         List<BranchDTO> result = new ArrayList<>();
         for (Branch branch : branchCache.values()) {
             result.add(DTOToDomainMapper.toDTO(branch));

@@ -2,10 +2,12 @@ package HR_Mudol.domain.repository;
 
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Objects.*;
 import com.sun.jdi.connect.spi.Connection;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import java.util.LinkedList;
@@ -102,10 +104,12 @@ public class RoleRepository {
         return roleDAO.getAllEmployeeIDsWithRoles();
     }
 
-
-
-    public List<Role> getAll() {
-        return new LinkedList<>(roles);
+    public List<Role> getAll() throws SQLException {
+        roles.clear();
+        for (RoleDTO dto : roleDAO.getAll()) {
+            roles.add(DTOToDomainMapper.fromDTO(dto));
+        }
+        return new ArrayList<>(roles);
     }
 
     public void addFromDTO(RoleDTO dto) {

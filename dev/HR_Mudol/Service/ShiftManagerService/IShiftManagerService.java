@@ -1,6 +1,8 @@
 package HR_Mudol.Service.ShiftManagerService;
 import HR_Mudol.DTO.*;
 
+import java.sql.SQLException;
+
 public interface IShiftManagerService {
 
     /**
@@ -11,7 +13,7 @@ public interface IShiftManagerService {
     /**
      * Add an employee to a selected shift in the current week.
      */
-    void addEmployeeToShift(UserDTO theCaller);
+    void addEmployeeToShift(UserDTO theCaller) throws SQLException;
 
     /**
      * Transfer the cancellation card to the next shift manager.

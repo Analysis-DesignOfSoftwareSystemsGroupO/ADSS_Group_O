@@ -1,6 +1,7 @@
 package HR_Mudol.domain.Objects;
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.repository.*;
 
 import java.sql.Connection;
@@ -10,9 +11,6 @@ import java.sql.SQLException;
  * Represents a Branch in the company, managing employees, users, weeks, and roles.
  */
 public class Branch {
-
-    // Static counter for tracking number of created branches
-    static int counter = 0;
 
     // Branch ID assigned at creation
     private int branchID;
@@ -38,7 +36,6 @@ public class Branch {
      * Constructs an empty Branch with initialized repositories.
      */
     public Branch(String district,String name) throws SQLException {
-        this.branchID = counter++;
 
         this.employeeDAO=new EmployeeDAOImpl();
         this.roleDAO=new RoleDAOImpl();
@@ -55,6 +52,8 @@ public class Branch {
         this.name=name;
         this.district=district;
         weekRepo.add(new Week());
+
+        DTOToDomainMapper.initialize(userRepo, employeeRepo,roleRepo,weekRepo);
     }
 
     public int getBranchID() {

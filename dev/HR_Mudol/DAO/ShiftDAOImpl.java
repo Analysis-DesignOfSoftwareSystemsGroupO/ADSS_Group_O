@@ -240,7 +240,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             stmt.setInt(1, shiftId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return Status.valueOf(rs.getString("status").toUpperCase());
+                return Status.valueOf(rs.getString("status"));
             } else {
                 throw new RuntimeException("Shift not found");
             }

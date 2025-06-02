@@ -351,7 +351,7 @@ public class ShiftController implements IShiftController {
     }
 
     @Override
-    public List<EmployeeDTO> getAllEmployeesAsDTOs() {
+    public List<EmployeeDTO> getAllEmployeesAsDTOs() throws SQLException {
         List<EmployeeDTO> result = new ArrayList<>();
         for (Employee e : curBranch.getEmployeeRepo().getAll()) {
             result.add(DTOToDomainMapper.toDTO(e));

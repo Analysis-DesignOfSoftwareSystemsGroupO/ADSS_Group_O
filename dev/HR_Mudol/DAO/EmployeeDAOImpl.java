@@ -22,7 +22,6 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
                 "ON CONFLICT (empID) DO NOTHING";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            System.out.println("Inserting empID: " + dto.getEmployeeId());
             stmt.setLong(1, dto.getEmployeeId());
             stmt.setString(2, dto.getFullName());
             stmt.setString(3, dto.getPassword());

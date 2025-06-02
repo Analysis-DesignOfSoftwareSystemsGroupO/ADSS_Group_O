@@ -57,9 +57,18 @@ public class EmployeeRepository {
         return e;
     }
 
-    public List<Employee> getAll() {
-        return new ArrayList<>(employeesById.values());
+    public List<Employee> getAll() throws SQLException {
+        List<EmployeeDTO> allDTOs = employeeDAO.getAll(); // שואב מהדאטה בייס
+        List<Employee> allEmployees = new ArrayList<>();
+
+        for (EmployeeDTO dto : allDTOs) {
+            Employee emp = getById(dto.getEmployeeId());
+            allEmployees.add(emp);
+        }
+
+        return allEmployees;
     }
+
 
     public void updateBankAccount(User caller, int empId, String newBankAccount) throws SQLException {
         Employee e = getById(empId);

@@ -61,5 +61,5 @@ public interface IShiftController {
     void removeRoleFromShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException;
 
     List<ShiftDTO> getAllShiftDTOs();
-    List<EmployeeDTO> getAllEmployeesAsDTOs();
+    List<EmployeeDTO> getAllEmployeesAsDTOs() throws SQLException;
 }

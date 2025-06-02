@@ -15,7 +15,7 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
 
     @Override
     public void insert(RoleDTO dto) throws SQLException {
-        String sql = "INSERT INTO Roles (description) VALUES (?)";
+        String sql = "INSERT INTO Roles (description) VALUES (?) ON CONFLICT (description) DO NOTHING";
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, dto.getDescription());
             stmt.executeUpdate();
@@ -23,11 +23,11 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next()) {
                 int generatedId = keys.getInt(1);
-                dto.setRoleNumber(generatedId); // רק אם אתה רוצה לשמור אותו ב־DTO
+                dto.setRoleNumber(generatedId); // אם נוסף חדש – נקבל את ה-ID
             }
         }
-
     }
+
 
     @Override
     public void updateDescription(RoleDTO dto) {
