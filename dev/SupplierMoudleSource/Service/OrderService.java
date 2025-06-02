@@ -169,22 +169,16 @@ public class OrderService {
     }
 
     public void scheduleDailyOrderCheck() {
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        Runnable task = () -> {
-            LocalDate today = LocalDate.now();
-            DayOfWeek dayOfWeek = today.getDayOfWeek();
-            try {
-                createAllOrdersForToday(dayOfWeek.toString().substring(0, 3));
-            } catch (Exception e) {
-                throw new RuntimeException("Error while creating all constant orders", e);
-            }
-        };
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        try {
+            createAllOrdersForToday(dayOfWeek.toString().substring(0, 3));
+        } catch (Exception e) {
+            throw new RuntimeException("Error while creating all constant orders", e);
+        }
 
-        long delay = getDelayUntilTargetTimeInMillis(supplierInventoryService.getTime());
-        long period = TimeUnit.DAYS.toMillis(1);
 
-        scheduler.scheduleAtFixedRate(task, delay, period, TimeUnit.MILLISECONDS);
     }
 
     private static long getDelayUntilTargetTimeInMillis(Time targetTime) {

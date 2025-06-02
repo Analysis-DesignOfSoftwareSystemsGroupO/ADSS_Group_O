@@ -190,8 +190,9 @@ public class LoadData {
                 e.printStackTrace();
                 System.out.println("error int adding items to agreement");
             }
-            System.out.println("✅ Data loaded successfully.");
 
         }
+
+        System.out.println("✅ Data loaded successfully.");
     }
 }
