@@ -1,7 +1,6 @@
 package TransportModule.Presentation;
 import TransportModule.DTO.TruckDto;
 import TransportModule.Transport_Module_Exceptions.InvalidInputException;
-import TransportModule.transport_module.TransportContorollerDomain;
 import TransportModule.transport_module.TruckControllerDomain;
 
 import java.util.List;

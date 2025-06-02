@@ -4,6 +4,7 @@ package TransportModule.transport_module;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.DTO.TruckDto;
 import TransportModule.Transport_Module_Exceptions.InvalidInputException;
+import TransportModule.Transport_Module_Exceptions.TruckNotFoundException;
 
 
 import java.util.ArrayList;
@@ -13,13 +14,19 @@ import java.util.List;
 
 public class TruckControllerDomain  {
 
-    private  ITruckRepository truckRepository;
-    private  ITransportRepository transportRepository;
+    private final ITruckRepository truckRepository;
+    private  final ITransportRepository transportRepository;
 
 
     public TruckControllerDomain() throws Exception{
         truckRepository= new TruckRepositoryIMP();
         transportRepository = new TransportRepositoryIMP();
+    }
+
+    // For test section
+    public TruckControllerDomain(ITruckRepository truckRepository, ITransportRepository transportRepository) {
+        this.truckRepository = truckRepository;
+        this.transportRepository = transportRepository;
     }
 
     public void addTruck(TruckDto truckDto) throws Exception{
@@ -32,21 +39,15 @@ public class TruckControllerDomain  {
     }
     public List<TruckDto> getAllTrucks() throws Exception{
         List<Truck> trucks =  truckRepository.getAllTrucks();
+        if(trucks == null)
+            throw new TruckNotFoundException("No trucks to show");
         List<TruckDto> trucksDTOs = new ArrayList<>();
+
         for(Truck truck: trucks){
-            trucksDTOs.add( makeDtoFromTruck(truck));
+            trucksDTOs.add( truckRepository.truckToDTO(truck));
         }
         return trucksDTOs;
 
-    }
-
-
-    /** A function that creates DTO from truck*/
-    public TruckDto makeDtoFromTruck(Truck truck) throws Exception{
-        if (truck == null )
-            throw new InvalidInputException();
-        // Create and return a DTO with trucks arguments
-        return new TruckDto(truck.getMaxWeight(),truck.getDrivingLicence().getCode(), truck.getPlateNumber());
     }
 
 
@@ -62,7 +63,7 @@ public class TruckControllerDomain  {
         Transport transport = transportRepository.getTransportByid(transportId); // create a transport
         Truck truck = truckRepository.getTruckBYPlateNumber(plate); // create a truck
         transport.assignTruck(truck); // try to assign truck - if failed throw exception. otherwise, continue
-        TransportDTO transportDTO = new  TransportDTO(transport.getId(),transport.getDate(), transport.isSent(), transport.getMaxWeight(),"-1",truck.getPlateNumber(),transport.getSource().getName(),transport.getDeparture_time());
+        TransportDTO transportDTO = transportRepository.transportToTransportDTO(transport);
         transportRepository.saveTransport(transportDTO);
 
 
