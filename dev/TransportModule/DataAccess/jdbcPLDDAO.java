@@ -22,7 +22,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public void save(ProductListDocumentDto dto) throws SQLException {
         log.info("jdbcPLDDAO ::deletePLD(DTO)");
-        String sql = "INSERT INTO ProductListDocument (ProductListDocumentID, TransportID, totalweight, AproximatedArrivaleTime, DestinationSiteName) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"AproximatedArrivaleTime\",\"DestinationSiteName\") VALUES (?,?,?,?,?)";
         if(dto != null){
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1,dto.getId());
@@ -43,7 +43,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public void deletePLD(int serialNumber) throws SQLException {
         log.info("jdbcPLDDAO ::deletePLD( serialNumber= " + serialNumber + ")") ;
-        String sql = "DELETE FROM ProductListDocument WHERE ProductListDocumentID = ?";
+        String sql = "DELETE FROM \"ProductListDocument\" WHERE \"ProductListDocumentID\" = ?";
         try (Connection conn = DataBase.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, serialNumber);

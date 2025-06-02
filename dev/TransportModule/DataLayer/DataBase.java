@@ -5,14 +5,14 @@ import java.sql.*;
 
 public class DataBase {
     private static final Logger log = LogManager.getLogger(DataBase.class);
-    private static final String DB_URL = "jdbc:log4jdbc:postgresql://10.100.102.28:5432/postgres?user=postgres&password=1234&connectTimeout=10&sslmode=prefer";
+    private static final String DB_URL = "jdbc:log4jdbc:postgresql://172.19.160.1:5432/postgres?user=postgres&password=1234&connectTimeout=10&sslmode=prefer";
     private static Connection conn;
 
     static {
         try{
-            Class.forName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy"); // initialize logger query
-            conn = DriverManager.getConnection(DB_URL);
+            Class.forName("net.sf.log4jdbc.DriverSpy"); // initialize logger query
             log.info("Connecting to SQL Server... ");
+            conn = DriverManager.getConnection(DB_URL);
             log.info("Connected to SQL {}", DB_URL);
         } catch (ClassNotFoundException e) {
             log.error("ClassNotFoundError, connection Failed");
