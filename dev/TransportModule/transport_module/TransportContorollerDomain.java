@@ -24,6 +24,12 @@ public class TransportContorollerDomain implements ITransportController {
 
     }
 
+    // For test section
+    public TransportContorollerDomain(ITransportRepository transportRepo, IProductListDocumentRepository productListDocumentRepo) {
+        this.transportRepo = transportRepo;
+        this.ProductListDocumentRepo = productListDocumentRepo;
+    }
+
     public List<TransportDTO> getTransportNextWeek() throws Exception{
         int day = LocalDate.now().getDayOfMonth();
         int month = LocalDate.now().getMonthValue();
