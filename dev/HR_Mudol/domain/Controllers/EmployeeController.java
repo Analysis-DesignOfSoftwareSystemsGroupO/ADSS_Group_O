@@ -428,37 +428,20 @@ public class EmployeeController implements IEmployeeController {
             throw new IllegalArgumentException("Employee not found with ID: " + empId);
         }
 
+        // המרת DTO לאובייקט דומיין
         Constraint constraint = DTOToDomainMapper.fromDTO(constraintDTO);
-        ShiftType type = constraint.getType();
 
-        int currentCount;
-        int limit;
-
-        if (type == ShiftType.MORNING) {
-            currentCount = employee.getMorningConstraints().size();
-            limit = employee.getContract().getMinDayShift(employee);
-        } else {
-            currentCount = employee.getEveningConstraints().size();
-            limit = employee.getContract().getMinEveninigShift(employee);
-        }
-
-        if (currentCount >= limit) {
-            System.out.println("❌ You have already submitted the maximum number of " + type + " constraints.");
-            return; // לא שומר
-        }
-
-        // שמירה בזיכרון
+        // שמירה ברמת העובד
         employee.addNewConstraints(constraint);
-        if (type == ShiftType.MORNING) {
+        if (constraint.getType() == ShiftType.MORNING) {
             employee.addNewMorningConstraints(constraint);
         } else {
             employee.addNewEveningConstraints(constraint);
         }
 
-        // שמירה במסד הנתונים
+        // שמירה ברמת הריפוזיטורי הכללי
         curBranch.getConstraintRepo().save(empId, constraint);
     }
-
 
     @Override
     public EmploymentContractDTO getContractDetails(UserDTO caller, int empId) {
@@ -491,14 +474,28 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void updateConstraintExplanation(EmployeeDTO emp, ConstraintDTO constraintDTO, String newExplanation) {
-        Constraint constraint = curBranch.getConstraintRepo()
-                .getConstraint(emp.getEmployeeId(), WeekDay.valueOf(constraintDTO.getDay().toUpperCase()), ShiftType.valueOf(constraintDTO.getType().toUpperCase()));
+    public void updateConstraintExplanation(EmployeeDTO empDTO, ConstraintDTO constraintDTO, String newExplanation) {
+        int empId = empDTO.getEmployeeId();
+        WeekDay day = WeekDay.valueOf(constraintDTO.getDay().toUpperCase());
+        ShiftType type = ShiftType.valueOf(constraintDTO.getType().toUpperCase());
 
+        // עדכון ברמת האובייקט Constraint מתוך ConstraintRepo
+        Constraint constraint = curBranch.getConstraintRepo().getConstraint(empId, day, type);
         if (constraint != null) {
-            constraint.setExplanation(DTOToDomainMapper.fromDTO(emp), newExplanation);
+            constraint.setExplanation(DTOToDomainMapper.fromDTO(empDTO),newExplanation);
+            curBranch.getConstraintRepo().update(empId, constraint);
+        }
 
-            curBranch.getConstraintRepo().update(emp.getEmployeeId(), constraint);
+        // עדכון גם בתוך העובד עצמו ברמת EmployeeRepo
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee != null) {
+            List<Constraint> allConstraints = employee.getWeeklyConstraints();
+            for (Constraint c : allConstraints) {
+                if (c.getDay() == day && c.getType() == type) {
+                    c.setExplanation(DTOToDomainMapper.fromDTO(empDTO),newExplanation);
+                    break;
+                }
+            }
         }
     }
 
