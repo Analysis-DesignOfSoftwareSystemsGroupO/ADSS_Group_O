@@ -20,4 +20,8 @@ public interface IRoleDAO {
     List<RoleDTO> getAll() throws SQLException;
 
     List<RoleDTO> getRolesByEmpId(long empId);
+
+    RoleDTO getByDescription(String description) throws SQLException;
+
+    void deleteByDescription(String description) throws SQLException;
 }

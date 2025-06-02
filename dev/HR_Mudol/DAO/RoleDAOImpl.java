@@ -9,6 +9,8 @@ import java.util.List;
 
 public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
 
+    private final EmployeeDAOImpl employeeDAO = new EmployeeDAOImpl();
+
     public RoleDAOImpl() throws SQLException {
         super();
     }
@@ -103,9 +105,24 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
             stmt.setInt(1, roleNumber);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new RoleDTO(
-                        rs.getString("description")
-                );
+                String description = rs.getString("description");
+
+                // טען את כל העובדים עם התפקיד הזה דרך טבלת קישור
+                List<EmployeeDTO> relevantEmployees = new ArrayList<>();
+                String employeeSql = "SELECT empID FROM EmployeeRole WHERE roleNumber = ?";
+                try (PreparedStatement empStmt = conn.prepareStatement(employeeSql)) {
+                    empStmt.setInt(1, roleNumber);
+                    ResultSet empRs = empStmt.executeQuery();
+                    while (empRs.next()) {
+                        long empId = empRs.getLong("empID");
+                        EmployeeDTO empDto = employeeDAO.getById(empId);
+                        if (empDto != null) {
+                            relevantEmployees.add(empDto);
+                        }
+                    }
+                }
+
+                return new RoleDTO(roleNumber, description, relevantEmployees);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to fetch role", e);
@@ -130,21 +147,38 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
 
     @Override
     public List<RoleDTO> getAllByBranch(int branchId) throws SQLException {
-        // Assuming there's a RequiredRoles table linking branchID and roleNumber
-        String sql = "SELECT DISTINCT r.roleNumber, r.description FROM Roles r " +
-                "JOIN RequiredRoles rr ON r.roleNumber = rr.roleNumber WHERE rr.branchID = ?";
+        String sql = "SELECT DISTINCT r.roleNumber, r.description " +
+                "FROM Roles r JOIN RequiredRoles rr ON r.roleNumber = rr.roleNumber " +
+                "WHERE rr.branchID = ?";
         List<RoleDTO> roles = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, branchId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                roles.add(new RoleDTO(
-                        rs.getString("description")
-                ));
+                int roleNumber = rs.getInt("roleNumber");
+                String description = rs.getString("description");
+
+                // טען עובדים רלוונטיים
+                List<EmployeeDTO> relevantEmployees = new ArrayList<>();
+                String empSql = "SELECT empID FROM EmployeeRole WHERE roleNumber = ?";
+                try (PreparedStatement empStmt = conn.prepareStatement(empSql)) {
+                    empStmt.setInt(1, roleNumber);
+                    ResultSet empRs = empStmt.executeQuery();
+                    while (empRs.next()) {
+                        long empId = empRs.getLong("empID");
+                        EmployeeDTO empDTO = employeeDAO.getById(empId);
+                        if (empDTO != null) {
+                            relevantEmployees.add(empDTO);
+                        }
+                    }
+                }
+
+                roles.add(new RoleDTO(roleNumber, description, relevantEmployees));
             }
         }
         return roles;
     }
+
 
     @Override
     public void delete(int roleNumber) throws SQLException {
@@ -162,13 +196,30 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                roles.add(new RoleDTO(
-                        rs.getString("description")
-                ));
+                int roleNumber = rs.getInt("roleNumber");
+                String description = rs.getString("description");
+
+                // טען עובדים רלוונטיים לתפקיד הזה
+                List<EmployeeDTO> relevantEmployees = new ArrayList<>();
+                String empSql = "SELECT empID FROM EmployeeRole WHERE roleNumber = ?";
+                try (PreparedStatement empStmt = conn.prepareStatement(empSql)) {
+                    empStmt.setInt(1, roleNumber);
+                    ResultSet empRs = empStmt.executeQuery();
+                    while (empRs.next()) {
+                        long empId = empRs.getLong("empID");
+                        EmployeeDTO empDTO = employeeDAO.getById(empId);
+                        if (empDTO != null) {
+                            relevantEmployees.add(empDTO);
+                        }
+                    }
+                }
+
+                roles.add(new RoleDTO(roleNumber, description, relevantEmployees));
             }
         }
         return roles;
     }
+
 
     @Override
     public List<RoleDTO> getRolesByEmpId(long empId) {
@@ -184,8 +235,22 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
                 int roleNumber = rs.getInt("roleNumber");
                 String description = rs.getString("description");
 
-                RoleDTO dto = new RoleDTO(description);
-                roles.add(dto);
+                // טען את כל העובדים שמקושרים לתפקיד הזה
+                List<EmployeeDTO> relevantEmployees = new ArrayList<>();
+                String empSql = "SELECT empID FROM EmployeeRole WHERE roleNumber = ?";
+                try (PreparedStatement empStmt = conn.prepareStatement(empSql)) {
+                    empStmt.setInt(1, roleNumber);
+                    ResultSet empRs = empStmt.executeQuery();
+                    while (empRs.next()) {
+                        long relEmpId = empRs.getLong("empID");
+                        EmployeeDTO empDTO = employeeDAO.getById(relEmpId);
+                        if (empDTO != null) {
+                            relevantEmployees.add(empDTO);
+                        }
+                    }
+                }
+
+                roles.add(new RoleDTO(roleNumber, description, relevantEmployees));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to get roles for employee ID: " + empId, e);
@@ -193,19 +258,39 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         return roles;
     }
 
+    @Override
     public RoleDTO getByDescription(String description) throws SQLException {
         String sql = "SELECT roleNumber, description FROM Roles WHERE LOWER(description) = LOWER(?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, description);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                RoleDTO dto = new RoleDTO(rs.getString("description"));
-                dto.setRoleNumber(rs.getInt("roleNumber"));
-                return dto;
+                int roleNumber = rs.getInt("roleNumber");
+                String desc = rs.getString("description");
+
+                // טען את כל העובדים שמקושרים לתפקיד הזה
+                List<EmployeeDTO> relevantEmployees = new ArrayList<>();
+                String empSql = "SELECT empID FROM EmployeeRole WHERE roleNumber = ?";
+                try (PreparedStatement empStmt = conn.prepareStatement(empSql)) {
+                    empStmt.setInt(1, roleNumber);
+                    ResultSet empRs = empStmt.executeQuery();
+                    while (empRs.next()) {
+                        long empId = empRs.getLong("empID");
+                        EmployeeDTO empDTO = employeeDAO.getById(empId);
+                        if (empDTO != null) {
+                            relevantEmployees.add(empDTO);
+                        }
+                    }
+                }
+
+                return new RoleDTO(roleNumber, desc, relevantEmployees);
             }
         }
         return null;
     }
+
+
+    @Override
     public void deleteByDescription(String description) throws SQLException {
         String sql = "DELETE FROM Roles WHERE LOWER(description) = LOWER(?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
