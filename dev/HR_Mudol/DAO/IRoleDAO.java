@@ -7,8 +7,8 @@ import java.util.List;
 public interface IRoleDAO {
     void insert(RoleDTO role) throws SQLException;
     void updateDescription(RoleDTO dto);
-    void assignEmployeeToRole(int empID, int roleNumber);
-    void removeEmployeeFromRole(int empID, int roleNumber);
+    void assignEmployeeToRole(long empID, int roleNumber);
+    void removeEmployeeFromRole(long empID, int roleNumber);
     List<EmployeeDTO> getAllEmployeeDTOsWithRoles();
     RoleDTO getByNumber(int roleNumber);
     List<Integer> getAllEmployeeIDsWithRoles();
@@ -19,5 +19,5 @@ public interface IRoleDAO {
 
     List<RoleDTO> getAll() throws SQLException;
 
-    List<RoleDTO> getRolesByEmpId(int empId);
+    List<RoleDTO> getRolesByEmpId(long empId);
 }

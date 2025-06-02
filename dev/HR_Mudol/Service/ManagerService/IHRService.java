@@ -1,12 +1,14 @@
 package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.EmployeeController;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * IHRSystemManager is an interface that defines the core functionality required to manage the HR system for a given branch.
@@ -51,7 +53,6 @@ public interface IHRService {
 
     void removeEmployeeFromALLRoles(UserDTO caller) throws SQLException;
 
-    void removeEmployeeFromRole(UserDTO caller, int roleNumber, EmployeeDTO employee) throws SQLException;
 
     List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException;
 

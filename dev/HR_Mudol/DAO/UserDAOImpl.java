@@ -1,7 +1,6 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,16 +33,16 @@ public class UserDAOImpl extends BaseDAO implements IUserDAO {
     }
 
     @Override
-    public void delete(int userId) throws SQLException {
+    public void delete(long userId) throws SQLException {
         String sql = "DELETE FROM users WHERE userID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
+            stmt.setLong(1, userId);
             stmt.executeUpdate();
         }
     }
 
     @Override
-    public UserDTO get(int userId) throws SQLException {
+    public UserDTO get(long userId) throws SQLException {
         String sql = "SELECT * FROM users WHERE userID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, userId);
@@ -69,10 +68,10 @@ public class UserDAOImpl extends BaseDAO implements IUserDAO {
     }
 
     @Override
-    public boolean exists(int userId) throws SQLException {
+    public boolean exists(long userId) throws SQLException {
         String sql = "SELECT 1 FROM users WHERE userID = ? LIMIT 1";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
+            stmt.setLong(1, userId);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         }

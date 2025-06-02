@@ -22,7 +22,7 @@ public class EmploymentContractDAOImpl extends BaseDAO implements IEmploymentCon
             stmt.setInt(2, contract.getMinEveningShift());
             stmt.setInt(3, contract.getSickDays());
             stmt.setInt(4, contract.getDaysOff());
-            stmt.setInt(5, contract.getOwnerId());
+            stmt.setLong(5, contract.getOwnerId());
             stmt.executeUpdate();
         }
     }
@@ -54,7 +54,7 @@ public class EmploymentContractDAOImpl extends BaseDAO implements IEmploymentCon
             stmt.setInt(2, contract.getMinEveningShift());
             stmt.setInt(3, contract.getSickDays());
             stmt.setInt(4, contract.getDaysOff());
-            stmt.setInt(5, contract.getOwnerId());
+            stmt.setLong(5, contract.getOwnerId());
             stmt.executeUpdate();
         }
     }

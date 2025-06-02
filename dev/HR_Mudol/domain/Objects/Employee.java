@@ -34,7 +34,7 @@ public class Employee extends AbstractEmployee {
     /**
      * Constructs a new Employee with basic details and initializes all constraint lists.
      */
-    public Employee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
+    public Employee(String empName, long empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
         super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
         this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff, this);
         this.weeklyConstraints = new LinkedList<>();

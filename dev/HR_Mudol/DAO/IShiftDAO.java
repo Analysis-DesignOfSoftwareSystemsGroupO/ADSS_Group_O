@@ -14,7 +14,7 @@ public interface IShiftDAO {
     ShiftDTO get(int shiftID) throws SQLException;
     List<ShiftDTO> getAll() throws SQLException;
 
-    void insertEmpToShift(int brunchID, int empID, int shiftID, int roleNumber);
+    void insertEmpToShift(int brunchID, long empID, int shiftID, int roleNumber);
 
     void removeEmpFromShift(int shiftID, int empNum);
 
@@ -24,7 +24,7 @@ public interface IShiftDAO {
 
     void updateStatus(int shiftId, String newStatus);
 
-    boolean isEmployeeAssignedToShift(int empId, int shiftId);
+    boolean isEmployeeAssignedToShift(long empId, int shiftId);
 
     Status getShiftStatus(int shiftId);
 

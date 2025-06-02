@@ -6,7 +6,6 @@ import HR_Mudol.DTO.WeekDTO;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public interface IEmployeeService {
 
@@ -14,42 +13,42 @@ public interface IEmployeeService {
      * Display all upcoming shifts assigned to the given employee.
      */
 
-    void viewMyShifts(UserDTO caller, int empId) throws SQLException;
+    void viewMyShifts(UserDTO caller, long empId) throws SQLException;
 
     /**
      * Allow the employee to submit a new constraint.
      */
-    void submitConstraint(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
+    void submitConstraint(UserDTO caller, long empId, WeekDTO currentWeek) throws SQLException;
 
     /**
      * Allow the employee to update an existing constraint.
      */
-    void updateConstraint(UserDTO caller, int empId, WeekDTO currentWeek);
+    void updateConstraint(UserDTO caller, long empId, WeekDTO currentWeek);
 
     /**
      * Display personal details of the employee (e.g., name, role, salary).
      */
-    void viewPersonalDetails(UserDTO caller, int empId) throws SQLException;
+    void viewPersonalDetails(UserDTO caller, long employeeId) throws SQLException;
 
     /**
      * View the list of constraints the employee has submitted for the current week.
      */
-    void viewMyConstraints(UserDTO caller, int empId);
+    void viewMyConstraints(UserDTO caller, long employeeId);
 
     /**
      * Allow the employee to change their account password.
      */
-    void changePassword(UserDTO caller, int empId) throws SQLException;
+    void changePassword(UserDTO caller, long empId) throws SQLException;
 
     /**
      * Display the employment contract details of the employee.
      */
-    void viewContractDetails(UserDTO caller, int empId);
+    void viewContractDetails(UserDTO caller, long empId);
 
     /**
      * View the roles that the employee is eligible to perform.
      */
-    void viewAvailableRoles(UserDTO caller, int empId);
+    void viewAvailableRoles(UserDTO caller, long employeeId);
 
     List<EmployeeDTO> getAllEmployees() throws SQLException;
 

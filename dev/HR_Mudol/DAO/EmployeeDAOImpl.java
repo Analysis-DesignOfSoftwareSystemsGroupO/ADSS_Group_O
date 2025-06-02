@@ -1,7 +1,6 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.EmployeeDTO;
-import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -23,7 +22,8 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
                 "ON CONFLICT (empID) DO NOTHING";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, dto.getEmployeeId());
+            System.out.println("Inserting empID: " + dto.getEmployeeId());
+            stmt.setLong(1, dto.getEmployeeId());
             stmt.setString(2, dto.getFullName());
             stmt.setString(3, dto.getPassword());
             stmt.setString(4, dto.getBankAccount());
@@ -53,7 +53,7 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
             stmt.setInt(7, emp.getMinEveningShift());
             stmt.setInt(8, emp.getSickDays());
             stmt.setInt(9, emp.getDaysOff());
-            stmt.setInt(10, emp.getEmployeeId());
+            stmt.setLong(10, emp.getEmployeeId());
             stmt.executeUpdate();
         }
     }
@@ -136,11 +136,11 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
     }
 
     @Override
-    public void updatePassword(int empId, String newPassword) {
+    public void updatePassword(long empId, String newPassword) {
         String sql = "UPDATE Employees SET empPassword = ? WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newPassword);
-            stmt.setInt(2, empId);
+            stmt.setLong(2, empId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update password", e);
@@ -148,10 +148,10 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
     }
 
     @Override
-    public EmployeeDTO getById(int employeeId) {
+    public EmployeeDTO getById(long employeeId) {
         String sql = "SELECT * FROM Employees WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, employeeId);
+            stmt.setLong(1, employeeId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Date rawDate = rs.getDate("empStartDate");
@@ -204,10 +204,10 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
     }
 
     @Override
-    public boolean exists(int employeeId) {
+    public boolean exists(long employeeId) {
         String sql = "SELECT 1 FROM Employees WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, employeeId);
+            stmt.setLong(1, employeeId);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {

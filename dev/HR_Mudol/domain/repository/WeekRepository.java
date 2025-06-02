@@ -28,7 +28,7 @@ public class WeekRepository {
     /**
      * Insert an employee to a shift inside a week - to DB
      */
-    public void insertEmployeeToShift(int brunchID, int empID, int shiftID, int roleNumber) {
+    public void insertEmployeeToShift(int brunchID, long empID, int shiftID, int roleNumber) {
         shiftDAO.insertEmpToShift(brunchID, empID, shiftID, roleNumber);
     }
 
@@ -52,7 +52,7 @@ public class WeekRepository {
         shiftDAO.delete(shiftId);
     }
 
-    public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
+    public boolean isEmployeeAssignedToShift(long empId, int shiftId) {
         return shiftDAO.isEmployeeAssignedToShift(empId, shiftId);
     }
 

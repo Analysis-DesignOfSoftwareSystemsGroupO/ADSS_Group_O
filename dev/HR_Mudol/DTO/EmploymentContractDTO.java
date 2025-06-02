@@ -5,9 +5,9 @@ public class EmploymentContractDTO {
     private int minEveningShift;
     private int sickDays;
     private int daysOff;
-    private int ownerId;
+    private long ownerId;
 
-    public EmploymentContractDTO(int minDayShift, int minEveningShift, int sickDays, int daysOff, int ownerId) {
+    public EmploymentContractDTO(int minDayShift, int minEveningShift, int sickDays, int daysOff, long ownerId) {
         this.minDayShift = minDayShift;
         this.minEveningShift = minEveningShift;
         this.sickDays = sickDays;
@@ -19,6 +19,6 @@ public class EmploymentContractDTO {
     public int getMinEveningShift() { return minEveningShift; }
     public int getSickDays() { return sickDays; }
     public int getDaysOff() { return daysOff; }
-    public int getOwnerId() { return ownerId; }
+    public long getOwnerId() { return ownerId; }
 }
 

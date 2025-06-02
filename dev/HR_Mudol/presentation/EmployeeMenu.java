@@ -23,7 +23,7 @@ public class EmployeeMenu implements Menu {
 
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO branch) {
-        int empId = self.getEmployeeId();
+        long empId = self.getEmployeeId();
         WeekDTO currentWeek = branch.getCurrentWeekDTO();
 
         if (caller.getUserId() != empId) {

@@ -7,6 +7,7 @@ import HR_Mudol.domain.Objects.Role;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * The IRoleManager interface defines the operations related to managing roles within the system.
@@ -113,5 +114,8 @@ public interface IRoleController {
 
     void deleteRole(UserDTO caller,String des) throws SQLException;
 
+     void setEmployeeManager(IEmployeeController employeeManager);
+
+    void removeEmployeeFromRoleInteractive(UserDTO theCaller, Scanner sc) throws SQLException;
 }
 

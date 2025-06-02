@@ -234,7 +234,7 @@ public class DTOToDomainMapper {
         return new RoleDTO( r.getDescription(), relevantEmployees);
     }
 
-    public static ConstraintDTO toDTO(Constraint c, int ID) {
+    public static ConstraintDTO toDTO(Constraint c, long ID) {
         return new ConstraintDTO(
                 ID,
                 c.getExplanation(),

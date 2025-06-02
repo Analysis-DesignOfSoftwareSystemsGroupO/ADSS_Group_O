@@ -30,8 +30,7 @@ public class EmployeeService implements IEmployeeService {
         empController.close();
     }
 
-    @Override
-    public void viewMyShifts(UserDTO caller, int empId) throws SQLException {
+    public void viewMyShifts(UserDTO caller, long empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null ) {
             System.out.println("Error: employee not available.");
@@ -54,8 +53,7 @@ public class EmployeeService implements IEmployeeService {
         }
     }
 
-    @Override
-    public void submitConstraint(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
+    public void submitConstraint(UserDTO caller, long empId, WeekDTO currentWeek) throws SQLException {
         if (!currentWeek.isConstraintSubmissionOpen()) {
             empController.lockWeeklyConstraints(empId);
             System.out.println("Constraint submission is now closed.");
@@ -76,7 +74,7 @@ public class EmployeeService implements IEmployeeService {
         printSummary(submitted);
     }
 
-    private void handleConstraintSubmission(int empId, ShiftType type, int shiftLimit, List<ConstraintDTO> submitted) throws SQLException {
+    private void handleConstraintSubmission(long empId, ShiftType type, int shiftLimit, List<ConstraintDTO> submitted) throws SQLException {
         int shiftCount = 0;
 
         for (WeekDay day : WeekDay.values()) {
@@ -119,7 +117,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void changePassword(UserDTO caller, int empId) throws SQLException {
+    public void changePassword(UserDTO caller, long empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null) {
             System.out.println("Employee not found.");
@@ -151,7 +149,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewContractDetails(UserDTO caller, int empId) {
+    public void viewContractDetails(UserDTO caller, long empId) {
         try {
             EmploymentContractDTO contract = empController.getContractDetails(caller, empId);
             if (contract == null) {
@@ -173,7 +171,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewMyConstraints(UserDTO caller, int employeeId) {
+    public void viewMyConstraints(UserDTO caller, long employeeId) {
         List<ConstraintDTO> constraints = empController.getConstraintsByEmployeeId(employeeId);
         if (constraints.isEmpty()) {
             System.out.println("No constraints found.");
@@ -199,7 +197,7 @@ public class EmployeeService implements IEmployeeService {
 
 
     @Override
-    public void viewPersonalDetails(UserDTO caller, int employeeId) throws SQLException {
+    public void viewPersonalDetails(UserDTO caller, long employeeId) throws SQLException {
         if (!caller.isRegularEmployee()) {
             throw new SecurityException("Access denied: Only HR managers can view other employees' personal details.");
         }
@@ -215,7 +213,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewAvailableRoles(UserDTO caller, int employeeId) {
+    public void viewAvailableRoles(UserDTO caller, long employeeId) {
         List<RoleDTO> roles = empController.getRolesForEmployee(employeeId);
         if (roles.isEmpty()) {
             System.out.println("No roles available.");
@@ -228,7 +226,7 @@ public class EmployeeService implements IEmployeeService {
         }
     }
     @Override
-    public void updateConstraint(UserDTO caller, int empId, WeekDTO currentWeek) {
+    public void updateConstraint(UserDTO caller, long empId, WeekDTO currentWeek) {
         try {
             EmployeeDTO employee = empController.getEmployeeById(caller, empId);
             if (employee == null) {

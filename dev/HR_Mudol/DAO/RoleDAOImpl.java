@@ -41,11 +41,10 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         }
     }
 
-    @Override
-    public void assignEmployeeToRole(int empID, int roleNumber) {
+    public void assignEmployeeToRole(long empID, int roleNumber) {
         String sql = "INSERT INTO EmployeeRole (empID, roleNumber) VALUES (?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empID);
+            stmt.setLong(1, empID);
             stmt.setInt(2, roleNumber);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -53,11 +52,10 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         }
     }
 
-    @Override
-    public void removeEmployeeFromRole(int empID, int roleNumber) {
+    public void removeEmployeeFromRole(long empID, int roleNumber) {
         String sql = "DELETE FROM EmployeeRole WHERE empID = ? AND roleNumber = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empID);
+            stmt.setLong(1, empID);
             stmt.setInt(2, roleNumber);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -173,14 +171,14 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
     }
 
     @Override
-    public List<RoleDTO> getRolesByEmpId(int empId) {
+    public List<RoleDTO> getRolesByEmpId(long empId) {
         List<RoleDTO> roles = new ArrayList<>();
         String sql = "SELECT r.roleNumber, r.description " +
                 "FROM Roles r " +
                 "JOIN EmployeeRole er ON r.roleNumber = er.roleNumber " +
                 "WHERE er.empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
+            stmt.setLong(1, empId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int roleNumber = rs.getInt("roleNumber");

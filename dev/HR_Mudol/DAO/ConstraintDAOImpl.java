@@ -18,7 +18,7 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
     public void insert(ConstraintDTO c) throws SQLException {
         String sql = "INSERT INTO constraints (empID, WeekDay, ShiftType, explanation, date_created) VALUES (?, ?, ?, ?, CURRENT_DATE)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, c.getEmpID());
+            stmt.setLong(1, c.getEmpID());
             stmt.setString(2, c.getDay());
             stmt.setString(3, c.getType());
             stmt.setString(4, c.getExplanation());
@@ -28,10 +28,10 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
 
     @Override
-    public void delete(int empID, String day, String type) throws SQLException {
+    public void delete(long empID, String day, String type) throws SQLException {
         String sql = "DELETE FROM constraints WHERE empID = ? AND WeekDay = ? AND ShiftType = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empID);
+            stmt.setLong(1, empID);
             stmt.setString(2, day);
             stmt.setString(3, type);
             stmt.executeUpdate();
@@ -40,11 +40,11 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
 
     @Override
-    public List<ConstraintDTO> getByEmployee(int empID) throws SQLException {
+    public List<ConstraintDTO> getByEmployee(long empID) throws SQLException {
         List<ConstraintDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM constraints WHERE empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empID);
+            stmt.setLong(1, empID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(new ConstraintDTO(
@@ -77,10 +77,10 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
     }
 
     @Override
-    public ConstraintDTO getConstraint(int empId, WeekDay day, ShiftType type) {
+    public ConstraintDTO getConstraint(long empId, WeekDay day, ShiftType type) {
         String sql = "SELECT explanation FROM constraints WHERE empID = ? AND WeekDay = ? AND ShiftType = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
+            stmt.setLong(1, empId);
             stmt.setString(2, day.name());
             stmt.setString(3, type.name());
             ResultSet rs = stmt.executeQuery();
@@ -95,11 +95,11 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
 
 
     @Override
-    public void update(int empId, ConstraintDTO dto) {
+    public void update(long empId, ConstraintDTO dto) {
         String sql = "UPDATE constraints SET explanation = ? WHERE empID = ? AND WeekDay = ? AND ShiftType = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dto.getExplanation());
-            stmt.setInt(2, empId);
+            stmt.setLong(2, empId);
             stmt.setString(3, dto.getDay());
             stmt.setString(4, dto.getType());
             stmt.executeUpdate();
@@ -109,25 +109,25 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
     }
 
     @Override
-    public List<ConstraintDTO> getWeeklyConstraints(int empId) {
+    public List<ConstraintDTO> getWeeklyConstraints(long empId) {
         String sql = "SELECT * FROM constraints WHERE empID = ?";
         return fetchConstraints(empId, sql);
     }
 
     @Override
-    public List<ConstraintDTO> getMorningConstraints(int empId) {
+    public List<ConstraintDTO> getMorningConstraints(long empId) {
         String sql = "SELECT * FROM constraints WHERE empID = ? AND ShiftType = 'MORNING'";
         return fetchConstraints(empId, sql);
     }
 
     @Override
-    public List<ConstraintDTO> getEveningConstraints(int empId) {
+    public List<ConstraintDTO> getEveningConstraints(long empId) {
         String sql = "SELECT * FROM constraints WHERE empID = ? AND ShiftType = 'EVENING'";
         return fetchConstraints(empId, sql);
     }
 
     @Override
-    public List<ConstraintDTO> getLockedConstraints(int empId) {
+    public List<ConstraintDTO> getLockedConstraints(long empId) {
         String sql = """
             SELECT * FROM constraints
             WHERE empID = ?
@@ -142,10 +142,10 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
         return fetchConstraints(empId, sql);
     }
 
-    private List<ConstraintDTO> fetchConstraints(int empId, String sql) {
+    private List<ConstraintDTO> fetchConstraints(long empId, String sql) {
         List<ConstraintDTO> result = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
+            stmt.setLong(1, empId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result.add(new ConstraintDTO(

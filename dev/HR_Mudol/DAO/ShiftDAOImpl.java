@@ -26,7 +26,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             stmt.setString(2, shift.getDay());
             stmt.setString(3, shift.getType());
             stmt.setString(4, shift.getStatus());
-            stmt.setInt(5, shift.getShiftManagerId());
+            stmt.setLong(5, shift.getShiftManagerId());
             stmt.executeUpdate();
         }
     }
@@ -38,7 +38,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             stmt.setString(1, shift.getDay());
             stmt.setString(2, shift.getType());
             stmt.setString(3, shift.getStatus());
-            stmt.setInt(4, shift.getShiftManagerId());
+            stmt.setLong(4, shift.getShiftManagerId());
             stmt.setInt(5, shift.getShiftID());
             stmt.executeUpdate();
         }
@@ -113,13 +113,12 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         return list;
     }
 
-    @Override
-    public void insertEmpToShift(int branchID, int empID, int shiftID, int roleNumber) {
+    public void insertEmpToShift(int branchID, long empID, int shiftID, int roleNumber) {
         String sql = "INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, branchID);
             stmt.setInt(2, shiftID);
-            stmt.setInt(3, empID);
+            stmt.setLong(3, empID);
             stmt.setInt(4, roleNumber);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -222,11 +221,10 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         }
     }
 
-    @Override
-    public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
+    public boolean isEmployeeAssignedToShift(long empId, int shiftId) {
         String sql = "SELECT 1 FROM ShiftAssignments WHERE empID = ? AND shiftID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
+            stmt.setLong(1, empId);
             stmt.setInt(2, shiftId);
             ResultSet rs = stmt.executeQuery();
             return rs.next();

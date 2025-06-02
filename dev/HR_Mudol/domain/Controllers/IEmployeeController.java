@@ -2,8 +2,6 @@ package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.Branch;
-import HR_Mudol.domain.Objects.Employee;
-import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.ShiftType;
 
 import java.sql.SQLException;
@@ -69,11 +67,12 @@ public interface IEmployeeController {
 
     /**
      * Retrieves an employee by their ID.
+     *
      * @param theCaller the user performing the operation (must be a manager)
-     * @param ID the employee ID
+     * @param empId     the employee ID
      * @return the employee object if found, or null otherwise
      */
-    EmployeeDTO getEmployeeById(UserDTO theCaller, int ID) throws SQLException;
+    EmployeeDTO getEmployeeById(UserDTO theCaller, long empId) throws SQLException;
 
     void close();
 
@@ -95,29 +94,29 @@ public interface IEmployeeController {
      */
     void printAllEmployees(UserDTO theCaller) throws SQLException;
 
-    boolean verifyPassword(UserDTO caller, int empId, String password);
+    boolean verifyPassword(UserDTO caller, long empId, String password);
 
-    void updatePassword(UserDTO callerDTO, int empId, String newPassword) throws SQLException;
+    void updatePassword(UserDTO callerDTO, long empId, String newPassword) throws SQLException;
 
-    List<ConstraintDTO> getConstraintsByEmployeeId(int employeeId);
+    List<ConstraintDTO> getConstraintsByEmployeeId(long employeeId);
 
-    List<RoleDTO> getRolesForEmployee(int employeeId);
+    List<RoleDTO> getRolesForEmployee(long employeeId);
 
-    public void lockWeeklyConstraints(int empId);
+    public void lockWeeklyConstraints(long empId);
 
-    public int getMinDayShifts(int empId);
+    public int getMinDayShifts(long empId);
 
-    public int getMinEveningShifts(int empId);
+    public int getMinEveningShifts(long empId);
 
-    void submitConstraint(int empId, ConstraintDTO constraintDTO) throws SQLException;
+    void submitConstraint(long empId, ConstraintDTO constraintDTO) throws SQLException;
 
-    EmploymentContractDTO getContractDetails(UserDTO caller, int empId);
+    EmploymentContractDTO getContractDetails(UserDTO caller, long empId);
 
-    List<ConstraintDTO> getConstraintsByType(int empId, ShiftType type);
+    List<ConstraintDTO> getConstraintsByType(long empId, ShiftType type);
 
     void updateConstraintExplanation(EmployeeDTO emp, ConstraintDTO constraint, String newExplanation);
 
-    void removeConstraint(int empId, ConstraintDTO constraint) throws SQLException;
+    void removeConstraint(long empId, ConstraintDTO constraintDTO) throws SQLException;
 
     /**
      * Returns the total number of employees in the branch.

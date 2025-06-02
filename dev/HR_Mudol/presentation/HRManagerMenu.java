@@ -61,20 +61,20 @@ public class HRManagerMenu implements Menu {
         while (true) {
             System.out.println("\n--- Employee Management ---");
             System.out.println("1. Add Employee");
-            System.out.println("2. Remove Employee from ALL Roles");
-            System.out.println("3. View My Constraints");
-            System.out.println("4. View Personal Details");
-            System.out.println("0. Back");
-
+            System.out.println("2. Remove Employee");
+            System.out.println("3. Update Bank Account");
+            System.out.println("4. Update Salary");
+            System.out.println("5. Print All Employees");
+            System.out.println("0. Back to Main Menu");
             String choice = sc.nextLine();
             try {
                 switch (choice) {
-                    case "1" -> hr.addEmployee(caller);
-                    case "2" -> hr.removeEmployeeFromALLRoles(caller);
-                    case "3" -> hr.viewMyConstraints(caller, caller.getUserId());
-                    case "4" -> hr.viewPersonalDetails(caller, caller.getUserId());
-                    case "0" -> { return; }
-                    default -> System.out.println("Invalid option.");
+                    case "1": hr.addEmployee(caller); break;
+                    case "2": hr.removeEmployee(caller); break;
+                    case "3": hr.updateBankAccount(caller); break;
+                    case "4": hr.updateSalary(caller); break;
+                    case "5": hr.printAllEmployees(caller); break;
+                    case "0": return;
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
@@ -171,13 +171,7 @@ public class HRManagerMenu implements Menu {
                 switch (choice) {
                     case "1" -> hr.createRole(caller);
                     case "2" -> hr.assignEmployeeToRole(caller);
-                    case "3" -> {
-                        System.out.print("Enter role number: ");
-                        int roleNum = Integer.parseInt(sc.nextLine());
-                        System.out.print("Enter employee ID: ");
-                        int empId = Integer.parseInt(sc.nextLine());
-                        hr.removeEmployeeFromRole(caller, roleNum, empId);
-                    }
+                    case "3" -> hr.removeEmployeeFromRole(caller,sc);
                     case "4" -> hr.assignEmployeeToShiftManager(caller);
                     case "5" -> hr.printAllRoles(caller);
                     case "6" -> {

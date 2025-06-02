@@ -44,6 +44,7 @@ public class RoleController implements IRoleController {
         }
     }
 
+    @Override
     public void setEmployeeManager(IEmployeeController employeeManager) {
         this.employeeManager = employeeManager;
     }
@@ -107,26 +108,42 @@ public class RoleController implements IRoleController {
 
     @Override
     public void assignEmployeeToRole(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
-        if (!caller.isManager()) throw new SecurityException("Access denied.");
+        User caller = mapper.fromDTO(theCaller);
 
-        int empId = getIntInput("Enter employee ID: ");
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
+        // הדפסת כל ת"ז של העובדים
+        List<Employee> allEmployees = curBranch.getEmployeeRepo().getAll();
+        System.out.println("Employee IDs:");
+        for (Employee e : allEmployees) {
+            System.out.println("- " + e.getEmpId());
+        }
+
+        long empId = getIntInput("Enter employee ID : ");
         Employee employee = DTOToDomainMapper.fromDTO(employeeManager.getEmployeeById(theCaller, empId));
         if (employee == null) {
             System.out.println("Employee not found.");
             return;
         }
 
-        int roleNumber = getIntInput("Enter role number to assign: ");
-        Role role = getRoleByNumber(roleNumber);
-        if (role == null) {
+        // הדפסת כל התפקידים לפי תיאור
+        List<Role> allRoles = curBranch.getRoleRepo().getAllRoles();
+        System.out.println("Available roles:");
+        for (Role r : allRoles) {
+            System.out.println("- " + r.getDescription());
+        }
+
+        String roleDesc = getStringInput("Enter role description to assign: ");
+        Role chosenRole = curBranch.getRoleRepo().getRoleByDescription(roleDesc);
+
+        if (chosenRole == null) {
             System.out.println("Role not found.");
             return;
         }
 
-        curBranch.getRoleRepo().assignEmployeeToRole(employee, role); //updates RAM and DB
+        curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
         System.out.println("Employee assigned to role.");
     }
+
 
     @Override
     public void assignEmployeeToShiftManager(UserDTO theCaller) throws SQLException {
@@ -141,7 +158,7 @@ public class RoleController implements IRoleController {
         }
 
         // Assuming role number 1 is Shift Manager
-        Role shiftManager = curBranch.getRoleRepo().getRoleByNumber(1);
+        Role shiftManager = curBranch.getRoleRepo().getRoleByDescription("shiftManager");
         if (shiftManager == null) {
             System.out.println("Shift Manager role not found.");
             return;
@@ -170,7 +187,7 @@ public class RoleController implements IRoleController {
 
     @Override
     public void removeEmployeeFromRole(UserDTO theCaller, int roleId, EmployeeDTO employee) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         Role role = getRoleByNumber(roleId);
@@ -178,15 +195,16 @@ public class RoleController implements IRoleController {
             System.out.println("Role not found.");
             return;
         }
-        try {
-            role.removeEmployee(mapper.fromDTO(employee)); //update RAM
-            curBranch.getRoleRepo().removeEmployeeFromRole(mapper.fromDTO(employee), role); //update DB
 
+        try {
+            role.removeEmployee(mapper.fromDTO(employee)); // RAM
+            curBranch.getRoleRepo().removeEmployeeFromRole(mapper.fromDTO(employee), role); // DB
             System.out.println("Employee removed from role: " + role.getDescription());
         } catch (SecurityException e) {
             System.out.println(e.getMessage());
         }
     }
+
 
     @Override
     public List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException {
@@ -272,6 +290,69 @@ public class RoleController implements IRoleController {
         curBranch.getRoleRepo().deleteByDescription(description);
         System.out.println("✅ Role '" + description + "' deleted successfully.");
     }
+    private String getStringInput(String message) {
+        System.out.print(message);
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+
+
+
+    public void removeEmployeeFromRoleInteractive(UserDTO theCaller, Scanner sc) throws SQLException {
+        User caller = mapper.fromDTO(theCaller);
+        if (!caller.isManager()) throw new SecurityException("Access denied.");
+
+        List<Role> roles = getAllRoles(theCaller);
+        if (roles.isEmpty()) {
+            System.out.println("No roles found.");
+            return;
+        }
+
+        System.out.println("Available Roles:");
+        for (Role role : roles) {
+            System.out.println( curBranch.getRoleRepo().getRoleByDescription(role.getDescription()).getRoleNumber() + " " + "- Description: " + role.getDescription());
+        }
+
+        System.out.print("Enter role description: ");
+        String roleDesc = sc.nextLine().trim();
+
+        Role selectedRole = curBranch.getRoleRepo().getRoleByDescription(roleDesc);
+        if (selectedRole == null) {
+            System.out.println("Role not found.");
+            return;
+        }
+
+        List<Employee> employeesInRole = selectedRole.getRelevantEmployees();
+        if (employeesInRole.isEmpty()) {
+            System.out.println("No employees assigned to this role.");
+            return;
+        }
+
+        System.out.println("Employees assigned to '" + selectedRole.getDescription() + "':");
+        for (Employee e : employeesInRole) {
+            System.out.println("- ID: " + e.getEmpId() + ", Name: " + e.getEmpName());
+        }
+
+        System.out.print("Enter employee ID to remove: ");
+        long empId = Long.parseLong(sc.nextLine());
+
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return;
+        }
+
+        try {
+            selectedRole.removeEmployee(employee); // RAM
+            curBranch.getRoleRepo().removeEmployeeFromRole(employee, selectedRole); // DB
+            System.out.println("Employee removed from role: " + selectedRole.getDescription());
+        } catch (SecurityException e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+
+
 
 
 }

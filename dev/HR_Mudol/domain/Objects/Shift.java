@@ -201,7 +201,7 @@ public class Shift {
     }
 
 
-    public int getShiftManagerId() {
+    public long getShiftManagerId() {
         return (shiftManager != null) ? shiftManager.getEmpId() : -1;
     }
 

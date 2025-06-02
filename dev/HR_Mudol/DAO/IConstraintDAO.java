@@ -7,18 +7,18 @@ import java.util.List;
 
 public interface IConstraintDAO {
     void insert(ConstraintDTO constraint) throws SQLException;
-    void delete(int empID, String day, String type) throws SQLException;
+    void delete(long empID, String day, String type) throws SQLException;
 
-    ConstraintDTO getConstraint(int empId, WeekDay day, ShiftType type);
-    List<ConstraintDTO> getByEmployee(int empID) throws SQLException;
+    ConstraintDTO getConstraint(long empId, WeekDay day, ShiftType type);
+    List<ConstraintDTO> getByEmployee(long empID) throws SQLException;
     List<ConstraintDTO> getAll() throws SQLException;
-    void update(int empId, ConstraintDTO dto);
+    void update(long empId, ConstraintDTO dto);
 
-    List<ConstraintDTO> getWeeklyConstraints(int empId);
+    List<ConstraintDTO> getWeeklyConstraints(long empId);
 
-    List<ConstraintDTO> getMorningConstraints(int empId);
+    List<ConstraintDTO> getMorningConstraints(long empId);
 
-    List<ConstraintDTO> getEveningConstraints(int empId);
+    List<ConstraintDTO> getEveningConstraints(long empId);
 
-    List<ConstraintDTO> getLockedConstraints(int empId);
+    List<ConstraintDTO> getLockedConstraints(long empId);
 }

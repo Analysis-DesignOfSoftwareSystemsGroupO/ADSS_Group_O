@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class EmployeeRepository {
-    private final Map<Integer, Employee> employeesById = new HashMap<>();
+    private final Map<Long, Employee> employeesById = new HashMap<Long, Employee>();
     private final List<Employee> oldEmployees = new LinkedList<>();
     private final IEmployeeDAO employeeDAO;
     private final IConstraintDAO constraintDAO;
@@ -40,12 +40,12 @@ public class EmployeeRepository {
         employeeDAO.archive(empId);
     }
 
-    public boolean exists(int empId) {
+    public boolean exists(long empId) {
         if (employeesById.containsKey(empId)) return true;
         return employeeDAO.exists(empId);
     }
 
-    public Employee getById(int empId) {
+    public Employee getById(long empId) {
         if (employeesById.containsKey(empId))
             return employeesById.get(empId);
 
@@ -109,7 +109,7 @@ public class EmployeeRepository {
         }
     }
 
-    public void updatePassword(int empId, String newPassword) {
+    public void updatePassword(long empId, String newPassword) {
         AbstractEmployee employee = employeesById.get(empId);
         if (employee != null) {
             employee.setEmpPassword(newPassword); // RAM
