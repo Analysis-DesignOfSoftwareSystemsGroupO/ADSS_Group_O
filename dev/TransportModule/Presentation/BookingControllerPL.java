@@ -19,6 +19,10 @@ public class BookingControllerPL {
         this.domainController = new TransportContorollerDomain();
     }
 
+    public BookingControllerPL(TransportContorollerDomain domainController) { // For test section
+        this.domainController = domainController;
+    }
+
     /**
      * Creates a new transport request
      */
