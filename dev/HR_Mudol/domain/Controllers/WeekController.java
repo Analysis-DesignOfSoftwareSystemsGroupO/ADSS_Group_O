@@ -476,4 +476,14 @@ public class WeekController implements IWeekController {
         }
         return choosenShift;
     }
+
+    public List<ShiftDTO> getCurrentWeekShifts() {
+        try {
+            WeekDTO currentWeek = curBranch.getWeekRepo().getCurrentWeekDTO(curBranch.getBranchID());
+            return currentWeek.getShifts();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
 }

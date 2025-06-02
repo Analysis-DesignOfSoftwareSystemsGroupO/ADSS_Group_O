@@ -13,7 +13,8 @@ public interface IEmployeeService {
     /**
      * Display all upcoming shifts assigned to the given employee.
      */
-    void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
+
+    void viewMyShifts(UserDTO caller, int empId) throws SQLException;
 
     /**
      * Allow the employee to submit a new constraint.

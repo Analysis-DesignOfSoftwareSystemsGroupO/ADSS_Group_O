@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS Employees (
 );
 
 CREATE TABLE IF NOT EXISTS Roles (
-    roleNumber INT PRIMARY KEY,
-    description VARCHAR(255)
+    roleNumber SERIAL,
+    description VARCHAR(255) PRIMARY KEY
 );
+
+ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
@@ -37,22 +39,20 @@ CREATE TABLE IF NOT EXISTS EmploymentContracts (
     daysOff INT,
     ownerID BIGINT REFERENCES Employees(empID)
 );
-
 CREATE TABLE IF NOT EXISTS Users (
     userID BIGINT PRIMARY KEY REFERENCES Employees(empID),
     level VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS Constraints (
+CREATE TABLE IF NOT EXISTS constraints (
     constraintID SERIAL,
     empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
     explanation TEXT,
     date_created DATE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (empID, WeekDay, ShiftType)
+    PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
 );
-
 
 CREATE TABLE IF NOT EXISTS Shifts (
     shiftID INT PRIMARY KEY,
@@ -82,48 +82,3 @@ CREATE TABLE IF NOT EXISTS Archived_Employees (
     empID BIGINT PRIMARY KEY,
     archiveDate DATE
 );
-
-INSERT INTO Branches (branchID, name, district) VALUES
-(1, 'Branch 1', 'North'),
-(2, 'Branch 2', 'Center'),
-(3, 'Branch 3', 'South'),
-(4, 'Branch 4', 'North'),
-(5, 'Branch 5', 'Center'),
-(6, 'Branch 6', 'South'),
-(7, 'Branch 7', 'North'),
-(8, 'Branch 8', 'Center'),
-(9, 'Branch 9', 'South')
-ON CONFLICT (branchID) DO NOTHING;
-
--- Additional data for demonstration
-INSERT INTO Roles (roleNumber, description) VALUES
-(101, 'Shift Manager'),
-(102, 'Warehouse'),
-(103, 'Driver')
-ON CONFLICT (roleNumber) DO NOTHING;
-
-INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID)
-SELECT * FROM (VALUES
-(111111111, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 1),
-(222222222, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 2),
-(333333333, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 3),
-(444444444, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 4),
-(555555555, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 5),
-(666666666, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 6),
-(777777777, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 7),
-(888888888, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 8),
-(999999999, 'admin', 'admin', NULL, CAST(NULL AS INTEGER), CAST(NULL AS DATE), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), CAST(NULL AS INTEGER), 9)
-) AS vals(empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID)
-ON CONFLICT (empID) DO NOTHING;
-
-INSERT INTO Users (userID, level) VALUES
-(111111111, 'HRManager'),
-(222222222, 'HRManager'),
-(333333333, 'HRManager'),
-(444444444, 'HRManager'),
-(555555555, 'HRManager'),
-(666666666, 'HRManager'),
-(777777777, 'HRManager'),
-(888888888, 'HRManager'),
-(999999999, 'HRManager')
-ON CONFLICT (userID) DO NOTHING;

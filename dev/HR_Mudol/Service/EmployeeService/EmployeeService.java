@@ -2,9 +2,7 @@
 package HR_Mudol.Service.EmployeeService;
 
 import HR_Mudol.DTO.*;
-import HR_Mudol.domain.Controllers.DTOToDomainMapper;
-import HR_Mudol.domain.Controllers.EmployeeController;
-import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
 
@@ -16,12 +14,15 @@ public class EmployeeService implements IEmployeeService {
     private BranchDTO branchDTO;
     private final Scanner scanner;
     private final EmployeeController empController;
+    private final WeekController weekController;
 
     public EmployeeService(BranchDTO branch) throws SQLException {
 
         this.branchDTO=branch;
         this.scanner = new Scanner(System.in);
         this.empController = new EmployeeController(branch);
+        IRoleController r= new RoleController(branch);
+        this.weekController= new WeekController(new ShiftController(branch,r),branch,r);
     }
 
     @Override
@@ -30,17 +31,20 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
+    public void viewMyShifts(UserDTO caller, int empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
-        if (employee == null || currentWeek == null) {
-            System.out.println("Error: employee or current week not available.");
+        if (employee == null ) {
+            System.out.println("Error: employee not available.");
             return;
         }
 
         System.out.println("Shifts for " + employee.getFullName() + ":");
+
+        List<ShiftDTO> currentWeek= weekController.getCurrentWeekShifts();
+
         boolean found = false;
-        for (ShiftDTO shift : currentWeek.getShifts()) {
-            if (shift.getEmployeeIds().contains(empId)) {
+        for (ShiftDTO shift : currentWeek) {
+               if (shift.getEmployeeIds().contains(empId)) {
                 System.out.println("- " + shift);
                 found = true;
             }

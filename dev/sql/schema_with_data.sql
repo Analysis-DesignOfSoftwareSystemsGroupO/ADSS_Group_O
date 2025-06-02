@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS Employees (
 );
 
 CREATE TABLE IF NOT EXISTS Roles (
-    roleNumber INT PRIMARY KEY,
-    description VARCHAR(255)
+    roleNumber SERIAL,
+    description VARCHAR(255) PRIMARY KEY
 );
+
+ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
@@ -42,14 +44,14 @@ CREATE TABLE IF NOT EXISTS Users (
     level VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS Constraints (
+CREATE TABLE IF NOT EXISTS constraints (
     constraintID SERIAL,
     empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
     explanation TEXT,
     date_created DATE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (empID, WeekDay, ShiftType)
+    PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (

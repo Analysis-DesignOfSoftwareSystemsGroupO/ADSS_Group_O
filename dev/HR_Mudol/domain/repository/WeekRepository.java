@@ -70,22 +70,9 @@ public class WeekRepository {
         }
         return null;
     }
-    public WeekDTO getCurrentWeekDTO() {
-        if (weeks.isEmpty()) {
-            throw new IllegalStateException("No weeks available");
-        }
 
-        Week current = weeks.get(weeks.size() - 1);
-        List<ShiftDTO> shiftDTOs = current.getShifts().stream()
-                .map(shift -> new ShiftDTO(
-                        shift.getShiftID(),
-                        shift.getDay().name(),
-                        shift.getType().name(),
-                        shift.getStatus().name(), // assuming getStatus() returns enum
-                        shift.getShiftManagerId() // assuming such getter exists
-                ))
-                .toList();
-
-        return new WeekDTO(current.getConstraintDeadline(), shiftDTOs);
+    public WeekDTO getCurrentWeekDTO(int branchId) {
+        List<ShiftDTO> shiftDTOs = shiftDAO.getCurShiftsByBranch(branchId);
+        return new WeekDTO(null, shiftDTOs);
     }
 }

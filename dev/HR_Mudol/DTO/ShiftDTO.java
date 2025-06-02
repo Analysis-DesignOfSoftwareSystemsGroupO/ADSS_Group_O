@@ -89,4 +89,16 @@ public class ShiftDTO {
         return ids;
     }
 
+    public void setEmployeeIds(List<EmployeeDTO>employeeIds) {
+        this.employees = employeeIds;
+    }
+
+    @Override
+    public String toString() {
+        return  "On " + day +
+                " - " + type;
+    }
+
+
+
 }

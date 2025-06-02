@@ -27,4 +27,6 @@ public interface IShiftDAO {
     boolean isEmployeeAssignedToShift(int empId, int shiftId);
 
     Status getShiftStatus(int shiftId);
+
+    List<ShiftDTO> getCurShiftsByBranch(int branchId);
 }

@@ -70,7 +70,7 @@ public class HRService implements IHRService {
 
     @Override
     public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
-        employeeService.viewMyShifts(caller, empId, currentWeek);
+        employeeService.viewMyShifts(caller, empId);
     }
 
     @Override

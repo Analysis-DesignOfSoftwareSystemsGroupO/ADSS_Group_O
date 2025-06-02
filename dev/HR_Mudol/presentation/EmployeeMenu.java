@@ -47,7 +47,7 @@ public class EmployeeMenu implements Menu {
 
             try {
                 switch (choice) {
-                    case "1" -> employeeService.viewMyShifts(caller, empId, currentWeek);
+                    case "1" -> employeeService.viewMyShifts(caller, empId);
                     case "2" -> employeeService.submitConstraint(caller, empId, currentWeek);
                     case "3" -> employeeService.updateConstraint(caller, empId, currentWeek);
                     case "4" -> employeeService.viewMyConstraints(caller, empId);
