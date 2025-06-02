@@ -19,13 +19,13 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="jdbc.sqlonly" level="debug" additivity="false">
-            <AppenderRef ref="SQLFile"/>
-        </Logger>
-
-        <Logger name="jdbc.sqltiming" level="debug" additivity="false">
-            <AppenderRef ref="SQLFile"/>
-        </Logger>
+        <logger name="log4jdbc.log4j2" level="error" additivity="false">
+            <appender-ref ref="SQLFile"/>
+        </logger>
+        <logger name="log4jdbc.log4j2" level="info" additivity="false">
+            <MarkerFilter marker="LOG4JDBC_OTHER" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <appender-ref ref="SQLFile"/>
+        </logger>
         <Root level="info">
             <AppenderRef ref="STDOUT" />
             <AppenderRef ref="File"/>

@@ -53,7 +53,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     @Override
     public List<TruckDto> findAllTrucks() throws SQLException {
         log.info("jdbcTruckDAO :: findAllTrucks()");
-        String sql = "SELECT * FROM Trucks ORDER BY PlateNumber ASC"; //get all rows
+        String sql = "SELECT * FROM trucks ORDER BY \"PlateNumber\" ASC;"; //get all rows
         List<TruckDto> list = new ArrayList<>();
 
         try (Statement st = DataBase.getConnection().createStatement();
@@ -77,7 +77,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     @Override
     public void deleteTruck(String pn) throws SQLException {
         log.info("jdbcTruckDAO :: deleteTruck()");
-        String sql = "DELETE FROM Trucks WHERE PlateNumber = ? ;";
+        String sql = "DELETE FROM \"Trucks\" WHERE \"PlateNumber\" = ? ;";
         try (Connection conn = DataBase.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, pn);
@@ -96,7 +96,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     public boolean checkAvailabilityOfTruck(String truckPN, LocalDate date) throws SQLException  {
         log.info("jdbcTruckDAO :: checkAvailabilityOfTruck( " + truckPN+ " , " + date + " ) ");
         //check that the Truck is not occuppied
-        String sql = "SELECT COUNT(TruckPN) AS COUNTER FROM TruckAvailability WHERE EXSISTS (SELECT TruckPN FROM TruckAvailability WHERE TruckPn = ? AND Date = ? );";
+        String sql = "SELECT COUNT(\"TruckPN\") AS COUNTER FROM \"TruckAvailability\" WHERE EXSISTS (SELECT \"TruckPN\" FROM \"TruckAvailability\" WHERE \"TruckPn\" = ? AND \"Date\" = ? );";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1,truckPN);
             ps.setDate(2, Date.valueOf(date));
@@ -124,7 +124,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
      */
     public List<LocalDate> getListofOccupiedDates(String truckPn) throws SQLException{
         log.info("jdbcTruckDAO :: checkAvailabilityOfTruck( " + truckPn+ "  ) ");
-        String sql = "SELECT Date FROM TruckAvailability WHERE TruckPN = ? ;";
+        String sql = "SELECT \"Date\" FROM \"TruckAvailability\" WHERE \"TruckPN\" = ? ;";
         List<LocalDate> dates = new ArrayList<>();
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1, truckPn);
@@ -155,7 +155,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     public void assignTruckToDate(String truckPN, LocalDate date) throws SQLException, UnAvailableTruckException {
         log.info("jdbcTruckDAO::assignTruckToDate ( " + truckPN+ " , " + date + " ) ");
         if(checkAvailabilityOfTruck(truckPN, date )) throw new UnAvailableTruckException();
-        String sql = "INSERT INTO TruckAvailability (Date , TruckPN ) VALUES(? , ? )";
+        String sql = "INSERT INTO \"TruckAvailability\" (\"Date\" , \"TruckPN\" ) VALUES(? , ? )";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1,truckPN);
             ps.setDate(2, Date.valueOf(date));

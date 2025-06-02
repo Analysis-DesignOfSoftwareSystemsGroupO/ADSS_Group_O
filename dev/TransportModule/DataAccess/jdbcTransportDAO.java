@@ -17,7 +17,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public Optional<TransportDTO> getTransportByid(int id) throws SQLException {
         log.info("jdbcTransportDAO :: getTransportByid( " + id + " ) ");
-        String sql = "SELECT id, Date , is_sent , maximum_weight  , TruckPN , DriverID, departure_time, Sorce_site_name FROM  Transports WHERE id = ?";
+        String sql = "SELECT \"id\", \"Date\" , \"is_sent\" , \"maximum_weight\"  , \"TruckPN\" , \"DriverID\", \"departure_time\", \"Sorce_site_name\" FROM  \"Transports\" WHERE \"id\" = ?";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()){
@@ -32,7 +32,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public List<TransportDTO> getTransportsByDate(LocalDate date) throws SQLException {
         log.info("jdbcTransportDAO :: getTransportsByDate( " + date + " )");
-        String sql = "SELECT id FROM Transports WHERE Date = ? ;";
+        String sql = "SELECT \"id\" FROM \"Transports\" WHERE \"Date\" = ? ;";
         List<Integer> idList = new ArrayList<>();
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setDate(1, Date.valueOf(date));
@@ -55,7 +55,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public List<TransportDTO> getTransports() throws SQLException {
         log.info("jdbcTransportDAO :: getTransports");
-        String sql = "SELECT * FROM Tranports ORDER BY id ASC;";
+        String sql = "SELECT * FROM \"Tranports\" ORDER BY \"id\" ASC;";
         List<TransportDTO> transports = new ArrayList<>();
 
         try(Statement st = DataBase.getConnection().createStatement();
@@ -78,7 +78,7 @@ public class jdbcTransportDAO implements ITransportDAO {
 
     public int getHieghestTransportID() throws  SQLException{
         log.info("jdbcTransportDAO :: getHieghestTransportID ()");
-        String sql = "SELECT id FROM Transports ORDER BY id DESC LIMIT 1;";
+        String sql = "SELECT \"id\" FROM \"Transports\" ORDER BY \"id\" DESC LIMIT 1;";
 
         try(Statement st = DataBase.getConnection().createStatement();
             ResultSet rs = st.executeQuery(sql)){
@@ -97,7 +97,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public List<TransportDTO> getTransportsWithoutTruck() throws SQLException {
         log.info("jdbcTransportDAO:: getTransportsWithoutTruck");
-        String sql = "SELECT id FROM Transports WHERE TruckPN IS NULL;";
+        String sql = "SELECT \"id\" FROM \"Transports\" WHERE \"TruckPN\" IS NULL;";
         List<Integer> tIDs = new ArrayList<>(); // create a list of transport id that has no trucks assigned
         try (Statement st = DataBase.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -126,7 +126,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public void assignTruckToTransport(int transportID, int truckPN) throws SQLException {
         log.info("jdbcTransportDAO ::assignTruckToTransport( " + transportID+ " , " +truckPN + " )" );
-        String sql = "UPDATE Transports SET TruckPN = ? WHERE id = ?;";
+        String sql = "UPDATE \"Transports\" SET \"TruckPN\" = ? WHERE \"id\" = ?;";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setInt(1,transportID); //set the transportID argument as the first questionMark
             ps.setInt(2, truckPN);//set the truckPN  argument as the second questionMark
@@ -140,7 +140,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public void save(TransportDTO transportDTO) throws SQLException {
         log.info("jdbcTransportsDAO :: save() ");
-        String sql = "INSERT INTO Transports (id, Date, is_sent, maximum_weight, Truck_PN, DriverID, departure_time, Source_site_name ) VALUES (?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO \"Transports\" (\"id\", \"Date\", \"is_sent\", \"maximum_weight\", \"Truck_PN\", \"DriverID\", \"departure_time\", \"Source_site_name\"; ) VALUES (?,?,?,?,?,?,?,?);";
         if (transportDTO != null) {
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1, transportDTO.getId());
@@ -161,7 +161,7 @@ public class jdbcTransportDAO implements ITransportDAO {
         @Override
         public void deleteTransport ( int id ) throws SQLException{
             log.info("jdbcTransport::deleteTransport( " + id + ")");
-            String sql = "DELETE FROM Transport WHERE id = ?";
+            String sql = "DELETE FROM \"Transport\" WHERE \"id\" = ?";
             try (Connection conn = DataBase.getConnection();
                  PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                 preparedStatement.setInt(1, id);
