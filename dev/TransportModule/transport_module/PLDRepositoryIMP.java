@@ -6,7 +6,7 @@ import TransportModule.DataAccess.IPLDDAO;
 import TransportModule.DataAccess.jdbcPLDDAO;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 import TransportModule.Transport_Module_Exceptions.InvalidATransportException;
-import Transport_Module_Exceptions.InvalidPLDException;
+import TransportModule.Transport_Module_Exceptions.InvalidPLDException;
 import TransportModule.Transport_Module_Exceptions.TransportMismatchException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +37,11 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     public int getValidID(){
         availableid ++;
         return availableid;}
+
+    @Override
+    public List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException {
+        return getPLDByTransportID(-1);
+    }
 
     int initValidid()throws SQLException{
         availableid = dao.getHieghestPLDID() + 1;
@@ -80,9 +85,9 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             deleteProductListDocument(id); //Delete this PLD
             throw e;
         } catch (TransportMismatchException e) {
-            log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
-            deleteProductListDocument(id);
-            throw e;
+                log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
+                deleteProductListDocument(id);
+                throw e;
         } catch (ATransportModuleException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);

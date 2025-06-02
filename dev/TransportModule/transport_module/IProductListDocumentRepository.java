@@ -1,5 +1,6 @@
 package TransportModule.transport_module;
 
+import TransportModule.DTO.ProductDTO;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 import TransportModule.Transport_Module_Exceptions.InvalidATransportException;
@@ -27,4 +28,6 @@ public interface IProductListDocumentRepository {
     void setArriavleTime(int pldID, LocalTime time) throws SQLException , ATransportModuleException;
 
     int getValidID();
+
+    List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException;
 }
