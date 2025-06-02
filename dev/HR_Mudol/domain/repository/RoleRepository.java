@@ -30,7 +30,12 @@ public class RoleRepository {
     public void updateDescription(Role role, String newDescription) {
         role.setDescription(newDescription);  // update in memory
 
-        RoleDTO dto = new RoleDTO(newDescription);
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee emp : role.getRelevantEmployees()) {
+            employeeDTOs.add(DTOToDomainMapper.toDTO(emp));
+        }
+
+        RoleDTO dto = new RoleDTO(role.getRoleNumber(),newDescription,employeeDTOs);
         roleDAO.updateDescription(dto);       // update in DB
     }
 
@@ -122,7 +127,13 @@ public class RoleRepository {
     }
 
     private RoleDTO toDTO(Role role) {
-        return new RoleDTO(role.getDescription());
+
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee emp : role.getRelevantEmployees()) {
+            employeeDTOs.add(DTOToDomainMapper.toDTO(emp));
+        }
+
+        return new RoleDTO(role.getRoleNumber(),role.getDescription(),employeeDTOs);
     }
 
 
