@@ -186,7 +186,16 @@ INSERT INTO Archived_Employees (empID, archiveDate) VALUES
 ON CONFLICT (empID) DO NOTHING;
 
 INSERT INTO Users (userID, level) VALUES
-(100000001, 'HRManager'),
-(200000002, 'shiftManager'),
-(300000003, 'regularEmp')
+(100000001, 'HRManager'),           -- The HR
+(100000002, 'regularEmp'),          -- Alice Cohen
+(100000003, 'regularEmp'),          -- David Levi
+(100000004, 'regularEmp'),          -- Rina Azulay
+(200000002, 'shiftManager'),        -- Boaz shiftManager
+(200000003, 'regularEmp'),          -- Itay Bar
+(200000004, 'regularEmp'),          -- Noa Kimchi
+(200000005, 'regularEmp'),          -- Gil Peretz
+(300000003, 'regularEmp'),          -- Dana the emp
+(300000004, 'regularEmp'),          -- Shir Ben-David
+(300000005, 'regularEmp'),          -- Lior Mor
+(300000006, 'regularEmp')           -- Tamar Green
 ON CONFLICT (userID) DO NOTHING;
