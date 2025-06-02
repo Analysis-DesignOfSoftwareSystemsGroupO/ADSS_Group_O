@@ -428,20 +428,37 @@ public class EmployeeController implements IEmployeeController {
             throw new IllegalArgumentException("Employee not found with ID: " + empId);
         }
 
-        // המרת DTO לאובייקט דומיין
         Constraint constraint = DTOToDomainMapper.fromDTO(constraintDTO);
+        ShiftType type = constraint.getType();
 
-        // שמירה ברמת העובד
+        int currentCount;
+        int limit;
+
+        if (type == ShiftType.MORNING) {
+            currentCount = employee.getMorningConstraints().size();
+            limit = employee.getContract().getMinDayShift(employee);
+        } else {
+            currentCount = employee.getEveningConstraints().size();
+            limit = employee.getContract().getMinEveninigShift(employee);
+        }
+
+        if (currentCount >= limit) {
+            System.out.println("❌ You have already submitted the maximum number of " + type + " constraints.");
+            return; // לא שומר
+        }
+
+        // שמירה בזיכרון
         employee.addNewConstraints(constraint);
-        if (constraint.getType() == ShiftType.MORNING) {
+        if (type == ShiftType.MORNING) {
             employee.addNewMorningConstraints(constraint);
         } else {
             employee.addNewEveningConstraints(constraint);
         }
 
-        // שמירה ברמת הריפוזיטורי הכללי
+        // שמירה במסד הנתונים
         curBranch.getConstraintRepo().save(empId, constraint);
     }
+
 
     @Override
     public EmploymentContractDTO getContractDetails(UserDTO caller, int empId) {
