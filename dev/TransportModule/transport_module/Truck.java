@@ -5,6 +5,7 @@ import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,6 +34,17 @@ public class Truck {
         this.liceenceReq = dl;
         this.plateNumber = pn;
         this.availablityCalander = new HashMap<>();
+    }
+    public Truck(DrivingLicence dl, int maxWeight, String pn, List<LocalDate> availability) throws ATransportModuleException {
+        if(dl == null || maxWeight<1 || pn.isEmpty())
+            throw new InvalidInputException();
+        this.maxWeight = maxWeight;
+        this.liceenceReq = dl;
+        this.plateNumber = pn;
+        this.availablityCalander = new HashMap<>();
+        for (LocalDate d : availability){
+            availablityCalander.put(d, true);
+        }
     }
 
 //********************************************************************************************************************** Get functions

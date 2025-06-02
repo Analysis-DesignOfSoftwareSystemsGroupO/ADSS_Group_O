@@ -62,8 +62,10 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             Site site = new Site(dto.getSiteDes(), "Default Area "); // todo : This feature of the area is posposed and will be implemented later. Meanwhile the Area is Deafault
             LocalDate date = dto.getDate();
             DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
+            LocalTime time = dto.getApproximatedArrivalTime();
+            DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm");
             // todo = Sagi: need to add id and hour to Constructor (even if a default one)
-            pld = new ProductListDocument(site, dateformatter.format(date));
+            pld = new ProductListDocument(id,site, dateformatter.format(date), df2.format(time));
             if(dto.getTransportID() != -1) { // -1 is the deafault TransportID in the data base. means that this PLD is not attached to any of the transports
                 Transport t = transportRep.getTransportByid(dto.getTransportID());
                 if (t != null) pld.attachTransportToDocument(t);
