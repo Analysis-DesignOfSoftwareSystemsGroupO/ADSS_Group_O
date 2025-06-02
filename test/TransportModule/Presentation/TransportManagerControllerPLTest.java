@@ -3,7 +3,6 @@ package TransportModule.Presentation;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.TransportContorollerDomain;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,10 +30,6 @@ class TransportManagerControllerPLTest {
 
         domainMock = mock(TransportContorollerDomain.class);
         controller = new TransportManagerControllerPL(domainMock);
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
@@ -77,7 +72,7 @@ class TransportManagerControllerPLTest {
 
     @Test
     void removeTransportById_shouldCallDomainMethod() throws Exception {
-        String id = "5"; // נניח קלט מ־Scanner
+        String id = "5";
         controller.removeTransportById(id);
         verify(domainMock).removeTransportById(id);
     }

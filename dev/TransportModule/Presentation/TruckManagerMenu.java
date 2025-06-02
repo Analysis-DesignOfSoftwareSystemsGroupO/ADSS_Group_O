@@ -44,7 +44,7 @@ public class TruckManagerMenu {
         }
 
     }
-    private void printTrucksArrayOfDTO(TruckDto[] trucks){
+    private void printTrucksArrayOfDTO(List<TruckDto> trucks){
         if (trucks == null)
             return;
         for (TruckDto currTruck : trucks) {
@@ -57,7 +57,7 @@ public class TruckManagerMenu {
         try {
             // Get from controller all trucks
 
-            TruckDto[] trucks = truckController.getAllTrucks();
+            List<TruckDto> trucks = truckController.getAllTrucks();
 
             // for each truck - print its details
             printTrucksArrayOfDTO(trucks);

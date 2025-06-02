@@ -6,6 +6,7 @@ import TransportModule.DTO.TruckDto;
 import TransportModule.Transport_Module_Exceptions.InvalidInputException;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,22 +21,7 @@ public class TruckControllerDomain  {
         truckRepository= new TruckRepositoryIMP();
         transportRepository = new TransportRepositoryIMP();
     }
-    /** A function that creates truck instance from Truck DTO*/
-    public Truck getTruckFromDto(TruckDto truckDto) throws Exception{
-        // send DTO to TruckRepositoryIMP
 
-        if( truckDto == null)
-            throw new InvalidInputException();
-
-        // Get all information from DTO
-        int weight = truckDto.getWeight();
-        int maxWeight = truckDto.getMaxWeight();
-        String liceenceReq = truckDto.getLiceenceReq();
-        String plateNumber = truckDto.getPlateNumber();
-
-        return truckRepository.getTruckBYPlateNumber(Integer.parseInt(plateNumber));
-
-    }
     public void addTruck(TruckDto truckDto) throws Exception{
         // send DTO to TruckRepositoryIMP
         if (truckDto == null)
@@ -44,20 +30,16 @@ public class TruckControllerDomain  {
 
 
     }
-    public TruckDto[] getAllTrucks() throws Exception{
+    public List<TruckDto> getAllTrucks() throws Exception{
         List<Truck> trucks =  truckRepository.getAllTrucks();
-
-        return turnTruckListToTruckDTOArray(trucks);
-    }
-
-    private TruckDto[] turnTruckListToTruckDTOArray(List<Truck> trucks) throws Exception{
-        TruckDto[] truckDtos = new TruckDto[trucks.size()];
-        int i=0;
+        List<TruckDto> trucksDTOs = new ArrayList<>();
         for(Truck truck: trucks){
-            truckDtos[i++] = makeDtoFromTruck(truck);
+            trucksDTOs.add( makeDtoFromTruck(truck));
         }
-        return truckDtos;
+        return trucksDTOs;
+
     }
+
 
     /** A function that creates DTO from truck*/
     public TruckDto makeDtoFromTruck(Truck truck) throws Exception{
@@ -66,7 +48,6 @@ public class TruckControllerDomain  {
         // Create and return a DTO with trucks arguments
         return new TruckDto(truck.getMaxWeight(),truck.getDrivingLicence().getCode(), truck.getPlateNumber());
     }
-
 
 
     public void deleteTruck(String plate) throws Exception{

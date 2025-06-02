@@ -1,7 +1,10 @@
 package TransportModule.Presentation;
 import TransportModule.DTO.TruckDto;
 import TransportModule.Transport_Module_Exceptions.InvalidInputException;
+import TransportModule.transport_module.TransportContorollerDomain;
 import TransportModule.transport_module.TruckControllerDomain;
+
+import java.util.List;
 
 public class TruckControllerPL {
     private final TruckControllerDomain truckControllerDomain;
@@ -10,12 +13,16 @@ public class TruckControllerPL {
         truckControllerDomain = new TruckControllerDomain();
     }
 
+    public TruckControllerPL(TruckControllerDomain truckControllerDomain) { // For test section
+        this.truckControllerDomain = truckControllerDomain;
+    }
+
     public void addTruck(String plate, int maxWeight, String licenceCode) throws Exception{
 
         TruckDto truckDto = new TruckDto(maxWeight,licenceCode,plate);
         truckControllerDomain.addTruck(truckDto);
     }
-    public TruckDto[] getAllTrucks() throws Exception{
+    public List<TruckDto> getAllTrucks() throws Exception{
 
         return truckControllerDomain.getAllTrucks();
     }
