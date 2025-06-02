@@ -2,10 +2,7 @@ package SupplierMoudleSource.Service;
 
 import MainService.SupplierInventoryService;
 import SupplierMoudleSource.DTO.*;
-import SupplierMoudleSource.Domain.Agreement;
-import SupplierMoudleSource.Domain.Branch;
-import SupplierMoudleSource.Domain.ConstantOrder;
-import SupplierMoudleSource.Domain.Order;
+import SupplierMoudleSource.Domain.*;
 import SupplierMoudleSource.Repository.*;
 
 import java.sql.SQLException;
@@ -142,7 +139,8 @@ public class OrderService {
             Agreement bestAgreement = null;
             int minPrice = -1;
             for (Agreement a : agreement) {
-                if (a.getBranchID().equals(branchID)) {
+                SupplierDTO supplierDTO = supplierRepository.getSupplier(a.getSupplierID());
+                if (a.getBranchID().equals(branchID) && supplierDTO.getDelivery().getDeliveryWay().equals("Temporary Delivery")) {
                     int curPrice = a.getPriceForProduct(productID, quantity);
                     if (curPrice != -1 && (curPrice < minPrice || minPrice == -1) ) {
                         minPrice = curPrice;
@@ -176,22 +174,14 @@ public class OrderService {
     }
 
     public void scheduleDailyOrderCheck() {
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        try {
+            createAllOrdersForToday(dayOfWeek.toString().substring(0, 3));
+        } catch (Exception e) {
+            throw new RuntimeException("Error while creating all constant orders", e);
+        }
 
-        Runnable task = () -> {
-            LocalDate today = LocalDate.now();
-            DayOfWeek dayOfWeek = today.getDayOfWeek();
-            try {
-                createAllOrdersForToday(dayOfWeek.toString().substring(0, 3));
-            } catch (Exception e) {
-                throw new RuntimeException("Error while creating all constant orders", e);
-            }
-        };
-
-        long delay = getDelayUntilTargetTimeInMillis(supplierInventoryService.getTime());
-        long period = TimeUnit.DAYS.toMillis(1);
-
-        scheduler.scheduleAtFixedRate(task, delay, period, TimeUnit.MILLISECONDS);
     }
 
     private static long getDelayUntilTargetTimeInMillis(Time targetTime) {

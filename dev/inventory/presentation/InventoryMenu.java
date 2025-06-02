@@ -12,7 +12,7 @@ import inventory.domain.DiscountTargetType;
 import inventory.domain.DiscountType;
 import inventory.domain.StockItemStatus;
 import inventory.service.UserApplication;
-import org.postgresql.core.QueryExecutorCloseAction;
+
 
 
 import java.time.LocalDate;

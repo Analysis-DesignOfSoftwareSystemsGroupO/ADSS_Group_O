@@ -117,7 +117,8 @@ public class SupplierInventoryService {
 //                System.out.println("Checking and creating immediate orders...");
                 updateConstantOrder();
 //                System.out.println("Updating constant orders...");
-                //todo scheduled constant orders
+                orderService.scheduleDailyOrderCheck();
+
             } catch (Exception e) {
                 System.out.println(e);
             }

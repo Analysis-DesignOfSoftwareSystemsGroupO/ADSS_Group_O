@@ -44,9 +44,9 @@ public class LoadData {
         }
         // add suppliers with full data for the constructor
         String[][] supplierData = {
-                {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager", "Constant Delivery", ""},
-                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales", "Temporary Delivery", ""},
-                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk", "Constant Delivery", ""},
+                {"1", "Yosi", "CreditCard", "12", "286", "570", "Noa", "0501234567", "Manager", "Temporary Delivery", ""},
+                {"2", "Dina", "Cash", "123", "12", "102", "Rami", "0507654321", "Sales", "Self Pick Up", ""},
+                {"3", "Avi", "Check", "111", "10", "103", "Lior", "0521112233", "Clerk", "Temporary Delivery", ""},
                 {"4", "Liat", "Bank Transfer", "11", "555", "104", "Dana", "0543334455", "Assistant", "Constant Delivery", ""},
                 {"5", "Moshe", "CreditCard", "14", "888", "105", "Eli", "0539998877", "Supervisor", "Constant Delivery", ""}
         };
@@ -132,21 +132,22 @@ public class LoadData {
         //add products to agreements
         Object[][] items = {
                 { 17, "1", "1", "1"},
-                { 14, "2", "1", "2" },
+                {12, "1", "3", "3"},
+                { 14, "2", "1", "2"},
                 { 22, "3", "1", "4"},
-                { 27, "4", "1", "3" },
+                { 27, "4", "1", "3"},
                 { 10, "5", "1", "5"},
-                { 24, "6", "1", "2" },
-                { 19, "7", "1", "1" },
-                { 11, "8", "1", "3" },
-                { 13, "9", "1", "4" },
-                { 29, "10", "1", "1" },
-                { 9,  "11", "1", "5" },
-                { 20, "12", "1", "5" },
+                { 24, "6", "1", "2"},
+                { 19, "7", "1", "1"},
+                { 11, "8", "1", "3"},
+                { 13, "9", "1", "4"},
+                { 29, "10", "1", "1"},
+                { 9,  "11", "1", "5"},
+                { 20, "12", "1", "5"},
                 { 25, "13", "1", "4"},
-                { 15, "14", "1", "4" },
-                { 12, "15", "1", "1" },
-                { 18, "16", "1", "3" }
+                { 15, "14", "1", "4"},
+                { 12, "15", "1", "1"},
+                { 18, "16", "1", "3"}
         };
 
 
@@ -190,8 +191,9 @@ public class LoadData {
                 e.printStackTrace();
                 System.out.println("error int adding items to agreement");
             }
-            System.out.println("✅ Data loaded successfully.");
+
 
         }
+        System.out.println("✅ Data loaded successfully.");
     }
 }
