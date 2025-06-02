@@ -119,8 +119,8 @@ INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickD
 ON CONFLICT (contractID) DO NOTHING;
 
 INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
-(1001, 1, '2024-06-10', 'Monday', 'Morning', 'Planned', 1),
-(1002, 2, '2024-06-11', 'Tuesday', 'Evening', 'Planned', 2)
+(1001, 1, '2024-06-10', 'Monday', 'Morning', 'Full', 1),
+(1002, 2, '2024-06-11', 'Tuesday', 'Evening', 'Full', 2)
 ON CONFLICT (shiftID) DO NOTHING;
 
 INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES

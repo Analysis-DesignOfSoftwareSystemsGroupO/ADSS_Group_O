@@ -1,7 +1,6 @@
 package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.ConstraintDTO;
-import HR_Mudol.DataBase.PostgresConnection;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
 
@@ -107,6 +106,59 @@ public class ConstraintDAOImpl extends BaseDAO implements IConstraintDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update constraint", e);
         }
+    }
+
+    @Override
+    public List<ConstraintDTO> getWeeklyConstraints(int empId) {
+        String sql = "SELECT * FROM Constraints WHERE empID = ?";
+        return fetchConstraints(empId, sql);
+    }
+
+    @Override
+    public List<ConstraintDTO> getMorningConstraints(int empId) {
+        String sql = "SELECT * FROM Constraints WHERE empID = ? AND ShiftType = 'MORNING'";
+        return fetchConstraints(empId, sql);
+    }
+
+    @Override
+    public List<ConstraintDTO> getEveningConstraints(int empId) {
+        String sql = "SELECT * FROM Constraints WHERE empID = ? AND ShiftType = 'EVENING'";
+        return fetchConstraints(empId, sql);
+    }
+
+    @Override
+    public List<ConstraintDTO> getLockedConstraints(int empId) {
+        String sql = """
+            SELECT * FROM Constraints
+            WHERE empID = ?
+              AND date_created < (
+                date_trunc('week', CURRENT_DATE) + interval '4 days' + interval '12 hours'
+                - CASE 
+                    WHEN EXTRACT(DOW FROM CURRENT_DATE) < 4 THEN interval '7 days'
+                    ELSE interval '0'
+                  END
+              );
+        """;
+        return fetchConstraints(empId, sql);
+    }
+
+    private List<ConstraintDTO> fetchConstraints(int empId, String sql) {
+        List<ConstraintDTO> result = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(new ConstraintDTO(
+                        empId,
+                        rs.getString("explanation"),
+                        rs.getString("WeekDay"),
+                        rs.getString("ShiftType")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch constraints", e);
+        }
+        return result;
     }
 
 }

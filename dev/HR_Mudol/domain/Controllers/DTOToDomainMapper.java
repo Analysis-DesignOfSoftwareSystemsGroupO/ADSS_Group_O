@@ -3,10 +3,9 @@ package HR_Mudol.domain.Controllers;
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Level;
 import HR_Mudol.domain.Objects.*;
-import HR_Mudol.domain.ShiftType;
-import HR_Mudol.domain.Status;
-import HR_Mudol.domain.WeekDay;
+import HR_Mudol.domain.*;
 import HR_Mudol.domain.repository.*;
+import HR_Mudol.DAO.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,15 +17,19 @@ public class DTOToDomainMapper {
     private static EmployeeRepository employeeRepository;
     private static RoleRepository roleRepository;
     private static WeekRepository weekRepository;
+    private static RoleDAOImpl roleDAO;
+    private static ConstraintDAOImpl constraintDAO;
 
     public static void initialize(UserRepository userRepo,
                                   EmployeeRepository empRepo,
                                   RoleRepository roleRepo,
-                                  WeekRepository weekRepo) {
+                                  WeekRepository weekRepo) throws SQLException {
         userRepository = userRepo;
         employeeRepository = empRepo;
         roleRepository = roleRepo;
         weekRepository = weekRepo;
+        roleDAO = new RoleDAOImpl();
+        constraintDAO = new ConstraintDAOImpl();
     }
 
     public static User fromDTO(UserDTO dto) throws SQLException {
@@ -36,7 +39,7 @@ public class DTOToDomainMapper {
     }
 
     public static Employee fromDTO(EmployeeDTO dto) {
-        return new Employee(
+        Employee e = new Employee(
                 dto.getFullName(),
                 dto.getEmployeeId(),
                 dto.getPassword(),
@@ -48,7 +51,42 @@ public class DTOToDomainMapper {
                 dto.getSickDays(),
                 dto.getDaysOff()
         );
+
+        List<Role> roles = new ArrayList<>();
+        for (RoleDTO r : roleDAO.getRolesByEmpId(dto.getEmployeeId())) {
+            roles.add(fromDTO(r));
+        }
+        e.setRelevantRoles(roles);
+
+
+        List<Constraint> weekly = new ArrayList<>();
+        for (ConstraintDTO c : constraintDAO.getWeeklyConstraints(dto.getEmployeeId())) {
+            weekly.add(fromDTO(c));
+        }
+        e.setWeeklyConstraints(weekly);
+
+        List<Constraint> morning = new ArrayList<>();
+        for (ConstraintDTO c : constraintDAO.getMorningConstraints(dto.getEmployeeId())) {
+            morning.add(fromDTO(c));
+        }
+        e.setMorningConstraints(morning);
+
+        List<Constraint> evening = new ArrayList<>();
+        for (ConstraintDTO c : constraintDAO.getEveningConstraints(dto.getEmployeeId())) {
+            evening.add(fromDTO(c));
+        }
+        e.setEveningConstraints(evening);
+
+        List<Constraint> locked = new ArrayList<>();
+        for (ConstraintDTO c : constraintDAO.getLockedConstraints(dto.getEmployeeId())) {
+            locked.add(fromDTO(c));
+        }
+        e.setLockedConstraints(locked);
+
+        return e;
     }
+
+
 
     public static Role fromDTO(RoleDTO dto) {
 
@@ -127,9 +165,39 @@ public class DTOToDomainMapper {
             roleIds.add(role.getRoleNumber());
         }
 
-        List<ConstraintDTO> constraintDTOs = new ArrayList<>();
+        List<ConstraintDTO> weekly = new ArrayList<>();
         for (Constraint c : e.getWeeklyConstraints()) {
-            constraintDTOs.add(new ConstraintDTO(
+            weekly.add(new ConstraintDTO(
+                    e.getEmpId(),
+                    c.getExplanation(),
+                    c.getDay().name(),
+                    c.getType().name()
+            ));
+        }
+
+        List<ConstraintDTO> morning = new ArrayList<>();
+        for (Constraint c : e.getMorningConstraints()) {
+            morning.add(new ConstraintDTO(
+                    e.getEmpId(),
+                    c.getExplanation(),
+                    c.getDay().name(),
+                    c.getType().name()
+            ));
+        }
+
+        List<ConstraintDTO> evening = new ArrayList<>();
+        for (Constraint c : e.getEveningConstraints()) {
+            evening.add(new ConstraintDTO(
+                    e.getEmpId(),
+                    c.getExplanation(),
+                    c.getDay().name(),
+                    c.getType().name()
+            ));
+        }
+
+        List<ConstraintDTO> locked = new ArrayList<>();
+        for (Constraint c : e.getLockedConstraints()) {
+            locked.add(new ConstraintDTO(
                     e.getEmpId(),
                     c.getExplanation(),
                     c.getDay().name(),
@@ -149,9 +217,13 @@ public class DTOToDomainMapper {
                 e.getSickDays(),
                 e.getDaysOff(),
                 roleIds,
-                constraintDTOs
+                weekly,
+                evening,
+                locked,
+                morning
         );
     }
+
 
     public static RoleDTO toDTO(Role r) {
         List<EmployeeDTO> relevantEmployees = new ArrayList<>();

@@ -15,9 +15,9 @@ public interface IRoleDAO {
     List<RoleDTO> getAllByBranch(int branchId) throws SQLException;
 
 
-
-
     void delete(int roleNumber) throws SQLException;
 
     List<RoleDTO> getAll() throws SQLException;
+
+    List<RoleDTO> getRolesByEmpId(int empId);
 }

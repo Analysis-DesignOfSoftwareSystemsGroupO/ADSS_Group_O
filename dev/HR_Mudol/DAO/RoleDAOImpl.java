@@ -2,7 +2,6 @@ package HR_Mudol.DAO;
 
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.RoleDTO;
-import HR_Mudol.DataBase.PostgresConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -169,4 +168,28 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         }
         return roles;
     }
+
+    @Override
+    public List<RoleDTO> getRolesByEmpId(int empId) {
+        List<RoleDTO> roles = new ArrayList<>();
+        String sql = "SELECT r.roleNumber, r.description " +
+                "FROM Roles r " +
+                "JOIN EmployeeRole er ON r.roleNumber = er.roleNumber " +
+                "WHERE er.empID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, empId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int roleNumber = rs.getInt("roleNumber");
+                String description = rs.getString("description");
+
+                RoleDTO dto = new RoleDTO(roleNumber, description);
+                roles.add(dto);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get roles for employee ID: " + empId, e);
+        }
+        return roles;
+    }
+
 }

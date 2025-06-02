@@ -13,4 +13,12 @@ public interface IConstraintDAO {
     List<ConstraintDTO> getByEmployee(int empID) throws SQLException;
     List<ConstraintDTO> getAll() throws SQLException;
     void update(int empId, ConstraintDTO dto);
+
+    List<ConstraintDTO> getWeeklyConstraints(int empId);
+
+    List<ConstraintDTO> getMorningConstraints(int empId);
+
+    List<ConstraintDTO> getEveningConstraints(int empId);
+
+    List<ConstraintDTO> getLockedConstraints(int empId);
 }
