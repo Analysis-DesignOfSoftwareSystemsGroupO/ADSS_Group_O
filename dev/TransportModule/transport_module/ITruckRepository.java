@@ -5,6 +5,7 @@ import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ITruckRepository {
 
@@ -19,6 +20,9 @@ public interface ITruckRepository {
     TruckDto truckToDTO(Truck truck);
 
     void AssignDateToTruck(LocalDate date , String pn) throws ATransportModuleException, SQLException;
+
+    List<Truck> getAllTrucks();
+
 
 
 

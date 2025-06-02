@@ -5,7 +5,7 @@ package TransportModule.transport_module;
  * Each product has a unique code, a name, and a weight (in kilograms).
  */
 public class Product {
-    private int code;
+    private String code;
     private String name;
     private int weight;
 
@@ -16,7 +16,7 @@ public class Product {
     public Product() {
         name = "";
         weight = 0;
-        code = 0;
+        code = "default_code";
     }
 
     /***
@@ -25,7 +25,7 @@ public class Product {
      * @param n Name of the product
      * @param w Weight of the product (in kilograms)
      */
-    public Product(int c, String n, int w) {
+    public Product(String c, String n, int w) {
         name = n;
         weight = w;
         code = c;
@@ -58,7 +58,7 @@ public class Product {
     /***
      * @return Code of the product
      */
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 //********************************************************************************************************************** print functions
@@ -93,6 +93,6 @@ public class Product {
     @Override
     public final int hashCode() {
 
-        return this.getCode();
+        return this.getCode().hashCode();
     }
 }

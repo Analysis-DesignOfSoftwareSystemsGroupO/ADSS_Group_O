@@ -1,5 +1,7 @@
 package TransportModule.DataAccess;
 
+import TransportModule.transport_module.Driver;
+
 public class DriverDto {
     private String name;
     private String id;

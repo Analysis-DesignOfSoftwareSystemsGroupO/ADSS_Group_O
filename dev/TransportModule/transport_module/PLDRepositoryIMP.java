@@ -6,7 +6,7 @@ import TransportModule.DataAccess.IPLDDAO;
 import TransportModule.DataAccess.jdbcPLDDAO;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 import TransportModule.Transport_Module_Exceptions.InvalidATransportException;
-import Transport_Module_Exceptions.InvalidPLDException;
+import TransportModule.Transport_Module_Exceptions.InvalidPLDException;
 import TransportModule.Transport_Module_Exceptions.TransportMismatchException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,6 +38,11 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         availableid ++;
         return availableid;}
 
+    @Override
+    public List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException {
+        return getPLDByTransportID(-1);
+    }
+
     int initValidid()throws SQLException{
         availableid = dao.getHieghestPLDID() + 1;
         return availableid;
@@ -58,8 +63,9 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             LocalDate date = dto.getDate();
             DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
             LocalTime time = dto.getApproximatedArrivalTime();
-            DateTimeFormatter dateformatter2 = DateTimeFormatter.ofPattern("HH:mm");
-            pld = new ProductListDocument(id, site, dateformatter.format(date), dateformatter2.format(time));
+            DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm");
+            // todo = Sagi: need to add id and hour to Constructor (even if a default one)
+            pld = new ProductListDocument(id,site, dateformatter.format(date), df2.format(time));
             if(dto.getTransportID() != -1) { // -1 is the deafault TransportID in the data base. means that this PLD is not attached to any of the transports
                 Transport t = transportRep.getTransportByid(dto.getTransportID());
                 if (t != null) pld.attachTransportToDocument(t);
@@ -82,9 +88,9 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             deleteProductListDocument(id); //Delete this PLD
             throw e;
         } catch (TransportMismatchException e) {
-            log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
-            deleteProductListDocument(id);
-            throw e;
+                log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
+                deleteProductListDocument(id);
+                throw e;
         } catch (ATransportModuleException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -141,6 +147,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         List<ProductDTO> products = new ArrayList<>(); //get the Products -> quantety map of ProductListDocument
         Map<Product, Integer >pMap = pld.getProducts();
         for(Product p : pMap.keySet()){
+            // todo - sagi: replace id at DTO to int or replace id in PLD to String
             products.add(new ProductDTO(p.getCode(), p.getWeight(), pMap.get(p)));
         }
         return new ProductListDocumentDto(pld.getId(), pld.getTransportId(), pld.getDestination().getName(), products, pld.getTotalWeight(),pld.getDate(),pld.getApproximatedArriavaleTime() );

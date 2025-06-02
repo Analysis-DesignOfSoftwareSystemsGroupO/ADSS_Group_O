@@ -15,11 +15,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-public class TransportRepositoryIMP implements ITransportRepository{
+public class TransportRepositoryIMP implements ITransportRepository {
     private static final Logger log =  LogManager.getLogger(TransportRepositoryIMP.class);
     private HashMap<Integer, Transport> transports;
     private static ITransportDAO dao = new jdbcTransportDAO();
     private int availableId;
+    private ITruckRepository truckRepository;
 
     /**
      *
@@ -63,7 +64,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
     }
 
     @Override
-    public List<Transport> getTransportsByDate(LocalDate date) throws SQLException {
+    public List<Transport> getTransportsByDate(LocalDate date) throws SQLException, ATransportModuleException {
         List<TransportDTO> transportsDTO =  getTransportsDTOByDate(date);
         List<Transport> transports = new ArrayList<>();
         for(TransportDTO tDTO :transportsDTO){ // for each DTO , if finds it ,add to transports list and return
@@ -77,6 +78,21 @@ public class TransportRepositoryIMP implements ITransportRepository{
     public List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException{
         List<TransportDTO > transportDTOS = dao.getTransportsByDate(date);//get DTO of all transports that day
         return transportDTOS;
+    }
+
+    @Override
+    public void attachTrucktoTransport(int transportId, String pn) throws SQLException, ATransportModuleException {
+        try {
+            Transport t = getTransportByid(transportId); //remove truck from Transport
+            dao.assignTruckToTransport(transportId, Integer.parseInt(pn));
+            truckRepository.AssignDateToTruck(t.getDate(),pn);
+        }
+        catch (Exception e){
+            Transport t = getTransportByid(transportId); //remove truck from Transport
+            t.assignTruck(null);
+            throw e ;
+        }
+
     }
 
     @Override
@@ -127,6 +143,7 @@ public class TransportRepositoryIMP implements ITransportRepository{
         for (TransportDTO dto : transportDTOS){ //for each transport dto
             Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper
         }
+        truckRepository = new TruckRepositoryIMP();
 
     }
 

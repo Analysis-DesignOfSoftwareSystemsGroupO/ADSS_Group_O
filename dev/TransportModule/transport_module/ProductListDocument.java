@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import TransportModule.Transport_Module_Exceptions.*;
-import Transport_Module_Exceptions.*;
 
 public class ProductListDocument {
     private final int id; // document id
@@ -17,7 +16,7 @@ public class ProductListDocument {
     private int totalWeight; // total weight of the products in document
     private LocalDate date;
     private Transport transport;
-    private LocalTime departure_time;
+    private LocalTime approximatedArrivaleTime;
 
     /***
      * Constructor - creates a new ProductListDocument
@@ -56,7 +55,7 @@ public class ProductListDocument {
             throw new InvalidInputException("Hour is Invalid format. Please try again");
 
         }
-        departure_time = LocalTime.of(hour, minute); // set the hour
+        approximatedArrivaleTime = LocalTime.of(hour, minute); // set the hour
 
 
 
@@ -98,7 +97,17 @@ public class ProductListDocument {
         return destination;
     }
 
-//********************************************************************************************************************** Set functions
+    public Map<Product, Integer> getProducts() {
+        return productHashMap;
+    }
+
+    public int getTransportId(){
+        return this.transport.getId();
+    }
+
+    public LocalTime getApproximatedArriavaleTime(){return approximatedArrivaleTime;}
+
+    //********************************************************************************************************************** Set functions
 
 
     /***
@@ -202,6 +211,9 @@ public class ProductListDocument {
 
             }
         }
+    }
+    public void setArriavleTime(LocalTime time){
+        this.approximatedArrivaleTime = time;
     }
 
 

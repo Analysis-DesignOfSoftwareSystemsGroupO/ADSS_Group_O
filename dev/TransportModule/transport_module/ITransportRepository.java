@@ -2,6 +2,7 @@ package TransportModule.transport_module;
 
 import TransportModule.DTO.TransportDTO;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
+import TransportModule.Transport_Module_Exceptions.TransportMismatchException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public interface ITransportRepository {
 
     Transport getTransportByid(int id) throws SQLException, ATransportModuleException;
 
-    List<Transport> getTransportsByDate(LocalDate date) throws SQLException;
+    List<Transport> getTransportsByDate(LocalDate date) throws SQLException, ATransportModuleException;
 
     void saveTransport(TransportDTO transport) throws ATransportModuleException, SQLException;
 
@@ -23,6 +24,8 @@ public interface ITransportRepository {
     TransportDTO transportToTransportDTO(Transport transport);
 
     List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException;
+
+    void attachTrucktoTransport(int transportId , String pn) throws SQLException, ATransportModuleException;
 
     int getAvailableid();
 
