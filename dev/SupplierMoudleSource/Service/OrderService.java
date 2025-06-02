@@ -177,7 +177,7 @@ public class OrderService {
         LocalDate today = LocalDate.now();
         DayOfWeek dayOfWeek = today.getDayOfWeek();
         try {
-            createAllOrdersForToday(dayOfWeek.toString().substring(0, 3));
+            createAllOrdersForToday(dayOfWeek.toString().toUpperCase());
         } catch (Exception e) {
             throw new RuntimeException("Error while creating all constant orders", e);
         }
