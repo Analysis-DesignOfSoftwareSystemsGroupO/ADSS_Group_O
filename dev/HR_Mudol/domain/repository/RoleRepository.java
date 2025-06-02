@@ -3,6 +3,7 @@ package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
+import com.sun.jdi.connect.spi.Connection;
 
 import java.sql.SQLException;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class RoleRepository {
     public void updateDescription(Role role, String newDescription) {
         role.setDescription(newDescription);  // update in memory
 
-        RoleDTO dto = new RoleDTO(role.getRoleNumber(), newDescription);
+        RoleDTO dto = new RoleDTO(newDescription);
         roleDAO.updateDescription(dto);       // update in DB
     }
 
@@ -76,7 +77,7 @@ public class RoleRepository {
     public List<Role> getAllRoles() throws SQLException {
         List<RoleDTO> dtos = roleDAO.getAll();  // ← שליפה מה־DB
         return dtos.stream()
-                .map(dto -> new Role( dto.getDescription()))
+                .map(dto -> new Role(dto.getRoleNumber(), dto.getDescription()))
                 .collect(Collectors.toList());
     }
 
@@ -117,8 +118,30 @@ public class RoleRepository {
     }
 
     private RoleDTO toDTO(Role role) {
-        return new RoleDTO(role.getRoleNumber(), role.getDescription());
+        return new RoleDTO(role.getDescription());
     }
+
+
+
+    public Role getRoleByDescription(String description) throws SQLException {
+        for (Role r : roles) {
+            if (r.getDescription().equalsIgnoreCase(description)) {
+                return r;
+            }
+        }
+
+        RoleDTO dto = roleDAO.getByDescription(description);
+        if (dto == null) return null;
+
+        Role newRole = new Role(dto.getRoleNumber(), dto.getDescription());
+        roles.add(newRole);
+        return newRole;
+    }
+    public void deleteByDescription(String description) throws SQLException {
+        roles.removeIf(r -> r.getDescription().equalsIgnoreCase(description));
+        roleDAO.deleteByDescription(description);
+    }
+
 
 
 

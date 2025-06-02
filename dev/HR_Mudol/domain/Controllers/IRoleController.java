@@ -110,4 +110,8 @@ public interface IRoleController {
      * @return The number of employees who do not have any roles.
      */
     int countEmployeesWithoutRoles(UserDTO theCaller, List<EmployeeDTO> employeeList) throws SQLException;
-        }
+
+    void deleteRole(UserDTO caller,String des) throws SQLException;
+
+}
+

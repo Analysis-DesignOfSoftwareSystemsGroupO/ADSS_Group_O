@@ -15,12 +15,18 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
 
     @Override
     public void insert(RoleDTO dto) throws SQLException {
-        String sql = "INSERT INTO Roles (roleNumber, description) VALUES (?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, dto.getRoleNumber());
-            stmt.setString(2, dto.getDescription());
+        String sql = "INSERT INTO Roles (description) VALUES (?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, dto.getDescription());
             stmt.executeUpdate();
+
+            ResultSet keys = stmt.getGeneratedKeys();
+            if (keys.next()) {
+                int generatedId = keys.getInt(1);
+                dto.setRoleNumber(generatedId); // רק אם אתה רוצה לשמור אותו ב־DTO
+            }
         }
+
     }
 
     @Override
@@ -100,7 +106,6 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new RoleDTO(
-                        rs.getInt("roleNumber"),
                         rs.getString("description")
                 );
             }
@@ -136,7 +141,6 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 roles.add(new RoleDTO(
-                        rs.getInt("roleNumber"),
                         rs.getString("description")
                 ));
             }
@@ -161,7 +165,6 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 roles.add(new RoleDTO(
-                        rs.getInt("roleNumber"),
                         rs.getString("description")
                 ));
             }
@@ -183,7 +186,7 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
                 int roleNumber = rs.getInt("roleNumber");
                 String description = rs.getString("description");
 
-                RoleDTO dto = new RoleDTO(roleNumber, description);
+                RoleDTO dto = new RoleDTO(description);
                 roles.add(dto);
             }
         } catch (SQLException e) {
@@ -191,5 +194,27 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         }
         return roles;
     }
+
+    public RoleDTO getByDescription(String description) throws SQLException {
+        String sql = "SELECT roleNumber, description FROM Roles WHERE LOWER(description) = LOWER(?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, description);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                RoleDTO dto = new RoleDTO(rs.getString("description"));
+                dto.setRoleNumber(rs.getInt("roleNumber"));
+                return dto;
+            }
+        }
+        return null;
+    }
+    public void deleteByDescription(String description) throws SQLException {
+        String sql = "DELETE FROM Roles WHERE LOWER(description) = LOWER(?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, description);
+            stmt.executeUpdate();
+        }
+    }
+
 
 }
