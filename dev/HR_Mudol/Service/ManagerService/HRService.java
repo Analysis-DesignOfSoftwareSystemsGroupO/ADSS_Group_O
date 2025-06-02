@@ -8,6 +8,7 @@ import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
@@ -290,5 +291,10 @@ public class HRService implements IHRService {
         }
         roleController.removeEmployeeFromRole(theCaller, roleNumber, employeeDTO);
     }
+
+    public void deleteRole(UserDTO theCaller,String des) throws SQLException{
+        roleController.deleteRole(theCaller,des);
+    }
+
 
 }

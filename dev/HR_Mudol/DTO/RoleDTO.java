@@ -7,20 +7,28 @@ public class RoleDTO {
     private String description;
     private List<EmployeeDTO> relevantEmployees;
 
+    public RoleDTO( String description, List<EmployeeDTO> relevantEmployees) {
+        this.description = description;
+        this.relevantEmployees = relevantEmployees;
+    }
+    public RoleDTO(String description) {
+        this.description = description;
+        this.relevantEmployees = List.of();
+    }
     public RoleDTO(int roleNumber, String description, List<EmployeeDTO> relevantEmployees) {
         this.roleNumber = roleNumber;
         this.description = description;
         this.relevantEmployees = relevantEmployees;
     }
-    public RoleDTO(int roleNumber, String description) {
-        this.roleNumber = roleNumber;
-        this.description = description;
-        this.relevantEmployees = List.of();
-    }
+
 
 
     public int getRoleNumber() {
         return roleNumber;
+    }
+
+    public void setRoleNumber(int roleNumber) {
+        this.roleNumber = roleNumber;
     }
 
     public String getDescription() {

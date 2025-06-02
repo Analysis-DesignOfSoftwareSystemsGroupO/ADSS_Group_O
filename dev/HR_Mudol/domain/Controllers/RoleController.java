@@ -251,4 +251,27 @@ public class RoleController implements IRoleController {
             return getIntInput(prompt);
         }
     }
+
+    @Override
+    public void deleteRole(UserDTO caller, String description) throws SQLException {
+        User user = mapper.fromDTO(caller);
+        if (!user.isManager())
+            throw new SecurityException("Only managers can delete roles.");
+
+        Role role = curBranch.getRoleRepo().getRoleByDescription(description);
+        if (role == null) {
+            System.out.println("❌ Role '" + description + "' not found.");
+            return;
+        }
+
+        if (!role.getRelevantEmployees().isEmpty()) {
+            System.out.println("⚠️ Cannot delete role '" + description + "': Employees are still assigned to it.");
+            return;
+        }
+
+        curBranch.getRoleRepo().deleteByDescription(description);
+        System.out.println("✅ Role '" + description + "' deleted successfully.");
+    }
+
+
 }

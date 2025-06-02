@@ -10,8 +10,6 @@ import java.util.List;
  */
 public class Role {
 
-    // Static counter to generate unique role numbers
-    static int RoleCounter = 0;
 
     // Unique identifier for the role
     private  int roleNumber;
@@ -29,11 +27,16 @@ public class Role {
      */
 
     public Role(String description) {
-        RoleCounter++;
-        this.roleNumber = RoleCounter;
         this.description = description;
         this.relevantEmployees = new LinkedList<>();
     }
+
+    public Role(int roleNumber, String description) {
+        this.roleNumber = roleNumber;
+        this.description = description;
+        this.relevantEmployees = new LinkedList<>();
+    }
+
 
     /**
      * Returns the unique role number.
@@ -99,7 +102,7 @@ public class Role {
      */
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("Role number " + this.getRoleNumber() + " - " + this.getDescription());
+        StringBuilder string = new StringBuilder("Role" + " - " +this.getDescription());
 
         if (relevantEmployees.isEmpty()) {
             string.append("\n  No employees assigned to this role.");

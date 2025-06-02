@@ -163,6 +163,7 @@ public class HRManagerMenu implements Menu {
             System.out.println("3. Remove Employee from Role");
             System.out.println("4. Assign Employee to Shift Manager");
             System.out.println("5. Print All Roles");
+            System.out.println("6. Delete Role");
             System.out.println("0. Back");
 
             String choice = sc.nextLine();
@@ -179,6 +180,12 @@ public class HRManagerMenu implements Menu {
                     }
                     case "4" -> hr.assignEmployeeToShiftManager(caller);
                     case "5" -> hr.printAllRoles(caller);
+                    case "6" -> {
+                        System.out.print("Enter role description to delete: ");
+                        String desc = sc.nextLine().trim();
+                        hr.deleteRole(caller, desc);
+                    }
+
                     case "0" -> { return; }
                     default -> System.out.println("Invalid option.");
                 }
