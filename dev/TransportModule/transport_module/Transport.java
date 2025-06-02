@@ -162,11 +162,7 @@ public class Transport {
         if (!truck.confirmDriver(d)) {
             throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
         }
-        if (!d.isavailable(date)) {
-            throw new InvalidDriverException("New Driver is not available - please assign another driver ");
-        }
         driver = d;
-        driver.assignToMission(date);
 
 
     }

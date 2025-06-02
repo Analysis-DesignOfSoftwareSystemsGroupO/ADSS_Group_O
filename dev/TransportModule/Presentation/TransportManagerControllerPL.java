@@ -13,6 +13,11 @@ public class TransportManagerControllerPL {
         this.domainController = new TransportContorollerDomain();
     }
 
+    public TransportManagerControllerPL(TransportContorollerDomain domainController) { // For test section
+        this.domainController = domainController;
+    }
+
+
     public List<TransportDTO> getNextWeekTransports() throws Exception{
         return domainController.getTransportNextWeek();
     }

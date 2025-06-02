@@ -15,12 +15,12 @@ public class TransportContorollerDomain implements ITransportController {
 
     private final ITransportRepository transportRepo;
     private final IProductListDocumentRepository ProductListDocumentRepo;
-    private final EmployeeRepository employeeRepository;
+//    private final EmployeeRepository employeeRepository;
 
     public TransportContorollerDomain() throws Exception{
         this.transportRepo = new TransportRepositoryIMP();
         this.ProductListDocumentRepo = new PLDRepositoryIMP();
-        this.employeeRepository = new EmployeeRepository(); // todo - check with Dekel how to get the repo
+//        this.employeeRepository = new EmployeeRepository(); // todo - check with Dekel how to get the repo
 
     }
 
@@ -53,13 +53,13 @@ public class TransportContorollerDomain implements ITransportController {
     }
 
     public void assignDriverTransport(String driverID, String transportID) throws Exception{
-        Driver driver =(Driver) employeeRepository.getById(Integer.parseInt(driverID));
-        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
-
-        // try to assign driver
-        transport.addDriver(driver);
-        // try to save transport in DB
-        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
+//        Driver driver =(Driver) employeeRepository.getById(Integer.parseInt(driverID));
+//        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+//
+//        // try to assign driver
+//        transport.addDriver(driver);
+//        // try to save transport in DB
+//        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
     }
 
 

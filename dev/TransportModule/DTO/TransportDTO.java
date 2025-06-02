@@ -2,7 +2,6 @@ package TransportModule.DTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 public class TransportDTO {
     private int id;
@@ -89,4 +88,17 @@ public class TransportDTO {
         return this.departureTime;
     }
 
+    @Override
+    public String toString() {
+        return "TransportDTO{" +
+                "id=" + id +
+                ", date=" + date +
+                ", is_sent=" + is_sent +
+                ", maxWeight=" + maxWeight +
+                ", driverID='" + driverID + '\'' +
+                ", truckPN='" + truckPN + '\'' +
+                ", siteName='" + siteName + '\'' +
+                ", departureTime=" + departureTime +
+                '}';
+    }
 }
