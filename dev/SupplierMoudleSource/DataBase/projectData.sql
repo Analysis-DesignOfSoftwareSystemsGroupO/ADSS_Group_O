@@ -110,7 +110,7 @@ CREATE TABLE supplierinventorydb.productOfSupplier (
 
 CREATE TABLE supplierinventorydb.productsinorder (
                                                      quantity integer CHECK (quantity > 0),
-                                                     orderID integer PRIMARY KEY,
+                                                     orderID integer,
                                                      suppliedItemID integer,
                                                      FOREIGN KEY (orderID) REFERENCES supplierinventorydb."order"(id),
                                                      FOREIGN KEY (suppliedItemID) REFERENCES supplierinventorydb.product(id) -- Assuming supplieditem → product

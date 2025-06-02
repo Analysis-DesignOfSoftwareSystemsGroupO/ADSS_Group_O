@@ -110,6 +110,10 @@ public class ConstantOrder {
         return constantOrderDTO;
     }
 
+    public Agreement getAgreement(){
+        return agreement;
+    }
+
     public void closeConstantOrder() {
         OrderRepository.getInstance().closeConstantOrder(this);
     }

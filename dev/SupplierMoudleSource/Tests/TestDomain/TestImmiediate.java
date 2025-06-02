@@ -33,6 +33,7 @@ public class TestImmiediate
             e.printStackTrace();
         }
     }
+
     @Test
     public void addImmidiateOrder(){
         try {
@@ -68,8 +69,4 @@ public class TestImmiediate
             e.printStackTrace();
         }
     }
-
-
-
-
 }

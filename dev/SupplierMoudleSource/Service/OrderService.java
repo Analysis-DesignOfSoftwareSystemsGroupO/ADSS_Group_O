@@ -174,14 +174,15 @@ public class OrderService {
     }
 
     public void scheduleDailyOrderCheck() {
-        LocalDate today = LocalDate.now();
-        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        DayOfWeek dayOfWeek = LocalDate.now().plusDays(1).getDayOfWeek();
+        String day = dayOfWeek.name();
+        String formatDayTomorrow = day.substring(0, 1) + day.substring(1).toLowerCase();
+
         try {
-            createAllOrdersForToday(dayOfWeek.toString().toUpperCase());
+            createAllOrdersForToday(formatDayTomorrow);
         } catch (Exception e) {
             throw new RuntimeException("Error while creating all constant orders", e);
         }
-
     }
 
     private static long getDelayUntilTargetTimeInMillis(Time targetTime) {

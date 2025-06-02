@@ -289,7 +289,7 @@ public class OrderDAO {
                 int shelfLife = 0;
 
                 if (rs2.next()) {
-                    productName = rs2.getString("productName");
+                    productName = rs2.getString("name");
                     productManufacturer = rs2.getString("manufacturer");
                     shelfLife = rs2.getInt("shelflifedays");
                 }

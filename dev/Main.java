@@ -3,6 +3,10 @@ import SupplierMoudleSource.Presentation.PresentMainMenu;
 import inventory.presentation.InventoryMenu;
 import inventory.service.UserApplication;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static SupplierMoudleSource.DataBase.DatabaseInitializer.createSupplierTables;
