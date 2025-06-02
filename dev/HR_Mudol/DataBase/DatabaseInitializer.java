@@ -13,7 +13,7 @@ public class DatabaseInitializer {
     private static final String PASSWORD = "Sansa1234";
 
     public static void initialize(boolean loadFromDatabase) {
-        if (!loadFromDatabase) {
+        if (loadFromDatabase) {
             System.out.println("⚠️ Initializing fresh system from schema_with_data.sql...");
             executeSQLFile("dev/sql/schema_with_data.sql");
         } else {
