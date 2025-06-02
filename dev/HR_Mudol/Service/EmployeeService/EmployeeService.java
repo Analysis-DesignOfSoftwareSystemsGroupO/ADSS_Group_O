@@ -242,8 +242,10 @@ public class EmployeeService implements IEmployeeService {
                 ShiftType selectedType = promptShiftType();
                 if (selectedType == null) break;
 
-                while (true) {
+                boolean typeEditing = true;
+                while (typeEditing) {
                     List<ConstraintDTO> constraints = empController.getConstraintsByType(empId, selectedType);
+
                     if (constraints.isEmpty()) {
                         System.out.println("No constraints found for " + selectedType + " shifts.");
                         break;
@@ -268,6 +270,7 @@ public class EmployeeService implements IEmployeeService {
                     if (index == -1) continue;
 
                     ConstraintDTO selected = constraints.get(index);
+
                     boolean isAssigned = currentWeek.getShifts().stream()
                             .anyMatch(s -> s.getDay().equalsIgnoreCase(selected.getDay())
                                     && s.getType().equalsIgnoreCase(selected.getType())
@@ -291,20 +294,22 @@ public class EmployeeService implements IEmployeeService {
                         System.out.println("✅ Explanation updated successfully.");
                     } else {
                         empController.removeConstraint(empId, selected);
-                        constraints.remove(index);
                         System.out.println("✅ Constraint removed.");
-
-                        if (constraints.isEmpty()) {
-                            System.out.println("No more constraints left for " + selectedType + " shifts.");
-                            break;
-                        } else {
-                            printConstraints(constraints, selectedType.name());
-                        }
                     }
+
+                    // טען מחדש את הרשימה כדי לשקף את השינוי
+                    constraints = empController.getConstraintsByType(empId, selectedType);
+
+                    if (constraints.isEmpty()) {
+                        System.out.println("No more constraints left for " + selectedType + " shifts.");
+                        break;
+                    }
+
+                    printConstraints(constraints, selectedType.name());
 
                     System.out.println("\nDo you want to continue editing constraints of this type? (yes/no)");
                     String cont = scanner.nextLine().trim().toLowerCase();
-                    if (!cont.equals("yes")) break;
+                    if (!cont.equals("yes")) typeEditing = false;
                 }
 
                 System.out.println("\nDo you want to continue editing other shift types? (yes/no)");
@@ -316,6 +321,7 @@ public class EmployeeService implements IEmployeeService {
             System.out.println("Error: " + ex.getMessage());
         }
     }
+
 
 
     private ShiftType promptShiftType() {
