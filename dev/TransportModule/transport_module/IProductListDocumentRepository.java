@@ -30,4 +30,6 @@ public interface IProductListDocumentRepository {
     int getValidID();
 
     List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException;
+
+    void deleteAll() throws SQLException;
 }

@@ -17,8 +17,8 @@ public class TruckControllerDomain  {
 
 
     public TruckControllerDomain() throws Exception{
-        truckRepository= new TruckRepositoryIMP();
-        transportRepository = new TransportRepositoryIMP();
+        truckRepository= TruckRepositoryIMP.getInstance();
+        transportRepository = TransportRepositoryIMP.getInstance();
     }
     /** A function that creates truck instance from Truck DTO*/
     public Truck getTruckFromDto(TruckDto truckDto) throws Exception{

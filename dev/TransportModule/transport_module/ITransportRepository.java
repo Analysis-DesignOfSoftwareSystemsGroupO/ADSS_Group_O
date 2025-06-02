@@ -29,5 +29,6 @@ public interface ITransportRepository {
 
     int getAvailableid();
 
+    void deleteAll()throws SQLException;
 
 }

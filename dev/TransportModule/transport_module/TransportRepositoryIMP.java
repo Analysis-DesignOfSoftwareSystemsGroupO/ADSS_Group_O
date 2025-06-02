@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -20,8 +21,9 @@ public class TransportRepositoryIMP implements ITransportRepository {
     private HashMap<Integer, Transport> transports;
     private static ITransportDAO dao = new jdbcTransportDAO();
     private int availableId;
-    private ITruckRepository truckRepository;
-
+    private static ITruckRepository truckRepository;
+    private static TransportRepositoryIMP instance;
+    private static  int counter =0 ;
     /**
      *
      * @param id
@@ -104,6 +106,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
 
     @Override
     public void deleteTransport(int  transportID) throws SQLException {
+        if(transportID == -1 )throw new  RuntimeException();
         dao.deleteTransport(transportID); //remove record from data base
         transports.remove(transportID);  //remove transport from mapper
     }
@@ -134,7 +137,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
 
 
 
-    public TransportRepositoryIMP() throws SQLException, ATransportModuleException {
+    private TransportRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableId = dao.getHieghestTransportID() + 1;
         //set the mapper and fill it with transports:
         this.transports = new HashMap<>();
@@ -143,8 +146,22 @@ public class TransportRepositoryIMP implements ITransportRepository {
         for (TransportDTO dto : transportDTOS){ //for each transport dto
             Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper
         }
-        truckRepository = new TruckRepositoryIMP();
-
+        truckRepository = TruckRepositoryIMP.getInstance();
+        //Add Transport with id -1
+        TransportDTO tdto0 = new TransportDTO(-1, LocalDate.of(9999,12,31), false, 0, null, null, null, LocalTime.of(23,59));
+        saveTransport(tdto0);
     }
 
+    public static TransportRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
+        if(counter == 0){
+            instance = new TransportRepositoryIMP();
+            counter++;
+        }
+        return instance;
+    }
+
+    @Override
+    public void deleteAll()throws SQLException{
+        dao.deleteAll();
+    }
 }

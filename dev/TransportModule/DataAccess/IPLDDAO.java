@@ -18,4 +18,5 @@ public interface IPLDDAO {
     List<ProductDTO> getListOfProductsByPLDID(int pldID)throws  SQLException;
     void setArriavleTime(int pldID, LocalTime time) throws SQLException;
     List<Integer> getPLDsID() throws SQLException;
+    void deleteAll() throws SQLException;
 }
