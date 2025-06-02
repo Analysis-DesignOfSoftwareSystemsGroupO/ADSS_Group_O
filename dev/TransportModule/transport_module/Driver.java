@@ -56,6 +56,10 @@ public class Driver extends Employee{
         return licencs.size();
     }
 
+    public int getId(){
+        return this.getEmpId();
+    }
+
 //*********************************************************************************************************************** Set functions
 
 

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import TransportModule.Transport_Module_Exceptions.*;
-import Transport_Module_Exceptions.*;
 
 public class ProductListDocument {
     private final int id; // document id
@@ -98,7 +97,15 @@ public class ProductListDocument {
         return destination;
     }
 
-//********************************************************************************************************************** Set functions
+    public Map<Product, Integer> getProducts() {
+        return productHashMap;
+    }
+
+    public int getTransportId(){
+        return this.transport.getId();
+    }
+
+    //********************************************************************************************************************** Set functions
 
 
     /***
@@ -202,6 +209,9 @@ public class ProductListDocument {
 
             }
         }
+    }
+    public void setArriavleTime(LocalTime time){
+        this.departure_time = time;
     }
 
 
