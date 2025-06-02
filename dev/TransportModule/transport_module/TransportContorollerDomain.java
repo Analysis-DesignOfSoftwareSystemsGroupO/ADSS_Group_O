@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TransportContorollerDomain implements ITransportController {
 
@@ -93,6 +94,32 @@ public class TransportContorollerDomain implements ITransportController {
         TransportDTO transportDTO = transportRepo.transportToTransportDTO(transport);
         transportRepo.saveTransport(transportDTO);
 
+    }
+
+    public List<TransportDTO> getNextWeekTransportsWithNoTrucks() throws Exception{
+        List<TransportDTO> repoListDTO = getTransportNextWeek();
+        List<TransportDTO> noTrucksDTOList = new ArrayList<>();
+        for (TransportDTO dto: repoListDTO){
+            if(Objects.equals(dto.getTruckPN(), "-1")){
+                noTrucksDTOList.add(dto);
+            }
+        }
+        return noTrucksDTOList;
+    }
+
+    public List<TransportDTO> getNextWeekTransportsWithNoDrivers() throws Exception{
+        List<TransportDTO> repoListDTO = getTransportNextWeek();
+        List<TransportDTO> noDriversDTOList = new ArrayList<>();
+        for (TransportDTO dto: repoListDTO){
+            if(Objects.equals(dto.getDriverID(), "-1")){
+                noDriversDTOList.add(dto);
+            }
+        }
+        return noDriversDTOList;
+    }
+
+    public void removeTransportById(String transportId) throws Exception{
+        transportRepo.deleteTransport(Integer.parseInt(transportId));
     }
 
 

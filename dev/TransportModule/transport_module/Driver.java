@@ -4,11 +4,9 @@ import HR_Mudol.domain.Objects.Employee;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Driver extends Employee{
-    private ArrayList<DrivingLicence> licencs;
+    private final ArrayList<DrivingLicence> licencs;
 
     /***
      * Constructor - creates a Driver with given name, ID and a copy of provided licenses.
@@ -26,10 +24,10 @@ public class Driver extends Employee{
     //********************************************************************************************************************** Get functions
 
     /**
-     * @return Copy of the Driving licence list of the driver
+     * @return Copy the Driving license list of the driver
      */
     public ArrayList<DrivingLicence> getLicencs() { //return copy of the list
-        ArrayList<DrivingLicence> cpy = new ArrayList<DrivingLicence>();
+        ArrayList<DrivingLicence> cpy = new ArrayList<>();
         for (DrivingLicence dl : licencs) {
             cpy.add(new DrivingLicence(dl));
         }
@@ -40,9 +38,9 @@ public class Driver extends Employee{
 
 
     /***
-     * Checks if the driver has a specific driving licence.
-     * @param licence Licence to check
-     * @return true if driver has the licence, false otherwise
+     * Checks if the driver has a specific driving license.
+     * @param licence license to check
+     * @return true if driver has the license, false otherwise
      */
     public boolean hasLicencs(DrivingLicence licence) {
         for (DrivingLicence dl : licencs) {

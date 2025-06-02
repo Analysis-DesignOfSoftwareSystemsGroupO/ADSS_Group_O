@@ -13,8 +13,8 @@ import java.util.Scanner;
 public class TruckManagerMenu {
 
     // Service layer that handles truck-related business logic
-    private TruckControllerPL truckController;
-    private BookingControllerPL bookingControllerPL;
+    private final TruckControllerPL truckController;
+    private final BookingControllerPL bookingControllerPL;
     private final Scanner scanner = new Scanner(System.in);
 
     /**
@@ -96,7 +96,6 @@ public class TruckManagerMenu {
     }
 
     private void attachTruckToTransport(){
-        String input;
 
         System.out.println("Please enter transport id");
         String transportId = scanner.nextLine();

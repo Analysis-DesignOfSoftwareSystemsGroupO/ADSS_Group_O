@@ -1,6 +1,9 @@
 package TransportModule.Presentation;
 
+import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.TransportContorollerDomain;
+
+import java.util.List;
 
 public class TransportManagerControllerPL {
 
@@ -8,6 +11,22 @@ public class TransportManagerControllerPL {
 
     public TransportManagerControllerPL() throws Exception{
         this.domainController = new TransportContorollerDomain();
+    }
+
+    public List<TransportDTO> getNextWeekTransports() throws Exception{
+        return domainController.getTransportNextWeek();
+    }
+
+    public List<TransportDTO> getNextWeekTransportsWithNoTrucks() throws Exception{
+        return domainController.getNextWeekTransportsWithNoTrucks();
+    }
+
+    public List<TransportDTO> getNextWeekTransportsWithNoDrivers() throws Exception{
+        return domainController.getNextWeekTransportsWithNoDrivers();
+    }
+
+    public void removeTransportById(String transportId) throws Exception{
+        domainController.removeTransportById(transportId);
     }
 
 }
