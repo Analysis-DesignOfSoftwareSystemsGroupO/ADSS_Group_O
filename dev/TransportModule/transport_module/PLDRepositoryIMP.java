@@ -62,6 +62,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             Site site = new Site(dto.getSiteDes(), "Default Area "); // todo : This feature of the area is posposed and will be implemented later. Meanwhile the Area is Deafault
             LocalDate date = dto.getDate();
             DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
+            // todo = Sagi: need to add id and hour to Constructor (even if a default one)
             pld = new ProductListDocument(site, dateformatter.format(date));
             if(dto.getTransportID() != -1) { // -1 is the deafault TransportID in the data base. means that this PLD is not attached to any of the transports
                 Transport t = transportRep.getTransportByid(dto.getTransportID());
@@ -144,6 +145,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         List<ProductDTO> products = new ArrayList<>(); //get the Products -> quantety map of ProductListDocument
         Map<Product, Integer >pMap = pld.getProducts();
         for(Product p : pMap.keySet()){
+            // todo - sagi: replace id at DTO to int or replace id in PLD to String
             products.add(new ProductDTO(p.getCode(), p.getWeight(), pMap.get(p)));
         }
         return new ProductListDocumentDto(pld.getId(), pld.getTransportId(), pld.getDestination().getName(), products, pld.getTotalWeight(),pld.getDate(),pld.getApproximatedArriavaleTime() );
