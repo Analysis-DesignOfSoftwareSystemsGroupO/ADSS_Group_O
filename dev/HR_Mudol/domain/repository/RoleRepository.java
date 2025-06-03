@@ -2,9 +2,12 @@ package HR_Mudol.domain.repository;
 
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Objects.*;
+import com.sun.jdi.connect.spi.Connection;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import java.util.LinkedList;
@@ -27,7 +30,12 @@ public class RoleRepository {
     public void updateDescription(Role role, String newDescription) {
         role.setDescription(newDescription);  // update in memory
 
-        RoleDTO dto = new RoleDTO(role.getRoleNumber(), newDescription);
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee emp : role.getRelevantEmployees()) {
+            employeeDTOs.add(DTOToDomainMapper.toDTO(emp));
+        }
+
+        RoleDTO dto = new RoleDTO(role.getRoleNumber(),newDescription,employeeDTOs);
         roleDAO.updateDescription(dto);       // update in DB
     }
 
@@ -56,8 +64,9 @@ public class RoleRepository {
         }
     }
 
-    public List<Employee> getAllRelevantEmployees() {
-        List<EmployeeDTO> dtos = roleDAO.getAllEmployeeDTOsWithRoles();
+    public List<Employee> getAllRelevantEmployees(Role role, Branch branch) {
+        List<EmployeeDTO> dtos = roleDAO.getEmployeesForRole(role.getRoleNumber(), branch.getBranchID());
+
         return dtos.stream()
                 .map(dto -> new Employee(
                         dto.getFullName(),
@@ -70,13 +79,14 @@ public class RoleRepository {
                         dto.getMinEveningShift(),
                         dto.getSickDays(),
                         dto.getDaysOff()
-                )).collect(Collectors.toList());
+                ))
+                .collect(Collectors.toList());
     }
 
     public List<Role> getAllRoles() throws SQLException {
         List<RoleDTO> dtos = roleDAO.getAll();  // ← שליפה מה־DB
         return dtos.stream()
-                .map(dto -> new Role( dto.getDescription()))
+                .map(dto -> new Role( dto.getRoleNumber(), dto.getDescription()))
                 .collect(Collectors.toList());
     }
 
@@ -101,14 +111,17 @@ public class RoleRepository {
         return roleDAO.getAllEmployeeIDsWithRoles();
     }
 
-
-
-    public List<Role> getAll() {
-        return new LinkedList<>(roles);
+    public List<Role> getAll() throws SQLException {
+        roles.clear();
+        for (RoleDTO dto : roleDAO.getAll()) {
+            roles.add(DTOToDomainMapper.fromDTO(dto));
+        }
+        return new ArrayList<>(roles);
     }
 
-    public void addFromDTO(RoleDTO dto) {
+    public void addFromDTO(RoleDTO dto) throws SQLException {
         Role r = fromDTO(dto);
+        this.roleDAO.insert(dto);
         roles.add(r);
     }
 
@@ -117,17 +130,37 @@ public class RoleRepository {
     }
 
     private RoleDTO toDTO(Role role) {
-        return new RoleDTO(role.getRoleNumber(), role.getDescription());
+
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee emp : role.getRelevantEmployees()) {
+            employeeDTOs.add(DTOToDomainMapper.toDTO(emp));
+        }
+
+        return new RoleDTO(role.getRoleNumber(),role.getDescription(),employeeDTOs);
     }
 
-    public Role getByName(String name) {
+
+
+    public Role getRoleByDescription(String description) throws SQLException {
         for (Role r : roles) {
-            if (r.getDescription().equalsIgnoreCase(name)) {
+            if (r.getDescription().equalsIgnoreCase(description)) {
                 return r;
             }
         }
-        return null;
+
+        RoleDTO dto = roleDAO.getByDescription(description);
+        if (dto == null) return null;
+
+        Role newRole = new Role(dto.getRoleNumber(), dto.getDescription());
+        roles.add(newRole);
+        return newRole;
     }
+    public void deleteByDescription(String description) throws SQLException {
+        roles.removeIf(r -> r.getDescription().equalsIgnoreCase(description));
+        roleDAO.deleteByDescription(description);
+    }
+
+
 
 
 

@@ -27,7 +27,22 @@ public class EmployeeController implements IEmployeeController {
     public EmployeeController(BranchDTO Branch) throws SQLException {
 
         this.curBranch = DTOToDomainMapper.fromDTO(Branch);
-        this.mapper = new DTOToDomainMapper(curBranch.getUserRepo(), curBranch.getEmployeeRepo(), curBranch.getRoleRepo(), curBranch.getWeekRepo());
+        DTOToDomainMapper.initialize(
+                curBranch.getUserRepo(),
+                curBranch.getEmployeeRepo(),
+                curBranch.getRoleRepo(),
+                curBranch.getWeekRepo()
+        );
+        //this.mapper = new DTOToDomainMapper(curBranch.getUserRepo(), curBranch.getEmployeeRepo(), curBranch.getRoleRepo(), curBranch.getWeekRepo());
+    }
+    @Override
+    public void close() {
+        try {
+            curBranch.close();
+        } catch (Exception e) {
+            System.out.println("❌ Failed to close branch resources: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void setRoleManager(IRoleController roleManager) {
@@ -46,7 +61,7 @@ public class EmployeeController implements IEmployeeController {
 
         String empName = getNonEmptyStringInput("Enter employee full name: ");
 
-        int empID;
+        long empID;
         do {
             empID = getIntInput("Enter employee ID (9 digits): ");
             if (String.valueOf(empID).length() != 9) {
@@ -92,8 +107,10 @@ public class EmployeeController implements IEmployeeController {
 
         Employee toRemove = curBranch.getEmployeeRepo().getById(empId);
 
-        for (Role role : roleManager.getAllRoles(theCaller)) {
-            roleManager.removeEmployeeFromRole(theCaller, role.getRoleNumber(), mapper.toDTO(toRemove));
+        for (Role role : toRemove.getRelevantRoles()) {
+            if (role != null){
+                roleManager.removeEmployeeFromRole(theCaller, role.getRoleNumber(), mapper.toDTO(toRemove));
+            }
         }
 
         User user = curBranch.getUserRepo().getByEmployeeId(empId);
@@ -214,9 +231,8 @@ public class EmployeeController implements IEmployeeController {
 
 
     @Override
-    public EmployeeDTO getEmployeeById(UserDTO theCaller, int empId) throws SQLException {
+    public EmployeeDTO getEmployeeById(UserDTO theCaller, long empId) throws SQLException {
         User caller = mapper.fromDTO(theCaller);
-        if (!caller.isManager()) throw new SecurityException("Access denied");
 
         if (String.valueOf(empId).length() != 9) {
             System.out.println("Employee ID must be exactly 9 digits.");
@@ -310,7 +326,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public boolean verifyPassword(UserDTO caller, int empId, String password) {
+    public boolean verifyPassword(UserDTO caller, long empId, String password) {
         Employee employee = curBranch.getEmployeeRepo().getById(empId);
 
         // אם העובד לא קיים – החזרה של שגיאה/false
@@ -330,7 +346,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void updatePassword(UserDTO callerDTO, int empId, String newPassword) throws SQLException {
+    public void updatePassword(UserDTO callerDTO, long empId, String newPassword) throws SQLException {
         // שליפת האובייקט Employee
         Employee employee = curBranch.getEmployeeRepo().getById(empId);
         if (employee == null) {
@@ -351,11 +367,10 @@ public class EmployeeController implements IEmployeeController {
 
         curBranch.getEmployeeRepo().updatePassword(empId, newPassword);
 
-        System.out.println("Password updated successfully.");
     }
 
     @Override
-    public List<ConstraintDTO> getConstraintsByEmployeeId(int employeeId) {
+    public List<ConstraintDTO> getConstraintsByEmployeeId(long employeeId) {
         Employee emp = curBranch.getEmployeeRepo().getById(employeeId);
         if (emp == null) {
             throw new IllegalArgumentException("Employee not found");
@@ -373,7 +388,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public List<RoleDTO> getRolesForEmployee(int employeeId) {
+    public List<RoleDTO> getRolesForEmployee(long employeeId) {
         Employee emp = curBranch.getEmployeeRepo().getById(employeeId);
         if (emp == null) {
             throw new IllegalArgumentException("Employee not found");
@@ -388,28 +403,28 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void lockWeeklyConstraints(int empId) {
+    public void lockWeeklyConstraints(long empId) {
         Employee emp = curBranch.getEmployeeRepo().getById(empId);
         if (emp == null) throw new IllegalArgumentException("Employee not found");
         emp.lockWeeklyConstraints();
     }
 
     @Override
-    public int getMinDayShifts(int empId) {
+    public int getMinDayShifts(long empId) {
         Employee emp = curBranch.getEmployeeRepo().getById(empId);
         if (emp == null) throw new IllegalArgumentException("Employee not found");
         return emp.getContract().getMinDayShift(emp);
     }
 
     @Override
-    public int getMinEveningShifts(int empId) {
+    public int getMinEveningShifts(long empId) {
         Employee emp = curBranch.getEmployeeRepo().getById(empId);
         if (emp == null) throw new IllegalArgumentException("Employee not found");
         return emp.getContract().getMinEveninigShift(emp);
     }
 
     @Override
-    public void submitConstraint(int empId, ConstraintDTO constraintDTO) throws SQLException {
+    public void submitConstraint(long empId, ConstraintDTO constraintDTO) throws SQLException {
         Employee employee = curBranch.getEmployeeRepo().getById(empId);
         if (employee == null) {
             throw new IllegalArgumentException("Employee not found with ID: " + empId);
@@ -431,7 +446,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public EmploymentContractDTO getContractDetails(UserDTO caller, int empId) {
+    public EmploymentContractDTO getContractDetails(UserDTO caller, long empId) {
         Employee employee = curBranch.getEmployeeRepo().getById(empId);
         if (employee == null) return null;
 
@@ -445,7 +460,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public List<ConstraintDTO> getConstraintsByType(int empId, ShiftType type) {
+    public List<ConstraintDTO> getConstraintsByType(long empId, ShiftType type) {
         List<Constraint> all = curBranch.getEmployeeRepo()
                 .getById(empId)
                 .getWeeklyConstraints();
@@ -461,23 +476,43 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public void updateConstraintExplanation(EmployeeDTO emp, ConstraintDTO constraintDTO, String newExplanation) {
-        Constraint constraint = curBranch.getConstraintRepo()
-                .getConstraint(emp.getEmployeeId(), WeekDay.valueOf(constraintDTO.getDay().toUpperCase()), ShiftType.valueOf(constraintDTO.getType().toUpperCase()));
+    public void updateConstraintExplanation(EmployeeDTO empDTO, ConstraintDTO constraintDTO, String newExplanation) {
+        long empId = empDTO.getEmployeeId();
+        WeekDay day = WeekDay.valueOf(constraintDTO.getDay().toUpperCase());
+        ShiftType type = ShiftType.valueOf(constraintDTO.getType().toUpperCase());
 
+        // עדכון ברמת האובייקט Constraint מתוך ConstraintRepo
+        Constraint constraint = curBranch.getConstraintRepo().getConstraint(empId, day, type);
         if (constraint != null) {
-            constraint.setExplanation(DTOToDomainMapper.fromDTO(emp), newExplanation);
+            constraint.setExplanation(DTOToDomainMapper.fromDTO(empDTO),newExplanation);
+            curBranch.getConstraintRepo().update(empId, constraint);
+        }
 
-            curBranch.getConstraintRepo().update(emp.getEmployeeId(), constraint);
+        // עדכון גם בתוך העובד עצמו ברמת EmployeeRepo
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee != null) {
+            List<Constraint> allConstraints = employee.getWeeklyConstraints();
+            for (Constraint c : allConstraints) {
+                if (c.getDay() == day && c.getType() == type) {
+                    c.setExplanation(DTOToDomainMapper.fromDTO(empDTO),newExplanation);
+                    break;
+                }
+            }
         }
     }
 
     @Override
-    public void removeConstraint(int empId, ConstraintDTO constraintDTO) throws SQLException {
+    public void removeConstraint(long empId, ConstraintDTO constraintDTO) throws SQLException {
         WeekDay day = WeekDay.valueOf(constraintDTO.getDay().toUpperCase());
         ShiftType type = ShiftType.valueOf(constraintDTO.getType().toUpperCase());
 
-        curBranch.getConstraintRepo().delete(empId, day, type);
+        curBranch.getConstraintRepo().delete(empId, day, type); //מסיר מהריפוזיטורי של אילוצים ומהדאטה בייס
+
+        // 3. הסר מהאובייקט של העובד בריפוזיטורי של עובדים
+        Employee employee = curBranch.getEmployeeRepo().getById(empId);
+        if (employee != null) {
+            employee.removeConstraint(day, type);
+        }
     }
 
     @Override
@@ -497,6 +532,17 @@ public class EmployeeController implements IEmployeeController {
     @Override
     public String getUserLevel(int employeeId) throws SQLException {
         return curBranch.getUserRepo().getLevelById(employeeId).name();
+    }
+
+    @Override
+    public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException{
+        return curBranch.getEmployeeRepo().isEmployeeInBranch(empId,branchId);
+    }
+
+    @Override
+    public UserDTO getUserById(int empId) throws SQLException {
+        User user= curBranch.getUserRepo().getByEmployeeId(empId);
+        return DTOToDomainMapper.toDTO(user);
     }
 
 

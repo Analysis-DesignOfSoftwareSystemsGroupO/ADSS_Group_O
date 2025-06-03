@@ -7,12 +7,15 @@ import HR_Mudol.domain.Objects.Role;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * The IRoleManager interface defines the operations related to managing roles within the system.
  * These operations include creating, updating, assigning, and removing roles, as well as querying and counting employees' role assignments.
  */
 public interface IRoleController {
+
+    void close();
 
     /**
      * Creates a new role in the system.
@@ -71,7 +74,7 @@ public interface IRoleController {
      * @param theCaller The user who is querying the employees (typically an HR manager).
      * @return A list of employees who are assigned to roles.
      */
-    List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException;
+    //List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException;
 
     /**
      * Retrieves a list of all roles in the system.
@@ -108,4 +111,11 @@ public interface IRoleController {
      * @return The number of employees who do not have any roles.
      */
     int countEmployeesWithoutRoles(UserDTO theCaller, List<EmployeeDTO> employeeList) throws SQLException;
-        }
+
+    void deleteRole(UserDTO caller,String des) throws SQLException;
+
+     void setEmployeeManager(IEmployeeController employeeManager);
+
+    void removeEmployeeFromRoleInteractive(UserDTO theCaller, Scanner sc) throws SQLException;
+}
+

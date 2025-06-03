@@ -10,6 +10,8 @@ public class PostgresConnection {
     private static final String USER = "postgres";
     private static final String PASSWORD = "Sansa1234";
 
+    private static Connection connection; // ← מחזיק את החיבור היחיד
+
     static {
         try {
             Class.forName("org.postgresql.Driver");
@@ -21,12 +23,27 @@ public class PostgresConnection {
     }
 
     public static Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            try {
+                connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                System.out.println("✅ Connected to PostgreSQL.");
+            } catch (SQLException e) {
+                System.err.println("❌ Failed to connect to database: " + DB_URL);
+                throw e;
+            }
+        }
+        return connection;
+    }
+
+    public static void closeConnection() {
         try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-            return conn;
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                System.out.println("✅ PostgreSQL connection closed.");
+            }
         } catch (SQLException e) {
-            System.err.println("❌ Failed to connect to database: " + DB_URL);
-            throw e;
+            System.err.println("❌ Failed to close PostgreSQL connection.");
+            e.printStackTrace();
         }
     }
 }

@@ -12,15 +12,19 @@ public class RoleDTO {
         this.description = description;
         this.relevantEmployees = relevantEmployees;
     }
-    public RoleDTO(int roleNumber, String description) {
-        this.roleNumber = roleNumber;
+    public RoleDTO( String description) {
         this.description = description;
-        this.relevantEmployees = List.of(); // או new ArrayList<>()
     }
 
 
+
     public int getRoleNumber() {
+
         return roleNumber;
+    }
+
+    public void setRoleNumber(int roleNumber) {
+        this.roleNumber = roleNumber;
     }
 
     public String getDescription() {

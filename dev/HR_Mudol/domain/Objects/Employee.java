@@ -34,7 +34,7 @@ public class Employee extends AbstractEmployee {
     /**
      * Constructs a new Employee with basic details and initializes all constraint lists.
      */
-    public Employee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
+    public Employee(String empName, long empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff) {
         super(empName, empId, empPassword, empBankAccount, empSalary, empStartDate);
         this.Contract = new EmploymentContract(minDayShift, minEveninigShift, sickDays, daysOff, this);
         this.weeklyConstraints = new LinkedList<>();
@@ -174,23 +174,6 @@ public class Employee extends AbstractEmployee {
     }
 
     /**
-     * Returns the locked constraints (after submission deadline).
-     * Accessible by the employee himself or an HR manager.
-     *
-     * @param caller The user requesting access.
-     * @return List of locked constraints.
-     */
-    public List<Constraint> getLockedConstraintsAllowSelfView(User caller) {
-        if (!caller.isManager() && !caller.isSameEmployee(this)) {
-            throw new SecurityException("Access denied.");
-        }
-        return this.lockedConstraints;
-    }
-
-
-
-
-    /**
      * Prints the employee's relevant roles.
      */
     public void printRelevantRoles() {
@@ -285,14 +268,11 @@ public class Employee extends AbstractEmployee {
      * Returns the locked constraints (after submission deadline).
      * Only a manager is allowed to access locked constraints.
      *
-     * @param caller The user attempting to access the locked constraints.
      * @return A list of locked constraints.
      * @throws SecurityException if the caller is not a manager.
      */
-    public List<Constraint> getLockedConstraints(User caller) {
-        if (!caller.isManager()) {
-            throw new SecurityException("Access denied.");
-        }
+    public List<Constraint> getLockedConstraints() {
+
         return this.lockedConstraints;
     }
 
@@ -309,4 +289,40 @@ public class Employee extends AbstractEmployee {
                 "\n  Salary: " + this.getEmpSalary() +
                 "\n  Start Date: " + this.getEmpStartDate();
     }
+
+    public void setRelevantRoles(List<Role> relevantRoles) {
+        this.relevantRoles = relevantRoles;
+    }
+
+    public void setWeeklyConstraints(List<Constraint> weeklyConstraints) {
+        this.weeklyConstraints = weeklyConstraints;
+    }
+
+    public void setMorningConstraints(List<Constraint> morningConstraints) {
+        this.morningConstraints = morningConstraints;
+    }
+
+    public void setEveningConstraints(List<Constraint> eveningConstraints) {
+        this.eveningConstraints = eveningConstraints;
+    }
+
+    public void setLockedConstraints(List<Constraint> lockedConstraints) {
+        this.lockedConstraints = lockedConstraints;
+    }
+
+    public void removeConstraint(WeekDay day, ShiftType type) {
+        // הסרה מהרשימה הכללית
+        weeklyConstraints.removeIf(c -> c.getDay() == day && c.getType() == type);
+
+        // הסרה מהרשימה הספציפית לסוג המשמרת
+        switch (type) {
+            case MORNING:
+                morningConstraints.removeIf(c -> c.getDay() == day);
+                break;
+            case EVENING:
+                eveningConstraints.removeIf(c -> c.getDay() == day);
+                break;
+        }
+    }
+
 }

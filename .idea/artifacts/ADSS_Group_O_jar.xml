@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ADSS_Group_O:jar">
+    <output-path>$PROJECT_DIR$/release/out/artifacts/ADSS_Group_O_jar</output-path>
+    <root id="archive" name="ADSS_Group_O.jar">
+      <element id="module-output" name="ADSS_Group_O" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/dev/lib/postgresql-42.7.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

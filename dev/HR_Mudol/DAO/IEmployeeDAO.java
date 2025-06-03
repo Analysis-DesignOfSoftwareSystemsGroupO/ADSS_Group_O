@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface IEmployeeDAO {
 
-    EmployeeDTO getById(int employeeId);
-    boolean exists(int employeeId);
+    EmployeeDTO getById(long employeeId);
+    boolean exists(long employeeId);
     void insert(EmployeeDTO dto, int brunchID) throws SQLException;
     void update(EmployeeDTO employee) throws SQLException;
     List<EmployeeDTO> getAll() throws SQLException;
@@ -19,7 +19,7 @@ public interface IEmployeeDAO {
     void updateMinEveningShift(int empId, int newMinEveningShift) throws SQLException;
     void updateSickDays(int empId, int newSickDays) throws SQLException;
     void updateDaysOff(int empId, int daysOff) throws SQLException;
-    void updatePassword(int empId, String newPassword);
+    void updatePassword(long empId, String newPassword);
     List<EmployeeDTO> getAllByBranch(int branchId) throws SQLException;
     boolean isEmployeeInBranch(int empId, int branchId) throws SQLException;
 
