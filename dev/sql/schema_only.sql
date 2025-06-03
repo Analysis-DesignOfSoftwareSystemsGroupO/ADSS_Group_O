@@ -101,7 +101,7 @@ ON CONFLICT (branchID) DO NOTHING;
 INSERT INTO Roles (roleNumber, description) VALUES
 (101, 'Shift Manager'),
 (102, 'Cashier'),
-(103, 'Stocker')
+(103, 'Warehouse')
 ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES

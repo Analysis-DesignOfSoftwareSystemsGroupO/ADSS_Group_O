@@ -120,9 +120,9 @@ public class RoleRepository {
     }
 
     public void addFromDTO(RoleDTO dto) throws SQLException {
-        Role r = fromDTO(dto);
+        Role r = this.fromDTO(dto);
         this.roleDAO.insert(dto);
-        roles.add(r);
+        this.roles.add(r);
     }
 
     private Role fromDTO(RoleDTO dto) {
@@ -159,8 +159,6 @@ public class RoleRepository {
         roles.removeIf(r -> r.getDescription().equalsIgnoreCase(description));
         roleDAO.deleteByDescription(description);
     }
-
-
 
 
 
