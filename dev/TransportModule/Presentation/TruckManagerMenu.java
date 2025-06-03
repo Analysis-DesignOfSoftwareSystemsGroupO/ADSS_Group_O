@@ -88,11 +88,38 @@ public class TruckManagerMenu {
 
             for (TransportDTO transportReq : transportDTOList) // print all weekly transports
                 if(Objects.equals(transportReq.getTruckPN(), "-1")) // show weekly transports with no trucks
-                    System.out.println(transportReq);
+                    System.out.println(printTransportDTO(transportReq));
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    private String printTransportDTO(TransportDTO dto){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Transport number: ").append(dto.getId()).append("\n").append("\t");
+            stringBuilder.append("From: ").append(dto.getSiteName()).append("\n").append("\t");
+            stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
+            stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
+            stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
+            stringBuilder.append("Driver: ");
+            if(Objects.equals(dto.getDriverID(),"-1"))
+                stringBuilder.append(" No driver assigned to Transport");
+            else
+                stringBuilder.append("id number - ").append(dto.getId());
+            stringBuilder.append("\n\t");
+            stringBuilder.append("Truck: ");
+            if(Objects.equals(dto.getTruckPN(),"-1"))
+                stringBuilder.append(" No Truck assigned to Transport");
+            else
+                stringBuilder.append("Truck's Plate number - ").append(dto.getId());
+            stringBuilder.append("\n\t");
+            if(dto.isSent())
+                stringBuilder.append("wait to be sent.\n");
+            else
+                stringBuilder.append("already left.\n");
+
+            return stringBuilder.toString();
     }
 
     private void attachTruckToTransport(){

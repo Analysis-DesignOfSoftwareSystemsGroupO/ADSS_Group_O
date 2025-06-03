@@ -3,6 +3,7 @@ package TransportModule.Presentation;
 import TransportModule.DTO.TransportDTO;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -71,9 +72,37 @@ public class TransportManagerMenu {
 
     private void PrintTransportDTOList(List<TransportDTO> list) {
         for (TransportDTO dto : list) {
-            System.out.println(dto);
+            System.out.println(printTransportDTO(dto));
         }
     }
+
+    private String printTransportDTO(TransportDTO dto){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Transport number: ").append(dto.getId()).append("\n").append("\t");
+        stringBuilder.append("From: ").append(dto.getSiteName()).append("\n").append("\t");
+        stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
+        stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
+        stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
+        stringBuilder.append("Driver: ");
+        if(Objects.equals(dto.getDriverID(),"-1"))
+            stringBuilder.append(" No driver assigned to Transport");
+        else
+            stringBuilder.append("id number - ").append(dto.getId());
+        stringBuilder.append("\n\t");
+        stringBuilder.append("Truck: ");
+        if(Objects.equals(dto.getTruckPN(),"-1"))
+            stringBuilder.append(" No Truck assigned to Transport");
+        else
+            stringBuilder.append("Truck's Plate number - ").append(dto.getId());
+        stringBuilder.append("\n\t");
+        if(dto.isSent())
+            stringBuilder.append("wait to be sent.\n");
+        else
+            stringBuilder.append("already left.\n");
+
+        return stringBuilder.toString();
+    }
+
 
     private void RemoveTransportById(){
         System.out.println("Please enter Transport id you want to delete: ");
