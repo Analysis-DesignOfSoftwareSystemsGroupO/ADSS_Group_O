@@ -9,6 +9,7 @@ import HR_Mudol.DAO.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DTOToDomainMapper {
@@ -103,7 +104,7 @@ public class DTOToDomainMapper {
 
     public static Shift fromDTO(ShiftDTO dto) {
 
-        Shift shift = new Shift(
+        Shift shift = new Shift(dto.getShiftID(),
                 WeekDay.valueOf(dto.getDay().toUpperCase()),
                 ShiftType.valueOf(dto.getType().toUpperCase())
         );
@@ -256,7 +257,7 @@ public class DTOToDomainMapper {
     }
 
     public static Branch fromDTO(BranchDTO dto) throws SQLException {
-        Branch branch = new Branch(dto.getDistrict(), dto.getName());
+        Branch branch = new Branch(dto.getDistrict(), dto.getName(),dto.getCurrentWeekDTO());
         branch.setBranchID(dto.getBranchID());
 
         if (dto.getEmployees() != null) {
@@ -310,13 +311,15 @@ public class DTOToDomainMapper {
         );
     }
     public static Week fromDTO(WeekDTO dto) {
+
         Week week = new Week();
 
-
+        List<Shift> shifts=new LinkedList<>();
         for (ShiftDTO shiftDTO : dto.getShifts()) {
             Shift shift = fromDTO(shiftDTO);
-            week.addShift(shift);
+            shifts.add(shift);
         }
+        week.setShifts(shifts);
 
         return week;
     }
@@ -330,4 +333,15 @@ public class DTOToDomainMapper {
         return new UserDTO(userId, level);
     }
 
+
+    public static WeekDTO toDTO(Week newWeek) {
+        // המרת כל משמרת ברשימת המשמרות ל־DTO
+        List<ShiftDTO> shiftDTOs = new ArrayList<>();
+        for (Shift shift : newWeek.getShifts()) {
+            shiftDTOs.add(toDTO(shift)); // מניח שיש לך already method DTOToDomainMapper.toDTO(Shift)
+        }
+
+        // בניית WeekDTO עם deadline ו־shiftDTOs
+        return new WeekDTO(newWeek.getConstraintDeadline(), shiftDTOs);
+    }
 }

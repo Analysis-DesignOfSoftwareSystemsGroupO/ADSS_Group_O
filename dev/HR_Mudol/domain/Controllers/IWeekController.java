@@ -24,7 +24,7 @@ public interface IWeekController {
      * The user performing this action must be authorized to manage the theWeek's shifts.
      * @return The newly created Week object containing all shifts for the theWeek.
      */
-    Week createNewWeek();
+    WeekDTO createNewWeek() throws SQLException;
 
     /**
      * Cancels a shift for the current theWeek.

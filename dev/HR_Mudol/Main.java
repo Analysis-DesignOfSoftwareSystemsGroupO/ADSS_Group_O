@@ -40,7 +40,7 @@ public class Main {
             while (keepRunning) {
                 System.out.println("\nAvailable Branches:");
                 for (int i = 0; i < branches.size(); i++) {
-                    System.out.printf("%d. %s\n", i + 1, branches.get(i).getName());
+                    System.out.printf("%d. %s\n", i+1 , branches.get(i).getName());
                 }
 
                 BranchDTO selectedBranch;

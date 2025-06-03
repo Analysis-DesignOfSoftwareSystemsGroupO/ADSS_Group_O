@@ -196,7 +196,7 @@ public class HRService implements IHRService {
 
     // WeekController forwarding:
     @Override
-    public Week createNewWeek(UserDTO caller) {
+    public WeekDTO createNewWeek(UserDTO caller) throws SQLException {
         if (caller.isHRManager())
             return weekController.createNewWeek();
         else {
@@ -218,7 +218,7 @@ public class HRService implements IHRService {
 
     @Override
     public void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.manageTheWeekRelevantRoles(caller, week);
+        weekController.manageTheWeekRelevantRoles(caller,week);
     }
 
     @Override

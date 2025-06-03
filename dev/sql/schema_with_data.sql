@@ -1,3 +1,5 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
@@ -98,12 +100,17 @@ CREATE TABLE IF NOT EXISTS Shifts (
     shiftManager BIGINT REFERENCES Employees(empID)
 );
 
-CREATE TABLE IF NOT EXISTS RequiredRoles (
+DROP TABLE IF EXISTS RequiredRoles CASCADE;
+
+CREATE TABLE RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),
-    counter INT
+    counter INT,
+    PRIMARY KEY (branchID, shiftID, roleNumber)
 );
+
+
 
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
@@ -120,15 +127,15 @@ CREATE TABLE IF NOT EXISTS Archived_Employees (
 
 -- Insert data into Branches
 INSERT INTO Branches (branchID, name, district) VALUES
-(1, 'Branch 1', 'North'),
-(2, 'Branch 2', 'Center'),
-(3, 'Branch 3', 'South'),
-(4, 'Branch 4', 'North'),
-(5, 'Branch 5', 'Center'),
-(6, 'Branch 6', 'South'),
-(7, 'Branch 7', 'North'),
-(8, 'Branch 8', 'Center'),
-(9, 'Branch 9', 'South')
+(0, 'Branch 0', 'North'),
+(1, 'Branch 1', 'Center'),
+(2, 'Branch 2', 'South'),
+(3, 'Branch 3', 'North'),
+(4, 'Branch 4', 'Center'),
+(5, 'Branch 5', 'South'),
+(6, 'Branch 6', 'North'),
+(7, 'Branch 7', 'Center'),
+(8, 'Branch 8', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (description) VALUES
@@ -138,18 +145,18 @@ INSERT INTO Roles (description) VALUES
 ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
-(100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1),
-(100000002, 'Alice Cohen', 'alice123', 'IL101', 7800, '2023-04-12', 3, 2, 7, 10, 1),
-(100000003, 'David Levi', 'david456', 'IL102', 8200, '2022-11-05', 4, 3, 6, 11, 1),
-(100000004, 'Rina Azulay', 'rina789', 'IL103', 7900, '2024-01-18', 5, 2, 8, 12, 1),
-(200000002, 'Boaz shiftManager', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 2),
-(200000003, 'Itay Bar', 'itay321', 'IL201', 7300, '2023-06-20', 3, 2, 6, 9, 2),
-(200000004, 'Noa Kimchi', 'noa654', 'IL202', 7600, '2022-09-03', 4, 2, 7, 10, 2),
-(200000005, 'Gil Peretz', 'gil987', 'IL203', 8100, '2024-02-22', 3, 3, 5, 13, 2),
-(300000003, 'Dana the emp', 'shay', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3),
-(300000004, 'Shir Ben-David', 'shir111', 'IL301', 7700, '2023-01-25', 4, 2, 9, 11, 3),
-(300000005, 'Lior Mor', 'lior222', 'IL302', 7900, '2022-08-14', 3, 2, 6, 12, 3),
-(300000006, 'Tamar Green', 'tamar333', 'IL303', 8500, '2023-12-30', 4, 3, 8, 10, 3)
+(100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 0),
+(100000002, 'Alice Cohen', 'alice123', 'IL101', 7800, '2023-04-12', 3, 2, 7, 10, 0),
+(100000003, 'David Levi', 'david456', 'IL102', 8200, '2022-11-05', 4, 3, 6, 11, 0),
+(100000004, 'Rina Azulay', 'rina789', 'IL103', 7900, '2024-01-18', 5, 2, 8, 12, 0),
+(200000002, 'Boaz shiftManager', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 1),
+(200000003, 'Itay Bar', 'itay321', 'IL201', 7300, '2023-06-20', 3, 2, 6, 9, 1),
+(200000004, 'Noa Kimchi', 'noa654', 'IL202', 7600, '2022-09-03', 4, 2, 7, 10, 1),
+(200000005, 'Gil Peretz', 'gil987', 'IL203', 8100, '2024-02-22', 3, 3, 5, 13, 1),
+(300000003, 'Dana the emp', 'shay', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 2),
+(300000004, 'Shir Ben-David', 'shir111', 'IL301', 7700, '2023-01-25', 4, 2, 9, 11, 2),
+(300000005, 'Lior Mor', 'lior222', 'IL302', 7900, '2022-08-14', 3, 2, 6, 12, 2),
+(300000006, 'Tamar Green', 'tamar333', 'IL303', 8500, '2023-12-30', 4, 3, 8, 10, 2)
 ON CONFLICT (empID) DO NOTHING;
 
 
@@ -166,20 +173,6 @@ INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickD
 (3, 5, 1, 5, 14, 300000003)
 ON CONFLICT (contractID) DO NOTHING;
 
-INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
-(1001, 1, '2024-06-10', 'Monday', 'Morning', 'Full', 100000001),
-(1002, 2, '2024-06-11', 'Tuesday', 'Evening', 'Full', 200000002)
-ON CONFLICT (shiftID) DO NOTHING;
-
-INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
-(1, 1001, 102, 2),
-(2, 1002, 103, 1)
-ON CONFLICT DO NOTHING;
-
-INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
-(1, 1001, 200000002, 102),
-(2, 1002, 300000003, 103)
-ON CONFLICT DO NOTHING;
 
 INSERT INTO Archived_Employees (empID, archiveDate) VALUES
 (400000004, '2023-12-31')

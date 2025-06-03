@@ -12,8 +12,6 @@ import java.util.List;
  */
 public class Shift {
 
-    static int counter = 0; // Static counter for unique shift IDs
-
     private int shiftID;
     private WeekDay day;
     private ShiftType type;
@@ -26,9 +24,9 @@ public class Shift {
     /**
      * Constructs a new shift for a given day and shift type.
      */
-    public Shift(WeekDay day, ShiftType type) {
-        counter++;
-        this.shiftID = counter;
+    public Shift(int number, WeekDay day, ShiftType type) {
+
+        this.shiftID = number;
         this.day = day;
         this.type = type;
         this.employees = new LinkedList<>();
@@ -36,6 +34,8 @@ public class Shift {
         this.necessaryRoles = new LinkedList<>();
         this.filledRoles = new LinkedList<>();
     }
+
+
 
     // -------------------- Getters --------------------
 

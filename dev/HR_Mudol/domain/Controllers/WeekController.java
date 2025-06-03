@@ -56,11 +56,19 @@ public class WeekController implements IWeekController {
      * @return A new Week object.
      */
     @Override
-    public Week createNewWeek() {
+    public WeekDTO createNewWeek() throws SQLException {
 
         Week newWeek = new Week(); //only on RAM
 
-        return newWeek;
+        // הוספה לריפוזיטורי בזיכרון
+        curBranch.getWeekRepo().add(newWeek);
+
+        // שמירה של כל המשמרות שיצרנו במסד הנתונים
+        for (Shift shift : newWeek.getShifts()) {
+            curBranch.getWeekRepo().saveShift(DTOToDomainMapper.toDTO(shift), curBranch.getBranchID());
+        }
+
+        return DTOToDomainMapper.toDTO(newWeek);
     }
 
     /**
