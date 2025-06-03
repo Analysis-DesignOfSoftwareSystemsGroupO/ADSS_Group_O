@@ -116,7 +116,7 @@ public class ProductListDocument {
      * @throws ATransportModuleException if transport is null or dates mismatch
      */
     public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
-        if (transport == null || this.transport.equals(transport)) {
+        if (transport == null || (this.transport != null && this.transport.equals(transport))) {
             throw new InvalidInputException();
         }
         if (!transport.getDate().equals(date)) {
