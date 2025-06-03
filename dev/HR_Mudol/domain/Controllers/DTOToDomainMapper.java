@@ -6,7 +6,6 @@ import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.*;
 import HR_Mudol.domain.repository.*;
 import HR_Mudol.DAO.*;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

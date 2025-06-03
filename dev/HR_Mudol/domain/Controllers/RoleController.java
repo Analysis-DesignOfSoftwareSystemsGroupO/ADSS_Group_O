@@ -158,12 +158,14 @@ public class RoleController implements IRoleController {
         }
 
         // Assuming role number 1 is Shift Manager
-        Role shiftManager = curBranch.getRoleRepo().getRoleByDescription("shiftManager");
+        Role shiftManager = curBranch.getRoleRepo().getRoleByDescription("shift Manager");
         if (shiftManager == null) {
             System.out.println("Shift Manager role not found.");
             return;
         }
-        curBranch.getRoleRepo().assignEmployeeToRole(employee, shiftManager); //updates RAM and DB
+        curBranch.getRoleRepo().assignEmployeeToRole(employee, shiftManager);//updates RAM and DB
+
+
         System.out.println("Employee assigned as Shift Manager.");
     }
 
