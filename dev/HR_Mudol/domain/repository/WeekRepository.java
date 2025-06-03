@@ -2,11 +2,15 @@ package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.ShiftDAOImpl;
 import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.Week;
 import HR_Mudol.domain.*;
 
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,8 +46,8 @@ public class WeekRepository {
         shiftDAO.decrementOrRemove(branchID, shiftID, roleNumber);
     }
 
-    public void addOrUpdateRequiredRole(int branchID, int shiftID, int roleNumber, int count) {
-        shiftDAO.insertOrIncrementRequiredRole(branchID, shiftID, roleNumber, count);
+    public void addOrUpdateRequiredRole(int branchID, WeekDay day ,ShiftType type, int roleNumber, int count) {
+        shiftDAO.insertOrIncrementRequiredRole(branchID, day , type, roleNumber, count);
     }
 
     public void updateShiftStatus(int shiftId, Status newStatus) {
@@ -80,10 +84,27 @@ public class WeekRepository {
 
     public WeekDTO getNextWeekDTO(int branchId) {
         List<ShiftDTO> shiftDTOs = shiftDAO.getNextShiftsByBranch(branchId);
-        return new WeekDTO(null, shiftDTOs);
+
+        if (shiftDTOs.isEmpty())
+        {
+            shiftDAO.insertShiftsForNextWeek(branchId);
+            shiftDTOs = shiftDAO.getNextShiftsByBranch(branchId);
+        }
+        // חישוב יום חמישי הקרוב
+        LocalDate today = LocalDate.now();
+        int daysUntilThursday = DayOfWeek.THURSDAY.getValue() - today.getDayOfWeek().getValue();
+        if (daysUntilThursday < 0) {
+            daysUntilThursday += 7; // עבור יום חמישי הבא אם היום אחרי חמישי
+        }
+        LocalDate nextThursday = today.plusDays(daysUntilThursday);
+
+        // קביעת השעה 12:00
+        LocalDateTime constraintDeadline = nextThursday.atTime(12, 0);
+
+        return new WeekDTO(constraintDeadline, shiftDTOs);
     }
 
-    public void saveShift(ShiftDTO shift, int branchID) throws SQLException {
+    public void saveShift(ShiftDTO shift, int branchID)  {
         shiftDAO.insertShift(shift, branchID);
     }
 

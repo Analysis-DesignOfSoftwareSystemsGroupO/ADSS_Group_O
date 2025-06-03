@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface IEmployeeService {
 
+    WeekDTO getNextWeekDTO();
+
+    WeekDTO getCurrentWeekDTO();
+
     /**
      * Display all upcoming shifts assigned to the given employee.
      */

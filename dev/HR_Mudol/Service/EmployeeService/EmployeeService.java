@@ -30,6 +30,16 @@ public class EmployeeService implements IEmployeeService {
         empController.close();
     }
 
+    @Override
+    public WeekDTO getNextWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
+
+    @Override
+    public WeekDTO getCurrentWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
+
     public void viewMyShifts(UserDTO caller, long empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null ) {
@@ -39,7 +49,11 @@ public class EmployeeService implements IEmployeeService {
 
         System.out.println("Shifts for " + employee.getFullName() + ":");
 
-        List<ShiftDTO> currentWeek= weekController.getCurrentWeekShifts();
+        List<ShiftDTO> currentWeek= weekController.getCurrentWeekDTO().getShifts();
+
+        List<ShiftDTO> commingWeek= weekController.getNextWeekDTO().getShifts();
+
+        System.out.println("Your shifts this week:");
 
         boolean found = false;
         for (ShiftDTO shift : currentWeek) {
@@ -50,6 +64,18 @@ public class EmployeeService implements IEmployeeService {
         }
         if (!found) {
             System.out.println("No assigned shifts found for the upcoming week.");
+        }
+
+        System.out.println("\nYour shifts next week:");
+        found = false;
+        for (ShiftDTO shift : commingWeek) {
+            if (shift.getEmployeeIds().contains(empId)) {
+                System.out.println("- " + shift);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No assigned shifts found for the next week.");
         }
     }
 

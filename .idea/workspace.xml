@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" afterDir="false" />
-    </list>
+    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,5 +70,18 @@
       <updated>1748870326864</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="HR_Mudol.domain.repository.WeekRepository" memberName="weeks" />
+        <PinnedItemInfo parentTag="HR_Mudol.DTO.WeekDTO" memberName="constraintDeadline" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Week" memberName="shifts" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Objects.Week" memberName="shifts" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Objects.Shift" memberName="status" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.User" memberName="user" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.User" memberName="level" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

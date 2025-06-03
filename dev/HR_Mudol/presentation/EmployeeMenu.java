@@ -24,7 +24,8 @@ public class EmployeeMenu implements Menu {
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO branch) {
         long empId = self.getEmployeeId();
-        WeekDTO currentWeek = branch.getCurrentWeekDTO();
+
+        WeekDTO commingWeek= employeeService.getNextWeekDTO();
 
         if (caller.getUserId() != empId) {
             System.out.println("Access denied: You can only access your own menu.");
@@ -48,8 +49,8 @@ public class EmployeeMenu implements Menu {
             try {
                 switch (choice) {
                     case "1" -> employeeService.viewMyShifts(caller, empId);
-                    case "2" -> employeeService.submitConstraint(caller, empId, currentWeek);
-                    case "3" -> employeeService.updateConstraint(caller, empId, currentWeek);
+                    case "2" -> employeeService.submitConstraint(caller, empId, commingWeek);
+                    case "3" -> employeeService.updateConstraint(caller, empId, commingWeek);
                     case "4" -> employeeService.viewMyConstraints(caller, empId);
                     case "5" -> employeeService.viewContractDetails(caller, empId);
                     case "6" -> employeeService.viewAvailableRoles(caller, empId);

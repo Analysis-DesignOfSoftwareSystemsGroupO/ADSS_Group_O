@@ -103,4 +103,8 @@ public interface IWeekController {
      * @param theWeek The theWeek object representing the current theWeek.
      */
     void addEmployeeToShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
+
+    WeekDTO getNextWeekDTO();
+
+    WeekDTO getCurrentWeekDTO();
 }

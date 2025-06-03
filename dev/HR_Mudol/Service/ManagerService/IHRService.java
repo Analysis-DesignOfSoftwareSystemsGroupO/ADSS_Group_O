@@ -80,6 +80,10 @@ public interface IHRService {
     // WeekController forwarding
     WeekDTO createNewWeek(UserDTO caller) throws SQLException;
 
+    WeekDTO getNextWeekDTO();
+
+    WeekDTO getCurrentWeekDTO();
+
     void cancelShift(UserDTO caller, WeekDTO week) throws SQLException;
 
     void assigningEmployToShifts(UserDTO caller) throws SQLException;
@@ -108,6 +112,4 @@ public interface IHRService {
      void close();
 
     void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO weekDTO) throws SQLException;
-
-    void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException;
 }
