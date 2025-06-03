@@ -84,7 +84,7 @@ public class RoleRepository {
     public List<Role> getAllRoles() throws SQLException {
         List<RoleDTO> dtos = roleDAO.getAll();  // ← שליפה מה־DB
         return dtos.stream()
-                .map(dto -> new Role(dto.getRoleNumber(), dto.getDescription()))
+                .map(dto -> new Role( dto.getRoleNumber(), dto.getDescription()))
                 .collect(Collectors.toList());
     }
 

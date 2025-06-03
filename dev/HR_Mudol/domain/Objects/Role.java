@@ -37,6 +37,13 @@ public class Role {
         this.relevantEmployees = new LinkedList<>();
     }
 
+    public Role(int roleNumber, String description,List<Employee> relevantEmployees) {
+        this.roleNumber = roleNumber;
+        this.description = description;
+        this.relevantEmployees = relevantEmployees;
+    }
+
+
 
     /**
      * Returns the unique role number.

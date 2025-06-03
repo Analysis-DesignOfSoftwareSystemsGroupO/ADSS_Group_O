@@ -225,19 +225,26 @@ public class RoleController implements IRoleController {
 
     @Override
     public void printAllRoles(UserDTO theCaller) throws SQLException {
-
-        List<Role> roles = getAllRoles(theCaller);
-
+        List<Role> roles = curBranch.getRoleRepo().getAllRoles();
         if (roles.isEmpty()) {
             System.out.println("No roles found.");
             return;
         }
-
         System.out.println("Available Roles:");
         for (Role role : roles) {
-            System.out.println(role);
+            System.out.println(role.getRoleNumber() + " - Description: " + role.getDescription());
+            for (Employee e : curBranch.getEmployeeRepo().getAll()){
+                for (Role r : e.getRelevantRoles()){
+                    if (role.equals(r)&& !roles.isEmpty() ){
+                        System.out.println("  - ID: " + e.getEmpId() + ", Name: " + e.getEmpName());
+                    }
+                }
+            }
         }
     }
+
+
+
 
     @Override
     public Role getRoleByNumber(int roleNumber) {
