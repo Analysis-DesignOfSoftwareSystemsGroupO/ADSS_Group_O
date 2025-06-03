@@ -1,42 +1,80 @@
-import TransportModule.transport_module.ITransportRepository;
-import TransportModule.transport_module.Truck;
-import TransportModule.transport_module.TruckRepositoryIMP;
-import org.junit.jupiter.api.BeforeEach;
-import TransportModule.DTO.TruckDto;
-import TransportModule.transport_module.TruckControllerDomain;
-import org.junit.jupiter.api.Test;
 
+import TransportModule.DTO.TruckDto;
+import TransportModule.Transport_Module_Exceptions.InvalidInputException;
+import TransportModule.Transport_Module_Exceptions.TruckNotFoundException;
+import TransportModule.transport_module.TransportRepositoryIMP;
+import TransportModule.transport_module.Truck;
+
+import TransportModule.transport_module.TruckControllerDomain;
+import TransportModule.transport_module.TruckRepositoryIMP;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+
+import java.util.List;
 
 class TruckControllerDomainIntegrationTest {
 
-    private TruckRepositoryIMP truckRepo;
-    private TruckControllerDomain domain;
+    private TruckRepositoryIMP truckRepository;
+    private TruckControllerDomain truckDomain;
 
     @BeforeEach
     void setUp() throws Exception {
-        truckRepo =  TruckRepositoryIMP.getInstance();
-        domain = new TruckControllerDomain(truckRepo, mock(ITransportRepository.class));
+        truckRepository = TruckRepositoryIMP.getInstance();
+        truckDomain = new TruckControllerDomain(truckRepository, TransportRepositoryIMP.getInstance());
+    }
+
+    @AfterEach
+    void tearDown() {
+        truckRepository.clear();
     }
 
     @Test
-    void addTruck_thenRepoContainsIt() throws Exception {
-        TruckDto truck = new TruckDto(2000, "C", "9999");
-        domain.addTruck(truck);
+    void addTruck_shouldStoreTruckInRepository() throws Exception {
+        TruckDto dto = new TruckDto(5000, "C", "1234");
 
-        Truck result = truckRepo.getTruckBYPlateNumber(9999);
-        assertEquals("9999", result.getPlateNumber());
-        assertEquals("C", result.getDrivingLicence().getCode());
+        truckDomain.addTruck(dto);
+
+        Truck actualTruck = truckRepository.getTruckBYPlateNumber(1234);
+        assertEquals("1234", actualTruck.getPlateNumber());
+        assertEquals("C", actualTruck.getDrivingLicence().getCode());
+        assertEquals(5000, actualTruck.getMaxWeight());
     }
 
     @Test
-    void deleteTruck_thenRepoDoesNotContainIt() throws Exception {
-        TruckDto truck = new TruckDto(2000, "C", "9999");
-        domain.addTruck(truck);
-        domain.deleteTruck("9999");
+    void addTruck_nullDto_shouldThrowException() {
+        assertThrows(InvalidInputException.class, () -> truckDomain.addTruck(null));
+    }
 
-        assertThrows(Exception.class, () -> truckRepo.getTruckBYPlateNumber(9999));
+    @Test
+    void getAllTrucks_shouldReturnCorrectDTOs() throws Exception {
+        truckDomain.addTruck(new TruckDto(3000, "B", "5678"));
+        truckDomain.addTruck(new TruckDto(4000, "C", "9876"));
+
+        List<TruckDto> trucks = truckDomain.getAllTrucks();
+
+        assertEquals(2, trucks.size());
+        assertTrue(trucks.stream().anyMatch(t -> t.getPlateNumber().equals("5678")));
+        assertTrue(trucks.stream().anyMatch(t -> t.getPlateNumber().equals("9876")));
+    }
+
+    @Test
+    void getAllTrucks_empty_shouldThrowTruckNotFoundException() {
+        assertThrows(TruckNotFoundException.class, () -> truckDomain.getAllTrucks());
+    }
+
+    @Test
+    void deleteTruck_validPlate_shouldRemoveTruck() throws Exception {
+        TruckDto dto = new TruckDto(2500, "A", "7777");
+        truckDomain.addTruck(dto);
+
+        truckDomain.deleteTruck("7777");
+
+        assertThrows(Exception.class, () -> truckRepository.getTruckBYPlateNumber(7777));
+    }
+
+    @Test
+    void deleteTruck_emptyPlate_shouldThrowException() {
+        assertThrows(InvalidInputException.class, () -> truckDomain.deleteTruck(""));
     }
 }

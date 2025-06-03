@@ -4,15 +4,19 @@ import HR_Mudol.domain.Objects.Employee;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Driver {
     private final ArrayList<DrivingLicence> licencs;
-    private long id;
+
+  
+
+    private String id;
 
     /***
      * Constructor - creates a Driver with given name, ID and a copy of provided licenses.
      */
-    public Driver( long id, ArrayList<DrivingLicence> licencs) {
+    public Driver( String id, ArrayList<DrivingLicence> licencs) {
         this.licencs = new ArrayList<>();
         for (DrivingLicence licence : licencs) {
             this.licencs.add(new DrivingLicence(licence));
@@ -56,14 +60,15 @@ public class Driver {
     }
 
     public String getId(){
-        return "sa";
-//        return Integer.toString(this.getEmpId());
+        return id;
     }
 
 //*********************************************************************************************************************** Set functions
 
 
-
+    public void setId(String id) {
+        this.id = id;
+    }
 
 
 //*********************************************************************************************************************** print functions
@@ -88,7 +93,7 @@ public class Driver {
         if (obj == null || getClass() != obj.getClass())
             return false;
         Driver other = (Driver) obj;
-        return this.getEmpId() == other.getEmpId();
+        return Objects.equals(other.id, this.id);
     }
 
     /***
@@ -96,8 +101,7 @@ public class Driver {
      */
     @Override
     public final int hashCode() {
-//        return  this.getEmpId();
-        return 1;
+        return  this.id.hashCode();
     }
 
 }
