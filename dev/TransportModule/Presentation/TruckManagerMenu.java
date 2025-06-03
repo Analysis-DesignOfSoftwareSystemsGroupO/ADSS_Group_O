@@ -25,6 +25,52 @@ public class TruckManagerMenu {
         this.bookingControllerPL = new BookingControllerPL();
     }
 
+    /**
+     * Displays the truck manager menu and handles user input.
+     * Supported actions: add truck, list all trucks, show available trucks on date, remove truck, and exit.
+     */
+    public void showMenu() {
+        boolean running = true;
+        while (running) {
+            // Print menu options
+            System.out.println("1. Add new Truck");
+            System.out.println("2. Show all Trucks");
+            System.out.println("3. Remove Truck");
+            System.out.println("4. Show Weekly Transports");
+            System.out.println("5. Attach Truck to transport");
+            System.out.println("E. Exit");
+            String input = scanner.nextLine();
+
+            try {
+                switch (input) {
+
+                    case "1" -> addTruck();
+
+                    case "2" -> showAllTrucks();
+
+                    case "3" -> deleteTruck();
+
+                    case "4" -> showWeeklyTransports();
+
+                    case "5" -> attachTruckToTransport();
+
+
+                    case "E", "e" -> {
+                        running = false;
+                        System.out.println("Goodbye.");
+                    }
+
+                    // Handle invalid input
+                    default -> System.out.println("Invalid input.");
+                }
+            } catch (Exception e) {
+                // Catch and report any runtime exceptions
+                System.out.println("Error: " + e.getMessage()); // Show error message
+            }
+        }
+    }
+
+
     private void addTruck(){
         System.out.println("Enter truck plate number:");
         String plate = scanner.nextLine();
@@ -44,14 +90,7 @@ public class TruckManagerMenu {
         }
 
     }
-    private void printTrucksArrayOfDTO(List<TruckDto> trucks){
-        if (trucks == null)
-            return;
-        for (TruckDto currTruck : trucks) {
-            System.out.println("Truck number: " + currTruck.getPlateNumber() + " Licence " + currTruck.getLiceenceReq());
-            System.out.println(currTruck.getWeight() + "/" + currTruck.getMaxWeight() + " weight");
-        }
-    }
+
 
     private void showAllTrucks(){
         try {
@@ -67,6 +106,14 @@ public class TruckManagerMenu {
         }
     }
 
+    private void printTrucksArrayOfDTO(List<TruckDto> trucks){
+        if (trucks == null)
+            return;
+        for (TruckDto currTruck : trucks) {
+            System.out.println("Truck number: " + currTruck.getPlateNumber() + " Licence " + currTruck.getLiceenceReq());
+            System.out.println(currTruck.getWeight() + "/" + currTruck.getMaxWeight() + " weight");
+        }
+    }
 
 
     private void deleteTruck(){
@@ -122,6 +169,8 @@ public class TruckManagerMenu {
             return stringBuilder.toString();
     }
 
+
+
     private void attachTruckToTransport(){
 
         System.out.println("Please enter transport id");
@@ -142,48 +191,5 @@ public class TruckManagerMenu {
     }
 
 
-    /**
-     * Displays the truck manager menu and handles user input.
-     * Supported actions: add truck, list all trucks, show available trucks on date, remove truck, and exit.
-     */
-    public void showMenu() {
-        boolean running = true;
-        while (running) {
-            // Print menu options
-            System.out.println("1. Add new Truck");
-            System.out.println("2. Show all Trucks");
-            System.out.println("3. Remove Truck");
-            System.out.println("4. Show Weekly Transports");
-            System.out.println("5. Attach Truck to transport");
-            System.out.println("E. Exit");
-            String input = scanner.nextLine();
 
-            try {
-                switch (input) {
-
-                    case "1" -> addTruck();
-
-                    case "2" -> showAllTrucks();
-
-                    case "3" -> deleteTruck();
-
-                    case "4" -> showWeeklyTransports();
-
-                    case "5" -> attachTruckToTransport();
-
-
-                    case "E", "e" -> {
-                        running = false;
-                        System.out.println("Goodbye.");
-                    }
-
-                    // Handle invalid input
-                    default -> System.out.println("Invalid input.");
-                }
-            } catch (Exception e) {
-                // Catch and report any runtime exceptions
-                System.out.println("Error: " + e.getMessage()); // Show error message
-            }
-        }
-    }
 }
