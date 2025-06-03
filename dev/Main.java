@@ -9,9 +9,9 @@ public class Main {
 
     private static void init_useres(Map<String, User> users) throws Exception {
 
-            users.put("TransportManager", new TransportManagerUser("TransportManager", "1234"));
-            users.put("User", new BookingUser("User", "1234"));
-            users.put("TruckManagerUser", new TruckManagerUser("TruckManagerUser", "1234"));
+            users.put("TransportManager", new TransportManagerUser("TransportManager"));
+            users.put("User", new BookingUser("User"));
+            users.put("TruckManagerUser", new TruckManagerUser("TruckManagerUser"));
 
 
     }
@@ -29,7 +29,6 @@ public class Main {
             return;
         }
         Scanner scanner = new Scanner(System.in);
-        int attempts = 3;
         User user;
 
         System.out.println("Welcome to Transport Department");
@@ -45,23 +44,6 @@ public class Main {
             }
         } // End username check while
 
-        while (true){
-            if(attempts == 0){
-                System.out.println("You have no more attempts. Goodbye!");
-                scanner.close();
-                return;
-            }
-            System.out.println("Please enter password: ");
-            String password = scanner.nextLine();
-            if(user.comparePassword(password)){
-                break;
-            }
-            else{
-                System.out.println("Wrong password. Please try again");
-                attempts--;
-                System.out.println("You have "+attempts+" attempts to try");
-            }
-        } // End password check while
 
         user.showMenu();
         scanner.close();
