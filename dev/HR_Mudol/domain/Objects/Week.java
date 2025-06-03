@@ -15,6 +15,8 @@ import java.time.temporal.TemporalAdjusters;
  */
 public class Week {
 
+    private static int counter=0;
+
     // List of all shifts scheduled for the week
     private List<Shift> shifts;
 
@@ -61,7 +63,7 @@ public class Week {
                 type = ShiftType.MORNING;
             }
 
-            newShift = new Shift(day, type);
+            newShift = new Shift(counter++,day, type);
             shifts.addLast(newShift);
         }
     }
@@ -76,6 +78,11 @@ public class Week {
         this(); // Calls the default constructor to create shifts
         this.constraintDeadline = customDeadline;
     }
+
+    public void setShifts(List<Shift> shifts){
+        this.shifts=shifts;
+    }
+
 
     /**
      * Adds a new shift to the week.

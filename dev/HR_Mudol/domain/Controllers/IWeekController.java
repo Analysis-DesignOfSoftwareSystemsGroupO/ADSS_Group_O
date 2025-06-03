@@ -24,7 +24,7 @@ public interface IWeekController {
      * The user performing this action must be authorized to manage the theWeek's shifts.
      * @return The newly created Week object containing all shifts for the theWeek.
      */
-    Week createNewWeek();
+    WeekDTO createNewWeek() throws SQLException;
 
     /**
      * Cancels a shift for the current theWeek.
@@ -40,7 +40,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is choosing the roles for shifts.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    void manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
+    WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
 
     /**
      * Assigns employees to the shifts for the given theWeek.

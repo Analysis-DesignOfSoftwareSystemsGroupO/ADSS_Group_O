@@ -5,6 +5,8 @@ import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.Week;
 import HR_Mudol.domain.*;
+
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,4 +77,9 @@ public class WeekRepository {
         List<ShiftDTO> shiftDTOs = shiftDAO.getCurShiftsByBranch(branchId);
         return new WeekDTO(null, shiftDTOs);
     }
+
+    public void saveShift(ShiftDTO shift, int branchID) throws SQLException {
+        shiftDAO.insertShift(shift, branchID);
+    }
+
 }

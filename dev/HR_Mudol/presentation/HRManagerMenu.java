@@ -43,7 +43,7 @@ public class HRManagerMenu implements Menu {
                 case "1" -> manageEmployees(caller);
                 case "2" -> viewShiftsHistory(caller, curBranch);
                 case "3" -> generateReports(caller, curBranch);
-                case "4" -> manageShift(caller, curBranch);
+                case "4" -> manageShift(caller);
                 case "5" -> manageRoles(caller);
                 case "6" -> displayDashboard(caller, curBranch);
                 case "0" -> {
@@ -189,8 +189,8 @@ public class HRManagerMenu implements Menu {
         }
     }
 
-    private void manageShift(UserDTO caller, BranchDTO branch) {
-        WeekDTO week = branch.getCurrentWeekDTO();
+    private void manageShift(UserDTO caller) throws SQLException {
+        WeekDTO week=hr.createNewWeek(caller);
         if (week == null) {
             System.out.println("No current week available.");
             return;
@@ -208,9 +208,9 @@ public class HRManagerMenu implements Menu {
             String choice = sc.nextLine();
             try {
                 switch (choice) {
-                    case "1" -> hr.manageTheWeekRelevantRoles(caller, week);
-                    case "2" -> hr.assigningEmployToShifts(caller, week);
-                    case "3" -> editShifts(caller, week);
+                    case "1" -> week=hr.manageTheWeekRelevantRoles(caller,week);
+                    case "2" -> hr.assigningEmployToShifts(caller,week);
+                    case "3" -> editShifts(caller,week);
                     case "0" -> { return; }
                     default -> System.out.println("Invalid option.");
                 }

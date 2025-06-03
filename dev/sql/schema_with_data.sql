@@ -1,3 +1,5 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
@@ -98,12 +100,20 @@ CREATE TABLE IF NOT EXISTS Shifts (
     shiftManager BIGINT REFERENCES Employees(empID)
 );
 
-CREATE TABLE IF NOT EXISTS RequiredRoles (
+ALTER TABLE Shifts
+ADD CONSTRAINT unique_shift_per_day_type_branch
+UNIQUE (deadline, type, branchID);
+
+
+CREATE TABLE RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),
-    counter INT
+    counter INT,
+    PRIMARY KEY (branchID, shiftID, roleNumber)
 );
+
+
 
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
@@ -120,15 +130,15 @@ CREATE TABLE IF NOT EXISTS Archived_Employees (
 
 -- Insert data into Branches
 INSERT INTO Branches (branchID, name, district) VALUES
-(0, 'Branch 1', 'North'),
-(1, 'Branch 2', 'Center'),
-(2, 'Branch 3', 'South'),
-(3, 'Branch 4', 'North'),
-(4, 'Branch 5', 'Center'),
-(5, 'Branch 6', 'South'),
-(6, 'Branch 7', 'North'),
-(7, 'Branch 8', 'Center'),
-(8, 'Branch 9', 'South')
+(0, 'Branch 0', 'North'),
+(1, 'Branch 1', 'Center'),
+(2, 'Branch 2', 'South'),
+(3, 'Branch 3', 'North'),
+(4, 'Branch 4', 'Center'),
+(5, 'Branch 5', 'South'),
+(6, 'Branch 6', 'North'),
+(7, 'Branch 7', 'Center'),
+(8, 'Branch 8', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (description) VALUES
@@ -166,20 +176,6 @@ INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickD
 (3, 5, 1, 5, 14, 300000003)
 ON CONFLICT (contractID) DO NOTHING;
 
-INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
-(1001, 0, '2024-06-10', 'Monday', 'Morning', 'Full', 100000001),
-(1002, 1, '2024-06-11', 'Tuesday', 'Evening', 'Full', 200000002)
-ON CONFLICT (shiftID) DO NOTHING;
-
-INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
-(0, 1001, 102, 2),
-(1, 1002, 103, 1)
-ON CONFLICT DO NOTHING;
-
-INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
-(0, 1001, 200000002, 102),
-(1, 1002, 300000003, 103)
-ON CONFLICT DO NOTHING;
 
 INSERT INTO Archived_Employees (empID, archiveDate) VALUES
 (400000004, '2023-12-31')

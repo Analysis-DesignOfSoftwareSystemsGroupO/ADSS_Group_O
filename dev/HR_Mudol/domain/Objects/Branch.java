@@ -1,6 +1,7 @@
 package HR_Mudol.domain.Objects;
 import HR_Mudol.DAO.*;
 import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.repository.*;
 
@@ -35,7 +36,7 @@ public class Branch {
     /**
      * Constructs an empty Branch with initialized repositories.
      */
-    public Branch(String district,String name) throws SQLException {
+    public Branch(String district,String name, WeekDTO week) throws SQLException {
 
         this.employeeDAO=new EmployeeDAOImpl();
         this.roleDAO=new RoleDAOImpl();
@@ -51,7 +52,7 @@ public class Branch {
 
         this.name=name;
         this.district=district;
-        weekRepo.add(new Week());
+        //weekRepo.add(DTOToDomainMapper.fromDTO(week));
 
         DTOToDomainMapper.initialize(userRepo, employeeRepo,roleRepo,weekRepo);
     }

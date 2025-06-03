@@ -179,7 +179,8 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
     public void insertOrIncrementRequiredRole(int branchID, int shiftID, int roleNumber, int count) {
         String select = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
         String update = "UPDATE RequiredRoles SET counter = counter + ? WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
-        String insert = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES (?, ?, ?, ?)";
+        String insert = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) " +
+                "VALUES (?, ?, ?, ?) ON CONFLICT (branchID, shiftID, roleNumber) DO NOTHING";
 
         try (PreparedStatement selectStmt = conn.prepareStatement(select)) {
             selectStmt.setInt(1, branchID);
@@ -371,6 +372,41 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
         return employees;
     }
+
+    public void insertShift(ShiftDTO shift, int branchId) {
+        String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT (deadline, type, branchID) DO NOTHING";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shift.getShiftID());
+            stmt.setInt(2, branchId);
+
+            // חישוב deadline
+            LocalDate today = LocalDate.now();
+            DayOfWeek todayDayOfWeek = today.getDayOfWeek();
+            DayOfWeek shiftDay = DayOfWeek.valueOf(shift.getDay());
+            int daysToAdd = (shiftDay.getValue() - todayDayOfWeek.getValue() + 7) % 7;
+            LocalDate deadline = today.plusDays(daysToAdd);
+
+            stmt.setDate(3, Date.valueOf(deadline));
+            stmt.setString(4, shift.getDay());
+            stmt.setString(5, shift.getType());
+            stmt.setString(6, shift.getStatus());
+
+            if (shift.getShiftManagerId() == -1) {
+                stmt.setNull(7, Types.BIGINT);
+            } else {
+                stmt.setLong(7, shift.getShiftManagerId());
+            }
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert shift", e);
+        }
+    }
+
+
 
 
 
