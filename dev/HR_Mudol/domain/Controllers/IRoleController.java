@@ -74,7 +74,7 @@ public interface IRoleController {
      * @param theCaller The user who is querying the employees (typically an HR manager).
      * @return A list of employees who are assigned to roles.
      */
-    List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException;
+    //List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException;
 
     /**
      * Retrieves a list of all roles in the system.

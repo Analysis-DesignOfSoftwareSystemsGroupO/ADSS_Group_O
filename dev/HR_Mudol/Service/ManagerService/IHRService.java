@@ -54,7 +54,7 @@ public interface IHRService {
     void removeEmployeeFromALLRoles(UserDTO caller) throws SQLException;
 
 
-    List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException;
+    //List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException;
 
     List<Role> getAllRoles(UserDTO caller) throws SQLException;
 

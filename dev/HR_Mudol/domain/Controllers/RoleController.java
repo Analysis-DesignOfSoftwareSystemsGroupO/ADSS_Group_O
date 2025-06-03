@@ -205,7 +205,7 @@ public class RoleController implements IRoleController {
         }
     }
 
-
+    /*
     @Override
     public List<Employee> getRelevantEmployees(UserDTO theCaller) throws SQLException {
 
@@ -214,6 +214,8 @@ public class RoleController implements IRoleController {
 
         return curBranch.getRoleRepo().getAllRelevantEmployees();
     }
+
+     */
 
     @Override
     public List<Role> getAllRoles(UserDTO theCaller) throws SQLException {

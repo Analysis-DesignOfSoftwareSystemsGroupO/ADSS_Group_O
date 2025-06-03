@@ -64,8 +64,9 @@ public class RoleRepository {
         }
     }
 
-    public List<Employee> getAllRelevantEmployees() {
-        List<EmployeeDTO> dtos = roleDAO.getAllEmployeeDTOsWithRoles();
+    public List<Employee> getAllRelevantEmployees(Role role) {
+        List<EmployeeDTO> dtos = roleDAO.getEmployeesForRole(role.getRoleNumber());
+
         return dtos.stream()
                 .map(dto -> new Employee(
                         dto.getFullName(),
@@ -78,7 +79,8 @@ public class RoleRepository {
                         dto.getMinEveningShift(),
                         dto.getSickDays(),
                         dto.getDaysOff()
-                )).collect(Collectors.toList());
+                ))
+                .collect(Collectors.toList());
     }
 
     public List<Role> getAllRoles() throws SQLException {

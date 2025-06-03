@@ -211,7 +211,7 @@ public class HRManagerMenu implements Menu {
                     case "1" -> hr.manageTheWeekRelevantRoles(caller,week);
                     case "2" -> hr.assigningEmployToShifts(caller);
                     case "3" -> editShifts(caller,week);
-                    case "0" -> { return; }1
+                    case "0" -> { return; }
                     default -> System.out.println("Invalid option.");
                 }
             } catch (Exception e) {

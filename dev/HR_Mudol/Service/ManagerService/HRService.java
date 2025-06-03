@@ -137,11 +137,13 @@ public class HRService implements IHRService {
         roleController.removeEmployeeFromALLRoles(caller);
     }
 
-
+    /*
     @Override
     public List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException {
         return roleController.getRelevantEmployees(caller);
     }
+
+     */
 
     @Override
     public List<Role> getAllRoles(UserDTO caller) throws SQLException {

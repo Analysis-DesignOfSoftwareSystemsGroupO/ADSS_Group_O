@@ -14,7 +14,6 @@ public interface IRoleDAO {
     List<Integer> getAllEmployeeIDsWithRoles();
     List<RoleDTO> getAllByBranch(int branchId) throws SQLException;
 
-
     void delete(int roleNumber) throws SQLException;
 
     List<RoleDTO> getAll() throws SQLException;
@@ -24,4 +23,6 @@ public interface IRoleDAO {
     RoleDTO getByDescription(String description) throws SQLException;
 
     void deleteByDescription(String description) throws SQLException;
+
+    List<EmployeeDTO> getEmployeesForRole(int roleNumber);
 }

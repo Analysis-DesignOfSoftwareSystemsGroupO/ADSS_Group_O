@@ -175,14 +175,16 @@ public class WeekController implements IWeekController {
 
 
         Scanner scanner = new Scanner(System.in);
-        List<Employee> candidates = role.getRelevantEmployees();
+
+        List<Employee> candidates=curBranch.getRoleRepo().getAllRelevantEmployees(role);
+
         if (candidates.isEmpty()) {
             System.out.println("No employees are available for role: " + role.getDescription());
             return null;
         }
 
         System.out.println("You should find an employee for the role - " + role.getDescription());
-        printRelevantEmp(role);
+        printRelevantEmp(candidates);
 
         Set<Integer> triedIndexes = new HashSet<>();
 
@@ -237,11 +239,10 @@ public class WeekController implements IWeekController {
     /**
      * Prints the list of relevant employees for a specific role.
      *
-     * @param role The role for which employees are being listed.
      */
-    private void printRelevantEmp(Role role) {
+    private void printRelevantEmp(List<Employee> candidate ) {
         int index = 1;
-        for (Employee emp : role.getRelevantEmployees()) {
+        for (Employee emp : candidate) {
             System.out.println(index + ". " + emp.getEmpName());
             index++;
 

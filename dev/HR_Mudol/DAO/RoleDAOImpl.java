@@ -4,6 +4,7 @@ import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.RoleDTO;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -298,6 +299,42 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public List<EmployeeDTO> getEmployeesForRole(int roleNumber) {
+        List<EmployeeDTO> employees = new ArrayList<>();
+        String sql = "SELECT e.* FROM Employees e " +
+                "JOIN EmployeeRole er ON e.empID = er.empID " +
+                "WHERE er.roleNumber = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, roleNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Date rawDate = rs.getDate("empStartDate");
+                LocalDate empStartDate = (rawDate != null) ? rawDate.toLocalDate() : LocalDate.now();
+
+                employees.add(new EmployeeDTO(
+                        rs.getLong("empID"),
+                        rs.getString("empName"),
+                        rs.getString("empPassword"),
+                        rs.getString("empBankAccount"),
+                        rs.getInt("empSalary"),
+                        empStartDate,
+                        rs.getInt("minDayShift"),
+                        rs.getInt("minEveningShift"),
+                        rs.getInt("sickDays"),
+                        rs.getInt("daysOff")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch employees for role", e);
+        }
+
+        return employees;
+    }
+
 
 
 }
