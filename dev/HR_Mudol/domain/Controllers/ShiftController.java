@@ -2,6 +2,7 @@ package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.ShiftType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -392,13 +393,16 @@ public class ShiftController implements IShiftController {
         // הוספה ל-DB
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
                 curBranch.getBranchID(),
-                shift.getShiftID(),
+                shift.getDay(),
+                shift.getType(),
                 role.getRoleNumber(),
                 (int) currentCount + toAdd
         );
 
+
         System.out.printf("✅ %d x '%s' added to shift [%s %s].%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
     }
+
 
 
 

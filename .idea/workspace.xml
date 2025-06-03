@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="" />
+    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/IHRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/IHRService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

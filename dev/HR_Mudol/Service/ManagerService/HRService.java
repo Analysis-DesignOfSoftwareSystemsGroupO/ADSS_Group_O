@@ -277,37 +277,43 @@ public class HRService implements IHRService {
         reportGenerator.generateShiftReport(caller, curWeek);
     }
 
+    @Override
     public IRoleController getRoleController() {
         return roleController;
     }
 
+    @Override
     public void removeEmployeeFromRole(UserDTO theCaller, Scanner sc) throws SQLException {
         roleController.removeEmployeeFromRoleInteractive(theCaller, sc);
     }
 
+    @Override
     public void removeEmployee(UserDTO caller) throws SQLException {
         employeeController.removeEmployee(caller);
     }
 
-
+    @Override
     public void updateBankAccount(UserDTO caller) throws SQLException {
         employeeController.updateBankAccount(caller);
     }
 
-
+    @Override
     public void deleteRole(UserDTO theCaller,String des) throws SQLException{
         roleController.deleteRole(theCaller,des);
     }
-
+    @Override
     public void updateSalary(UserDTO caller) throws SQLException {
         employeeController.updateSalary(caller);
     }
-
+    @Override
     public void printAllEmployees(UserDTO caller) throws SQLException {
             employeeController.printAllEmployees(caller);
     }
 
-
+    @Override
+    public void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException {
+        shiftController.addRoleToShiftIfNeeded(caller, shift, role, requiredAmount);
+    }
 
 
 
