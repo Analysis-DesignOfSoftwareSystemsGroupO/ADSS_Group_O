@@ -6,7 +6,6 @@ import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.ITransportController;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
-import HR_Mudol.domain.Objects.Week;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
 
@@ -19,64 +18,30 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     private final ITransportController transportController;
     private final HRService hrService;
 
-    public TransportShiftIntegrator(BranchDTO branch, ITransportController transportController, HRService hrService) throws SQLException {
+    public TransportShiftIntegrator(BranchDTO branch, ITransportController transportController, HRService hrService) {
         this.branch = branch;
         this.transportController = transportController;
         this.hrService = hrService;
     }
 
     public void integrateTransportShifts(UserDTO theCaller) throws Exception {
-        List<TransportDTO> transports = transportController.getTransportNextWeek();
         WeekDTO weekDTO = branch.getCurrentWeekDTO();
         if (weekDTO == null) {
             System.out.println("⚠ No current week found in branch.");
             return;
         }
-        Week week = DTOToDomainMapper.fromDTO(weekDTO);
 
-        List<RoleDTO> roleDTOList = branch.getRoles();
+        // Ensure required roles exist
+        ensureRolesExist(theCaller);
+        RoleDTO driverDTO = getRoleByDescription("Driver");
+        RoleDTO warehouseDTO = getRoleByDescription("Warehouse");
 
-        // יצירה או שליפה של התפקיד "Driver"
-        RoleDTO driverDTO = roleDTOList.stream()
-                .filter(r -> r.getDescription().equalsIgnoreCase("Driver"))
-                .findFirst()
-                .orElseGet(() -> {
-                    try {
-                        hrService.getRoleController().createRolebydescription(theCaller, "Driver");
-                        System.out.println("✅ Role 'Driver' created.");
-                    } catch (Exception e) {
-                        throw new RuntimeException("❌ Failed to create Driver role", e);
-                    }
-                    return null; // נחפש אותו שוב למטה אם צריך
-                });
+        List<TransportDTO> transports = transportController.getTransportNextWeek();
 
-        // יצירה או שליפה של התפקיד "Warehouse"
-        RoleDTO warehouseDTO = roleDTOList.stream()
-                .filter(r -> r.getDescription().equalsIgnoreCase("Warehouse"))
-                .findFirst()
-                .orElseGet(() -> {
-                    try {
-                        hrService.getRoleController().createRolebydescription(theCaller, "Warehouse");
-                        System.out.println("✅ Role 'Warehouse' created.");
-                    } catch (Exception e) {
-                        throw new RuntimeException("❌ Failed to create Warehouse role", e);
-                    }
-                    return null; // נחפש אותו שוב למטה אם צריך
-                });
+        for (TransportDTO transport : transports) {
+            WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
+            ShiftType type = determineShiftType(transport.getDepartureTime());
 
-        // עדכון הרשימה מחדש במקרה ונוצר תפקיד חדש
-        roleDTOList = branch.getRoles();
-        driverDTO = roleDTOList.stream()
-                .filter(r -> r.getDescription().equalsIgnoreCase("Driver"))
-                .findFirst().orElseThrow(() -> new IllegalStateException("Driver role not found after creation"));
-
-        warehouseDTO = roleDTOList.stream()
-                .filter(r -> r.getDescription().equalsIgnoreCase("Warehouse"))
-                .findFirst().orElseThrow(() -> new IllegalStateException("Warehouse role not found after creation"));
-
-        for (TransportDTO t : transports) {
-            WeekDay day = WeekDay.valueOf(t.getDate().getDayOfWeek().name());
-            ShiftType type = determineShiftType(t.getDepartureTime());
             ShiftDTO shiftDTO = weekDTO.getShifts().stream()
                     .filter(s -> s.getDay().equals(day) && s.getType().equals(type))
                     .findFirst()
@@ -87,13 +52,16 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                 continue;
             }
 
-            // אם האתר שלנו הוא המקור - דרוש נהג
-            if (t.getSiteName().equalsIgnoreCase(branch.getName())) {
-                hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
-            }
+            // Origin branch: needs Driver
+// Add 1 Driver
+            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
 
-            // אם האתר שלנו הוא היעד - דרוש מחסנאי
-            List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(t.getId()));
+// Add 1 Warehouse worker
+            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
+
+
+            // Destination branch: needs Warehouse
+            List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(transport.getId()));
             for (ProductListDocumentDto pld : plds) {
                 if (pld.getSiteDes().equalsIgnoreCase(branch.getName())) {
                     hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
@@ -106,5 +74,33 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
     private ShiftType determineShiftType(LocalTime time) {
         return time.isBefore(LocalTime.NOON) ? ShiftType.MORNING : ShiftType.EVENING;
+    }
+
+    private void ensureRolesExist(UserDTO caller) throws SQLException {
+        List<RoleDTO> roles = branch.getRoles();
+
+        boolean hasDriver = roles.stream().anyMatch(r -> r.getDescription().equalsIgnoreCase("Driver"));
+        boolean hasWarehouse = roles.stream().anyMatch(r -> r.getDescription().equalsIgnoreCase("Warehouse"));
+
+        if (!hasDriver) {
+            hrService.getRoleController().createRolebydescription(caller, "Driver");
+            System.out.println("✅ Role 'Driver' created.");
+        }
+        if (!hasWarehouse) {
+            hrService.getRoleController().createRolebydescription(caller, "Warehouse");
+            System.out.println("✅ Role 'Warehouse' created.");
+        }
+
+        // Refresh role list after potential additions
+        branch.setRoles(hrService.getRoleController().getAllRoles(caller).stream()
+                .map(DTOToDomainMapper::toDTO)
+                .toList());
+    }
+
+    private RoleDTO getRoleByDescription(String desc) {
+        return branch.getRoles().stream()
+                .filter(r -> r.getDescription().equalsIgnoreCase(desc))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("❌ Role not found: " + desc));
     }
 }
