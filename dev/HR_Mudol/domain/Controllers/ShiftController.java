@@ -231,6 +231,8 @@ public class ShiftController implements IShiftController {
             throw new SecurityException("Access denied.");
         }
 
+        System.out.println("For Shift "+theShift.getDay()+" at "+theShift.getType());
+
         // Add Shift Manager automatically (only once)
         Role shiftManager = dependency.getRoleByNumber(1);
         shift.addNecessaryRoles(shiftManager);
