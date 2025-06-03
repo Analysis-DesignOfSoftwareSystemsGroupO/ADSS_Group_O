@@ -230,15 +230,21 @@ public class RoleController implements IRoleController {
             System.out.println("No roles found.");
             return;
         }
-
         System.out.println("Available Roles:");
         for (Role role : roles) {
-            System.out.println( curBranch.getRoleRepo().getRoleByDescription(role.getDescription()).getRoleNumber() + " " + "- Description: " + role.getDescription());
-            for(Employee e : role.getRelevantEmployees())
-            System.out.println(e.toString());
+            System.out.println(role.getRoleNumber() + " - Description: " + role.getDescription());
+            for (Employee e : curBranch.getEmployeeRepo().getAll()){
+                for (Role r : e.getRelevantRoles()){
+                    if (role.equals(r)&& !roles.isEmpty() ){
+                        System.out.println("  - ID: " + e.getEmpId() + ", Name: " + e.getEmpName());
+                    }
+                }
+            }
         }
-
     }
+
+
+
 
     @Override
     public Role getRoleByNumber(int roleNumber) {

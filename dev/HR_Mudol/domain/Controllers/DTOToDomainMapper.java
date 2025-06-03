@@ -10,6 +10,7 @@ import HR_Mudol.DAO.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DTOToDomainMapper {
 
@@ -86,6 +87,12 @@ public class DTOToDomainMapper {
         return e;
     }
 
+
+    public static List<Employee> convertEmployeeDTOListToDomain(List<EmployeeDTO> employeeDTOs) {
+        return employeeDTOs.stream()
+                .map(DTOToDomainMapper::fromDTO)
+                .collect(Collectors.toList());
+    }
 
 
     public static Role fromDTO(RoleDTO dto) {
