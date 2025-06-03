@@ -18,8 +18,8 @@ public class TransportContorollerDomain implements ITransportController {
 //    private final EmployeeRepository employeeRepository;
 
     public TransportContorollerDomain() throws Exception{
-        this.transportRepo = new TransportRepositoryIMP();
-        this.ProductListDocumentRepo = new PLDRepositoryIMP();
+        this.transportRepo = TransportRepositoryIMP.getInstance();
+        this.ProductListDocumentRepo =  PLDRepositoryIMP.getInstance();
 //        this.employeeRepository = new EmployeeRepository(); // todo - check with Dekel how to get the repo
 
     }

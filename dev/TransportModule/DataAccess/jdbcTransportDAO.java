@@ -157,24 +157,35 @@ public class jdbcTransportDAO implements ITransportDAO {
                 throw e;
             }
         }
-    }
-        @Override
-        public void deleteTransport ( int id ) throws SQLException{
-            log.info("jdbcTransport::deleteTransport( " + id + ")");
-            String sql = "DELETE FROM \"Transport\" WHERE \"id\" = ?";
-            try (Connection conn = DataBase.getConnection();
-                 PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-                preparedStatement.setInt(1, id);
-                preparedStatement.executeUpdate();
-            }
-            catch (SQLException e) {
-                log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-                throw e;
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                throw e;
-            }
+}
+    @Override
+    public void deleteTransport ( int id ) throws SQLException{
+        log.info("jdbcTransport::deleteTransport( " + id + ")");
+        String sql = "DELETE FROM \"Transport\" WHERE \"id\" = ?";
+        try (Connection conn = DataBase.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
         }
+        catch (SQLException e) {
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void deleteAll() throws SQLException{
+        String sql = "DELETE FROM \"Transport\" WHERE \"id\" <> -1 ;";
+        try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
+            ps.executeUpdate();
+
+        }catch (SQLException e){
+            throw e;
+        }
+    }
 
 }

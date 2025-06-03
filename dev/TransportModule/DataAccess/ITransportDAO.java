@@ -17,4 +17,5 @@ public interface ITransportDAO {
     List<TransportDTO> getTransportsWithoutTruck()throws SQLException;
     void assignTruckToTransport(int transportID, int truckPN) throws SQLException;
     List<TransportDTO> getTransportsByDate(LocalDate date) throws SQLException;
+    void deleteAll() throws SQLException;
 }

@@ -22,16 +22,38 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     private Map<Integer , ProductListDocument> mapper;
     private static IPLDDAO dao = new jdbcPLDDAO();
     private static final Logger log = LogManager.getLogger(PLDRepositoryIMP.class);
-    private static ITransportRepository transportRep ;
+    private static ITransportRepository transportRep;
+    private static PLDRepositoryIMP instance;
+    private static int counter =0;
+    static {
+        try {
+            transportRep = TransportRepositoryIMP.getInstance();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ATransportModuleException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    ;
     private int availableid;
 
-    public PLDRepositoryIMP() throws SQLException, InvalidATransportException, TransportMismatchException {
+    private PLDRepositoryIMP() throws SQLException, InvalidATransportException, TransportMismatchException {
         this.availableid = initValidid(); //init the availableID field
+        this.mapper = new HashMap<>();
         //fill the mapper with pld instances:
         List<Integer> pldIDs = dao.getPLDsID(); //get id of plds from the data base
         for (int id : pldIDs){ //for each id: get the ProductListDocument instance and add it to the mapper
             ProductListDocument pld = getProductListDocumentByid(id); // This function will add the PLD to the mapper.
         }
+    }
+
+    public static PLDRepositoryIMP getInstance() throws SQLException, InvalidATransportException, TransportMismatchException {
+        if(counter ==0 ) {
+            counter++;
+            instance = new PLDRepositoryIMP();
+        }
+        return instance;
     }
 
     public int getValidID(){
@@ -107,7 +129,6 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         }
         dao.save(pld);
         mapper.put(pld.getId(), PLDdtoTOPLD(pld)); //COnvert the DTO to a ProductListDocument instance and puts in the mapper
-
         log.error("SQL failure while saving ProductListDocument");
 
     }
@@ -147,7 +168,6 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         List<ProductDTO> products = new ArrayList<>(); //get the Products -> quantety map of ProductListDocument
         Map<Product, Integer >pMap = pld.getProducts();
         for(Product p : pMap.keySet()){
-            // todo - sagi: replace id at DTO to int or replace id in PLD to String
             products.add(new ProductDTO(p.getCode(), p.getWeight(), pMap.get(p)));
         }
         return new ProductListDocumentDto(pld.getId(), pld.getTransportId(), pld.getDestination().getName(), products, pld.getTotalWeight(),pld.getDate(),pld.getApproximatedArriavaleTime() );
@@ -181,5 +201,10 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         ProductListDocument p = getProductListDocumentByid(pldID);
         p.setArriavleTime(time);
         dao.setArriavleTime(pldID,time);
+    }
+
+    @Override
+    public void deleteAll() throws SQLException {
+        dao.deleteAll();
     }
 }

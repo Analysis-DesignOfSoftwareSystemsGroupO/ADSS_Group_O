@@ -20,23 +20,24 @@ public class jdbcTruckDAO  implements ITruckDAO{
     public void save(TruckDto dto) throws SQLException {
         log.info("jdbcTrucakDAO:: save() ");
         if (dto.getPlateNumber() != null) {
-            String sql = "INSERT INTO Trucks (MaxWeight, LicenceReq, PlateNumber) VALUES (?,?,?)";
+            String sql = "INSERT INTO \"Trucks\" (\"maxWeight\", \"LicenceReq\", \"PlateNumber\") VALUES (?,?,?)";
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1, dto.getMaxWeight());
                 ps.setString(2, dto.getLiceenceReq());
-                ps.setString(2, dto.getPlateNumber());
+                ps.setString(3, dto.getPlateNumber());
                 ps.executeUpdate();
             } catch (SQLException e) {
                 log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
                 throw e;
             }
+
         }
     }
 
     @Override
     public Optional<TruckDto> findByTruckPN(String pn) throws SQLException{
         log.info("jdbcTruckDAO :: findByTruckPN(" + pn + " )");
-        String sql = "Select PlateNumber, maxWeight, LicenceReq From Trucks WHERE PlateNumber = ?";
+        String sql = "Select \"PlateNumber\", \"maxWeight\", \"LicenceReq\" From \"Trucks\" WHERE \"PlateNumber\" = ?";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1, pn);
             try(ResultSet rs = ps.executeQuery()){
@@ -53,7 +54,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     @Override
     public List<TruckDto> findAllTrucks() throws SQLException {
         log.info("jdbcTruckDAO :: findAllTrucks()");
-        String sql = "SELECT * FROM trucks ORDER BY \"PlateNumber\" ASC;"; //get all rows
+        String sql = "SELECT * FROM \"Trucks\" ORDER BY \"PlateNumber\" ASC;"; //get all rows
         List<TruckDto> list = new ArrayList<>();
 
         try (Statement st = DataBase.getConnection().createStatement();
@@ -96,7 +97,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     public boolean checkAvailabilityOfTruck(String truckPN, LocalDate date) throws SQLException  {
         log.info("jdbcTruckDAO :: checkAvailabilityOfTruck( " + truckPN+ " , " + date + " ) ");
         //check that the Truck is not occuppied
-        String sql = "SELECT COUNT(\"TruckPN\") AS COUNTER FROM \"TruckAvailability\" WHERE EXSISTS (SELECT \"TruckPN\" FROM \"TruckAvailability\" WHERE \"TruckPn\" = ? AND \"Date\" = ? );";
+        String sql = "SELECT COUNT(\"TruckPN\") AS \"COUNTER\" FROM \"TruckAvailability\" WHERE \"TruckPN\" = ? AND \"Date\" = ? ;";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1,truckPN);
             ps.setDate(2, Date.valueOf(date));
@@ -154,11 +155,11 @@ public class jdbcTruckDAO  implements ITruckDAO{
     @Override
     public void assignTruckToDate(String truckPN, LocalDate date) throws SQLException, UnAvailableTruckException {
         log.info("jdbcTruckDAO::assignTruckToDate ( " + truckPN+ " , " + date + " ) ");
-        if(checkAvailabilityOfTruck(truckPN, date )) throw new UnAvailableTruckException();
+        if(checkAvailabilityOfTruck(truckPN, date ) == false) throw new UnAvailableTruckException();
         String sql = "INSERT INTO \"TruckAvailability\" (\"Date\" , \"TruckPN\" ) VALUES(? , ? )";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
-            ps.setString(1,truckPN);
-            ps.setDate(2, Date.valueOf(date));
+            ps.setString(2,truckPN);
+            ps.setDate(1, java.sql.Date.valueOf(date));
             ps.executeUpdate();
         } catch (SQLException e) {
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

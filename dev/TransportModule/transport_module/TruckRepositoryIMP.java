@@ -15,12 +15,15 @@ import java.util.*;
 public class TruckRepositoryIMP implements ITruckRepository {
 
     private static final Logger log =  LogManager.getLogger(TruckRepositoryIMP.class);
-
+    private static TruckRepositoryIMP instance;
+    private static int counter = 0;
     private Map<String , Truck> mapper ;
     private static ITruckDAO truckDAO = new jdbcTruckDAO();
     private List<Truck> trucks;
-    public TruckRepositoryIMP() throws SQLException, ATransportModuleException {
+
+    private TruckRepositoryIMP() throws SQLException, ATransportModuleException {
         mapper = new HashMap<>();
+        trucks = new ArrayList<>();
         //fill mapper with Trucks
         List<TruckDto> truckDTOs = truckDAO.findAllTrucks();
         for(TruckDto tDTO :truckDTOs){
@@ -37,7 +40,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
         truckDAO.save(truck);
         try {
             Truck t = getTruckBYPlateNumber(Integer.valueOf(truck.getPlateNumber()));
-            mapper.put(t.getPlateNumber(), t);// add truck to mapper
+
         }
         catch (Exception e){
             truckDAO.deleteTruck(truck.getPlateNumber());
@@ -54,7 +57,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
             Optional<TruckDto> truckDto = truckDAO.findByTruckPN(Integer.toString(pn)); //get Optional of truckDto from data base
             if(truckDto.isPresent()){
                 Truck t = DTOtoTruck(truckDto.get());
-                mapper.put( Integer.toString(pn) , t);
+                return t;
             }
             return null;
         }catch (SQLException e){
@@ -65,6 +68,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
 
     @Override
     public void deleteTruck(String pn ) throws  SQLException {
+        trucks.remove(mapper.get(pn));
         mapper.remove(pn);
         try {
             truckDAO.deleteTruck(pn);
@@ -87,6 +91,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
             List<LocalDate> dates = truckDAO.getListofOccupiedDates(dto.getPlateNumber()); // load the dates of that the truck is occupied
             Truck t = new Truck(new DrivingLicence(dto.getLiceenceReq()), dto.getMaxWeight(),dto.getPlateNumber() , dates);
             mapper.put(t.getPlateNumber(), t);
+            trucks.add(t);
             return  t;
         }
         catch (SQLException e){
@@ -131,5 +136,13 @@ public class TruckRepositoryIMP implements ITruckRepository {
     @Override
     public List<Truck> getAllTrucks() {
         return trucks;
+    }
+
+    public static TruckRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
+        if(counter == 0 ){
+            counter++ ;
+            instance =new  TruckRepositoryIMP();
+        }
+        return instance;
     }
 }

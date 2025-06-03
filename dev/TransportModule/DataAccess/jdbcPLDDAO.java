@@ -22,7 +22,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public void save(ProductListDocumentDto dto) throws SQLException {
         log.info("jdbcPLDDAO ::deletePLD(DTO)");
-        String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"AproximatedArrivaleTime\",\"DestinationSiteName\") VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"aproximatedArrivaleTime\",\"DestinationSiteName\") VALUES (?,?,?,?,?)";
         if(dto != null){
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1,dto.getId());
@@ -67,19 +67,21 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public int getHieghestPLDID() throws  SQLException{
         log.info("jdbcPLDDAO :: getHieghestTransportID ()");
-        String sql = "SELECT ProductListDocumentID FROM ProductListDocument ORDER BY ProductListDocumentID DESC LIMIT 1";
+        String sql = "SELECT \"ProductListDocumentID\" FROM \"ProductListDocument\" ORDER BY \"ProductListDocumentID\" DESC LIMIT 1";
 
         try(Statement st = DataBase.getConnection().createStatement();
             ResultSet rs = st.executeQuery(sql)){
             if(rs.next()){
                 return   rs.getInt(1);
             }
+            else {
+                return 0;
+            }
         }
         catch (SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
             throw e;
         }
-        return 0 ;
     }
 
     /**
@@ -91,7 +93,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public Optional<ProductListDocumentDto> findByPLDID(int id) throws SQLException {
         log.info("jdbc:: findByPLDID( " + id+ ")");
-        String sql = "SELECT * FROM ProductListDocument WHERE ProductListDocumentID = ?";
+        String sql = "SELECT * FROM \"ProductListDocument\" WHERE \"ProductListDocumentID \"= ?";
         try (PreparedStatement ps =  DataBase.getConnection().prepareStatement(sql)){
             List<ProductDTO> products = getListOfProductsByPLDID(id); //get the ProductsDto for this PLD
             ps.setInt(1,id);
@@ -116,7 +118,7 @@ public class jdbcPLDDAO implements IPLDDAO{
      */
     public List<ProductDTO> getListOfProductsByPLDID(int pldID)throws  SQLException{
         log.info("jdbc::getListOfProductsByPLDID( " + pldID + ")");
-        String sql = "SELECT ProductQuantety, WeightPerUnit, ProductSerialNumber FROM ProductListDocument_Products WHERE ProductListDocumentId = ?";
+        String sql = "SELECT \"ProductQuantety\", \"WeightPerUnit\", \"ProductSerialNumber\" FROM \"ProductListDocument_Products\" WHERE \"ProductListDocumentId\" = ? ;";
         List<ProductDTO> products = new ArrayList<>();
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setInt(1, pldID);
@@ -148,7 +150,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public List<Integer> findByTransport(int Tid) throws SQLException {
         log.info("jdbcPLDDAO ::findByTransport( " + Tid + ") ");
-        String sql = "SELECT ProductListDocumentId FROM Transports_ProductListDocument WHERE TransportId = ? ;";
+        String sql = "SELECT \"ProductListDocumentId\" FROM \"Transports_ProductListDocument\" WHERE \"TransportId\" = ? ;";
         List<Integer> PLDids = new ArrayList<>();
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
             ps.setInt(1, Tid);
@@ -167,10 +169,11 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public void setArriavleTime(int pldID, LocalTime time) throws SQLException{
         log.info("jdbcPLDDAO::setArrivaleTime( + " + pldID + " , " + time + " ) ");
-        String sql = "UPDATE ProductListDocument SET aproximatedArrivaleTime = ? WHERE ProductListDocumentID = ? ;";
+        String sql = "UPDATE \"ProductListDocument\" SET \"aproximatedArrivaleTime\" = ? WHERE \"ProductListDocumentID\" = ? ;";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setTime(1,Time.valueOf(time));
             ps.setInt(2, pldID);
+            ps.executeUpdate();
         }
         catch (SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -186,7 +189,7 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public List<Integer> getPLDsID() throws SQLException {
         log.info("jdbcPLDDAO::getPLDs()");
-        String sql = "SELECT ProductListDocumentId FROM ProductListDocument;"; //SQL statement
+        String sql = "SELECT \"ProductListDocumentID\" FROM \"ProductListDocument\";"; //SQL statement
         List<Integer> idList = new ArrayList<>();
         try(Statement st = DataBase.getConnection().createStatement();
             ResultSet rs = st.executeQuery(sql)) {
@@ -202,5 +205,16 @@ public class jdbcPLDDAO implements IPLDDAO{
             throw  e;
         }
         return idList;
+    }
+
+    @Override
+    public void deleteAll(){
+        String sql = "DELETE FROM \"ProductListDocument\" ;";
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
