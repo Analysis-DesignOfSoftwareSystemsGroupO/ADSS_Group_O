@@ -1,3 +1,4 @@
+
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empPassword VARCHAR(255);
@@ -50,7 +51,8 @@ CREATE TABLE IF NOT EXISTS Employees (
     branchID INT REFERENCES Branches(branchID)
 );
 
-CREATE TABLE IF NOT EXISTS Roles (
+CREATE TABLE IF NOT EXISTS Roles;
+CREATE TABLE Roles (
     roleNumber SERIAL PRIMARY KEY,
     description TEXT UNIQUE NOT NULL
 );
@@ -101,7 +103,7 @@ ADD CONSTRAINT unique_shift_per_day_type_branch
 UNIQUE (deadline, type, branchID);
 
 
-CREATE TABLE IF NOT EXISTS RequiredRoles (
+CREATE TABLE RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),
