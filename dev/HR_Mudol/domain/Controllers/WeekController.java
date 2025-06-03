@@ -143,8 +143,10 @@ public class WeekController implements IWeekController {
                 Employee chosen = chooseEmployeeForRole(shift, role);
                 if (chosen != null) {
                     dependency.assignEmployeeToShift(theCaller, mapper.toDTO(shift), mapper.toDTO(chosen), mapper.toDTO(role));
+                    shift.addEmployee(chosen,role);
                     System.out.println(chosen.getEmpName() + " assigned to " + role.getDescription() + " in this shift.");
-                } else {
+                } else
+                {
                     System.out.println("No suitable employee found for role: " + role.getDescription());
                 }
                 System.out.println("Next role.\n");
@@ -162,6 +164,14 @@ public class WeekController implements IWeekController {
 
             System.out.println("Finished with that shift.\n");
         }
+    }
+
+    private boolean notAssigned(Shift shift, Employee chosen){
+
+        if (shift.getEmployees().contains(chosen)){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -209,6 +219,8 @@ public class WeekController implements IWeekController {
 
                 Constraint constraint = curBranch.getConstraintRepo()
                         .getConstraint(employee.getEmpId(), shift.getDay(), shift.getType());
+
+
 
                 if (constraint == null) {
                     System.out.println("The employee can work this shift.");
