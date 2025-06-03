@@ -117,8 +117,9 @@ public class RoleRepository {
         return new ArrayList<>(roles);
     }
 
-    public void addFromDTO(RoleDTO dto) {
+    public void addFromDTO(RoleDTO dto) throws SQLException {
         Role r = fromDTO(dto);
+        this.roleDAO.insert(dto);
         roles.add(r);
     }
 

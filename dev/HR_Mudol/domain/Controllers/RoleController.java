@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.RoleDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
@@ -70,10 +71,11 @@ public class RoleController implements IRoleController {
         }
 
         //Create domain object - RAM
-        Role newRole = new Role(description);
+        RoleDTO newRole = new RoleDTO(description);
 
         //Add to DB
-        curBranch.getRoleRepo().add(newRole); // internally converts to DTO and calls DAO
+        curBranch.getRoleRepo().addFromDTO(newRole); // internally converts to DTO and calls DAO
+
 
         System.out.println("Role created successfully.");
     }
@@ -234,7 +236,7 @@ public class RoleController implements IRoleController {
         }
         System.out.println("Available Roles:");
         for (Role role : roles) {
-            System.out.println(role.getRoleNumber() + " - Description: " + role.getDescription());
+            System.out.println( "Role Num: " + role.getRoleNumber() + " - Description: " + role.getDescription());
             for (Employee e : curBranch.getEmployeeRepo().getAll()){
                 for (Role r : e.getRelevantRoles()){
                     if (role.equals(r)&& !roles.isEmpty() ){

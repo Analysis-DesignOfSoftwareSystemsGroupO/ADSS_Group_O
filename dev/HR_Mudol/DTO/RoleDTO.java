@@ -12,6 +12,10 @@ public class RoleDTO {
         this.description = description;
         this.relevantEmployees = relevantEmployees;
     }
+    public RoleDTO( String description) {
+        this.description = description;
+    }
+
 
 
     public int getRoleNumber() {
