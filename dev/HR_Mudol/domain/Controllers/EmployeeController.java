@@ -107,8 +107,10 @@ public class EmployeeController implements IEmployeeController {
 
         Employee toRemove = curBranch.getEmployeeRepo().getById(empId);
 
-        for (Role role : roleManager.getAllRoles(theCaller)) {
-            roleManager.removeEmployeeFromRole(theCaller, role.getRoleNumber(), mapper.toDTO(toRemove));
+        for (Role role : toRemove.getRelevantRoles()) {
+            if (role != null){
+                roleManager.removeEmployeeFromRole(theCaller, role.getRoleNumber(), mapper.toDTO(toRemove));
+            }
         }
 
         User user = curBranch.getUserRepo().getByEmployeeId(empId);
