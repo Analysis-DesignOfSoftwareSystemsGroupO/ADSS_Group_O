@@ -102,6 +102,8 @@ public class ProductListDocument {
     }
 
     public int getTransportId(){
+        //return -1 if null
+        if(transport == null )return -1;
         return this.transport.getId();
     }
 

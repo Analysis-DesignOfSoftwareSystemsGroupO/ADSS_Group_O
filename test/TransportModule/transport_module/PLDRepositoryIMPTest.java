@@ -21,6 +21,7 @@ class PLDRepositoryIMPTest {
         try {
             rep = PLDRepositoryIMP.getInstance();
 
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (InvalidATransportException e) {
@@ -29,12 +30,16 @@ class PLDRepositoryIMPTest {
             throw new RuntimeException(e);
         }
     }
+    private LocalDate date;
+    private LocalTime time ;
+    private ProductListDocumentDto plddto;
     @BeforeEach
     void setUp() throws SQLException, ATransportModuleException {
         rep.deleteAll();
-        LocalDate date = LocalDate.of(2030,12,30);
-        LocalTime time = LocalTime.of(16,16);
-        ProductListDocumentDto plddto = new ProductListDocumentDto(123,-1,"OsherAd_Yavne", null,0,date, time);
+        date = LocalDate.of(2030,12,30);
+        time = LocalTime.of(16,16);
+        int id = rep.getValidID();
+        plddto = new ProductListDocumentDto(id,-1,"OsherAd_Yavne", null,0,date, time);
         rep.saveProductListDocument(plddto);
     }
 
@@ -45,27 +50,19 @@ class PLDRepositoryIMPTest {
 
     @Test
     void getValidID() {
-        assertEquals(rep.getValidID(), 124);
+
+        assertEquals(rep.getValidID(),plddto.getId() + 1 );
     }
 
-    @Test
-    void getPLDwithOutTransport() {
 
+    @Test
+    void getProductListDocumentByid() throws SQLException, InvalidATransportException, TransportMismatchException {
+        assertEquals("OsherAd_Yavne", rep.getProductListDocumentByid(2).getDestination().getName());
     }
 
-    @Test
-    void getProductListDocumentByid() {
-    }
 
     @Test
-    void saveProductListDocument() {
-    }
-
-    @Test
-    void deleteProductListDocument() {
-    }
-
-    @Test
-    void getPLDByTransportID() {
+    void getPLDByTransportID() throws InvalidATransportException, TransportMismatchException {
+        assertEquals("OsherAd_Yavne", rep.getPLDByTransportID(-1).get(0).getDestination().getName());
     }
 }

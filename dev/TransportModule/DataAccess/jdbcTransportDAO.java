@@ -17,7 +17,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public Optional<TransportDTO> getTransportByid(int id) throws SQLException {
         log.info("jdbcTransportDAO :: getTransportByid( " + id + " ) ");
-        String sql = "SELECT \"id\", \"Date\" , \"is_sent\" , \"maximum_weight\"  , \"TruckPN\" , \"DriverID\", \"departure_time\", \"Sorce_site_name\" FROM  \"Transports\" WHERE \"id\" = ?";
+        String sql = "SELECT \"id\", \"Date\" , \"is_sent\" , \"maximum_weight\"  , \"TruckPN\" , \"DriverID\", \"departure_time\", \"Source_site_name\" FROM  \"Transports\" WHERE \"id\" = ?";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()){
@@ -55,7 +55,7 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public List<TransportDTO> getTransports() throws SQLException {
         log.info("jdbcTransportDAO :: getTransports");
-        String sql = "SELECT * FROM \"Tranports\" ORDER BY \"id\" ASC;";
+        String sql = "SELECT * FROM \"Transports\" ORDER BY \"id\" ASC;";
         List<TransportDTO> transports = new ArrayList<>();
 
         try(Statement st = DataBase.getConnection().createStatement();
@@ -140,17 +140,17 @@ public class jdbcTransportDAO implements ITransportDAO {
     @Override
     public void save(TransportDTO transportDTO) throws SQLException {
         log.info("jdbcTransportsDAO :: save() ");
-        String sql = "INSERT INTO \"Transports\" (\"id\", \"Date\", \"is_sent\", \"maximum_weight\", \"Truck_PN\", \"DriverID\", \"departure_time\", \"Source_site_name\"; ) VALUES (?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO \"Transports\" (\"id\", \"Date\", \"maximum_weight\", \"TruckPN\", \"DriverID\", \"departure_time\", \"Source_site_name\" ,\"is_sent\" ) VALUES (?,?,?,?,?,?,?,?) ;";
         if (transportDTO != null) {
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
                 ps.setInt(1, transportDTO.getId());
-                ps.setTime(2, Time.valueOf(transportDTO.getDepartureTime()));
-                ps.setBoolean(3, transportDTO.isSent());
-                ps.setInt(4, transportDTO.getMaxWeight());
-                ps.setString(5, transportDTO.getSiteName());
-                ps.setString(6, transportDTO.getTruckPN());
-                ps.setDate(7, Date.valueOf(transportDTO.getDate()));
-                ps.setString(8, ((Integer) transportDTO.getId()).toString());
+                ps.setDate(2, Date.valueOf(transportDTO.getDate()));
+                ps.setBoolean(8, transportDTO.isSent());
+                ps.setInt(3, transportDTO.getMaxWeight());
+                ps.setString(4, transportDTO.getTruckPN());
+                ps.setString(5, transportDTO.getDriverID());
+                ps.setTime(6, Time.valueOf(transportDTO.getDepartureTime()));
+                ps.setString(7,transportDTO.getSiteName());
                 ps.executeUpdate();
             } catch (SQLException e) {
                 log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

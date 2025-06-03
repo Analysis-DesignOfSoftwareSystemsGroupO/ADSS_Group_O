@@ -41,11 +41,13 @@
         <Logger name="jdbc.connection" level="INFO" additivity="false">
             <AppenderRef ref="SQLFile"/>
         </Logger>
+        <Logger name="errors" level ="error" additivity="false">
+            <AppenderRef ref = "ErrorFile"/>
+        </Logger>
         <Root level="info">
             <AppenderRef ref="STDOUT" />
             <AppenderRef ref="File"/>
-            <AppenderRef ref="ErrorFile"
-                         level="error"/>
+
         </Root>
     </Loggers>
 </Configuration>
