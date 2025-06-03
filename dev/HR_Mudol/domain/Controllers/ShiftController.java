@@ -236,7 +236,8 @@ public class ShiftController implements IShiftController {
         shift.addNecessaryRoles(shiftManager);
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
                 curBranch.getBranchID(), shift.getShiftID(), 1, 1
-        );
+        )
+        ;
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -304,6 +305,12 @@ public class ShiftController implements IShiftController {
                 }
             }
         }
+
+        List <RoleDTO> roleDTOList=new ArrayList<>();
+        for (Role r : shift.getNecessaryRoles()) {
+            roleDTOList.add(DTOToDomainMapper.toDTO(r));
+        }
+        theShift.setNecessaryRoles(roleDTOList);
     }
 
 

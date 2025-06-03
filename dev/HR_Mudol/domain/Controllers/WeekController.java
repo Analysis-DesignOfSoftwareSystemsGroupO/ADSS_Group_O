@@ -84,7 +84,7 @@ public class WeekController implements IWeekController {
     public WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
-        Week week=mapper.fromDTO(theWeek);
+
 
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
@@ -99,11 +99,11 @@ public class WeekController implements IWeekController {
             throw new IllegalArgumentException("No employees at the system - first add them.");
         }
 
-        for (Shift shift : week.getShifts()) {
+        for (ShiftDTO shift : theWeek.getShifts()) {
 
-            dependency.chooseRelevantRoleForShift(theCaller, mapper.toDTO(shift));
+            dependency.chooseRelevantRoleForShift(theCaller, shift);
         }
-        return DTOToDomainMapper.toDTO(week);
+        return theWeek;
 
     }
 
