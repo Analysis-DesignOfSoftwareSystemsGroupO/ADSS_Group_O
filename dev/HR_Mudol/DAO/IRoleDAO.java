@@ -24,5 +24,5 @@ public interface IRoleDAO {
 
     void deleteByDescription(String description) throws SQLException;
 
-    List<EmployeeDTO> getEmployeesForRole(int roleNumber);
+    List<EmployeeDTO> getEmployeesForRole(int roleNumber, int branchID);
 }

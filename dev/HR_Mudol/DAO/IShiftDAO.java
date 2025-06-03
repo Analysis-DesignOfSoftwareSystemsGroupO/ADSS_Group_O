@@ -29,4 +29,9 @@ public interface IShiftDAO {
     Status getShiftStatus(int shiftId);
 
     List<ShiftDTO> getCurShiftsByBranch(int branchId);
+
+    //מחזיר את המשמרות של שבוע הבא- אלו שעוד לא שובצו
+    List<ShiftDTO> getNextShiftsByBranch(int branchId);
+
+    void insertShift(ShiftDTO shift, int branchId);
 }

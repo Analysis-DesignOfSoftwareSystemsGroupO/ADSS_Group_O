@@ -128,7 +128,7 @@ public class WeekController implements IWeekController {
     @Override
     public void assigningEmployToShifts(UserDTO theCaller) throws SQLException {
 
-        WeekDTO weekDTO=curBranch.getWeekRepo().getCurrentWeekDTO(curBranch.getBranchID());
+        WeekDTO weekDTO=curBranch.getWeekRepo().getNextWeekDTO(curBranch.getBranchID());
         Week week=mapper.fromDTO(weekDTO);
 
         for (Shift shift : week.getShifts()) {
@@ -176,7 +176,7 @@ public class WeekController implements IWeekController {
 
         Scanner scanner = new Scanner(System.in);
 
-        List<Employee> candidates=curBranch.getRoleRepo().getAllRelevantEmployees(role);
+        List<Employee> candidates=curBranch.getRoleRepo().getAllRelevantEmployees(role, curBranch);
 
         if (candidates.isEmpty()) {
             System.out.println("No employees are available for role: " + role.getDescription());

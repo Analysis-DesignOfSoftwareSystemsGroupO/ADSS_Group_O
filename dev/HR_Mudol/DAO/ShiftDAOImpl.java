@@ -250,7 +250,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         }
     }
 
-    @Override
+    @Override// מביא את המשמרות שיש לעובד שבוע קדימה (כבר שובצו)
     public List<ShiftDTO> getCurShiftsByBranch(int branchId) {
         String sql = "SELECT * FROM Shifts WHERE branchID = ? AND deadline >= ? AND deadline < ?";
         List<ShiftDTO> shifts = new ArrayList<>();
@@ -299,6 +299,51 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
         return shifts;
     }
+
+    @Override //מחזיר את המשמרות של שבוע הבא- אלו שעוד לא שובצו
+    public List<ShiftDTO> getNextShiftsByBranch(int branchId) {
+        String sql = "SELECT * FROM Shifts WHERE branchID = ? AND deadline >= ? AND deadline <= ?";
+        List<ShiftDTO> shifts = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // מחשבים את טווח התאריכים של השבוע הבא: ראשון עד שישי
+            LocalDate today = LocalDate.now();
+            DayOfWeek currentDow = today.getDayOfWeek();
+            LocalDate thisSunday = today.minusDays(currentDow.getValue() % 7);
+            LocalDate nextSunday = thisSunday.plusWeeks(1); // ראשון הבא
+            LocalDate nextFriday = nextSunday.plusDays(5);  // שישי הבא
+
+            stmt.setInt(1, branchId);
+            stmt.setDate(2, java.sql.Date.valueOf(nextSunday));
+            stmt.setDate(3, java.sql.Date.valueOf(nextFriday));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int shiftId = rs.getInt("shiftID");
+
+                ShiftDTO shift = new ShiftDTO(
+                        shiftId,
+                        rs.getString("day"),
+                        rs.getString("type"),
+                        rs.getString("status"),
+                        rs.getInt("shiftmanager")
+                );
+
+                shift.setFilledRoles(getFilledRoles(shiftId));
+                shift.setNecessaryRoles(getNecessaryRoles(shiftId));
+                shift.setEmployeeIds(getEmployeesInShift(shiftId));
+
+                shifts.add(shift);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch next week's shifts", e);
+        }
+
+        return shifts;
+    }
+
 
 
     private List<FilledRoleDTO> getFilledRoles(int shiftId) throws SQLException {
@@ -373,6 +418,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         return employees;
     }
 
+    @Override // יצירת משמרות חדשות לשבוע הבא (ראשון עד שישי)
     public void insertShift(ShiftDTO shift, int branchId) {
         String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
@@ -382,12 +428,15 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             stmt.setInt(1, shift.getShiftID());
             stmt.setInt(2, branchId);
 
-            // חישוב deadline
+            // חישוב תחילת השבוע הבא (ראשון)
             LocalDate today = LocalDate.now();
-            DayOfWeek todayDayOfWeek = today.getDayOfWeek();
-            DayOfWeek shiftDay = DayOfWeek.valueOf(shift.getDay());
-            int daysToAdd = (shiftDay.getValue() - todayDayOfWeek.getValue() + 7) % 7;
-            LocalDate deadline = today.plusDays(daysToAdd);
+            DayOfWeek currentDay = today.getDayOfWeek();
+            LocalDate nextSunday = today.minusDays(currentDay.getValue() % 7).plusWeeks(1);
+
+            // מחשבים כמה ימים מראשון הבא עד ליום הרצוי
+            DayOfWeek targetDay = DayOfWeek.valueOf(shift.getDay().toUpperCase());
+            int daysToAdd = (targetDay.getValue() - DayOfWeek.SUNDAY.getValue() + 7) % 7;
+            LocalDate deadline = nextSunday.plusDays(daysToAdd);
 
             stmt.setDate(3, Date.valueOf(deadline));
             stmt.setString(4, shift.getDay());
@@ -405,6 +454,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             throw new RuntimeException("Failed to insert shift", e);
         }
     }
+
 
 
 

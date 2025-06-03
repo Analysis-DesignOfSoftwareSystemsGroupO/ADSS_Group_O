@@ -64,8 +64,8 @@ public class RoleRepository {
         }
     }
 
-    public List<Employee> getAllRelevantEmployees(Role role) {
-        List<EmployeeDTO> dtos = roleDAO.getEmployeesForRole(role.getRoleNumber());
+    public List<Employee> getAllRelevantEmployees(Role role, Branch branch) {
+        List<EmployeeDTO> dtos = roleDAO.getEmployeesForRole(role.getRoleNumber(), branch.getBranchID());
 
         return dtos.stream()
                 .map(dto -> new Employee(

@@ -301,14 +301,15 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
     }
 
     @Override
-    public List<EmployeeDTO> getEmployeesForRole(int roleNumber) {
+    public List<EmployeeDTO> getEmployeesForRole(int roleNumber, int branchID) {
         List<EmployeeDTO> employees = new ArrayList<>();
         String sql = "SELECT e.* FROM Employees e " +
                 "JOIN EmployeeRole er ON e.empID = er.empID " +
-                "WHERE er.roleNumber = ?";
+                "WHERE er.roleNumber = ? AND e.branchID = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, roleNumber);
+            stmt.setInt(2, branchID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -329,11 +330,12 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
                 ));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch employees for role", e);
+            throw new RuntimeException("Failed to fetch employees for role and branch", e);
         }
 
         return employees;
-    }
+}
+
 
 
 

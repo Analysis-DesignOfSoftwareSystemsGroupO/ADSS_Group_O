@@ -78,6 +78,11 @@ public class WeekRepository {
         return new WeekDTO(null, shiftDTOs);
     }
 
+    public WeekDTO getNextWeekDTO(int branchId) {
+        List<ShiftDTO> shiftDTOs = shiftDAO.getNextShiftsByBranch(branchId);
+        return new WeekDTO(null, shiftDTOs);
+    }
+
     public void saveShift(ShiftDTO shift, int branchID) throws SQLException {
         shiftDAO.insertShift(shift, branchID);
     }
