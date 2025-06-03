@@ -309,6 +309,11 @@ public class HRService implements IHRService {
             employeeController.printAllEmployees(caller);
     }
 
+    public void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException {
+        shiftController.addRoleToShiftIfNeeded(caller, shift, role, requiredAmount);
+    }
+
+
 
 
 }

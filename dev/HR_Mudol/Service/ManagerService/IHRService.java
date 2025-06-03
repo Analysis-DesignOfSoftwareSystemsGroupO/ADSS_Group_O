@@ -108,4 +108,6 @@ public interface IHRService {
      void close();
 
     void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO weekDTO) throws SQLException;
+
+    void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException;
 }

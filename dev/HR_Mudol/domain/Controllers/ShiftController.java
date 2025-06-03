@@ -280,8 +280,7 @@ public class ShiftController implements IShiftController {
 
                         // Add to DB
                         curBranch.getWeekRepo().addOrUpdateRequiredRole(
-                                curBranch.getBranchID(), shift.getShiftID(), roleNumber, count
-                        );
+                                curBranch.getBranchID(), shift.getShiftID(), roleNumber, count);
 
                         System.out.println(count + " x " + role.getDescription() + " added to the shift.");
                         break;
@@ -365,6 +364,44 @@ public class ShiftController implements IShiftController {
         }
         return result;
     }
+
+    @Override
+    public void addRoleToShiftIfNeeded(UserDTO callerDTO, ShiftDTO shiftDTO, RoleDTO roleDTO, int requiredAmount) throws SQLException {
+        User caller = mapper.fromDTO(callerDTO);
+        Shift shift = mapper.fromDTO(shiftDTO);
+        Role role = mapper.fromDTO(roleDTO);
+
+        if (!caller.isManager() && !caller.isShiftManager()) {
+            throw new SecurityException("Access denied.");
+        }
+
+        long currentCount = shift.getNecessaryRoles().stream()
+                .filter(r -> r.getRoleNumber() == role.getRoleNumber())
+                .count();
+
+        int toAdd = requiredAmount - (int) currentCount;
+        if (toAdd <= 0) {
+            return; // כבר יש מספיק תפקידים כאלה
+        }
+
+        // הוספה לזיכרון
+        for (int i = 0; i < toAdd; i++) {
+            shift.addNecessaryRoles(role);
+        }
+
+        // הוספה ל-DB
+        curBranch.getWeekRepo().addOrUpdateRequiredRole(
+                curBranch.getBranchID(),
+                shift.getShiftID(),
+                role.getRoleNumber(),
+                (int) currentCount + toAdd
+        );
+
+        System.out.printf("✅ %d x '%s' added to shift [%s %s].%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
+    }
+
+
+
 
 
 

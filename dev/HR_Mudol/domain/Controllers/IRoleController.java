@@ -61,9 +61,9 @@ public interface IRoleController {
      * Removes an employee from a specific role.
      * This operation unassigns an employee from a specific role based on role number.
      *
-     * @param theCaller The user who is removing the employee from the role (typically an HR manager).
+     * @param theCaller  The user who is removing the employee from the role (typically an HR manager).
      * @param roleNumber The identifier for the role.
-     * @param e The employee to be removed from the role.
+     * @param e          The employee to be removed from the role.
      */
     void removeEmployeeFromRole(UserDTO theCaller, int roleNumber, EmployeeDTO e) throws SQLException;
 
@@ -106,16 +106,20 @@ public interface IRoleController {
      * Counts the number of employees who do not have any assigned roles.
      * This operation helps to track employees who have not been assigned to any role.
      *
-     * @param theCaller The user who is counting employees without roles (typically an HR manager).
+     * @param theCaller    The user who is counting employees without roles (typically an HR manager).
      * @param employeeList The list of all employees in the system.
      * @return The number of employees who do not have any roles.
      */
     int countEmployeesWithoutRoles(UserDTO theCaller, List<EmployeeDTO> employeeList) throws SQLException;
 
-    void deleteRole(UserDTO caller,String des) throws SQLException;
+    void deleteRole(UserDTO caller, String des) throws SQLException;
 
-     void setEmployeeManager(IEmployeeController employeeManager);
+    void setEmployeeManager(IEmployeeController employeeManager);
 
     void removeEmployeeFromRoleInteractive(UserDTO theCaller, Scanner sc) throws SQLException;
+
+    void createRolebydescription(UserDTO theCaller, String str) throws SQLException;
 }
+
+
 

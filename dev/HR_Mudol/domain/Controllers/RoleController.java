@@ -59,6 +59,7 @@ public class RoleController implements IRoleController {
         System.out.print("Enter role description: ");
         String description = scanner.nextLine().trim();
 
+
         if (description.isEmpty()) {
             System.out.println("Role description cannot be empty.");
             return;
@@ -81,7 +82,18 @@ public class RoleController implements IRoleController {
         System.out.println("Role created successfully.");
     }
 
-    @Override
+    public void createRolebydescription(UserDTO theCaller,String str) throws SQLException {
+        //Create domain object - RAM
+        RoleDTO newRole = new RoleDTO(str);
+
+
+        //Add to DB
+        curBranch.getRoleRepo().addFromDTO(newRole); // internally converts to DTO and calls DAO
+
+
+    }
+
+        @Override
     public void updateRoleDescription(UserDTO theCaller) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied.");
@@ -142,7 +154,9 @@ public class RoleController implements IRoleController {
             System.out.println("Role not found.");
             return;
         }
-
+        // todo if driver selected do: drivercontroller.addDriver(id, list<string> driver lisence)
+        //todo need driver conntroller domain to assigned driver in transportmodule
+        //drivercontroller.
         curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
         curBranch.getEmployeeRepo().getById(empId).addNewRole(caller,chosenRole);
         System.out.println("Employee assigned to role.");
