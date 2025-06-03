@@ -235,7 +235,7 @@ public class ShiftController implements IShiftController {
         Role shiftManager = dependency.getRoleByNumber(1);
         shift.addNecessaryRoles(shiftManager);
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
-                curBranch.getBranchID(), shift.getShiftID(), 1, 1
+                curBranch.getBranchID(), shift.getDay(),shift.getType(), 1, 1
         )
         ;
 
@@ -280,7 +280,7 @@ public class ShiftController implements IShiftController {
 
                         // Add to DB
                         curBranch.getWeekRepo().addOrUpdateRequiredRole(
-                                curBranch.getBranchID(), shift.getShiftID(), roleNumber, count
+                                curBranch.getBranchID(), shift.getDay(),shift.getType(), roleNumber, count
                         );
 
                         System.out.println(count + " x " + role.getDescription() + " added to the shift.");

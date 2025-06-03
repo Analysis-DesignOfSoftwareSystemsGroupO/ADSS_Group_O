@@ -80,6 +80,10 @@ public interface IHRService {
     // WeekController forwarding
     WeekDTO createNewWeek(UserDTO caller) throws SQLException;
 
+    WeekDTO getNextWeekDTO();
+
+    WeekDTO getCurrentWeekDTO();
+
     void cancelShift(UserDTO caller, WeekDTO week) throws SQLException;
 
     void assigningEmployToShifts(UserDTO caller) throws SQLException;

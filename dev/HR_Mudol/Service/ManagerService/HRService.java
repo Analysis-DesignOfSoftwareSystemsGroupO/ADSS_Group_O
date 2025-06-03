@@ -6,10 +6,7 @@ import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
-import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
-import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -199,7 +196,15 @@ public class HRService implements IHRService {
             return null;
         }
     }
+    @Override
+    public WeekDTO getNextWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
 
+    @Override
+    public WeekDTO getCurrentWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
 
     public void addEmployee(UserDTO caller) throws SQLException {
         employeeController.addEmployee(caller);
@@ -301,6 +306,8 @@ public class HRService implements IHRService {
     public void printAllEmployees(UserDTO caller) throws SQLException {
             employeeController.printAllEmployees(caller);
     }
+
+
 
 
 

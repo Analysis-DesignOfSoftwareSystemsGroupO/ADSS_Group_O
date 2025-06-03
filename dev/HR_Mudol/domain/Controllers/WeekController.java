@@ -496,4 +496,14 @@ public class WeekController implements IWeekController {
         }
     }
 
+    @Override
+    public WeekDTO getNextWeekDTO() {
+        return curBranch.getWeekRepo().getNextWeekDTO(curBranch.getBranchID());
+    }
+
+    @Override
+    public WeekDTO getCurrentWeekDTO() {
+        return curBranch.getWeekRepo().getCurrentWeekDTO(curBranch.getBranchID());
+    }
+
 }

@@ -30,6 +30,16 @@ public class EmployeeService implements IEmployeeService {
         empController.close();
     }
 
+    @Override
+    public WeekDTO getNextWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
+
+    @Override
+    public WeekDTO getCurrentWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
+
     public void viewMyShifts(UserDTO caller, long empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null ) {
