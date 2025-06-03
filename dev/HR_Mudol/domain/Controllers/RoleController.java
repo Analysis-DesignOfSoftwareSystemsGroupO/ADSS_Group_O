@@ -2,6 +2,7 @@ package HR_Mudol.domain.Controllers;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import HR_Mudol.DTO.BranchDTO;
@@ -143,13 +144,14 @@ public class RoleController implements IRoleController {
         }
 
         curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
+        curBranch.getEmployeeRepo().getById(empId).addNewRole(caller,chosenRole);
         System.out.println("Employee assigned to role.");
     }
 
 
     @Override
     public void assignEmployeeToShiftManager(UserDTO theCaller) throws SQLException {
-        User caller=mapper.fromDTO(theCaller);
+        User caller = mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         int empId = getIntInput("Enter employee ID to promote to Shift Manager: ");
@@ -159,17 +161,19 @@ public class RoleController implements IRoleController {
             return;
         }
 
-        // Assuming role number 1 is Shift Manager
-        Role shiftManager = curBranch.getRoleRepo().getRoleByDescription("shift Manager");
+        Role shiftManager = curBranch.getRoleRepo().getRoleByDescription("Shift Manager");
         if (shiftManager == null) {
             System.out.println("Shift Manager role not found.");
             return;
         }
-        curBranch.getRoleRepo().assignEmployeeToRole(employee, shiftManager);//updates RAM and DB
 
+        curBranch.getRoleRepo().assignEmployeeToRole(employee, shiftManager); // updates DB
+        shiftManager.addNewEmployee(employee); // updates RAM role side
+        curBranch.getEmployeeRepo().getById(empId).addNewRole(caller, shiftManager); // updates RAM employee side
 
         System.out.println("Employee assigned as Shift Manager.");
     }
+
 
     @Override
     public void removeEmployeeFromALLRoles(UserDTO theCaller) throws SQLException {
@@ -333,16 +337,20 @@ public class RoleController implements IRoleController {
             return;
         }
 
-        List<Employee> employeesInRole = selectedRole.getRelevantEmployees();
-        if (employeesInRole.isEmpty()) {
-            System.out.println("No employees assigned to this role.");
-            return;
+//        this.printAllRoles(theCaller);
+        for (Role role : roles) {
+            if (roleDesc.equals(role.getDescription())){
+            System.out.println( "Role Num: " + role.getRoleNumber() + " - Description: " + role.getDescription());
+            for (Employee e : curBranch.getEmployeeRepo().getAll()){
+                for (Role r : e.getRelevantRoles()){
+                    if (role.equals(r)&& !roles.isEmpty() ){
+                        System.out.println("  - ID: " + e.getEmpId() + ", Name: " + e.getEmpName());
+                    }
+                }
+            }
+            }
         }
 
-        System.out.println("Employees assigned to '" + selectedRole.getDescription() + "':");
-        for (Employee e : employeesInRole) {
-            System.out.println("- ID: " + e.getEmpId() + ", Name: " + e.getEmpName());
-        }
 
         System.out.print("Enter employee ID to remove: ");
         long empId = Long.parseLong(sc.nextLine());
@@ -356,6 +364,7 @@ public class RoleController implements IRoleController {
         try {
             selectedRole.removeEmployee(employee); // RAM
             curBranch.getRoleRepo().removeEmployeeFromRole(employee, selectedRole); // DB
+            employee.removeRole(caller,selectedRole);
             System.out.println("Employee removed from role: " + selectedRole.getDescription());
         } catch (SecurityException e) {
             System.out.println("❌ " + e.getMessage());
