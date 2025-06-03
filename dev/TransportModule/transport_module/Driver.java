@@ -5,18 +5,19 @@ import HR_Mudol.domain.Objects.Employee;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Driver extends Employee{
+public class Driver {
     private final ArrayList<DrivingLicence> licencs;
+    private long id;
 
     /***
      * Constructor - creates a Driver with given name, ID and a copy of provided licenses.
      */
-    public Driver( String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff, ArrayList<DrivingLicence> licencs) {
-       super( empName, empId, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveninigShift, sickDays, daysOff);
+    public Driver( long id, ArrayList<DrivingLicence> licencs) {
         this.licencs = new ArrayList<>();
         for (DrivingLicence licence : licencs) {
             this.licencs.add(new DrivingLicence(licence));
         }
+        this.id = id;
     }
 
 

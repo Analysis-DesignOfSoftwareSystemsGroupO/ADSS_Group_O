@@ -1,6 +1,6 @@
 package TransportModule.transport_module;
 
-import HR_Mudol.domain.repository.EmployeeRepository;
+import TransportModule.DTO.DriverDto;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 
@@ -15,19 +15,20 @@ public class TransportContorollerDomain implements ITransportController {
 
     private final ITransportRepository transportRepo;
     private final IProductListDocumentRepository ProductListDocumentRepo;
-//    private final EmployeeRepository employeeRepository;
+    private final DriverControllerDomain driverControllerDomain;
 
     public TransportContorollerDomain() throws Exception{
         this.transportRepo = TransportRepositoryIMP.getInstance();
         this.ProductListDocumentRepo =  PLDRepositoryIMP.getInstance();
-//        this.employeeRepository = new EmployeeRepository(); // todo - check with Dekel how to get the repo
+        this.driverControllerDomain = new DriverControllerDomain();
 
     }
 
     // For test section
-    public TransportContorollerDomain(ITransportRepository transportRepo, IProductListDocumentRepository productListDocumentRepo) {
+    public TransportContorollerDomain(ITransportRepository transportRepo, IProductListDocumentRepository productListDocumentRepo, DriverControllerDomain driverControllerDomain) {
         this.transportRepo = transportRepo;
         this.ProductListDocumentRepo = productListDocumentRepo;
+        this.driverControllerDomain = driverControllerDomain;
     }
 
     public List<TransportDTO> getTransportNextWeek() throws Exception{
@@ -59,13 +60,13 @@ public class TransportContorollerDomain implements ITransportController {
     }
 
     public void assignDriverTransport(String driverID, String transportID) throws Exception{
-//        Driver driver =  employeeRepository.getById(Integer.parseInt(driverID));
-//        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+        DriverDto driverDto = driverControllerDomain.getDriverById(driverID);
+        Driver driver = driverControllerDomain.getDriverFromDTO(driverDto);
+        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
 
-        // try to assign driver
-//        transport.addDriver(driver);
-        // try to save transport in DB
-//        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
+        transport.addDriver(driver);
+
+        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
     }
 
 

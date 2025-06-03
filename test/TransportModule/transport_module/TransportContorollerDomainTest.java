@@ -19,12 +19,14 @@ class TransportContorollerDomainTest {
     private ITransportRepository transportRepoMock;
     private IProductListDocumentRepository productListDocumentRepoMock;
     private TransportContorollerDomain controller;
+    private DriverControllerDomain driverControllerDomainMock;
 
     @BeforeEach
     void setUp() {
         transportRepoMock = mock(ITransportRepository.class);
         productListDocumentRepoMock = mock(IProductListDocumentRepository.class);
-        controller = new TransportContorollerDomain(transportRepoMock, productListDocumentRepoMock);
+        driverControllerDomainMock = mock(DriverControllerDomain.class);
+        controller = new TransportContorollerDomain(transportRepoMock, productListDocumentRepoMock,driverControllerDomainMock);
     }
 
 
