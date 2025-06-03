@@ -375,19 +375,17 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
     public void insertShift(ShiftDTO shift, int branchId) {
         String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT (deadline, type, branchID) DO NOTHING";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shift.getShiftID());
             stmt.setInt(2, branchId);
 
-            // מחשבים את ה-deadline לפי היום בשבוע הנוכחי
+            // חישוב deadline
             LocalDate today = LocalDate.now();
             DayOfWeek todayDayOfWeek = today.getDayOfWeek();
-
-            DayOfWeek shiftDay = DayOfWeek.valueOf(shift.getDay().toUpperCase());
-
-            // מחשבים כמה ימים להוסיף מהיום כדי להגיע ליום הרצוי
+            DayOfWeek shiftDay = DayOfWeek.valueOf(shift.getDay());
             int daysToAdd = (shiftDay.getValue() - todayDayOfWeek.getValue() + 7) % 7;
             LocalDate deadline = today.plusDays(daysToAdd);
 
@@ -395,18 +393,19 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             stmt.setString(4, shift.getDay());
             stmt.setString(5, shift.getType());
             stmt.setString(6, shift.getStatus());
+
             if (shift.getShiftManagerId() == -1) {
                 stmt.setNull(7, Types.BIGINT);
             } else {
                 stmt.setLong(7, shift.getShiftManagerId());
             }
 
-
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert shift", e);
         }
     }
+
 
 
 

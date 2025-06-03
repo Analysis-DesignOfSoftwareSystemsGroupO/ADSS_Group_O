@@ -208,7 +208,7 @@ public class HRManagerMenu implements Menu {
             String choice = sc.nextLine();
             try {
                 switch (choice) {
-                    case "1" -> hr.manageTheWeekRelevantRoles(caller,week);
+                    case "1" -> week=hr.manageTheWeekRelevantRoles(caller,week);
                     case "2" -> hr.assigningEmployToShifts(caller,week);
                     case "3" -> editShifts(caller,week);
                     case "0" -> { return; }

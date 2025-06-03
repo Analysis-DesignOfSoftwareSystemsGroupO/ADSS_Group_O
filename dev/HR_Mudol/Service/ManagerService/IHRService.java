@@ -107,5 +107,5 @@ public interface IHRService {
 
      void close();
 
-     void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO weekDTO) throws SQLException;
+    void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO weekDTO) throws SQLException;
 }

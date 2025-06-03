@@ -100,7 +100,10 @@ CREATE TABLE IF NOT EXISTS Shifts (
     shiftManager BIGINT REFERENCES Employees(empID)
 );
 
-DROP TABLE IF EXISTS RequiredRoles CASCADE;
+ALTER TABLE Shifts
+ADD CONSTRAINT unique_shift_per_day_type_branch
+UNIQUE (deadline, type, branchID);
+
 
 CREATE TABLE RequiredRoles (
     branchID INT REFERENCES Branches(branchID),

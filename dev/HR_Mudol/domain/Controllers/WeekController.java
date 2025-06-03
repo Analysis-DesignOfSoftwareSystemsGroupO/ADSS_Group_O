@@ -81,7 +81,7 @@ public class WeekController implements IWeekController {
      * @throws IllegalArgumentException if there are no roles or employees in the system.
      */
     @Override
-    public void manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
+    public WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
         Week week=mapper.fromDTO(theWeek);
@@ -103,6 +103,8 @@ public class WeekController implements IWeekController {
 
             dependency.chooseRelevantRoleForShift(theCaller, mapper.toDTO(shift));
         }
+        return DTOToDomainMapper.toDTO(week);
+
     }
 
     /**
