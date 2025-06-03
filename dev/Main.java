@@ -1,4 +1,7 @@
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import TransportModule.Users.BookingUser;
 import TransportModule.Users.TransportManagerUser;
@@ -48,7 +51,15 @@ public class Main {
         user.showMenu();
         scanner.close();
 
-
+        // Run every 1 minute the sendTransport function
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                sendTransport(transportsPerDate);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }, 0, 1, TimeUnit.MINUTES);
     }
 
 }
@@ -56,12 +67,3 @@ public class Main {
 
 
 
-//        // Run every 1 minute the sendTransport function
-//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-//        scheduler.scheduleAtFixedRate(() -> {
-//            try {
-//                sendTransport(transportsPerDate);
-//            } catch (Exception e) {
-//                System.out.println(e.getMessage());
-//            }
-//        }, 0, 1, TimeUnit.MINUTES);
