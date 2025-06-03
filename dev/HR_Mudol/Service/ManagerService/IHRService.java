@@ -1,12 +1,14 @@
 package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.EmployeeController;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * IHRSystemManager is an interface that defines the core functionality required to manage the HR system for a given branch.
@@ -16,6 +18,12 @@ import java.util.List;
 public interface IHRService {
 
     void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException;
+
+    // EmployeeService forwarding:
+    UserDTO getUserById(int empId) throws SQLException;
+
+    // EmployeeService forwarding:
+    boolean isEmployeeInBranch(int empId, int branchId) throws SQLException;
 
     // EmployeeService forwarding
     void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException;
@@ -45,9 +53,8 @@ public interface IHRService {
 
     void removeEmployeeFromALLRoles(UserDTO caller) throws SQLException;
 
-    void removeEmployeeFromRole(UserDTO caller, int roleNumber, EmployeeDTO employee) throws SQLException;
 
-    List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException;
+    //List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException;
 
     List<Role> getAllRoles(UserDTO caller) throws SQLException;
 
@@ -71,13 +78,11 @@ public interface IHRService {
     void removeRoleFromShift(UserDTO caller, ShiftDTO shift) throws SQLException;
 
     // WeekController forwarding
-    Week createNewWeek(UserDTO caller);
+    WeekDTO createNewWeek(UserDTO caller) throws SQLException;
 
     void cancelShift(UserDTO caller, WeekDTO week) throws SQLException;
 
-    void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO week) throws SQLException;
-
-    void assigningEmployToShifts(UserDTO caller, WeekDTO week) throws SQLException;
+    void assigningEmployToShifts(UserDTO caller) throws SQLException;
 
     void printWeek(WeekDTO week);
 
@@ -99,4 +104,8 @@ public interface IHRService {
     void generateWeeklyReport(UserDTO caller, List<WeekDTO> weeks);
 
     void generateShiftReport(UserDTO caller, WeekDTO curWeek);
+
+     void close();
+
+    void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO weekDTO) throws SQLException;
 }

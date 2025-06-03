@@ -31,7 +31,23 @@ public class WeekController implements IWeekController {
         this.dependency = dependency;
         this.curBranch=DTOToDomainMapper.fromDTO(Branch);
         this.roleController=roleController;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+        DTOToDomainMapper.initialize(
+                curBranch.getUserRepo(),
+                curBranch.getEmployeeRepo(),
+                curBranch.getRoleRepo(),
+                curBranch.getWeekRepo()
+        );
+
+        //this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+    }
+    @Override
+    public void close() {
+        try {
+            curBranch.close();
+        } catch (Exception e) {
+            System.out.println("❌ Failed to close branch resources: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -40,11 +56,19 @@ public class WeekController implements IWeekController {
      * @return A new Week object.
      */
     @Override
-    public Week createNewWeek() {
+    public WeekDTO createNewWeek() throws SQLException {
 
         Week newWeek = new Week(); //only on RAM
 
-        return newWeek;
+        // הוספה לריפוזיטורי בזיכרון
+        curBranch.getWeekRepo().add(newWeek);
+
+        // שמירה של כל המשמרות שיצרנו במסד הנתונים
+        for (Shift shift : newWeek.getShifts()) {
+            curBranch.getWeekRepo().saveShift(DTOToDomainMapper.toDTO(shift), curBranch.getBranchID());
+        }
+
+        return DTOToDomainMapper.toDTO(newWeek);
     }
 
     /**
@@ -57,10 +81,10 @@ public class WeekController implements IWeekController {
      * @throws IllegalArgumentException if there are no roles or employees in the system.
      */
     @Override
-    public void manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
+    public WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
         User caller=mapper.fromDTO(theCaller);
-        Week week=mapper.fromDTO(theWeek);
+
 
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
@@ -75,10 +99,12 @@ public class WeekController implements IWeekController {
             throw new IllegalArgumentException("No employees at the system - first add them.");
         }
 
-        for (Shift shift : week.getShifts()) {
+        for (ShiftDTO shift : theWeek.getShifts()) {
 
-            dependency.chooseRelevantRoleForShift(theCaller, mapper.toDTO(shift));
+            dependency.chooseRelevantRoleForShift(theCaller, shift);
         }
+        return theWeek;
+
     }
 
     /**
@@ -98,13 +124,12 @@ public class WeekController implements IWeekController {
      * and employees are assigned accordingly.
      *
      * @param theCaller The user who is assigning employees.
-     * @param theWeek The week in which the shifts and roles are to be filled.
      */
     @Override
-    public void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
+    public void assigningEmployToShifts(UserDTO theCaller) throws SQLException {
 
-        User caller=mapper.fromDTO(theCaller);
-        Week week=mapper.fromDTO(theWeek);
+        WeekDTO weekDTO=curBranch.getWeekRepo().getNextWeekDTO(curBranch.getBranchID());
+        Week week=mapper.fromDTO(weekDTO);
 
         for (Shift shift : week.getShifts()) {
             System.out.print("For the shift " + shift.getDay() + " - " + shift.getType() + ", ");
@@ -150,14 +175,16 @@ public class WeekController implements IWeekController {
 
 
         Scanner scanner = new Scanner(System.in);
-        List<Employee> candidates = role.getRelevantEmployees();
+
+        List<Employee> candidates=curBranch.getRoleRepo().getAllRelevantEmployees(role, curBranch);
+
         if (candidates.isEmpty()) {
             System.out.println("No employees are available for role: " + role.getDescription());
             return null;
         }
 
         System.out.println("You should find an employee for the role - " + role.getDescription());
-        printRelevantEmp(role);
+        printRelevantEmp(candidates);
 
         Set<Integer> triedIndexes = new HashSet<>();
 
@@ -212,11 +239,10 @@ public class WeekController implements IWeekController {
     /**
      * Prints the list of relevant employees for a specific role.
      *
-     * @param role The role for which employees are being listed.
      */
-    private void printRelevantEmp(Role role) {
+    private void printRelevantEmp(List<Employee> candidate ) {
         int index = 1;
-        for (Employee emp : role.getRelevantEmployees()) {
+        for (Employee emp : candidate) {
             System.out.println(index + ". " + emp.getEmpName());
             index++;
 
@@ -460,4 +486,14 @@ public class WeekController implements IWeekController {
         }
         return choosenShift;
     }
+
+    public List<ShiftDTO> getCurrentWeekShifts() {
+        try {
+            WeekDTO currentWeek = curBranch.getWeekRepo().getCurrentWeekDTO(curBranch.getBranchID());
+            return currentWeek.getShifts();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
 }

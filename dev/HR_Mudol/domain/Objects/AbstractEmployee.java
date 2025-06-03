@@ -19,7 +19,7 @@ public abstract class AbstractEmployee {
     private String empName;
 
     // Employee’s ID number (must be exactly 9 digits)
-    private final int empId;
+    private final long empId;
 
     // Employee’s account password
     private String empPassword;
@@ -45,7 +45,7 @@ public abstract class AbstractEmployee {
      * @param empStartDate Employee's start date
      * @throws IllegalArgumentException if ID is invalid
      */
-    public AbstractEmployee(String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
+    public AbstractEmployee(String empName, long empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate) {
 
         if (empId <= 0) {
             throw new IllegalArgumentException("Employee ID must be a positive number.");
@@ -83,7 +83,7 @@ public abstract class AbstractEmployee {
     /**
      * Returns the employee’s ID number.
      */
-    public int getEmpId() {
+    public long getEmpId() {
         return empId;
     }
 

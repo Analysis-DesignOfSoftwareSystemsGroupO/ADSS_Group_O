@@ -51,15 +51,15 @@ public class Main {
         user.showMenu();
         scanner.close();
 
-        // Run every 1 minute the sendTransport function
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                sendTransport(transportsPerDate);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }, 0, 1, TimeUnit.MINUTES);
+//        // Run every 1 minute the sendTransport function
+//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        scheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                sendTransport(transportsPerDate);
+//            } catch (Exception e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }, 0, 1, TimeUnit.MINUTES);
     }
 
 }

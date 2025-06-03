@@ -1,21 +1,21 @@
 package HR_Mudol.DAO;
 
-import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.FilledRoleDTO;
 import HR_Mudol.DTO.RoleDTO;
-import HR_Mudol.DataBase.PostgresConnection;
+import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.domain.Status;
 
 import java.sql.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShiftDAOImpl implements IShiftDAO {
-    private final Connection conn;
+public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
     public ShiftDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ShiftDAOImpl implements IShiftDAO {
             stmt.setString(2, shift.getDay());
             stmt.setString(3, shift.getType());
             stmt.setString(4, shift.getStatus());
-            stmt.setInt(5, shift.getShiftManagerId());
+            stmt.setLong(5, shift.getShiftManagerId());
             stmt.executeUpdate();
         }
     }
@@ -38,7 +38,7 @@ public class ShiftDAOImpl implements IShiftDAO {
             stmt.setString(1, shift.getDay());
             stmt.setString(2, shift.getType());
             stmt.setString(3, shift.getStatus());
-            stmt.setInt(4, shift.getShiftManagerId());
+            stmt.setLong(4, shift.getShiftManagerId());
             stmt.setInt(5, shift.getShiftID());
             stmt.executeUpdate();
         }
@@ -113,13 +113,12 @@ public class ShiftDAOImpl implements IShiftDAO {
         return list;
     }
 
-    @Override
-    public void insertEmpToShift(int branchID, int empID, int shiftID, int roleNumber) {
+    public void insertEmpToShift(int branchID, long empID, int shiftID, int roleNumber) {
         String sql = "INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, branchID);
             stmt.setInt(2, shiftID);
-            stmt.setInt(3, empID);
+            stmt.setLong(3, empID);
             stmt.setInt(4, roleNumber);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -180,7 +179,8 @@ public class ShiftDAOImpl implements IShiftDAO {
     public void insertOrIncrementRequiredRole(int branchID, int shiftID, int roleNumber, int count) {
         String select = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
         String update = "UPDATE RequiredRoles SET counter = counter + ? WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
-        String insert = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES (?, ?, ?, ?)";
+        String insert = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) " +
+                "VALUES (?, ?, ?, ?) ON CONFLICT (branchID, shiftID, roleNumber) DO NOTHING";
 
         try (PreparedStatement selectStmt = conn.prepareStatement(select)) {
             selectStmt.setInt(1, branchID);
@@ -222,11 +222,10 @@ public class ShiftDAOImpl implements IShiftDAO {
         }
     }
 
-    @Override
-    public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
+    public boolean isEmployeeAssignedToShift(long empId, int shiftId) {
         String sql = "SELECT 1 FROM ShiftAssignments WHERE empID = ? AND shiftID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, empId);
+            stmt.setLong(1, empId);
             stmt.setInt(2, shiftId);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
@@ -242,7 +241,7 @@ public class ShiftDAOImpl implements IShiftDAO {
             stmt.setInt(1, shiftId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return Status.valueOf(rs.getString("status").toUpperCase());
+                return Status.valueOf(rs.getString("status"));
             } else {
                 throw new RuntimeException("Shift not found");
             }
@@ -250,4 +249,216 @@ public class ShiftDAOImpl implements IShiftDAO {
             throw new RuntimeException("Failed to get shift status", e);
         }
     }
+
+    @Override// מביא את המשמרות שיש לעובד שבוע קדימה (כבר שובצו)
+    public List<ShiftDTO> getCurShiftsByBranch(int branchId) {
+        String sql = "SELECT * FROM Shifts WHERE branchID = ? AND deadline >= ? AND deadline < ?";
+        List<ShiftDTO> shifts = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // חישוב תחילת השבוע - יום ראשון
+            LocalDate today = LocalDate.now();
+            DayOfWeek dow = today.getDayOfWeek();
+            LocalDate sunday = today.minusDays(dow.getValue() % 7); // ראשון
+
+            // חישוב סיום השבוע - שבת בבוקר, כלומר לפני ראשון הבא
+            LocalDate nextSaturdayNight = sunday.plusDays(6).plusDays(1); // ראשון הבא
+
+            stmt.setInt(1, branchId);
+            stmt.setDate(2, java.sql.Date.valueOf(sunday));
+            stmt.setDate(3, java.sql.Date.valueOf(nextSaturdayNight));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int shiftId = rs.getInt("shiftID");
+
+                ShiftDTO shift = new ShiftDTO(
+                        shiftId,
+                        rs.getString("day"),
+                        rs.getString("type"),
+                        rs.getString("status"),
+                        rs.getInt("shiftmanager")
+                );
+
+                // שיבוצים בפועל
+                shift.setFilledRoles(getFilledRoles(shiftId));
+
+                // תפקידים דרושים
+                shift.setNecessaryRoles(getNecessaryRoles(shiftId));
+
+                // עובדים בשיבוץ
+                shift.setEmployeeIds(getEmployeesInShift(shiftId));
+
+                shifts.add(shift);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch shifts", e);
+        }
+
+        return shifts;
+    }
+
+    @Override //מחזיר את המשמרות של שבוע הבא- אלו שעוד לא שובצו
+    public List<ShiftDTO> getNextShiftsByBranch(int branchId) {
+        String sql = "SELECT * FROM Shifts WHERE branchID = ? AND deadline >= ? AND deadline <= ?";
+        List<ShiftDTO> shifts = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // מחשבים את טווח התאריכים של השבוע הבא: ראשון עד שישי
+            LocalDate today = LocalDate.now();
+            DayOfWeek currentDow = today.getDayOfWeek();
+            LocalDate thisSunday = today.minusDays(currentDow.getValue() % 7);
+            LocalDate nextSunday = thisSunday.plusWeeks(1); // ראשון הבא
+            LocalDate nextFriday = nextSunday.plusDays(5);  // שישי הבא
+
+            stmt.setInt(1, branchId);
+            stmt.setDate(2, java.sql.Date.valueOf(nextSunday));
+            stmt.setDate(3, java.sql.Date.valueOf(nextFriday));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int shiftId = rs.getInt("shiftID");
+
+                ShiftDTO shift = new ShiftDTO(
+                        shiftId,
+                        rs.getString("day"),
+                        rs.getString("type"),
+                        rs.getString("status"),
+                        rs.getInt("shiftmanager")
+                );
+
+                shift.setFilledRoles(getFilledRoles(shiftId));
+                shift.setNecessaryRoles(getNecessaryRoles(shiftId));
+                shift.setEmployeeIds(getEmployeesInShift(shiftId));
+
+                shifts.add(shift);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch next week's shifts", e);
+        }
+
+        return shifts;
+    }
+
+
+
+    private List<FilledRoleDTO> getFilledRoles(int shiftId) throws SQLException {
+        String sql = "SELECT * FROM shiftassignments WHERE shiftID = ?";
+        List<FilledRoleDTO> result = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shiftId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(new FilledRoleDTO(
+                        shiftId,
+                        rs.getInt("empID"),
+                        rs.getInt("roleNumber")
+                ));
+            }
+        }
+        return result;
+    }
+
+    private List<RoleDTO> getNecessaryRoles(int shiftId) throws SQLException {
+        String sql = "SELECT rr.roleNumber, r.description FROM requiredroles rr JOIN roles r ON rr.roleNumber = r.roleNumber WHERE rr.shiftID = ?";
+        List<RoleDTO> result = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shiftId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(new RoleDTO(
+                        rs.getInt("roleNumber"),
+                        rs.getString("description"),
+                        null // לא טוענים כרגע עובדים מתאימים
+                ));
+            }
+        }
+        return result;
+    }
+
+    private List<EmployeeDTO> getEmployeesInShift(int shiftId) throws SQLException {
+        List<EmployeeDTO> employees = new ArrayList<>();
+
+        String sql = """
+        SELECT e.*
+        FROM shiftassignments sa
+        JOIN employees e ON sa.empID = e.empID
+        WHERE sa.shiftID = ?
+    """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shiftId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                EmployeeDTO employee = new EmployeeDTO(
+                        rs.getInt("empID"),
+                        rs.getString("empName"),
+                        rs.getString("empPassword"),
+                        rs.getString("empBankAccount"),
+                        rs.getInt("empSalary"),
+                        rs.getDate("empStartDate") != null ? rs.getDate("empStartDate").toLocalDate() : null,
+                        rs.getInt("minDayShift"),
+                        rs.getInt("minEveningShift"),
+                        rs.getInt("sickDays"),
+                        rs.getInt("daysOff")
+                );
+                employees.add(employee);
+            }
+        }
+
+        return employees;
+    }
+
+    @Override // יצירת משמרות חדשות לשבוע הבא (ראשון עד שישי)
+    public void insertShift(ShiftDTO shift, int branchId) {
+        String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT (deadline, type, branchID) DO NOTHING";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shift.getShiftID());
+            stmt.setInt(2, branchId);
+
+            // חישוב תחילת השבוע הבא (ראשון)
+            LocalDate today = LocalDate.now();
+            DayOfWeek currentDay = today.getDayOfWeek();
+            LocalDate nextSunday = today.minusDays(currentDay.getValue() % 7).plusWeeks(1);
+
+            // מחשבים כמה ימים מראשון הבא עד ליום הרצוי
+            DayOfWeek targetDay = DayOfWeek.valueOf(shift.getDay().toUpperCase());
+            int daysToAdd = (targetDay.getValue() - DayOfWeek.SUNDAY.getValue() + 7) % 7;
+            LocalDate deadline = nextSunday.plusDays(daysToAdd);
+
+            stmt.setDate(3, Date.valueOf(deadline));
+            stmt.setString(4, shift.getDay());
+            stmt.setString(5, shift.getType());
+            stmt.setString(6, shift.getStatus());
+
+            if (shift.getShiftManagerId() == -1) {
+                stmt.setNull(7, Types.BIGINT);
+            } else {
+                stmt.setLong(7, shift.getShiftManagerId());
+            }
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert shift", e);
+        }
+    }
+
+
+
+
+
+
+
 }

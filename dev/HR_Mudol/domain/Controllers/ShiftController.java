@@ -25,7 +25,23 @@ public class ShiftController implements IShiftController {
     public ShiftController(BranchDTO Branch, IRoleController dependency) throws SQLException {
         this.curBranch=DTOToDomainMapper.fromDTO(Branch);
         this.dependency = dependency;
-        this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+        DTOToDomainMapper.initialize(
+                curBranch.getUserRepo(),
+                curBranch.getEmployeeRepo(),
+                curBranch.getRoleRepo(),
+                curBranch.getWeekRepo()
+        );
+
+        //this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
+    }
+    @Override
+    public void close() {
+        try {
+            curBranch.close();
+        } catch (Exception e) {
+            System.out.println("❌ Failed to close branch resources: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -220,7 +236,8 @@ public class ShiftController implements IShiftController {
         shift.addNecessaryRoles(shiftManager);
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
                 curBranch.getBranchID(), shift.getShiftID(), 1, 1
-        );
+        )
+        ;
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -288,6 +305,12 @@ public class ShiftController implements IShiftController {
                 }
             }
         }
+
+        List <RoleDTO> roleDTOList=new ArrayList<>();
+        for (Role r : shift.getNecessaryRoles()) {
+            roleDTOList.add(DTOToDomainMapper.toDTO(r));
+        }
+        theShift.setNecessaryRoles(roleDTOList);
     }
 
 
@@ -335,7 +358,7 @@ public class ShiftController implements IShiftController {
     }
 
     @Override
-    public List<EmployeeDTO> getAllEmployeesAsDTOs() {
+    public List<EmployeeDTO> getAllEmployeesAsDTOs() throws SQLException {
         List<EmployeeDTO> result = new ArrayList<>();
         for (Employee e : curBranch.getEmployeeRepo().getAll()) {
             result.add(DTOToDomainMapper.toDTO(e));

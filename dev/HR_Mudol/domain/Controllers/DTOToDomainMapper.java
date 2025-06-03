@@ -1,234 +1,281 @@
-package HR_Mudol.domain.Controllers;
-import HR_Mudol.DTO.*;
-import HR_Mudol.domain.Level;
-import HR_Mudol.domain.Objects.*;
-import HR_Mudol.domain.repository.*;
-import HR_Mudol.domain.*;
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
 
+package HR_Mudol.domain.Controllers;
+
+import HR_Mudol.DAO.ConstraintDAOImpl;
+import HR_Mudol.DAO.RoleDAOImpl;
+import HR_Mudol.DTO.BranchDTO;
+import HR_Mudol.DTO.ConstraintDTO;
+import HR_Mudol.DTO.EmployeeDTO;
+import HR_Mudol.DTO.EmploymentContractDTO;
+import HR_Mudol.DTO.FilledRoleDTO;
+import HR_Mudol.DTO.RoleDTO;
+import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.domain.Level;
+import HR_Mudol.domain.ShiftType;
+import HR_Mudol.domain.Status;
+import HR_Mudol.domain.WeekDay;
+import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Objects.Constraint;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.EmploymentContract;
+import HR_Mudol.domain.Objects.FilledRole;
+import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.Shift;
+import HR_Mudol.domain.Objects.User;
+import HR_Mudol.domain.Objects.Week;
+import HR_Mudol.domain.repository.EmployeeRepository;
+import HR_Mudol.domain.repository.RoleRepository;
+import HR_Mudol.domain.repository.UserRepository;
+import HR_Mudol.domain.repository.WeekRepository;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 public class DTOToDomainMapper {
-    private final UserRepository userRepository;
-    private static EmployeeRepository employeeRepository = null;
-    private static RoleRepository roleRepository= null;
+    private static UserRepository userRepository;
+    private static EmployeeRepository employeeRepository;
+    private static RoleRepository roleRepository;
     private static WeekRepository weekRepository;
+    private static RoleDAOImpl roleDAO;
+    private static ConstraintDAOImpl constraintDAO;
 
-    public DTOToDomainMapper(UserRepository userRepository,
-                             EmployeeRepository employeeRepository,
-                             RoleRepository roleRepository, WeekRepository weekRepository) {
-        this.userRepository = userRepository;
-        this.employeeRepository = employeeRepository;
-        this.roleRepository = roleRepository;
-        this.weekRepository=weekRepository;
+    public DTOToDomainMapper() {
     }
 
-    public static Week fromDTO(WeekDTO dto) {
-        Week week = new Week();
-
-        for (ShiftDTO shiftDTO : dto.getShifts()) {
-            Shift shift = fromDTO(shiftDTO);
-            week.addShift(shift);
-        }
-
-        return week;
+    public static void initialize(UserRepository userRepo, EmployeeRepository empRepo, RoleRepository roleRepo, WeekRepository weekRepo) throws SQLException {
+        userRepository = userRepo;
+        employeeRepository = empRepo;
+        roleRepository = roleRepo;
+        weekRepository = weekRepo;
+        roleDAO = new RoleDAOImpl();
+        constraintDAO = new ConstraintDAOImpl();
     }
 
-    public User fromDTO(UserDTO dto) throws SQLException {
-        User user = userRepository.getByEmployeeId(dto.getUserId());
-        if (user != null) return user;
-
-        Employee employee = employeeRepository.getById(dto.getUserId());
-        User newUser = new User(employee, Level.valueOf(dto.getLevel()));
-        return newUser;
+    public static User fromDTO(UserDTO dto) throws SQLException {
+        Employee employee = employeeRepository.getById((long)dto.getUserId());
+        return new User(employee, Level.valueOf(dto.getLevel()));
     }
 
     public static Employee fromDTO(EmployeeDTO dto) {
-        Employee emp = employeeRepository.getById(dto.getEmployeeId());
-        if (emp != null) return emp;
+        Employee e = new Employee(dto.getFullName(), dto.getEmployeeId(), dto.getPassword(), dto.getBankAccount(), dto.getSalary(), dto.getStartDate(), dto.getMinDayShift(), dto.getMinEveningShift(), dto.getSickDays(), dto.getDaysOff());
+        List<Role> roles = new ArrayList();
+        Iterator var3 = roleDAO.getRolesByEmpId(dto.getEmployeeId()).iterator();
 
-        return new Employee(
-                dto.getFullName(),
-                dto.getEmployeeId(),
-                dto.getPassword(),
-                dto.getBankAccount(),
-                dto.getSalary(),
-                dto.getStartDate(),
-                dto.getMinDayShift(),
-                dto.getMinEveningShift(),
-                dto.getSickDays(),
-                dto.getDaysOff()
-        );
+        while(var3.hasNext()) {
+            RoleDTO r = (RoleDTO)var3.next();
+            roles.add(fromDTO(r));
+        }
+
+        e.setRelevantRoles(roles);
+        List<Constraint> weekly = new ArrayList();
+        Iterator var10 = constraintDAO.getWeeklyConstraints(dto.getEmployeeId()).iterator();
+
+        while(var10.hasNext()) {
+            ConstraintDTO c = (ConstraintDTO)var10.next();
+            weekly.add(fromDTO(c));
+        }
+
+        e.setWeeklyConstraints(weekly);
+        List<Constraint> morning = new ArrayList();
+        Iterator var12 = constraintDAO.getMorningConstraints(dto.getEmployeeId()).iterator();
+
+        while(var12.hasNext()) {
+            ConstraintDTO c = (ConstraintDTO)var12.next();
+            morning.add(fromDTO(c));
+        }
+
+        e.setMorningConstraints(morning);
+        List<Constraint> evening = new ArrayList();
+        Iterator var14 = constraintDAO.getEveningConstraints(dto.getEmployeeId()).iterator();
+
+        while(var14.hasNext()) {
+            ConstraintDTO c = (ConstraintDTO)var14.next();
+            evening.add(fromDTO(c));
+        }
+
+        e.setEveningConstraints(evening);
+        List<Constraint> locked = new ArrayList();
+        Iterator var16 = constraintDAO.getLockedConstraints(dto.getEmployeeId()).iterator();
+
+        while(var16.hasNext()) {
+            ConstraintDTO c = (ConstraintDTO)var16.next();
+            locked.add(fromDTO(c));
+        }
+
+        e.setLockedConstraints(locked);
+        return e;
     }
 
     public static Role fromDTO(RoleDTO dto) {
-        Role role = roleRepository.getRoleByNumber(dto.getRoleNumber());
-        if (role != null) return role;
-
-        Role newRole = new Role(dto.getDescription());
-        return newRole;
+        return new Role(dto.getRoleNumber(), dto.getDescription());
+    }
+    public static List<Employee> convertEmployeeDTOListToDomain(List<EmployeeDTO> employeeDTOs) {
+        return (List)employeeDTOs.stream().map(DTOToDomainMapper::fromDTO).collect(Collectors.toList());
     }
 
+
+
     public static Constraint fromDTO(ConstraintDTO dto) {
-        return new Constraint(
-                dto.getExplanation(),
-                WeekDay.valueOf(dto.getDay().toUpperCase()),
-                ShiftType.valueOf(dto.getType().toUpperCase())
-        );
+        return new Constraint(dto.getExplanation(), WeekDay.valueOf(dto.getDay().toUpperCase()), ShiftType.valueOf(dto.getType().toUpperCase()));
     }
 
     public static Shift fromDTO(ShiftDTO dto) {
-        Shift existing = weekRepository.getShiftById(dto.getShiftID());
-        if (existing != null) return existing;
+        Shift shift = new Shift(dto.getShiftID(), WeekDay.valueOf(dto.getDay().toUpperCase()), ShiftType.valueOf(dto.getType().toUpperCase()));
+        shift.updateStatus(Status.valueOf(dto.getStatus()));
+        if (!Status.valueOf(dto.getStatus()).equals(Status.Empty)) {
+            Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
+            shift.setShiftManager(shiftManager);
+        }
 
-        Shift shift = new Shift(
-                WeekDay.valueOf(dto.getDay().toUpperCase()),
-                ShiftType.valueOf(dto.getType().toUpperCase())
-        );
-        shift.updateStatus(Status.valueOf(dto.getStatus().toUpperCase()));
+        Iterator var6 = dto.getNecessaryRoles().iterator();
 
-        Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
-        shift.setShiftManager(shiftManager);
-
-        // הוספת תפקידים דרושים
-        for (RoleDTO roleDTO : dto.getNecessaryRoles()) {
+        while(var6.hasNext()) {
+            RoleDTO roleDTO = (RoleDTO)var6.next();
             shift.addNecessaryRoles(fromDTO(roleDTO));
         }
 
-        // הוספת תפקידי מילוי (FilledRoles)
-        for (FilledRoleDTO filledRoleDTO : dto.getFilledRoles()) {
+        var6 = dto.getFilledRoles().iterator();
+
+        while(var6.hasNext()) {
+            FilledRoleDTO filledRoleDTO = (FilledRoleDTO)var6.next();
             Employee employee = employeeRepository.getById(filledRoleDTO.getEmployeeId());
-            Role role=roleRepository.getRoleByNumber(filledRoleDTO.getRoleId());
-            shift.addEmployee(employee,role);
+            Role role = roleRepository.getRoleByNumber(filledRoleDTO.getRoleId());
+            shift.addEmployee(employee, role);
         }
 
         return shift;
     }
 
-    // --- toDTO ---
-
     public static ShiftDTO toDTO(Shift shift) {
-        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
-        for (Employee e : shift.getEmployees()) {
+        List<EmployeeDTO> employeeDTOs = new ArrayList();
+        Iterator var2 = shift.getEmployees().iterator();
+
+        while(var2.hasNext()) {
+            Employee e = (Employee)var2.next();
             employeeDTOs.add(toDTO(e));
         }
 
-        List<RoleDTO> roleDTOs = new ArrayList<>();
-        for (Role r : shift.getNecessaryRoles()) {
+        List<RoleDTO> roleDTOs = new ArrayList();
+        Iterator var7 = shift.getNecessaryRoles().iterator();
+
+        while(var7.hasNext()) {
+            Role r = (Role)var7.next();
             roleDTOs.add(toDTO(r));
         }
 
-        List<FilledRoleDTO> filledRoleDTOs = new ArrayList<>();
-        for (FilledRole fr : shift.getFilledRoles()) {
-            filledRoleDTOs.add(new FilledRoleDTO(
-                    shift.getShiftID(),
-                    fr.getEmployee().getEmpId(),
-                    fr.getRole().getRoleNumber()
-            ));
+        List<FilledRoleDTO> filledRoleDTOs = new ArrayList();
+        Iterator var9 = shift.getFilledRoles().iterator();
+
+        while(var9.hasNext()) {
+            FilledRole fr = (FilledRole)var9.next();
+            filledRoleDTOs.add(new FilledRoleDTO(shift.getShiftID(), fr.getEmployee().getEmpId(), fr.getRole().getRoleNumber()));
         }
 
-        return new ShiftDTO(
-                shift.getShiftID(),
-                shift.getDay().name(),
-                shift.getType().name(),
-                shift.getStatus().name(),
-                shift.getShiftManager() != null ? shift.getShiftManager().getEmpId() : -1,
-                employeeDTOs,
-                roleDTOs,
-                filledRoleDTOs
-        );
+        return new ShiftDTO(shift.getShiftID(), shift.getDay().name(), shift.getType().name(), shift.getStatus().name(), shift.getShiftManager() != null ? shift.getShiftManager().getEmpId() : -1L, employeeDTOs, roleDTOs, filledRoleDTOs);
     }
 
     public static EmployeeDTO toDTO(Employee e) {
+        List<Integer> roleIds = new ArrayList();
+        Iterator var2 = e.getRelevantRoles().iterator();
 
-        // המרת List<Role> ל־List<Integer>
-        List<Integer> roleIds = new ArrayList<>();
-        for (Role role : e.getRelevantRoles()) {
+        while(var2.hasNext()) {
+            Role role = (Role)var2.next();
             roleIds.add(role.getRoleNumber());
         }
 
-        // המרת List<Constraint> ל־List<ConstraintDTO>
-        List<ConstraintDTO> constraintDTOs = new ArrayList<>();
-        for (Constraint c : e.getWeeklyConstraints()) {
-            constraintDTOs.add(new ConstraintDTO(
-                    e.getEmpId(),
-                    c.getExplanation(),
-                    c.getDay().name(),
-                    c.getType().name()
-            ));
+        List<ConstraintDTO> weekly = new ArrayList();
+        Iterator var9 = e.getWeeklyConstraints().iterator();
+
+        while(var9.hasNext()) {
+            Constraint c = (Constraint)var9.next();
+            weekly.add(new ConstraintDTO(e.getEmpId(), c.getExplanation(), c.getDay().name(), c.getType().name()));
         }
 
-        return new EmployeeDTO(
-                e.getEmpId(),
-                e.getEmpName(),
-                e.getEmpPassword(),
-                e.getEmpBankAccount(),
-                e.getEmpSalary(),
-                e.getEmpStartDate(),
-                e.getMinDayShift(),
-                e.getMinEveninigShift(),
-                e.getSickDays(),
-                e.getDaysOff(),
-                roleIds,
-                constraintDTOs
-        );
+        List<ConstraintDTO> morning = new ArrayList();
+        Iterator var11 = e.getMorningConstraints().iterator();
 
+        while(var11.hasNext()) {
+            Constraint c = (Constraint)var11.next();
+            morning.add(new ConstraintDTO(e.getEmpId(), c.getExplanation(), c.getDay().name(), c.getType().name()));
+        }
+
+        List<ConstraintDTO> evening = new ArrayList();
+        Iterator var13 = e.getEveningConstraints().iterator();
+
+        while(var13.hasNext()) {
+            Constraint c = (Constraint)var13.next();
+            evening.add(new ConstraintDTO(e.getEmpId(), c.getExplanation(), c.getDay().name(), c.getType().name()));
+        }
+
+        List<ConstraintDTO> locked = new ArrayList();
+        Iterator var15 = e.getLockedConstraints().iterator();
+
+        while(var15.hasNext()) {
+            Constraint c = (Constraint)var15.next();
+            locked.add(new ConstraintDTO(e.getEmpId(), c.getExplanation(), c.getDay().name(), c.getType().name()));
+        }
+
+        return new EmployeeDTO(e.getEmpId(), e.getEmpName(), e.getEmpPassword(), e.getEmpBankAccount(), e.getEmpSalary(), e.getEmpStartDate(), e.getMinDayShift(), e.getMinEveninigShift(), e.getSickDays(), e.getDaysOff(), roleIds, weekly, evening, locked, morning);
     }
 
     public static RoleDTO toDTO(Role r) {
-        List<EmployeeDTO> relevantEmployees = new ArrayList<>();
-        for (Employee e : r.getRelevantEmployees()) {
+        List<EmployeeDTO> relevantEmployees = new ArrayList();
+        Iterator var2 = r.getRelevantEmployees().iterator();
+
+        while(var2.hasNext()) {
+            Employee e = (Employee)var2.next();
             relevantEmployees.add(toDTO(e));
         }
 
         return new RoleDTO(r.getRoleNumber(), r.getDescription(), relevantEmployees);
     }
 
-    public static ConstraintDTO toDTO(Constraint c,int ID) {
-        return new ConstraintDTO(
-                ID,
-                c.getExplanation(),
-                c.getDay().name(),
-                c.getType().name()
-        );
+    public static ConstraintDTO toDTO(Constraint c, long ID) {
+        return new ConstraintDTO(ID, c.getExplanation(), c.getDay().name(), c.getType().name());
     }
 
     public static EmploymentContractDTO toDTO(EmploymentContract contract, Employee employee) {
-        return new EmploymentContractDTO(
-                contract.getMinDayShift(employee),
-                contract.getMinEveninigShift(employee),
-                contract.getSickDays(employee),
-                contract.getDaysOff(employee),
-                employee.getEmpId()
-        );
+        return new EmploymentContractDTO(contract.getMinDayShift(employee), contract.getMinEveninigShift(employee), contract.getSickDays(employee), contract.getDaysOff(employee), employee.getEmpId());
     }
 
     public static Branch fromDTO(BranchDTO dto) throws SQLException {
-        // יוצרים את האובייקט עם name ו-district מתוך DTO
-        Branch branch = new Branch(dto.getDistrict(), dto.getName());
-
-        // שומרים על ה-ID המקורי של הסניף מה-DTO
+        Branch branch = new Branch(dto.getDistrict(), dto.getName(), dto.getCurrentWeekDTO());
         branch.setBranchID(dto.getBranchID());
-
-        // מיפוי עובדים
+        Iterator var2;
         if (dto.getEmployees() != null) {
-            for (EmployeeDTO empDTO : dto.getEmployees()) {
+            var2 = dto.getEmployees().iterator();
+
+            while(var2.hasNext()) {
+                EmployeeDTO empDTO = (EmployeeDTO)var2.next();
                 branch.getEmployeeRepo().addFromDTO(fromDTO(empDTO));
             }
         }
 
-        // מיפוי תפקידים
         if (dto.getRoles() != null) {
-            for (RoleDTO roleDTO : dto.getRoles()) {
+            var2 = dto.getRoles().iterator();
+
+            while(var2.hasNext()) {
+                RoleDTO roleDTO = (RoleDTO)var2.next();
                 branch.getRoleRepo().add(fromDTO(roleDTO));
             }
         }
 
-        // מיפוי שבועות
         if (dto.getWeeks() != null) {
-            for (WeekDTO weekDTO : dto.getWeeks()) {
+            var2 = dto.getWeeks().iterator();
+
+            while(var2.hasNext()) {
+                WeekDTO weekDTO = (WeekDTO)var2.next();
                 branch.getWeekRepo().add(fromDTO(weekDTO));
             }
         }
@@ -236,38 +283,76 @@ public class DTOToDomainMapper {
         return branch;
     }
 
+    public static BranchDTO toDTO(Branch branch) throws SQLException {
+        List<EmployeeDTO> employeeDTOs = new ArrayList();
+        Iterator var2 = branch.getEmployeeRepo().getAll().iterator();
 
-    public static BranchDTO toDTO(Branch branch) {
-        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
-        for (Employee employee : branch.getEmployeeRepo().getAll()) {
+        while(var2.hasNext()) {
+            Employee employee = (Employee)var2.next();
             employeeDTOs.add(toDTO(employee));
         }
 
-        List<RoleDTO> roleDTOs = new ArrayList<>();
-        for (Role role : branch.getRoleRepo().getAll()) {
+        List<RoleDTO> roleDTOs = new ArrayList();
+        Iterator var10 = branch.getRoleRepo().getAll().iterator();
+
+        while(var10.hasNext()) {
+            Role role = (Role)var10.next();
             roleDTOs.add(toDTO(role));
         }
 
-        List<WeekDTO> weekDTOs = new ArrayList<>();
-        for (Week week : branch.getWeekRepo().getAll()) {
-            List<ShiftDTO> shiftDTOs = new ArrayList<>();
-            for (Shift shift : week.getShifts()) {
+        List<WeekDTO> weekDTOs = new ArrayList();
+        Iterator var12 = branch.getWeekRepo().getAll().iterator();
+
+        while(var12.hasNext()) {
+            Week week = (Week)var12.next();
+            List<ShiftDTO> shiftDTOs = new ArrayList();
+            Iterator var7 = week.getShifts().iterator();
+
+            while(var7.hasNext()) {
+                Shift shift = (Shift)var7.next();
                 shiftDTOs.add(toDTO(shift));
             }
-            WeekDTO weekDTO = new WeekDTO(week.getConstraintDeadline(), shiftDTOs);
-            weekDTOs.add(weekDTO);
+
+            weekDTOs.add(new WeekDTO(week.getConstraintDeadline(), shiftDTOs));
         }
 
-        return new BranchDTO(
-                branch.getBranchID(),
-                branch.getName(),
-                "district", // אם יש לך שדה מחלקתי ל-district אפשר לשלוף אותו כאן במקום מחרוזת קבועה
-                employeeDTOs,
-                roleDTOs,
-                weekDTOs
-        );
+        return new BranchDTO(branch.getBranchID(), branch.getName(), branch.getDistrict(), employeeDTOs, roleDTOs, weekDTOs);
     }
 
+    public static Week fromDTO(WeekDTO dto) {
+        Week week = new Week();
+        List<Shift> shifts = new LinkedList();
+        Iterator var3 = dto.getShifts().iterator();
 
+        while(var3.hasNext()) {
+            ShiftDTO shiftDTO = (ShiftDTO)var3.next();
+            Shift shift = fromDTO(shiftDTO);
+            shifts.add(shift);
+        }
 
+        week.setShifts(shifts);
+        return week;
+    }
+
+    public static UserDTO toDTO(User user) {
+        if (user != null && user.getUser() != null && user.getLevel() != null) {
+            long userId = user.getUser().getEmpId();
+            String level = user.getLevel().name();
+            return new UserDTO(userId, level);
+        } else {
+            throw new IllegalArgumentException("User or user details cannot be null");
+        }
+    }
+
+    public static WeekDTO toDTO(Week newWeek) {
+        List<ShiftDTO> shiftDTOs = new ArrayList();
+        Iterator var2 = newWeek.getShifts().iterator();
+
+        while(var2.hasNext()) {
+            Shift shift = (Shift)var2.next();
+            shiftDTOs.add(toDTO(shift));
+        }
+
+        return new WeekDTO(newWeek.getConstraintDeadline(), shiftDTOs);
+    }
 }

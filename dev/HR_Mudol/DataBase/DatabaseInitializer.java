@@ -12,9 +12,13 @@ public class DatabaseInitializer {
     private static final String USER = "postgres";
     private static final String PASSWORD = "Sansa1234";
 
-    public static void initialize(boolean withData) {
-        String sqlFile = withData ? "dev/sql/schema_with_data.sql" : "dev/sql/schema_only.sql";
-        executeSQLFile(sqlFile);
+    public static void initialize(boolean loadFromDatabase) {
+        if (loadFromDatabase) {
+            System.out.println("⚠️ Initializing fresh system from schema_with_data.sql...");
+            executeSQLFile("dev/sql/schema_with_data.sql");
+        } else {
+            System.out.println("✅ Loading existing data from database — skipping script.");
+        }
     }
 
     private static void executeSQLFile(String filePath) {

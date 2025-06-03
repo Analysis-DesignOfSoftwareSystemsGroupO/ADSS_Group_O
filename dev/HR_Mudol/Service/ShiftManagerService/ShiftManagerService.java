@@ -1,6 +1,7 @@
 package HR_Mudol.Service.ShiftManagerService;
 
 import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.Controllers.ShiftController;
 import HR_Mudol.domain.Controllers.IRoleController;
 import HR_Mudol.domain.WeekDay;
@@ -12,11 +13,18 @@ import java.util.Scanner;
 
 public class ShiftManagerService implements IShiftManagerService {
 
+    private BranchDTO branchDTO;
     private final ShiftController shiftController;
     private final Scanner scanner = new Scanner(System.in);
 
     public ShiftManagerService(BranchDTO branchDTO, IRoleController roleController) throws SQLException {
+        this.branchDTO=branchDTO;
         this.shiftController = new ShiftController(branchDTO, roleController);
+    }
+
+    @Override
+    public void close() {
+       shiftController.close();
     }
 
     @Override
@@ -31,7 +39,7 @@ public class ShiftManagerService implements IShiftManagerService {
     }
 
     @Override
-    public void addEmployeeToShift(UserDTO theCaller) {
+    public void addEmployeeToShift(UserDTO theCaller) throws SQLException {
         if (!theCaller.getLevel().equals("HR_MANAGER") && !theCaller.getLevel().equals("SHIFT_MANAGER")) {
             System.out.println("Access denied. Only shift managers can add employees to shifts.");
             return;

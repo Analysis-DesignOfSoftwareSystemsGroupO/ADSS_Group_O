@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class UserRepository {
-    private final Map<Integer, User> usersByEmployeeId = new HashMap<>();
+    private final Map<Long, User> usersByEmployeeId = new HashMap<>();
     private final IUserDAO userDAO;
     private EmployeeRepository employeeRepo;
 
@@ -19,7 +19,7 @@ public class UserRepository {
     }
 
     public void add(User user) throws SQLException {
-        int empId = user.getUser().getEmpId();
+        long empId = user.getUser().getEmpId();
 
         if (exists(empId)) return; // avoid duplicates
 
@@ -29,12 +29,12 @@ public class UserRepository {
     }
 
     public void remove(User user) throws SQLException {
-        int empId = user.getUser().getEmpId();
+        long empId = user.getUser().getEmpId();
         usersByEmployeeId.remove(empId);//RAM
         userDAO.delete(empId); // Remove from DB
     }
 
-    public boolean exists(int empId) throws SQLException {
+    public boolean exists(long empId) throws SQLException {
         if (usersByEmployeeId.containsKey(empId)) return true;
         return userDAO.exists(empId);
     }
@@ -50,7 +50,7 @@ public class UserRepository {
         return new ArrayList<>(usersByEmployeeId.values());
     }
 
-    public User getByEmployeeId(int empId) throws SQLException {
+    public User getByEmployeeId(long empId) throws SQLException {
 
         if (usersByEmployeeId.containsKey(empId)) {
             return usersByEmployeeId.get(empId);

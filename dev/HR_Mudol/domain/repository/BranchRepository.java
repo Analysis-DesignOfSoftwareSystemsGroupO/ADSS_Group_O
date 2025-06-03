@@ -1,5 +1,6 @@
 package HR_Mudol.domain.repository;
 
+import HR_Mudol.DAO.BranchDAOImpl;
 import HR_Mudol.DAO.IBranchDAO;
 import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
@@ -13,8 +14,8 @@ public class BranchRepository {
     private final IBranchDAO dao;
     private static final Map<Integer, Branch> branchCache = new HashMap<>();
 
-    public BranchRepository(IBranchDAO dao) throws SQLException {
-        this.dao = dao;
+    public BranchRepository() throws SQLException {
+        this.dao = new BranchDAOImpl();
         loadBranches(); // טוען פעם אחת את כל הסניפים מה-DB
     }
 
@@ -30,10 +31,13 @@ public class BranchRepository {
         return branchCache.get(branchId);
     }
 
-    public Collection<Branch> getAllBranches() {
-        return branchCache.values();
+    public List<BranchDTO> getAllBranches() throws SQLException {
+        List<BranchDTO> result = new ArrayList<>();
+        for (Branch branch : branchCache.values()) {
+            result.add(DTOToDomainMapper.toDTO(branch));
+        }
+        return result;
     }
-
 
     public void add(BranchDTO dto) throws SQLException {
         dao.insert(dto); // הוספה למסד הנתונים

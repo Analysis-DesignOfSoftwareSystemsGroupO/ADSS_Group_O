@@ -3,15 +3,15 @@ package HR_Mudol.DTO;
 import java.util.Objects;
 
 public class UserDTO {
-    private int userId;     // ID of the AbstractEmployee
+    private long userId;     // ID of the AbstractEmployee
     private String level;   // Level name (e.g., "HR_MANAGER", "SHIFT_MANAGER")
 
-    public UserDTO(int userId, String level) {
+    public UserDTO(long userId, String level) {
         this.userId = userId;
         this.level = level;
     }
 
-    public int getUserId() { return userId; }
+    public int getUserId() { return (int)userId; }
 
     public String getLevel() { return level; }
 
@@ -24,13 +24,12 @@ public class UserDTO {
     }
 
 
-
-    public boolean isShiftManager() {
-        return "SHIFT_MANAGER".equalsIgnoreCase(level);
+    public boolean isHRManager() {
+        return "HRManager".equalsIgnoreCase(level);
     }
 
-    public boolean isManager() {
-        return "HR_MANAGER".equalsIgnoreCase(level);
+    public boolean isSHManager() {
+        return "shiftManager".equalsIgnoreCase(level);
     }
 
     public boolean isTransportManager() {
@@ -38,7 +37,7 @@ public class UserDTO {
     }
 
     public boolean isRegularEmployee() {
-        return "REGULAREMP".equalsIgnoreCase(level); // או השם התקני לפי Enum שלך
+        return "regularEmp".equalsIgnoreCase(level); // או השם התקני לפי Enum שלך
     }
 
 }

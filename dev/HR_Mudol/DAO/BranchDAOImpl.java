@@ -7,11 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BranchDAOImpl implements IBranchDAO {
-    private final Connection conn;
+public class BranchDAOImpl extends BaseDAO implements IBranchDAO {
 
     public BranchDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override

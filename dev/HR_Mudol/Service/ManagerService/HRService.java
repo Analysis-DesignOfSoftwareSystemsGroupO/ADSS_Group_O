@@ -6,13 +6,14 @@ import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
-import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
+import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * HRSystemManager is responsible for the overall management of the HR system for a specific branch.
@@ -20,6 +21,7 @@ import java.util.List;
  */
 public class HRService implements IHRService {
 
+    private BranchDTO branchDTO;
     private IRoleController roleController;
     private IEmployeeController employeeController;
     private IShiftController shiftController;
@@ -27,19 +29,22 @@ public class HRService implements IHRService {
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
 
-    public HRService(Branch branch) throws SQLException {
-        BranchDTO curBranch = DTOToDomainMapper.toDTO(branch);
-        this.roleController = new RoleController(curBranch);
+    public HRService(BranchDTO curBranch) throws SQLException {
+
+        this.branchDTO=curBranch;
         this.employeeController = new EmployeeController(curBranch);
+        this.roleController = new RoleController(curBranch);
+        this.roleController.setEmployeeManager(this.employeeController);
         this.shiftController = new ShiftController(curBranch, this.roleController);
         this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
 
-        this.employeeService = new EmployeeService(branch);
+        this.employeeService = new EmployeeService(curBranch);
         this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController);
     }
 
-    public IEmployeeController getEmployeeController() {
-        return employeeController;
+    @Override
+    public void close() {
+        roleController.close();
     }
 
     @Override
@@ -47,18 +52,28 @@ public class HRService implements IHRService {
         int totalEmployees = employeeService.getTotalEmployeeCount();
         int withoutRoles = roleController.countEmployeesWithoutRoles(caller, employeeService.getAllEmployees());
 
-        System.out.println("\uD83D\uDCC5 Week starting " + currentWeek.getConstraintDeadline());
-        System.out.println("\uD83D\uDEA8 " + hasUnassignedRoles(currentWeek) + " shifts are required attention!");
+        System.out.println(" Week starting " + currentWeek.getConstraintDeadline());
+        System.out.println(" " + hasUnassignedRoles(currentWeek) + " shifts are required attention!");
 
-        System.out.println("\n\uD83D\uDC65 Employees Status:");
+        System.out.println(" Employees Status:");
         System.out.println("- Total employees: " + totalEmployees);
         System.out.println("- Without roles: " + withoutRoles);
     }
 
     // EmployeeService forwarding:
     @Override
+    public UserDTO getUserById(int empId) throws SQLException {
+        return employeeController.getUserById(empId);
+    }
+
+    @Override
+    public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException{
+        return employeeController.isEmployeeInBranch(empId,branchId);
+    }
+
+    @Override
     public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
-        employeeService.viewMyShifts(caller, empId, currentWeek);
+        employeeService.viewMyShifts(caller, empId);
     }
 
     @Override
@@ -122,15 +137,13 @@ public class HRService implements IHRService {
         roleController.removeEmployeeFromALLRoles(caller);
     }
 
-    @Override
-    public void removeEmployeeFromRole(UserDTO caller, int roleNumber, EmployeeDTO e) throws SQLException {
-        roleController.removeEmployeeFromRole(caller, roleNumber, e);
-    }
-
+    /*
     @Override
     public List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException {
         return roleController.getRelevantEmployees(caller);
     }
+
+     */
 
     @Override
     public List<Role> getAllRoles(UserDTO caller) throws SQLException {
@@ -185,14 +198,20 @@ public class HRService implements IHRService {
 
     // WeekController forwarding:
     @Override
-    public Week createNewWeek(UserDTO caller) {
-        if (caller.isManager())
+    public WeekDTO createNewWeek(UserDTO caller) throws SQLException {
+        if (caller.isHRManager())
             return weekController.createNewWeek();
         else {
             System.out.println("Access denied");
             return null;
         }
     }
+
+
+    public void addEmployee(UserDTO caller) throws SQLException {
+        employeeController.addEmployee(caller);
+    }
+
 
     @Override
     public void cancelShift(UserDTO caller, WeekDTO week) throws SQLException {
@@ -201,12 +220,12 @@ public class HRService implements IHRService {
 
     @Override
     public void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.manageTheWeekRelevantRoles(caller, week);
+        weekController.manageTheWeekRelevantRoles(caller,week);
     }
 
     @Override
-    public void assigningEmployToShifts(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.assigningEmployToShifts(caller, week);
+    public void assigningEmployToShifts(UserDTO caller) throws SQLException {
+        weekController.assigningEmployToShifts(caller);
     }
 
     @Override
@@ -263,4 +282,33 @@ public class HRService implements IHRService {
     public IRoleController getRoleController() {
         return roleController;
     }
+
+    public void removeEmployeeFromRole(UserDTO theCaller, Scanner sc) throws SQLException {
+        roleController.removeEmployeeFromRoleInteractive(theCaller, sc);
+    }
+
+    public void removeEmployee(UserDTO caller) throws SQLException {
+        employeeController.removeEmployee(caller);
+    }
+
+
+    public void updateBankAccount(UserDTO caller) throws SQLException {
+        employeeController.updateBankAccount(caller);
+    }
+
+
+    public void deleteRole(UserDTO theCaller,String des) throws SQLException{
+        roleController.deleteRole(theCaller,des);
+    }
+
+    public void updateSalary(UserDTO caller) throws SQLException {
+        employeeController.updateSalary(caller);
+    }
+
+    public void printAllEmployees(UserDTO caller) throws SQLException {
+            employeeController.printAllEmployees(caller);
+    }
+
+
+
 }

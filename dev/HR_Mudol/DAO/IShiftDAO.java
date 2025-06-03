@@ -14,7 +14,7 @@ public interface IShiftDAO {
     ShiftDTO get(int shiftID) throws SQLException;
     List<ShiftDTO> getAll() throws SQLException;
 
-    void insertEmpToShift(int brunchID, int empID, int shiftID, int roleNumber);
+    void insertEmpToShift(int brunchID, long empID, int shiftID, int roleNumber);
 
     void removeEmpFromShift(int shiftID, int empNum);
 
@@ -24,7 +24,14 @@ public interface IShiftDAO {
 
     void updateStatus(int shiftId, String newStatus);
 
-    boolean isEmployeeAssignedToShift(int empId, int shiftId);
+    boolean isEmployeeAssignedToShift(long empId, int shiftId);
 
     Status getShiftStatus(int shiftId);
+
+    List<ShiftDTO> getCurShiftsByBranch(int branchId);
+
+    //מחזיר את המשמרות של שבוע הבא- אלו שעוד לא שובצו
+    List<ShiftDTO> getNextShiftsByBranch(int branchId);
+
+    void insertShift(ShiftDTO shift, int branchId);
 }

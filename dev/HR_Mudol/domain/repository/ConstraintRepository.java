@@ -19,7 +19,7 @@ public class ConstraintRepository {
         this.constraintDAO = constraintDAO;
     }
 
-    public Constraint getConstraint(int empId, WeekDay day, ShiftType type) {
+    public Constraint getConstraint(long empId, WeekDay day, ShiftType type) {
         String key = buildKey(empId, day, type);
 
         // RAM
@@ -44,11 +44,11 @@ public class ConstraintRepository {
         );
     }
 
-    private String buildKey(int empId, WeekDay day, ShiftType type) {
+    private String buildKey(long empId, WeekDay day, ShiftType type) {
         return empId + "_" + day.name() + "_" + type.name();
     }
 
-    public void save(int empId, Constraint constraint) throws SQLException {
+    public void save(long empId, Constraint constraint) throws SQLException {
         String key = buildKey(empId, constraint.getDay(), constraint.getType());
 
         // המרה ל־DTO לשם שמירה במסד הנתונים
@@ -66,7 +66,7 @@ public class ConstraintRepository {
         constraintCache.put(key, constraint);
     }
 
-    public void update(int empId, Constraint constraint) {
+    public void update(long empId, Constraint constraint) {
         String key = buildKey(empId, constraint.getDay(), constraint.getType());
         constraintCache.put(key, constraint); // עדכון בזיכרון
 
@@ -74,12 +74,15 @@ public class ConstraintRepository {
         constraintDAO.update(empId, dto);
     }
 
-    public void delete(int empId, WeekDay day, ShiftType type) throws SQLException {
+    public void delete(long empId, WeekDay day, ShiftType type) throws SQLException {
         String key = buildKey(empId, day, type);
+
+        // 1. הסר מה־cache הכללי
         constraintCache.remove(key);
+
+        // 2. הסר מה־DB
         constraintDAO.delete(empId, type.name(), day.name());
     }
-
 
 
 }

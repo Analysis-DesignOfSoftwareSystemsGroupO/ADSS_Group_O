@@ -23,7 +23,7 @@ public class EmployeeMenu implements Menu {
 
     @Override
     public boolean start(UserDTO caller, EmployeeDTO self, BranchDTO branch) {
-        int empId = self.getEmployeeId();
+        long empId = self.getEmployeeId();
         WeekDTO currentWeek = branch.getCurrentWeekDTO();
 
         if (caller.getUserId() != empId) {
@@ -47,7 +47,7 @@ public class EmployeeMenu implements Menu {
 
             try {
                 switch (choice) {
-                    case "1" -> employeeService.viewMyShifts(caller, empId, currentWeek);
+                    case "1" -> employeeService.viewMyShifts(caller, empId);
                     case "2" -> employeeService.submitConstraint(caller, empId, currentWeek);
                     case "3" -> employeeService.updateConstraint(caller, empId, currentWeek);
                     case "4" -> employeeService.viewMyConstraints(caller, empId);
@@ -56,6 +56,7 @@ public class EmployeeMenu implements Menu {
                     case "7" -> employeeService.viewPersonalDetails(caller, empId);
                     case "8" -> employeeService.changePassword(caller, empId);
                     case "0" -> {
+                        employeeService.close();
                         return true;
                     }
                     default -> System.out.println("Invalid option. Please try again.");

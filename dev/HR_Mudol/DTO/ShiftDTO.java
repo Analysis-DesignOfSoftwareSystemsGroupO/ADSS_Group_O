@@ -8,12 +8,12 @@ public class ShiftDTO {
     private String day;
     private String type;
     private String status;
-    private int shiftManagerId;
+    private long shiftManagerId;
     private List<EmployeeDTO> employees;
     private List<RoleDTO> necessaryRoles;
     private List<FilledRoleDTO> filledRoles;
 
-    public ShiftDTO(int shiftID, String day, String type, String status, int shiftManagerId,
+    public ShiftDTO(int shiftID, String day, String type, String status, long shiftManagerId,
                     List<EmployeeDTO> employees,
                     List<RoleDTO> necessaryRoles,
                     List<FilledRoleDTO> filledRoles) {
@@ -54,7 +54,7 @@ public class ShiftDTO {
         return status;
     }
 
-    public int getShiftManagerId() {
+    public long getShiftManagerId() {
         return shiftManagerId;
     }
 
@@ -81,12 +81,24 @@ public class ShiftDTO {
     public void setFilledRoles(List<FilledRoleDTO> filledRoles) {
         this.filledRoles = filledRoles;
     }
-    public List<Integer> getEmployeeIds() {
-        List<Integer> ids = new ArrayList<>();
+    public List<Long> getEmployeeIds() {
+        List<Long> ids = new ArrayList<>();
         for (EmployeeDTO e : employees) {
             ids.add(e.getEmployeeId());
         }
         return ids;
     }
+
+    public void setEmployeeIds(List<EmployeeDTO>employeeIds) {
+        this.employees = employeeIds;
+    }
+
+    @Override
+    public String toString() {
+        return  "On " + day +
+                " - " + type;
+    }
+
+
 
 }

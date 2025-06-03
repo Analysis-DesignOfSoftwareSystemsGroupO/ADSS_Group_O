@@ -7,11 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
-    private final Connection conn;
+public class EmploymentContractDAOImpl extends BaseDAO implements IEmploymentContractDAO {
 
     public EmploymentContractDAOImpl() throws SQLException {
-        this.conn = PostgresConnection.getConnection();
+        super();
     }
 
     @Override
@@ -23,7 +22,7 @@ public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
             stmt.setInt(2, contract.getMinEveningShift());
             stmt.setInt(3, contract.getSickDays());
             stmt.setInt(4, contract.getDaysOff());
-            stmt.setInt(5, contract.getOwnerId());
+            stmt.setLong(5, contract.getOwnerId());
             stmt.executeUpdate();
         }
     }
@@ -55,7 +54,7 @@ public class EmploymentContractDAOImpl implements IEmploymentContractDAO {
             stmt.setInt(2, contract.getMinEveningShift());
             stmt.setInt(3, contract.getSickDays());
             stmt.setInt(4, contract.getDaysOff());
-            stmt.setInt(5, contract.getOwnerId());
+            stmt.setLong(5, contract.getOwnerId());
             stmt.executeUpdate();
         }
     }

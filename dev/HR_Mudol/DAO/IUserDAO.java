@@ -8,8 +8,8 @@ import java.util.List;
 public interface IUserDAO {
     void insert(UserDTO user) throws SQLException;
     void update(UserDTO user) throws SQLException;
-    void delete(int userId) throws SQLException;
-    UserDTO get(int userId) throws SQLException;
+    void delete(long userId) throws SQLException;
+    UserDTO get(long userId) throws SQLException;
     List<UserDTO> getAll() throws SQLException;
-    boolean exists(int empId) throws SQLException;
+    boolean exists(long empId) throws SQLException;
 }

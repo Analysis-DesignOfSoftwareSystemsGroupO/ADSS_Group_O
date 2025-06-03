@@ -55,7 +55,8 @@ public class Driver extends Employee{
     }
 
     public String getId(){
-        return Integer.toString(this.getEmpId());
+        return "sa";
+//        return Integer.toString(this.getEmpId());
     }
 
 //*********************************************************************************************************************** Set functions
@@ -94,7 +95,8 @@ public class Driver extends Employee{
      */
     @Override
     public final int hashCode() {
-        return  this.getEmpId();
+//        return  this.getEmpId();
+        return 1;
     }
 
 }

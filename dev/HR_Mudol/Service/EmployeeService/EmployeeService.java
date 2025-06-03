@@ -2,9 +2,7 @@
 package HR_Mudol.Service.EmployeeService;
 
 import HR_Mudol.DTO.*;
-import HR_Mudol.domain.Controllers.DTOToDomainMapper;
-import HR_Mudol.domain.Controllers.EmployeeController;
-import HR_Mudol.domain.Objects.Branch;
+import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
 
@@ -13,26 +11,39 @@ import java.util.*;
 
 public class EmployeeService implements IEmployeeService {
 
+    private BranchDTO branchDTO;
     private final Scanner scanner;
     private final EmployeeController empController;
+    private final WeekController weekController;
 
-    public EmployeeService(Branch branch) throws SQLException {
+    public EmployeeService(BranchDTO branch) throws SQLException {
+
+        this.branchDTO=branch;
         this.scanner = new Scanner(System.in);
-        this.empController = new EmployeeController(DTOToDomainMapper.toDTO(branch));
+        this.empController = new EmployeeController(branch);
+        IRoleController r= new RoleController(branch);
+        this.weekController= new WeekController(new ShiftController(branch,r),branch,r);
     }
 
     @Override
-    public void viewMyShifts(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
+    public void close() {
+        empController.close();
+    }
+
+    public void viewMyShifts(UserDTO caller, long empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
-        if (employee == null || currentWeek == null) {
-            System.out.println("Error: employee or current week not available.");
+        if (employee == null ) {
+            System.out.println("Error: employee not available.");
             return;
         }
 
         System.out.println("Shifts for " + employee.getFullName() + ":");
+
+        List<ShiftDTO> currentWeek= weekController.getCurrentWeekShifts();
+
         boolean found = false;
-        for (ShiftDTO shift : currentWeek.getShifts()) {
-            if (shift.getEmployeeIds().contains(empId)) {
+        for (ShiftDTO shift : currentWeek) {
+               if (shift.getEmployeeIds().contains(empId)) {
                 System.out.println("- " + shift);
                 found = true;
             }
@@ -42,8 +53,7 @@ public class EmployeeService implements IEmployeeService {
         }
     }
 
-    @Override
-    public void submitConstraint(UserDTO caller, int empId, WeekDTO currentWeek) throws SQLException {
+    public void submitConstraint(UserDTO caller, long empId, WeekDTO currentWeek) throws SQLException {
         if (!currentWeek.isConstraintSubmissionOpen()) {
             empController.lockWeeklyConstraints(empId);
             System.out.println("Constraint submission is now closed.");
@@ -64,7 +74,7 @@ public class EmployeeService implements IEmployeeService {
         printSummary(submitted);
     }
 
-    private void handleConstraintSubmission(int empId, ShiftType type, int shiftLimit, List<ConstraintDTO> submitted) throws SQLException {
+    private void handleConstraintSubmission(long empId, ShiftType type, int shiftLimit, List<ConstraintDTO> submitted) throws SQLException {
         int shiftCount = 0;
 
         for (WeekDay day : WeekDay.values()) {
@@ -107,7 +117,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void changePassword(UserDTO caller, int empId) throws SQLException {
+    public void changePassword(UserDTO caller, long empId) throws SQLException {
         EmployeeDTO employee = empController.getEmployeeById(caller, empId);
         if (employee == null) {
             System.out.println("Employee not found.");
@@ -139,7 +149,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewContractDetails(UserDTO caller, int empId) {
+    public void viewContractDetails(UserDTO caller, long empId) {
         try {
             EmploymentContractDTO contract = empController.getContractDetails(caller, empId);
             if (contract == null) {
@@ -161,7 +171,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewMyConstraints(UserDTO caller, int employeeId) {
+    public void viewMyConstraints(UserDTO caller, long employeeId) {
         List<ConstraintDTO> constraints = empController.getConstraintsByEmployeeId(employeeId);
         if (constraints.isEmpty()) {
             System.out.println("No constraints found.");
@@ -187,8 +197,8 @@ public class EmployeeService implements IEmployeeService {
 
 
     @Override
-    public void viewPersonalDetails(UserDTO caller, int employeeId) throws SQLException {
-        if (!caller.isManager()) {
+    public void viewPersonalDetails(UserDTO caller, long employeeId) throws SQLException {
+        if (!caller.isRegularEmployee()) {
             throw new SecurityException("Access denied: Only HR managers can view other employees' personal details.");
         }
 
@@ -203,7 +213,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public void viewAvailableRoles(UserDTO caller, int employeeId) {
+    public void viewAvailableRoles(UserDTO caller, long employeeId) {
         List<RoleDTO> roles = empController.getRolesForEmployee(employeeId);
         if (roles.isEmpty()) {
             System.out.println("No roles available.");
@@ -215,9 +225,8 @@ public class EmployeeService implements IEmployeeService {
             System.out.println(role.getRoleNumber() + ": " + role.getDescription());
         }
     }
-
     @Override
-    public void updateConstraint(UserDTO caller, int empId, WeekDTO currentWeek) {
+    public void updateConstraint(UserDTO caller, long empId, WeekDTO currentWeek) {
         try {
             EmployeeDTO employee = empController.getEmployeeById(caller, empId);
             if (employee == null) {
@@ -229,17 +238,21 @@ public class EmployeeService implements IEmployeeService {
                 throw new SecurityException("Employees may only edit their own constraints.");
             }
 
-            while (true) {
+            boolean continueEditing = true;
+
+            while (continueEditing) {
                 ShiftType selectedType = promptShiftType();
-                if (selectedType == null) return;
+                if (selectedType == null) break;
 
-                List<ConstraintDTO> constraints = empController.getConstraintsByType(empId, selectedType);
-                if (constraints.isEmpty()) {
-                    System.out.println("No constraints found for " + selectedType + " shifts.");
-                    continue;
-                }
+                boolean typeEditing = true;
+                while (typeEditing) {
+                    List<ConstraintDTO> constraints = empController.getConstraintsByType(empId, selectedType);
 
-                while (true) {
+                    if (constraints.isEmpty()) {
+                        System.out.println("No constraints found for " + selectedType + " shifts.");
+                        break;
+                    }
+
                     printConstraints(constraints, selectedType.name());
 
                     System.out.println("\nSelect an action:");
@@ -259,6 +272,7 @@ public class EmployeeService implements IEmployeeService {
                     if (index == -1) continue;
 
                     ConstraintDTO selected = constraints.get(index);
+
                     boolean isAssigned = currentWeek.getShifts().stream()
                             .anyMatch(s -> s.getDay().equalsIgnoreCase(selected.getDay())
                                     && s.getType().equalsIgnoreCase(selected.getType())
@@ -279,19 +293,38 @@ public class EmployeeService implements IEmployeeService {
                             newExp += " (used day off)";
 
                         empController.updateConstraintExplanation(employee, selected, newExp);
+                        System.out.println("✅ Explanation updated successfully.");
                     } else {
                         empController.removeConstraint(empId, selected);
-                        constraints.remove(index);
+                        System.out.println("✅ Constraint removed.");
                     }
 
-                    if (constraints.isEmpty()) break;
+                    // טען מחדש את הרשימה כדי לשקף את השינוי
+                    constraints = empController.getConstraintsByType(empId, selectedType);
+
+                    if (constraints.isEmpty()) {
+                        System.out.println("No more constraints left for " + selectedType + " shifts.");
+                        break;
+                    }
+
+                    printConstraints(constraints, selectedType.name());
+
+                    System.out.println("\nDo you want to continue editing constraints of this type? (yes/no)");
+                    String cont = scanner.nextLine().trim().toLowerCase();
+                    if (!cont.equals("yes")) typeEditing = false;
                 }
+
+                System.out.println("\nDo you want to continue editing other shift types? (yes/no)");
+                String more = scanner.nextLine().trim().toLowerCase();
+                if (!more.equals("yes")) continueEditing = false;
             }
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
     }
+
+
 
     private ShiftType promptShiftType() {
         while (true) {

@@ -59,13 +59,13 @@ public class TransportContorollerDomain implements ITransportController {
     }
 
     public void assignDriverTransport(String driverID, String transportID) throws Exception{
-        Driver driver =  employeeRepository.getById(Integer.parseInt(driverID));
-        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+//        Driver driver =  employeeRepository.getById(Integer.parseInt(driverID));
+//        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
 
         // try to assign driver
-        transport.addDriver(driver);
+//        transport.addDriver(driver);
         // try to save transport in DB
-        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
+//        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
     }
 
 

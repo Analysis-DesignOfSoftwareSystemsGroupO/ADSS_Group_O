@@ -5,6 +5,8 @@ import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.Week;
 import HR_Mudol.domain.*;
+
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class WeekRepository {
     /**
      * Insert an employee to a shift inside a week - to DB
      */
-    public void insertEmployeeToShift(int brunchID, int empID, int shiftID, int roleNumber) {
+    public void insertEmployeeToShift(int brunchID, long empID, int shiftID, int roleNumber) {
         shiftDAO.insertEmpToShift(brunchID, empID, shiftID, roleNumber);
     }
 
@@ -52,7 +54,7 @@ public class WeekRepository {
         shiftDAO.delete(shiftId);
     }
 
-    public boolean isEmployeeAssignedToShift(int empId, int shiftId) {
+    public boolean isEmployeeAssignedToShift(long empId, int shiftId) {
         return shiftDAO.isEmployeeAssignedToShift(empId, shiftId);
     }
 
@@ -70,22 +72,19 @@ public class WeekRepository {
         }
         return null;
     }
-    public WeekDTO getCurrentWeekDTO() {
-        if (weeks.isEmpty()) {
-            throw new IllegalStateException("No weeks available");
-        }
 
-        Week current = weeks.get(weeks.size() - 1);
-        List<ShiftDTO> shiftDTOs = current.getShifts().stream()
-                .map(shift -> new ShiftDTO(
-                        shift.getShiftID(),
-                        shift.getDay().name(),
-                        shift.getType().name(),
-                        shift.getStatus().name(), // assuming getStatus() returns enum
-                        shift.getShiftManagerId() // assuming such getter exists
-                ))
-                .toList();
-
-        return new WeekDTO(current.getConstraintDeadline(), shiftDTOs);
+    public WeekDTO getCurrentWeekDTO(int branchId) {
+        List<ShiftDTO> shiftDTOs = shiftDAO.getCurShiftsByBranch(branchId);
+        return new WeekDTO(null, shiftDTOs);
     }
+
+    public WeekDTO getNextWeekDTO(int branchId) {
+        List<ShiftDTO> shiftDTOs = shiftDAO.getNextShiftsByBranch(branchId);
+        return new WeekDTO(null, shiftDTOs);
+    }
+
+    public void saveShift(ShiftDTO shift, int branchID) throws SQLException {
+        shiftDAO.insertShift(shift, branchID);
+    }
+
 }
