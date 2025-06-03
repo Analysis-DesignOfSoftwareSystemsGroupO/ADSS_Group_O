@@ -127,7 +127,6 @@ public class WeekController implements IWeekController {
     @Override
     public void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
 
-        User caller=mapper.fromDTO(theCaller);
         Week week=mapper.fromDTO(theWeek);
 
         for (Shift shift : week.getShifts()) {
