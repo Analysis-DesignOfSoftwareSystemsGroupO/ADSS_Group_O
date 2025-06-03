@@ -103,7 +103,7 @@ ADD CONSTRAINT unique_shift_per_day_type_branch
 UNIQUE (deadline, type, branchID);
 
 
-CREATE TABLE RequiredRoles (
+CREATE TABLE IF NOT EXISTS RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),

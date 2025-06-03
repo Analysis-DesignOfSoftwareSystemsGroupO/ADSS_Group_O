@@ -222,8 +222,8 @@ public class HRService implements IHRService {
     }
 
     @Override
-    public void assigningEmployToShifts(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.assigningEmployToShifts(caller, week);
+    public void assigningEmployToShifts(UserDTO caller) throws SQLException {
+        weekController.assigningEmployToShifts(caller);
     }
 
     @Override

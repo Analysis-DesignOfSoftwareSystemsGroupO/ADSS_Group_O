@@ -46,9 +46,9 @@ public interface IWeekController {
      * Assigns employees to the shifts for the given theWeek.
      * The user performing this action must be authorized to manage the theWeek's shifts.
      * @param theCaller The user (manager or shift manager) who is assigning employees.
-     * @param theWeek The theWeek object representing the current theWeek.
+
      */
-    void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
+    void assigningEmployToShifts(UserDTO theCaller) throws SQLException;
 
     /**
      * Prints the details of the theWeek, including shifts and roles.

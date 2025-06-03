@@ -124,12 +124,12 @@ public class WeekController implements IWeekController {
      * and employees are assigned accordingly.
      *
      * @param theCaller The user who is assigning employees.
-     * @param theWeek The week in which the shifts and roles are to be filled.
      */
     @Override
-    public void assigningEmployToShifts(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
+    public void assigningEmployToShifts(UserDTO theCaller) throws SQLException {
 
-        Week week=mapper.fromDTO(theWeek);
+        WeekDTO weekDTO=curBranch.getWeekRepo().getCurrentWeekDTO(curBranch.getBranchID());
+        Week week=mapper.fromDTO(weekDTO);
 
         for (Shift shift : week.getShifts()) {
             System.out.print("For the shift " + shift.getDay() + " - " + shift.getType() + ", ");

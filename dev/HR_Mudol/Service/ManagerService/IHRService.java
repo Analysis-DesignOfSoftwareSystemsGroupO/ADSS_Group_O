@@ -82,7 +82,7 @@ public interface IHRService {
 
     void cancelShift(UserDTO caller, WeekDTO week) throws SQLException;
 
-    void assigningEmployToShifts(UserDTO caller, WeekDTO week) throws SQLException;
+    void assigningEmployToShifts(UserDTO caller) throws SQLException;
 
     void printWeek(WeekDTO week);
 
