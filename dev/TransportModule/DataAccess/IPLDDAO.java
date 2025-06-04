@@ -19,4 +19,5 @@ public interface IPLDDAO {
     void setArriavleTime(int pldID, LocalTime time) throws SQLException;
     List<Integer> getPLDsID() throws SQLException;
     void deleteAll() throws SQLException;
+    void attachTransport(int pldID, int transportID)throws SQLException;
 }
