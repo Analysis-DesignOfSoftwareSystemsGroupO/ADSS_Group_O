@@ -6,10 +6,7 @@ import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.domain.Controllers.*;
-import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
-import HR_Mudol.domain.Objects.User;
-import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -137,13 +134,6 @@ public class HRService implements IHRService {
         roleController.removeEmployeeFromALLRoles(caller);
     }
 
-    /*
-    @Override
-    public List<Employee> getRelevantEmployees(UserDTO caller) throws SQLException {
-        return roleController.getRelevantEmployees(caller);
-    }
-
-     */
 
     @Override
     public List<Role> getAllRoles(UserDTO caller) throws SQLException {
@@ -206,7 +196,15 @@ public class HRService implements IHRService {
             return null;
         }
     }
+    @Override
+    public WeekDTO getNextWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
 
+    @Override
+    public WeekDTO getCurrentWeekDTO() {
+        return weekController.getNextWeekDTO();
+    }
 
     public void addEmployee(UserDTO caller) throws SQLException {
         employeeController.addEmployee(caller);
@@ -279,40 +277,43 @@ public class HRService implements IHRService {
         reportGenerator.generateShiftReport(caller, curWeek);
     }
 
+    @Override
     public IRoleController getRoleController() {
         return roleController;
     }
 
+    @Override
     public void removeEmployeeFromRole(UserDTO theCaller, Scanner sc) throws SQLException {
         roleController.removeEmployeeFromRoleInteractive(theCaller, sc);
     }
 
+    @Override
     public void removeEmployee(UserDTO caller) throws SQLException {
         employeeController.removeEmployee(caller);
     }
 
-
+    @Override
     public void updateBankAccount(UserDTO caller) throws SQLException {
         employeeController.updateBankAccount(caller);
     }
 
-
+    @Override
     public void deleteRole(UserDTO theCaller,String des) throws SQLException{
         roleController.deleteRole(theCaller,des);
     }
-
+    @Override
     public void updateSalary(UserDTO caller) throws SQLException {
         employeeController.updateSalary(caller);
     }
-
+    @Override
     public void printAllEmployees(UserDTO caller) throws SQLException {
             employeeController.printAllEmployees(caller);
     }
 
+    @Override
     public void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException {
         shiftController.addRoleToShiftIfNeeded(caller, shift, role, requiredAmount);
     }
-
 
 
 

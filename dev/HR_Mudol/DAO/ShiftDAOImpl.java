@@ -4,7 +4,9 @@ import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.FilledRoleDTO;
 import HR_Mudol.DTO.RoleDTO;
 import HR_Mudol.DTO.ShiftDTO;
+import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.Status;
+import HR_Mudol.domain.WeekDay;
 
 import java.sql.*;
 import java.time.DayOfWeek;
@@ -176,39 +178,56 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
     }
 
     @Override
-    public void insertOrIncrementRequiredRole(int branchID, int shiftID, int roleNumber, int count) {
+    public void insertOrIncrementRequiredRole(int branchID, WeekDay day, ShiftType type, int roleNumber, int count) {
+        String selectShiftIDs = "SELECT shiftID FROM Shifts WHERE branchID = ? AND day = ? AND type = ? AND deadline >= ?";
         String select = "SELECT counter FROM RequiredRoles WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
         String update = "UPDATE RequiredRoles SET counter = counter + ? WHERE branchID = ? AND shiftID = ? AND roleNumber = ?";
         String insert = "INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) " +
                 "VALUES (?, ?, ?, ?) ON CONFLICT (branchID, shiftID, roleNumber) DO NOTHING";
 
-        try (PreparedStatement selectStmt = conn.prepareStatement(select)) {
-            selectStmt.setInt(1, branchID);
-            selectStmt.setInt(2, shiftID);
-            selectStmt.setInt(3, roleNumber);
-            ResultSet rs = selectStmt.executeQuery();
+        try (PreparedStatement shiftStmt = conn.prepareStatement(selectShiftIDs)) {
+            shiftStmt.setInt(1, branchID);
+            shiftStmt.setString(2, day.name());
+            shiftStmt.setString(3, type.name());
+            shiftStmt.setDate(4, Date.valueOf(LocalDate.now()));
 
-            if (rs.next()) {
-                try (PreparedStatement updateStmt = conn.prepareStatement(update)) {
-                    updateStmt.setInt(1, count);
-                    updateStmt.setInt(2, branchID);
-                    updateStmt.setInt(3, shiftID);
-                    updateStmt.setInt(4, roleNumber);
-                    updateStmt.executeUpdate();
-                }
-            } else {
-                try (PreparedStatement insertStmt = conn.prepareStatement(insert)) {
-                    insertStmt.setInt(1, branchID);
-                    insertStmt.setInt(2, shiftID);
-                    insertStmt.setInt(3, roleNumber);
-                    insertStmt.setInt(4, count);
-                    insertStmt.executeUpdate();
+            ResultSet shiftRs = shiftStmt.executeQuery();
+
+            while (shiftRs.next()) {
+                int shiftID = shiftRs.getInt("shiftID");
+
+                // Check if role already exists for this shift
+                try (PreparedStatement selectStmt = conn.prepareStatement(select)) {
+                    selectStmt.setInt(1, branchID);
+                    selectStmt.setInt(2, shiftID);
+                    selectStmt.setInt(3, roleNumber);
+                    ResultSet rs = selectStmt.executeQuery();
+
+                    if (rs.next()) {
+                        try (PreparedStatement updateStmt = conn.prepareStatement(update)) {
+                            updateStmt.setInt(1, count);
+                            updateStmt.setInt(2, branchID);
+                            updateStmt.setInt(3, shiftID);
+                            updateStmt.setInt(4, roleNumber);
+                            updateStmt.executeUpdate();
+                        }
+                    } else {
+                        try (PreparedStatement insertStmt = conn.prepareStatement(insert)) {
+                            insertStmt.setInt(1, branchID);
+                            insertStmt.setInt(2, shiftID);
+                            insertStmt.setInt(3, roleNumber);
+                            insertStmt.setInt(4, count);
+                            insertStmt.executeUpdate();
+                        }
+                    }
                 }
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to insert/increment required role", e);
+            throw new RuntimeException("Failed to insert/increment required role for matching shifts", e);
         }
     }
+
 
     @Override
     public void updateStatus(int shiftId, String newStatus) {
@@ -454,6 +473,53 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
             throw new RuntimeException("Failed to insert shift", e);
         }
     }
+
+    @Override
+    public void insertShiftsForNextWeek(int branchId) {
+        String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
+                "VALUES (?, ?, ?, ?, ?, 'Empty', NULL) " +
+                "ON CONFLICT (shiftID) DO NOTHING";
+
+        LocalDate today = LocalDate.now();
+        DayOfWeek currentDow = today.getDayOfWeek();
+        LocalDate thisSunday = today.minusDays(currentDow.getValue() % 7);
+        LocalDate nextSunday = thisSunday.plusWeeks(1); // ראשון הבא
+
+        String[] days = {"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
+        int shiftId = getMaxShiftIdFromDB() + 1;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < days.length; i++) {
+                LocalDate deadline = nextSunday.plusDays(i);
+                for (String type : new String[]{"MORNING", "EVENING"}) {
+                    stmt.setInt(1, shiftId++);
+                    stmt.setInt(2, branchId);
+                    stmt.setDate(3, Date.valueOf(deadline));
+                    stmt.setString(4, days[i]);
+                    stmt.setString(5, type);
+                    stmt.addBatch();
+                }
+            }
+            stmt.executeBatch();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert shifts for branch " + branchId + " for next week", e);
+        }
+    }
+
+    private int getMaxShiftIdFromDB() {
+        String sql = "SELECT COALESCE(MAX(shiftID), 0) FROM Shifts";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get max shiftID", e);
+        }
+        return 0;
+    }
+
 
 
 

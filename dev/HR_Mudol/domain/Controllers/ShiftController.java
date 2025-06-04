@@ -2,6 +2,7 @@ package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.ShiftType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -62,9 +63,6 @@ public class ShiftController implements IShiftController {
 
         //save at the DB
         curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpId(), shift.getShiftID(), role.getRoleNumber());
-
-        System.out.println(employee.getEmpName() +
-                " assigned to shift " + shift.getDay() + " - " + shift.getType() + ".");
     }
 
 
@@ -231,11 +229,13 @@ public class ShiftController implements IShiftController {
             throw new SecurityException("Access denied.");
         }
 
+        System.out.println("For Shift "+theShift.getDay()+" at "+theShift.getType());
+
         // Add Shift Manager automatically (only once)
         Role shiftManager = dependency.getRoleByNumber(1);
         shift.addNecessaryRoles(shiftManager);
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
-                curBranch.getBranchID(), shift.getShiftID(), 1, 1
+                curBranch.getBranchID(), shift.getDay(),shift.getType(), 1, 1
         )
         ;
 
@@ -280,7 +280,8 @@ public class ShiftController implements IShiftController {
 
                         // Add to DB
                         curBranch.getWeekRepo().addOrUpdateRequiredRole(
-                                curBranch.getBranchID(), shift.getShiftID(), roleNumber, count);
+                                curBranch.getBranchID(), shift.getDay(),shift.getType(), roleNumber, count
+                        );
 
                         System.out.println(count + " x " + role.getDescription() + " added to the shift.");
                         break;
@@ -392,15 +393,15 @@ public class ShiftController implements IShiftController {
         // הוספה ל-DB
         curBranch.getWeekRepo().addOrUpdateRequiredRole(
                 curBranch.getBranchID(),
-                shift.getShiftID(),
+                shift.getDay(),
+                shift.getType(),
                 role.getRoleNumber(),
                 (int) currentCount + toAdd
         );
 
+
         System.out.printf("✅ %d x '%s' added to shift [%s %s].%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
     }
-
-
 
 
 

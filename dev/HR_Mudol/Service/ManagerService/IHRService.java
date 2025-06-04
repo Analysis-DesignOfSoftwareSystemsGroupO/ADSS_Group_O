@@ -2,6 +2,7 @@ package HR_Mudol.Service.ManagerService;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Controllers.EmployeeController;
+import HR_Mudol.domain.Controllers.IRoleController;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
@@ -80,6 +81,10 @@ public interface IHRService {
     // WeekController forwarding
     WeekDTO createNewWeek(UserDTO caller) throws SQLException;
 
+    WeekDTO getNextWeekDTO();
+
+    WeekDTO getCurrentWeekDTO();
+
     void cancelShift(UserDTO caller, WeekDTO week) throws SQLException;
 
     void assigningEmployToShifts(UserDTO caller) throws SQLException;
@@ -108,6 +113,20 @@ public interface IHRService {
      void close();
 
     void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO weekDTO) throws SQLException;
+
+    IRoleController getRoleController();
+
+    void removeEmployeeFromRole(UserDTO theCaller, Scanner sc) throws SQLException;
+
+    void removeEmployee(UserDTO caller) throws SQLException;
+
+    void updateBankAccount(UserDTO caller) throws SQLException;
+
+    void deleteRole(UserDTO theCaller, String des) throws SQLException;
+
+    void updateSalary(UserDTO caller) throws SQLException;
+
+    void printAllEmployees(UserDTO caller) throws SQLException;
 
     void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException;
 }
