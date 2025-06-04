@@ -364,13 +364,12 @@ public class ShiftController implements IShiftController {
     @Override
     public List<ShiftDTO> getAllShiftDTOs() {
         List<ShiftDTO> result = new ArrayList<>();
+        WeekDTO weekDTO=curBranch.getWeekRepo().getNextWeekDTO(curBranch.getBranchID());
+        Week week=mapper.fromDTO(weekDTO);
 
-        for (Week week : curBranch.getWeekRepo().getAll()) {
             for (Shift shift : week.getShifts()) {
-                result.add(mapper.toDTO(shift));
+                result.add(DTOToDomainMapper.toDTO(shift));
             }
-        }
-
         return result;
     }
 
@@ -418,6 +417,11 @@ public class ShiftController implements IShiftController {
 
 
         System.out.printf("✅ %d x '%s' added to shift [%s %s].%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
+    }
+
+
+   public List<EmployeeDTO> getAllEmployeesAsDTOs2() throws SQLException {
+        return curBranch.getEmployeeRepo().getAllEmployeesAsDTOs(curBranch.getBranchID());
     }
 
 

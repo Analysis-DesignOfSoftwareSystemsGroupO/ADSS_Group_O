@@ -27,8 +27,15 @@ public class WeekRepository {
         weeks.add(week);
     }
 
+
+
     public List<Week> getAll() {
         return new LinkedList<>(weeks);
+    }
+
+    public List<ShiftDTO> getAllShift(int branchid) {
+        this.shiftDAO.insertShiftsForNextWeek(branchid);
+         return this.shiftDAO.getNextShiftsByBranch(branchid);
     }
 
     /**

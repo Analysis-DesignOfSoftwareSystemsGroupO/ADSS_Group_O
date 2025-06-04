@@ -48,14 +48,12 @@ public class ShiftManagerService implements IShiftManagerService {
         ShiftDTO shiftDTO = chooseShiftDTO();
         if (shiftDTO == null) return;
 
-        if (shiftDTO.getShiftManagerId() != theCaller.getUserId()) {
-            System.out.println("Access denied. You are not the shift manager of this shift.");
-            return;
-        }
 
-        List<EmployeeDTO> employeeDTOs = shiftController.getAllEmployeesAsDTOs();
+
+        List<EmployeeDTO> employeeDTOs = shiftController.getAllEmployeesAsDTOs2();
         for (int i = 0; i < employeeDTOs.size(); i++) {
             EmployeeDTO e = employeeDTOs.get(i);
+
             System.out.println((i + 1) + ". " + e.getFullName() + " (ID: " + e.getEmployeeId() + ")");
         }
 

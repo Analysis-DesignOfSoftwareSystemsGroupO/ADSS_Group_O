@@ -134,6 +134,9 @@ public class EmployeeRepository {
     public boolean isEmployeeInBranch(int empId, int branchId) throws SQLException {
         return employeeDAO.isEmployeeInBranch(empId,branchId);
     }
+    public List<EmployeeDTO> getAllEmployeesAsDTOs(int branchID) throws SQLException {
+        return this.employeeDAO.getAllByBranch(branchID);
+    }
 
 
 }

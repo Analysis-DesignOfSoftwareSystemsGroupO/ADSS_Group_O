@@ -55,7 +55,7 @@ public class jdbcDriverDAO implements IDriverDAO{
         log.info("jdbcDriverDAO::save()");
         String sql = "INSERT INTO \"Drivers\" (\"id\" ) VALUES(?) ; ";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
-            ps.setString(1, dto.id());
+            ps.setString(1, dto.getId());
         }
         catch(SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -63,8 +63,8 @@ public class jdbcDriverDAO implements IDriverDAO{
         }
         String sql2 = "INSERT INTO \"Driveres_Licenece\" (\"DriverID\" , \"Licence\" ) VALUES ( ?, ?) ;";
         try (PreparedStatement ps2 = DataBase.getConnection().prepareStatement(sql)){
-            for(String licence: dto.drivingLicenceList()){
-                ps2.setString(1 , dto.id());
+            for(String licence: dto.getLicence()){
+                ps2.setString(1 , dto.getId());
                 ps2.setString(2, licence);
                 ps2.addBatch();
             }
@@ -73,7 +73,7 @@ public class jdbcDriverDAO implements IDriverDAO{
         catch (SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage()); //try deleteing driver
             try {
-                deleteDriver(dto.id());
+                deleteDriver(dto.getId());
             }
             catch (SQLException e2){
                 log.error("SQL State: %s\n%s", e.getSQLState(), e2.getMessage());
