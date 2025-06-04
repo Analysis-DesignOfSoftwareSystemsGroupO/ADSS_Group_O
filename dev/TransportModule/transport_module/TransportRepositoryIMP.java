@@ -44,7 +44,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
                     Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
-                    t.addDriver(new Driver(t.getDriver().getId(), null));  //todo integration with driver Table
+                    t.addDriver(new Driver(,t.getDriver().getEmpId()));  //todo integration with driver Table
                     List<ProductListDocument> plds = pldRep.getPLDByTransportID(t.getId());
                     for (ProductListDocument pld : plds)
                         t.loadByDocument(pld);

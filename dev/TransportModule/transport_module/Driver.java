@@ -56,10 +56,6 @@ public class Driver extends Employee{
         return licencs.size();
     }
 
-    public String getId(){
-        return Integer.toString(this.getEmpId());
-    }
-
 //*********************************************************************************************************************** Set functions
 
 
@@ -73,8 +69,7 @@ public class Driver extends Employee{
      */
     @Override
     public String toString() {
-        return// super() +
-                ", licenses=" + licencs;
+        return super() +", licenses=" + licencs;
     }
 
     /***
