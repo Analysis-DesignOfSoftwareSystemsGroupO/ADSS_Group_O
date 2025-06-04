@@ -13,4 +13,5 @@ public interface IDriverRep {
     void deleteDriver(String Driverid)throws SQLException;
     Driver getDriverByID(String id )throws SQLException;
     Driver convertDTOtoDriver(DriverDto dto) throws SQLException, ATransportModuleException;
+    void addLicenceToDriver(String id, String licence) throws SQLException, ATransportModuleException;
 }

@@ -92,4 +92,12 @@ public class DriverRepIMP implements IDriverRep{
         return d;
     }
 
+    @Override
+    public void addLicenceToDriver(String id, String licence) throws SQLException, ATransportModuleException{
+        //check that driver exsists
+        Driver d = getDriverByID(id);
+        if(d == null) throw new DriverMismatchException("Adding licence to not exsists driver ");
+        dao.addLicenceToDriver(id, licence);
+        d.addLicence("licence");
+    }
 }

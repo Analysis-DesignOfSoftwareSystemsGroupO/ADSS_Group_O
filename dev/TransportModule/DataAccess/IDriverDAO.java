@@ -11,4 +11,5 @@ public interface IDriverDAO {
     void deleteDriver(String id)throws SQLException;
     void save(DriverDto dto) throws SQLException;
     List<String> getAllDriversID()throws SQLException;
+    void addLicenceToDriver(String id, String Licence) throws SQLException;
 }
