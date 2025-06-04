@@ -9,7 +9,7 @@ import HR_Mudol.presentation.LoginScreen;
 
 import java.util.*;
 
-public class Main {
+public class HR_Main {
 
     public static void main(String[] args) {
         try {
