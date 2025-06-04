@@ -33,17 +33,30 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
         // Ensure required roles exist
         ensureRolesExist(theCaller);
-        RoleDTO driverDTO = getRoleByDescription("Driver");
+        RoleDTO driverDTO;
         RoleDTO warehouseDTO = getRoleByDescription("Warehouse");
+
 
         List<TransportDTO> transports = transportController.getTransportNextWeek();
 
         for (TransportDTO transport : transports) {
+            int weight = transport.getMaxWeight();
+            String licence;
+            if(weight<=10000)
+                licence = "Driver-A";
+            else if(weight<=20000)
+                licence = "Driver-B";
+            else
+                licence = "Driver-C";
+
+            driverDTO = getRoleByDescription(licence);
+            driverDTO.setDescription(licence+":"+transport.getId());
+
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
 
             ShiftDTO shiftDTO = weekDTO.getShifts().stream().filter(s -> s.getDay().equals(day) && s.getType().equals(type)).findFirst().orElse(null);
-
+            // todo - if shiftDTO == null ->  create one and add it to weekly repository
             if (shiftDTO == null) {
                 System.out.printf("⚠ No shift found for %s %s%n", day, type);
                 continue;
@@ -52,9 +65,6 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             // Origin branch: needs Driver
 // Add 1 Driver
             hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
-
-// Add 1 Warehouse worker
-            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
 
 
             // Destination branch: needs Warehouse
@@ -95,6 +105,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     }
 
     private RoleDTO getRoleByDescription(String desc) {
+        // todo - change the function because it can send Driver-A -> need to be Driver
         return branch.getRoles().stream()
                 .filter(r -> r.getDescription().equalsIgnoreCase(desc))
                 .findFirst()

@@ -17,6 +17,9 @@ public class RoleDTO {
     }
 
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public int getRoleNumber() {
 

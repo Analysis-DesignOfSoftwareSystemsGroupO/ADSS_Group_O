@@ -3,7 +3,6 @@ package HR_Mudol.domain.Controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 import HR_Mudol.DTO.BranchDTO;
@@ -14,6 +13,8 @@ import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.User;
+import TransportModule.DTO.DriverDto;
+import TransportModule.transport_module.DriverControllerDomain;
 
 
 /**
@@ -157,23 +158,42 @@ public class RoleController implements IRoleController {
             return;
         }
 
+        List<String> driverList = new ArrayList<>();
         if (chosenRole.getDescription().toLowerCase().contains("driver")) {
-            List<String> driverList = new ArrayList<>();
-            driverList.add(chosenRole.getDescription());
+
             for (Role r : employee.getRelevantRoles()) {
                 if (r.getDescription().toLowerCase().contains("driver")) {
-                    driverList.add(r.getDescription());
+                    System.out.println("this employee already have a driver in his role.");
+                    return;
+                }
+                else{
+                    driverList.add(chosenRole.getDescription());
                 }
             }
         }
 
-        //make new driverDTO (id, list < string > driver lisence)
-             //drivercontroller.addDriver(driverDTO)
 
 
-        // todo if driver selected do: drivercontroller.addDriver(id, list<string> driver lisence)
-        //todo need driver conntroller domain to assigned driver in transportmodule
-        //drivercontroller.
+        DriverDto dto = new DriverDto(Integer.toString((int)employee.getEmpId()),driverList);
+        DriverControllerDomain driverControllerDomain;
+        try {
+            driverControllerDomain = new DriverControllerDomain();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
+
+
+        try {
+            driverControllerDomain.addDriverFromDto(dto);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
+
+
         curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
         curBranch.getEmployeeRepo().getById(empId).addNewRole(caller,chosenRole);
         System.out.println("Employee assigned to role.");
@@ -348,6 +368,7 @@ public class RoleController implements IRoleController {
 
     public void removeEmployeeFromRoleInteractive(UserDTO theCaller, Scanner sc) throws SQLException {
         User caller = mapper.fromDTO(theCaller);
+        boolean is_driver = false;
         if (!caller.isManager()) throw new SecurityException("Access denied.");
 
         List<Role> roles = getAllRoles(theCaller);
@@ -365,11 +386,14 @@ public class RoleController implements IRoleController {
         String roleDesc = sc.nextLine().trim();
 
         Role selectedRole = curBranch.getRoleRepo().getRoleByDescription(roleDesc);
+
         if (selectedRole == null) {
             System.out.println("Role not found.");
             return;
         }
-
+        if (selectedRole.getDescription().toLowerCase().contains("driver")) {
+            is_driver = true;
+        }
 //        this.printAllRoles(theCaller);
         for (Role role : roles) {
             if (roleDesc.equals(role.getDescription())){
@@ -393,6 +417,20 @@ public class RoleController implements IRoleController {
             System.out.println("Employee not found.");
             return;
         }
+
+        if(is_driver) {
+            DriverControllerDomain driverControllerDomain;
+            try {
+                driverControllerDomain = new DriverControllerDomain();
+                driverControllerDomain.deleteDriverById(Integer.toString((int)employee.getEmpId()));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
+
+
+
 
         try {
             selectedRole.removeEmployee(employee); // RAM

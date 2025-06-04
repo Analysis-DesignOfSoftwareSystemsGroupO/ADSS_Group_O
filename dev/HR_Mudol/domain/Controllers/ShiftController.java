@@ -3,6 +3,7 @@ package HR_Mudol.domain.Controllers;
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.ShiftType;
+import TransportModule.transport_module.TransportContorollerDomain;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -58,11 +59,27 @@ public class ShiftController implements IShiftController {
             throw new SecurityException("Access denied.");
         }
 
+        if( role.getDescription().toLowerCase().contains("driver")){
+            String[] parts = role.getDescription().split(":",2);
+            String transportId = parts[1];
+            TransportContorollerDomain transportContorollerDomain;
+            try {
+                transportContorollerDomain = new TransportContorollerDomain();
+                transportContorollerDomain.assignDriverTransport(Integer.toString((int)theEmployee.getEmployeeId()),transportId);
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
         // save at RAM
         shift.addEmployee(employee, role);
 
+
         //save at the DB
         curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpId(), shift.getShiftID(), role.getRoleNumber());
+
+
     }
 
 
