@@ -40,7 +40,9 @@ public class Driver {
     }
 
 
-
+    public void addLicence(String Lincence){
+        licencs.add(new DrivingLicence(Lincence));
+    }
 
     /***
      * Checks if the driver has a specific driving license.

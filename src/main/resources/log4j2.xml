@@ -2,35 +2,47 @@
 <Configuration>
     <Appenders>
         <Console name="STDOUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n" />
+            <PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n"/>
         </Console>
         <File name="SQLFile" fileName="log/SQLFile.txt" append="true">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger - %msg%n"/>
         </File>
         <File name="File" fileName="log/Execution_output.txt">
-            <PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n" />
+            <PatternLayout pattern="%d{yyyy-MM-dd}-%t-%x-%-5p-%-10c:%m%n"/>
         </File>
-        <File name="ErrorFile"
-              fileName="log/error.log"
-              immediateFlush="false"
-              append="false">
+        <File name="ErrorFile" fileName="log/error.log" immediateFlush="false" append="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="jdbc.sqlonly" level="debug" additivity="false">
+        <logger name="log4jdbc.log4j2" level="error" additivity="false">
+            <appender-ref ref="SQLFile"/>
+        </logger>
+        <logger name="log4jdbc.log4j2" level="info" additivity="false">
+            <MarkerFilter marker="LOG4JDBC_OTHER" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <appender-ref ref="SQLFile"/>
+        </logger>
+        <Logger name="jdbc.sqlonly" level="INFO" additivity="false">
             <AppenderRef ref="SQLFile"/>
         </Logger>
-
-        <Logger name="jdbc.sqltiming" level="debug" additivity="false">
+        <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
             <AppenderRef ref="SQLFile"/>
+        </Logger>
+        <Logger name="jdbc.audit" level="INFO" additivity="false">
+            <AppenderRef ref="SQLFile"/>
+        </Logger>
+        <Logger name="jdbc.resultset" level="INFO" additivity="false">
+            <AppenderRef ref="SQLFile"/>
+        </Logger>
+        <Logger name="jdbc.connection" level="INFO" additivity="false">
+            <AppenderRef ref="SQLFile"/>
+        </Logger>
+        <Logger name="errors" level="error" additivity="false">
+            <AppenderRef ref="ErrorFile"/>
         </Logger>
         <Root level="info">
-            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="File"/>
-            <AppenderRef ref="ErrorFile"
-                         level="error"/>
         </Root>
     </Loggers>
 </Configuration>
