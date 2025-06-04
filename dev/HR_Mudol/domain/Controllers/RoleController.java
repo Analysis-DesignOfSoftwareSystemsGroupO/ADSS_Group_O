@@ -1,6 +1,7 @@
 package HR_Mudol.domain.Controllers;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -13,6 +14,7 @@ import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.User;
+
 
 /**
  * Manages roles within a branch: creation, assignment, removal, and description updates.
@@ -154,6 +156,21 @@ public class RoleController implements IRoleController {
             System.out.println("Role not found.");
             return;
         }
+
+        if (chosenRole.getDescription().toLowerCase().contains("driver")) {
+            List<String> driverList = new ArrayList<>();
+            driverList.add(chosenRole.getDescription());
+            for (Role r : employee.getRelevantRoles()) {
+                if (r.getDescription().toLowerCase().contains("driver")) {
+                    driverList.add(r.getDescription());
+                }
+            }
+        }
+
+        //make new driverDTO (id, list < string > driver lisence)
+             //drivercontroller.addDriver(driverDTO)
+
+
         // todo if driver selected do: drivercontroller.addDriver(id, list<string> driver lisence)
         //todo need driver conntroller domain to assigned driver in transportmodule
         //drivercontroller.

@@ -195,7 +195,6 @@ public class HRManagerMenu implements Menu {
             System.out.println("No current week available.");
             return;
         }
-
         Scanner sc = new Scanner(System.in);
 
         while (true) {

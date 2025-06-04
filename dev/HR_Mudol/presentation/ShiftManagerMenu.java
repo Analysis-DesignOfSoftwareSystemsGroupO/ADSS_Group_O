@@ -9,10 +9,12 @@ import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.Service.ShiftManagerService.ShiftManagerService;
 import HR_Mudol.Service.TransportService.TransportShiftIntegrator;
 import HR_Mudol.domain.Controllers.RoleController;
+import HR_Mudol.domain.Objects.Week;
 import TransportModule.transport_module.ITransportController;
 import TransportModule.transport_module.TransportContorollerDomain;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class ShiftManagerMenu implements Menu {
@@ -56,15 +58,13 @@ public class ShiftManagerMenu implements Menu {
     }
 
     private static void manageShift(HRService hr, BranchDTO branch, UserDTO callerDTO) throws SQLException {
-        WeekDTO currentWeekDTO = branch.getCurrentWeekDTO();
-        if (currentWeekDTO == null) {
-            System.out.println("No current week found.");
+        WeekDTO weeks = hr.getCurrentWeekDTO();
+        if (weeks == null) {
+            System.out.println("❌ No weeks available for shift management.");
             return;
         }
-
         ShiftManagerService shiftSys = new ShiftManagerService(branch, hr.getRoleController());
         Scanner sc = new Scanner(System.in);
-
         while (true) {
             System.out.println("\n--- Shift Management ---");
             System.out.println("1. Remove an employee from a shift");

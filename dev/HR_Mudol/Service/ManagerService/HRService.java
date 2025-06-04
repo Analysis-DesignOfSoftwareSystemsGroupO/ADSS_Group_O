@@ -203,7 +203,7 @@ public class HRService implements IHRService {
 
     @Override
     public WeekDTO getCurrentWeekDTO() {
-        return weekController.getNextWeekDTO();
+        return weekController.getCurrentWeekDTO();
     }
 
     public void addEmployee(UserDTO caller) throws SQLException {

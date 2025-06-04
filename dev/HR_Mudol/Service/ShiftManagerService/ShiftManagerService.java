@@ -40,7 +40,7 @@ public class ShiftManagerService implements IShiftManagerService {
 
     @Override
     public void addEmployeeToShift(UserDTO theCaller) throws SQLException {
-        if (!theCaller.getLevel().equals("HR_MANAGER") && !theCaller.getLevel().equals("SHIFT_MANAGER")) {
+        if (!theCaller.getLevel().equals("HRManager") && !theCaller.getLevel().equals("shiftManager")) {
             System.out.println("Access denied. Only shift managers can add employees to shifts.");
             return;
         }

@@ -42,10 +42,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
 
-            ShiftDTO shiftDTO = weekDTO.getShifts().stream()
-                    .filter(s -> s.getDay().equals(day) && s.getType().equals(type))
-                    .findFirst()
-                    .orElse(null);
+            ShiftDTO shiftDTO = weekDTO.getShifts().stream().filter(s -> s.getDay().equals(day) && s.getType().equals(type)).findFirst().orElse(null);
 
             if (shiftDTO == null) {
                 System.out.printf("⚠ No shift found for %s %s%n", day, type);
