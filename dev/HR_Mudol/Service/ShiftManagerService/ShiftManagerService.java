@@ -46,7 +46,10 @@ public class ShiftManagerService implements IShiftManagerService {
         }
 
         ShiftDTO shiftDTO = chooseShiftDTO();
-        if (shiftDTO == null) return;
+        if (shiftDTO == null){
+            System.out.println("Shift dont created yet.");
+            return;
+        }
 
         if (shiftDTO.getShiftManagerId() != theCaller.getUserId()) {
             System.out.println("Access denied. You are not the shift manager of this shift.");

@@ -222,6 +222,7 @@ public class ShiftController implements IShiftController {
 
     @Override
     public void chooseRelevantRoleForShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException {
+        /// todo dont let driver to add
         User caller=mapper.fromDTO(theCaller);
         Shift shift=mapper.fromDTO(theShift);
 
