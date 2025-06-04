@@ -1,0 +1,88 @@
+package HR_Mudol.domain.repository;
+
+import HR_Mudol.DAO.*;
+import HR_Mudol.DTO.*;
+import HR_Mudol.domain.Controllers.DTOToDomainMapper;
+import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.WeekDay;
+import HR_Mudol.domain.ShiftType;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ConstraintRepository {
+    private final IConstraintDAO constraintDAO;
+    private final Map<String, Constraint> constraintCache = new HashMap<>();
+
+    public ConstraintRepository(IConstraintDAO constraintDAO) {
+        this.constraintDAO = constraintDAO;
+    }
+
+    public Constraint getConstraint(long empId, WeekDay day, ShiftType type) {
+        String key = buildKey(empId, day, type);
+
+        // RAM
+        if (constraintCache.containsKey(key)) {
+            return constraintCache.get(key);
+        }
+
+        // else - DB
+        ConstraintDTO dto = constraintDAO.getConstraint(empId, day, type);
+        if (dto == null) return null;
+
+        Constraint constraint = fromDTO(dto);
+        constraintCache.put(key, constraint);
+        return constraint;
+    }
+
+    private Constraint fromDTO(ConstraintDTO dto) {
+        return new Constraint(
+                dto.getExplanation(),
+                WeekDay.valueOf(dto.getDay().toUpperCase()),
+                ShiftType.valueOf(dto.getType().toUpperCase())
+        );
+    }
+
+    private String buildKey(long empId, WeekDay day, ShiftType type) {
+        return empId + "_" + day.name() + "_" + type.name();
+    }
+
+    public void save(long empId, Constraint constraint) throws SQLException {
+        String key = buildKey(empId, constraint.getDay(), constraint.getType());
+
+        // המרה ל־DTO לשם שמירה במסד הנתונים
+        ConstraintDTO dto = new ConstraintDTO(
+                empId,
+                constraint.getExplanation(),
+                constraint.getDay().name(),
+                constraint.getType().name()
+        );
+
+        // שמירה במסד הנתונים
+        constraintDAO.insert(dto);
+
+        // שמירה בזיכרון
+        constraintCache.put(key, constraint);
+    }
+
+    public void update(long empId, Constraint constraint) {
+        String key = buildKey(empId, constraint.getDay(), constraint.getType());
+        constraintCache.put(key, constraint); // עדכון בזיכרון
+
+        ConstraintDTO dto = DTOToDomainMapper.toDTO(constraint,empId);
+        constraintDAO.update(empId, dto);
+    }
+
+    public void delete(long empId, WeekDay day, ShiftType type) throws SQLException {
+        String key = buildKey(empId, day, type);
+
+        // 1. הסר מה־cache הכללי
+        constraintCache.remove(key);
+
+        // 2. הסר מה־DB
+        constraintDAO.delete(empId, type.name(), day.name());
+    }
+
+
+}
