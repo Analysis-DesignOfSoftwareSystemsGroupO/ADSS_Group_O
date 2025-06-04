@@ -2,14 +2,15 @@ package TransportModule.transport_module;
 
 import TransportModule.DTO.DriverDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DriverControllerDomain {
 
-    private IDriverRepository driverRepository;
+    private final IDriverRep driverRepository;
 
-    public DriverControllerDomain(){
-        driverRepository = new DriverRepositoryIMP();
+    public DriverControllerDomain() throws Exception{
+        driverRepository = DriverRepIMP.getInstance();
 
     }
 
@@ -18,20 +19,26 @@ public class DriverControllerDomain {
     }
 
     public void addDriverFromDto(DriverDto driverDto) throws Exception{
-        driverRepository.addNewDriver(driverDto);
+        driverRepository.save(driverDto);
 
     }
 
     public DriverDto getDriverById(String id) throws Exception{
-        return driverRepository.getDriverById(id);
+        Driver d = driverRepository.getDriverByID(id);
+        ArrayList<DrivingLicence> licences = d.getLicencs();
+        ArrayList<String> licencesStr = new ArrayList<>();
+        for(DrivingLicence drivingLicence: licences){
+            licencesStr.add(drivingLicence.getCode());
+        }
+        return new DriverDto(d.getId(),licencesStr);
     }
 
     public void deleteDriverById(String id) throws Exception{
-        driverRepository.deleteDriverById();
+        driverRepository.deleteDriver(id);
     }
 
     public Driver getDriverFromDTO(DriverDto dto) throws Exception{
-        return driverRepository.getDriverFromDTO(dto);
+        return driverRepository.convertDTOtoDriver(dto);
     }
 
 
