@@ -115,4 +115,7 @@ public class WeekRepository {
         shiftDAO.insertShift(shift, branchID);
     }
 
+    public void assignedShiftM(long empId, int shiftId){
+        shiftDAO.assignedShiftM(empId,shiftId);
+    }
 }

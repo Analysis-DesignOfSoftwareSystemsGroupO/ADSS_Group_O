@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="shayAV2" />
+                    <option name="lastUsedInstant" value="1749078693" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="SagiFromSaD-local" />
+                    <option name="lastUsedInstant" value="1749078647" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="hrAndTrsdekel" />
+                    <option name="lastUsedInstant" value="1749078646" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2xxCQtzXg1GwlwXpK4c5RSuXu96" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HR_Main.executor": "Debug",
+    "Application.Main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "shayAV2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/dekel/IdeaProjects/ADSS_Group_O/dev/lib/postgresql-42.7.6.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\HR_Mudol\Service" />
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\sql" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.HR_Main">
+    <configuration name="HR_Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="HR_Mudol.HR_Main" />
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="HR_Mudol.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="HR_Mudol.Main" />
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="HR_Mudol.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.HR_Main" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="" />
+      <created>1748870326864</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748870326864</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WfRunsListSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;branch&quot;: &quot;SagiFromSaD-local&quot;,
+      &quot;currentBranchFilter&quot;: true
+    },
+    {
+      &quot;branch&quot;: &quot;shayAV2&quot;,
+      &quot;currentBranchFilter&quot;: true
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;branch&quot;: &quot;shayAV2&quot;,
+    &quot;currentBranchFilter&quot;: true
+  }
+}</component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="HR_Mudol.domain.repository.WeekRepository" memberName="weeks" />
+        <PinnedItemInfo parentTag="HR_Mudol.DTO.WeekDTO" memberName="constraintDeadline" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Week" memberName="shifts" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Objects.Week" memberName="shifts" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Objects.Shift" memberName="status" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.User" memberName="user" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.User" memberName="level" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>
