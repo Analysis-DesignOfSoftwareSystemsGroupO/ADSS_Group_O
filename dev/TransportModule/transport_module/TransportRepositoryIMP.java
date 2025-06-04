@@ -44,7 +44,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
                     Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
-                    t.addDriver(new Driver(,t.getDriver().getEmpId()));  //todo integration with driver Table
+                    t.addDriver(new Driver(dto.getDriverID(), null));  //todo integration with driver Table to get the Licence
                     List<ProductListDocument> plds = pldRep.getPLDByTransportID(t.getId());
                     for (ProductListDocument pld : plds)
                         t.loadByDocument(pld);
@@ -151,7 +151,6 @@ public class TransportRepositoryIMP implements ITransportRepository {
         List<Transport> transportsList = new ArrayList<>();
         for (TransportDTO dto : transportDTOS){ //for each transport dto
             Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper
-
         }
         //Add Transport with id -1 if not exsists
         if(getTransportByid(-1) ==null) {

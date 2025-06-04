@@ -1,24 +1,28 @@
+
 package TransportModule.transport_module;
 
 import HR_Mudol.domain.Objects.Employee;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
-public class Driver extends Employee{
-    private ArrayList<DrivingLicence> licencs;
+public class Driver {
+    private final ArrayList<DrivingLicence> licencs;
+
+
+
+    private String id;
 
     /***
      * Constructor - creates a Driver with given name, ID and a copy of provided licenses.
      */
-    public Driver( String empName, int empId, String empPassword, String empBankAccount, int empSalary, LocalDate empStartDate, int minDayShift, int minEveninigShift, int sickDays, int daysOff, ArrayList<DrivingLicence> licencs) {
-       super( empName, empId, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveninigShift, sickDays, daysOff);
+    public Driver( String id, ArrayList<DrivingLicence> licencs) {
         this.licencs = new ArrayList<>();
         for (DrivingLicence licence : licencs) {
             this.licencs.add(new DrivingLicence(licence));
         }
+        this.id = id;
     }
 
 
@@ -26,10 +30,10 @@ public class Driver extends Employee{
     //********************************************************************************************************************** Get functions
 
     /**
-     * @return Copy of the Driving licence list of the driver
+     * @return Copy the Driving license list of the driver
      */
     public ArrayList<DrivingLicence> getLicencs() { //return copy of the list
-        ArrayList<DrivingLicence> cpy = new ArrayList<DrivingLicence>();
+        ArrayList<DrivingLicence> cpy = new ArrayList<>();
         for (DrivingLicence dl : licencs) {
             cpy.add(new DrivingLicence(dl));
         }
@@ -40,9 +44,9 @@ public class Driver extends Employee{
 
 
     /***
-     * Checks if the driver has a specific driving licence.
-     * @param licence Licence to check
-     * @return true if driver has the licence, false otherwise
+     * Checks if the driver has a specific driving license.
+     * @param licence license to check
+     * @return true if driver has the license, false otherwise
      */
     public boolean hasLicencs(DrivingLicence licence) {
         for (DrivingLicence dl : licencs) {
@@ -56,10 +60,16 @@ public class Driver extends Employee{
         return licencs.size();
     }
 
+    public String getId(){
+        return id;
+    }
+
 //*********************************************************************************************************************** Set functions
 
 
-
+    public void setId(String id) {
+        this.id = id;
+    }
 
 
 //*********************************************************************************************************************** print functions
@@ -69,7 +79,7 @@ public class Driver extends Employee{
      */
     @Override
     public String toString() {
-        return super() +", licenses=" + licencs;
+        return super.toString() +", licenses= " + licencs;
     }
 
     /***
@@ -84,7 +94,7 @@ public class Driver extends Employee{
         if (obj == null || getClass() != obj.getClass())
             return false;
         Driver other = (Driver) obj;
-        return this.getEmpId() == other.getEmpId();
+        return Objects.equals(other.id, this.id);
     }
 
     /***
@@ -92,7 +102,7 @@ public class Driver extends Employee{
      */
     @Override
     public final int hashCode() {
-        return  this.getEmpId();
+        return  this.id.hashCode();
     }
 
 }
