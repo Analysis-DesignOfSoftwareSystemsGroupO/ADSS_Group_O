@@ -14,6 +14,7 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
         super();
     }
 
+
     @Override
     public void insert(EmployeeDTO dto, int brunchID) {
         String sql = "INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, " +

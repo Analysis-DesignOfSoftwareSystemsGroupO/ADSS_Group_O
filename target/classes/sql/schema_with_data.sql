@@ -51,8 +51,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     branchID INT REFERENCES Branches(branchID)
     );
 
-CREATE TABLE IF NOT EXISTS Roles;
-CREATE TABLE Roles (
+CREATE TABLE IF NOT EXISTS Roles (
                        roleNumber SERIAL PRIMARY KEY,
                        description TEXT UNIQUE NOT NULL
 );

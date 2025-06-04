@@ -4,5 +4,4 @@ public enum Level {
     HRManager,
     shiftManager,
     regularEmp,
-    TransportManager
 }

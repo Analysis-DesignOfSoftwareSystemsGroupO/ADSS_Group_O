@@ -5,13 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dev/sql/test_schema.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/Controller/EmployeeControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/DAO/EmployeeDAOImplTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/DAO/RoleDAOImplTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/DTO/ConstraintDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/DTO/EmployeeDTOTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/DTO/RoleDTOTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/domain/ConstraintTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/domain/EmployeeTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/domain/HRManagerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/domain/RoleTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/domain/ShiftTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/domain/UserTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/integration/EmployeeFlowTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/HRModule/integration/RoleFlowTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ADSS_Group_O.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ADSS_Group_O.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/BaseDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/BaseDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/EmployeeDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/EmployeeDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DataBase/DatabaseInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DataBase/DatabaseInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Level.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Objects/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Objects/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/BaseDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/BaseDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/EmployeeDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/EmployeeDAOImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/DataBase/DatabaseInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/DataBase/DatabaseInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Level.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Level.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Objects/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Objects/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sql/schema_with_data.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -25,41 +62,120 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;hrAndTrsdekel&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dekel/IdeaProjects/ADSS_Group_O/dev/lib/postgresql-42.7.6.jar&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.All in ADSS_Group_O.executor": "Run",
+    "JUnit.EmployeeControllerTest.executor": "Run",
+    "JUnit.EmployeeControllerTest.testGetContractDetails_AsSelf.executor": "Run",
+    "JUnit.EmployeeControllerTest.testGetRolesForEmployee.executor": "Run",
+    "JUnit.EmployeeDAOImplTest.executor": "Run",
+    "JUnit.EmployeeDAOImplTest.testArchiveAndDelete.executor": "Run",
+    "JUnit.EmployeeDTOTest.executor": "Run",
+    "JUnit.EmployeeDTOTest.testToStringDoesNotThrow.executor": "Run",
+    "JUnit.EmployeeFlowTest.executor": "Run",
+    "JUnit.RoleDAOImplTest.executor": "Run",
+    "JUnit.RoleDTOTest.testConstructorWithAllFields.executor": "Run",
+    "JUnit.RoleFlowTest.executor": "Run",
+    "JUnit.RoleTest.executor": "Run",
+    "JUnit.test in ADSS_Group_O.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "hrAndTrsdekel",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/dekel/IdeaProjects/ADSS_Group_O/dev/lib/postgresql-42.7.6.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\test\HRModile\Service\EmployeeSystem" />
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\test\HRModile\Service\ManagerSystem" />
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\test\HRModile\domain" />
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\HR_Mudol\Service" />
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\sql" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="HR_Mudol.Main" />
+  <component name="RunManager" selected="JUnit.RoleDAOImplTest">
+    <configuration name="EmployeeControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADSS_Group_O" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="HR_Mudol.*" />
+          <option name="PATTERN" value="HRModule.Controller.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="HRModule.Controller" />
+      <option name="MAIN_CLASS_NAME" value="HRModule.Controller.EmployeeControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EmployeeControllerTest.testGetContractDetails_AsSelf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="HRModule.Controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="HRModule.Controller" />
+      <option name="MAIN_CLASS_NAME" value="HRModule.Controller.EmployeeControllerTest" />
+      <option name="METHOD_NAME" value="testGetContractDetails_AsSelf" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EmployeeControllerTest.testGetRolesForEmployee" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="HRModule.Controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="HRModule.Controller" />
+      <option name="MAIN_CLASS_NAME" value="HRModule.Controller.EmployeeControllerTest" />
+      <option name="METHOD_NAME" value="testGetRolesForEmployee" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RoleDAOImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="HRModule.DAO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="HRModule.DAO" />
+      <option name="MAIN_CLASS_NAME" value="HRModule.DAO.RoleDAOImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test in ADSS_Group_O" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/test" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.RoleDAOImplTest" />
+        <item itemvalue="JUnit.test in ADSS_Group_O" />
+        <item itemvalue="JUnit.EmployeeControllerTest" />
+        <item itemvalue="JUnit.EmployeeControllerTest.testGetRolesForEmployee" />
+        <item itemvalue="JUnit.EmployeeControllerTest.testGetContractDetails_AsSelf" />
       </list>
     </recent_temporary>
   </component>

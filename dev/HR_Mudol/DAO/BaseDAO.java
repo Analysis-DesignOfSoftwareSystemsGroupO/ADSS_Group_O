@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public abstract class BaseDAO implements AutoCloseable {
-    protected final Connection conn;
+    protected Connection conn;
 
     public BaseDAO() throws SQLException {
         this.conn = PostgresConnection.getConnection();

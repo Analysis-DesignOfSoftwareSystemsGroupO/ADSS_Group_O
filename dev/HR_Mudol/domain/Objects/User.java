@@ -81,8 +81,6 @@ public class User {
     }
 
 
-    public boolean isTransportManager() {
-        return level == Level.TransportManager;
-    }
+
 
 }
