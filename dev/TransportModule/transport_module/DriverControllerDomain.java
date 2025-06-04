@@ -2,6 +2,8 @@ package TransportModule.transport_module;
 
 import TransportModule.DTO.DriverDto;
 
+import java.util.List;
+
 public class DriverControllerDomain {
 
     private IDriverRepository driverRepository;
@@ -11,7 +13,11 @@ public class DriverControllerDomain {
 
     }
 
-    public void addDriver(DriverDto driverDto) throws Exception{
+    public void addDriver(String id, List<String> drivinglincesCodes) throws Exception{
+        addDriverFromDto(new DriverDto(id,drivinglincesCodes));
+    }
+
+    public void addDriverFromDto(DriverDto driverDto) throws Exception{
         driverRepository.addNewDriver(driverDto);
 
     }

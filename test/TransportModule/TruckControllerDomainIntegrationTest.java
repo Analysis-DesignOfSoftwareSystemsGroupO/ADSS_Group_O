@@ -1,3 +1,4 @@
+package TransportModule;
 
 import TransportModule.DTO.TruckDto;
 import TransportModule.Transport_Module_Exceptions.InvalidInputException;
@@ -26,7 +27,8 @@ class TruckControllerDomainIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        truckRepository.clear();
+        // todo - think about clear method in repository
+//        truckRepository.clear();
     }
 
     @Test
