@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/sql/schema_only.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_only.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,19 +53,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.HR_Main.executor": "Debug",
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "shayAV2",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/dekel/IdeaProjects/ADSS_Group_O/dev/lib/postgresql-42.7.6.jar",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.HR_Main.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;shayAV2&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dekel/IdeaProjects/ADSS_Group_O/dev/lib/postgresql-42.7.6.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\HR_Mudol\Service" />
@@ -138,6 +134,15 @@
   }
 }</component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java</url>
+          <line>210</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="HR_Mudol.domain.repository.WeekRepository" memberName="weeks" />
