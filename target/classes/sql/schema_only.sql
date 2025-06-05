@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
@@ -13,6 +14,8 @@ ALTER TABLE Employees ADD COLUMN IF NOT EXISTS sickDays INT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS daysOff INT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS branchID INT;
 
+=======
+>>>>>>> sagiNew
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -20,7 +23,11 @@ CREATE TABLE IF NOT EXISTS Branches (
 );
 
 CREATE TABLE IF NOT EXISTS Employees (
+<<<<<<< HEAD
     empID BIGINT PRIMARY KEY,
+=======
+    empID INT PRIMARY KEY,
+>>>>>>> sagiNew
     empName VARCHAR(255),
     empPassword VARCHAR(255),
     empBankAccount VARCHAR(255),
@@ -33,6 +40,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     branchID INT REFERENCES Branches(branchID)
 );
 
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -62,6 +70,15 @@ ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
+=======
+CREATE TABLE IF NOT EXISTS Roles (
+    roleNumber INT PRIMARY KEY,
+    description VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS EmployeeRole (
+    empID INT REFERENCES Employees(empID),
+>>>>>>> sagiNew
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
@@ -72,6 +89,7 @@ CREATE TABLE IF NOT EXISTS EmploymentContracts (
     minEveningShift INT,
     sickDays INT,
     daysOff INT,
+<<<<<<< HEAD
     ownerID BIGINT REFERENCES Employees(empID)
 );
 CREATE TABLE IF NOT EXISTS Users (
@@ -87,6 +105,28 @@ CREATE TABLE IF NOT EXISTS constraints (
     explanation TEXT,
     date_created DATE DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
+=======
+    ownerID INT REFERENCES Employees(empID)
+);
+
+CREATE TABLE IF NOT EXISTS Users (
+    userID INT PRIMARY KEY REFERENCES Employees(empID),
+    level VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS EmployeeRole (
+    empID INT REFERENCES Employees(empID),
+    roleNumber INT REFERENCES Roles(roleNumber),
+    PRIMARY KEY (empID, roleNumber)
+);
+
+CREATE TABLE IF NOT EXISTS Constraints (
+    constraintID SERIAL PRIMARY KEY,
+    empID INT REFERENCES Employees(empID),
+    ShiftType VARCHAR(255),
+    WeekDay VARCHAR(255),
+    explanation TEXT
+>>>>>>> sagiNew
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (
@@ -96,6 +136,7 @@ CREATE TABLE IF NOT EXISTS Shifts (
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
+<<<<<<< HEAD
     shiftManager BIGINT REFERENCES Employees(empID)
 );
 
@@ -110,17 +151,35 @@ CREATE TABLE iF NOT EXISTS RequiredRoles (
     roleNumber INT REFERENCES Roles(roleNumber),
     counter INT,
     PRIMARY KEY (branchID, shiftID, roleNumber)
+=======
+    shiftManager INT REFERENCES Employees(empID)
+);
+
+CREATE TABLE IF NOT EXISTS RequiredRoles (
+    branchID INT REFERENCES Branches(branchID),
+    shiftID INT REFERENCES Shifts(shiftID),
+    roleNumber INT REFERENCES Roles(roleNumber),
+    counter INT
+>>>>>>> sagiNew
 );
 
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
+<<<<<<< HEAD
     empID BIGINT REFERENCES Employees(empID),
+=======
+    empID INT REFERENCES Employees(empID),
+>>>>>>> sagiNew
     roleNumber INT REFERENCES Roles(roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Archived_Employees (
+<<<<<<< HEAD
     empID BIGINT PRIMARY KEY,
+=======
+    empID INT PRIMARY KEY,
+>>>>>>> sagiNew
     archiveDate DATE
 );
 
@@ -136,6 +195,7 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (9, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
+<<<<<<< HEAD
 INSERT INTO Roles (roleNumber, description) VALUES
 (101, 'Shift Manager'),
 (102, 'Cashier'),
@@ -147,3 +207,11 @@ ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
 (100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1);
+=======
+-- Additional data for demonstration
+INSERT INTO Roles (roleNumber, description) VALUES
+(101, 'Shift Manager'),
+(102, 'Warehouse'),
+(103, 'Driver')
+ON CONFLICT (roleNumber) DO NOTHING;
+>>>>>>> sagiNew
