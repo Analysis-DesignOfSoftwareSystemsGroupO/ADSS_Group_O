@@ -48,8 +48,8 @@ public class BookingMenu {
 
             // Display the main menu options
             System.out.println("Welcome to Booking Menu!");
-            System.out.println("Press 1 to Request new transport");
-            System.out.println("Press E to Exit Menu");
+            System.out.println("Press 1 to Request new transport.");
+            System.out.println("Press E to Exit Menu.");
 
             String input = scanner.nextLine();
 
@@ -65,7 +65,7 @@ public class BookingMenu {
                 }
 
                 // Handle invalid inputs
-                default -> System.out.println("Invalid input. Please try again.");
+                default -> System.out.println("Invalid input. Please try again.\n");
             }
         }
     }
@@ -138,8 +138,8 @@ public class BookingMenu {
         boolean running = true;
         while (running){
             System.out.println("Welcome to Delivery document!");
-            System.out.println("press 1 to create new Delivery document");
-            System.out.println("press E to Finish");
+            System.out.println("press 1 to create new Delivery document.");
+            System.out.println("press E to Finish.");
             String input = scanner.nextLine();
             switch (input){
                 case "1"-> {
@@ -155,7 +155,7 @@ public class BookingMenu {
                     System.out.println("Thank you!");
                     running = false;
                 }
-                default -> System.out.println("Invalid input. Please try again");
+                default -> System.out.println("Invalid input. Please try again\n");
             }
         }
         if(productsDocumentIdList.isEmpty()){ // if user didn't put any PLD - create empty one
@@ -167,7 +167,7 @@ public class BookingMenu {
     private int createEmptyProductListDocument(LocalDate date) throws Exception{
         System.out.println("Please enter your site destination: ");
         String site = scanner.nextLine();
-        System.out.println("Please enter wanted hour in HH:MM format: ");
+        System.out.println("Please enter wanted arrival time (HH:MM): ");
         String wantedhour = scanner.nextLine();
         String[] parts = wantedhour.split(":");
         int hour = Integer.parseInt(parts[0]);
@@ -185,7 +185,7 @@ public class BookingMenu {
         boolean running = true;
         System.out.println("Please enter your site destination: ");
         String site = scanner.nextLine();
-        System.out.println("Please enter wanted hour in HH:MM format: ");
+        System.out.println("Please enter wanted arrival time (HH:MM): ");
         String wantedhour = scanner.nextLine();
         String[] parts = wantedhour.split(":");
         int hour = Integer.parseInt(parts[0]);
@@ -196,14 +196,14 @@ public class BookingMenu {
         int totalWeight = 0;
         List<ProductDTO> productDTOS = new ArrayList<>();
         while (running) {
-            System.out.println("Press 1 to add Product");
-            System.out.println("Press E to return");
+            System.out.println("Press 1 to add Product.");
+            System.out.println("Press E to return.");
             String input = scanner.nextLine();
             switch (input) {
                 case "1" -> {
-                    System.out.println("Please enter product id");
+                    System.out.println("Please enter product id: ");
                     String productId = scanner.nextLine();
-                    System.out.println("Please enter amount");
+                    System.out.println("Please enter amount: ");
                     int amount = Integer.parseInt(scanner.nextLine());
                     ProductDTO productDTO = new ProductDTO(productId,5, amount);
                     try {
@@ -218,7 +218,7 @@ public class BookingMenu {
                     System.out.println("Thank you!");
                     running = false;
                 }
-                default -> System.out.println("Invalid input please try again");
+                default -> System.out.println("Invalid input please try again.\n");
             }
         }
 

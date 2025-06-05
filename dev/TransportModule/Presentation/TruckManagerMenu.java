@@ -33,12 +33,12 @@ public class TruckManagerMenu {
         boolean running = true;
         while (running) {
             // Print menu options
-            System.out.println("1. Add new Truck");
-            System.out.println("2. Show all Trucks");
-            System.out.println("3. Remove Truck");
-            System.out.println("4. Show Weekly Transports");
-            System.out.println("5. Attach Truck to transport");
-            System.out.println("E. Exit");
+            System.out.println("1. Add new Truck.");
+            System.out.println("2. Show all Trucks.");
+            System.out.println("3. Remove Truck.");
+            System.out.println("4. Show Weekly Transports.");
+            System.out.println("5. Attach Truck to transport.");
+            System.out.println("E. Exit.");
             String input = scanner.nextLine();
 
             try {
@@ -57,11 +57,11 @@ public class TruckManagerMenu {
 
                     case "E", "e" -> {
                         running = false;
-                        System.out.println("Goodbye.");
+                        System.out.println("Goodbye.\n");
                     }
 
                     // Handle invalid input
-                    default -> System.out.println("Invalid input.");
+                    default -> System.out.println("Invalid input.\n");
                 }
             } catch (Exception e) {
                 // Catch and report any runtime exceptions
@@ -72,18 +72,18 @@ public class TruckManagerMenu {
 
 
     private void addTruck(){
-        System.out.println("Enter truck plate number:");
+        System.out.println("Enter truck plate number: ");
         String plate = scanner.nextLine();
 
-        System.out.println("Enter max weight:");
+        System.out.println("Enter max weight: ");
         int maxWeight = Integer.parseInt(scanner.nextLine());
 
-        System.out.println("Enter driving licence code:");
+        System.out.println("Enter driving licence code: ");
         String licence = scanner.nextLine();
 
         try { // try to add new truck to system
             truckController.addTruck(plate, maxWeight, licence);
-            System.out.println("Truck has added successfully");
+            System.out.println("Truck has added successfully.\n");
         }
         catch (Exception e){ // catch the Exception if threw
             System.out.println(e.getMessage());
@@ -117,7 +117,7 @@ public class TruckManagerMenu {
 
 
     private void deleteTruck(){
-        System.out.println("Enter plate number:");
+        System.out.println("Enter plate number: ");
         String plate = scanner.nextLine();
         try{
             truckController.deleteTruck(plate);
@@ -173,10 +173,10 @@ public class TruckManagerMenu {
 
     private void attachTruckToTransport(){
 
-        System.out.println("Please enter transport id");
+        System.out.println("Please enter transport id: ");
         String transportId = scanner.nextLine();
 
-        System.out.println("Please enter truck plate number");
+        System.out.println("Please enter truck plate number: ");
         String truckPlt = scanner.nextLine();
 
         // Try to attach truck

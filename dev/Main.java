@@ -9,7 +9,7 @@ public class Main {
         System.out.println("Please choose your menu:");
         System.out.println("1. HR Menu");
         System.out.println("2. Transport Menu");
-        System.out.println("E. Exit\n");
+        System.out.println("E. Exit.");
     }
     public static void main(String[] args) {
 

@@ -37,7 +37,7 @@ public class TRS_Main {
         while (true){
             System.out.println("Please enter user name: ");
             String name = scanner.nextLine();
-            user = users.get(name.toLowerCase());
+            user = users.get(name);
             if (user == null){
                 System.out.println("User is not exist. Please try again");
             }
