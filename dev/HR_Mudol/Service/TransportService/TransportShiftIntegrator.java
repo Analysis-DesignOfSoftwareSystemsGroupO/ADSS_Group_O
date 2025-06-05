@@ -2,6 +2,7 @@ package HR_Mudol.Service.TransportService;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.Service.ManagerService.HRService;
+import HR_Mudol.domain.Objects.Role;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.ITransportController;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class TransportShiftIntegrator implements ITransportShiftIntegrator {
+    ///todo  change to branchrepository from branch
     private final BranchDTO branch;
     private final ITransportController transportController;
     private final HRService hrService;
@@ -25,7 +27,8 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     }
 
     public void integrateTransportShifts(UserDTO theCaller) throws Exception {
-        WeekDTO weekDTO = branch.getCurrentWeekDTO();
+        ///todo check if  branch.getCurrentWeekDTO() is exist if not create one
+        WeekDTO weekDTO = branch.getCurrentWeekDTO();///todo chnage to next week
         if (weekDTO == null) {
             System.out.println("⚠ No current week found in branch.");
             return;
@@ -34,7 +37,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
         // Ensure required roles exist
         ensureRolesExist(theCaller);
         RoleDTO driverDTO;
-        RoleDTO warehouseDTO = getRoleByDescription("Warehouse");
+        RoleDTO warehouseDTO = getRoleByDescription("Warehouse",theCaller);
 
 
         List<TransportDTO> transports = transportController.getTransportNextWeek();
@@ -49,33 +52,33 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             else
                 licence = "Driver-C";
 
-            driverDTO = getRoleByDescription(licence);
+            driverDTO = getRoleByDescription(licence,theCaller);
             driverDTO.setDescription(licence+":"+transport.getId());
 
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
-
-            ShiftDTO shiftDTO = weekDTO.getShifts().stream().filter(s -> s.getDay().equals(day) && s.getType().equals(type)).findFirst().orElse(null);
-            // todo - if shiftDTO == null ->  create one and add it to weekly repository
-            if (shiftDTO == null) {
-                System.out.printf("⚠ No shift found for %s %s%n", day, type);
-                continue;
-            }
-
-            // Origin branch: needs Driver
-// Add 1 Driver
-            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
+            List<ShiftDTO> shiftDTOs = branch.getCurrentWeekDTO().getShifts();
+            for (ShiftDTO dto : shiftDTOs) {
+                if (dto.getDay().equals(day.name()) && dto.getType().equals(type.name())) {
+                    hrService.addRoleToShiftIfNeeded(theCaller, dto, driverDTO, 1);
 
 
-            // Destination branch: needs Warehouse
-            List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(transport.getId()));
-            for (ProductListDocumentDto pld : plds) {
-                if (pld.getSiteDes().equalsIgnoreCase(branch.getName())) {
-                    hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
+                    ///todo לכל סניף להוסיף מחסנאי בזמן ההגעה של ההובלה
+                    // Destination branch: needs Warehouse
+                    List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(transport.getId()));
+                    for (ProductListDocumentDto pld : plds) {
+
+                        if (pld.getSiteDes().equalsIgnoreCase(branch.getName())) {
+                            hrService.addRoleToShiftIfNeeded(theCaller, dto, warehouseDTO, 1);
+                        }
+                    }
+
+
+
                 }
             }
-        }
 
+        }
         System.out.println("🚚 Transport-based roles integrated into shifts and saved to DB.");
     }
 
@@ -90,7 +93,9 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
         boolean hasWarehouse = roles.stream().anyMatch(r -> r.getDescription().equalsIgnoreCase("Warehouse"));
 
         if (!hasDriver) {
-            hrService.getRoleController().createRolebydescription(caller, "Driver");
+            hrService.getRoleController().createRolebydescription(caller, "Driver-A");
+            hrService.getRoleController().createRolebydescription(caller, "Driver-B");
+            hrService.getRoleController().createRolebydescription(caller, "Driver-C");
             System.out.println("✅ Role 'Driver' created.");
         }
         if (!hasWarehouse) {
@@ -104,11 +109,14 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                 .toList());
     }
 
-    private RoleDTO getRoleByDescription(String desc) {
+    private RoleDTO getRoleByDescription(String desc ,UserDTO caller) throws SQLException {
         // todo - change the function because it can send Driver-A -> need to be Driver
-        return branch.getRoles().stream()
-                .filter(r -> r.getDescription().equalsIgnoreCase(desc))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("❌ Role not found: " + desc));
+        for (Role role : hrService.getRoleController().getAllRoles(caller)) {
+            if (role.getDescription().toLowerCase().contains("driver")) {
+                return DTOToDomainMapper.toDTO(role);
+            }
+        }
+        return null;
     }
 }
+//

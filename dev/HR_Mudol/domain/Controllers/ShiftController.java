@@ -94,10 +94,7 @@ public class ShiftController implements IShiftController {
             return;
         }
 
-        if (!isShiftManagerOfShift(caller, shift)) {
-            System.out.println("Access denied. You are not the shift manager of this shift.");
-            return;
-        }
+
 
         // Authorization check
         if (!caller.isManager() && !caller.isShiftManager()) {
