@@ -1,0 +1,3 @@
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-05-main-[]-ERROR-TransportModule.DataLayer.DataBase:Connection Failed with SQLexception 

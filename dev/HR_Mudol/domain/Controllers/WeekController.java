@@ -1,8 +1,13 @@
 package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.*;
+import HR_Mudol.Service.ManagerService.HRService;
+import HR_Mudol.Service.TransportService.TransportShiftIntegrator;
 import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.Status;
+import TransportModule.transport_module.ITransportController;
+import TransportModule.transport_module.TransportContorollerDomain;
+import HR_Mudol.*;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -81,7 +86,9 @@ public class WeekController implements IWeekController {
      * @throws IllegalArgumentException if there are no roles or employees in the system.
      */
     @Override
-    public WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException {
+    public WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, HRService hr, WeekDTO theWeek) throws SQLException {
+
+        integrateTransport(DTOToDomainMapper.toDTO(curBranch),hr,theCaller); //  קריאה והוספה אוטומטית של תפקידים לפי הדרישות במחלקת הובלות
 
         User caller=mapper.fromDTO(theCaller);
 
@@ -105,6 +112,16 @@ public class WeekController implements IWeekController {
         }
         return theWeek;
 
+    }
+    private static void integrateTransport(BranchDTO curBranch,HRService hr,UserDTO callerDTO) {
+        try {
+            ITransportController transportController = new TransportContorollerDomain();
+            TransportShiftIntegrator integrator = new TransportShiftIntegrator(curBranch, transportController , hr);
+            integrator.integrateTransportShifts(callerDTO);
+        } catch (Exception e) {
+            System.out.println("❌ Failed to integrate transport roles: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**

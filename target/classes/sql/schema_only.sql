@@ -1,6 +1,18 @@
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empPassword VARCHAR(255);
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empBankAccount VARCHAR(255);
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empSalary INT;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empStartDate DATE;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS minDayShift INT;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS minEveningShift INT;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS sickDays INT;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS daysOff INT;
+ALTER TABLE Employees ADD COLUMN IF NOT EXISTS branchID INT;
+
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -21,9 +33,29 @@ CREATE TABLE IF NOT EXISTS Employees (
     branchID INT REFERENCES Branches(branchID)
 );
 
-CREATE TABLE IF NOT EXISTS Roles (
-    roleNumber SERIAL,
-    description VARCHAR(255) PRIMARY KEY
+CREATE TABLE IF NOT EXISTS Branches (
+    branchID INT PRIMARY KEY,
+    name VARCHAR(255),
+    district VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS Employees (
+    empID BIGINT PRIMARY KEY,
+    empName VARCHAR(255),
+    empPassword VARCHAR(255),
+    empBankAccount VARCHAR(255),
+    empSalary INT,
+    empStartDate DATE,
+    minDayShift INT,
+    minEveningShift INT,
+    sickDays INT,
+    daysOff INT,
+    branchID INT REFERENCES Branches(branchID)
+);
+
+CREATE TABLE IF NOT EXISTS Roles(
+    roleNumber SERIAL PRIMARY KEY,
+    description TEXT UNIQUE NOT NULL
 );
 
 ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
@@ -67,11 +99,17 @@ CREATE TABLE IF NOT EXISTS Shifts (
     shiftManager BIGINT REFERENCES Employees(empID)
 );
 
-CREATE TABLE IF NOT EXISTS RequiredRoles (
+ALTER TABLE Shifts
+ADD CONSTRAINT unique_shift_per_day_type_branch
+UNIQUE (deadline, type, branchID);
+
+
+CREATE TABLE iF NOT EXISTS RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),
-    counter INT
+    counter INT,
+    PRIMARY KEY (branchID, shiftID, roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
@@ -101,7 +139,10 @@ ON CONFLICT (branchID) DO NOTHING;
 INSERT INTO Roles (roleNumber, description) VALUES
 (101, 'Shift Manager'),
 (102, 'Cashier'),
-(103, 'Warehouse')
+(103, 'Warehouse'),
+(104, 'Driver-A'),
+(105, 'Driver-B'),
+(106, 'Driver-C')
 ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
