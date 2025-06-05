@@ -88,7 +88,7 @@ public class Role {
      */
     public void addNewEmployee(Employee employee) {
 
-        this.relevantEmployees.addLast(employee);
+        this.relevantEmployees.add(employee);
     }
 
     /**

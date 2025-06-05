@@ -20,7 +20,7 @@ public class Main {
             String choice = scanner.nextLine();
             switch (choice){
                 case "1" ->  HR_Main.main(args);
-                case "2" -> TRS_Main.main(args);
+                case "2" -> TRS_Main.TRS_main(args);
                 case "E","e" -> {
                     System.out.println("GoodBye!");
                     running = false;

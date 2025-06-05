@@ -80,17 +80,19 @@ public class jdbcTransportDAO implements ITransportDAO {
         log.info("jdbcTransportDAO :: getHieghestTransportID ()");
         String sql = "SELECT \"id\" FROM \"Transports\" ORDER BY \"id\" DESC LIMIT 1;";
 
-        try(Statement st = DataBase.getConnection().createStatement();
-            ResultSet rs = st.executeQuery(sql)){
-            if(rs.next()){
-                return   rs.getInt("id");
+        try (PreparedStatement stmt = DataBase.getConnection().prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("id");
             }
-        }
-        catch (SQLException e){
+
+        } catch (SQLException e) {
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
             throw e;
         }
-        return 0 ;
+
+        return 0;
     }
 
     //retun list of Transport dto that have no trucks assigned

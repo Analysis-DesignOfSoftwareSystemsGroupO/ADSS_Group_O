@@ -1,3 +1,23 @@
 2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
 2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
 2025-06-05-main-[]-ERROR-TransportModule.DataLayer.DataBase:Connection Failed with SQLexception 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-05-main-[]-ERROR-TransportModule.DataLayer.DataBase:Connection Failed with SQLexception 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-05-main-[]-ERROR-TransportModule.DataLayer.DataBase:Connection Failed with SQLexception 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-05-main-[]-ERROR-TransportModule.DataLayer.DataBase:Connection Failed with SQLexception 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-05-main-[]-ERROR-TransportModule.DataLayer.DataBase:Connection Failed with SQLexception 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-05-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-05-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 

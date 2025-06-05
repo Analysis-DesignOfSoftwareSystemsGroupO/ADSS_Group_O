@@ -18,9 +18,7 @@ public class TRS_Main {
 
     }
 
-
-
-    public static void main(String[] args) {
+    public static void TRS_main(String[] args) {
 
         Map<String, User> users = new HashMap<>();
         try {

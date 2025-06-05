@@ -128,8 +128,8 @@ public class Shift {
         if (employees.contains(employee)) {
             throw new IllegalArgumentException("Employee already assigned to this shift.");
         }
-        this.filledRoles.addLast(new FilledRole(employee, role));
-        this.employees.addLast(employee);
+        this.filledRoles.add(new FilledRole(employee, role));
+        this.employees.add(employee);
     }
 
     /**

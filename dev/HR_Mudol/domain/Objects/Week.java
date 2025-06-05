@@ -64,7 +64,7 @@ public class Week {
             }
 
             newShift = new Shift(counter++,day, type);
-            shifts.addLast(newShift);
+            shifts.add(newShift);
         }
     }
 

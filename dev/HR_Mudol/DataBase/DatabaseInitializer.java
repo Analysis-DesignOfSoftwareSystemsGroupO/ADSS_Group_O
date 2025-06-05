@@ -14,22 +14,15 @@
 
         public static void initialize(boolean loadFromDatabase) {
             if (loadFromDatabase) {
-                System.out.println("⚠️ Initializing fresh system from schema_with_data.sql...");
                 executeSQLFile("dev/sql/schema_with_data.sql");
+                executeSQLFile("dev/sql/TRS_schema.sql");
+
             } else {
-                System.out.println("✅ Loading existing data from database — skipping script.");
+                System.out.println("⚠️ Initializing fresh system...");
+                executeSQLFile("dev/sql/schema_only.sql");
+                executeSQLFile("dev/sql/TRS_schema.sql");
             }
         }
-        public static void initializeForTests() {
-            System.out.println("🧪 Initializing test DB from test_schema.sql...");
-            executeSQLFile("dev/sql/test_schema.sql");
-        }
-
-        public static void initializeFromPath(String path) {
-            System.out.println("🧪 Initializing test database from: " + path);
-            executeSQLFile(path);
-        }
-
 
         private static void executeSQLFile(String filePath) {
             try {
