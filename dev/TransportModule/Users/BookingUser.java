@@ -15,4 +15,3 @@ public class BookingUser extends User {
         bookingMenu.showMenu();
     }
 }
-

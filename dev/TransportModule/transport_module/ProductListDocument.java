@@ -58,7 +58,6 @@ public class ProductListDocument {
         approximatedArrivaleTime = LocalTime.of(hour, minute); // set the hour
 
 
-
     }
     //****************************************************************************************************************** Get functions
 
@@ -101,13 +100,15 @@ public class ProductListDocument {
         return productHashMap;
     }
 
-    public int getTransportId(){
-        //return -1 if null
-        if(transport == null )return -1;
+    public int getTransportId() {
+        if (transport == null)
+            return -1;
         return this.transport.getId();
     }
 
-    public LocalTime getApproximatedArriavaleTime(){return approximatedArrivaleTime;}
+    public LocalTime getApproximatedArriavaleTime() {
+        return approximatedArrivaleTime;
+    }
 
     //********************************************************************************************************************** Set functions
 
@@ -118,7 +119,7 @@ public class ProductListDocument {
      * @throws ATransportModuleException if transport is null or dates mismatch
      */
     public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
-        if (transport == null || this.transport.equals(transport)) {
+        if (transport == null || (this.transport != null && this.transport.equals(transport))) {
             throw new InvalidInputException();
         }
         if (!transport.getDate().equals(date)) {
@@ -214,7 +215,8 @@ public class ProductListDocument {
             }
         }
     }
-    public void setArriavleTime(LocalTime time){
+
+    public void setArriavleTime(LocalTime time) {
         this.approximatedArrivaleTime = time;
     }
 
