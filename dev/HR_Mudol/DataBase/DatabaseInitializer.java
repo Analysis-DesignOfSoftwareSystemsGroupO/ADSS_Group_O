@@ -23,7 +23,10 @@
                 executeSQLFile("dev/sql/TRS_schema.sql");
             }
         }
-
+        public static void initializeForTests() {
+            System.out.println("🧪 Initializing test DB from test_schema.sql...");
+            executeSQLFile("dev/sql/test_schema.sql");
+        }
         private static void executeSQLFile(String filePath) {
             try {
                 String sql = new String(Files.readAllBytes(Paths.get(filePath)));
