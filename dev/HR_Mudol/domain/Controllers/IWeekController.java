@@ -4,6 +4,7 @@ import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Shift;
 import HR_Mudol.domain.Objects.User;
@@ -40,7 +41,7 @@ public interface IWeekController {
      * @param theCaller The user (manager or shift manager) who is choosing the roles for shifts.
      * @param theWeek The theWeek object representing the current theWeek.
      */
-    WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
+    WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, HRService hr,WeekDTO theWeek) throws SQLException;
 
     /**
      * Assigns employees to the shifts for the given theWeek.

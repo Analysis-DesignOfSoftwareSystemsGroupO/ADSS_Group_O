@@ -5,8 +5,10 @@ import HR_Mudol.Service.EmployeeService.IEmployeeService;
 import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
+import HR_Mudol.Service.TransportService.TransportShiftIntegrator;
 import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.Objects.Role;
+
 
 import java.sql.SQLException;
 import java.util.List;
@@ -218,8 +220,10 @@ public class HRService implements IHRService {
 
     @Override
     public void manageTheWeekRelevantRoles(UserDTO caller, WeekDTO week) throws SQLException {
-        weekController.manageTheWeekRelevantRoles(caller,week);
+        weekController.manageTheWeekRelevantRoles(caller,this, week);
     }
+
+
 
     @Override
     public void assigningEmployToShifts(UserDTO caller) throws SQLException {

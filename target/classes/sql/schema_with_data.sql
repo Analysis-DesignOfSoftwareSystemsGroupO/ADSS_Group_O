@@ -140,6 +140,9 @@ INSERT INTO Roles (description) VALUES
 ('Shift Manager'),
 ('Cashier'),
 ('Warehouse'),
+('Driver-A'),
+('Driver-B'),
+'Driver-C'),
 ('Butcher'),
 ('Baker'),
 ('Security Guard'),
@@ -159,7 +162,6 @@ INSERT INTO Roles (description) VALUES
 ('Assistant Store Manager'),
 ('Store Manager'),
 ('Marketing Promoter'),
-('Driver')
 ON CONFLICT (description) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
@@ -301,60 +303,5 @@ INSERT INTO Users (userID, level) VALUES
 (400000010, 'regularEmp'),
 (400000011, 'regularEmp')
 ON CONFLICT (userID) DO NOTHING;
-
-
--- טבלת משמרות חדשה לשבוע 1.6–7.6 עבור סניף 0
-INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
-(100, 0, '2025-06-01', 'Sunday', 'Morning', 'Empty', 100000002),
-(101, 0, '2025-06-01', 'Sunday', 'Evening', 'Problem', 100000002),
-(102, 0, '2025-06-02', 'Monday', 'Morning', 'Full', 100000002),
-(103, 0, '2025-06-02', 'Monday', 'Evening', 'Problem', 100000002),
-(104, 0, '2025-06-03', 'Tuesday', 'Morning', 'Full', 100000002),
-(105, 0, '2025-06-03', 'Tuesday', 'Evening', 'Empty', 100000002),
-(106, 0, '2025-06-04', 'Wednesday', 'Morning', 'Problem', 100000002),
-(107, 0, '2025-06-04', 'Wednesday', 'Evening', 'Empty', 100000002),
-(108, 0, '2025-06-05', 'Thursday', 'Morning', 'Full', 100000002),
-(109, 0, '2025-06-05', 'Thursday', 'Evening', 'Problem', 100000002),
-(110, 0, '2025-06-06', 'Friday', 'Morning', 'Full', 100000002),
-(111, 0, '2025-06-06', 'Friday', 'Evening', 'Problem', 100000002),
-(112, 0, '2025-06-07', 'Saturday', 'Morning', 'Empty', 100000002)
-ON CONFLICT DO NOTHING;
-
--- RequiredRoles - הגדרת תפקידים נדרשים לכל משמרת לדוגמה
-INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
-(0, 100, 1, 1), -- Shift Manager
-(0, 100, 2, 2), -- Cashier
-(0, 101, 3, 1),
-(0, 102, 7, 1),
-(0, 103, 9, 2),
-(0, 104, 10, 1),
-(0, 105, 11, 1),
-(0, 106, 12, 1),
-(0, 107, 13, 1),
-(0, 108, 14, 1),
-(0, 109, 15, 1),
-(0, 110, 16, 1),
-(0, 111, 17, 1),
-(0, 112, 18, 1)
-ON CONFLICT DO NOTHING;
-
-
--- ShiftAssignments - שיבוץ עובדים מסניף 0 בלבד
-INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
-(0, 100, 100000002, 1),
-(0, 100, 100000003, 2),
-(0, 101, 100000004, 3),
-(0, 102, 100000002, 7),
-(0, 103, 100000003, 9),
-(0, 104, 100000004, 10),
-(0, 105, 100000002, 11),
-(0, 106, 100000003, 12),
-(0, 107, 100000004, 13),
-(0, 108, 100000002, 14),
-(0, 109, 100000003, 15),
-(0, 110, 100000004, 16),
-(0, 111, 100000002, 17),
-(0, 112, 100000003, 18)
-ON CONFLICT DO NOTHING;
 
 

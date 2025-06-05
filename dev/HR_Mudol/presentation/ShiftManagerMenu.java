@@ -70,7 +70,6 @@ public class ShiftManagerMenu implements Menu {
             System.out.println("1. Remove an employee from a shift");
             System.out.println("2. Add an employee to a shift");
             System.out.println("3. Transfer cancellation card");
-            System.out.println("4. Integrate transport roles into shifts"); // ✅ חדשה
             System.out.println("0. Exit");
 
             String choice = sc.nextLine().trim();
@@ -79,7 +78,6 @@ public class ShiftManagerMenu implements Menu {
                 case "1" -> shiftSys.removeEmployeeFromShift(callerDTO);
                 case "2" -> shiftSys.addEmployeeToShift(callerDTO);
                 case "3" -> shiftSys.transferCancellationCard(callerDTO);
-                case "4" -> integrateTransport(branch,hr,callerDTO); // ✅ קריאה לאינטגרציה עם הובלות
                 case "0" -> {
                     return;
                 }
@@ -88,15 +86,5 @@ public class ShiftManagerMenu implements Menu {
         }
     }
 
-    // ✅ פונקציה שמבצעת את אינטגרציית ההובלות
-    private static void integrateTransport(BranchDTO curBranch,HRService hr,UserDTO callerDTO) {
-        try {
-            ITransportController transportController = new TransportContorollerDomain();
-            TransportShiftIntegrator integrator = new TransportShiftIntegrator(curBranch, transportController , hr);
-            integrator.integrateTransportShifts(callerDTO);
-        } catch (Exception e) {
-            System.out.println("❌ Failed to integrate transport roles: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+
 }
