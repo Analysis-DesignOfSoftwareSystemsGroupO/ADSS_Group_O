@@ -4,7 +4,7 @@ import TransportModule.DTO.ProductDTO;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.TransportContorollerDomain;
-import transport_module.*;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,6 +17,10 @@ public class BookingControllerPL {
 
     public BookingControllerPL()throws Exception {
         this.domainController = new TransportContorollerDomain();
+    }
+
+    public BookingControllerPL(TransportContorollerDomain domainController) { // For test section
+        this.domainController = domainController;
     }
 
     /**

@@ -163,6 +163,8 @@ public class Transport {
             throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
         }
         driver = d;
+
+
     }
 
 
@@ -182,7 +184,8 @@ public class Transport {
                     throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
                 }
             }
-            truck.releaseTruck(date); // release the previous truck from transport
+            if(truck!= null)
+                truck.releaseTruck(date); // release the previous truck from transport
             truck = t; // save new truck to this transport
             truck.setDate(date); // save the new date in new truck
             maxWeight = t.getMaxWeight(); // change the maximum weight of transport

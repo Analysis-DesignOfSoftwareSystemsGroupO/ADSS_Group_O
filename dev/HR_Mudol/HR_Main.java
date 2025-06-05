@@ -13,11 +13,10 @@ import HR_Mudol.Service.EmployeeService.EmployeeService;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.presentation.LoginScreen;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
-public class Main {
+public class HR_Main {
 
     public static void main(String[] args) {
         try {

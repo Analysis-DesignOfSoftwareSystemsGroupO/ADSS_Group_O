@@ -6,32 +6,22 @@ public abstract class User {
     protected static int id = 0;
     protected   int code;
     protected String username;
-    protected String password;
 
-    public User(String username, String password){
-        this.password = password;
+    public User(String username){
         this.username = username;
         this.code = ++id;
 
     }
 
-    public void setPassword(String oldpassword, String newpassword) {
-        if(Objects.equals(oldpassword, password)) {
-            this.password = newpassword;
-        }
-    }
 
-    public void setUsername(String password, String newusername){
-        if(Objects.equals(this.password, password)) {
-            this.username = newusername;
-        }
+
+    public void setUsername( String newusername){
+        this.username = newusername;
+
     }
 
     public String getUsername(){
         return username;
-    }
-    public boolean comparePassword(String password){
-        return  Objects.equals(this.password, password);
     }
 
     @Override
@@ -39,12 +29,12 @@ public abstract class User {
 
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        return Objects.equals(((User) other).password, password) &&  Objects.equals(((User) other).username, username);
+        return  Objects.equals(((User) other).username, username);
     }
 
     @Override
     public final int hashCode() {
-        return (username + password).hashCode();
+        return username .hashCode();
     }
 
     public abstract void showMenu();

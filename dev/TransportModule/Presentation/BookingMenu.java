@@ -19,11 +19,10 @@ import java.util.Scanner;
 public class BookingMenu {
 
     // Dependency on the BookingService to process transport requests
-    private BookingControllerPL controller;
+    private final BookingControllerPL controller;
     private final Scanner scanner = new Scanner(System.in);
-    private String d; // date variable for Transport request
     private int transportId;
-    private List<Integer> productsDocumentIdList;
+    private final List<Integer> productsDocumentIdList;
     private int maxWeight;
 
 
@@ -33,8 +32,6 @@ public class BookingMenu {
     public BookingMenu() throws Exception{
 
         controller = new BookingControllerPL();
-        this.controller = controller;
-        d = "";
         transportId = -1;
         maxWeight = 0;
         productsDocumentIdList = new ArrayList<>();
@@ -115,9 +112,8 @@ public class BookingMenu {
             // Submit the transport request to the service
 
             this.transportId = controller.createTransport(date,source,maxWeight,departure_time);
-            this.d = datestr;
 
-            // attach each product list document to transport( even if its empty one)
+            // attach each product list document to transport (even if its empty one)
             controller.attachProductListDocumentsToTransport(productsDocumentIdList, transportId);
 
 
@@ -133,7 +129,6 @@ public class BookingMenu {
         // Clear all data for next booking
         productsDocumentIdList.clear();
         transportId = -1;
-        d = "";
         maxWeight = 0;
     }
 
