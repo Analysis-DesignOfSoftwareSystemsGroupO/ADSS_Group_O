@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class DataBase {
     private static final Logger log = LogManager.getLogger(DataBase.class);
-    private static final String DB_URL = "jdbc:log4jdbc:postgresql://172.19.160.1:5432/postgres?user=postgres&password=1234&connectTimeout=10&sslmode=prefer";
+    private static final String DB_URL = "jdbc:log4jdbc:postgresql://192.168.1.176:5432/postgres?user=postgres&password=1234&connectTimeout=10&sslmode=prefer";
     private static Connection conn;
 
     static {

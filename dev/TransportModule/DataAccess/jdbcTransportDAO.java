@@ -22,7 +22,7 @@ public class jdbcTransportDAO implements ITransportDAO {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()){
                 return rs.next()
-                        ? Optional.of(new TransportDTO(rs.getInt("id"), rs.getDate("Date").toLocalDate(), rs.getBoolean("is_sent"), rs.getInt("maximum_weight"), rs.getString("DriverID"), rs.getString("TruckPN"), rs.getString("Source_site_name"), rs.getTime("departure_time").toLocalTime()))
+                        ? Optional.of(new TransportDTO(rs.getInt("id"), rs.getDate("Date").toLocalDate(), rs.getBoolean("is_sent"), rs.getInt("maximum_weight"), rs.getString("DriverID").trim(), rs.getString("TruckPN").trim(), rs.getString("Source_site_name").trim(), rs.getTime("departure_time").toLocalTime()))
                         :Optional.empty(); //return TransportDTo , if failed to find return empty Optional
             }
 
