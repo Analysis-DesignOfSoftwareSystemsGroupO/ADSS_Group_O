@@ -9,7 +9,7 @@ public class Main {
         System.out.println("Please choose your menu:");
         System.out.println("1. HR Menu");
         System.out.println("2. Transport Menu");
-        System.out.println("E. Exit");
+        System.out.println("E. Exit\n");
     }
     public static void main(String[] args) {
 
@@ -19,13 +19,13 @@ public class Main {
             print_message();
             String choice = scanner.nextLine();
             switch (choice){
-                case "1" ->  HR_Main.main(args);
-                case "2" -> TRS_Main.main(args);
+                case "1" ->  HR_Main.HR_main(args);
+                case "2" -> TRS_Main.TRS_main(args);
                 case "E","e" -> {
                     System.out.println("GoodBye!");
                     running = false;
                 }
-                default -> System.out.println("Wrong input please try again");
+                default -> System.out.println("Wrong input please try again\n");
             }
         }
 
