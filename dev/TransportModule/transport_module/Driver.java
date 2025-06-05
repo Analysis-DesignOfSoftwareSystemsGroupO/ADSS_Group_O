@@ -1,17 +1,11 @@
-
 package TransportModule.transport_module;
 
-import HR_Mudol.domain.Objects.Employee;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Driver {
+
     private final ArrayList<DrivingLicence> licencs;
-
-
-
     private String id;
 
     /***
@@ -41,7 +35,9 @@ public class Driver {
     }
 
 
-
+    public void addLicence(String Lincence){
+        licencs.add(new DrivingLicence(Lincence));
+    }
 
     /***
      * Checks if the driver has a specific driving license.
@@ -79,7 +75,7 @@ public class Driver {
      */
     @Override
     public String toString() {
-        return super.toString() +", licenses= " + licencs;
+        return id +", licenses= " + licencs;
     }
 
     /***

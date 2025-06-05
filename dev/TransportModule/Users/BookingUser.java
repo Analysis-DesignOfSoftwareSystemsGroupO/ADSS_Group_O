@@ -5,8 +5,8 @@ import TransportModule.Presentation.BookingMenu;
 public class BookingUser extends User {
     private final BookingMenu bookingMenu;
 
-    public BookingUser(String username,String password) throws Exception {
-        super(username,password);
+    public BookingUser(String username) throws Exception {
+        super(username);
         this.bookingMenu = new BookingMenu();
     }
 

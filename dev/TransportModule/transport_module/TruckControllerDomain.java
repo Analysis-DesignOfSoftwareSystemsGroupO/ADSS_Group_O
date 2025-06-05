@@ -6,6 +6,7 @@ import TransportModule.DTO.TruckDto;
 import TransportModule.Transport_Module_Exceptions.InvalidInputException;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,20 +45,16 @@ public class TruckControllerDomain  {
 
 
     }
-    public TruckDto[] getAllTrucks() throws Exception{
+    public List<TruckDto> getAllTrucks() throws Exception{
         List<Truck> trucks =  truckRepository.getAllTrucks();
-
-        return turnTruckListToTruckDTOArray(trucks);
-    }
-
-    private TruckDto[] turnTruckListToTruckDTOArray(List<Truck> trucks) throws Exception{
-        TruckDto[] truckDtos = new TruckDto[trucks.size()];
-        int i=0;
+        List<TruckDto> truckDtos = new ArrayList<>();
         for(Truck truck: trucks){
-            truckDtos[i++] = makeDtoFromTruck(truck);
+            truckDtos.add(truckRepository.truckToDTO(truck));
         }
         return truckDtos;
     }
+
+
 
     /** A function that creates DTO from truck*/
     public TruckDto makeDtoFromTruck(Truck truck) throws Exception{

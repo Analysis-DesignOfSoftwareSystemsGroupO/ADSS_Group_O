@@ -8,12 +8,9 @@ import java.util.List;
 
 public interface ITransportController {
 
-    // מחזיר את כל הבקשות להובלות לשבוע הקרוב
     List<TransportDTO> getTransportNextWeek() throws Exception;
 
-    // מחזיר את מסמכי רשימות המוצרים לפי מזהה הובלה
     List<ProductListDocumentDto> getPLDbyTransportID(String transportID) throws Exception;
 
-    // מקצה נהג להובלה (מבחינת סטטוס ההובלה)
     void assignDriverTransport(String driverID, String transportID) throws Exception;
 }
