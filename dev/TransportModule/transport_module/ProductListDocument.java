@@ -122,6 +122,10 @@ public class ProductListDocument {
         if (transport == null || (this.transport != null && this.transport.equals(transport))) {
             throw new InvalidInputException();
         }
+        if(transport.getId() == -1){
+            this.transport = transport;
+            return;
+        }
         if (!transport.getDate().equals(date)) {
             throw new TransportMismatchException("Transport date doesn't match to document shipment date.");
         }
