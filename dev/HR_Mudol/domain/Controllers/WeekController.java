@@ -87,12 +87,8 @@ public class WeekController implements IWeekController {
      */
     @Override
     public WeekDTO manageTheWeekRelevantRoles(UserDTO theCaller, HRService hr, WeekDTO theWeek) throws SQLException {
-
         integrateTransport(DTOToDomainMapper.toDTO(curBranch),hr,theCaller); //  קריאה והוספה אוטומטית של תפקידים לפי הדרישות במחלקת הובלות
-
         User caller=mapper.fromDTO(theCaller);
-
-
         if (!caller.isManager()) {
             throw new SecurityException("Access denied.");
         }
@@ -101,6 +97,7 @@ public class WeekController implements IWeekController {
         {
             throw new IllegalArgumentException("No roles at the system - first add roles.");
         }
+
         if (this.curBranch.getEmployeeRepo().getAll().isEmpty())
         {
             throw new IllegalArgumentException("No employees at the system - first add them.");

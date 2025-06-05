@@ -27,19 +27,11 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     }
 
     public void integrateTransportShifts(UserDTO theCaller) throws Exception {
-        ///todo check if  branch.getCurrentWeekDTO() is exist if not create one
-        WeekDTO weekDTO = branch.getCurrentWeekDTO();///todo chnage to next week
-        if (weekDTO == null) {
-            System.out.println("⚠ No current week found in branch.");
-            return;
-        }
-
+        WeekDTO weekDTO = hrService.getNextWeekDTO();;
         // Ensure required roles exist
         ensureRolesExist(theCaller);
         RoleDTO driverDTO;
         RoleDTO warehouseDTO = getRoleByDescription("Warehouse",theCaller);
-
-
         List<TransportDTO> transports = transportController.getTransportNextWeek();
 
         for (TransportDTO transport : transports) {
@@ -54,27 +46,21 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
             driverDTO = getRoleByDescription(licence,theCaller);
             driverDTO.setDescription(licence+":"+transport.getId());
-
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
             List<ShiftDTO> shiftDTOs = branch.getCurrentWeekDTO().getShifts();
-            for (ShiftDTO dto : shiftDTOs) {
-                if (dto.getDay().equals(day.name()) && dto.getType().equals(type.name())) {
-                    hrService.addRoleToShiftIfNeeded(theCaller, dto, driverDTO, 1);
-
-
-                    ///todo לכל סניף להוסיף מחסנאי בזמן ההגעה של ההובלה
+            for (ShiftDTO shiftDTO : shiftDTOs) {
+                if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
+                    hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
                     // Destination branch: needs Warehouse
                     List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(transport.getId()));
                     for (ProductListDocumentDto pld : plds) {
-
-                        if (pld.getSiteDes().equalsIgnoreCase(branch.getName())) {
-                            hrService.addRoleToShiftIfNeeded(theCaller, dto, warehouseDTO, 1);
+                        ShiftType typeforWarehouseDTO = determineShiftType(pld.getApproximatedArrivalTime());
+                        WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
+                        if (pld.getSiteDes().equalsIgnoreCase(branch.getName()) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name()) ) {
+                            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
                         }
                     }
-
-
-
                 }
             }
 
@@ -89,28 +75,30 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     private void ensureRolesExist(UserDTO caller) throws SQLException {
         List<RoleDTO> roles = branch.getRoles();
 
-        boolean hasDriver = roles.stream().anyMatch(r -> r.getDescription().equalsIgnoreCase("Driver"));
-        boolean hasWarehouse = roles.stream().anyMatch(r -> r.getDescription().equalsIgnoreCase("Warehouse"));
+        boolean hasDriverA = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Driver-A"));
+        boolean hasDriverB = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Driver-B"));
+        boolean hasDriverC = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Driver-C"));
 
-        if (!hasDriver) {
+        boolean hasWarehouse = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Warehouse"));
+
+        if (!hasDriverA) {
             hrService.getRoleController().createRolebydescription(caller, "Driver-A");
+        }
+        if (!hasDriverB) {
             hrService.getRoleController().createRolebydescription(caller, "Driver-B");
+        }
+        if (!hasDriverC) {
             hrService.getRoleController().createRolebydescription(caller, "Driver-C");
-            System.out.println("✅ Role 'Driver' created.");
         }
         if (!hasWarehouse) {
             hrService.getRoleController().createRolebydescription(caller, "Warehouse");
-            System.out.println("✅ Role 'Warehouse' created.");
         }
 
         // Refresh role list after potential additions
-        branch.setRoles(hrService.getRoleController().getAllRoles(caller).stream()
-                .map(DTOToDomainMapper::toDTO)
-                .toList());
+        branch.setRoles(hrService.getRoleController().getAllRoles(caller).stream().map(DTOToDomainMapper::toDTO).toList());
     }
 
     private RoleDTO getRoleByDescription(String desc ,UserDTO caller) throws SQLException {
-        // todo - change the function because it can send Driver-A -> need to be Driver
         for (Role role : hrService.getRoleController().getAllRoles(caller)) {
             if (role.getDescription().toLowerCase().contains("driver")) {
                 return DTOToDomainMapper.toDTO(role);
