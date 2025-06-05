@@ -11,7 +11,7 @@ import java.util.*;
 
 public class HR_Main {
 
-    public static void main(String[] args) {
+    public static void HR_main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
 
