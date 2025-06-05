@@ -520,11 +520,15 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         return 0;
     }
 
-
-
-
-
-
-
+    public void assignedShiftM(long empId, int shiftId) {
+        String sql = "UPDATE Shifts SET shiftmanager = ? WHERE shiftid = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, empId);
+            stmt.setInt(2, shiftId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to assign shift manager", e);
+        }
+    }
 
 }

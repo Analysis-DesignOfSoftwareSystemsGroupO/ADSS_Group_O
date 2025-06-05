@@ -140,6 +140,9 @@ INSERT INTO Roles (description) VALUES
 ('Shift Manager'),
 ('Cashier'),
 ('Warehouse'),
+('Driver-A'),
+('Driver-B'),
+'Driver-C'),
 ('Butcher'),
 ('Baker'),
 ('Security Guard'),
@@ -159,7 +162,6 @@ INSERT INTO Roles (description) VALUES
 ('Assistant Store Manager'),
 ('Store Manager'),
 ('Marketing Promoter'),
-('Driver')
 ON CONFLICT (description) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
@@ -337,6 +339,7 @@ INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
 (0, 111, 17, 1),
 (0, 112, 18, 1)
 ON CONFLICT DO NOTHING;
+
 
 -- ShiftAssignments - שיבוץ עובדים מסניף 0 בלבד
 INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES

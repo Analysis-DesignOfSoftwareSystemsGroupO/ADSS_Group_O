@@ -79,6 +79,9 @@ public class ShiftController implements IShiftController {
         //save at the DB
         curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpId(), shift.getShiftID(), role.getRoleNumber());
 
+        if (role.getDescription().equals("Shift Manager")){
+            curBranch.getWeekRepo().assignedShiftM(employee.getEmpId(),shift.getShiftID());
+        }
 
     }
 

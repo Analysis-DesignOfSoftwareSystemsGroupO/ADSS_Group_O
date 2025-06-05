@@ -338,6 +338,7 @@ INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
 (0, 112, 18, 1)
 ON CONFLICT DO NOTHING;
 
+
 -- ShiftAssignments - שיבוץ עובדים מסניף 0 בלבד
 INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
 (0, 100, 100000002, 1),
