@@ -1,3 +1,4 @@
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -10,18 +11,18 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 -- Create Tables
-CREATE TABLE IF NOT EXISTS Driveres_Licenece (
+CREATE TABLE IF NOT EXISTS "Driveres_Licenece" (
     DriverID character(32) NOT NULL,
     Licence character(32) NOT NULL,
     PRIMARY KEY (DriverID, Licence)
 );
 
-CREATE TABLE IF NOT EXISTS Drivers (
+CREATE TABLE IF NOT EXISTS "Drivers" (
     id character(32) NOT NULL,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS ProductListDocument (
+CREATE TABLE IF NOT EXISTS "ProductListDocument" (
     ProductListDocumentID integer NOT NULL,
     TransportID integer DEFAULT -1,
     totalweight integer,
@@ -31,7 +32,7 @@ CREATE TABLE IF NOT EXISTS ProductListDocument (
     PRIMARY KEY (ProductListDocumentID)
 );
 
-CREATE TABLE IF NOT EXISTS ProductListdocument_Products (
+CREATE TABLE IF NOT EXISTS "ProductListdocument_Products" (
     ProductListDocumentId integer NOT NULL,
     ProductQuantety integer DEFAULT 0,
     WeightPerUnit integer,
@@ -39,7 +40,7 @@ CREATE TABLE IF NOT EXISTS ProductListdocument_Products (
     PRIMARY KEY (ProductListDocumentId, ProductSerialNumber)
 );
 
-CREATE TABLE IF NOT EXISTS Transports (
+CREATE TABLE IF NOT EXISTS "Transports" (
     id integer NOT NULL,
     Date date,
     maximum_weight integer,
@@ -51,42 +52,42 @@ CREATE TABLE IF NOT EXISTS Transports (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS Transports_ProductListdocument (
+CREATE TABLE IF NOT EXISTS "Transports_ProductListdocument" (
     TransportId integer NOT NULL,
     ProductListDocumentId integer NOT NULL,
     PRIMARY KEY (TransportId, ProductListDocumentId)
 );
 
-CREATE TABLE IF NOT EXISTS TruckAvailability (
+CREATE TABLE IF NOT EXISTS "TruckAvailability" (
     Date date NOT NULL,
     TruckPN character(12) NOT NULL,
     PRIMARY KEY (Date, TruckPN)
 );
 
-CREATE TABLE IF NOT EXISTS Trucks (
-    maxWeight integer,
-    LicenceReq character(32),
-    PlateNumber character(32) NOT NULL,
+CREATE TABLE IF NOT EXISTS "Trucks" (
+    "maxWeight" integer,
+    "LicenceReq" character(32),
+    "PlateNumber" character(32) NOT NULL,
     PRIMARY KEY (PlateNumber)
 );
 
 -- Foreign Keys
-ALTER TABLE Driveres_Licenece
+ALTER TABLE "Driveres_Licenece"
     ADD CONSTRAINT DriverId_Fkey FOREIGN KEY (DriverID) REFERENCES Drivers(id);
 
-ALTER TABLE ProductListdocument_Products
+ALTER TABLE "ProductListdocument_Products"
     ADD CONSTRAINT ForeignKeyPLDid FOREIGN KEY (ProductListDocumentId) REFERENCES ProductListDocument(ProductListDocumentID);
 
-ALTER TABLE ProductListDocument
+ALTER TABLE "ProductListDocument"
     ADD CONSTRAINT TransportIDForeignKey FOREIGN KEY (TransportID) REFERENCES Transports(id);
 
-ALTER TABLE Transports
+ALTER TABLE "Transports"
     ADD CONSTRAINT DriverID_FK FOREIGN KEY (DriverID) REFERENCES Drivers(id),
     ADD CONSTRAINT TruckPN_FK FOREIGN KEY (TruckPN) REFERENCES Trucks(PlateNumber);
 
-ALTER TABLE TruckAvailability
+ALTER TABLE "TruckAvailability"
     ADD CONSTRAINT TruckPN_FK FOREIGN KEY (TruckPN) REFERENCES Trucks(PlateNumber);
 
-ALTER TABLE Transports_ProductListdocument
+ALTER TABLE "Transports_ProductListdocument"
     ADD CONSTRAINT pldID_FK FOREIGN KEY (ProductListDocumentId) REFERENCES ProductListDocument(ProductListDocumentID),
     ADD CONSTRAINT transportID_FK FOREIGN KEY (TransportId) REFERENCES Transports(id);
