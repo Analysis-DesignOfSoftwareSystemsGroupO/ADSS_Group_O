@@ -5,12 +5,12 @@ import HR_Mudol.Service.EmployeeService.IEmployeeService;
 import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
-import HR_Mudol.Service.TransportService.TransportShiftIntegrator;
 import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.Objects.Role;
 
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,7 +38,7 @@ public class HRService implements IHRService {
         this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
 
         this.employeeService = new EmployeeService(curBranch);
-        this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController);
+        this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController,this.roleController);
     }
 
     @Override
@@ -212,7 +212,6 @@ public class HRService implements IHRService {
         employeeController.addEmployee(caller);
     }
 
-
     @Override
     public void cancelShift(UserDTO caller, WeekDTO week) throws SQLException {
         weekController.cancelShift(caller, week);
@@ -228,6 +227,11 @@ public class HRService implements IHRService {
     @Override
     public void assigningEmployToShifts(UserDTO caller) throws SQLException {
         weekController.assigningEmployToShifts(caller);
+    }
+
+    @Override
+    public List<ShiftDTO> getShiftsInDateRange(BranchDTO branchDTO,LocalDate startDate, LocalDate endDate) throws SQLException {
+        return weekController.getShiftsInDateRange(branchDTO, startDate, endDate);
     }
 
     @Override
@@ -266,6 +270,12 @@ public class HRService implements IHRService {
     }
 
     // ReportGenerator forwarding
+
+    @Override
+    public void generateReports(UserDTO caller, BranchDTO branch, String reportType){
+        reportGenerator.generateReports(caller, branch, reportType);
+    }
+
     @Override
     public void generateEmployeeReport(UserDTO caller, int empId, WeekDTO curWeek) throws SQLException {
         reportGenerator.generateEmployeeReport(caller, empId, curWeek);
@@ -318,6 +328,7 @@ public class HRService implements IHRService {
     public void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException {
         shiftController.addRoleToShiftIfNeeded(caller, shift, role, requiredAmount);
     }
+
 
 
 

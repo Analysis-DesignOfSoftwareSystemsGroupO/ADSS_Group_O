@@ -1,5 +1,6 @@
 package HR_Mudol.domain.repository;
 import HR_Mudol.DAO.ShiftDAOImpl;
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.ShiftDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
@@ -117,5 +118,9 @@ public class WeekRepository {
 
     public void assignedShiftM(long empId, int shiftId){
         shiftDAO.assignedShiftM(empId,shiftId);
+    }
+
+    public List<ShiftDTO> getShiftsInDateRange(BranchDTO branchDTO, LocalDate startDate, LocalDate endDate) throws SQLException {
+        return shiftDAO.getShiftsInDateRange(branchDTO.getBranchID(),startDate,endDate);
     }
 }

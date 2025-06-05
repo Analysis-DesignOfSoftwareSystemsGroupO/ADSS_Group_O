@@ -64,4 +64,6 @@ public interface IShiftController {
     List<EmployeeDTO> getAllEmployeesAsDTOs() throws SQLException;
 
      void addRoleToShiftIfNeeded(UserDTO callerDTO, ShiftDTO shiftDTO, RoleDTO roleDTO, int requiredAmount) throws SQLException;
+
+    List<EmployeeDTO> getAllEmployeesAsDTOs2() throws SQLException;
 }

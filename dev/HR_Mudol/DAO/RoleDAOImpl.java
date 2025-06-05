@@ -146,40 +146,6 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
         return result;
     }
 
-    @Override
-    public List<RoleDTO> getAllByBranch(int branchId) throws SQLException {
-        String sql = "SELECT DISTINCT r.roleNumber, r.description " +
-                "FROM Roles r JOIN RequiredRoles rr ON r.roleNumber = rr.roleNumber " +
-                "WHERE rr.branchID = ?";
-        List<RoleDTO> roles = new ArrayList<>();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, branchId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                int roleNumber = rs.getInt("roleNumber");
-                String description = rs.getString("description");
-
-                // טען עובדים רלוונטיים
-                List<EmployeeDTO> relevantEmployees = new ArrayList<>();
-                String empSql = "SELECT empID FROM EmployeeRole WHERE roleNumber = ?";
-                try (PreparedStatement empStmt = conn.prepareStatement(empSql)) {
-                    empStmt.setInt(1, roleNumber);
-                    ResultSet empRs = empStmt.executeQuery();
-                    while (empRs.next()) {
-                        long empId = empRs.getLong("empID");
-                        EmployeeDTO empDTO = employeeDAO.getById(empId);
-                        if (empDTO != null) {
-                            relevantEmployees.add(empDTO);
-                        }
-                    }
-                }
-
-                roles.add(new RoleDTO(roleNumber, description, relevantEmployees));
-            }
-        }
-        return roles;
-    }
-
 
     @Override
     public void delete(int roleNumber) throws SQLException {

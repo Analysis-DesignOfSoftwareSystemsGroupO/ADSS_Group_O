@@ -403,7 +403,49 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         return result;
     }
 
+    public List<ShiftDTO> getShiftsInDateRange(int branchID, LocalDate startDate, LocalDate endDate) throws SQLException {
+        List<ShiftDTO> shifts = new ArrayList<>();
+
+        String shiftSql = """
+        SELECT * FROM Shifts
+        WHERE deadline BETWEEN ? AND ? AND branchid = ?
+    """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(shiftSql)) {
+            stmt.setDate(1, Date.valueOf(startDate));
+            stmt.setDate(2, Date.valueOf(endDate));
+            stmt.setInt(3, branchID); // הוספת סינון לפי סניף
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int shiftId = rs.getInt("shiftid");
+                String day = rs.getString("day");
+                String type = rs.getString("type");
+                String status = rs.getString("status");
+                int shiftManagerId = rs.getObject("shiftmanager") != null ? rs.getInt("shiftmanager") : -1;
+
+                ShiftDTO shift = new ShiftDTO(shiftId, day, type, status, shiftManagerId);
+
+                // הוספת עובדים
+                shift.setEmployees(getEmployeesInShift(shiftId));
+
+                // הוספת תפקידים נדרשים
+                shift.setNecessaryRoles(getNecessaryRoles(shiftId));
+
+                // הוספת תפקידים שמולאו בפועל
+                shift.setFilledRoles(getFilledRoles(shiftId));
+
+                shifts.add(shift);
+            }
+        }
+
+        return shifts;
+    }
+
+
     private List<EmployeeDTO> getEmployeesInShift(int shiftId) throws SQLException {
+
         List<EmployeeDTO> employees = new ArrayList<>();
 
         String sql = """
