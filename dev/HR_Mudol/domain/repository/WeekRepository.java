@@ -46,8 +46,8 @@ public class WeekRepository {
         shiftDAO.insertEmpToShift(brunchID, empID, shiftID, roleNumber);
     }
 
-    public void removeEmployeeFromShift(int empNum, int shiftID) {
-        shiftDAO.removeEmpFromShift(shiftID, empNum);
+    public void removeEmployeeFromShift(long empID, int shiftID) {
+        shiftDAO.removeEmpFromShift(shiftID, empID);
     }
 
     public void removeRoleFromShift(int branchID, int shiftID, int roleNumber) {

@@ -146,7 +146,7 @@ public class ShiftController implements IShiftController {
         shift.removeEmployee(caller, employeeToRemove);
 
         //Remove from DB
-        curBranch.getWeekRepo().removeEmployeeFromShift(employeeToRemove.getEmpNum(),shift.getShiftID());
+        curBranch.getWeekRepo().removeEmployeeFromShift(employeeToRemove.getEmpId(),shift.getShiftID());
 
         System.out.println(employeeToRemove.getEmpName() +
                 " was removed from shift " + shift.getDay() + " - " + shift.getType() + ".");

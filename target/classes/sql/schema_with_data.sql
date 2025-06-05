@@ -1,6 +1,3 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empPassword VARCHAR(255);
@@ -163,7 +160,7 @@ INSERT INTO Roles (description) VALUES
 ('HR Representative'),
 ('Assistant Store Manager'),
 ('Store Manager'),
-('Marketing Promoter'),
+('Marketing Promoter')
 ON CONFLICT (description) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES

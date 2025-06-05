@@ -1,3 +1,2 @@
 Manifest-Version: 1.0
-TransportModule.TRS_Main-Class: HR_Mudol.HR_Main
-
+Main-Class: Main
