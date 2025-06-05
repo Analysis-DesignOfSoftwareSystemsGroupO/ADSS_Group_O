@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class TransportShiftIntegrator implements ITransportShiftIntegrator {
-    ///todo  change to branchrepository from branch
+
     private final BranchDTO branch;
     private final ITransportController transportController;
     private final HRService hrService;
@@ -74,16 +74,9 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
         boolean hasDriver = roles.stream().anyMatch(r -> r.getDescription().equals(str));
 
-
-        //boolean hasWarehouse = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Warehouse"));
-
         if (!hasDriver) {
            hrService.getRoleController().createRolebydescription(caller, str);
         }
-
-//        if (!hasWarehouse) {
-//            hrService.getRoleController().createRolebydescription(caller, "Warehouse");
-//        }
 
         // Refresh role list after potential additions
         branch.setRoles(hrService.getRoleController().getAllRoles(caller).stream().map(DTOToDomainMapper::toDTO).toList());
