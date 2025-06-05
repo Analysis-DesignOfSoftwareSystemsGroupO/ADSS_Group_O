@@ -4,25 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IRoleDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IRoleDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/RoleDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/RoleDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DTO/ShiftDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DTO/ShiftDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/IReportGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/IReportGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/IHRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/IHRService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ReportGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ReportGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IShiftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IShiftController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IWeekController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IWeekController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
-    </list>
+    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -226,13 +208,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/ReportGenerator.java</url>
-          <line>247</line>
+          <line>241</line>
           <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java</url>
-          <line>149</line>
-          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
