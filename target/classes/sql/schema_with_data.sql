@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
@@ -12,8 +11,6 @@ ALTER TABLE Employees ADD COLUMN IF NOT EXISTS sickDays INT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS daysOff INT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS branchID INT;
 
-=======
->>>>>>> sagiNew
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -21,11 +18,7 @@ CREATE TABLE IF NOT EXISTS Branches (
 );
 
 CREATE TABLE IF NOT EXISTS Employees (
-<<<<<<< HEAD
     empID BIGINT PRIMARY KEY,
-=======
-    empID INT PRIMARY KEY,
->>>>>>> sagiNew
     empName VARCHAR(255),
     empPassword VARCHAR(255),
     empBankAccount VARCHAR(255),
@@ -38,7 +31,6 @@ CREATE TABLE IF NOT EXISTS Employees (
     branchID INT REFERENCES Branches(branchID)
 );
 
-<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -68,15 +60,6 @@ ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
-=======
-CREATE TABLE IF NOT EXISTS Roles (
-    roleNumber INT PRIMARY KEY,
-    description VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
->>>>>>> sagiNew
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
@@ -87,7 +70,6 @@ CREATE TABLE IF NOT EXISTS EmploymentContracts (
     minEveningShift INT,
     sickDays INT,
     daysOff INT,
-<<<<<<< HEAD
     ownerID BIGINT REFERENCES Employees(empID)
 );
 CREATE TABLE IF NOT EXISTS Users (
@@ -103,28 +85,6 @@ CREATE TABLE IF NOT EXISTS constraints (
     explanation TEXT,
     date_created DATE DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
-=======
-    ownerID INT REFERENCES Employees(empID)
-);
-
-CREATE TABLE IF NOT EXISTS Users (
-    userID INT PRIMARY KEY REFERENCES Employees(empID),
-    level VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
-    roleNumber INT REFERENCES Roles(roleNumber),
-    PRIMARY KEY (empID, roleNumber)
-);
-
-CREATE TABLE IF NOT EXISTS Constraints (
-    constraintID SERIAL PRIMARY KEY,
-    empID INT REFERENCES Employees(empID),
-    ShiftType VARCHAR(255),
-    WeekDay VARCHAR(255),
-    explanation TEXT
->>>>>>> sagiNew
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (
@@ -134,7 +94,6 @@ CREATE TABLE IF NOT EXISTS Shifts (
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
-<<<<<<< HEAD
     shiftManager BIGINT REFERENCES Employees(empID)
 );
 
@@ -149,31 +108,16 @@ CREATE TABLE iF NOT EXISTS RequiredRoles (
     roleNumber INT REFERENCES Roles(roleNumber),
     counter INT,
     PRIMARY KEY (branchID, shiftID, roleNumber)
-=======
-    shiftManager INT REFERENCES Employees(empID)
-);
-
-CREATE TABLE IF NOT EXISTS RequiredRoles (
-    branchID INT REFERENCES Branches(branchID),
-    shiftID INT REFERENCES Shifts(shiftID),
-    roleNumber INT REFERENCES Roles(roleNumber),
-    counter INT
->>>>>>> sagiNew
 );
 
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
-<<<<<<< HEAD
     empID BIGINT REFERENCES Employees(empID),
-=======
-    empID INT REFERENCES Employees(empID),
->>>>>>> sagiNew
     roleNumber INT REFERENCES Roles(roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Archived_Employees (
-<<<<<<< HEAD
     empID BIGINT PRIMARY KEY,
     archiveDate DATE
 );
@@ -361,75 +305,3 @@ INSERT INTO Users (userID, level) VALUES
 ON CONFLICT (userID) DO NOTHING;
 
 
-=======
-    empID INT PRIMARY KEY,
-    archiveDate DATE
-);
-
--- Insert data into Branches
-INSERT INTO Branches (branchID, name, district) VALUES
-(1, 'Branch 1', 'North'),
-(2, 'Branch 2', 'Center'),
-(3, 'Branch 3', 'South'),
-(4, 'Branch 4', 'North'),
-(5, 'Branch 5', 'Center'),
-(6, 'Branch 6', 'South'),
-(7, 'Branch 7', 'North'),
-(8, 'Branch 8', 'Center'),
-(9, 'Branch 9', 'South')
-ON CONFLICT (branchID) DO NOTHING;
-
--- Additional data for demonstration
-INSERT INTO Roles (roleNumber, description) VALUES
-(101, 'Shift Manager'),
-(102, 'Cashier'),
-(103, 'Stocker')
-ON CONFLICT (roleNumber) DO NOTHING;
-
-INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
-(1, 'Alice Cohen', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1),
-(2, 'Boaz Levi', 'pass456', 'IL002', 9500, '2023-03-15', 3, 3, 8, 10, 2),
-(3, 'Dana Shalev', 'pass789', 'IL003', 8000, '2021-07-22', 5, 1, 5, 14, 3)
-ON CONFLICT (empID) DO NOTHING;
-
-INSERT INTO EmployeeRole (empID, roleNumber) VALUES
-(1, 101),
-(2, 102),
-(3, 103)
-ON CONFLICT (empID, roleNumber) DO NOTHING;
-
-INSERT INTO EmploymentContracts (contractID, minDayShift, minEveningShift, sickDays, daysOff, ownerID) VALUES
-(1, 4, 2, 10, 12, 1),
-(2, 3, 3, 8, 10, 2),
-(3, 5, 1, 5, 14, 3)
-ON CONFLICT (contractID) DO NOTHING;
-
--- Additional data for demonstration
-INSERT INTO Roles (roleNumber, description) VALUES
-(101, 'Shift Manager'),
-(102, 'Cashier'),
-(103, 'Warehouse'),
-(104, 'Technician'),
-(105, 'Cleaner'),
-(106, 'Driver')
-ON CONFLICT (roleNumber) DO NOTHING;
-
-INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) VALUES
-(1001, 1, '2024-06-10', 'Monday', 'Morning', 'Planned', 1),
-(1002, 2, '2024-06-11', 'Tuesday', 'Evening', 'Planned', 2)
-ON CONFLICT (shiftID) DO NOTHING;
-
-INSERT INTO RequiredRoles (branchID, shiftID, roleNumber, counter) VALUES
-(1, 1001, 102, 2),
-(2, 1002, 103, 1)
-ON CONFLICT DO NOTHING; -- אין מפתח ראשי בטבלה הזו, אז זה כללי
-
-INSERT INTO ShiftAssignments (branchID, shiftID, empID, roleNumber) VALUES
-(1, 1001, 2, 102),
-(2, 1002, 3, 103)
-ON CONFLICT DO NOTHING; -- גם כאן אין מפתח ראשי – או שהוא משולב
-
-INSERT INTO Archived_Employees (empID, archiveDate) VALUES
-(4, '2023-12-31')
-ON CONFLICT (empID) DO NOTHING;
->>>>>>> sagiNew

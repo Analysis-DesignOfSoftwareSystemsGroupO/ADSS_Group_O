@@ -56,7 +56,7 @@ public class Employee extends AbstractEmployee {
         if (role == null) {
             throw new NullPointerException("Role cannot be null");
         }
-        this.relevantRoles.addLast(role);
+        this.relevantRoles.add(role);
     }
 
 
