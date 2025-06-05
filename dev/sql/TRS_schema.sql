@@ -1,7 +1,3 @@
--- Cleaned SQL Script (ready for pgAdmin)
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;

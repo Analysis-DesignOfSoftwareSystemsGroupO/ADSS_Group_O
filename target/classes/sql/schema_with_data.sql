@@ -1,3 +1,5 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
@@ -142,7 +144,7 @@ INSERT INTO Roles (description) VALUES
 ('Warehouse'),
 ('Driver-A'),
 ('Driver-B'),
-'Driver-C'),
+('Driver-C'),
 ('Butcher'),
 ('Baker'),
 ('Security Guard'),

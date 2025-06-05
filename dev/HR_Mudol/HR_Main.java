@@ -1,7 +1,6 @@
 package HR_Mudol;
 
 import HR_Mudol.DTO.*;
-import HR_Mudol.DataBase.*;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.repository.BranchRepository;
 import HR_Mudol.Service.ManagerService.HRService;
@@ -15,6 +14,7 @@ public class HR_Main {
         try {
             Scanner scanner = new Scanner(System.in);
 
+            /*
             System.out.println("=== Welcome to the Workforce System ===");
             System.out.println("1. Load data from database");
             System.out.println("2. Start with a fresh (empty) system");
@@ -27,9 +27,8 @@ public class HR_Main {
                 System.out.println("Invalid option.");
                 return;
             }
+            */
 
-            // Init DB
-            DatabaseInitializer.initialize(loadFromDatabase);
 
             // Branch repository
             BranchRepository branchRepo = new BranchRepository();
