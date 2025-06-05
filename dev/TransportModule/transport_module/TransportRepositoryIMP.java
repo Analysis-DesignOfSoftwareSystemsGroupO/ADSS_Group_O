@@ -91,7 +91,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
         }
         return transports;
     }
-
+    //
     @Override
     public List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException{
         List<TransportDTO > transportDTOS = dao.getTransportsByDate(date);//get DTO of all transports that day
