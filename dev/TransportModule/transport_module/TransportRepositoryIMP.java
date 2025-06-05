@@ -42,20 +42,24 @@ public class TransportRepositoryIMP implements ITransportRepository {
                 if(transportDTO.isPresent()){
                     TransportDTO dto = transportDTO.get();
                     DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    Site s = new Site(dto.getSiteName(), "DefaultArea"); // Area feature is posposed
+                    Site s = new Site(dto.getSiteName(), "DefaultArea"); // todo Area feature is posposed
                     //Get the time by String
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
                     Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
+                    if(dto.getTruckPN() != null){
+                        Truck truck = truckRepository.getTruckBYPlateNumber(dto.getTruckPN());
+                        t.assignTruck(truck);
+                    }
                     if(dto.getDriverID() != null) { //assignDriver to transport
-                        Driver driver = driverRep.getDriverByID(dto.getDriverID()); //throw exception if driver not exsists
+                        Driver driver = driverRep.getDriverByID(dto.getDriverID().trim()); //throw exception if driver not exsists
                         t.addDriver(driver);
                     }
+
                     List<ProductListDocument> plds = pldRep.getPLDByTransportID(t.getId());
                     for (ProductListDocument pld : plds)
                         t.loadByDocument(pld);
                     transports.put(t.getId(), t);
-
                     return t;
                 }
                 else {return null;}
@@ -180,4 +184,16 @@ public class TransportRepositoryIMP implements ITransportRepository {
     public void deleteAll()throws SQLException{
         dao.deleteAll();
     }
+
+    @Override
+    public List<Transport> getAllTransports() throws SQLException, ATransportModuleException {
+        List<Transport> transportsList = new ArrayList<>();
+        List<Integer> tIDs = dao.getIDs(); //get all transports Dtos
+        for(Integer id : tIDs){
+            transportsList.add(getTransportByid(id));
+        }
+        return transportsList;
+    }
+
+
 }

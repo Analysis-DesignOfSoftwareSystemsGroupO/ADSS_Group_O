@@ -37,8 +37,7 @@ public class TruckControllerPL {
 
     // Attach truck - aopplu attach truck in domain
     public void attachTruck(String transportId, String truckPlt) throws Exception{
-
-        truckControllerDomain.assignTruckToTransport(Integer.parseInt( transportId),Integer.parseInt(truckPlt));
+        truckControllerDomain.assignTruckToTransport(Integer.parseInt( transportId),truckPlt);
     }
 
 
