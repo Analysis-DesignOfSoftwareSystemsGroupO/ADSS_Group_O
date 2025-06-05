@@ -152,7 +152,6 @@ public class BookingMenu{
                 default -> System.out.println("Invalid input. Please try again\n");
             }
         }
-        // todo - handle no PLD
 
 
     }
@@ -222,7 +221,7 @@ public class BookingMenu{
             }
         }
 
-        int ProductListDocumentId = controller.createProductListDocument(transportId,site,productDTOS,totalWeight,date,departure_time);
+        int ProductListDocumentId = controller.createProductListDocument(-1,site,productDTOS,totalWeight,date,departure_time);
 
         maxWeight+= totalWeight; // add the weight to total weight
         return ProductListDocumentId;
