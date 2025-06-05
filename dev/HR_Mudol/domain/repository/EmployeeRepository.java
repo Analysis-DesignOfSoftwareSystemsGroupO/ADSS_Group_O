@@ -58,7 +58,7 @@ public class EmployeeRepository {
     }
 
     public List<Employee> getAll() throws SQLException {
-        List<EmployeeDTO> allDTOs = employeeDAO.getAll(); // שואב מהדאטה בייס
+        List<EmployeeDTO> allDTOs = employeeDAO.getAll(branchID); // שואב מהדאטה בייס
         List<Employee> allEmployees = new ArrayList<>();
 
         for (EmployeeDTO dto : allDTOs) {

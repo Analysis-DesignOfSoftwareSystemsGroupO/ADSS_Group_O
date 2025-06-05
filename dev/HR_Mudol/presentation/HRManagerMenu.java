@@ -243,7 +243,7 @@ public class HRManagerMenu implements Menu {
     }
 
     private void displayDashboard(UserDTO caller, BranchDTO branch) {
-        WeekDTO week = branch.getCurrentWeekDTO();
+        WeekDTO week = hr.getCurrentWeekDTO();
         if (week == null) {
             System.out.println("No current week available.");
             return;

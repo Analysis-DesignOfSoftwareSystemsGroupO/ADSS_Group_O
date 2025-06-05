@@ -6,27 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IShiftDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IShiftDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ShiftManagerService/ShiftManagerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ShiftManagerService/ShiftManagerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/dev/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/EmployeeDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/EmployeeDAOImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IEmployeeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IEmployeeDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/EmployeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +71,7 @@
   "keyToString": {
     "Application.HR_Main.executor": "Run",
     "Application.Main (1).executor": "Run",
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "SagiFromSaD-local",
@@ -95,7 +79,8 @@
     "last_opened_file_path": "C:/Users/shaya/IdeaProjects/ADSS_Group_O",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15527344",
-    "project.structure.side.proportion": "0.2"
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -253,19 +238,19 @@
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/ShiftManagerMenu.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="18" />
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
+          <line>148</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
-          <line>112</line>
-          <option name="timeStamp" value="19" />
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
-          <line>144</line>
-          <option name="timeStamp" value="20" />
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java</url>
+          <line>245</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/dev/HR_Mudol/DAO/IShiftDAO.java</url>
