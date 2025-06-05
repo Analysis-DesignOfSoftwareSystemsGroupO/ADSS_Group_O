@@ -45,6 +45,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                 licence = "Driver-C";
 
             driverDTO = getRoleByDescription(licence,theCaller);
+
             driverDTO.setDescription(licence+":"+transport.getId());
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
@@ -52,6 +53,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             for (ShiftDTO shiftDTO : shiftDTOs) {
                 if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
                     hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
+
                     // Destination branch: needs Warehouse
                     List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(transport.getId()));
                     for (ProductListDocumentDto pld : plds) {
@@ -75,9 +77,9 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     private void ensureRolesExist(UserDTO caller) throws SQLException {
         List<RoleDTO> roles = branch.getRoles();
 
-        boolean hasDriverA = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Driver-A"));
-        boolean hasDriverB = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Driver-B"));
-        boolean hasDriverC = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Driver-C"));
+        boolean hasDriverA = roles.stream().anyMatch(r -> r.getDescription().equals("Driver-A"));
+        boolean hasDriverB = roles.stream().anyMatch(r -> r.getDescription().equals("Driver-B"));
+        boolean hasDriverC = roles.stream().anyMatch(r -> r.getDescription().equals("Driver-C"));
 
         boolean hasWarehouse = roles.stream().anyMatch(r -> r.getDescription().toLowerCase().contains("Warehouse"));
 
@@ -100,7 +102,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
     private RoleDTO getRoleByDescription(String desc ,UserDTO caller) throws SQLException {
         for (Role role : hrService.getRoleController().getAllRoles(caller)) {
-            if (role.getDescription().toLowerCase().contains("driver")) {
+            if (role.getDescription().equals(desc)) {
                 return DTOToDomainMapper.toDTO(role);
             }
         }

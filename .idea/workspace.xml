@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/sql/TRS_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/TRS_schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/DriverControllerPL.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sql/TRS_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sql/TRS_schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sql/schema_with_data.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
