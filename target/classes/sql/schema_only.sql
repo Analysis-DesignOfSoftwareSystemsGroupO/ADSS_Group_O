@@ -1,18 +1,6 @@
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empPassword VARCHAR(255);
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empBankAccount VARCHAR(255);
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empSalary INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empStartDate DATE;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS minDayShift INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS minEveningShift INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS sickDays INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS daysOff INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS branchID INT;
-
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -147,3 +135,6 @@ ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
 (100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1);
+
+INSERT INTO Users (userID, level) VALUES
+(100000001, 'HRManager');
