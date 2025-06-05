@@ -1,9 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
-import HR_Mudol.DTO.EmployeeDTO;
-import HR_Mudol.DTO.ShiftDTO;
-import HR_Mudol.DTO.UserDTO;
-import HR_Mudol.DTO.WeekDTO;
+import HR_Mudol.DTO.*;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Shift;
@@ -11,6 +8,7 @@ import HR_Mudol.domain.Objects.User;
 import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 /**
  * The IWeekManager interface defines the operations for managing a theWeek's shifts in the system.
@@ -88,6 +86,8 @@ public interface IWeekController {
      * @param theWeek The theWeek object representing the current theWeek.
      */
     void removeRoleFromShift(UserDTO theCaller, WeekDTO theWeek) throws SQLException;
+
+    List<ShiftDTO> getShiftsInDateRange(BranchDTO branchDTO, LocalDate startDate, LocalDate endDate) throws SQLException;
 
     /**
      * Adds a role to a shift in the current theWeek.

@@ -99,6 +99,20 @@ public class ShiftDTO {
                 " - " + type;
     }
 
+    public void printRole() {
+        if (necessaryRoles == null || necessaryRoles.isEmpty()) {
+            System.out.println("No roles are required for this shift.");
+            return;
+        }
+
+        System.out.println("Required Roles: ");
+        for (RoleDTO role : necessaryRoles) {
+            System.out.println(" - Role Number: " + role.getRoleNumber() +
+                    ", Role Name: " + role.getDescription());
+        }
+    }
+
+
 
 
 }

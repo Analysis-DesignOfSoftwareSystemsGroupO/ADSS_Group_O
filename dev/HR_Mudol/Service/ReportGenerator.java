@@ -3,6 +3,8 @@ package HR_Mudol.Service;
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.*;
+import HR_Mudol.domain.Objects.Employee;
+import HR_Mudol.domain.Objects.Role;
 
 
 import java.sql.SQLException;
@@ -19,6 +21,8 @@ public class ReportGenerator implements IReportGenerator {
 
     private final IEmployeeController empM;
     private final IWeekController weekM;
+    private final IRoleController roleM;
+
 
     /**
      * Constructor to initialize the ReportGenerator with necessary managers.
@@ -26,9 +30,10 @@ public class ReportGenerator implements IReportGenerator {
      * @param weekM The WeekManager used for week-related operations.
      * @param empM  The EmployeeManager used for employee-related operations.
      */
-    public ReportGenerator(IWeekController weekM, IEmployeeController empM) {
+    public ReportGenerator(IWeekController weekM, IEmployeeController empM,IRoleController roleM) {
         this.weekM = weekM;
         this.empM = empM;
+        this.roleM=roleM;
     }
 
 
@@ -215,6 +220,49 @@ public class ReportGenerator implements IReportGenerator {
         }
     }
 
+    @Override
+    public void generateReports(UserDTO caller, BranchDTO branch, String reportType) {
+        Scanner sc = new Scanner(System.in);
 
+        try {
+            switch (reportType) {
+                case "WEEKLY" -> printWeeks(weekM.getCurrentWeekDTO(), "Weekly Shifts");
 
-}
+                case "FUTURE" -> printWeeks(weekM.getNextWeekDTO(), "Future Unassigned Shifts");
+
+                default -> System.out.println("Unknown report type: " + reportType);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error generating report: " + e.getMessage());
+        }
+        }
+
+        private void printWeeks(WeekDTO week, String title) {
+            System.out.println("\n=== " + title + " ===");
+            for (ShiftDTO shift : week.getShifts()) {
+                System.out.println("Shift ID: " + shift.getShiftID() +
+                        " | Day: " + shift.getDay() +
+                        " | Type: " + shift.getType() +
+                        " | Status: " + shift.getStatus());
+            }
+        }
+
+    private void printShifts(List<ShiftDTO> shifts, String title) {
+        System.out.println("\n=== " + title + " ===");
+        for (ShiftDTO shift : shifts) {
+            System.out.println("Shift ID: " + shift.getShiftID() +
+                    " | Day: " + shift.getDay() +
+                    " | Type: " + shift.getType() +
+                    " | Status: " + shift.getStatus());
+        }
+    }
+
+        private LocalDate promptDate(String message) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print(message);
+            return LocalDate.parse(sc.nextLine().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+    }
+

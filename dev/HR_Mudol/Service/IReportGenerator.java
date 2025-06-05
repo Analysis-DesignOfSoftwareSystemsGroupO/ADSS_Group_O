@@ -1,5 +1,6 @@
 package HR_Mudol.Service;
 
+import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.UserDTO;
 import HR_Mudol.DTO.WeekDTO;
 import HR_Mudol.domain.Objects.User;
@@ -43,4 +44,5 @@ public interface IReportGenerator {
      */
     void generateShiftReport(UserDTO caller, WeekDTO curWeek);
 
+    void generateReports(UserDTO caller, BranchDTO branch, String reportType);
 }

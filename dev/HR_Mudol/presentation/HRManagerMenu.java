@@ -83,24 +83,11 @@ public class HRManagerMenu implements Menu {
     }
 
     private void viewShiftsHistory(UserDTO caller, BranchDTO branch) {
-        List<WeekDTO> weeks = branch.getWeeks();
-        if (weeks == null || weeks.isEmpty()) {
-            System.out.println("No weeks available.");
-            return;
-        }
-
         Scanner sc = new Scanner(System.in);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        System.out.print("Do you want to see only the last week? (Y/N): ");
-        String choice = sc.nextLine().trim();
+        LocalDate from, to;
 
-        if (choice.equalsIgnoreCase("Y")) {
-            hr.printWeek(weeks.get(weeks.size() - 1));
-            return;
-        }
-
-        LocalDate from = null, to = null;
         try {
             System.out.print("Enter start date (yyyy-MM-dd): ");
             from = LocalDate.parse(sc.nextLine(), formatter);
@@ -111,46 +98,58 @@ public class HRManagerMenu implements Menu {
             return;
         }
 
-        for (WeekDTO week : weeks) {
-            LocalDate deadline = week.getConstraintDeadline().toLocalDate();
-            if (!deadline.isBefore(from) && !deadline.isAfter(to)) {
-                hr.printWeek(week);
+        List<ShiftDTO> shiftsInRange;
+        try {
+            shiftsInRange = hr.getShiftsInDateRange(branch, from, to);
+        } catch (SQLException e) {
+            System.out.println("Error retrieving shifts: " + e.getMessage());
+            return;
+        }
+
+        if (shiftsInRange.isEmpty()) {
+            System.out.println("No shifts found in the selected date range.");
+            return;
+        }
+
+        System.out.println("\nShift History Report for Branch " + branch.getBranchID() +
+                " between " + from + " and " + to + ":\n");
+
+        for (ShiftDTO shift : shiftsInRange) {
+            System.out.println("Shift ID: " + shift.getShiftID());
+            System.out.println("Date: " + shift.getDay());
+            System.out.println("Type: " + shift.getType());
+            System.out.println("Status: " + shift.getStatus());
+            System.out.println("Manager ID: " + (shift.getShiftManagerId() != -1 ? shift.getShiftManagerId() : "None"));
+
+            System.out.println("Assigned Employees:");
+            for (EmployeeDTO emp : shift.getEmployees()) {
+                System.out.println("  - " + emp.getFullName() + " (ID: " + emp.getEmployeeId() + ")");
             }
+
+            shift.printRole();
+
+            System.out.println("--------------------------------------------------");
         }
     }
 
+
     private void generateReports(UserDTO caller, BranchDTO branch) {
         Scanner sc = new Scanner(System.in);
-        List<WeekDTO> weeks = branch.getWeeks();
-        if (weeks == null || weeks.isEmpty()) {
-            System.out.println("No weeks available.");
-            return;
-        }
-        WeekDTO last = weeks.get(weeks.size() - 1);
 
         System.out.println("\n--- Report Generation ---");
         System.out.println("1. Weekly Report");
-        System.out.println("2. Employee Report");
-        System.out.println("3. Shift Report");
+        System.out.println("2. Future Unassigned Shifts");
         System.out.println("0. Back");
 
-        String choice = sc.nextLine();
-        try {
-            switch (choice) {
-                case "1" -> hr.generateWeeklyReport(caller, weeks);
-                case "2" -> {
-                    System.out.print("Enter Employee ID: ");
-                    int empId = Integer.parseInt(sc.nextLine());
-                    hr.generateEmployeeReport(caller, empId, last);
-                }
-                case "3" -> hr.generateShiftReport(caller, last);
-                case "0" -> {
-                    return;
-                }
-                default -> System.out.println("Invalid option.");
+        String choice = sc.nextLine().trim();
+
+        switch (choice) {
+            case "1" -> hr.generateReports(caller, branch, "WEEKLY");
+            case "2" -> hr.generateReports(caller, branch, "FUTURE");
+            case "0" -> {
+                return;
             }
-        } catch (Exception e) {
-            System.out.println("Failed to generate report: " + e.getMessage());
+            default -> System.out.println("Invalid option.");
         }
     }
 

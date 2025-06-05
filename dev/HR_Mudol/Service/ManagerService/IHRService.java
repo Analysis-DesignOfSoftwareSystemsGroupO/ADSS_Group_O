@@ -8,6 +8,7 @@ import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -89,6 +90,8 @@ public interface IHRService {
 
     void assigningEmployToShifts(UserDTO caller) throws SQLException;
 
+    List<ShiftDTO> getShiftsInDateRange(BranchDTO branchDTO,LocalDate startDate, LocalDate endDate) throws SQLException;
+
     void printWeek(WeekDTO week);
 
     void removeEmployeeFromShift(UserDTO caller, WeekDTO week) throws SQLException;
@@ -102,6 +105,8 @@ public interface IHRService {
     int hasUnassignedRoles(WeekDTO week);
 
     List<ShiftDTO> getShiftsForEmployee(EmployeeDTO employee, WeekDTO curWeek);
+
+    void generateReports(UserDTO caller, BranchDTO branch, String reportType);
 
     // ReportGenerator forwarding
     void generateEmployeeReport(UserDTO caller, int empId, WeekDTO curWeek) throws SQLException;

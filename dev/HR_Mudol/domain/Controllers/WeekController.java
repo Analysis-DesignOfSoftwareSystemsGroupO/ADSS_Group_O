@@ -1,5 +1,6 @@
 package HR_Mudol.domain.Controllers;
 
+import HR_Mudol.DAO.ShiftDAOImpl;
 import HR_Mudol.DTO.*;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.Service.TransportService.TransportShiftIntegrator;
@@ -7,9 +8,9 @@ import HR_Mudol.domain.Objects.*;
 import HR_Mudol.domain.Status;
 import TransportModule.transport_module.ITransportController;
 import TransportModule.transport_module.TransportContorollerDomain;
-import HR_Mudol.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -113,6 +114,7 @@ public class WeekController implements IWeekController {
         return theWeek;
 
     }
+
     private static void integrateTransport(BranchDTO curBranch,HRService hr,UserDTO callerDTO) {
         try {
             ITransportController transportController = new TransportContorollerDomain();
@@ -122,6 +124,11 @@ public class WeekController implements IWeekController {
             System.out.println("❌ Failed to integrate transport roles: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<ShiftDTO> getShiftsInDateRange(BranchDTO branchDTO, LocalDate startDate, LocalDate endDate) throws SQLException {
+        return curBranch.getWeekRepo().getShiftsInDateRange(branchDTO, startDate, endDate);
     }
 
     /**
