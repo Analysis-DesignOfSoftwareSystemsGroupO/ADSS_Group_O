@@ -109,9 +109,9 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             deleteProductListDocument(id); //Delete this PLD
             throw e;
         } catch (TransportMismatchException e) {
-                log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
-                deleteProductListDocument(id);
-                throw e;
+            log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
+            deleteProductListDocument(id);
+            throw e;
         } catch (ATransportModuleException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);

@@ -9,5 +9,8 @@
         <module name="ADSS_Group_O" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="DataLayer" target="22" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -30,7 +30,7 @@ public class BookingControllerPL {
 
         int transportId = domainController.getNewTransportId();
 
-        TransportDTO transportDTO = new TransportDTO(transportId,date,false,maxWeight,"-1","-1",source,hour);
+        TransportDTO transportDTO = new TransportDTO(transportId,date,false,maxWeight,null,null,source,hour);
 
         domainController.createTransport(transportDTO);
         return  transportId;
