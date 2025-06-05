@@ -31,4 +31,5 @@ public interface ITransportRepository {
 
     void deleteAll()throws SQLException;
 
+    List<Transport> getAllTransports() throws SQLException, ATransportModuleException;
 }

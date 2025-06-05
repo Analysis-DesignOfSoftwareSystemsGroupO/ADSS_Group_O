@@ -26,23 +26,20 @@ public class BookingControllerPL {
     /**
      * Creates a new transport request
      */
-    public int createTransport(LocalDate date, String source, int maxWeight,LocalTime hour) throws Exception {
+    public void createTransport(  int transportId ,LocalDate date, String source, int maxWeight,LocalTime hour) throws Exception {
 
-        int transportId = domainController.getNewTransportId();
-
-        TransportDTO transportDTO = new TransportDTO(transportId,date,false,maxWeight,"-1","-1",source,hour);
+        TransportDTO transportDTO = new TransportDTO(transportId,date,false,maxWeight,null,null,source,hour);
 
         domainController.createTransport(transportDTO);
-        return  transportId;
     }
 
     /**
      * Creates a delivery document and returns its ID
      */
-    public int createProductListDocument(String destination, List<ProductDTO> productDTOList, int totalweight, LocalDate date, LocalTime hour) throws Exception {
+    public int createProductListDocument(int transportId, String destination, List<ProductDTO> productDTOList, int totalweight, LocalDate date, LocalTime hour) throws Exception {
 
         int nextPLDId = domainController.getValidID(); // get the next valid input of PLD
-        ProductListDocumentDto dto = new ProductListDocumentDto(nextPLDId,-1,destination,productDTOList,totalweight,date,hour);
+        ProductListDocumentDto dto = new ProductListDocumentDto(nextPLDId,transportId,destination,productDTOList,totalweight,date,hour);
         domainController.createProductListDocument(dto);
         return nextPLDId;
     }
@@ -61,5 +58,9 @@ public class BookingControllerPL {
 
         return domainController.getTransportNextWeek();
 
+    }
+
+    int getNewTransportId() throws Exception{
+        return domainController.getNewTransportId();
     }
 }

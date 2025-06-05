@@ -80,19 +80,17 @@ public class jdbcTransportDAO implements ITransportDAO {
         log.info("jdbcTransportDAO :: getHieghestTransportID ()");
         String sql = "SELECT \"id\" FROM \"Transports\" ORDER BY \"id\" DESC LIMIT 1;";
 
-        try (PreparedStatement stmt = DataBase.getConnection().prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            if (rs.next()) {
-                return rs.getInt("id");
+        try(Statement st = DataBase.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql)){
+            if(rs.next()){
+                return   rs.getInt("id");
             }
-
-        } catch (SQLException e) {
+        }
+        catch (SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
             throw e;
         }
-
-        return 0;
+        return 0 ;
     }
 
     //retun list of Transport dto that have no trucks assigned
@@ -188,6 +186,33 @@ public class jdbcTransportDAO implements ITransportDAO {
         }catch (SQLException e){
             throw e;
         }
+    }
+
+    /**
+     *
+     * @return list of integers of ids
+     * @throws SQLException
+     */
+    @Override
+    public List<Integer> getIDs() throws SQLException {
+        log.info("jdbcTransportDAO::getIDs()");
+        String sql = "SELECT \"id\" FROM \"Transports\" ; ";
+        List<Integer > list = new ArrayList<>();
+        try(Statement st = DataBase.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(sql);){
+            while (rs.next()){
+                list.add(rs.getInt("id"));
+            }
+        }
+        catch (SQLException e) {
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return list;
     }
 
 }

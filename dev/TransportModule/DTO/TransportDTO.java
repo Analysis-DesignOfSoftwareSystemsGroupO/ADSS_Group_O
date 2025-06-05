@@ -2,6 +2,7 @@ package TransportModule.DTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 public class TransportDTO {
     private int id;
@@ -87,6 +88,5 @@ public class TransportDTO {
     public LocalTime getDepartureTime(){
         return this.departureTime;
     }
-
 
 }

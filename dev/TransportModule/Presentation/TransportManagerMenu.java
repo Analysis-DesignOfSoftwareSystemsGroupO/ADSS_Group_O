@@ -26,12 +26,12 @@ public class TransportManagerMenu {
         boolean running = true;
         while (running) {
 
-            System.out.println("\nWelcome to Transport Manager Menu");
-            System.out.println("1. Show all next week Transports");
-            System.out.println("2. Show all next week Transports With no Trucks");
-            System.out.println("3. Show all next week Transports With no Driver");
-            System.out.println("4. Remove Transport");
-            System.out.println("E. Exit");
+            System.out.println("\nWelcome to Transport Manager Menu.");
+            System.out.println("1. Show all next week Transports.");
+            System.out.println("2. Show all next week Transports With no Trucks.");
+            System.out.println("3. Show all next week Transports With no Driver.");
+            System.out.println("4. Remove Transport.");
+            System.out.println("E. Exit.");
 
             String input = scanner.nextLine();
 
@@ -41,7 +41,7 @@ public class TransportManagerMenu {
                 case "3" -> ShowAllNextWeekTransportsWithNoDrivers();
                 case "4" -> RemoveTransportById();
                 case "E", "e" -> running = false;
-                default -> System.out.println("Invalid option, try again.");
+                default -> System.out.println("Invalid option, try again.\n");
             }
         }
     }

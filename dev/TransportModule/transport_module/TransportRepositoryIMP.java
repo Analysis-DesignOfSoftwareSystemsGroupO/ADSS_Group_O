@@ -1,5 +1,6 @@
 package TransportModule.transport_module;
 
+import TransportModule.DTO.DriverDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.DataAccess.ITransportDAO;
 import TransportModule.DataAccess.jdbcTransportDAO;
@@ -24,6 +25,9 @@ public class TransportRepositoryIMP implements ITransportRepository {
     private static ITruckRepository truckRepository;
     private static TransportRepositoryIMP instance;
     private static  int counter =0 ;
+    private static IProductListDocumentRepository pldRep;
+    private IDriverRep driverRep ;
+
     /**
      *
      * @param id
@@ -37,12 +41,24 @@ public class TransportRepositoryIMP implements ITransportRepository {
                 Optional<TransportDTO> transportDTO = dao.getTransportByid(id);
                 if(transportDTO.isPresent()){
                     TransportDTO dto = transportDTO.get();
-                    DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
-                    Site s = new Site(dto.getSiteName(), "DefaultArea"); // Area feature is posposed
+                    DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    Site s = new Site(dto.getSiteName(), "DefaultArea"); // todo Area feature is posposed
                     //Get the time by String
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
                     Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
+                    if(dto.getTruckPN() != null){
+                        Truck truck = truckRepository.getTruckBYPlateNumber(dto.getTruckPN());
+                        t.assignTruck(truck);
+                    }
+                    if(dto.getDriverID() != null) { //assignDriver to transport
+                        Driver driver = driverRep.getDriverByID(dto.getDriverID().trim()); //throw exception if driver not exsists
+                        t.addDriver(driver);
+                    }
+
+                    List<ProductListDocument> plds = pldRep.getPLDByTransportID(t.getId());
+                    for (ProductListDocument pld : plds)
+                        t.loadByDocument(pld);
                     transports.put(t.getId(), t);
                     return t;
                 }
@@ -75,7 +91,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
         }
         return transports;
     }
-
+    //
     @Override
     public List<TransportDTO> getTransportsDTOByDate(LocalDate date)throws SQLException{
         List<TransportDTO > transportDTOS = dao.getTransportsByDate(date);//get DTO of all transports that day
@@ -121,11 +137,10 @@ public class TransportRepositoryIMP implements ITransportRepository {
     @Override
     public Transport TransportDTOtoTransport(TransportDTO dto) throws SQLException, ATransportModuleException {
         Transport t = getTransportByid(dto.getId());
-        if(t.getDate() == dto.getDate() && t.getSource().getName() == dto.getSiteName() && t.getMaxWeight() == dto.getMaxWeight()){
-            if((t.getDriver() == null && Integer.valueOf(dto.getDriverID()) != -1 )|| t.getDriver().getId() == dto.getDriverID()){
-                throw new TransportMismatchException("Miss match data");
+        if(t.getDate().equals( dto.getDate()) && t.getSource().getName() == dto.getSiteName() && t.getMaxWeight() == dto.getMaxWeight()){
+            if((t.getDriver() == null && dto.getDriverID() ==null )|| t.getDriver().getId() == dto.getDriverID()){
+                return t;
             }
-            return t;
         }
         throw new TransportMismatchException("Miss match data");
     }
@@ -139,23 +154,28 @@ public class TransportRepositoryIMP implements ITransportRepository {
 
     private TransportRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableId = dao.getHieghestTransportID() + 1;
+        truckRepository = TruckRepositoryIMP.getInstance();
+        pldRep = PLDRepositoryIMP.getInstance();
+        driverRep = DriverRepIMP.getInstance();
         //set the mapper and fill it with transports:
         this.transports = new HashMap<>();
         List<TransportDTO> transportDTOS = dao.getTransports();
-        List<Transport> transportsList = new ArrayList<>();
+
         for (TransportDTO dto : transportDTOS){ //for each transport dto
-            Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper
+            Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper and list
         }
-        truckRepository = TruckRepositoryIMP.getInstance();
-        //Add Transport with id -1
-        TransportDTO tdto0 = new TransportDTO(-1, LocalDate.of(9999,12,31), false, 0, null, null, null, LocalTime.of(23,59));
-        saveTransport(tdto0);
+        //Add Transport with id -1 if not exsists
+        if(getTransportByid(-1) ==null) {
+            TransportDTO tdto0 = new TransportDTO(-1, LocalDate.of(9999, 12, 31), false, 0, null, null, null, LocalTime.of(23, 59));
+            saveTransport(tdto0);
+        }
     }
 
     public static TransportRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
         if(counter == 0){
-            instance = new TransportRepositoryIMP();
             counter++;
+            instance = new TransportRepositoryIMP();
+
         }
         return instance;
     }
@@ -164,4 +184,16 @@ public class TransportRepositoryIMP implements ITransportRepository {
     public void deleteAll()throws SQLException{
         dao.deleteAll();
     }
+
+    @Override
+    public List<Transport> getAllTransports() throws SQLException, ATransportModuleException {
+        List<Transport> transportsList = new ArrayList<>();
+        List<Integer> tIDs = dao.getIDs(); //get all transports Dtos
+        for(Integer id : tIDs){
+            transportsList.add(getTransportByid(id));
+        }
+        return transportsList;
+    }
+
+
 }

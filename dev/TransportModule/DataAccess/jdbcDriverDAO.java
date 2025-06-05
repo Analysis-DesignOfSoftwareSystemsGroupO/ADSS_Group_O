@@ -20,13 +20,16 @@ public class jdbcDriverDAO implements IDriverDAO{
     public DriverDto getDriverByID(String id) throws SQLException {
         log.info("jdblcDriverDAO::getDriverByID( "+ id + " )");
         List<String > licences = new ArrayList<>();
-        String sql = "SELECT \"Licence\" FROM \"Driveres_Licenece\" WHERE \"DriverID\" = ? ;";
+        String sql = "SELECT \"DriverID\" , \"Licence\" FROM \"Driveres_Licenece\" WHERE \"DriverID\" = ? ;";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
+            boolean found = false;
             while (rs.next()){
+                found = true;
                 licences.add(rs.getString("Driveres_Licenece"));
             }
+            if(!found)return null;
         }
         catch (SQLException e){
             log.error("Failed to load all licences of the driver ");
@@ -55,7 +58,7 @@ public class jdbcDriverDAO implements IDriverDAO{
         log.info("jdbcDriverDAO::save()");
         String sql = "INSERT INTO \"Drivers\" (\"id\" ) VALUES(?) ; ";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
-            ps.setString(1, dto.getId());
+            ps.setString(1, dto.id());
         }
         catch(SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -63,8 +66,8 @@ public class jdbcDriverDAO implements IDriverDAO{
         }
         String sql2 = "INSERT INTO \"Driveres_Licenece\" (\"DriverID\" , \"Licence\" ) VALUES ( ?, ?) ;";
         try (PreparedStatement ps2 = DataBase.getConnection().prepareStatement(sql)){
-            for(String licence: dto.getLicence()){
-                ps2.setString(1 , dto.getId());
+            for(String licence: dto.drivingLicenceList()){
+                ps2.setString(1 , dto.id());
                 ps2.setString(2, licence);
                 ps2.addBatch();
             }
@@ -73,7 +76,7 @@ public class jdbcDriverDAO implements IDriverDAO{
         catch (SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage()); //try deleteing driver
             try {
-                deleteDriver(dto.getId());
+                deleteDriver(dto.id());
             }
             catch (SQLException e2){
                 log.error("SQL State: %s\n%s", e.getSQLState(), e2.getMessage());
@@ -97,5 +100,22 @@ public class jdbcDriverDAO implements IDriverDAO{
             log.error("failed to find all distinct Drivers id ");
             throw e;
         }
+    }
+
+    @Override
+    public void addLicenceToDriver(String id, String licence) throws SQLException {
+        log.info("jdbcDriverDAO::getALlDriversID(" + id + " , " + licence + " ) ");
+        //Assume that driver exsists in System
+        String sql  = "INSERT INTO \"Driveres_Licenece\" (\"DriverID\" ,  \"Licence\") VALUES( ? , ? ) ; ";
+        try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
+            ps.setString(1, id);
+            ps.setString(2,licence);
+            ps.executeUpdate();
+        }
+        catch(SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+
     }
 }

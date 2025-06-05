@@ -11,9 +11,9 @@ public class TRS_Main {
 
     private static void init_useres(Map<String, User> users) throws Exception {
 
-            users.put("TransportManager", new TransportManagerUser("TransportManager"));
-            users.put("User", new BookingUser("User"));
-            users.put("TruckManagerUser", new TruckManagerUser("TruckManagerUser"));
+        users.put("TransportManager", new TransportManagerUser("TransportManager"));
+        users.put("User", new BookingUser("User"));
+        users.put("TruckManagerUser", new TruckManagerUser("TruckManagerUser"));
 
 
     }
@@ -35,7 +35,7 @@ public class TRS_Main {
         while (true){
             System.out.println("Please enter user name: ");
             String name = scanner.nextLine();
-            user = users.get(name.toLowerCase());
+            user = users.get(name);
             if (user == null){
                 System.out.println("User is not exist. Please try again");
             }
@@ -60,7 +60,3 @@ public class TRS_Main {
     }
 
 }
-
-
-
-

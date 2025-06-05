@@ -53,12 +53,12 @@ public class DriverRepIMP implements IDriverRep{
 
     @Override
     public void save(DriverDto driverDto) throws SQLException , ATransportModuleException {
-        Driver d = getDriverByID(driverDto.getId());
+        Driver d = getDriverByID(driverDto.id());
         if(d != null) {
             throw new DriverMismatchException("Driver Already exsists");
         }
         dao.save(driverDto);
-        getDriverByID(driverDto.getId()); //will also put it on the mapper
+        getDriverByID(driverDto.id()); //will also put it on the mapper
     }
 
     @Override
@@ -72,7 +72,7 @@ public class DriverRepIMP implements IDriverRep{
         else{ //try to look for it on the data base , if exsists, load to mapper
             DriverDto dto = dao.getDriverByID(id);
             ArrayList<DrivingLicence> licence = new ArrayList<>();
-            for(String s : dto.getLicence()) // create Array list of Licences
+            for(String s : dto.drivingLicenceList()) // create Array list of Licences
                 licence.add(new DrivingLicence(s));
             Driver d = new Driver(id, licence);
             map.put(d.getId(),d);
@@ -82,14 +82,22 @@ public class DriverRepIMP implements IDriverRep{
 
     @Override
     public Driver convertDTOtoDriver(DriverDto dto) throws SQLException, ATransportModuleException {
-        Driver d = getDriverByID(dto.getId()); //check that both the driver and the dto has the same Driving licence
+        Driver d = getDriverByID(dto.id()); //check that both the driver and the dto has the same Driving licence
         List<String> codes = new ArrayList<>(); //create list of data licences codes
         for(DrivingLicence dl : d.getLicencs()){
             codes.add(dl.getCode());
         }
-        boolean isEqual = new HashSet<>(codes).equals(new HashSet<>(dto.getLicence())); // check that both equals
+        boolean isEqual = new HashSet<>(codes).equals(new HashSet<>(dto.drivingLicenceList())); // check that both equals
         if (isEqual == false) throw new DriverMismatchException("Already exsists this driver with diffrent variables");
         return d;
     }
 
+    @Override
+    public void addLicenceToDriver(String id, String licence) throws SQLException, ATransportModuleException{
+        //check that driver exsists
+        Driver d = getDriverByID(id);
+        if(d == null) throw new DriverMismatchException("Adding licence to not exsists driver ");
+        dao.addLicenceToDriver(id, licence);
+        d.addLicence("licence");
+    }
 }

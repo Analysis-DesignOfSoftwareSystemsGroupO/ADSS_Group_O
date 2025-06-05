@@ -35,7 +35,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         }
     }
 
-    ;
+
     private int availableid;
 
     private PLDRepositoryIMP() throws SQLException, InvalidATransportException, TransportMismatchException {
@@ -81,12 +81,11 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             if(!optPLD.isPresent())return null; // if did not find the PLD in data Base nor in the mapper
             //Creating the ProductList instance and add it to the repository mapper.
             ProductListDocumentDto dto = optPLD.get();
-            Site site = new Site(dto.getSiteDes(), "Default Area "); // todo : This feature of the area is posposed and will be implemented later. Meanwhile the Area is Deafault
+            Site site = new Site(dto.getSiteDes().trim(), "Default Area "); // todo : This feature of the area is posposed and will be implemented later. Meanwhile the Area is Deafault
             LocalDate date = dto.getDate();
-            DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("DD/MM/YYYY");
+            DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalTime time = dto.getApproximatedArrivalTime();
             DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm");
-            // todo = Sagi: need to add id and hour to Constructor (even if a default one)
             pld = new ProductListDocument(id,site, dateformatter.format(date), df2.format(time));
             if(dto.getTransportID() != -1) { // -1 is the deafault TransportID in the data base. means that this PLD is not attached to any of the transports
                 Transport t = transportRep.getTransportByid(dto.getTransportID());
@@ -110,9 +109,9 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             deleteProductListDocument(id); //Delete this PLD
             throw e;
         } catch (TransportMismatchException e) {
-                log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
-                deleteProductListDocument(id);
-                throw e;
+            log.error("In getProductListDocumentByid, Thrown TransportMissmatchException. Deleting ProductListDocument with id: "+ id);
+            deleteProductListDocument(id);
+            throw e;
         } catch (ATransportModuleException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -126,10 +125,15 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         //check that the ProductListDocument is already exsists:
         if(mapper.get(pld.getId()) != null){
             throw new InvalidPLDException("Didn't added the ProductList Document to the system, A ProsuctLIstDocument with this id already exsists.");
+        }try {
+            dao.save(pld);
+            dao.attachTransport(pld.getId(),pld.getTransportID());
         }
-        dao.save(pld);
+        catch (Exception e){
+            dao.deletePLD(pld.getId());
+            throw e;
+        }
         mapper.put(pld.getId(), PLDdtoTOPLD(pld)); //COnvert the DTO to a ProductListDocument instance and puts in the mapper
-        log.error("SQL failure while saving ProductListDocument");
 
     }
 
@@ -152,7 +156,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     @Override
     public ProductListDocument PLDdtoTOPLD(ProductListDocumentDto dto) throws ATransportModuleException, SQLException {
         ProductListDocument pld= getProductListDocumentByid(dto.getId());
-        if(pld.getDate() == dto.getDate() && pld.getDestination().getName() == dto.getSiteDes() && pld.getTransportId() == dto.getTransportID()){
+        if(pld.getDate().equals( dto.getDate() ) && pld.getDestination().getName().equals(dto.getSiteDes() )&& pld.getTransportId() == dto.getTransportID()){
             return pld;
         }
         throw new InvalidPLDException("Product List Document doesnt match with exsists pld ") ;
@@ -206,5 +210,6 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     @Override
     public void deleteAll() throws SQLException {
         dao.deleteAll();
+        availableid = initValidid();
     }
 }

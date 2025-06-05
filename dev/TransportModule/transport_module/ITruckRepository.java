@@ -11,7 +11,7 @@ public interface ITruckRepository {
 
     void addTruck(TruckDto truck) throws ATransportModuleException, SQLException;
 
-    Truck getTruckBYPlateNumber(int pn) throws  ATransportModuleException;
+    Truck getTruckBYPlateNumber(String pn) throws  ATransportModuleException;
 
     void deleteTruck(String pn) throws  SQLException;
 

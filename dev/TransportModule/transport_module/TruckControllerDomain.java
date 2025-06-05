@@ -58,7 +58,7 @@ public class TruckControllerDomain  {
         truckRepository.deleteTruck(plate);
     }
 
-    public void assignTruckToTransport(int transportId, int plate) throws Exception {
+    public void assignTruckToTransport(int transportId, String plate) throws Exception {
 
         Transport transport = transportRepository.getTransportByid(transportId); // create a transport
         Truck truck = truckRepository.getTruckBYPlateNumber(plate); // create a truck

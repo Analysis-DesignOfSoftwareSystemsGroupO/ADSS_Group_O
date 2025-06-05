@@ -75,7 +75,7 @@ public class TransportContorollerDomain implements ITransportController {
      */
     public void createTransport(TransportDTO dto) throws Exception {
         // try to create transport with Transport requeest DTO
-         transportRepo.TransportDTOtoTransport(dto);
+        transportRepo.TransportDTOtoTransport(dto);
     }
 
     /**
@@ -107,7 +107,7 @@ public class TransportContorollerDomain implements ITransportController {
         List<TransportDTO> repoListDTO = getTransportNextWeek();
         List<TransportDTO> noTrucksDTOList = new ArrayList<>();
         for (TransportDTO dto: repoListDTO){
-            if(Objects.equals(dto.getTruckPN(), "-1")){
+            if(dto.getTruckPN() == null){
                 noTrucksDTOList.add(dto);
             }
         }
@@ -118,7 +118,7 @@ public class TransportContorollerDomain implements ITransportController {
         List<TransportDTO> repoListDTO = getTransportNextWeek();
         List<TransportDTO> noDriversDTOList = new ArrayList<>();
         for (TransportDTO dto: repoListDTO){
-            if(Objects.equals(dto.getDriverID(), "-1")){
+            if(dto.getDriverID() == null){
                 noDriversDTOList.add(dto);
             }
         }

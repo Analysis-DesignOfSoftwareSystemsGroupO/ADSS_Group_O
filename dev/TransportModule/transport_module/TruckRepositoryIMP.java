@@ -39,7 +39,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
         if(mapper.get(truck.getPlateNumber()) != null) return;
         truckDAO.save(truck);
         try {
-            Truck t = getTruckBYPlateNumber(Integer.valueOf(truck.getPlateNumber()));
+            Truck t = getTruckBYPlateNumber(truck.getPlateNumber());
 
         }
         catch (Exception e){
@@ -50,11 +50,11 @@ public class TruckRepositoryIMP implements ITruckRepository {
     }
 
     @Override
-    public Truck getTruckBYPlateNumber(int pn) throws ATransportModuleException {
+    public Truck getTruckBYPlateNumber(String pn) throws ATransportModuleException {
         if(mapper.get(pn ) != null) return mapper.get(pn);
         //if pn not found in the mapper
         try {
-            Optional<TruckDto> truckDto = truckDAO.findByTruckPN(Integer.toString(pn)); //get Optional of truckDto from data base
+            Optional<TruckDto> truckDto = truckDAO.findByTruckPN(pn); //get Optional of truckDto from data base
             if(truckDto.isPresent()){
                 Truck t = DTOtoTruck(truckDto.get());
                 return t;
@@ -108,23 +108,15 @@ public class TruckRepositoryIMP implements ITruckRepository {
     /**
      * Set the date of a specific truck to unavialble.
      * @param date
-     * @param plateNumber
+     * @param pn
      * @throws ATransportModuleException
      */
     @Override
-    public void AssignDateToTruck(LocalDate date, String plateNumber) throws ATransportModuleException, SQLException {
-        int pn = 0;
-        try { //check that the plate number is valid
-            pn = Integer.valueOf(plateNumber);
-        }
-        catch (NumberFormatException  e){
-            log.error("Invalid number format for valueOf, Plate number should  be numeric");
-            return;
-        }
+    public void AssignDateToTruck(LocalDate date, String pn) throws ATransportModuleException, SQLException {
         try {
             Truck t = getTruckBYPlateNumber(pn);
             if(t == null) throw new TruckNotFoundException("Did not found Truck with this pn");;
-            truckDAO.assignTruckToDate(plateNumber, date);
+            truckDAO.assignTruckToDate(pn, date);
             t.setDate(date); //set the date as unavailable
         }
         catch (SQLException e){
