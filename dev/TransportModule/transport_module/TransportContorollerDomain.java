@@ -20,7 +20,10 @@ public class TransportContorollerDomain implements ITransportController {
     public TransportContorollerDomain() throws Exception{
         this.transportRepo = TransportRepositoryIMP.getInstance();
         this.ProductListDocumentRepo =  PLDRepositoryIMP.getInstance();
+        transportRepo.injectPLDRepository(ProductListDocumentRepo);
+        ProductListDocumentRepo.injectTransportRepository(transportRepo);
         this.driverControllerDomain = new DriverControllerDomain();
+
 
     }
 

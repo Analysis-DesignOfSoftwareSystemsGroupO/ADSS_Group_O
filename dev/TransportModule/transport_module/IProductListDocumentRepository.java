@@ -33,4 +33,6 @@ public interface IProductListDocumentRepository {
     void deleteAll() throws SQLException;
 
     void attachTransport(int pID, int tID) throws SQLException, ATransportModuleException;
+
+    void injectTransportRepository(ITransportRepository rep);
 }

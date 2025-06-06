@@ -25,7 +25,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
     private static ITruckRepository truckRepository;
     private static TransportRepositoryIMP instance;
     private static  int counter =0 ;
-    private static IProductListDocumentRepository pldRep;
+    private  IProductListDocumentRepository pldRep;
     private IDriverRep driverRep ;
 
     /**
@@ -161,7 +161,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
     private TransportRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableId = dao.getHieghestTransportID() + 1;
         truckRepository = TruckRepositoryIMP.getInstance();
-        pldRep = PLDRepositoryIMP.getInstance();
+
         driverRep = DriverRepIMP.getInstance();
         //set the mapper and fill it with transports:
         this.transports = new HashMap<>();
@@ -173,17 +173,24 @@ public class TransportRepositoryIMP implements ITransportRepository {
         //Add Transport with id -1 if not exsists
         if(getTransportByid(-1) ==null) {
             TransportDTO tdto0 = new TransportDTO(-1, LocalDate.of(9999, 12, 31), false, 0, null, null, null, LocalTime.of(23, 59));
-            saveTransport(tdto0);
+            dao.save(tdto0);
+            Transport t = new Transport(-1,"31/12/9999","23:59",null);
+            transports.put(-1,t);
         }
     }
 
     public static TransportRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
         if(counter == 0){
-            counter++;
             instance = new TransportRepositoryIMP();
-
+            counter++;
         }
         return instance;
+    }
+
+    @Override
+    public void injectPLDRepository(IProductListDocumentRepository pldRep) {
+        this.pldRep = pldRep;
+
     }
 
     @Override

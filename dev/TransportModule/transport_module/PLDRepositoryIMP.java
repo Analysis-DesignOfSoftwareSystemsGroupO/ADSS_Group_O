@@ -22,23 +22,15 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     private Map<Integer , ProductListDocument> mapper;
     private static IPLDDAO dao = new jdbcPLDDAO();
     private static final Logger log = LogManager.getLogger(PLDRepositoryIMP.class);
-    private static ITransportRepository transportRep;
+    private  ITransportRepository transportRep;
     private static PLDRepositoryIMP instance;
     private static int counter =0;
-    static {
-        try {
-            transportRep = TransportRepositoryIMP.getInstance();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ATransportModuleException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 
     private int availableid;
 
-    private PLDRepositoryIMP() throws SQLException, InvalidATransportException, TransportMismatchException {
+    private PLDRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableid = initValidid(); //init the availableID field
         this.mapper = new HashMap<>();
         //fill the mapper with pld instances:
@@ -48,12 +40,16 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         }
     }
 
-    public static PLDRepositoryIMP getInstance() throws SQLException, InvalidATransportException, TransportMismatchException {
+    public static PLDRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
         if(counter ==0 ) {
             counter++;
-            instance = new PLDRepositoryIMP();
+            instance = new PLDRepositoryIMP( );
         }
         return instance;
+    }
+
+    public void injectTransportRepository(ITransportRepository rep){
+        this.transportRep = rep;
     }
 
     public int getValidID(){
@@ -126,8 +122,8 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         if(mapper.get(pld.getId()) != null){
             throw new InvalidPLDException("Didn't added the ProductList Document to the system, A ProsuctLIstDocument with this id already exsists.");
         }try {
-            dao.save(pld);
             dao.attachTransport(pld.getId(),pld.getTransportID());
+            dao.save(pld);
         }
         catch (Exception e){
             dao.deletePLD(pld.getId());

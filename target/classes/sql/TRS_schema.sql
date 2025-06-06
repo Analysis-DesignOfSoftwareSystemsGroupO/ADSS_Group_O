@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS "Transports" (
 CREATE TABLE IF NOT EXISTS "Transports_ProductListdocument" (
     "TransportId" integer NOT NULL,
     "ProductListDocumentId" integer NOT NULL,
-    PRIMARY KEY ("TransportId", "ProductListDocumentId")
+    PRIMARY KEY ( "ProductListDocumentId")
 );
 
 CREATE TABLE IF NOT EXISTS "TruckAvailability" (
@@ -74,19 +74,16 @@ CREATE TABLE IF NOT EXISTS "Trucks" (
 ALTER TABLE "Driveres_Licenece"
     ADD CONSTRAINT "DriverId_Fkey" FOREIGN KEY ("DriverID") REFERENCES "Drivers"("id");
 
-ALTER TABLE "ProductListdocument_Products"
-    ADD CONSTRAINT "ForeignKeyPLDid" FOREIGN KEY ("ProductListDocumentId") REFERENCES "ProductListDocument"("ProductListDocumentID");
-
 ALTER TABLE "ProductListDocument"
-    ADD CONSTRAINT "TransportIDForeignKey" FOREIGN KEY ("TransportID") REFERENCES "Transports"("id");
+    ADD CONSTRAINT "TransportIDForeignKey" FOREIGN KEY ("TransportID") REFERENCES "Transports_ProductListdocument"("TransportId") ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT "ForeignKeyPLDid" FOREIGN KEY ("ProductListDocumentID") REFERENCES "Transports_ProductListdocument"("ProductListDocumentID") ON DELETE CASCADE ;
 
 ALTER TABLE "Transports"
-    ADD CONSTRAINT "DriverID_FK" FOREIGN KEY ("DriverID") REFERENCES "Drivers"("id"),
-    ADD CONSTRAINT "TruckPN_FK" FOREIGN KEY ("TruckPN") REFERENCES "Trucks"("PlateNumber");
+    ADD CONSTRAINT "DriverID_FK" FOREIGN KEY ("DriverID") REFERENCES "Drivers"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "TruckPN_FK" FOREIGN KEY ("TruckPN") REFERENCES "Trucks"("PlateNumber") ON DELETE SET NULL;
 
 ALTER TABLE "TruckAvailability"
-    ADD CONSTRAINT "TruckPN_FK" FOREIGN KEY ("TruckPN") REFERENCES "Trucks"("PlateNumber");
+    ADD CONSTRAINT "TruckPN_FK" FOREIGN KEY ("TruckPN") REFERENCES "Trucks"("PlateNumber") ON DELETE CASCADE ON UPDATE CASCADE ;
 
 ALTER TABLE "Transports_ProductListdocument"
-    ADD CONSTRAINT "pldID_FK" FOREIGN KEY ("ProductListDocumentId") REFERENCES "ProductListDocument"("ProductListDocumentID"),
-    ADD CONSTRAINT "transportID_FK" FOREIGN KEY ("TransportId") REFERENCES "Transports"("id");
+    ADD CONSTRAINT "TransportID_FK" FOREIGN KEY ("TransportId") REFERENCES "Transports"("id") ON DELETE CASCADE
