@@ -96,7 +96,8 @@ public class TransportContorollerDomain implements ITransportController {
         Transport transport = transportRepo.getTransportByid(transportId);
         for(int PLDId : docId){
             ProductListDocument PLD = ProductListDocumentRepo.getProductListDocumentByid(PLDId);
-            transport.loadByDocument(PLD);
+            ProductListDocumentRepo.attachTransport(PLDId,transportId);
+
         }
 
 

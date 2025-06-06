@@ -157,14 +157,14 @@ public class BookingMenuNew {
         boolean running = true;
         System.out.println("Please enter your site destination: ");
         String site = scanner.nextLine();
-        System.out.println("Please enter wanted arrival time (HH:MM): ");
+        System.out.println("Please enter approximated arrival time (HH:MM): ");
         String wantedhour = scanner.nextLine();
         String[] parts = wantedhour.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
 
         LocalTime departure_time = LocalTime.of(hour, minute); // set the hour
-        System.out.println("Press 1 if you need Empty transport.");
+        System.out.println("Press 1 if you need Empty transport. Any other chatecter to create one a shimpment document");
         String choice = scanner.nextLine();
         if(Objects.equals(choice, "1"))
             running = false;

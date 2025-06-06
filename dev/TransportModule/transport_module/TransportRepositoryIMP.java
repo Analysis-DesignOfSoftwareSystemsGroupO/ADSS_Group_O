@@ -51,6 +51,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
                     Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
+                    t.setMaxWeight(dto.getMaxWeight());
                     if(dto.getTruckPN() != null){
                         Truck truck = truckRepository.getTruckBYPlateNumber(dto.getTruckPN());
                         t.assignTruck(truck);

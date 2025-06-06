@@ -212,4 +212,13 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         dao.deleteAll();
         availableid = initValidid();
     }
+
+    @Override
+    public void attachTransport(int pID, int tID) throws SQLException, ATransportModuleException {
+        ProductListDocument p = getProductListDocumentByid(pID);
+        Transport t = transportRep.getTransportByid(tID);
+        p.attachTransportToDocument(t);
+        dao.attachTransport(pID, tID);
+
+    }
 }

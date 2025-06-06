@@ -157,7 +157,7 @@ public class jdbcTransportDAO implements ITransportDAO {
                 throw e;
             }
         }
-}
+    }
     @Override
     public void deleteTransport ( int id ) throws SQLException{
         log.info("jdbcTransport::deleteTransport( " + id + ")");
