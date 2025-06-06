@@ -78,7 +78,6 @@ public class BookingMenu{
      */
     private void handleBooking() {
         try {
-            transportId = controller.getNewTransportId();
             // Ask user for transport details
             System.out.println("Enter delivery date (DD/MM/YYYY): ");
             String datestr = scanner.nextLine();
@@ -97,13 +96,14 @@ public class BookingMenu{
             String source = scanner.nextLine();
 
             // create default PLD function and
-            createProductListDocument(date);
+            productsDocumentIdList.add(createProductListDocument(date));
 
             // optional - add more PLD
             ProductListDocumentMenu(date);
 
 
             // Submit the transport request to the service
+            transportId = controller.getNewTransportId();
 
             controller.createTransport(transportId,date,source,maxWeight,departure_time);
 
@@ -207,7 +207,7 @@ public class BookingMenu{
                     ProductDTO productDTO = new ProductDTO(productId,5, amount);
                     try {
                         productDTOS.add(productDTO);
-                        totalWeight+=5;
+                        totalWeight+=productDTO.weight();
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());

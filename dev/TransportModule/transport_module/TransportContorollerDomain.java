@@ -98,10 +98,10 @@ public class TransportContorollerDomain implements ITransportController {
             ProductListDocument PLD = ProductListDocumentRepo.getProductListDocumentByid(PLDId);
             transport.loadByDocument(PLD);
         }
-        TransportDTO transportDTO = transportRepo.transportToTransportDTO(transport);
-        transportRepo.saveTransport(transportDTO);
+
 
     }
+
 
     public List<TransportDTO> getNextWeekTransportsWithNoTrucks() throws Exception{
         List<TransportDTO> repoListDTO = getTransportNextWeek();

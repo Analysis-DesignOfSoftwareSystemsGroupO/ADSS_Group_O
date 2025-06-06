@@ -19,4 +19,6 @@ public interface ITransportDAO {
     List<TransportDTO> getTransportsByDate(LocalDate date) throws SQLException;
     void deleteAll() throws SQLException;
     List<Integer > getIDs() throws SQLException;
+    void setSent(int id) throws SQLException;
+    void setDriver(int Tid, String driverID) throws SQLException;
 }

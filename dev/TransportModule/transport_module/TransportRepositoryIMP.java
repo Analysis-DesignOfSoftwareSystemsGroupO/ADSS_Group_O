@@ -42,7 +42,11 @@ public class TransportRepositoryIMP implements ITransportRepository {
                 if(transportDTO.isPresent()){
                     TransportDTO dto = transportDTO.get();
                     DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    Site s = new Site(dto.getSiteName(), "DefaultArea"); // todo Area feature is posposed
+                    Site s = null;
+                    if(dto.getSiteName() != null) {
+                        s = new Site(dto.getSiteName().trim(), "DefaultArea"); // todo Area feature is posposed
+                    }
+
                     //Get the time by String
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
@@ -137,9 +141,10 @@ public class TransportRepositoryIMP implements ITransportRepository {
     @Override
     public Transport TransportDTOtoTransport(TransportDTO dto) throws SQLException, ATransportModuleException {
         Transport t = getTransportByid(dto.getId());
-        if(t.getDate().equals( dto.getDate()) && t.getSource().getName() == dto.getSiteName() && t.getMaxWeight() == dto.getMaxWeight()){
+        if(t.getDate().equals( dto.getDate())   && t.getMaxWeight() == dto.getMaxWeight()){
             if((t.getDriver() == null && dto.getDriverID() ==null )|| t.getDriver().getId() == dto.getDriverID()){
-                return t;
+                if((t.getSource().getName() == null && dto.getSiteName() == null) || t.getSource().getName().equals(dto.getSiteName() ))
+                    return t;
             }
         }
         throw new TransportMismatchException("Miss match data");
@@ -193,6 +198,44 @@ public class TransportRepositoryIMP implements ITransportRepository {
             transportsList.add(getTransportByid(id));
         }
         return transportsList;
+    }
+
+    @Override
+    public void updateTransport(TransportDTO Tdto) throws SQLException, ATransportModuleException {
+        Transport t = getTransportByid(Tdto.getId());
+        if(t.isSent() != Tdto.isSent()){ //update is sent
+            setSent(Tdto.getId());
+        }
+        if(Tdto.getDriverID() != null){ //update driver field
+            if(t.getDriver() == null){
+                setDriver(t.getId(), Tdto.getDriverID());
+            }
+            else { //t has a driver
+                if(!t.getDriver().getId().equals(Tdto.getDriverID())){ //if driver id in dto and in driver are diffrent
+                    setDriver(t.getId(), Tdto.getDriverID());
+                }
+            }
+        }
+        if(Tdto.getTruckPN() != null){ //update Truck
+            if(t.getTruck() == null){
+                attachTrucktoTransport(t.getId(), Tdto.getTruckPN());
+            }
+        }
+    }
+
+    @Override
+    public void setSent(int transportID ) throws SQLException, ATransportModuleException {
+        Transport t = getTransportByid(transportID);
+        t.sendTransport();
+        dao.setSent(transportID);
+    }
+
+    @Override
+    public void setDriver(int transportID, String driverID) throws ATransportModuleException, SQLException {
+        Transport t = getTransportByid(transportID);
+        Driver d = driverRep.getDriverByID(driverID);
+        t.addDriver(d);
+        dao.setDriver(transportID, driverID);
     }
 
 
