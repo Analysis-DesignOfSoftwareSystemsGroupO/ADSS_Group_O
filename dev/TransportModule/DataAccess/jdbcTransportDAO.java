@@ -215,4 +215,33 @@ public class jdbcTransportDAO implements ITransportDAO {
         return list;
     }
 
+    @Override
+    public void setSent(int id) throws SQLException {
+        log.info("jdbcTransportDAO::setSent( " + id + " )");
+        String sql = "UPDATE \"Transports\" SET \"is_sent\" = TRUE WHERE \"id\" = ?;";
+        try(PreparedStatement ps =DataBase.getConnection().prepareStatement(sql)){
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+        catch (SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public void setDriver(int id, String driverID) throws SQLException {
+        log.info("jdbcTransportDAO::setDriver( " + id + " , "+ driverID +" )");
+        String sql = "UPDATE \"Transports\" SET \"DriverID\" = ?  WHERE \"id\" = ?;";
+        try(PreparedStatement ps =DataBase.getConnection().prepareStatement(sql)){
+            ps.setString(1, driverID);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+        catch (SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+    }
+
 }

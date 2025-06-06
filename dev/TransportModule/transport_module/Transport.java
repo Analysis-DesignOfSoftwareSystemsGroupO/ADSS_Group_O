@@ -30,7 +30,8 @@ public class Transport {
      */
     public Transport(int id, String d, String time, Site s) throws ATransportModuleException {
         // input check
-        if (time.isEmpty() || d.isEmpty() || s == null) {
+
+        if (time.isEmpty() || d.isEmpty() || (s == null && id != -1) ) {
             throw new InvalidInputException();
         }
 

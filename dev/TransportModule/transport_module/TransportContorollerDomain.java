@@ -59,14 +59,14 @@ public class TransportContorollerDomain implements ITransportController {
         return PLDDTOList;
     }
 
-    public void assignDriverTransport(String driverID, String transportID) throws Exception{
+    public void assignDriverTransport(String driverID, int transportID) throws Exception{
         DriverDto driverDto = driverControllerDomain.getDriverById(driverID);
         Driver driver = driverControllerDomain.getDriverFromDTO(driverDto);
-        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+        Transport transport = transportRepo.getTransportByid(transportID);
 
-        transport.addDriver(driver);
-
-        transportRepo.saveTransport(transportRepo.transportToTransportDTO(transport));
+        transport.addDriver(driver); // throws exception if failed
+        TransportDTO tDTO =  new TransportDTO(transport.getId(), transport.getDate(), transport.isSent(), transport.getMaxWeight() ,transport.getDriver().getId(), transport.getTruck().getPlateNumber(),transport.getSource().getName(), transport.getDeparture_time() );
+        transportRepo.updateTransport(tDTO);
     }
 
 
@@ -75,7 +75,7 @@ public class TransportContorollerDomain implements ITransportController {
      */
     public void createTransport(TransportDTO dto) throws Exception {
         // try to create transport with Transport requeest DTO
-        transportRepo.TransportDTOtoTransport(dto);
+        transportRepo.saveTransport(dto);
     }
 
     /**
@@ -98,8 +98,7 @@ public class TransportContorollerDomain implements ITransportController {
             ProductListDocument PLD = ProductListDocumentRepo.getProductListDocumentByid(PLDId);
             transport.loadByDocument(PLD);
         }
-        TransportDTO transportDTO = transportRepo.transportToTransportDTO(transport);
-        transportRepo.saveTransport(transportDTO);
+
 
     }
 

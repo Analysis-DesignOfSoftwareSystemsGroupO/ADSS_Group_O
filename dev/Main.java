@@ -1,7 +1,6 @@
 import HR_Mudol.DataBase.DatabaseInitializer;
 import TransportModule.TRS_Main;
 import HR_Mudol.HR_Main;
-import HR_Mudol.DataBase.DatabaseInitializer;
 import java.util.Scanner;
 
 public class Main {

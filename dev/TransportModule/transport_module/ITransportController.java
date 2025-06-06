@@ -15,5 +15,5 @@ public interface ITransportController {
     List<ProductListDocumentDto> getPLDbyTransportID(String transportID) throws Exception;
 
     // מקצה נהג להובלה (מבחינת סטטוס ההובלה)
-    void assignDriverTransport(String driverID, String transportID) throws Exception;
+    void assignDriverTransport(String driverID, int transportID) throws Exception;
 }

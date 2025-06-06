@@ -1,5 +1,6 @@
 package TransportModule.transport_module;
 
+import TransportModule.DTO.DriverDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 import TransportModule.Transport_Module_Exceptions.TransportMismatchException;
@@ -32,4 +33,11 @@ public interface ITransportRepository {
     void deleteAll()throws SQLException;
 
     List<Transport> getAllTransports() throws SQLException, ATransportModuleException;
+
+    void updateTransport(TransportDTO t) throws SQLException, ATransportModuleException;
+
+    void setSent(int transportID ) throws SQLException, ATransportModuleException;
+
+    void setDriver(int transportID, String driverID) throws ATransportModuleException, SQLException;
+
 }
