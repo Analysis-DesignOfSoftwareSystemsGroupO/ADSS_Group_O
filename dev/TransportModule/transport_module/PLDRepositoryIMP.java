@@ -87,13 +87,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             LocalTime time = dto.getApproximatedArrivalTime();
             DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm");
             pld = new ProductListDocument(id,site, dateformatter.format(date), df2.format(time));
-            if(dto.getTransportID() != -1) { // -1 is the deafault TransportID in the data base. means that this PLD is not attached to any of the transports
-                Transport t = transportRep.getTransportByid(dto.getTransportID());
-                if (t != null) pld.attachTransportToDocument(t);
-                else {
-                    throw new InvalidATransportException("The transport id of this PLD is not set to -1, and there is no Transport with this id. ");
-                }
-            }
+            pld.attachTransportToDocument(dto.getTransportID());
             List<ProductDTO > productsdtos = dao.getListOfProductsByPLDID(id); //get all the products of this PLD
             for(ProductDTO pdto : productsdtos){
                 //todo: Integration with Products is posposed. later will get the products from Products moudle. right now it is presented like this
@@ -217,7 +211,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     public void attachTransport(int pID, int tID) throws SQLException, ATransportModuleException {
         ProductListDocument p = getProductListDocumentByid(pID);
         Transport t = transportRep.getTransportByid(tID);
-        p.attachTransportToDocument(t);
+        p.attachTransportToDocument(t.getId());
         dao.attachTransport(pID, tID);
 
     }
