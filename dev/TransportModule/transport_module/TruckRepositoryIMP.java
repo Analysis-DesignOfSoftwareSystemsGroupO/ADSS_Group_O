@@ -28,7 +28,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
         List<TruckDto> truckDTOs = truckDAO.findAllTrucks();
         for(TruckDto tDTO :truckDTOs){
             Truck t = DTOtoTruck(tDTO); // also add this to the mapper/
-            trucks.add(t);
+
         }
     }
 
@@ -89,7 +89,7 @@ public class TruckRepositoryIMP implements ITruckRepository {
         if(mapper.get(dto.getPlateNumber()) != null) return mapper.get(dto.getPlateNumber()); // get the Ttuck from the mapper.
         try {
             List<LocalDate> dates = truckDAO.getListofOccupiedDates(dto.getPlateNumber()); // load the dates of that the truck is occupied
-            Truck t = new Truck(new DrivingLicence(dto.getLiceenceReq()), dto.getMaxWeight(),dto.getPlateNumber() , dates);
+            Truck t = new Truck(new DrivingLicence(dto.getLiceenceReq().trim()), dto.getMaxWeight(),dto.getPlateNumber().trim() , dates);
             mapper.put(t.getPlateNumber(), t);
             trucks.add(t);
             return  t;

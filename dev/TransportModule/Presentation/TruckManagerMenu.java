@@ -39,7 +39,7 @@ public class TruckManagerMenu {
             System.out.println("1. Add new Truck.");
             System.out.println("2. Show all Trucks.");
             System.out.println("3. Remove Truck.");
-            System.out.println("4. Show Weekly Transports.");
+            System.out.println("4. Show Weekly Transports without Trucks.");
             System.out.println("5. Attach Truck to transport.");
             System.out.println("E. Exit.");
             String input = scanner.nextLine();
@@ -151,7 +151,7 @@ public class TruckManagerMenu {
         stringBuilder.append("To: ").append("\n").append("\t");
         List<ProductListDocumentDto> DTOS =  controller.getAllPLDSByTransportId(transportId);
         for (ProductListDocumentDto dto: DTOS){
-            stringBuilder.append("\t").append(dto.getSiteDes()).append("Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n");
+            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n").append("\t");
         }
         return stringBuilder.toString();
 

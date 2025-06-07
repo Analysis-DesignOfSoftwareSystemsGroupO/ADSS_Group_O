@@ -62,7 +62,11 @@ public class jdbcTransportDAO implements ITransportDAO {
             ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()){
                 //Adding tansport DTO to the List
-                transports.add(new TransportDTO(rs.getInt("id"), rs.getDate("Date").toLocalDate(), rs.getBoolean("is_sent"), rs.getInt("maximum_weight"), rs.getString("DriverID"), rs.getString("TruckPN"), rs.getString("Source_site_name"), rs.getTime("departure_time").toLocalTime()));
+                String driverId = rs.getString("DriverID");
+                if(driverId != null) driverId= driverId.trim();
+                String truckPN = rs.getString("TruckPN");
+                if(truckPN != null) truckPN = truckPN.trim();
+                transports.add(new TransportDTO(rs.getInt("id"), rs.getDate("Date").toLocalDate(), rs.getBoolean("is_sent"), rs.getInt("maximum_weight"), driverId, truckPN, rs.getString("Source_site_name").trim(), rs.getTime("departure_time").toLocalTime()));
             }
         }
         catch (SQLException e) {
@@ -124,12 +128,12 @@ public class jdbcTransportDAO implements ITransportDAO {
      * @throws SQLException
      */
     @Override
-    public void assignTruckToTransport(int transportID, int truckPN) throws SQLException {
+    public void assignTruckToTransport(int transportID, String truckPN) throws SQLException {
         log.info("jdbcTransportDAO ::assignTruckToTransport( " + transportID+ " , " +truckPN + " )" );
         String sql = "UPDATE \"Transports\" SET \"TruckPN\" = ? WHERE \"id\" = ?;";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
-            ps.setInt(1,transportID); //set the transportID argument as the first questionMark
-            ps.setInt(2, truckPN);//set the truckPN  argument as the second questionMark
+            ps.setString(1,truckPN); //set the transportID argument as the first questionMark
+            ps.setInt(2, transportID);//set the truckPN  argument as the second questionMark
             ps.executeUpdate(); //run query
         }catch (SQLException e ){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -235,6 +239,21 @@ public class jdbcTransportDAO implements ITransportDAO {
         try(PreparedStatement ps =DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1, driverID);
             ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+        catch (SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public void setMaxWeight(int tID, int w) throws SQLException {
+        log.info("jdbcTransportDAO::setMaxWeight( " + tID + " , " + w + " )");
+        String sql = "UPDATE \"Transports\" SET \"maximum_weight\" = ? WHERE \"id\" = ? ;";
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
+            ps.setInt(1, w);
+            ps.setInt(2, tID);
             ps.executeUpdate();
         }
         catch (SQLException e){

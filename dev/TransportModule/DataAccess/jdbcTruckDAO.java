@@ -42,7 +42,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
             ps.setString(1, pn);
             try(ResultSet rs = ps.executeQuery()){
                 return rs.next()
-                        ? Optional.of(new TruckDto(rs.getInt("maxWeight"), rs.getString("LicenceReq"),rs.getString("PlateNumber") ))
+                        ? Optional.of(new TruckDto(rs.getInt("maxWeight"), rs.getString("LicenceReq").trim(),rs.getString("PlateNumber").trim() ))
                         :Optional.empty(); //Create DTo by the query
             }
         }
@@ -60,7 +60,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
         try (Statement st = DataBase.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) { //run query
             while (rs.next()) {
-                list.add(new TruckDto(rs.getInt("maxWeight"), rs.getString("LicenceReq"),rs.getString("PlateNumber"))); //create DTO by row
+                list.add(new TruckDto(rs.getInt("maxWeight"), rs.getString("LicenceReq").trim(),rs.getString("PlateNumber").trim())); //create DTO by row
             }
 
         }

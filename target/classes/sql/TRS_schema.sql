@@ -90,4 +90,7 @@ ALTER TABLE "TruckAvailability"
     ADD CONSTRAINT "TruckPN_FK" FOREIGN KEY ("TruckPN") REFERENCES "Trucks"("PlateNumber") ON DELETE CASCADE ON UPDATE CASCADE ;
 
 ALTER TABLE "Transports_ProductListdocument"
-    ADD CONSTRAINT "TransportID_FK" FOREIGN KEY ("TransportId") REFERENCES "Transports"("id") ON DELETE CASCADE
+    ADD CONSTRAINT "TransportID_FK" FOREIGN KEY ("TransportId") REFERENCES "Transports"("id") ON DELETE CASCADE;
+
+ALTER TABLE "ProductListdocument_Products"
+    ADD CONSTRAINT "pldID_FK" FOREIGN KEY ("ProductListDocumentId") REFERENCES "ProductListDocument"("ProductListDocumentID") ON DELETE CASCADE;

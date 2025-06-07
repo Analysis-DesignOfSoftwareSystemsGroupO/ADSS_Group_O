@@ -21,28 +21,44 @@ public class jdbcPLDDAO implements IPLDDAO{
      */
     @Override
     public void save(ProductListDocumentDto dto) throws SQLException {
-        log.info("jdbcPLDDAO ::savePLD(DTO)"); //todo change the log
-        String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"aproximatedArrivaleTime\",\"DestinationSiteName\" , \"Date\") VALUES (?,?,?,?,?,?)";
-        if(dto != null){
-            try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
-                ps.setInt(1,dto.getId());
-                ps.setInt(2,dto.getTransportID());
+        log.info("jdbcPLDDAO ::savePLD(DTO)");
+        Connection  conn = DataBase.getConnection();
+        try {
+            conn.setAutoCommit(false);
+            String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"aproximatedArrivaleTime\",\"DestinationSiteName\" , \"Date\") VALUES (?,?,?,?,?,?)";
+            try (PreparedStatement ps =conn.prepareStatement(sql)) {
+                ps.setInt(1, dto.getId());
+                ps.setInt(2, dto.getTransportID());
                 ps.setInt(3, dto.getWeight());
                 ps.setTime(4, Time.valueOf(dto.getApproximatedArrivalTime()));
                 ps.setString(5, dto.getSiteDes());
-                ps.setDate(6,Date.valueOf(dto.getDate()));
+                ps.setDate(6, Date.valueOf(dto.getDate()));
                 ps.executeUpdate();//run query
             }
-            catch (SQLException e){
-                log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-                throw e;
+            String sql2 = "INSERT INTO \"ProductListdocument_Products\" (\"ProductListDocumentId\" , \"ProductQuantety\" , \"WeightPerUnit\" , \"ProductSerialNumber\") VALUES(?,?,?,?) ; ";
+            try (PreparedStatement ps2 = conn.prepareStatement(sql2)){
+                for (ProductDTO p : dto.getProducts()) { //for each product
+                    ps2.setInt(1, dto.getId());
+                    ps2.setInt(2, p.quantity());
+                    ps2.setInt(3, p.weight());
+                    ps2.setString(4, p.serialNumber());
+                    ps2.addBatch();
+                }
+                ps2.executeBatch();
             }
+
+
+            conn.commit();
+        }catch (SQLException e){
+            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
         }
+        finally {
+            conn.setAutoCommit(true);
+        }
+
     }
 
-
-
-    //delete a PLD from DataBase
     @Override
     public void deletePLD(int serialNumber) throws SQLException {
         log.info("jdbcPLDDAO ::deletePLD( serialNumber= " + serialNumber + ")") ;
@@ -234,7 +250,7 @@ public class jdbcPLDDAO implements IPLDDAO{
                     "ON CONFLICT (\"ProductListDocumentId\") DO UPDATE " +
                     "SET \"TransportId\" = EXCLUDED.\"TransportId\";";
 
-            try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, tID);
                 ps.setInt(2, pldID);
                 ps.executeUpdate();

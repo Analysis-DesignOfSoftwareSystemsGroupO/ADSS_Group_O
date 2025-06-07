@@ -194,6 +194,10 @@ public class Transport {
                 System.out.println("Truck has Over Weight");
         }
     }
+    public void setTruck(Truck t ){
+        this.truck = t;
+        maxWeight= t.getMaxWeight();
+    }
 
     /***
      * Sends the transport if all conditions are met: not already sent, has a driver, not overweight.

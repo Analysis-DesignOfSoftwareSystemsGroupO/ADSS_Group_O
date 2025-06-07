@@ -88,7 +88,7 @@ public class TransportManagerMenu {
         stringBuilder.append("To: ").append("\n").append("\t");
         List<ProductListDocumentDto> DTOS =  controller.getAllPLDSByTransportId(transportId);
         for (ProductListDocumentDto dto: DTOS){
-            stringBuilder.append("\t").append(dto.getSiteDes()).append("Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n");
+            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n").append("\t");
         }
         return stringBuilder.toString();
 

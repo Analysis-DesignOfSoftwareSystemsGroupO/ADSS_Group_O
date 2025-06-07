@@ -6,20 +6,30 @@
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/DataAccess/ITransportDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/DataAccess/ITransportDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcPLDDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcPLDDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTransportDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTransportDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerControllerPL.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerControllerPL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTruckDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTruckDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/TransportModule/Presentation/TruckManagerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/Presentation/TruckManagerMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/TransportModule/Users/TransportManagerUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/Users/TransportManagerUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/PLDRepositoryIMP.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/PLDRepositoryIMP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/Transport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/Transport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/TransportRepositoryIMP.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/TransportRepositoryIMP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/TruckControllerDomain.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/TruckControllerDomain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/TruckRepositoryIMP.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/TruckRepositoryIMP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/sql/TRS_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/TRS_schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/ITransportDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/ITransportDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcPLDDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcPLDDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcTransportDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcTransportDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcTruckDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcTruckDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TransportManagerControllerPL.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TransportManagerControllerPL.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TransportManagerMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TransportManagerMenu.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TruckManagerMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TruckManagerMenu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/Users/TransportManagerUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/Users/TransportManagerUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/PLDRepositoryIMP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/PLDRepositoryIMP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Transport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Transport.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportRepositoryIMP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportRepositoryIMP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TruckControllerDomain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TruckControllerDomain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TruckRepositoryIMP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TruckRepositoryIMP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sql/TRS_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sql/TRS_schema.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,24 +262,39 @@
           <option name="timeStamp" value="81" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTransportDAO.java</url>
-          <line>36</line>
-          <option name="timeStamp" value="84" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/Main.java</url>
           <line>37</line>
           <option name="timeStamp" value="86" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/TransportModule/TRS_Main.java</url>
-          <line>36</line>
-          <option name="timeStamp" value="87" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/TransportModule/Users/TransportManagerUser.java</url>
           <line>32</line>
           <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TruckManagerMenu.java</url>
+          <line>197</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TruckManagerMenu.java</url>
+          <line>39</line>
+          <option name="timeStamp" value="97" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TruckManagerMenu.java</url>
+          <line>101</line>
+          <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TransportRepositoryIMP.java</url>
+          <line>109</line>
+          <option name="timeStamp" value="100" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TransportRepositoryIMP.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/BookingMenuNew.java</url>
@@ -282,12 +307,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcPLDDAO.java</url>
-          <line>46</line>
+          <line>62</line>
           <properties class="TransportModule.DataAccess.jdbcPLDDAO" method="deletePLD">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TruckControllerPL.java</url>
+          <line>23</line>
+          <properties class="TransportModule.Presentation.TruckControllerPL" method="getAllTrucks">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TruckRepositoryIMP.java</url>
+          <line>52</line>
+          <properties class="TransportModule.transport_module.TruckRepositoryIMP" method="getTruckBYPlateNumber">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TruckRepositoryIMP.java</url>
+          <line>87</line>
+          <properties class="TransportModule.transport_module.TruckRepositoryIMP" method="DTOtoTruck">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="104" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
