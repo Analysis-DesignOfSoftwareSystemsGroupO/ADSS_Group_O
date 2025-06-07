@@ -60,7 +60,7 @@ public class ShiftController implements IShiftController {
 
         if( role.getDescription().toLowerCase().contains("driver")){
             String[] parts = role.getDescription().split(":",2);
-            String transportId = parts[1];
+            int transportId = Integer.parseInt(parts[1]);
             TransportContorollerDomain transportContorollerDomain;
             try {
                 transportContorollerDomain = new TransportContorollerDomain();

@@ -46,7 +46,6 @@ public class TRS_Main {
 
 
         user.showMenu();
-        scanner.close();
 
 //        // Run every 1 minute the sendTransport function
 //        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
