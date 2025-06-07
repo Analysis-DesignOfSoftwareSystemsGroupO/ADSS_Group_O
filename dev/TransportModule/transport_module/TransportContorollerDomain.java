@@ -54,15 +54,6 @@ public class TransportContorollerDomain implements ITransportController {
         return transportList;
     }
 
-    public List<ProductListDocumentDto> getAllPLDSByTransportId(int transportId) throws Exception{
-        List<ProductListDocument> productListDocumentList = ProductListDocumentRepo.getPLDByTransportID(transportId);
-        List<ProductListDocumentDto> plds = new ArrayList<>();
-        for (ProductListDocument pld: productListDocumentList){
-            plds.add(ProductListDocumentRepo.pldToDTO(pld));
-        }
-        return plds;
-    }
-
     public List<ProductListDocumentDto> getPLDbyTransportID(String transportID) throws Exception{
         Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
         List<ProductListDocument> PLDList = transport.getAllPLD();

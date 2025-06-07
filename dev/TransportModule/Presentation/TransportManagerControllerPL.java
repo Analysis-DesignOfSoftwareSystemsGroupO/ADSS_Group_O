@@ -36,8 +36,7 @@ public class TransportManagerControllerPL {
     }
 
     public List<ProductListDocumentDto> getAllPLDSByTransportId(int transportId) throws Exception{
-        return domainController.getAllPLDSByTransportId(transportId);
-
+        return domainController.getPLDbyTransportID(Integer.toString(transportId));
     }
 
 }
