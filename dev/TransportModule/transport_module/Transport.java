@@ -195,6 +195,7 @@ public class Transport {
 
         }
     }
+
     public void setTruck(Truck t ){
         this.truck = t;
         maxWeight= t.getMaxWeight();

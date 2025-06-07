@@ -42,14 +42,16 @@ public class TransportManagerControllerPL {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("To: ").append("\n").append("\t");
-        List<ProductListDocumentDto> DTOS = getAllPLDSByTransportId(transportId);
+        List<ProductListDocumentDto> DTOS =  getAllPLDSByTransportId(transportId);
+        int sum = 0;
         for (ProductListDocumentDto dto: DTOS){
-            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n").append("\t");
+            sum+= dto.getWeight();
+            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("weight:" ).append(dto.getWeight()).append("\n").append("\t");
         }
+        stringBuilder.append("Total Weight of products: " +  sum + "\n");
         return stringBuilder.toString();
 
     }
-
     public String printTransportDTO(TransportDTO dto){
         StringBuilder stringBuilder = new StringBuilder();
         try{
