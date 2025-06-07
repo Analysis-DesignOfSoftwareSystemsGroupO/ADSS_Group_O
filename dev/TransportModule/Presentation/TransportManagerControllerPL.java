@@ -1,5 +1,6 @@
 package TransportModule.Presentation;
 
+import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.TransportContorollerDomain;
 
@@ -34,4 +35,7 @@ public class TransportManagerControllerPL {
         domainController.removeTransportById(transportId);
     }
 
+    public List<ProductListDocumentDto> getAllPLDSByTransportId(int transportId) throws Exception{
+        return domainController.getPLDbyTransportID(Integer.toString(transportId));
+    }
 }

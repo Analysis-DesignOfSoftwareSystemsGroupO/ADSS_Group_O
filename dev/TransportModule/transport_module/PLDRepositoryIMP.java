@@ -66,7 +66,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     }
 
     int initValidid()throws SQLException{
-        availableid = dao.getHieghestPLDID() + 1;
+        availableid = dao.getHieghestPLDID();
         return availableid;
     }
 

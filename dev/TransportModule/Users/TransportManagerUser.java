@@ -39,6 +39,6 @@ public class TransportManagerUser extends User {
 
         } // End while
 
-        scanner.close();
+
     }
 }

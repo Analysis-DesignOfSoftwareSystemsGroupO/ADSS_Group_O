@@ -158,7 +158,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
 
 
     private TransportRepositoryIMP() throws SQLException, ATransportModuleException {
-        this.availableId = dao.getHieghestTransportID() + 1;
+        this.availableId = dao.getHieghestTransportID();
         truckRepository = TruckRepositoryIMP.getInstance();
 
         driverRep = DriverRepIMP.getInstance();
