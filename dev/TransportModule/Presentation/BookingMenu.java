@@ -207,7 +207,7 @@ public class BookingMenu{
                     ProductDTO productDTO = new ProductDTO(productId,5, amount);
                     try {
                         productDTOS.add(productDTO);
-                        totalWeight+=5;
+                        totalWeight+=productDTO.weight();
                     }
                     catch (Exception e){
                         System.out.println(e.getMessage());
