@@ -35,4 +35,6 @@ public interface IProductListDocumentRepository {
     void attachTransport(int pID, int tID) throws SQLException, ATransportModuleException;
 
     void injectTransportRepository(ITransportRepository rep);
+
+    void initRep() throws SQLException, InvalidATransportException, TransportMismatchException;
 }

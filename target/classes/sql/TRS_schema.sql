@@ -75,11 +75,15 @@ ALTER TABLE "Driveres_Licenece"
     ADD CONSTRAINT "DriverId_Fkey" FOREIGN KEY ("DriverID") REFERENCES "Drivers"("id");
 
 ALTER TABLE "ProductListDocument"
-    ADD CONSTRAINT "TransportIDForeignKey" FOREIGN KEY ("TransportID") REFERENCES "Transports_ProductListdocument"("TransportId") ON DELETE CASCADE ON UPDATE CASCADE;
-    ADD CONSTRAINT "ForeignKeyPLDid" FOREIGN KEY ("ProductListDocumentID") REFERENCES "Transports_ProductListdocument"("ProductListDocumentID") ON DELETE CASCADE ;
+    ADD CONSTRAINT "TransportIDForeignKey" FOREIGN KEY ("TransportID") REFERENCES "Transports"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "ProductListDocument"
+    ADD CONSTRAINT "ForeignKeyPLDid" FOREIGN KEY ("ProductListDocumentID") REFERENCES "Transports_ProductListdocument"("ProductListDocumentId") ON DELETE CASCADE ;
 
 ALTER TABLE "Transports"
     ADD CONSTRAINT "DriverID_FK" FOREIGN KEY ("DriverID") REFERENCES "Drivers"("id") ON DELETE SET NULL;
+
+ALTER TABLE "Transports"
     ADD CONSTRAINT "TruckPN_FK" FOREIGN KEY ("TruckPN") REFERENCES "Trucks"("PlateNumber") ON DELETE SET NULL;
 
 ALTER TABLE "TruckAvailability"

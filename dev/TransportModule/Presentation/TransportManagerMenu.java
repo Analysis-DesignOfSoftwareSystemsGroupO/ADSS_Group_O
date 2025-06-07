@@ -84,7 +84,7 @@ public class TransportManagerMenu {
         stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
         stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
         stringBuilder.append("Driver: ");
-        if(Objects.equals(dto.getDriverID(),"-1"))
+        if(dto.getDriverID()== "-1")
             stringBuilder.append(" No driver assigned to Transport");
         else
             stringBuilder.append("id number - ").append(dto.getId());
@@ -95,7 +95,7 @@ public class TransportManagerMenu {
         else
             stringBuilder.append("Truck's Plate number - ").append(dto.getId());
         stringBuilder.append("\n\t");
-        if(dto.isSent())
+        if(!dto.isSent())
             stringBuilder.append("wait to be sent.\n");
         else
             stringBuilder.append("already left.\n");

@@ -21,7 +21,7 @@ public class jdbcPLDDAO implements IPLDDAO{
      */
     @Override
     public void save(ProductListDocumentDto dto) throws SQLException {
-        log.info("jdbcPLDDAO ::deletePLD(DTO)"); //todo change the log
+        log.info("jdbcPLDDAO ::savePLD(DTO)"); //todo change the log
         String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"aproximatedArrivaleTime\",\"DestinationSiteName\" , \"Date\") VALUES (?,?,?,?,?,?)";
         if(dto != null){
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {

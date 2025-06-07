@@ -22,6 +22,8 @@ public class TransportContorollerDomain implements ITransportController {
         this.ProductListDocumentRepo =  PLDRepositoryIMP.getInstance();
         transportRepo.injectPLDRepository(ProductListDocumentRepo);
         ProductListDocumentRepo.injectTransportRepository(transportRepo);
+        ProductListDocumentRepo.initRep();
+        transportRepo.initRep();
         this.driverControllerDomain = new DriverControllerDomain();
 
 

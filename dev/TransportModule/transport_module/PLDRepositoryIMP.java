@@ -33,6 +33,10 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     private PLDRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableid = initValidid(); //init the availableID field
         this.mapper = new HashMap<>();
+
+
+    }
+    public void initRep() throws SQLException, InvalidATransportException, TransportMismatchException {
         //fill the mapper with pld instances:
         List<Integer> pldIDs = dao.getPLDsID(); //get id of plds from the data base
         for (int id : pldIDs){ //for each id: get the ProductListDocument instance and add it to the mapper
