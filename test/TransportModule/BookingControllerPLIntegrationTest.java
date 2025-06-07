@@ -34,14 +34,15 @@ class BookingControllerPLIntegrationTest {
         String source = "Beer Sheva";
         int maxWeight = 3000;
 
-        int transportId = bookingController.createTransport(date, source, maxWeight, time);
+        int transportId = bookingController.getNewTransportId();
+        bookingController.createTransport(transportId,date, source, maxWeight, time);
 
         List<ProductDTO> products = List.of(
                 new ProductDTO("Apples", 10,3),
                 new ProductDTO("Bananas", 5,4)
         );
         String destination = "Tel Aviv";
-        int pldId = bookingController.createProductListDocument(destination, products, 15, date, time);
+        int pldId = bookingController.createProductListDocument(transportId,destination, products, 15, date, time);
 
         // attach PLD to transport
         bookingController.attachProductListDocumentsToTransport(List.of(pldId), transportId);

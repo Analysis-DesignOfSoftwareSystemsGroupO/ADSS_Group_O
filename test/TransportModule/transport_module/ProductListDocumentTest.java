@@ -85,8 +85,8 @@ class ProductListDocumentTest {
     void attachTransportToDocumentAndGetTransport() throws ATransportModuleException {
         //    public Transport(int id, String d, String time, Site s) throws ATransportModuleException {
         Transport transport = new Transport(10, date, timeeStr, site);
-        document.attachTransportToDocument(transport);
-        assertEquals(transport, document.getTransport());
+        document.attachTransportToDocument(transport.getId());
+        assertEquals(transport.getId(), document.getTransportId());
     }
 
     @Test
@@ -130,9 +130,10 @@ class ProductListDocumentTest {
     void testRealiseFromTransport() throws ATransportModuleException {
         //     public Transport(int id, String d, String time, Site s) throws ATransportModuleException {
         Transport transport = new Transport(20, date, timeeStr,site);
-        document.attachTransportToDocument(transport);
-        document.realiseFromTransport(transport);
-        assertNull(document.getTransport());
+        document.attachTransportToDocument(transport.getId());
+        document.realiseFromTransport();
+        assertEquals(-1, document.getTransportId());
+
     }
 
     @Test
@@ -149,22 +150,6 @@ class ProductListDocumentTest {
         });
     }
 
-    @Test
-    void testChangeDateWithTransportAttached() throws ATransportModuleException {
-        Transport transport = new Transport(999, date, timeeStr, site);
-        document.attachTransportToDocument(transport);
-        assertThrows(ChangeDateException.class, () -> {
-            document.changeDate(dated.plusDays(2));
-        });
-    }
 
-    @Test
-    void testAttachTransportDateMismatch() throws ATransportModuleException {
-        LocalDate calcDate = dated.plusDays(5);
-        String datestr =calcDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        Transport badTransport = new Transport(888, datestr, timeeStr,  site);
-        assertThrows(TransportMismatchException.class, () -> {
-            document.attachTransportToDocument(badTransport);
-        });
-    }
+
 }

@@ -79,10 +79,10 @@ class TruckControllerDomainTest {
         TransportDTO dto = createDTO(999);
 
         when(transportRepoMock.getTransportByid(10)).thenReturn(transportMock);
-        when(truckRepoMock.getTruckBYPlateNumber(1234)).thenReturn(truckMock);
+        when(truckRepoMock.getTruckBYPlateNumber("1234")).thenReturn(truckMock);
         when(transportRepoMock.transportToTransportDTO(transportMock)).thenReturn(dto);
 
-        controller.assignTruckToTransport(10, 1234);
+        controller.assignTruckToTransport(10, "1234");
 
         verify(transportMock).assignTruck(truckMock);
         verify(transportRepoMock).saveTransport(dto);

@@ -93,7 +93,7 @@ class TransportControllerPLIntegrationTest {
         String validDriverId = "101";
 
         // act
-        domain.assignDriverTransport(validDriverId, String.valueOf(transportId));
+        domain.assignDriverTransport(validDriverId, transportId);
 
         // assert
         List<TransportDTO> transports = domain.getTransportNextWeek();

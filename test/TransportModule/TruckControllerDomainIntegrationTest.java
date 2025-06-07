@@ -37,7 +37,7 @@ class TruckControllerDomainIntegrationTest {
 
         truckDomain.addTruck(dto);
 
-        Truck actualTruck = truckRepository.getTruckBYPlateNumber(1234);
+        Truck actualTruck = truckRepository.getTruckBYPlateNumber("1234");
         assertEquals("1234", actualTruck.getPlateNumber());
         assertEquals("C", actualTruck.getDrivingLicence().getCode());
         assertEquals(5000, actualTruck.getMaxWeight());
@@ -72,7 +72,7 @@ class TruckControllerDomainIntegrationTest {
 
         truckDomain.deleteTruck("7777");
 
-        assertThrows(Exception.class, () -> truckRepository.getTruckBYPlateNumber(7777));
+        assertThrows(Exception.class, () -> truckRepository.getTruckBYPlateNumber("7777"));
     }
 
     @Test

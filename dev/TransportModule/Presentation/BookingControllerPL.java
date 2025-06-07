@@ -26,7 +26,7 @@ public class BookingControllerPL {
     /**
      * Creates a new transport request
      */
-    public void createTransport(  int transportId ,LocalDate date, String source, int maxWeight,LocalTime hour) throws Exception {
+    public void createTransport(int transportId, LocalDate date, String source, int maxWeight, LocalTime hour) throws Exception {
 
         TransportDTO transportDTO = new TransportDTO(transportId,date,false,maxWeight,null,null,source,hour);
 
@@ -60,7 +60,7 @@ public class BookingControllerPL {
 
     }
 
-    int getNewTransportId() throws Exception{
+    public int getNewTransportId() throws Exception{
         return domainController.getNewTransportId();
     }
 }
