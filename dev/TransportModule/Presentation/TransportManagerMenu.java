@@ -50,7 +50,7 @@ public class TransportManagerMenu {
 
     private void ShowAllNextWeekTransports() {
         try {
-            PrintTransportDTOList(controller.getNextWeekTransports());
+            controller.PrintTransportDTOList(controller.getNextWeekTransports());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -58,69 +58,21 @@ public class TransportManagerMenu {
 
     private void ShowAllNextWeekTransportsWithNoTrucks() {
         try {
-            PrintTransportDTOList(controller.getNextWeekTransportsWithNoTrucks());
+            controller.PrintTransportDTOList(controller.getNextWeekTransportsWithNoTrucks());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
     private void ShowAllNextWeekTransportsWithNoDrivers() {
         try {
-            PrintTransportDTOList(controller.getNextWeekTransportsWithNoDrivers());
+            controller.PrintTransportDTOList(controller.getNextWeekTransportsWithNoDrivers());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void PrintTransportDTOList(List<TransportDTO> list) {
-        for (TransportDTO dto : list) {
-            try {
-                System.out.println(printTransportDTO(dto));
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 
-    private String getPLDInfo(int transportId)throws Exception{
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("To: ").append("\n").append("\t");
-        List<ProductListDocumentDto> DTOS =  controller.getAllPLDSByTransportId(transportId);
-        for (ProductListDocumentDto dto: DTOS){
-            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n").append("\t");
-        }
-        return stringBuilder.toString();
-
-    }
-
-    private String printTransportDTO(TransportDTO dto) throws Exception{
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Transport number: ").append(dto.getId()).append("\n").append("\t");
-        stringBuilder.append("From: ").append(dto.getSiteName()).append("\n").append("\t");
-        stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
-        stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
-        stringBuilder.append(getPLDInfo(dto.getId()));
-        stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
-        stringBuilder.append("Driver: ");
-        if(dto.getDriverID()== null)
-            stringBuilder.append(" No driver assigned to Transport");
-        else
-            stringBuilder.append("id number - ").append(dto.getDriverID());
-        stringBuilder.append("\n\t");
-        stringBuilder.append("Truck: ");
-        if(dto.getTruckPN() ==null)
-            stringBuilder.append(" No Truck assigned to Transport");
-        else
-            stringBuilder.append("Truck's Plate number - ").append(dto.getTruckPN());
-        stringBuilder.append("\n\t");
-        if(!dto.isSent())
-            stringBuilder.append("wait to be sent.\n");
-        else
-            stringBuilder.append("already left.\n");
-
-        return stringBuilder.toString();
-    }
 
     private void RemoveTransportById(){
         System.out.println("Please enter Transport id you want to delete: ");
