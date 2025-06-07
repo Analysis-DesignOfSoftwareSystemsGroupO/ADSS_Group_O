@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/EmployeeDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/EmployeeDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IEmployeeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/IEmployeeDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/EmployeeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/HRService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/HRService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
