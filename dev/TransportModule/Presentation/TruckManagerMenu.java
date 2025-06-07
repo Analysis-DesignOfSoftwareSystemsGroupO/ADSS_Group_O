@@ -1,4 +1,5 @@
 package TransportModule.Presentation;
+import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.DTO.TruckDto;
 
@@ -15,6 +16,7 @@ public class TruckManagerMenu {
     // Service layer that handles truck-related business logic
     private final TruckControllerPL truckController;
     private final BookingControllerPL bookingControllerPL;
+    private final TransportManagerControllerPL controller;
     private final Scanner scanner = new Scanner(System.in);
 
     /**
@@ -23,6 +25,7 @@ public class TruckManagerMenu {
     public TruckManagerMenu() throws Exception{
         this.truckController = new TruckControllerPL();
         this.bookingControllerPL = new BookingControllerPL();
+        this.controller = new TransportManagerControllerPL();
     }
 
     /**
@@ -134,7 +137,7 @@ public class TruckManagerMenu {
             List<TransportDTO> transportDTOList = bookingControllerPL.getWeeklyTransportsRequests();
 
             for (TransportDTO transportReq : transportDTOList) // print all weekly transports
-                if(Objects.equals(transportReq.getTruckPN(), "-1")) // show weekly transports with no trucks
+                if(transportReq.getTruckPN() == null) // show weekly transports with no trucks
                     System.out.println(printTransportDTO(transportReq));
         }
         catch (Exception e){
@@ -142,32 +145,46 @@ public class TruckManagerMenu {
         }
     }
 
-    private String printTransportDTO(TransportDTO dto){
+    private String getPLDInfo(int transportId)throws Exception{
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("To: ").append("\n").append("\t");
+        List<ProductListDocumentDto> DTOS =  controller.getAllPLDSByTransportId(transportId);
+        for (ProductListDocumentDto dto: DTOS){
+            stringBuilder.append("\t").append(dto.getSiteDes()).append("Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n");
+        }
+        return stringBuilder.toString();
+
+    }
+
+    private String printTransportDTO(TransportDTO dto) throws Exception{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Transport number: ").append(dto.getId()).append("\n").append("\t");
         stringBuilder.append("From: ").append(dto.getSiteName()).append("\n").append("\t");
         stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
         stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
+        stringBuilder.append(getPLDInfo(dto.getId()));
         stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
         stringBuilder.append("Driver: ");
-        if(Objects.equals(dto.getDriverID(),"-1"))
+        if(dto.getDriverID()== null)
             stringBuilder.append(" No driver assigned to Transport");
         else
-            stringBuilder.append("id number - ").append(dto.getId());
+            stringBuilder.append("id number - ").append(dto.getDriverID());
         stringBuilder.append("\n\t");
         stringBuilder.append("Truck: ");
-        if(Objects.equals(dto.getTruckPN(),"-1"))
+        if(dto.getTruckPN() ==null)
             stringBuilder.append(" No Truck assigned to Transport");
         else
-            stringBuilder.append("Truck's Plate number - ").append(dto.getId());
+            stringBuilder.append("Truck's Plate number - ").append(dto.getTruckPN());
         stringBuilder.append("\n\t");
-        if(dto.isSent())
+        if(!dto.isSent())
             stringBuilder.append("wait to be sent.\n");
         else
             stringBuilder.append("already left.\n");
 
         return stringBuilder.toString();
     }
+
 
 
 

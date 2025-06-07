@@ -121,7 +121,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
      *
      * @param truckPn
      * @return list of dates that the truck is available
-      * @throws SQLException
+     * @throws SQLException
      */
     public List<LocalDate> getListofOccupiedDates(String truckPn) throws SQLException{
         log.info("jdbcTruckDAO :: checkAvailabilityOfTruck( " + truckPn+ "  ) ");
@@ -142,7 +142,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
             e.printStackTrace();
         }
         return dates;
-        }
+    }
 
 
     /**

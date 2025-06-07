@@ -91,7 +91,7 @@ public class jdbcDriverDAO implements IDriverDAO{
         String sql = "SELECT * FROM \"Drivers\" ;";
         List<String > list = new ArrayList<>();
         try(Statement st = DataBase.getConnection().createStatement();
-        ResultSet rs = st.executeQuery(sql)){
+            ResultSet rs = st.executeQuery(sql)){
             while (rs.next()){
                 list.add(rs.getString("id").trim());
             }
