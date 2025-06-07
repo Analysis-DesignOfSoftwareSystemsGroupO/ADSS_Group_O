@@ -38,52 +38,49 @@ public class TransportManagerControllerPL {
         return domainController.getPLDbyTransportID(Integer.toString(transportId));
     }
 
-    private String getPLDInfo(int transportId)throws Exception{
+    private void getPLDInfo(int transportId)throws Exception{
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("To: ").append("\n").append("\t");
+        System.out.println("To: \t");
         List<ProductListDocumentDto> DTOS =  getAllPLDSByTransportId(transportId);
         int sum = 0;
         for (ProductListDocumentDto dto: DTOS){
             sum+= dto.getWeight();
-            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("weight:" ).append(dto.getWeight()).append("\n").append("\t");
+            System.out.println("\t"+dto.getSiteDes()+" - Approximated arrival time at: "+dto.getApproximatedArrivalTime()+" weight:"+dto.getWeight()+"\t");
         }
-        stringBuilder.append("Total Weight of products: " +  sum + "\n");
-        return stringBuilder.toString();
+        System.out.println("\tTotal Weight of products: " +  sum + "");
 
     }
-    public String printTransportDTO(TransportDTO dto){
-        StringBuilder stringBuilder = new StringBuilder();
+
+
+    public void printTransportDTO(TransportDTO dto){
         try{
-            stringBuilder.append("Transport number: ").append(dto.getId()).append("\n").append("\t");
-            stringBuilder.append("From: ").append(dto.getSiteName()).append("\n").append("\t");
-            stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
-            stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
-            stringBuilder.append(getPLDInfo(dto.getId()));
-            stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
-            stringBuilder.append("Driver: ");
+            System.out.println("Transport number: "+dto.getId()+"\t");
+            System.out.println("From: "+dto.getSiteName()+"\t");
+            System.out.println("At date: "+dto.getDate()+"\t");
+            System.out.println("Leaves at: "+dto.getDepartureTime()+"\t");
+            getPLDInfo(dto.getId());
+            System.out.println("Max weight: "+dto.getMaxWeight()+"\t");
+            System.out.print("Driver: ");
             if(dto.getDriverID()== null)
-                stringBuilder.append(" No driver assigned to Transport");
+                System.out.println(" No driver assigned to Transport");
             else
-                stringBuilder.append("id number - ").append(dto.getDriverID());
-            stringBuilder.append("\n\t");
-            stringBuilder.append("Truck: ");
+                System.out.println("id number - " +dto.getDriverID()+"\t" );
+            System.out.print("Truck: ");
             if(dto.getTruckPN() ==null)
-                stringBuilder.append(" No Truck assigned to Transport");
+                System.out.println(" No Truck assigned to Transport"+"\t" );
             else
-                stringBuilder.append("Truck's Plate number - ").append(dto.getTruckPN());
-            stringBuilder.append("\n\t");
+                System.out.println("Truck's Plate number - "+dto.getTruckPN()+"\t");
             if(!dto.isSent())
-                stringBuilder.append("wait to be sent.\n");
-            else
-                stringBuilder.append("already left.\n");
+                System.out.println("wait to be sent.");
+            else {
+                System.out.println("already left.");
+            }
 
 
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return stringBuilder.toString();
     }
 
     public void PrintTransportDTOList(List<TransportDTO> list) {
@@ -92,7 +89,7 @@ public class TransportManagerControllerPL {
         }
         for (TransportDTO dto : list) {
             try {
-                System.out.println(printTransportDTO(dto));
+                printTransportDTO(dto);
             }
             catch (Exception e){
                 System.out.println(e.getMessage());

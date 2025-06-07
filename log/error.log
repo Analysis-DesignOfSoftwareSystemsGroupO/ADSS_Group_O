@@ -1,6 +1,0 @@
-2025-06-07 22:15:13.712 [main] ERROR TransportModule.DataAccess.jdbcTruckDAO - SQL State: %s
-%s
-2025-06-07 22:15:13.713 [main] ERROR TransportModule.transport_module.TruckRepositoryIMP - Failed to delete Truck: 666  due to SQL Exception 
-2025-06-07 22:15:26.536 [main] ERROR TransportModule.DataAccess.jdbcTruckDAO - SQL State: %s
-%s
-2025-06-07 22:15:26.536 [main] ERROR TransportModule.transport_module.TruckRepositoryIMP - Failed to delete Truck: 555  due to SQL Exception 

@@ -7,8 +7,10 @@
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerControllerPL.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerControllerPL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/Transport.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/Transport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/error.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TransportManagerControllerPL.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/Presentation/TransportManagerControllerPL.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Transport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Transport.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,10 +229,23 @@
           <line>241</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerControllerPL.java</url>
-          <line>60</line>
-          <option name="timeStamp" value="32" />
+          <line>54</line>
+          <properties class="TransportModule.Presentation.TransportManagerControllerPL" method="printTransportDTO">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TransportManagerControllerPL.java</url>
+          <line>85</line>
+          <properties class="TransportModule.Presentation.TransportManagerControllerPL" method="PrintTransportDTOList">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
