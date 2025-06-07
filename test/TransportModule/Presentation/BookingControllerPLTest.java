@@ -28,21 +28,17 @@ class BookingControllerPLTest {
     }
 
     @Test
-    void createTransport_callsDomainWithCorrectDTOAndReturnsId() throws Exception {
-        int expectedId = 101;
+    void createTransport_callsDomainWithCorrectDTO() throws Exception {
+        int inputId = 101;
         LocalDate date = LocalDate.of(2025, 6, 10);
         LocalTime time = LocalTime.of(9, 30);
         String source = "Tel Aviv";
         int weight = 2500;
 
-        when(domainMock.getNewTransportId()).thenReturn(expectedId);
-
-        int resultId = controller.createTransport(date, source, weight, time);
-
-        assertEquals(expectedId, resultId);
+        controller.createTransport(inputId, date, source, weight, time);
 
         verify(domainMock).createTransport(argThat(dto ->
-                dto.getId() == expectedId &&
+                dto.getId() == inputId &&
                         dto.getDate().equals(date) &&
                         dto.getMaxWeight() == weight &&
                         dto.getSiteName().equals(source) &&
@@ -52,9 +48,11 @@ class BookingControllerPLTest {
         ));
     }
 
+
     @Test
     void createProductListDocument_callsDomainWithCorrectDTOAndReturnsId() throws Exception {
         int expectedId = 501;
+        int transportId = 101;
         String dest = "Jerusalem";
         List<ProductDTO> products = List.of(mock(ProductDTO.class), mock(ProductDTO.class));
         int weight = 1200;
@@ -63,7 +61,7 @@ class BookingControllerPLTest {
 
         when(domainMock.getValidID()).thenReturn(expectedId);
 
-        int resultId = controller.createProductListDocument(dest, products, weight, date, time);
+        int resultId = controller.createProductListDocument(transportId, dest, products, weight, date, time);
 
         assertEquals(expectedId, resultId);
 
