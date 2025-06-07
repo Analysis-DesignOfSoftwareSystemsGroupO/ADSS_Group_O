@@ -1,6 +1,5 @@
 package TransportModule.transport_module;
 
-import TransportModule.DTO.ProductDTO;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.Transport_Module_Exceptions.ATransportModuleException;
 import TransportModule.Transport_Module_Exceptions.InvalidATransportException;
@@ -32,4 +31,10 @@ public interface IProductListDocumentRepository {
     List<ProductListDocument> getPLDwithOutTransport() throws SQLException, InvalidATransportException, TransportMismatchException;
 
     void deleteAll() throws SQLException;
+
+    void attachTransport(int pID, int tID) throws SQLException, ATransportModuleException;
+
+    void injectTransportRepository(ITransportRepository rep);
+
+    void initRep() throws SQLException, InvalidATransportException, TransportMismatchException;
 }

@@ -103,7 +103,7 @@ public class BookingMenu{
 
 
             // Submit the transport request to the service
-            transportId = controller.getNewTransportId();
+//            transportId = controller.getNewTransportId();
 
             controller.createTransport(transportId,date,source,maxWeight,departure_time);
 

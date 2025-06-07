@@ -18,10 +18,8 @@ public class TRS_Main {
 
     }
 
-
-
     public static void TRS_main(String[] args) {
-
+        Scanner scanner = new Scanner(System.in);
         Map<String, User> users = new HashMap<>();
         try {
             init_useres(users);
@@ -30,7 +28,6 @@ public class TRS_Main {
             System.out.println(e.getMessage());
             return;
         }
-        Scanner scanner = new Scanner(System.in);
         User user;
 
         System.out.println("Welcome to Transport Department");
@@ -48,7 +45,7 @@ public class TRS_Main {
 
 
         user.showMenu();
-        scanner.close();
+
 
 //        // Run every 1 minute the sendTransport function
 //        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

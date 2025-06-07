@@ -40,4 +40,7 @@ public interface ITransportRepository {
 
     void setDriver(int transportID, String driverID) throws ATransportModuleException, SQLException;
 
+    void injectPLDRepository(IProductListDocumentRepository rep);
+
+    public void initRep() throws SQLException, ATransportModuleException;
 }

@@ -1,3 +1,6 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
@@ -5,7 +8,7 @@ CREATE TABLE IF NOT EXISTS Branches (
 );
 
 CREATE TABLE IF NOT EXISTS Employees (
-    empID INT PRIMARY KEY,
+    empID BIGINT PRIMARY KEY,
     empName VARCHAR(255),
     empPassword VARCHAR(255),
     empBankAccount VARCHAR(255),
@@ -18,13 +21,35 @@ CREATE TABLE IF NOT EXISTS Employees (
     branchID INT REFERENCES Branches(branchID)
 );
 
-CREATE TABLE IF NOT EXISTS Roles (
-    roleNumber INT PRIMARY KEY,
-    description VARCHAR(255)
+CREATE TABLE IF NOT EXISTS Branches (
+    branchID INT PRIMARY KEY,
+    name VARCHAR(255),
+    district VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS Employees (
+    empID BIGINT PRIMARY KEY,
+    empName VARCHAR(255),
+    empPassword VARCHAR(255),
+    empBankAccount VARCHAR(255),
+    empSalary INT,
+    empStartDate DATE,
+    minDayShift INT,
+    minEveningShift INT,
+    sickDays INT,
+    daysOff INT,
+    branchID INT REFERENCES Branches(branchID)
+);
+
+CREATE TABLE IF NOT EXISTS Roles(
+    roleNumber SERIAL PRIMARY KEY,
+    description TEXT UNIQUE NOT NULL
+);
+
+ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
+
 CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber),
     PRIMARY KEY (empID, roleNumber)
 );
@@ -35,26 +60,21 @@ CREATE TABLE IF NOT EXISTS EmploymentContracts (
     minEveningShift INT,
     sickDays INT,
     daysOff INT,
-    ownerID INT REFERENCES Employees(empID)
+    ownerID BIGINT REFERENCES Employees(empID)
 );
-
 CREATE TABLE IF NOT EXISTS Users (
-    userID INT PRIMARY KEY REFERENCES Employees(empID),
+    userID BIGINT PRIMARY KEY REFERENCES Employees(empID),
     level VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS EmployeeRole (
-    empID INT REFERENCES Employees(empID),
-    roleNumber INT REFERENCES Roles(roleNumber),
-    PRIMARY KEY (empID, roleNumber)
-);
-
-CREATE TABLE IF NOT EXISTS Constraints (
-    constraintID SERIAL PRIMARY KEY,
-    empID INT REFERENCES Employees(empID),
+CREATE TABLE IF NOT EXISTS constraints (
+    constraintID SERIAL,
+    empID BIGINT REFERENCES Employees(empID),
     ShiftType VARCHAR(255),
     WeekDay VARCHAR(255),
-    explanation TEXT
+    explanation TEXT,
+    date_created DATE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (
@@ -64,25 +84,31 @@ CREATE TABLE IF NOT EXISTS Shifts (
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
-    shiftManager INT REFERENCES Employees(empID)
+    shiftManager BIGINT REFERENCES Employees(empID)
 );
 
-CREATE TABLE IF NOT EXISTS RequiredRoles (
+ALTER TABLE Shifts
+ADD CONSTRAINT unique_shift_per_day_type_branch
+UNIQUE (deadline, type, branchID);
+
+
+CREATE TABLE iF NOT EXISTS RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
     roleNumber INT REFERENCES Roles(roleNumber),
-    counter INT
+    counter INT,
+    PRIMARY KEY (branchID, shiftID, roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS ShiftAssignments (
     branchID INT REFERENCES Branches(branchID),
     shiftID INT REFERENCES Shifts(shiftID),
-    empID INT REFERENCES Employees(empID),
+    empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Archived_Employees (
-    empID INT PRIMARY KEY,
+    empID BIGINT PRIMARY KEY,
     archiveDate DATE
 );
 
@@ -98,9 +124,17 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (9, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
--- Additional data for demonstration
 INSERT INTO Roles (roleNumber, description) VALUES
 (101, 'Shift Manager'),
-(102, 'Warehouse'),
-(103, 'Driver')
+(102, 'Cashier'),
+(103, 'Warehouse'),
+(104, 'Driver-A'),
+(105, 'Driver-B'),
+(106, 'Driver-C')
 ON CONFLICT (roleNumber) DO NOTHING;
+
+INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
+(100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1);
+
+INSERT INTO Users (userID, level) VALUES
+(100000001, 'HRManager');

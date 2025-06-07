@@ -15,7 +15,8 @@ public class ProductListDocument {
     private final Map<Product, Integer> productHashMap; // a map of products and amount of each product
     private int totalWeight; // total weight of the products in document
     private LocalDate date;
-    private Transport transport;
+//    private Transport transport;
+    private int transportId;
     private LocalTime approximatedArrivaleTime;
 
     /***
@@ -47,7 +48,8 @@ public class ProductListDocument {
         destination = new Site(site); // set the destination of the document
         productHashMap = new HashMap<>(); // create a map for the document
         totalWeight = 0; // set the total weight to document
-        transport = null;
+
+        transportId = -1;
         String[] parts = h.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
@@ -71,8 +73,8 @@ public class ProductListDocument {
     /***
      * @return Transport ID attached to the document, or -1 if none
      */
-    public Transport getTransport() {
-        return transport;
+    public int getTransportId() {
+        return transportId;
     }
 
     /***
@@ -100,11 +102,7 @@ public class ProductListDocument {
         return productHashMap;
     }
 
-    public int getTransportId() {
-        if (transport == null)
-            return -1;
-        return this.transport.getId();
-    }
+
 
     public LocalTime getApproximatedArriavaleTime() {
         return approximatedArrivaleTime;
@@ -115,23 +113,16 @@ public class ProductListDocument {
 
     /***
      * Attaches the document to a given transport
-     * @param transport Transport to attach
+     * @param transportId Transport to attach
      * @throws ATransportModuleException if transport is null or dates mismatch
      */
-    public void attachTransportToDocument(Transport transport) throws ATransportModuleException {
-        if (transport == null || (this.transport != null && this.transport.equals(transport))) {
+    public void attachTransportToDocument(int transportId) throws ATransportModuleException {
+
+        if(this.transportId == transportId){
             throw new InvalidInputException();
         }
-        if(transport.getId() == -1){
-            this.transport = transport;
-            return;
-        }
-        if (!transport.getDate().equals(date)) {
-            throw new TransportMismatchException("Transport date doesn't match to document shipment date.");
-        }
-        if (this.transport != null)
-            this.realiseFromTransport(this.transport);
-        this.transport = transport;
+
+        this.transportId = transportId;
     }
 
     /***
@@ -202,22 +193,13 @@ public class ProductListDocument {
      * @throws ATransportModuleException if the document is already attached to a transport
      */
     public void changeDate(LocalDate date) throws ATransportModuleException {
-        if (transport != null && transport.getDate() != date) {
-            throw new ChangeDateException("Please remove document from transport " + transport.getId() + " first");
-        }
+
         this.date = date;
     }
 
 
     public void realiseFromTransport(Transport transport1) {
-        if (this.transport.equals(transport1)) {
-            this.transport = null;
-            try {
-                transport1.removeDocumentFromTransport(this);
-            } catch (ATransportModuleException e) {
-
-            }
-        }
+        this.transportId = -1;
     }
 
     public void setArriavleTime(LocalTime time) {

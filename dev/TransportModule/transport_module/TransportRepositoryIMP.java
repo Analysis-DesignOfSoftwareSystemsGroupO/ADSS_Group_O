@@ -25,7 +25,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
     private static ITruckRepository truckRepository;
     private static TransportRepositoryIMP instance;
     private static  int counter =0 ;
-    private static IProductListDocumentRepository pldRep;
+    private  IProductListDocumentRepository pldRep;
     private IDriverRep driverRep ;
 
     /**
@@ -51,6 +51,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
                     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                     String time = timeFormatter.format(dto.getDepartureTime());
                     Transport t = new Transport(dto.getId(),dateformatter.format(dto.getDate()), time ,s);
+                    t.setMaxWeight(dto.getMaxWeight());
                     if(dto.getTruckPN() != null){
                         Truck truck = truckRepository.getTruckBYPlateNumber(dto.getTruckPN());
                         t.assignTruck(truck);
@@ -59,7 +60,6 @@ public class TransportRepositoryIMP implements ITransportRepository {
                         Driver driver = driverRep.getDriverByID(dto.getDriverID().trim()); //throw exception if driver not exsists
                         t.addDriver(driver);
                     }
-
                     List<ProductListDocument> plds = pldRep.getPLDByTransportID(t.getId());
                     for (ProductListDocument pld : plds)
                         t.loadByDocument(pld);
@@ -160,29 +160,41 @@ public class TransportRepositoryIMP implements ITransportRepository {
     private TransportRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableId = dao.getHieghestTransportID() + 1;
         truckRepository = TruckRepositoryIMP.getInstance();
-        pldRep = PLDRepositoryIMP.getInstance();
+
         driverRep = DriverRepIMP.getInstance();
         //set the mapper and fill it with transports:
         this.transports = new HashMap<>();
-        List<TransportDTO> transportDTOS = dao.getTransports();
+        //Add Transport with id -1 if not exsists
 
+
+    }
+
+    public void initRep() throws SQLException, ATransportModuleException {
+        List<TransportDTO> transportDTOS = dao.getTransports();
+        if(getTransportByid(-1) ==null) {
+            TransportDTO tdto0 = new TransportDTO(-1, LocalDate.of(9999, 12, 31), false, 0, null, null, null, LocalTime.of(23, 59));
+            dao.save(tdto0);
+            Transport t = new Transport(-1,"31/12/9999","23:59",null);
+            transports.put(-1,t);
+        }
         for (TransportDTO dto : transportDTOS){ //for each transport dto
             Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper and list
         }
-        //Add Transport with id -1 if not exsists
-        if(getTransportByid(-1) ==null) {
-            TransportDTO tdto0 = new TransportDTO(-1, LocalDate.of(9999, 12, 31), false, 0, null, null, null, LocalTime.of(23, 59));
-            saveTransport(tdto0);
-        }
+
     }
 
     public static TransportRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
         if(counter == 0){
-            counter++;
             instance = new TransportRepositoryIMP();
-
+            counter++;
         }
         return instance;
+    }
+
+    @Override
+    public void injectPLDRepository(IProductListDocumentRepository pldRep) {
+        this.pldRep = pldRep;
+
     }
 
     @Override
