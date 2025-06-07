@@ -143,7 +143,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
         Transport t = getTransportByid(dto.getId());
         if(t.getDate().equals( dto.getDate())   && t.getMaxWeight() == dto.getMaxWeight()){
             if((t.getDriver() == null && dto.getDriverID() ==null )|| t.getDriver().getId() == dto.getDriverID()){
-                if((t.getSource().getName() == null && dto.getSiteName() == null) || t.getSource().getName().equals(dto.getSiteName() ))
+                if((t.getSource().getName() == null && dto.getSiteName() == null) || t.getSource().getName().trim().equals(dto.getSiteName().trim() ))
                 return t;
             }
         }

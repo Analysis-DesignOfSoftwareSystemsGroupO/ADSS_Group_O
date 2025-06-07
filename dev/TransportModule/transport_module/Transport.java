@@ -239,7 +239,7 @@ public class Transport {
             if (destinations_document_map.get(document.getDestination()) != null) { // if destination is already a destination in transport - throw exception
                 throw new AlreadyExistDestinationException();
             }
-            document.attachTransportToDocument(this);
+            document.attachTransportToDocument(id); // changed this row todo - done!
             destinations_document_map.put(document.getDestination(), document);
             currWeight += document.getTotalWeight();
 
@@ -276,11 +276,11 @@ public class Transport {
         }
         if (!destinations_document_map.get(document.getDestination()).equals(document))
             throw new InvalidInputException();
-        if (document.getTransport().equals(this)) {
+        if (document.getTransportId() == id) { // changed this if check todo - done!
             destinations_document_map.remove(document.getDestination()); // remove document from map
             currWeight -= document.getTotalWeight();// reduce weight from transport
 
-            document.realiseFromTransport(this);
+            document.realiseFromTransport(); // changed this row todo - done!
         }
 
     }
