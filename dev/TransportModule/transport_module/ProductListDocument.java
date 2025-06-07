@@ -118,10 +118,6 @@ public class ProductListDocument {
      */
     public void attachTransportToDocument(int transportId) throws ATransportModuleException {
 
-        if(this.transportId == transportId){
-            throw new InvalidInputException();
-        }
-
         this.transportId = transportId;
     }
 

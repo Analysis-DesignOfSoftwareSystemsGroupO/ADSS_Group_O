@@ -56,7 +56,8 @@ class TruckControllerPLTest {
     @Test
     void attachTruck_parsesInputAndCallsDomain() throws Exception {
         controller.attachTruck("10", "1234");
-        verify(domainMock).assignTruckToTransport(10, 1234);
+        verify(domainMock).assignTruckToTransport(10, "1234");
+
     }
 
     @Test
