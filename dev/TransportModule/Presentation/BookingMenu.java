@@ -47,7 +47,7 @@ public class BookingMenu{
         while (running) {
 
             // Display the main menu options
-            System.out.println("Welcome to Booking Menu!");
+            System.out.println("\nWelcome to Booking Menu!");
             System.out.println("Press 1 to Request new transport.");
             System.out.println("Press E to Exit Menu.");
 
@@ -98,6 +98,7 @@ public class BookingMenu{
 
             // create default PLD function and
             productsDocumentIdList.add(createProductListDocument(date));
+
             // optional - add more PLD
             ProductListDocumentMenu(date);
 
@@ -131,7 +132,7 @@ public class BookingMenu{
         boolean running = true;
         while (running){
 
-            System.out.println("press 1 to create new Delivery document.");
+            System.out.println("\npress 1 to create new Delivery document.");
             System.out.println("press E to Finish.");
             String input = scanner.nextLine();
             switch (input){
@@ -194,7 +195,7 @@ public class BookingMenu{
         int totalWeight = 0;
         List<ProductDTO> productDTOS = new ArrayList<>();
         while (running) {
-            System.out.println("Press 1 to add Product.");
+            System.out.println("\nPress 1 to add Product.");
             System.out.println("Press E to return.");
             String input = scanner.nextLine();
             switch (input) {

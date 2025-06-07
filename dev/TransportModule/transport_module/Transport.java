@@ -185,15 +185,17 @@ public class Transport {
                     throw new DriverMismatchException("Driver's licence doesn't match to truck's licence. please Assign another driver");
                 }
             }
+            if(t.getMaxWeight()<currWeight)
+                throw new OverWeightException(currWeight-t.getMaxWeight());
             if(truck!= null)
                 truck.releaseTruck(date); // release the previous truck from transport
             truck = t; // save new truck to this transport
             truck.setDate(date); // save the new date in new truck
             maxWeight = t.getMaxWeight(); // change the maximum weight of transport
-            if (maxWeight < currWeight)
-                System.out.println("Truck has Over Weight");
+
         }
     }
+
     public void setTruck(Truck t ){
         this.truck = t;
         maxWeight= t.getMaxWeight();
@@ -234,10 +236,10 @@ public class Transport {
      * @throws ATransportModuleException if document is invalid or causes overweight
      */
     public void loadByDocument(ProductListDocument document) throws ATransportModuleException {
-        if (document == null){
+        if (document == null)
             throw new InvalidInputException();
 
-        } else {
+        else {
             if (destinations_document_map.get(document.getDestination()) != null) { // if destination is already a destination in transport - throw exception
                 throw new AlreadyExistDestinationException();
             }
@@ -245,15 +247,16 @@ public class Transport {
             destinations_document_map.put(document.getDestination(), document);
             currWeight += document.getTotalWeight();
 
-            if (!source.getArea().equals(document.getDestination().getArea())) {
-                System.out.println("This destination is out of Area Zone, this is a special Transport");
-                isOutOfZone = true;
-            }
+//            if (!source.getArea().equals(document.getDestination().getArea())) {
+//                System.out.println("This destination is out of Area Zone, this is a special Transport");
+//                isOutOfZone = true;
+//            }
 
         }
 
 
     }
+
 
 
     /***
