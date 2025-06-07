@@ -65,8 +65,12 @@ public class jdbcTransportDAO implements ITransportDAO {
                 String driverId = rs.getString("DriverID");
                 if(driverId != null) driverId= driverId.trim();
                 String truckPN = rs.getString("TruckPN");
-                if(truckPN != null) truckPN = truckPN.trim();
-                transports.add(new TransportDTO(rs.getInt("id"), rs.getDate("Date").toLocalDate(), rs.getBoolean("is_sent"), rs.getInt("maximum_weight"), driverId, truckPN, rs.getString("Source_site_name").trim(), rs.getTime("departure_time").toLocalTime()));
+                if(truckPN != null) {
+                    truckPN = truckPN.trim();
+                }
+                String sourceName = rs.getString("Source_site_name");
+                if(sourceName != null) sourceName = sourceName.trim();
+                transports.add(new TransportDTO(rs.getInt("id"), rs.getDate("Date").toLocalDate(), rs.getBoolean("is_sent"), rs.getInt("maximum_weight"), driverId, truckPN, sourceName, rs.getTime("departure_time").toLocalTime()));
             }
         }
         catch (SQLException e) {

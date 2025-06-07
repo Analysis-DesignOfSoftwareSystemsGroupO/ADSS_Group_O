@@ -234,10 +234,8 @@ public class Transport {
      * @throws ATransportModuleException if document is invalid or causes overweight
      */
     public void loadByDocument(ProductListDocument document) throws ATransportModuleException {
-        if (document == null)
+        if (document == null){
             throw new InvalidInputException();
-        if (maxWeight < currWeight + document.getTotalWeight()) { // if truck is in Over Weight
-//            throw new OverWeightException((currWeight + document.getTotalWeight()) - maxWeight);
 
         } else {
             if (destinations_document_map.get(document.getDestination()) != null) { // if destination is already a destination in transport - throw exception
