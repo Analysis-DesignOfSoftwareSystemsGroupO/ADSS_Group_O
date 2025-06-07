@@ -87,9 +87,12 @@ public class TransportManagerMenu {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("To: ").append("\n").append("\t");
         List<ProductListDocumentDto> DTOS =  controller.getAllPLDSByTransportId(transportId);
+        int sum = 0;
         for (ProductListDocumentDto dto: DTOS){
-            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n").append("\t");
+            sum+= dto.getWeight();
+            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("weight:" ).append(dto.getWeight()).append("\n").append("\t");
         }
+        stringBuilder.append("Total Weight of products: " +  sum + "\n");
         return stringBuilder.toString();
 
     }
@@ -101,7 +104,7 @@ public class TransportManagerMenu {
         stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
         stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
         stringBuilder.append(getPLDInfo(dto.getId()));
-        stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
+        stringBuilder.append("Max weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
         stringBuilder.append("Driver: ");
         if(dto.getDriverID()== null)
             stringBuilder.append(" No driver assigned to Transport");
