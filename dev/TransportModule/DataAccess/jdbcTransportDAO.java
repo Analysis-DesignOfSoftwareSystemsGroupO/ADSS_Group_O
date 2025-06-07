@@ -157,15 +157,14 @@ public class jdbcTransportDAO implements ITransportDAO {
                 throw e;
             }
         }
-}
+    }
     @Override
     public void deleteTransport ( int id ) throws SQLException{
         log.info("jdbcTransport::deleteTransport( " + id + ")");
-        String sql = "DELETE FROM \"Transport\" WHERE \"id\" = ?";
-        try (Connection conn = DataBase.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+        String sql = "DELETE FROM \"Transports\" WHERE \"id\" = ?";
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
         }
         catch (SQLException e) {
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

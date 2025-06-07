@@ -22,25 +22,21 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     private Map<Integer , ProductListDocument> mapper;
     private static IPLDDAO dao = new jdbcPLDDAO();
     private static final Logger log = LogManager.getLogger(PLDRepositoryIMP.class);
-    private static ITransportRepository transportRep;
+    private  ITransportRepository transportRep;
     private static PLDRepositoryIMP instance;
     private static int counter =0;
-    static {
-        try {
-            transportRep = TransportRepositoryIMP.getInstance();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ATransportModuleException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 
     private int availableid;
 
-    private PLDRepositoryIMP() throws SQLException, InvalidATransportException, TransportMismatchException {
+    private PLDRepositoryIMP() throws SQLException, ATransportModuleException {
         this.availableid = initValidid(); //init the availableID field
         this.mapper = new HashMap<>();
+
+
+    }
+    public void initRep() throws SQLException, InvalidATransportException, TransportMismatchException {
         //fill the mapper with pld instances:
         List<Integer> pldIDs = dao.getPLDsID(); //get id of plds from the data base
         for (int id : pldIDs){ //for each id: get the ProductListDocument instance and add it to the mapper
@@ -48,12 +44,16 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         }
     }
 
-    public static PLDRepositoryIMP getInstance() throws SQLException, InvalidATransportException, TransportMismatchException {
+    public static PLDRepositoryIMP getInstance() throws SQLException, ATransportModuleException {
         if(counter ==0 ) {
             counter++;
-            instance = new PLDRepositoryIMP();
+            instance = new PLDRepositoryIMP( );
         }
         return instance;
+    }
+
+    public void injectTransportRepository(ITransportRepository rep){
+        this.transportRep = rep;
     }
 
     public int getValidID(){
@@ -66,7 +66,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     }
 
     int initValidid()throws SQLException{
-        availableid = dao.getHieghestPLDID() + 1;
+        availableid = dao.getHieghestPLDID();
         return availableid;
     }
 
@@ -87,13 +87,7 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
             LocalTime time = dto.getApproximatedArrivalTime();
             DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm");
             pld = new ProductListDocument(id,site, dateformatter.format(date), df2.format(time));
-            if(dto.getTransportID() != -1) { // -1 is the deafault TransportID in the data base. means that this PLD is not attached to any of the transports
-                Transport t = transportRep.getTransportByid(dto.getTransportID());
-                if (t != null) pld.attachTransportToDocument(t);
-                else {
-                    throw new InvalidATransportException("The transport id of this PLD is not set to -1, and there is no Transport with this id. ");
-                }
-            }
+            pld.attachTransportToDocument(dto.getTransportID());
             List<ProductDTO > productsdtos = dao.getListOfProductsByPLDID(id); //get all the products of this PLD
             for(ProductDTO pdto : productsdtos){
                 //todo: Integration with Products is posposed. later will get the products from Products moudle. right now it is presented like this
@@ -126,8 +120,8 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
         if(mapper.get(pld.getId()) != null){
             throw new InvalidPLDException("Didn't added the ProductList Document to the system, A ProsuctLIstDocument with this id already exsists.");
         }try {
-            dao.save(pld);
             dao.attachTransport(pld.getId(),pld.getTransportID());
+            dao.save(pld);
         }
         catch (Exception e){
             dao.deletePLD(pld.getId());
@@ -211,5 +205,14 @@ public class PLDRepositoryIMP implements IProductListDocumentRepository {
     public void deleteAll() throws SQLException {
         dao.deleteAll();
         availableid = initValidid();
+    }
+
+    @Override
+    public void attachTransport(int pID, int tID) throws SQLException, ATransportModuleException {
+        ProductListDocument p = getProductListDocumentByid(pID);
+        Transport t = transportRep.getTransportByid(tID);
+        p.attachTransportToDocument(t.getId());
+        dao.attachTransport(pID, tID);
+
     }
 }

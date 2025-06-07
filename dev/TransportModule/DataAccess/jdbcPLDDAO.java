@@ -21,7 +21,7 @@ public class jdbcPLDDAO implements IPLDDAO{
      */
     @Override
     public void save(ProductListDocumentDto dto) throws SQLException {
-        log.info("jdbcPLDDAO ::deletePLD(DTO)");
+        log.info("jdbcPLDDAO ::savePLD(DTO)"); //todo change the log
         String sql = "INSERT INTO \"ProductListDocument\" (\"ProductListDocumentID\", \"TransportID\", \"totalweight\", \"aproximatedArrivaleTime\",\"DestinationSiteName\" , \"Date\") VALUES (?,?,?,?,?,?)";
         if(dto != null){
             try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
@@ -224,15 +224,36 @@ public class jdbcPLDDAO implements IPLDDAO{
     @Override
     public void attachTransport(int pldID, int tID) throws SQLException {
         log.info("jdbcPLDDAO::attachTransport");
-        String sql = "INSERT INTO \"Transports_ProductListdocument\" (\"TransportId\", \"ProductListDocumentId\") VALUES(?, ? ) ; ";
-        try(PreparedStatement ps =DataBase.getConnection().prepareStatement(sql)){
-            ps.setInt(1,tID);
-            ps.setInt(2,pldID);
-            ps.executeUpdate();
-        }
-        catch (SQLException e){
+        Connection  conn = DataBase.getConnection();
+        try {
+            conn.setAutoCommit(false);
+
+            String sql = "INSERT INTO \"Transports_ProductListdocument\" " +
+                    "(\"TransportId\", \"ProductListDocumentId\") " +
+                    "VALUES (?, ?) " +
+                    "ON CONFLICT (\"ProductListDocumentId\") DO UPDATE " +
+                    "SET \"TransportId\" = EXCLUDED.\"TransportId\";";
+
+            try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)) {
+                ps.setInt(1, tID);
+                ps.setInt(2, pldID);
+                ps.executeUpdate();
+            }
+            String sql2 = "UPDATE \"ProductListDocument\" SET \"TransportID\" = ? WHERE \"ProductListDocumentID\" = ?";
+            try(PreparedStatement ps2 =conn.prepareStatement(sql2)) {
+                ps2.setInt(1,tID);
+                ps2.setInt(2,pldID);
+                ps2.executeUpdate();
+            }
+            conn.commit();
+
+        }catch (SQLException e){
             log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
             throw e;
         }
+        finally {
+            conn.setAutoCommit(true);
+        }
     }
+
 }

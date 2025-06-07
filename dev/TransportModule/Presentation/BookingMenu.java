@@ -97,7 +97,7 @@ public class BookingMenu{
             String source = scanner.nextLine();
 
             // create default PLD function and
-            createProductListDocument(date);
+            productsDocumentIdList.add(createProductListDocument(date));
 
             // optional - add more PLD
             ProductListDocumentMenu(date);

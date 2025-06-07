@@ -13,81 +13,81 @@ DROP TABLE IF EXISTS branches CASCADE;
 
 -- Branches
 CREATE TABLE branches (
-    branchID INT PRIMARY KEY,
-    name VARCHAR(255),
-    district VARCHAR(255)
+                          branchID INT PRIMARY KEY,
+                          name VARCHAR(255),
+                          district VARCHAR(255)
 );
 
 -- Employees
 CREATE TABLE employees (
-    empID BIGINT PRIMARY KEY,
-    empName VARCHAR(255),
-    empPassword VARCHAR(255),
-    empBankAccount VARCHAR(255),
-    empSalary INT,
-    empStartDate DATE,
-    minDayShift INT,
-    minEveningShift INT,
-    sickDays INT,
-    daysOff INT,
-    branchID INT REFERENCES branches(branchID)
+                           empID BIGINT PRIMARY KEY,
+                           empName VARCHAR(255),
+                           empPassword VARCHAR(255),
+                           empBankAccount VARCHAR(255),
+                           empSalary INT,
+                           empStartDate DATE,
+                           minDayShift INT,
+                           minEveningShift INT,
+                           sickDays INT,
+                           daysOff INT,
+                           branchID INT REFERENCES branches(branchID)
 );
 
 -- Archived Employees
 CREATE TABLE archived_employees (
-    empID BIGINT PRIMARY KEY,
-    archiveDate DATE
+                                    empID BIGINT PRIMARY KEY,
+                                    archiveDate DATE
 );
 
 -- Roles
 CREATE TABLE roles (
-    roleNumber SERIAL PRIMARY KEY,
-    description TEXT UNIQUE NOT NULL
+                       roleNumber SERIAL PRIMARY KEY,
+                       description TEXT UNIQUE NOT NULL
 );
 
 -- EmployeeRole
 CREATE TABLE employeerole (
-    empID BIGINT REFERENCES employees(empID),
-    roleNumber INT REFERENCES roles(roleNumber),
-    PRIMARY KEY (empID, roleNumber)
+                              empID BIGINT REFERENCES employees(empID),
+                              roleNumber INT REFERENCES roles(roleNumber),
+                              PRIMARY KEY (empID, roleNumber)
 );
 
 -- EmploymentContracts
 CREATE TABLE employmentcontracts (
-    contractID INT PRIMARY KEY,
-    minDayShift INT,
-    minEveningShift INT,
-    sickDays INT,
-    daysOff INT,
-    ownerID BIGINT REFERENCES employees(empID)
+                                     contractID INT PRIMARY KEY,
+                                     minDayShift INT,
+                                     minEveningShift INT,
+                                     sickDays INT,
+                                     daysOff INT,
+                                     ownerID BIGINT REFERENCES employees(empID)
 );
 
 -- Users
 CREATE TABLE users (
-    userID BIGINT PRIMARY KEY REFERENCES employees(empID),
-    level VARCHAR(255)
+                       userID BIGINT PRIMARY KEY REFERENCES employees(empID),
+                       level VARCHAR(255)
 );
 
 -- Constraints
 CREATE TABLE constraints (
-    constraintID SERIAL,
-    empID BIGINT REFERENCES employees(empID),
-    ShiftType VARCHAR(255),
-    WeekDay VARCHAR(255),
-    explanation TEXT,
-    date_created DATE DEFAULT CURRENT_DATE,
-    PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
+                             constraintID SERIAL,
+                             empID BIGINT REFERENCES employees(empID),
+                             ShiftType VARCHAR(255),
+                             WeekDay VARCHAR(255),
+                             explanation TEXT,
+                             date_created DATE DEFAULT CURRENT_DATE,
+                             PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
 );
 
 -- Shifts
 CREATE TABLE shifts (
-    shiftID INT PRIMARY KEY,
-    branchID INT REFERENCES branches(branchID),
-    deadline DATE,
-    day VARCHAR(255),
-    type VARCHAR(255),
-    status VARCHAR(255),
-    shiftManager BIGINT REFERENCES employees(empID)
+                        shiftID INT PRIMARY KEY,
+                        branchID INT REFERENCES branches(branchID),
+                        deadline DATE,
+                        day VARCHAR(255),
+                        type VARCHAR(255),
+                        status VARCHAR(255),
+                        shiftManager BIGINT REFERENCES employees(empID)
 );
 
 ALTER TABLE shifts ADD CONSTRAINT unique_shift_per_day_type_branch
@@ -95,27 +95,27 @@ ALTER TABLE shifts ADD CONSTRAINT unique_shift_per_day_type_branch
 
 -- RequiredRoles
 CREATE TABLE requiredroles (
-    branchID INT REFERENCES branches(branchID),
-    shiftID INT REFERENCES shifts(shiftID),
-    roleNumber INT REFERENCES roles(roleNumber),
-    counter INT,
-    PRIMARY KEY (branchID, shiftID, roleNumber)
+                               branchID INT REFERENCES branches(branchID),
+                               shiftID INT REFERENCES shifts(shiftID),
+                               roleNumber INT REFERENCES roles(roleNumber),
+                               counter INT,
+                               PRIMARY KEY (branchID, shiftID, roleNumber)
 );
 
 -- ShiftAssignments
 CREATE TABLE shiftassignments (
-    branchID INT REFERENCES branches(branchID),
-    shiftID INT REFERENCES shifts(shiftID),
-    empID BIGINT REFERENCES employees(empID),
-    roleNumber INT REFERENCES roles(roleNumber)
+                                  branchID INT REFERENCES branches(branchID),
+                                  shiftID INT REFERENCES shifts(shiftID),
+                                  empID BIGINT REFERENCES employees(empID),
+                                  roleNumber INT REFERENCES roles(roleNumber)
 );
 -- Branches
 INSERT INTO branches (branchID, name, district) VALUES
-(101, 'Test Branch A', 'Test District');
+    (101, 'Test Branch A', 'Test District');
 
 -- Roles
 INSERT INTO roles (description) VALUES
-('Manager'), ('Cashier');
+                                    ('Manager'), ('Cashier');
 
 -- Employees
 INSERT INTO employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID)
@@ -123,4 +123,4 @@ VALUES (999999999, 'Test Employee', 'test123', 'IL001', 10000, '2024-01-01', 3, 
 
 -- Users
 INSERT INTO users (userID, level) VALUES
-(999999999, 'HRManager');
+    (999999999, 'HRManager');

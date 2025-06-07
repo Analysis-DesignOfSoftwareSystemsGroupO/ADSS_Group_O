@@ -1,5 +1,6 @@
 package TransportModule.Presentation;
 
+import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 
 import java.util.List;
@@ -72,37 +73,54 @@ public class TransportManagerMenu {
 
     private void PrintTransportDTOList(List<TransportDTO> list) {
         for (TransportDTO dto : list) {
-            System.out.println(printTransportDTO(dto));
+            try {
+                System.out.println(printTransportDTO(dto));
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    private String printTransportDTO(TransportDTO dto){
+    private String getPLDInfo(int transportId)throws Exception{
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("To: ").append("\n").append("\t");
+        List<ProductListDocumentDto> DTOS =  controller.getAllPLDSByTransportId(transportId);
+        for (ProductListDocumentDto dto: DTOS){
+            stringBuilder.append("\t").append(dto.getSiteDes()).append(" - Approximated arrival time at: ").append(dto.getApproximatedArrivalTime()).append("\n").append("\t");
+        }
+        return stringBuilder.toString();
+
+    }
+
+    private String printTransportDTO(TransportDTO dto) throws Exception{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Transport number: ").append(dto.getId()).append("\n").append("\t");
         stringBuilder.append("From: ").append(dto.getSiteName()).append("\n").append("\t");
         stringBuilder.append("At date: ").append(dto.getDate()).append("\n").append("\t");
         stringBuilder.append("Leaves at: ").append(dto.getDepartureTime()).append("\n").append("\t");
+        stringBuilder.append(getPLDInfo(dto.getId()));
         stringBuilder.append("Total weight: ").append(dto.getMaxWeight()).append("\n").append("\t");
         stringBuilder.append("Driver: ");
-        if(Objects.equals(dto.getDriverID(),"-1"))
+        if(dto.getDriverID()== null)
             stringBuilder.append(" No driver assigned to Transport");
         else
-            stringBuilder.append("id number - ").append(dto.getId());
+            stringBuilder.append("id number - ").append(dto.getDriverID());
         stringBuilder.append("\n\t");
         stringBuilder.append("Truck: ");
-        if(Objects.equals(dto.getTruckPN(),"-1"))
+        if(dto.getTruckPN() ==null)
             stringBuilder.append(" No Truck assigned to Transport");
         else
-            stringBuilder.append("Truck's Plate number - ").append(dto.getId());
+            stringBuilder.append("Truck's Plate number - ").append(dto.getTruckPN());
         stringBuilder.append("\n\t");
-        if(dto.isSent())
+        if(!dto.isSent())
             stringBuilder.append("wait to be sent.\n");
         else
             stringBuilder.append("already left.\n");
 
         return stringBuilder.toString();
     }
-
 
     private void RemoveTransportById(){
         System.out.println("Please enter Transport id you want to delete: ");
@@ -114,6 +132,5 @@ public class TransportManagerMenu {
             System.out.println(e.getMessage());
         }
     }
-
 
 }

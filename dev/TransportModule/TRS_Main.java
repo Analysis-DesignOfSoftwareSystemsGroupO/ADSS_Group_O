@@ -13,7 +13,7 @@ public class TRS_Main {
 
         users.put("TransportManager", new TransportManagerUser("TransportManager"));
         users.put("User", new BookingUser("User"));
-        users.put("TruckManagerUser", new TruckManagerUser("TruckManagerUser"));
+        users.put("TruckManager", new TruckManagerUser("TruckManager"));
 
 
     }

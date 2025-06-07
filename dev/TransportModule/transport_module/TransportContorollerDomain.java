@@ -20,7 +20,12 @@ public class TransportContorollerDomain implements ITransportController {
     public TransportContorollerDomain() throws Exception{
         this.transportRepo = TransportRepositoryIMP.getInstance();
         this.ProductListDocumentRepo =  PLDRepositoryIMP.getInstance();
+        transportRepo.injectPLDRepository(ProductListDocumentRepo);
+        ProductListDocumentRepo.injectTransportRepository(transportRepo);
+        ProductListDocumentRepo.initRep();
+        transportRepo.initRep();
         this.driverControllerDomain = new DriverControllerDomain();
+
 
     }
 
@@ -96,7 +101,8 @@ public class TransportContorollerDomain implements ITransportController {
         Transport transport = transportRepo.getTransportByid(transportId);
         for(int PLDId : docId){
             ProductListDocument PLD = ProductListDocumentRepo.getProductListDocumentByid(PLDId);
-            transport.loadByDocument(PLD);
+            ProductListDocumentRepo.attachTransport(PLDId,transportId);
+
         }
 
 
