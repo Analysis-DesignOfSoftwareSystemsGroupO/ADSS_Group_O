@@ -1,6 +1,5 @@
 package TransportModule.transport_module;
 
-import TransportModule.DTO.DriverDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.DataAccess.ITransportDAO;
 import TransportModule.DataAccess.jdbcTransportDAO;
@@ -9,7 +8,7 @@ import TransportModule.Transport_Module_Exceptions.InvalidATransportException;
 import TransportModule.Transport_Module_Exceptions.TransportMismatchException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import TransportModule.transport_module.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -54,7 +53,7 @@ public class TransportRepositoryIMP implements ITransportRepository {
                     t.setMaxWeight(dto.getMaxWeight());
                     if(dto.getTruckPN() != null){
                         Truck truck = truckRepository.getTruckBYPlateNumber(dto.getTruckPN());
-                        t.assignTruck(truck);
+                        t.setTruck(truck);
                     }
                     if(dto.getDriverID() != null) { //assignDriver to transport
                         Driver driver = driverRep.getDriverByID(dto.getDriverID().trim()); //throw exception if driver not exsists
@@ -106,7 +105,8 @@ public class TransportRepositoryIMP implements ITransportRepository {
     public void attachTrucktoTransport(int transportId, String pn) throws SQLException, ATransportModuleException {
         try {
             Transport t = getTransportByid(transportId); //remove truck from Transport
-            dao.assignTruckToTransport(transportId, Integer.parseInt(pn));
+            dao.assignTruckToTransport(transportId, pn);
+            dao.setMaxWeight( t.getId(),  t.getMaxWeight());
             truckRepository.AssignDateToTruck(t.getDate(),pn);
         }
         catch (Exception e){

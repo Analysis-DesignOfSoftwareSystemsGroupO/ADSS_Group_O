@@ -36,7 +36,7 @@ public class TruckManagerMenu {
         boolean running = true;
         while (running) {
             // Print menu options
-            System.out.println("1. Add new Truck.");
+            System.out.println("\n1. Add new Truck.");
             System.out.println("2. Show all Trucks.");
             System.out.println("3. Remove Truck.");
             System.out.println("4. Show Weekly Transports.");
@@ -161,6 +161,7 @@ public class TruckManagerMenu {
 
 
     }
+
 
 
 

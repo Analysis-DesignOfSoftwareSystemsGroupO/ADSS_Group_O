@@ -302,5 +302,3 @@ INSERT INTO Users (userID, level) VALUES
                                       (400000010, 'regularEmp'),
                                       (400000011, 'regularEmp')
     ON CONFLICT (userID) DO NOTHING;
-
-

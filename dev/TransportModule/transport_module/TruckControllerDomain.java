@@ -63,8 +63,7 @@ public class TruckControllerDomain  {
         Transport transport = transportRepository.getTransportByid(transportId); // create a transport
         Truck truck = truckRepository.getTruckBYPlateNumber(plate); // create a truck
         transport.assignTruck(truck); // try to assign truck - if failed throw exception. otherwise, continue
-        TransportDTO transportDTO = transportRepository.transportToTransportDTO(transport);
-        transportRepository.saveTransport(transportDTO);
+        transportRepository.attachTrucktoTransport(transportId,plate);
 
 
     }
