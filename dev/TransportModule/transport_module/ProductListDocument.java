@@ -198,7 +198,7 @@ public class ProductListDocument {
     }
 
 
-    public void realiseFromTransport(Transport transport1) {
+    public void realiseFromTransport() {
         this.transportId = -1;
     }
 
