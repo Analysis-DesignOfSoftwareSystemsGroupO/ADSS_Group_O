@@ -158,12 +158,16 @@ public class RoleController implements IRoleController {
             return;
         }
 
+        curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
+        curBranch.getEmployeeRepo().getById(empId).addNewRole(caller,chosenRole);
+        System.out.println("Employee assigned to role.");
+
         List<String> driverList = new ArrayList<>();
         if (chosenRole.getDescription().toLowerCase().contains("driver")) {
 
             for (Role r : employee.getRelevantRoles()) {
-                if (r.getDescription().toLowerCase().contains("driver")) {
-                    System.out.println("this employee already have a driver in his role.");
+                if (r.getDescription().toLowerCase().contains("Driver")) {
+                    System.out.println("this employee already have a this licence.");
                     return;
                 }
                 else{
@@ -171,7 +175,6 @@ public class RoleController implements IRoleController {
                 }
             }
         }
-
 
 
         DriverDto dto = new DriverDto(Integer.toString((int)employee.getEmpId()),driverList);
@@ -194,9 +197,6 @@ public class RoleController implements IRoleController {
         }
 
 
-        curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
-        curBranch.getEmployeeRepo().getById(empId).addNewRole(caller,chosenRole);
-        System.out.println("Employee assigned to role.");
     }
 
 
