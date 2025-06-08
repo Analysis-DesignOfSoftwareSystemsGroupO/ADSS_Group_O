@@ -5,10 +5,7 @@ import TransportModule.DataLayer.DataBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,32 +53,42 @@ public class jdbcDriverDAO implements IDriverDAO{
     @Override
     public void save(DriverDto dto) throws SQLException {
         log.info("jdbcDriverDAO::save()");
-        String sql = "INSERT INTO \"Drivers\" (\"id\" ) VALUES(?) ; ";
-        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
-            ps.setString(1, dto.id());
-        }
-        catch(SQLException e){
-            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-            throw e;
-        }
-        String sql2 = "INSERT INTO \"Driveres_Licenece\" (\"DriverID\" , \"Licence\" ) VALUES ( ?, ?) ;";
-        try (PreparedStatement ps2 = DataBase.getConnection().prepareStatement(sql)){
-            for(String licence: dto.drivingLicenceList()){
-                ps2.setString(1 , dto.id());
-                ps2.setString(2, licence);
-                ps2.addBatch();
+        Connection conn = DataBase.getConnection();
+        try {
+            conn.setAutoCommit(false); // begin transaction
+
+            String sql = "INSERT INTO \"Drivers\" (\"id\" ) VALUES(?) ;";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, dto.id());
+                ps.executeUpdate();
             }
-            ps2.executeBatch(); //execute batch
-        }
-        catch (SQLException e){
-            log.error("SQL State: %s\n%s", e.getSQLState(), e.getMessage()); //try deleteing driver
+
+            String sql2 = "INSERT INTO \"Driveres_Licenece\" (\"DriverID\" , \"Licence\" ) VALUES ( ?, ?) ;";
+            try (PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+                for (String licence : dto.drivingLicenceList()) {
+                    ps2.setString(1, dto.id());
+                    ps2.setString(2, licence);
+                    ps2.addBatch();
+                }
+                ps2.executeBatch();
+            }
+
+            conn.commit(); // commit transaction
+        } catch (SQLException e) {
+            log.error("SQL State: {}\n{}", e.getSQLState(), e.getMessage());
             try {
-                deleteDriver(dto.id());
-            }
-            catch (SQLException e2){
-                log.error("SQL State: %s\n%s", e.getSQLState(), e2.getMessage());
+                conn.rollback(); // rollback transaction on error
+            } catch (SQLException rollbackEx) {
+                log.error("Rollback failed: {}\n{}", rollbackEx.getSQLState(), rollbackEx.getMessage());
             }
             throw e;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (SQLException closeEx) {
+                log.error("Connection close failed: {}\n{}", closeEx.getSQLState(), closeEx.getMessage());
+            }
         }
     }
 
