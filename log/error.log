@@ -1,0 +1,2 @@
+2025-06-08 13:51:17.995 [main] ERROR TransportModule.DataAccess.jdbcTransportDAO - SQL State: %s
+%s
