@@ -58,13 +58,16 @@ public class TruckControllerDomain  {
         truckRepository.deleteTruck(plate);
     }
 
+    public TruckDto getTruckDTOByPlateNumber(String PtNumber) throws Exception{
+        return truckRepository.truckToDTO(truckRepository.getTruckBYPlateNumber(PtNumber));
+    }
+
     public void assignTruckToTransport(int transportId, String plate) throws Exception {
 
         Transport transport = transportRepository.getTransportByid(transportId); // create a transport
         Truck truck = truckRepository.getTruckBYPlateNumber(plate); // create a truck
         transport.assignTruck(truck); // try to assign truck - if failed throw exception. otherwise, continue
         transportRepository.attachTrucktoTransport(transportId,plate);
-
 
     }
 }
