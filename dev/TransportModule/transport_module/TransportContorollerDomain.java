@@ -102,7 +102,7 @@ public class TransportContorollerDomain implements ITransportController {
         for(int PLDId : docId){
             ProductListDocument PLD = ProductListDocumentRepo.getProductListDocumentByid(PLDId);
             ProductListDocumentRepo.attachTransport(PLDId,transportId);
-
+            transport.loadByDocument(PLD);
         }
 
 
