@@ -45,6 +45,7 @@ public class TransportManagerControllerPL {
     public void printTransportDTO(TransportDTO dto){
         List<ProductListDocumentDto> DTOS = new ArrayList<>();
         String truckWeight = "";
+        int sum = 0;
         try {
             if(dto.getTruckPN()!=null){
                 TruckDto truckDto = TruckController.getTruckDTOByPlateNumber(dto.getTruckPN());
@@ -62,11 +63,12 @@ public class TransportManagerControllerPL {
         System.out.println("\tLeaves at: "+dto.getDepartureTime());
         System.out.println("\tTo: \t");
         for (ProductListDocumentDto pldDto: DTOS){
+            sum+=pldDto.getWeight();
             System.out.println("\t\t"+pldDto.getSiteDes()+": ");
             System.out.println( "\t\t\tApproximated arrival time at: "+pldDto.getApproximatedArrivalTime());
             System.out.println("\t\t\tweight:"+pldDto.getWeight()+"\n");
         }
-        System.out.println("\tTotal Weight of products: " +  dto.getMaxWeight());
+        System.out.println("\tTotal Weight of products: " +  sum);
         System.out.print("\tDriver: ");
         if(dto.getDriverID()== null)
             System.out.println("*** No driver assigned to Transport ***");
