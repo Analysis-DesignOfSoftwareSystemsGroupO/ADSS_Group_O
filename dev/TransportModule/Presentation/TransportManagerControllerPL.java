@@ -4,6 +4,7 @@ import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.TransportContorollerDomain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransportManagerControllerPL {
@@ -53,43 +54,46 @@ public class TransportManagerControllerPL {
 
 
     public void printTransportDTO(TransportDTO dto){
-        try{
-            List<ProductListDocumentDto> DTOS =  getAllPLDSByTransportId(dto.getId());
-            int sum = 0;
-            System.out.println("Transport number: "+dto.getId());
-            System.out.println("\tFrom: "+dto.getSiteName());
-            System.out.println("\tAt date: "+dto.getDate());
-            System.out.println("\tLeaves at: "+dto.getDepartureTime());
-            System.out.println("\tTo: \t");
-            for (ProductListDocumentDto pldDto: DTOS){
-                sum+= pldDto.getWeight();
-                System.out.println("\t\t"+pldDto.getSiteDes()+": ");
-                System.out.println( "\t\t\tApproximated arrival time at: "+pldDto.getApproximatedArrivalTime());
-                System.out.println("\t\t\tweight:"+pldDto.getWeight()+"\n");
-            }
-            System.out.println("\tTotal Weight of products: " +  sum);
-            System.out.print("\tDriver: ");
-            if(dto.getDriverID()== null)
-                System.out.println("*** No driver assigned to Transport ***");
-            else
-                System.out.println("id number - " +dto.getDriverID() );
-            System.out.print("\tTruck: ");
-            if(dto.getTruckPN() ==null)
-                System.out.println("*** No Truck assigned to Transport ***" );
-            else
-                System.out.println("Truck's Plate number - "+dto.getTruckPN());
-            if(!dto.isSent())
-                System.out.println("\twait to be sent.");
-            else {
-                System.out.println("\talready left.");
-            }
-            System.out.println("");
+        List<ProductListDocumentDto> DTOS = new ArrayList<>();
+        try {
 
 
+            DTOS = getAllPLDSByTransportId(dto.getId());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Transport number: "+dto.getId());
+        System.out.println("\tFrom: "+dto.getSiteName());
+        System.out.println("\tAt date: "+dto.getDate());
+        System.out.println("\tLeaves at: "+dto.getDepartureTime());
+        System.out.println("\tTo: \t");
+        for (ProductListDocumentDto pldDto: DTOS){
+            System.out.println("\t\t"+pldDto.getSiteDes()+": ");
+            System.out.println( "\t\t\tApproximated arrival time at: "+pldDto.getApproximatedArrivalTime());
+            System.out.println("\t\t\tweight:"+pldDto.getWeight()+"\n");
+        }
+        System.out.println("\tTotal Weight of products: " +  dto.getMaxWeight());
+        System.out.print("\tDriver: ");
+        if(dto.getDriverID()== null)
+            System.out.println("*** No driver assigned to Transport ***");
+        else
+            System.out.println("id number - " +dto.getDriverID() );
+        System.out.print("\tTruck: ");
+        if(dto.getTruckPN() ==null)
+            System.out.println("*** No Truck assigned to Transport ***" );
+        else
+            System.out.println("Truck's Plate number - "+dto.getTruckPN());
+        if(!dto.isSent())
+            System.out.println("\twait to be sent.");
+        else {
+            System.out.println("\talready left.");
+        }
+        System.out.println("");
+
+
+
     }
 
     public void PrintTransportDTOList(List<TransportDTO> list) {
