@@ -54,27 +54,36 @@ public class TransportManagerControllerPL {
 
     public void printTransportDTO(TransportDTO dto){
         try{
-            System.out.println("Transport number: "+dto.getId()+"\t");
-            System.out.println("From: "+dto.getSiteName()+"\t");
-            System.out.println("At date: "+dto.getDate()+"\t");
-            System.out.println("Leaves at: "+dto.getDepartureTime()+"\t");
-            getPLDInfo(dto.getId());
-            System.out.println("Max weight: "+dto.getMaxWeight()+"\t");
-            System.out.print("Driver: ");
-            if(dto.getDriverID()== null)
-                System.out.println(" No driver assigned to Transport");
-            else
-                System.out.println("id number - " +dto.getDriverID()+"\t" );
-            System.out.print("Truck: ");
-            if(dto.getTruckPN() ==null)
-                System.out.println(" No Truck assigned to Transport"+"\t" );
-            else
-                System.out.println("Truck's Plate number - "+dto.getTruckPN()+"\t");
-            if(!dto.isSent())
-                System.out.println("wait to be sent.");
-            else {
-                System.out.println("already left.");
+            List<ProductListDocumentDto> DTOS =  getAllPLDSByTransportId(dto.getId());
+            int sum = 0;
+            System.out.println("Transport number: "+dto.getId());
+            System.out.println("\tFrom: "+dto.getSiteName());
+            System.out.println("\tAt date: "+dto.getDate());
+            System.out.println("\tLeaves at: "+dto.getDepartureTime());
+            System.out.println("\tTo: \t");
+            for (ProductListDocumentDto pldDto: DTOS){
+                sum+= pldDto.getWeight();
+                System.out.println("\t\t"+pldDto.getSiteDes()+": ");
+                System.out.println( "\t\t\tApproximated arrival time at: "+pldDto.getApproximatedArrivalTime());
+                System.out.println("\t\t\tweight:"+pldDto.getWeight()+"\n");
             }
+            System.out.println("\tTotal Weight of products: " +  sum);
+            System.out.print("\tDriver: ");
+            if(dto.getDriverID()== null)
+                System.out.println("*** No driver assigned to Transport ***");
+            else
+                System.out.println("id number - " +dto.getDriverID() );
+            System.out.print("\tTruck: ");
+            if(dto.getTruckPN() ==null)
+                System.out.println("*** No Truck assigned to Transport ***" );
+            else
+                System.out.println("Truck's Plate number - "+dto.getTruckPN());
+            if(!dto.isSent())
+                System.out.println("\twait to be sent.");
+            else {
+                System.out.println("\talready left.");
+            }
+            System.out.println("");
 
 
         }
@@ -89,6 +98,7 @@ public class TransportManagerControllerPL {
         }
         for (TransportDTO dto : list) {
             try {
+                System.out.println("****************************************************************************\n");
                 printTransportDTO(dto);
             }
             catch (Exception e){
