@@ -2,7 +2,9 @@ package TransportModule.Presentation;
 
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
+import TransportModule.DTO.TruckDto;
 import TransportModule.transport_module.TransportContorollerDomain;
+import TransportModule.transport_module.TruckControllerDomain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +12,13 @@ import java.util.List;
 public class TransportManagerControllerPL {
 
     private final TransportContorollerDomain domainController;
+    private final TruckControllerDomain TruckController;
 
     public TransportManagerControllerPL() throws Exception{
         this.domainController = new TransportContorollerDomain();
+        this.TruckController = new TruckControllerDomain();
     }
 
-    public TransportManagerControllerPL(TransportContorollerDomain domainController) { // For test section
-        this.domainController = domainController;
-    }
 
 
     public List<TransportDTO> getNextWeekTransports() throws Exception{
@@ -55,9 +56,12 @@ public class TransportManagerControllerPL {
 
     public void printTransportDTO(TransportDTO dto){
         List<ProductListDocumentDto> DTOS = new ArrayList<>();
+        String truckWeight = "";
         try {
-
-
+            if(dto.getTruckPN()!=null){
+                TruckDto truckDto = TruckController.getTruckDTOByPlateNumber(dto.getTruckPN());
+                truckWeight = String.valueOf(truckDto.getMaxWeight());
+            }
             DTOS = getAllPLDSByTransportId(dto.getId());
         }
         catch (Exception e){
@@ -84,7 +88,7 @@ public class TransportManagerControllerPL {
         if(dto.getTruckPN() ==null)
             System.out.println("*** No Truck assigned to Transport ***" );
         else
-            System.out.println("Truck's Plate number - "+dto.getTruckPN());
+            System.out.println("Truck's Plate number - "+dto.getTruckPN()+" with maximum weight of: "+truckWeight);
         if(!dto.isSent())
             System.out.println("\twait to be sent.");
         else {

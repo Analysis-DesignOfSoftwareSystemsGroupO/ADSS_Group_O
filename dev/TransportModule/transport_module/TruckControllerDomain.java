@@ -49,6 +49,9 @@ public class TruckControllerDomain  {
         return trucksDTOs;
 
     }
+    public TruckDto getTruckDTOByPlateNumber(String PtNumber) throws Exception{
+        return truckRepository.truckToDTO(truckRepository.getTruckBYPlateNumber(PtNumber));
+    }
 
 
     public void deleteTruck(String plate) throws Exception{
