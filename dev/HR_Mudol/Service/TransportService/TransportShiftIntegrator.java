@@ -43,7 +43,8 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             for (ShiftDTO shiftDTO : shiftDTOs) {
 
                 if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
-                    if (licence != null) {//בדיקה למקרה שלא שובצה משאית להובלה
+                    if (licence != null && !licence.trim().isEmpty()) {//בדיקה למקרה שלא שובצה משאית להובלה
+                        licence="Driver "+licence;
                         hrService.insertNewRole(licence);
                         driverDTO = getRoleByDescription(licence, theCaller);
                         driverDTO.setDescription(licence + ":" + transport.getId());

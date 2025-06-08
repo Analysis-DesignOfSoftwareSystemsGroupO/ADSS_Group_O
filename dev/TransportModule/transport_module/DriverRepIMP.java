@@ -71,6 +71,7 @@ public class DriverRepIMP implements IDriverRep{
         if(map.get(id)!= null) return map.get(id); // if Driver is presnented on the mapper
         else{ //try to look for it on the data base , if exsists, load to mapper
             DriverDto dto = dao.getDriverByID(id);
+            if(dto == null)return null;
             ArrayList<DrivingLicence> licence = new ArrayList<>();
             for(String s : dto.drivingLicenceList()) // create Array list of Licences
                 licence.add(new DrivingLicence(s));

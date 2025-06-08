@@ -162,8 +162,8 @@ public class RoleController implements IRoleController {
         if (chosenRole.getDescription().toLowerCase().contains("driver")) {
 
             for (Role r : employee.getRelevantRoles()) {
-                if (r.getDescription().toLowerCase().contains("driver")) {
-                    System.out.println("this employee already have a driver in his role.");
+                if (r.getDescription().toLowerCase().contains("Driver")) {
+                    System.out.println("this employee already have a this licence.");
                     return;
                 }
                 else{

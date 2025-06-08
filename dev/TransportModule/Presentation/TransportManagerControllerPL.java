@@ -40,7 +40,7 @@ public class TransportManagerControllerPL {
         domainController.removeTransportById(transportId);
     }
     public List<ProductListDocumentDto> getAllPLDSByTransportId(int transportId) throws Exception{
-        return domainController.getPLDbyTransportID(Integer.toString(transportId));
+        return domainController.getPLDbyTransportID(transportId);
     }
 
     private String getPLDInfo(int transportId)throws Exception{
