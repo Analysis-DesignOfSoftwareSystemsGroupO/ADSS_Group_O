@@ -40,18 +40,6 @@ public class TransportManagerControllerPL {
         return domainController.getPLDbyTransportID(Integer.toString(transportId));
     }
 
-    private void getPLDInfo(int transportId)throws Exception{
-
-        System.out.println("To: \t");
-        List<ProductListDocumentDto> DTOS =  getAllPLDSByTransportId(transportId);
-        int sum = 0;
-        for (ProductListDocumentDto dto: DTOS){
-            sum+= dto.getWeight();
-            System.out.println("\t"+dto.getSiteDes()+" - Approximated arrival time at: "+dto.getApproximatedArrivalTime()+" weight:"+dto.getWeight()+"\t");
-        }
-        System.out.println("\tTotal Weight of products: " +  sum + "");
-
-    }
 
 
     public void printTransportDTO(TransportDTO dto){
