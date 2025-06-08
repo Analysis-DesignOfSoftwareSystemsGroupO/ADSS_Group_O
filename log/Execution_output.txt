@@ -22606,3 +22606,34 @@
 2025-06-08-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
 2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
 2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000004 )
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-08-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-08-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000004 )
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-08-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-08-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000004 )
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-08-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
