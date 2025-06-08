@@ -11,7 +11,7 @@ public interface IEmployeeDAO {
     boolean exists(long employeeId);
     void insert(EmployeeDTO dto, int brunchID) throws SQLException;
     void update(EmployeeDTO employee) throws SQLException;
-    List<EmployeeDTO> getAll() throws SQLException;
+    List<EmployeeDTO> getAll(int branchID) throws SQLException;
     void archive(int empId) throws SQLException;
     void updateBankAccount(int empId, String newBankAccount) throws SQLException;
     void updateSalary(int empId, int newSalary) throws SQLException;

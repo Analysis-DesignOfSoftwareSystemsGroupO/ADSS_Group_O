@@ -38,11 +38,9 @@ public class ProductListDocument {
         }
 
 
-        if (parsedDate.isAfter(LocalDate.now())) {
-            date = parsedDate;
-        } else {
-            throw new InvalidDateException("the input date is older than now"); // throw exception invalid date
-        }
+
+        date = parsedDate;
+
 
         this.id = id; // give index to document
         destination = new Site(site); // set the destination of the document

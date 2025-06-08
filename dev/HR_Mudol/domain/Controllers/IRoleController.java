@@ -102,6 +102,8 @@ public interface IRoleController {
      */
     Role getRoleByNumber(int roleNumber);
 
+    void insertNewRole(String description) throws SQLException;
+
     /**
      * Counts the number of employees who do not have any assigned roles.
      * This operation helps to track employees who have not been assigned to any role.

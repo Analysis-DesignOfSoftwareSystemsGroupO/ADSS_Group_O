@@ -29,6 +29,12 @@ public class TransportContorollerDomain implements ITransportController {
 
     }
 
+    public String getLicenceRequiredByTransportID(int Tid)throws Exception{
+        Transport t = transportRepo.getTransportByid(Tid);
+        if(t == null )return null;
+        return t.getTruck().getDrivingLicence().getCode();
+    }
+
     // For test section
     public TransportContorollerDomain(ITransportRepository transportRepo, IProductListDocumentRepository productListDocumentRepo, DriverControllerDomain driverControllerDomain) {
         this.transportRepo = transportRepo;
@@ -54,8 +60,8 @@ public class TransportContorollerDomain implements ITransportController {
         return transportList;
     }
 
-    public List<ProductListDocumentDto> getPLDbyTransportID(String transportID) throws Exception{
-        Transport transport = transportRepo.getTransportByid(Integer.parseInt(transportID));
+    public List<ProductListDocumentDto> getPLDbyTransportID(int transportID) throws Exception{
+        Transport transport = transportRepo.getTransportByid(transportID);
         List<ProductListDocument> PLDList = transport.getAllPLD();
         List<ProductListDocumentDto> PLDDTOList = new ArrayList<>();
         for(ProductListDocument pld : PLDList){

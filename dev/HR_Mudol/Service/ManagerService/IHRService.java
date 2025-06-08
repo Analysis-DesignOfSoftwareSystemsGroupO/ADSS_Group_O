@@ -47,6 +47,8 @@ public interface IHRService {
     // RoleController forwarding
     void createRole(UserDTO caller) throws SQLException;
 
+    void insertNewRole(String description) throws SQLException;
+
     void updateRoleDescription(UserDTO caller) throws SQLException;
 
     void assignEmployeeToRole(UserDTO caller) throws SQLException;

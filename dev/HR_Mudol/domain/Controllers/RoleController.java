@@ -313,6 +313,11 @@ public class RoleController implements IRoleController {
     }
 
     @Override
+    public void insertNewRole(String description) throws SQLException {
+        curBranch.getRoleRepo().insertNewRole(description);
+    }
+
+    @Override
     public int countEmployeesWithoutRoles(UserDTO theCaller, List<EmployeeDTO> employeeList) throws SQLException {
         User caller=mapper.fromDTO(theCaller);
         if (!caller.isManager()) throw new SecurityException("Access denied.");

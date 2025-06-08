@@ -49,14 +49,13 @@ public class HRService implements IHRService {
     @Override
     public void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException {
         int totalEmployees = employeeService.getTotalEmployeeCount();
-        int withoutRoles = roleController.countEmployeesWithoutRoles(caller, employeeService.getAllEmployees());
+        //int withoutRoles = roleController.countEmployeesWithoutRoles(caller, employeeService.getAllEmployees());
 
-        System.out.println(" Week starting " + currentWeek.getConstraintDeadline());
-        System.out.println(" " + hasUnassignedRoles(currentWeek) + " shifts are required attention!");
+        System.out.println(" " + hasUnassignedRoles(currentWeek) + " shifts are required attention!\n");
 
         System.out.println(" Employees Status:");
         System.out.println("- Total employees: " + totalEmployees);
-        System.out.println("- Without roles: " + withoutRoles);
+        //System.out.println("- Without roles: " + withoutRoles);
     }
 
     // EmployeeService forwarding:
@@ -114,6 +113,11 @@ public class HRService implements IHRService {
     @Override
     public void createRole(UserDTO caller) throws SQLException {
         roleController.createRole(caller);
+    }
+
+    @Override
+    public void insertNewRole(String description) throws SQLException {
+        roleController.insertNewRole(description);
     }
 
     @Override
