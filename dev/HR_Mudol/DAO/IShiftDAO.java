@@ -18,7 +18,7 @@ public interface IShiftDAO {
 
     void insertEmpToShift(int brunchID, long empID, int shiftID, int roleNumber);
 
-    void removeEmpFromShift(int shiftID, int empNum);
+    void removeEmpFromShift(int shiftID, long empNum);
 
     void decrementOrRemove(int branchID, int shiftID, int roleNumber);
 

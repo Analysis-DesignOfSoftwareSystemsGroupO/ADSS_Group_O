@@ -129,11 +129,11 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
     }
 
     @Override
-    public void removeEmpFromShift(int shiftID, int empID) {
+    public void removeEmpFromShift(int shiftID, long empID) {
         String sql = "DELETE FROM ShiftAssignments WHERE shiftID = ? AND empID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shiftID);
-            stmt.setInt(2, empID);
+            stmt.setLong(2, empID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to remove employee from shift", e);

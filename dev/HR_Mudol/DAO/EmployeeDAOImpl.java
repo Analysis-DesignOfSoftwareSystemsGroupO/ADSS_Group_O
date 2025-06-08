@@ -178,10 +178,11 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
 
 
     @Override
-    public List<EmployeeDTO> getAll() {
+    public List<EmployeeDTO> getAll(int branchID) {
         List<EmployeeDTO> result = new ArrayList<>();
-        String sql = "SELECT * FROM Employees";
+        String sql = "SELECT * FROM Employees WHERE branchID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, branchID);  // הצבת branchID בשאילתה
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result.add(new EmployeeDTO(
@@ -198,7 +199,7 @@ public class EmployeeDAOImpl extends BaseDAO implements IEmployeeDAO {
                 ));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch employees", e);
+            throw new RuntimeException("Failed to fetch employees for branchID=" + branchID, e);
         }
         return result;
     }

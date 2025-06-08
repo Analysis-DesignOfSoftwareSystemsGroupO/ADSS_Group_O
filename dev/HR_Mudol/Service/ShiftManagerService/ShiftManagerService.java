@@ -91,7 +91,7 @@ public class ShiftManagerService implements IShiftManagerService {
 
     @Override
     public void transferCancellationCard(UserDTO theCaller) {
-        if (!theCaller.getLevel().equals("SHIFT_MANAGER")) {
+        if (!theCaller.getLevel().equals("shiftManager")) {
             System.out.println("Access denied. Only shift managers can transfer the cancellation card.");
             return;
         }
