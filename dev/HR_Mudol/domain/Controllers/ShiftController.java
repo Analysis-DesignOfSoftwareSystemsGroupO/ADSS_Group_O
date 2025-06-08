@@ -415,7 +415,7 @@ public class ShiftController implements IShiftController {
         );
 
 
-        System.out.printf("✅ %d x '%s' added to shift [%s %s].%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
+        System.out.printf("✅ %d x '%s' added to shift - %s %s.%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
     }
 
    @Override

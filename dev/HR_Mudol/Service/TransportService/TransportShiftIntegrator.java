@@ -28,41 +28,43 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
     public void integrateTransportShifts(UserDTO theCaller) throws Exception {
         RoleDTO driverDTO;
+        List<ShiftDTO> shiftDTOs;
         List<TransportDTO> transports = transportController.getTransportNextWeek();
 
         for (TransportDTO transport : transports) {
-            int weight = transport.getMaxWeight();
-            String licence;
-            if(weight<=10000)
-                licence = "Driver-A";
-            else if(weight<=20000)
-                licence = "Driver-B";
-            else
-                licence = "Driver-C";
-            ensureRolesExist(theCaller,licence);
-            driverDTO = getRoleByDescription(licence,theCaller);
-            driverDTO.setDescription(licence+":"+transport.getId());
+            String licence = transportController.getLicenceRequiredByTransportID(transport.getId());
+
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
-            List<ShiftDTO> shiftDTOs =hrService.getNextWeekDTO().getShifts();;
+            shiftDTOs = hrService.getNextWeekDTO().getShifts();
+
+            //נעבור על המשמרות נבדוק איזו מתאימה
+
             for (ShiftDTO shiftDTO : shiftDTOs) {
+
                 if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
-                    hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
-                    // Destination branch: needs Warehouse
-                    List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(String.valueOf(transport.getId()));
+                    if (licence != null) {//בדיקה למקרה שלא שובצה משאית להובלה
+                        hrService.insertNewRole(licence);
+                        driverDTO = getRoleByDescription(licence, theCaller);
+                        driverDTO.setDescription(licence + ":" + transport.getId());
+                        hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
+                    }
+                    //מחסנאי אני משבצת בכל מקרה
+                    List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(transport.getId());
                     for (ProductListDocumentDto pld : plds) {
                         ShiftType typeforWarehouseDTO = determineShiftType(pld.getApproximatedArrivalTime());
                         WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
-                        if (pld.getSiteDes().equalsIgnoreCase(branch.getName()) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name()) ) {
+                        if (pld.getSiteDes().equalsIgnoreCase(branch.getName()) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
                             ensureRolesWarehouseExist(theCaller);
-                            RoleDTO warehouseDTO = getRoleByDescription("Warehouse",theCaller);
+                            RoleDTO warehouseDTO = getRoleByDescription("Warehouse", theCaller);
                             hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
                         }
                     }
+                    System.out.println("🚚 Transport-based roles integrated into shifts and saved to DB.");
                 }
             }
+
         }
-        System.out.println("🚚 Transport-based roles integrated into shifts and saved to DB.");
     }
 
     private ShiftType determineShiftType(LocalTime time) {

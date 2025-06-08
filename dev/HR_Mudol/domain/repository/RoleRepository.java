@@ -27,6 +27,10 @@ public class RoleRepository {
         roleDAO.insert(dto);
     }
 
+    public void insertNewRole(String description) throws SQLException {
+        roleDAO.insert(new RoleDTO(description));
+    }
+
     public void updateDescription(Role role, String newDescription) {
         role.setDescription(newDescription);  // update in memory
 

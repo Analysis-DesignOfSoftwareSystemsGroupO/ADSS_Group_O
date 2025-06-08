@@ -116,6 +116,11 @@ public class HRService implements IHRService {
     }
 
     @Override
+    public void insertNewRole(String description) throws SQLException {
+        roleController.insertNewRole(description);
+    }
+
+    @Override
     public void updateRoleDescription(UserDTO caller) throws SQLException {
         roleController.updateRoleDescription(caller);
     }
