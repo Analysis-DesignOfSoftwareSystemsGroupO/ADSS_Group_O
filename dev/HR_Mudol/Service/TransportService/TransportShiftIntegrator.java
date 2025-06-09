@@ -48,7 +48,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                     //נהג ישבץ סניף המוצא
                     String branchName=hrService.getBranchOfShift(shiftDTO);
                     String siteStart=transport.getSiteName();
-                    if (licence != null && !licence.trim().isEmpty() &&  branchName.equalsIgnoreCase(siteStart)) {//בדיקה למקרה שלא שובצה משאית להובלה + בדיקה שהסניף רלוונטי
+                    if (licence != null && !licence.trim().isEmpty() && branchName.trim().equalsIgnoreCase(siteStart.trim())) {//בדיקה למקרה שלא שובצה משאית להובלה + בדיקה שהסניף רלוונטי
                         licence="Driver "+licence+ ":" + transport.getId();
                         hrService.insertNewRole(licence);
 
@@ -62,7 +62,8 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                         ShiftType typeforWarehouseDTO = determineShiftType(pld.getApproximatedArrivalTime());
                         WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
                         String siteDes=pld.getSiteDes();
-                        if (siteDes.equalsIgnoreCase(branchName) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
+                        if (siteDes.trim().equalsIgnoreCase(branchName.trim())
+                                && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
                             ensureRolesWarehouseExist(theCaller);
                             RoleDTO warehouse = getRoleByDescription("Warehouse", theCaller);
                             hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouse, 1);
