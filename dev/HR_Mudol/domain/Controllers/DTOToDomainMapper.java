@@ -132,23 +132,24 @@ public class DTOToDomainMapper {
 
     public static Shift fromDTO(ShiftDTO dto) {
         Shift shift = new Shift(dto.getShiftID(), WeekDay.valueOf(dto.getDay().toUpperCase()), ShiftType.valueOf(dto.getType().toUpperCase()));
+
+        // עדכון סטטוס
         shift.updateStatus(Status.valueOf(dto.getStatus()));
+
+        // הגדרת מנהל משמרת אם יש
         if (!Status.valueOf(dto.getStatus()).equals(Status.Empty)) {
             Employee shiftManager = employeeRepository.getById(dto.getShiftManagerId());
             shift.setShiftManager(shiftManager);
         }
 
-        Iterator var6 = dto.getNecessaryRoles().iterator();
 
-        while(var6.hasNext()) {
-            RoleDTO roleDTO = (RoleDTO)var6.next();
-            shift.addNecessaryRoles(fromDTO(roleDTO));
+        // הוספת תפקידים דרושים
+        for (RoleDTO r : dto.getNecessaryRoles()) {
+            shift.addNecessaryRoles(fromDTO(r));
         }
 
-        var6 = dto.getFilledRoles().iterator();
-
-        while(var6.hasNext()) {
-            FilledRoleDTO filledRoleDTO = (FilledRoleDTO)var6.next();
+        // הוספת עובדים ששובצו בפועל
+        for (FilledRoleDTO filledRoleDTO : dto.getFilledRoles()) {
             Employee employee = employeeRepository.getById(filledRoleDTO.getEmployeeId());
             Role role = roleRepository.getRoleByNumber(filledRoleDTO.getRoleId());
             shift.addEmployee(employee, role);
@@ -158,31 +159,41 @@ public class DTOToDomainMapper {
     }
 
     public static ShiftDTO toDTO(Shift shift) {
-        List<EmployeeDTO> employeeDTOs = new ArrayList();
-        Iterator var2 = shift.getEmployees().iterator();
-
-        while(var2.hasNext()) {
-            Employee e = (Employee)var2.next();
+        // המרת עובדים ל־DTO
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+        for (Employee e : shift.getEmployees()) {
             employeeDTOs.add(toDTO(e));
         }
 
-        List<RoleDTO> roleDTOs = new ArrayList();
-        Iterator var7 = shift.getNecessaryRoles().iterator();
-
-        while(var7.hasNext()) {
-            Role r = (Role)var7.next();
+        // המרת תפקידים דרושים ל־DTO
+        List<RoleDTO> roleDTOs = new ArrayList<>();
+        for (Role r : shift.getNecessaryRoles()) {
             roleDTOs.add(toDTO(r));
         }
 
-        List<FilledRoleDTO> filledRoleDTOs = new ArrayList();
-        Iterator var9 = shift.getFilledRoles().iterator();
-
-        while(var9.hasNext()) {
-            FilledRole fr = (FilledRole)var9.next();
-            filledRoleDTOs.add(new FilledRoleDTO(shift.getShiftID(), fr.getEmployee().getEmpId(), fr.getRole().getRoleNumber()));
+        // המרת שיבוצים בפועל ל־DTO
+        List<FilledRoleDTO> filledRoleDTOs = new ArrayList<>();
+        for (FilledRole fr : shift.getFilledRoles()) {
+            filledRoleDTOs.add(
+                    new FilledRoleDTO(
+                            shift.getShiftID(),
+                            fr.getEmployee().getEmpId(),
+                            fr.getRole().getRoleNumber()
+                    )
+            );
         }
 
-        return new ShiftDTO(shift.getShiftID(), shift.getDay().name(), shift.getType().name(), shift.getStatus().name(), shift.getShiftManager() != null ? shift.getShiftManager().getEmpId() : -1L, employeeDTOs, roleDTOs, filledRoleDTOs);
+        // יצירת האובייקט הסופי של DTO
+        return new ShiftDTO(
+                shift.getShiftID(),
+                shift.getDay().name(),
+                shift.getType().name(),
+                shift.getStatus().name(),
+                shift.getShiftManager() != null ? shift.getShiftManager().getEmpId() : -1L,
+                employeeDTOs,
+                roleDTOs,
+                filledRoleDTOs
+        );
     }
 
     public static EmployeeDTO toDTO(Employee e) {

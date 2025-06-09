@@ -24,7 +24,6 @@ public interface IShiftDAO {
 
     void insertOrIncrementRequiredRole(int branchID, WeekDay day, ShiftType type, int roleNumber, int count);
 
-
     void updateStatus(int shiftId, String newStatus);
 
     boolean isEmployeeAssignedToShift(long empId, int shiftId);

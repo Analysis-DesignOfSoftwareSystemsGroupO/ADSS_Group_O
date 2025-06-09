@@ -77,21 +77,39 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shiftID);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                return new ShiftDTO(
-                        rs.getInt("shiftID"),
-                        rs.getString("day"),
-                        rs.getString("type"),
-                        rs.getString("status"),
-                        rs.getInt("shiftManager"),
-                        null, // employees
-                        null, // necessaryRoles
-                        null  // filledRoles
+                String day = rs.getString("day");
+                String type = rs.getString("type");
+                String status = rs.getString("status");
+                int shiftManager = rs.getObject("shiftManager") != null ? rs.getInt("shiftManager") : -1;
+                LocalDate deadline = rs.getDate("deadline").toLocalDate();
+                int branchID = rs.getInt("branchID");
+
+                // יצירת אובייקט ShiftDTO בסיסי
+                ShiftDTO shift = new ShiftDTO(
+                        shiftID,
+                        day,
+                        type,
+                        status,
+                        shiftManager
                 );
+
+                // הוספת עובדים
+                shift.setEmployees(getEmployeesInShift(shiftID));
+
+                // הוספת תפקידים דרושים
+                shift.setNecessaryRoles(getNecessaryRoles(shiftID));
+
+                // הוספת תפקידים שמולאו בפועל
+                shift.setFilledRoles(getFilledRoles(shiftID, branchID, deadline));
+
+                return shift;
             }
         }
         return null;
     }
+
 
     @Override
     public List<ShiftDTO> getAll() throws SQLException {
@@ -488,7 +506,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
     public void insertShift(ShiftDTO shift, int branchId) {
         String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "ON CONFLICT (shiftID, branchID, deadline) DO NOTHING";
+                "ON CONFLICT (shiftID) DO NOTHING";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shift.getShiftID());

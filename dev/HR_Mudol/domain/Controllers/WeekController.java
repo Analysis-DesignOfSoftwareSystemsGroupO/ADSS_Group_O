@@ -498,7 +498,7 @@ public class WeekController implements IWeekController {
      * @param theWeek The week to search in.
      * @return The matching shift, or null if not found.
      */
-    private Shift findShift(WeekDTO theWeek){
+    private Shift findShift(WeekDTO theWeek) throws SQLException {
 
         Week week=mapper.fromDTO(theWeek);
         Scanner scanner = new Scanner(System.in);
@@ -512,10 +512,11 @@ public class WeekController implements IWeekController {
         Shift choosenShift=null;
         for (Shift shift : week.getShifts()) {
             if (shift.getType().name().equals(type) && shift.getDay().name().equals(day)) {
-                choosenShift=shift;
+                choosenShift=DTOToDomainMapper.fromDTO(curBranch.getWeekRepo().getShiftById(shift.getShiftID()));
                 break;
             }
         }
+
         return choosenShift;
     }
 

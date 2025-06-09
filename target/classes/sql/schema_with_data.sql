@@ -86,15 +86,15 @@ CREATE TABLE IF NOT EXISTS constraints (
     PRIMARY KEY (constraintID, empID, WeekDay, ShiftType)
 );
 
+
 CREATE TABLE IF NOT EXISTS Shifts (
-    shiftID INT,
+    shiftID SERIAL PRIMARY KEY,
     branchID INT REFERENCES Branches(branchID),
     deadline DATE,
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
-    shiftManager BIGINT REFERENCES Employees(empID),
-    PRIMARY KEY (shiftID, branchID, deadline)
+    shiftManager BIGINT REFERENCES Employees(empID)
 );
 
 CREATE TABLE iF NOT EXISTS RequiredRoles (
