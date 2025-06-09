@@ -2,6 +2,7 @@ package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.Status;
 import TransportModule.transport_module.TransportContorollerDomain;
 
 import java.sql.SQLException;
@@ -73,7 +74,6 @@ public class ShiftController implements IShiftController {
         // save at RAM
         shift.addEmployee(employee, role);
 
-
         //save at the DB
          curBranch.getWeekRepo().insertEmployeeToShift(curBranch.getBranchID(),employee.getEmpId(), shift.getShiftID(), role.getRoleNumber());
 
@@ -94,7 +94,6 @@ public class ShiftController implements IShiftController {
             System.out.println("Access denied. Only shift managers can remove employees from shifts.");
             return;
         }
-
 
 
         // Authorization check
@@ -149,6 +148,16 @@ public class ShiftController implements IShiftController {
 
         System.out.println(employeeToRemove.getEmpName() +
                 " was removed from shift " + shift.getDay() + " - " + shift.getType() + ".");
+
+        Status newStatus = (shift.getNecessaryRoles().size() == shift.getEmployees().size())
+                ? Status.Full
+                : Status.Problem;
+
+        // RAM
+        shift.updateStatus(newStatus);
+
+        // DB
+        curBranch.getWeekRepo().updateShiftStatus(shift.getShiftID(), newStatus);
     }
 
 

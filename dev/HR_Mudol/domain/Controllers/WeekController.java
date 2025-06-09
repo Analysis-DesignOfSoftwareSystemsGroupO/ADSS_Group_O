@@ -380,6 +380,8 @@ public class WeekController implements IWeekController {
             throw new SecurityException("Access denied.");
         }
         dependency.removeEmployeeFromShift(theCaller,mapper.toDTO(findShift(theWeek))); //if the shift null it will print msg
+
+
     }
 
 
@@ -461,7 +463,18 @@ public class WeekController implements IWeekController {
 
         // מימוש ההשמה בפועל
         dependency.assignEmployeeToShift(theCaller, mapper.toDTO(shift),mapper.toDTO(chosen), mapper.toDTO(selectedRole));
+        shift.addEmployee(chosen,selectedRole); //הופסה לזכרון
         System.out.println(chosen.getEmpName() + " assigned successfully to the shift.");
+
+        Status newStatus = (shift.getNecessaryRoles().size() == shift.getEmployees().size())
+                ? Status.Full
+                : Status.Problem;
+
+        // RAM
+        shift.updateStatus(newStatus);
+
+        // DB
+        curBranch.getWeekRepo().updateShiftStatus(shift.getShiftID(), newStatus);
     }
 
         /**
