@@ -19,6 +19,8 @@ import java.util.Scanner;
  */
 public interface IHRService {
 
+    int getBranchID();
+
     void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException;
 
     // EmployeeService forwarding:
@@ -136,4 +138,6 @@ public interface IHRService {
     void printAllEmployees(UserDTO caller) throws SQLException;
 
     void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException;
+
+    String getBranchOfShift(ShiftDTO shiftDTO);
 }

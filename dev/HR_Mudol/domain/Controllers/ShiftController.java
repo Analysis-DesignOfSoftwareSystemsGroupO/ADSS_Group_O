@@ -37,6 +37,12 @@ public class ShiftController implements IShiftController {
         //this.mapper=new DTOToDomainMapper(curBranch.getUserRepo(),curBranch.getEmployeeRepo(),curBranch.getRoleRepo(),curBranch.getWeekRepo());
     }
     @Override
+    public String getBranchID()
+    {
+        return this.curBranch.getName();
+    }
+
+    @Override
     public void close() {
         try {
             curBranch.close();

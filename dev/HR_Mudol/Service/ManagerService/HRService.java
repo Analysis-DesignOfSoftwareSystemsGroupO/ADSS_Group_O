@@ -47,6 +47,11 @@ public class HRService implements IHRService {
     }
 
     @Override
+    public int getBranchID(){
+        return this.branchDTO.getBranchID();
+    }
+
+    @Override
     public void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException {
         int totalEmployees = employeeService.getTotalEmployeeCount();
         //int withoutRoles = roleController.countEmployeesWithoutRoles(caller, employeeService.getAllEmployees());
@@ -162,6 +167,12 @@ public class HRService implements IHRService {
     }
 
     // ShiftController forwarding
+    @Override
+    public String getBranchOfShift(ShiftDTO shiftDTO){
+        return shiftController.getBranchID();
+    }
+
+
     @Override
     public void assignEmployeeToShift(UserDTO caller, ShiftDTO shift, EmployeeDTO employee, RoleDTO role) throws SQLException {
         shiftController.assignEmployeeToShift(caller, shift, employee, role);

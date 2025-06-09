@@ -21,6 +21,8 @@ import java.util.List;
  */
 public interface IShiftController {
 
+    String getBranchID();
+
     void close();
 
     /**
