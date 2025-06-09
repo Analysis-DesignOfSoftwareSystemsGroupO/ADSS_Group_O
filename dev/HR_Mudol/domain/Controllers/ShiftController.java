@@ -2,7 +2,9 @@ package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.*;
 import HR_Mudol.domain.Objects.*;
+import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.Status;
+import HR_Mudol.domain.WeekDay;
 import TransportModule.transport_module.TransportContorollerDomain;
 
 import java.sql.SQLException;
@@ -343,7 +345,12 @@ public class ShiftController implements IShiftController {
         theShift.setNecessaryRoles(roleDTOList);
     }
 
+    @Override
+    public void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException {
+        curBranch.getWeekRepo().addOrUpdateRequiredRole(
+                curBranch.getBranchID(), WeekDay.valueOf(shift.getDay()), ShiftType.valueOf(shift.getType()),role.getRoleNumber(),requiredAmount);
 
+    }
 
     @Override
     public void printShift(UserDTO theCaller, ShiftDTO theShift) throws SQLException {
@@ -395,6 +402,7 @@ public class ShiftController implements IShiftController {
         return result;
     }
 
+    /*
     @Override
     public void addRoleToShiftIfNeeded(UserDTO callerDTO, ShiftDTO shiftDTO, RoleDTO roleDTO, int requiredAmount) throws SQLException {
         User caller = mapper.fromDTO(callerDTO);
@@ -431,6 +439,8 @@ public class ShiftController implements IShiftController {
 
         System.out.printf("✅ %d x '%s' added to shift - %s %s.%n", toAdd, role.getDescription(), shift.getDay(), shift.getType());
     }
+
+     */
 
    @Override
    public List<EmployeeDTO> getAllEmployeesAsDTOs2() throws SQLException {

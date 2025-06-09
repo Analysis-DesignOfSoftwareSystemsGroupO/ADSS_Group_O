@@ -42,13 +42,16 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             //נעבור על המשמרות נבדוק איזו מתאימה
 
             for (ShiftDTO shiftDTO : shiftDTOs) {
-                //&& hrService.getBranchOfShift(shiftDTO)=branchTransport
+
                 if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
 
                     //נהג ישבץ סניף המוצא
-                    if (licence != null && !licence.trim().isEmpty() &&  Objects.equals(hrService.getBranchOfShift(shiftDTO), transport.getSiteName())) {//בדיקה למקרה שלא שובצה משאית להובלה + בדיקה שהסניף רלוונטי
+                    String branchName=hrService.getBranchOfShift(shiftDTO);
+                    String siteStart=transport.getSiteName();
+                    if (licence != null && !licence.trim().isEmpty() &&  branchName.equalsIgnoreCase(siteStart)) {//בדיקה למקרה שלא שובצה משאית להובלה + בדיקה שהסניף רלוונטי
                         licence="Driver "+licence+ ":" + transport.getId();
                         hrService.insertNewRole(licence);
+
                         driverDTO = getRoleByDescription(licence, theCaller);
                         hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
                     }
@@ -58,7 +61,8 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                     for (ProductListDocumentDto pld : plds) {
                         ShiftType typeforWarehouseDTO = determineShiftType(pld.getApproximatedArrivalTime());
                         WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
-                        if (Objects.equals(hrService.getBranchOfShift(shiftDTO), transport.getSiteName()) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
+                        String siteDes=pld.getSiteDes();
+                        if (siteDes.equalsIgnoreCase(branchName) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
                             ensureRolesWarehouseExist(theCaller);
                             RoleDTO warehouse = getRoleByDescription("Warehouse", theCaller);
                             hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouse, 1);

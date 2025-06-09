@@ -51,6 +51,7 @@ public class HRService implements IHRService {
         return this.branchDTO.getBranchID();
     }
 
+
     @Override
     public void displayDashboard(UserDTO caller, WeekDTO currentWeek) throws SQLException {
         int totalEmployees = employeeService.getTotalEmployeeCount();
@@ -341,7 +342,8 @@ public class HRService implements IHRService {
 
     @Override
     public void addRoleToShiftIfNeeded(UserDTO caller, ShiftDTO shift, RoleDTO role, int requiredAmount) throws SQLException {
-        shiftController.addRoleToShiftIfNeeded(caller, shift, role, requiredAmount);
+        shiftController.addRoleToShiftIfNeeded( caller,  shift,  role,  requiredAmount);
+
     }
 
 
