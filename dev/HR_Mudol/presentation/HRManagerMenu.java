@@ -206,8 +206,7 @@ public class HRManagerMenu implements Menu {
             String choice = sc.nextLine();
             try {
                 switch (choice) {
-                    case "1" -> hr.manageTheWeekRelevantRoles(caller,week);
-                    case "2" -> hr.assigningEmployToShifts(caller);
+                    case "1" -> hr.manageTheWeekRelevantRoles(caller,week);case "2" -> hr.assigningEmployToShifts(caller);
                     case "3" -> editShifts(caller,week);
                     case "0" -> { return; }
                     default -> System.out.println("Invalid option.");

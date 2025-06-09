@@ -44,10 +44,9 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
                 if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
                     if (licence != null && !licence.trim().isEmpty()) {//בדיקה למקרה שלא שובצה משאית להובלה
-                        licence="Driver "+licence;
+                        licence="Driver "+licence+ ":" + transport.getId();
                         hrService.insertNewRole(licence);
                         driverDTO = getRoleByDescription(licence, theCaller);
-                        driverDTO.setDescription(licence + ":" + transport.getId());
                         hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
                     }
                     //מחסנאי אני משבצת בכל מקרה
@@ -57,8 +56,8 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                         WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
                         if (pld.getSiteDes().equalsIgnoreCase(branch.getName()) && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
                             ensureRolesWarehouseExist(theCaller);
-                            RoleDTO warehouseDTO = getRoleByDescription("Warehouse", theCaller);
-                            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouseDTO, 1);
+                            RoleDTO warehouse = getRoleByDescription("Warehouse", theCaller);
+                            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouse, 1);
                         }
                     }
                     System.out.println("🚚 Transport-based roles integrated into shifts and saved to DB.");

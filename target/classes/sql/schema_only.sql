@@ -128,9 +128,6 @@ INSERT INTO Roles (roleNumber, description) VALUES
 (101, 'Shift Manager'),
 (102, 'Cashier'),
 (103, 'Warehouse'),
-(104, 'Driver-A'),
-(105, 'Driver-B'),
-(106, 'Driver-C')
 ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES

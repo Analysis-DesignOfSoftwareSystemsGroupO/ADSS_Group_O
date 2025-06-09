@@ -1,6 +1,0 @@
-2025-06-08 19:10:20.630 [main] ERROR TransportModule.DataAccess.jdbcDriverDAO - SQL State: %s
-%s
-2025-06-08 19:10:20.632 [main] ERROR TransportModule.DataAccess.jdbcDriverDAO - SQL State: %s
-%s
-2025-06-08 19:10:20.632 [main] ERROR TransportModule.DataAccess.jdbcDriverDAO - SQL State: %s
-%s

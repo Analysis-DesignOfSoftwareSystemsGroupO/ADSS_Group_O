@@ -291,6 +291,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
             while (rs.next()) {
                 int shiftId = rs.getInt("shiftID");
+                LocalDate date = rs.getDate("deadline").toLocalDate(); // קבלת התאריך מהשורה
 
                 ShiftDTO shift = new ShiftDTO(
                         shiftId,
@@ -301,7 +302,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
                 );
 
                 // שיבוצים בפועל
-                shift.setFilledRoles(getFilledRoles(shiftId));
+                shift.setFilledRoles(getFilledRoles(shiftId,branchId,date));
 
                 // תפקידים דרושים
                 shift.setNecessaryRoles(getNecessaryRoles(shiftId));
@@ -340,6 +341,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
             while (rs.next()) {
                 int shiftId = rs.getInt("shiftID");
+                LocalDate date = rs.getDate("deadline").toLocalDate(); // קבלת התאריך מהשורה
 
                 ShiftDTO shift = new ShiftDTO(
                         shiftId,
@@ -349,7 +351,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
                         rs.getInt("shiftmanager")
                 );
 
-                shift.setFilledRoles(getFilledRoles(shiftId));
+                shift.setFilledRoles(getFilledRoles(shiftId,branchId,date));
                 shift.setNecessaryRoles(getNecessaryRoles(shiftId));
                 shift.setEmployeeIds(getEmployeesInShift(shiftId));
 
@@ -364,8 +366,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
     }
 
 
-
-    private List<FilledRoleDTO> getFilledRoles(int shiftId) throws SQLException {
+    private List<FilledRoleDTO> getFilledRoles(int shiftId, int branchID, LocalDate deadline) throws SQLException {
         String sql = "SELECT * FROM shiftassignments WHERE shiftID = ?";
         List<FilledRoleDTO> result = new ArrayList<>();
 
@@ -420,6 +421,10 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
 
             while (rs.next()) {
                 int shiftId = rs.getInt("shiftid");
+
+                LocalDate date = rs.getDate("deadline").toLocalDate(); // קבלת התאריך מהשורה
+
+
                 String day = rs.getString("day");
                 String type = rs.getString("type");
                 String status = rs.getString("status");
@@ -434,7 +439,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
                 shift.setNecessaryRoles(getNecessaryRoles(shiftId));
 
                 // הוספת תפקידים שמולאו בפועל
-                shift.setFilledRoles(getFilledRoles(shiftId));
+                shift.setFilledRoles(getFilledRoles(shiftId,branchID,date));
 
                 shifts.add(shift);
             }
@@ -483,7 +488,7 @@ public class ShiftDAOImpl extends BaseDAO implements IShiftDAO {
     public void insertShift(ShiftDTO shift, int branchId) {
         String sql = "INSERT INTO Shifts (shiftID, branchID, deadline, day, type, status, shiftManager) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "ON CONFLICT (deadline, type, branchID) DO NOTHING";
+                "ON CONFLICT (shiftID, branchID, deadline) DO NOTHING";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, shift.getShiftID());

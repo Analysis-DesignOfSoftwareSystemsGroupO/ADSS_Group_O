@@ -87,19 +87,15 @@ CREATE TABLE IF NOT EXISTS constraints (
 );
 
 CREATE TABLE IF NOT EXISTS Shifts (
-    shiftID INT PRIMARY KEY,
+    shiftID INT,
     branchID INT REFERENCES Branches(branchID),
     deadline DATE,
     day VARCHAR(255),
     type VARCHAR(255),
     status VARCHAR(255),
-    shiftManager BIGINT REFERENCES Employees(empID)
+    shiftManager BIGINT REFERENCES Employees(empID),
+    PRIMARY KEY (shiftID, branchID, deadline)
 );
-
-ALTER TABLE Shifts
-ADD CONSTRAINT unique_shift_per_day_type_branch
-UNIQUE (deadline, type, branchID);
-
 
 CREATE TABLE iF NOT EXISTS RequiredRoles (
     branchID INT REFERENCES Branches(branchID),
@@ -139,9 +135,6 @@ INSERT INTO Roles (description) VALUES
 ('Shift Manager'),
 ('Cashier'),
 ('Warehouse'),
-('Driver-A'),
-('Driver-B'),
-('Driver-C'),
 ('Butcher'),
 ('Baker'),
 ('Security Guard'),
