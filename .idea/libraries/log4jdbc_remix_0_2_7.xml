@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="log4jdbc-remix-0.2.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/log4jdbc-remix-0.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/postgresql-42.7.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
