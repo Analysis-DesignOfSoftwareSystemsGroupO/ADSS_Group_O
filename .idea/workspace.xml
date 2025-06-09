@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="hrAndTrsdekel" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="shay_copy" />
+                    <option name="lastUsedInstant" value="1749129444" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="SagiFromSaD-local" />
+                    <option name="lastUsedInstant" value="1749123818" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="shayAV2" />
+                    <option name="lastUsedInstant" value="1749117466" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="hrAndTrsdekel" />
+                    <option name="lastUsedInstant" value="1749078646" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2xxCQtzXg1GwlwXpK4c5RSuXu96" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HR_Main.executor": "Run",
+    "Application.Main (1).executor": "Run",
+    "Application.Main.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "OmerCleanFix",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/user/Desktop/school/2/b/Nituz/project/ADSS_Group_O/lib/postgresql-42.7.6.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15527344",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Desktop\school\2\b\Nituz\project\ADSS_Group_O\src\main\resources\META-INF" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Desktop\school\2\b\Nituz\project\ADSS_Group_O\lib" />
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\HR_Mudol\Service" />
+      <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\sql" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="HR_Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="HR_Mudol.HR_Main" />
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="HR_Mudol.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="ADSS_Group_O" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="ADSS_Group_O" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main (1)" />
+        <item itemvalue="Application.HR_Main" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.HR_Main" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="" />
+      <created>1748870326864</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748870326864</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="WfRunsListSearchHistory"><![CDATA[{
+  "history": [
+    {
+      "branch": "SagiFromSaD-local",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shayAV2",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shayAV2",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shayAV2",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shayAV2",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shayAV2",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "SagiFromSad-local",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "SagiFromSad-local",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shay_copy",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "shay_copy",
+      "currentBranchFilter": true
+    },
+    {
+      "branch": "OmerCleanFix",
+      "currentBranchFilter": true
+    }
+  ],
+  "lastFilter": {
+    "branch": "OmerCleanFix",
+    "currentBranchFilter": true
+  }
+}]]></component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/ReportGenerator.java</url>
+          <line>241</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/BookingMenuNew.java</url>
+          <line>182</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/BookingControllerPL.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Users/TransportManagerUser.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TransportContorollerDomain.java</url>
+          <line>117</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/Main.java</url>
+          <line>37</line>
+          <option name="timeStamp" value="86" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Users/TransportManagerUser.java</url>
+          <line>32</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TruckManagerMenu.java</url>
+          <line>93</line>
+          <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TransportRepositoryIMP.java</url>
+          <line>107</line>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
+          <line>98</line>
+          <option name="timeStamp" value="119" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/TRS_Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="120" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/RoleController.java</url>
+          <line>179</line>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/RoleController.java</url>
+          <line>182</line>
+          <option name="timeStamp" value="128" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/RoleController.java</url>
+          <line>191</line>
+          <option name="timeStamp" value="130" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="155" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java</url>
+          <line>537</line>
+          <option name="timeStamp" value="172" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/ShiftManagerService/ShiftManagerService.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/ShiftManagerService/ShiftManagerService.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="174" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/DAO/ShiftDAOImpl.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="180" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/repository/WeekRepository.java</url>
+          <line>78</line>
+          <option name="timeStamp" value="181" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java</url>
+          <line>527</line>
+          <option name="timeStamp" value="182" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java</url>
+          <line>468</line>
+          <option name="timeStamp" value="185" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
+          <line>167</line>
+          <option name="timeStamp" value="187" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/presentation/HRManagerMenu.java</url>
+          <line>232</line>
+          <option name="timeStamp" value="189" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="193" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="194" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
+          <line>430</line>
+          <option name="timeStamp" value="197" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="199" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/BookingMenuNew.java</url>
+          <line>155</line>
+          <properties class="TransportModule.Presentation.BookingMenuNew" method="createProductListDocument">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcPLDDAO.java</url>
+          <line>62</line>
+          <properties class="TransportModule.DataAccess.jdbcPLDDAO" method="deletePLD">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/TruckControllerPL.java</url>
+          <line>23</line>
+          <properties class="TransportModule.Presentation.TruckControllerPL" method="getAllTrucks">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcDriverDAO.java</url>
+          <line>53</line>
+          <properties class="TransportModule.DataAccess.jdbcDriverDAO" method="save">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="131" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="HR_Mudol.domain.repository.WeekRepository" memberName="weeks" />
+        <PinnedItemInfo parentTag="HR_Mudol.DTO.WeekDTO" memberName="constraintDeadline" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Week" memberName="shifts" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Objects.Week" memberName="shifts" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.Objects.Shift" memberName="status" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.User" memberName="user" />
+        <PinnedItemInfo parentTag="HR_Mudol.domain.User" memberName="level" />
+        <PinnedItemInfo parentTag="HR_Mudol.DTO.RoleDTO" memberName="relevantEmployees" />
+      </pinned-members>
+    </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="transport" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

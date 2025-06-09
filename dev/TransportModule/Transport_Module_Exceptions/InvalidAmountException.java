@@ -1,0 +1,7 @@
+package TransportModule.Transport_Module_Exceptions;
+
+public class InvalidAmountException extends ATransportModuleException {
+    public InvalidAmountException(String message){
+        super(message);
+    }
+}
