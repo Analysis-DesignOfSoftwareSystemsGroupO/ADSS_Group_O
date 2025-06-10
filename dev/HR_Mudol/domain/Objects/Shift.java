@@ -87,11 +87,6 @@ public class Shift {
         if (r == null) {
             throw new IllegalArgumentException("Role is null.");
         }
-        /*
-        if (necessaryRoles.contains(r)) {
-            throw new IllegalArgumentException("Role already exists in the shift.");
-        }
-        */
 
         this.necessaryRoles.add(r);
     }

@@ -6,28 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/DAO/RoleDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/DAO/RoleDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/HRService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/IHRService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/ManagerService/IHRService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IRoleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IRoleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/RoleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/RoleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/WeekController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/repository/RoleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/ITransportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/ITransportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/TransportModule/transport_module/TransportContorollerDomain.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/transport_module/TransportContorollerDomain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/RoleDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/RoleDAOImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/HRService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/HRService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/IHRService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/IHRService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/IRoleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/IRoleController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/RoleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/RoleController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/repository/RoleRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/repository/RoleRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/ITransportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/ITransportController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportContorollerDomain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportContorollerDomain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/HR_Mudol/domain/Objects/Shift.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/HR_Mudol/domain/Objects/Shift.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +68,7 @@
   "keyToString": {
     "Application.HR_Main.executor": "Run",
     "Application.Main (1).executor": "Run",
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "shay",
@@ -342,16 +322,6 @@
           <option name="timeStamp" value="189" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="193" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/dev/HR_Mudol/Service/TransportService/TransportShiftIntegrator.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="194" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/ShiftController.java</url>
           <line>430</line>
           <option name="timeStamp" value="197" />
@@ -416,6 +386,15 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="131" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/HR_Mudol/domain/Controllers/IWeekController.java</url>
+          <line>41</line>
+          <properties class="HR_Mudol.domain.Controllers.IWeekController" method="manageTheWeekRelevantRoles">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="209" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
