@@ -51,7 +51,6 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
                     String branchName=hrService.getBranchOfShift(shiftDTO);
                     String siteStart=transport.getSiteName();
                     if (licence != null && !licence.trim().isEmpty() && branchName.trim().equalsIgnoreCase(siteStart.trim())) {//בדיקה למקרה שלא שובצה משאית להובלה + בדיקה שהסניף רלוונטי
-                        licence="Driver "+licence;
                         hrService.insertNewRole(licence);
 
                         driverDTO = getRoleByDescription(licence, theCaller);
