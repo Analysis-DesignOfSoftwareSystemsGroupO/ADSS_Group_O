@@ -1,6 +1,7 @@
 package TransportModule.transport_module;
 
 
+import TransportModule.DTO.DriverDto;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 
@@ -18,5 +19,7 @@ public interface ITransportController {
     void assignDriverTransport(String driverID, int transportID) throws Exception;
 
     String getLicenceRequiredByTransportID(int Tid)throws Exception;
+
+    public void addDriverFromDto(DriverDto dto) throws Exception;
 
 }

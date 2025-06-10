@@ -17,6 +17,7 @@ public class RoleRepository {
     private final List<Role> roles = new LinkedList<>();
     private final RoleDAOImpl roleDAO;
 
+
     public RoleRepository(RoleDAOImpl roleDAO) {
         this.roleDAO = roleDAO;
     }
@@ -44,6 +45,8 @@ public class RoleRepository {
     }
 
     public void assignEmployeeToRole(Employee employee, Role role) {
+
+
         //RAM
         role.addNewEmployee(employee);
 

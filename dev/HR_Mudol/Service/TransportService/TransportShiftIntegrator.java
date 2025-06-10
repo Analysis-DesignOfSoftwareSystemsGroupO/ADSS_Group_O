@@ -3,12 +3,14 @@ package HR_Mudol.Service.TransportService;
 import HR_Mudol.DTO.*;
 import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.domain.Objects.Role;
+import TransportModule.DTO.DriverDto;
 import TransportModule.DTO.ProductListDocumentDto;
 import TransportModule.DTO.TransportDTO;
 import TransportModule.transport_module.ITransportController;
 import HR_Mudol.domain.Controllers.DTOToDomainMapper;
 import HR_Mudol.domain.ShiftType;
 import HR_Mudol.domain.WeekDay;
+import TransportModule.transport_module.TransportContorollerDomain;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
@@ -21,9 +23,9 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
     private final ITransportController transportController;
     private final HRService hrService;
 
-    public TransportShiftIntegrator(BranchDTO branch, ITransportController transportController, HRService hrService) {
+    public TransportShiftIntegrator(BranchDTO branch, HRService hrService) throws Exception {
         this.branch = branch;
-        this.transportController = transportController;
+        this.transportController = new TransportContorollerDomain();
         this.hrService = hrService;
     }
 
@@ -107,11 +109,6 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
         branch.setRoles(hrService.getRoleController().getAllRoles(caller).stream().map(DTOToDomainMapper::toDTO).toList());
     }
 
-
-
-
-
-
     private RoleDTO getRoleByDescription(String desc ,UserDTO caller) throws SQLException {
         for (Role role : hrService.getRoleController().getAllRoles(caller)) {
             if (role.getDescription().equals(desc)) {
@@ -119,6 +116,11 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             }
         }
         return null;
+    }
+
+    public void addDriverFromDto(DriverDto dto) throws Exception {
+
+        transportController.addDriverFromDto(dto);
     }
 }
 //

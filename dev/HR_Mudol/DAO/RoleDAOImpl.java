@@ -18,7 +18,7 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
 
     @Override
     public void insert(RoleDTO dto) throws SQLException {
-        String sql = "INSERT INTO Roles (description) VALUES (?) ON CONFLICT (description) DO NOTHING";
+        String sql = "INSERT INTO Roles (description) VALUES (?) ON CONFLICT (Description) DO NOTHING";
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, dto.getDescription());
             stmt.executeUpdate();
@@ -45,7 +45,7 @@ public class RoleDAOImpl extends BaseDAO implements IRoleDAO {
     }
 
     public void assignEmployeeToRole(long empID, int roleNumber) {
-        String sql = "INSERT INTO EmployeeRole (empID, roleNumber) VALUES (?, ?)";
+        String sql = "INSERT INTO EmployeeRole (empID, roleNumber) VALUES (?, ?) ON CONFLICT (empID, roleNumber) DO NOTHING";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, empID);
             stmt.setInt(2, roleNumber);

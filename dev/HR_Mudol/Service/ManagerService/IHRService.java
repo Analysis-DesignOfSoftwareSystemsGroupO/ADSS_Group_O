@@ -6,6 +6,7 @@ import HR_Mudol.domain.Controllers.IRoleController;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 import HR_Mudol.domain.Objects.Week;
+import TransportModule.DTO.DriverDto;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -48,6 +49,8 @@ public interface IHRService {
 
     // RoleController forwarding
     void createRole(UserDTO caller) throws SQLException;
+
+    void addDriverFromDto(DriverDto dto);
 
     void insertNewRole(String description) throws SQLException;
 

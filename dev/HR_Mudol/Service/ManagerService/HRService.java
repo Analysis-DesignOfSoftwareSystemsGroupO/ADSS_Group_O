@@ -5,8 +5,10 @@ import HR_Mudol.Service.EmployeeService.IEmployeeService;
 import HR_Mudol.Service.IReportGenerator;
 import HR_Mudol.Service.ReportGenerator;
 import HR_Mudol.Service.EmployeeService.EmployeeService;
+import HR_Mudol.Service.TransportService.TransportShiftIntegrator;
 import HR_Mudol.domain.Controllers.*;
 import HR_Mudol.domain.Objects.Role;
+import TransportModule.DTO.DriverDto;
 
 
 import java.sql.SQLException;
@@ -27,18 +29,24 @@ public class HRService implements IHRService {
     private IWeekController weekController;
     private IReportGenerator reportGenerator;
     private IEmployeeService employeeService;
+    private TransportShiftIntegrator integrator;
 
-    public HRService(BranchDTO curBranch) throws SQLException {
-
+    public HRService(BranchDTO curBranch)  {
+    try {
         this.branchDTO=curBranch;
         this.employeeController = new EmployeeController(curBranch);
         this.roleController = new RoleController(curBranch);
         this.roleController.setEmployeeManager(this.employeeController);
         this.shiftController = new ShiftController(curBranch, this.roleController);
         this.weekController = new WeekController(this.shiftController, curBranch, this.roleController);
-
+        this.integrator=new TransportShiftIntegrator(branchDTO,this);
         this.employeeService = new EmployeeService(curBranch);
         this.reportGenerator = new ReportGenerator(this.weekController, this.employeeController,this.roleController);
+
+    }
+    catch (Exception e){
+        System.out.println("Failed to create an instance of he service");
+    }
     }
 
     @Override
@@ -122,6 +130,17 @@ public class HRService implements IHRService {
     }
 
     @Override
+    public void addDriverFromDto(DriverDto dto){
+        try {
+            integrator.addDriverFromDto(dto);
+        }
+        catch (Exception e){
+            System.out.println("Failed to add the new driver to the Transports module's DB");
+        }
+
+    }
+
+    @Override
     public void insertNewRole(String description) throws SQLException {
         roleController.insertNewRole(description);
     }
@@ -133,7 +152,7 @@ public class HRService implements IHRService {
 
     @Override
     public void assignEmployeeToRole(UserDTO caller) throws SQLException {
-        roleController.assignEmployeeToRole(caller);
+        roleController.assignEmployeeToRole(caller, this);
     }
 
     @Override

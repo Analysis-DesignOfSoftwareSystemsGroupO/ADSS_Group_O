@@ -114,8 +114,7 @@ public class WeekController implements IWeekController {
 
     private static void integrateTransport(BranchDTO curBranch,HRService hr,UserDTO callerDTO) {
         try {
-            ITransportController transportController = new TransportContorollerDomain();
-            TransportShiftIntegrator integrator = new TransportShiftIntegrator(curBranch, transportController , hr);
+            TransportShiftIntegrator integrator = new TransportShiftIntegrator(curBranch , hr);
             integrator.integrateTransportShifts(callerDTO);
         } catch (Exception e) {
             System.out.println("❌ Failed to integrate transport roles: " + e.getMessage());
