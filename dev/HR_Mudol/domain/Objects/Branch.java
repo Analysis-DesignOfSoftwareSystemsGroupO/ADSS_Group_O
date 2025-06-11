@@ -36,8 +36,9 @@ public class Branch {
     /**
      * Constructs an empty Branch with initialized repositories.
      */
-    public Branch(String district,String name, WeekDTO week) throws SQLException {
+    public Branch(String district,int branchID, String name, WeekDTO week) throws SQLException {
 
+        this.branchID=branchID;
         this.employeeDAO=new EmployeeDAOImpl();
         this.roleDAO=new RoleDAOImpl();
         this.shiftDAO=new ShiftDAOImpl();
@@ -52,7 +53,7 @@ public class Branch {
 
         this.name=name;
         this.district=district;
-        //weekRepo.add(DTOToDomainMapper.fromDTO(week));
+
 
         DTOToDomainMapper.initialize(userRepo, employeeRepo,roleRepo,weekRepo);
     }
@@ -65,9 +66,12 @@ public class Branch {
         return this.district;
     }
 
+    /*
     public void setBranchID(int ID){
         this.branchID =ID;
     }
+
+     */
 
     public EmployeeRepository getEmployeeRepo() {
         return employeeRepo;

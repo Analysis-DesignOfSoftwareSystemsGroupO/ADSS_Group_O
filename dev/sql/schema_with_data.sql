@@ -1,3 +1,4 @@
+
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
 ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empPassword VARCHAR(255);
@@ -120,15 +121,15 @@ CREATE TABLE IF NOT EXISTS Archived_Employees (
 
 -- Insert data into Branches
 INSERT INTO Branches (branchID, name, district) VALUES
-(0, 'Branch 0', 'North'),
-(1, 'Branch 1', 'Center'),
-(2, 'Branch 2', 'South'),
-(3, 'Branch 3', 'North'),
-(4, 'Branch 4', 'Center'),
-(5, 'Branch 5', 'South'),
-(6, 'Branch 6', 'North'),
-(7, 'Branch 7', 'Center'),
-(8, 'Branch 8', 'South')
+(0, 'Branch 1', 'North'),
+(1, 'Branch 2', 'Center'),
+(2, 'Branch 3', 'South'),
+(3, 'Branch 4', 'North'),
+(4, 'Branch 5', 'Center'),
+(5, 'Branch 6', 'South'),
+(6, 'Branch 7', 'North'),
+(7, 'Branch 8', 'Center'),
+(8, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (description) VALUES

@@ -261,32 +261,21 @@ public class DTOToDomainMapper {
     }
 
     public static Branch fromDTO(BranchDTO dto) throws SQLException {
-        Branch branch = new Branch(dto.getDistrict(), dto.getName(), dto.getCurrentWeekDTO());
-        branch.setBranchID(dto.getBranchID());
-        Iterator var2;
+        Branch branch = new Branch(dto.getDistrict(), dto.getBranchID(), dto.getName(), dto.getCurrentWeekDTO());
         if (dto.getEmployees() != null) {
-            var2 = dto.getEmployees().iterator();
-
-            while(var2.hasNext()) {
-                EmployeeDTO empDTO = (EmployeeDTO)var2.next();
+            for (EmployeeDTO empDTO : dto.getEmployees()) {
                 branch.getEmployeeRepo().addFromDTO(fromDTO(empDTO));
             }
         }
 
         if (dto.getRoles() != null) {
-            var2 = dto.getRoles().iterator();
-
-            while(var2.hasNext()) {
-                RoleDTO roleDTO = (RoleDTO)var2.next();
+            for (RoleDTO roleDTO : dto.getRoles()) {
                 branch.getRoleRepo().add(fromDTO(roleDTO));
             }
         }
 
         if (dto.getWeeks() != null) {
-            var2 = dto.getWeeks().iterator();
-
-            while(var2.hasNext()) {
-                WeekDTO weekDTO = (WeekDTO)var2.next();
+            for (WeekDTO weekDTO : dto.getWeeks()) {
                 branch.getWeekRepo().add(fromDTO(weekDTO));
             }
         }

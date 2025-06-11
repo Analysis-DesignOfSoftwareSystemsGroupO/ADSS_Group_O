@@ -14,22 +14,6 @@ public class HR_Main {
         try {
             Scanner scanner = new Scanner(System.in);
 
-            /*
-            System.out.println("=== Welcome to the Workforce System ===");
-            System.out.println("1. Load data from database");
-            System.out.println("2. Start with a fresh (empty) system");
-            System.out.print("Choose option [1/2]: ");
-            String choice = scanner.nextLine().trim();
-
-            boolean loadFromDatabase = choice.equals("1");
-
-            if (!loadFromDatabase && !choice.equals("2")) {
-                System.out.println("Invalid option.");
-                return;
-            }
-            */
-
-
             // Branch repository
             BranchRepository branchRepo = new BranchRepository();
             List<BranchDTO> branches = branchRepo.getAllBranches();

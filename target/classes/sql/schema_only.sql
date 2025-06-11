@@ -113,15 +113,15 @@ CREATE TABLE IF NOT EXISTS Archived_Employees (
 );
 
 INSERT INTO Branches (branchID, name, district) VALUES
-(1, 'Branch 1', 'North'),
-(2, 'Branch 2', 'Center'),
-(3, 'Branch 3', 'South'),
-(4, 'Branch 4', 'North'),
-(5, 'Branch 5', 'Center'),
-(6, 'Branch 6', 'South'),
-(7, 'Branch 7', 'North'),
-(8, 'Branch 8', 'Center'),
-(9, 'Branch 9', 'South')
+(0, 'Branch 1', 'North'),
+(1, 'Branch 2', 'Center'),
+(2, 'Branch 3', 'South'),
+(3, 'Branch 4', 'North'),
+(4, 'Branch 5', 'Center'),
+(5, 'Branch 6', 'South'),
+(6, 'Branch 7', 'North'),
+(7, 'Branch 8', 'Center'),
+(8, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (roleNumber, description) VALUES
