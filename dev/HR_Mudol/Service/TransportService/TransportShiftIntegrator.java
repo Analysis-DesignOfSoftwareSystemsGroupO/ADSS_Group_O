@@ -42,35 +42,35 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
             shiftDTOs = hrService.getNextWeekDTO().getShifts();
 
             //נעבור על המשמרות נבדוק איזו מתאימה
-
             for (ShiftDTO shiftDTO : shiftDTOs) {
+
+                String branchName=hrService.getBranchOfShift(shiftDTO);
 
                 if (shiftDTO.getDay().equals(day.name()) && shiftDTO.getType().equals(type.name())) {
 
                     //נהג ישבץ סניף המוצא
-                    String branchName=hrService.getBranchOfShift(shiftDTO);
                     String siteStart=transport.getSiteName();
                     if (licence != null && !licence.trim().isEmpty() && branchName.trim().equalsIgnoreCase(siteStart.trim())) {//בדיקה למקרה שלא שובצה משאית להובלה + בדיקה שהסניף רלוונטי
                         hrService.insertNewRole(licence);
 
                         driverDTO = getRoleByDescription(licence, theCaller);
                         hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, driverDTO, 1);
+                        System.out.println("🚚 Add a driver to shift according to requirements.");
                     }
-
-                    //מחסנאי ישבץ סניף היעד
-                    List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(transport.getId());
-                    for (ProductListDocumentDto pld : plds) {
-                        ShiftType typeforWarehouseDTO = determineShiftType(pld.getApproximatedArrivalTime());
-                        WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
-                        String siteDes=pld.getSiteDes();
-                        if (siteDes.trim().equalsIgnoreCase(branchName.trim())
-                                && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
-                            ensureRolesWarehouseExist(theCaller);
-                            RoleDTO warehouse = getRoleByDescription("Warehouse", theCaller);
-                            hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouse, 1);
-                        }
+                }
+                //מחסנאי ישבץ סניף היעד
+                List<ProductListDocumentDto> plds = transportController.getPLDbyTransportID(transport.getId());
+                for (ProductListDocumentDto pld : plds) {
+                    ShiftType typeforWarehouseDTO = determineShiftType(pld.getApproximatedArrivalTime());
+                    WeekDay dayforWarehouseDTO = WeekDay.valueOf(pld.getDate().getDayOfWeek().name());
+                    String siteDes=pld.getSiteDes();
+                    if (siteDes.trim().equalsIgnoreCase(branchName.trim())
+                            && shiftDTO.getDay().equals(dayforWarehouseDTO.name()) && shiftDTO.getType().equals(typeforWarehouseDTO.name())) {
+                        ensureRolesWarehouseExist(theCaller);
+                        RoleDTO warehouse = getRoleByDescription("Warehouse", theCaller);
+                        hrService.addRoleToShiftIfNeeded(theCaller, shiftDTO, warehouse, 1);
+                        System.out.println("🚚 Add a warehouse guy to shift according to requirements.");
                     }
-                    System.out.println("🚚 Transport-based roles integrated into shifts and saved to DB.");
                 }
             }
 

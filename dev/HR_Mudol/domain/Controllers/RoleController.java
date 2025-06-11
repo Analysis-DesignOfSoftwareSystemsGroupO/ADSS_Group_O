@@ -178,10 +178,9 @@ public class RoleController implements IRoleController {
                     driverList.add(r.getDescription());
                 }
             }
+            driverList.add(chosenRole.getDescription());
 
-            if (driverList.isEmpty()){
-                return;
-            }
+
             //process for saving at their DB
             DriverDto dto = new DriverDto(Integer.toString((int)employee.getEmpId()),driverList);
             hr.addDriverFromDto(dto);

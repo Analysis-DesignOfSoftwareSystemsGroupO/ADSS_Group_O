@@ -48,9 +48,10 @@ CREATE TABLE IF NOT EXISTS Roles(
 
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
-    roleNumber INT REFERENCES Roles(roleNumber),
+    roleNumber INT,
     PRIMARY KEY (empID, roleNumber)
 );
+
 
 CREATE TABLE IF NOT EXISTS EmploymentContracts (
     contractID INT PRIMARY KEY,
@@ -123,13 +124,12 @@ INSERT INTO Branches (branchID, name, district) VALUES
 ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (roleNumber, description) VALUES
-(101, 'Shift Manager'),
-(102, 'Cashier'),
-(103, 'Warehouse'),
+    (101, 'Shift Manager'),
+    (102, 'Warehouse')
 ON CONFLICT (roleNumber) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
-(100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 1);
+(100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 0);
 
 INSERT INTO Users (userID, level) VALUES
 (100000001, 'HRManager');
