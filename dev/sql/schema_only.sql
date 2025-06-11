@@ -46,8 +46,6 @@ CREATE TABLE IF NOT EXISTS Roles(
     description TEXT UNIQUE NOT NULL
 );
 
-ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
-
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
     roleNumber INT REFERENCES Roles(roleNumber),
