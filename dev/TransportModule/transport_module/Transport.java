@@ -240,9 +240,7 @@ public class Transport {
             throw new InvalidInputException();
 
         else {
-            if (destinations_document_map.get(document.getDestination()) != null) { // if destination is already a destination in transport - throw exception
-                throw new AlreadyExistDestinationException();
-            }
+
             document.attachTransportToDocument(id); // changed this row todo - done!
             destinations_document_map.put(document.getDestination(), document);
             currWeight += document.getTotalWeight();
