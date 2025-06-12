@@ -1,156 +1,942 @@
-2025-06-12 21:13:57.021 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
-1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
-2025-06-12 21:13:57.062 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
-1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 18 msec}
-2025-06-12 21:13:57.074 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+2025-06-12 22:16:46.910 [main] ERROR jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = ?
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1009) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:1859) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:534) ~[postgresql-42.7.2.jar:42.7.2]
+	at net.sf.log4jdbc.ConnectionSpy.prepareStatement(ConnectionSpy.java:389) ~[log4jdbc-remix-0.2.7.jar:?]
+	at TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41) ~[classes/:?]
+	at TransportModule.transport_module.TruckRepositoryIMP.getTruckBYPlateNumber(TruckRepositoryIMP.java:57) ~[classes/:?]
+	at TransportModule.transport_module.TruckControllerDomainTest.lambda$deleteTruck_validPlate_shouldRemoveTruck$3(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at TransportModule.transport_module.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:785) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:66) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57) [junit5-rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38) [junit-rt.jar:?]
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11) [idea_rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-06-12 22:16:46.914 [main] ERROR jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = ? {FAILED after -1 msec}
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1009) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:1859) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:534) ~[postgresql-42.7.2.jar:42.7.2]
+	at net.sf.log4jdbc.ConnectionSpy.prepareStatement(ConnectionSpy.java:389) ~[log4jdbc-remix-0.2.7.jar:?]
+	at TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41) ~[classes/:?]
+	at TransportModule.transport_module.TruckRepositoryIMP.getTruckBYPlateNumber(TruckRepositoryIMP.java:57) ~[classes/:?]
+	at TransportModule.transport_module.TruckControllerDomainTest.lambda$deleteTruck_validPlate_shouldRemoveTruck$3(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at TransportModule.transport_module.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:785) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:66) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57) [junit5-rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38) [junit-rt.jar:?]
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11) [idea_rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-06-12 22:17:05.560 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
 1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
-2025-06-12 21:13:57.076 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
-1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 2 msec}
-2025-06-12 21:13:57.081 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+2025-06-12 22:17:05.571 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 8 msec}
+2025-06-12 22:19:03.412 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:19:03.426 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 14 msec}
+2025-06-12 22:19:03.431 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:19:03.433 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 1 msec}
+2025-06-12 22:19:03.433 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:19:03.434 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 1 msec}
+2025-06-12 22:19:03.445 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:19:03.450 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 4 msec}
+2025-06-12 22:19:03.454 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
 1. SELECT * FROM "Drivers" ; 
-2025-06-12 21:13:57.084 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+2025-06-12 22:19:03.457 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 3 msec}
+2025-06-12 22:19:10.075 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:19:10.087 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 9 msec}
+2025-06-12 22:19:21.065 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:19:21.075 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 8 msec}
+2025-06-12 22:19:21.078 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:19:21.080 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 1 msec}
+2025-06-12 22:19:21.080 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:19:21.081 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 1 msec}
+2025-06-12 22:19:21.090 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:19:21.093 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 3 msec}
+2025-06-12 22:19:21.264 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:19:21.265 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 1 msec}
+2025-06-12 22:19:21.275 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:19:21.284 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 9 msec}
+2025-06-12 22:19:33.757 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:19:33.759 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 1 msec}
+2025-06-12 22:20:08.338 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:20:08.339 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 1 msec}
+2025-06-12 22:20:44.578 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:85)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:20:44.591 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:85)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 13 msec}
+2025-06-12 22:21:14.147 [main] ERROR jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = ?
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1009) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:1859) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:534) ~[postgresql-42.7.2.jar:42.7.2]
+	at net.sf.log4jdbc.ConnectionSpy.prepareStatement(ConnectionSpy.java:389) ~[log4jdbc-remix-0.2.7.jar:?]
+	at TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41) ~[classes/:?]
+	at TransportModule.transport_module.TruckRepositoryIMP.getTruckBYPlateNumber(TruckRepositoryIMP.java:57) ~[classes/:?]
+	at TransportModule.transport_module.TruckControllerDomainTest.lambda$deleteTruck_validPlate_shouldRemoveTruck$3(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at TransportModule.transport_module.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:785) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:66) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57) [junit5-rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38) [junit-rt.jar:?]
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11) [idea_rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-06-12 22:21:14.151 [main] ERROR jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = ? {FAILED after -1 msec}
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1009) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:1859) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:534) ~[postgresql-42.7.2.jar:42.7.2]
+	at net.sf.log4jdbc.ConnectionSpy.prepareStatement(ConnectionSpy.java:389) ~[log4jdbc-remix-0.2.7.jar:?]
+	at TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41) ~[classes/:?]
+	at TransportModule.transport_module.TruckRepositoryIMP.getTruckBYPlateNumber(TruckRepositoryIMP.java:57) ~[classes/:?]
+	at TransportModule.transport_module.TruckControllerDomainTest.lambda$deleteTruck_validPlate_shouldRemoveTruck$3(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at TransportModule.transport_module.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:785) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:66) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57) [junit5-rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38) [junit-rt.jar:?]
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11) [idea_rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-06-12 22:22:10.493 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:22:10.505 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 9 msec}
+2025-06-12 22:22:10.511 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:22:10.514 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:22:10.517 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:22:10.518 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 1 msec}
+2025-06-12 22:22:10.518 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:22:10.519 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 0 msec}
+2025-06-12 22:22:10.526 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:22:10.528 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 1 msec}
+2025-06-12 22:22:10.673 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:22:10.675 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
 1. SELECT * FROM "Drivers" ;  {executed in 2 msec}
-2025-06-12 21:13:57.089 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getHieghestPLDID(jdbcPLDDAO.java:92)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument" ORDER BY "ProductListDocumentID" 
-DESC LIMIT 1 
-2025-06-12 21:13:57.091 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getHieghestPLDID(jdbcPLDDAO.java:92)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument" ORDER BY "ProductListDocumentID" 
-DESC LIMIT 1  {executed in 2 msec}
-2025-06-12 21:13:57.091 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
-2025-06-12 21:13:57.092 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
-2025-06-12 21:13:57.092 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
-2025-06-12 21:13:57.093 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
-2025-06-12 21:13:57.104 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
-1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
-"Source_site_name" FROM "Transports" WHERE "id" = -1 
-2025-06-12 21:13:57.106 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
-1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
-"Source_site_name" FROM "Transports" WHERE "id" = -1  {executed in 2 msec}
-2025-06-12 21:13:57.128 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
-1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
--1 ; 
-2025-06-12 21:13:57.130 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
-1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
--1 ;  {executed in 2 msec}
-2025-06-12 21:13:57.142 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
-2025-06-12 21:13:57.143 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
-2025-06-12 21:13:57.143 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
-2025-06-12 21:13:57.144 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
-2025-06-12 21:13:57.145 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
-2025-06-12 21:13:57.146 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
-2025-06-12 21:13:57.146 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
-2025-06-12 21:13:57.148 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
-2025-06-12 21:13:57.151 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
-2025-06-12 21:13:57.152 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
-2025-06-12 21:13:57.153 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
-2025-06-12 21:13:57.154 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
-2025-06-12 21:13:57.156 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
-2025-06-12 21:13:57.156 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 0 msec}
-2025-06-12 21:13:57.158 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
-2025-06-12 21:13:57.159 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 0 msec}
-2025-06-12 21:13:57.160 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
-2025-06-12 21:13:57.161 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
-1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 0 msec}
-2025-06-12 21:13:57.161 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
-2025-06-12 21:13:57.162 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
-1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
-2025-06-12 21:15:11.811 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
-1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
-(-1, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+2025-06-12 22:22:10.683 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:22:10.685 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 2 msec}
+2025-06-12 22:22:21.506 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
 
-2025-06-12 21:15:11.883 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
-1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
-(-1, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
- {executed in 72 msec}
-2025-06-12 21:15:11.884 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
-1. UPDATE "ProductListDocument" SET "TransportID" = -1 WHERE "ProductListDocumentID" = 1 
-2025-06-12 21:15:11.888 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
-1. UPDATE "ProductListDocument" SET "TransportID" = -1 WHERE "ProductListDocumentID" = 1  {executed in 3 msec}
-2025-06-12 21:15:11.897 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:36)
-1. INSERT INTO "ProductListDocument" ("ProductListDocumentID", "TransportID", "totalweight", "aproximatedArrivaleTime","DestinationSiteName" 
-, "Date") VALUES (1,-1,5,'01/01/1970 12:00:00.000','Branch 1','06/17/2025 00:00:00.000') 
-2025-06-12 21:15:11.900 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:36)
-1. INSERT INTO "ProductListDocument" ("ProductListDocumentID", "TransportID", "totalweight", "aproximatedArrivaleTime","DestinationSiteName" 
-, "Date") VALUES (1,-1,5,'01/01/1970 12:00:00.000','Branch 1','06/17/2025 00:00:00.000')  {executed in 3 msec}
-2025-06-12 21:15:11.903 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:47)
-1. batching 1 statements: 0: INSERT INTO "ProductListdocument_Products" ("ProductListDocumentId" 
-, "ProductQuantety" , "WeightPerUnit" , "ProductSerialNumber") VALUES(1,1,5,'111') ; 
-2025-06-12 21:15:11.911 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:47)
-1. batching 1 statements: 0: INSERT INTO "ProductListdocument_Products" ("ProductListDocumentId" 
-, "ProductQuantety" , "WeightPerUnit" , "ProductSerialNumber") VALUES(1,1,5,'111') ;  {executed in 8 msec}
-2025-06-12 21:15:11.913 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
-1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
-WHERE "ProductListDocumentId" = 1 ; 
-2025-06-12 21:15:11.914 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
-1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
-WHERE "ProductListDocumentId" = 1 ;  {executed in 1 msec}
-2025-06-12 21:15:11.915 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.findByPLDID(jdbcPLDDAO.java:119)
-1. SELECT * FROM "ProductListDocument" WHERE "ProductListDocumentID"= 1 
-2025-06-12 21:15:11.916 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.findByPLDID(jdbcPLDDAO.java:119)
-1. SELECT * FROM "ProductListDocument" WHERE "ProductListDocumentID"= 1  {executed in 1 msec}
-2025-06-12 21:15:11.921 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
-1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
-WHERE "ProductListDocumentId" = 1 ; 
-2025-06-12 21:15:11.923 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
-1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
-WHERE "ProductListDocumentId" = 1 ;  {executed in 2 msec}
-2025-06-12 21:15:18.838 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
-1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
-"Source_site_name" FROM "Transports" WHERE "id" = 0 
-2025-06-12 21:15:18.840 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
-1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
-"Source_site_name" FROM "Transports" WHERE "id" = 0  {executed in 2 msec}
-2025-06-12 21:15:18.842 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.save(jdbcTransportDAO.java:162)
-1. INSERT INTO "Transports" ("id", "Date", "maximum_weight", "TruckPN", "DriverID", "departure_time", 
-"Source_site_name" ,"is_sent" ) VALUES (0,'06/17/2025 00:00:00.000',5,NULL,NULL,'01/01/1970 
-08:00:00.000','Branch 1',0) ; 
-2025-06-12 21:15:18.900 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.save(jdbcTransportDAO.java:162)
-1. INSERT INTO "Transports" ("id", "Date", "maximum_weight", "TruckPN", "DriverID", "departure_time", 
-"Source_site_name" ,"is_sent" ) VALUES (0,'06/17/2025 00:00:00.000',5,NULL,NULL,'01/01/1970 
-08:00:00.000','Branch 1',0) ;  {executed in 58 msec}
-2025-06-12 21:15:18.901 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
-1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
-"Source_site_name" FROM "Transports" WHERE "id" = 0 
-2025-06-12 21:15:18.904 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
-1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
-"Source_site_name" FROM "Transports" WHERE "id" = 0  {executed in 2 msec}
-2025-06-12 21:15:18.905 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
-1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
-0 ; 
-2025-06-12 21:15:18.908 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
-1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
-0 ;  {executed in 2 msec}
-2025-06-12 21:15:18.909 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
-1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
-(0, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+2025-06-12 22:22:21.509 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 1 msec}
+2025-06-12 22:22:30.088 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:22:30.092 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 2 msec}
+2025-06-12 22:22:33.601 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:85)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:22:33.604 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:85)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 2 msec}
+2025-06-12 22:23:33.611 [main] ERROR jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = ?
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1009) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:1859) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:534) ~[postgresql-42.7.2.jar:42.7.2]
+	at net.sf.log4jdbc.ConnectionSpy.prepareStatement(ConnectionSpy.java:389) ~[log4jdbc-remix-0.2.7.jar:?]
+	at TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41) ~[classes/:?]
+	at TransportModule.transport_module.TruckRepositoryIMP.getTruckBYPlateNumber(TruckRepositoryIMP.java:57) ~[classes/:?]
+	at TransportModule.transport_module.TruckControllerDomainTest.lambda$deleteTruck_validPlate_shouldRemoveTruck$3(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at TransportModule.transport_module.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:785) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:66) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57) [junit5-rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38) [junit-rt.jar:?]
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11) [idea_rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-06-12 22:23:33.616 [main] ERROR jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = ? {FAILED after -1 msec}
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1009) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:1859) ~[postgresql-42.7.2.jar:42.7.2]
+	at org.postgresql.jdbc.PgConnection.prepareStatement(PgConnection.java:534) ~[postgresql-42.7.2.jar:42.7.2]
+	at net.sf.log4jdbc.ConnectionSpy.prepareStatement(ConnectionSpy.java:389) ~[log4jdbc-remix-0.2.7.jar:?]
+	at TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:41) ~[classes/:?]
+	at TransportModule.transport_module.TruckRepositoryIMP.getTruckBYPlateNumber(TruckRepositoryIMP.java:57) ~[classes/:?]
+	at TransportModule.transport_module.TruckControllerDomainTest.lambda$deleteTruck_validPlate_shouldRemoveTruck$3(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128) ~[junit-jupiter-api-5.13.0-RC1.jar:5.13.0-RC1]
+	at TransportModule.transport_module.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck(TruckControllerDomainTest.java:73) ~[test-classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:785) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479) ~[junit-platform-commons-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$4(TestMethodTestDescriptor.java:221) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:217) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:159) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:70) ~[junit-jupiter-engine-5.13.0-RC1.jar:5.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:157) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at java.util.ArrayList.forEach(ArrayList.java:1597) ~[?:?]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:161) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:147) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:145) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:144) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:101) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:230) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:204) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:172) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:101) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:64) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:150) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:63) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:109) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:91) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39) ~[junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:66) [junit-platform-launcher-1.13.0-RC1.jar:1.13.0-RC1]
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57) [junit5-rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38) [junit-rt.jar:?]
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11) [idea_rt.jar:?]
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232) [junit-rt.jar:?]
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55) [junit-rt.jar:?]
+2025-06-12 22:23:36.618 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:23:36.635 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 13 msec}
+2025-06-12 22:23:36.645 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:23:36.647 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:23:36.650 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:23:36.650 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 0 msec}
+2025-06-12 22:23:36.651 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:23:36.651 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 0 msec}
+2025-06-12 22:23:36.662 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:23:36.664 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 2 msec}
+2025-06-12 22:23:36.676 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:23:36.678 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 2 msec}
+2025-06-12 22:23:36.687 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:23:36.689 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 2 msec}
+2025-06-12 22:23:39.469 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
 
-2025-06-12 21:15:18.912 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
-1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
-(0, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+2025-06-12 22:23:39.471 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
  {executed in 2 msec}
-2025-06-12 21:15:18.912 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
-1. UPDATE "ProductListDocument" SET "TransportID" = 0 WHERE "ProductListDocumentID" = 1 
-2025-06-12 21:15:18.914 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
-1. UPDATE "ProductListDocument" SET "TransportID" = 0 WHERE "ProductListDocumentID" = 1  {executed in 2 msec}
+2025-06-12 22:23:39.472 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:23:39.472 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:132)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 0 msec}
+2025-06-12 22:24:05.369 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:85)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:24:05.374 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:85)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 5 msec}
+2025-06-12 22:27:09.284 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:27:09.304 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 15 msec}
+2025-06-12 22:27:09.314 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:27:09.318 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 3 msec}
+2025-06-12 22:27:09.320 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:27:09.321 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 0 msec}
+2025-06-12 22:27:09.321 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:27:09.322 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 1 msec}
+2025-06-12 22:27:09.331 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:27:09.333 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 1 msec}
+2025-06-12 22:27:09.345 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:27:09.346 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 1 msec}
+2025-06-12 22:27:09.352 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:27:09.354 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 2 msec}
+2025-06-12 22:27:17.188 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:27:17.193 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 3 msec}
+2025-06-12 22:27:17.194 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:27:17.195 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 1 msec}
+2025-06-12 22:27:18.165 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:27:18.169 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 3 msec}
+2025-06-12 22:27:26.563 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:27:26.565 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 2 msec}
+2025-06-12 22:27:48.617 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:27:48.632 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 11 msec}
+2025-06-12 22:27:48.643 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:27:48.646 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:27:48.649 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:27:48.650 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 1 msec}
+2025-06-12 22:27:48.650 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:27:48.650 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 0 msec}
+2025-06-12 22:27:48.659 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:27:48.660 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 1 msec}
+2025-06-12 22:27:48.670 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:27:48.671 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 1 msec}
+2025-06-12 22:27:48.679 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:27:48.681 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 2 msec}
+2025-06-12 22:27:51.790 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:27:51.794 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 2 msec}
+2025-06-12 22:27:51.795 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:27:51.797 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 1 msec}
+2025-06-12 22:27:54.151 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:27:54.154 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 2 msec}
+2025-06-12 22:28:05.989 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:28:05.991 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 2 msec}
+2025-06-12 22:28:53.949 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:28:53.964 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 11 msec}
+2025-06-12 22:28:53.975 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:28:53.977 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:28:53.980 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:28:53.981 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 1 msec}
+2025-06-12 22:28:53.981 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:28:53.981 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 0 msec}
+2025-06-12 22:28:53.991 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:28:53.993 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 1 msec}
+2025-06-12 22:28:54.006 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:28:54.008 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 1 msec}
+2025-06-12 22:28:54.014 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:28:54.016 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 2 msec}
+2025-06-12 22:28:56.930 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:28:56.933 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 2 msec}
+2025-06-12 22:28:57.546 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:28:57.548 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 1 msec}
+2025-06-12 22:28:58.222 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:28:58.226 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 3 msec}
+2025-06-12 22:29:03.326 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:29:03.327 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 1 msec}
+2025-06-12 22:29:18.554 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:29:18.564 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 7 msec}
+2025-06-12 22:29:18.569 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:29:18.572 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:29:18.574 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:29:18.575 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 1 msec}
+2025-06-12 22:29:18.575 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:29:18.576 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 1 msec}
+2025-06-12 22:29:18.579 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:29:18.581 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 1 msec}
+2025-06-12 22:29:18.583 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:29:18.584 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 1 msec}
+2025-06-12 22:29:18.586 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777') 
+2025-06-12 22:29:18.590 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.save(jdbcTruckDAO.java:28)
+1. INSERT INTO "Trucks" ("maxWeight", "LicenceReq", "PlateNumber") VALUES (2500,'A','7777')  {executed in 3 msec}
+2025-06-12 22:29:18.591 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:29:18.591 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 0 msec}
+2025-06-12 22:29:18.592 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ; 
+2025-06-12 22:29:18.592 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '7777' ;  {executed in 0 msec}
+2025-06-12 22:29:18.592 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ; 
+2025-06-12 22:29:18.594 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.deleteTruck(jdbcTruckDAO.java:84)
+1. DELETE FROM "Trucks" WHERE "PlateNumber" = '7777' ;  {executed in 2 msec}
+2025-06-12 22:29:18.594 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+
+2025-06-12 22:29:18.594 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findByTruckPN(jdbcTruckDAO.java:43)
+1. Select "PlateNumber", "maxWeight", "LicenceReq" From "Trucks" WHERE "PlateNumber" = '7777' 
+ {executed in 0 msec}
+2025-06-12 22:29:38.259 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:29:38.272 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 9 msec}
+2025-06-12 22:29:38.279 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:29:38.282 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:29:38.286 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:29:38.287 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 0 msec}
+2025-06-12 22:29:38.287 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:29:38.287 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 0 msec}
+2025-06-12 22:29:38.292 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:29:38.294 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 2 msec}
+2025-06-12 22:29:38.297 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:29:38.299 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 2 msec}
+2025-06-12 22:35:33.038 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:35:33.091 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 39 msec}
+2025-06-12 22:35:33.109 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:35:33.116 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 6 msec}
+2025-06-12 22:35:33.123 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:35:33.124 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 0 msec}
+2025-06-12 22:35:33.124 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:35:33.125 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 0 msec}
+2025-06-12 22:35:33.140 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:35:33.142 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 2 msec}
+2025-06-12 22:35:33.157 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:35:33.158 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 1 msec}
+2025-06-12 22:36:37.477 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 22:36:37.494 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 12 msec}
+2025-06-12 22:36:37.505 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ; 
+2025-06-12 22:36:37.507 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '1234' ;  {executed in 2 msec}
+2025-06-12 22:36:37.510 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ; 
+2025-06-12 22:36:37.511 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '5678' ;  {executed in 0 msec}
+2025-06-12 22:36:37.511 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ; 
+2025-06-12 22:36:37.512 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.getListofOccupiedDates(jdbcTruckDAO.java:131)
+1. SELECT "Date" FROM "TruckAvailability" WHERE "TruckPN" = '9876' ;  {executed in 1 msec}
+2025-06-12 22:36:37.521 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 22:36:37.522 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 1 msec}
+2025-06-12 22:36:37.532 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 22:36:37.534 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 2 msec}

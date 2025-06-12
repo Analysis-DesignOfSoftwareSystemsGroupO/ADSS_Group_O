@@ -10,38 +10,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/TransportModule/transport_module/TransportControllerDomainTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/TransportModule/transport_module/TruckControllerDomainTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTruckDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTruckDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/Execution_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/Execution_output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/SQLFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log/SQLFile.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/RoleDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/DAO/RoleDAOImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/HR_Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/HR_Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/HRService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/HRService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/IHRService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/ManagerService/IHRService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/Service/TransportService/TransportShiftIntegrator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/DTOToDomainMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/DTOToDomainMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/IRoleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/IRoleController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/RoleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/RoleController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/ShiftController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/ShiftController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Controllers/WeekController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Objects/Branch.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Objects/Branch.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Objects/Shift.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/Objects/Shift.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/repository/RoleRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/domain/repository/RoleRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HR_Mudol/presentation/HRManagerMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/HR_Mudol/presentation/HRManagerMenu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcDriverDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/DataAccess/jdbcDriverDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/ITransportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/ITransportController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Transport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Transport.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportContorollerDomain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportContorollerDomain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportRepositoryIMP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/TransportRepositoryIMP.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Truck.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/TransportModule/transport_module/Truck.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/HRModule/Controller/EmployeeControllerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/HRModule/Controller/EmployeeControllerTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/TransportModule/BookingControllerDomainIntegrationTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/TransportModule/BookingControllerPLIntegrationTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/TransportModule/TransportControllerDomainIntegrationTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/TransportModule/TransportControllerPLIntegrationTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/TransportModule/TruckControllerDomainIntegrationTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/TransportModule/TruckControllerPLIntegrationTest.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -100,8 +93,15 @@
     "Application.Main.executor": "Run",
     "JAR Application.ADSS_Group_O.jar.executor": "Run",
     "JAR Application.adss2025_v02.jar.executor": "Debug",
+    "JUnit.TransportControllerDomainTest.createTransport_shouldSaveTransportInRepository.executor": "Run",
+    "JUnit.TransportControllerDomainTest.executor": "Debug",
+    "JUnit.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck.executor": "Run",
+    "JUnit.TruckControllerDomainTest.executor": "Debug",
+    "JUnit.TruckControllerDomainTest.getAllTrucks_shouldReturnCorrectDTOs.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "HR__TRANSPORTS__dev",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/user/Desktop/school/2/b/Nituz/project/ADSS_Group_O/lib/postgresql-42.7.6.jar",
@@ -120,28 +120,14 @@
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\HR_Mudol\Service" />
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\sql" />
     </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="TransportModule.transport_module" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="HR_Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="HR_Mudol.HR_Main" />
-      <module name="ADSS_Group_O" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="HR_Mudol.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="ADSS_Group_O" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.TruckControllerDomainTest.getAllTrucks_shouldReturnCorrectDTOs">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="ADSS_Group_O" />
@@ -149,28 +135,99 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ADSS_Group_O.jar" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/ADSS_Group_O_jar/ADSS_Group_O.jar" />
-      <method v="2" />
+    <configuration name="TransportControllerDomainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TransportModule.transport_module.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="TransportModule.transport_module" />
+      <option name="MAIN_CLASS_NAME" value="TransportModule.transport_module.TransportControllerDomainTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="adss2025_v02.jar" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/ADSS_Group_O_jar/adss2025_v02.jar" />
-      <method v="2" />
+    <configuration name="TransportControllerDomainTest.createTransport_shouldSaveTransportInRepository" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TransportModule.transport_module.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="TransportModule.transport_module" />
+      <option name="MAIN_CLASS_NAME" value="TransportModule.transport_module.TransportControllerDomainTest" />
+      <option name="METHOD_NAME" value="createTransport_shouldSaveTransportInRepository" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TruckControllerDomainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TransportModule.transport_module.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="TransportModule.transport_module" />
+      <option name="MAIN_CLASS_NAME" value="TransportModule.transport_module.TruckControllerDomainTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TransportModule.transport_module.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="TransportModule.transport_module" />
+      <option name="MAIN_CLASS_NAME" value="TransportModule.transport_module.TruckControllerDomainTest" />
+      <option name="METHOD_NAME" value="deleteTruck_validPlate_shouldRemoveTruck" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TruckControllerDomainTest.getAllTrucks_shouldReturnCorrectDTOs" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_O" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="TransportModule.transport_module.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="TransportModule.transport_module" />
+      <option name="MAIN_CLASS_NAME" value="TransportModule.transport_module.TruckControllerDomainTest" />
+      <option name="METHOD_NAME" value="getAllTrucks_shouldReturnCorrectDTOs" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <list>
       <item itemvalue="Application.Main" />
-      <item itemvalue="Application.HR_Main" />
-      <item itemvalue="Application.Main (1)" />
-      <item itemvalue="JAR Application.ADSS_Group_O.jar" />
-      <item itemvalue="JAR Application.adss2025_v02.jar" />
+      <item itemvalue="JUnit.TransportControllerDomainTest" />
+      <item itemvalue="JUnit.TransportControllerDomainTest.createTransport_shouldSaveTransportInRepository" />
+      <item itemvalue="JUnit.TruckControllerDomainTest" />
+      <item itemvalue="JUnit.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck" />
+      <item itemvalue="JUnit.TruckControllerDomainTest.getAllTrucks_shouldReturnCorrectDTOs" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JAR Application.adss2025_v02.jar" />
-        <item itemvalue="JAR Application.ADSS_Group_O.jar" />
-        <item itemvalue="Application.Main (1)" />
-        <item itemvalue="Application.HR_Main" />
-        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.TruckControllerDomainTest.getAllTrucks_shouldReturnCorrectDTOs" />
+        <item itemvalue="JUnit.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck" />
+        <item itemvalue="JUnit.TruckControllerDomainTest" />
+        <item itemvalue="JUnit.TransportControllerDomainTest.createTransport_shouldSaveTransportInRepository" />
+        <item itemvalue="JUnit.TransportControllerDomainTest" />
       </list>
     </recent_temporary>
   </component>
@@ -377,9 +434,37 @@
           <option name="timeStamp" value="274" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TransportContorollerDomain.java</url>
+          <line>131</line>
+          <option name="timeStamp" value="287" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TransportRepositoryIMP.java</url>
-          <line>143</line>
-          <option name="timeStamp" value="279" />
+          <line>125</line>
+          <option name="timeStamp" value="291" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/TransportModule/transport_module/TruckControllerDomainTest.java</url>
+          <line>72</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="293" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/transport_module/TruckRepositoryIMP.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="294" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTruckDAO.java</url>
+          <line>39</line>
+          <option name="timeStamp" value="296" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/TransportModule/transport_module/TruckControllerDomainTest.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="298" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/dev/TransportModule/Presentation/BookingMenuNew.java</url>
@@ -416,6 +501,15 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="222" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/dev/TransportModule/DataAccess/jdbcTruckDAO.java</url>
+          <line>78</line>
+          <properties class="TransportModule.DataAccess.jdbcTruckDAO" method="deleteTruck">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="297" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

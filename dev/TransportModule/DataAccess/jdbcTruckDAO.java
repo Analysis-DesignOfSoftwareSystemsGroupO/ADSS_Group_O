@@ -79,8 +79,7 @@ public class jdbcTruckDAO  implements ITruckDAO{
     public void deleteTruck(String pn) throws SQLException {
         log.info("jdbcTruckDAO :: deleteTruck()");
         String sql = "DELETE FROM \"Trucks\" WHERE \"PlateNumber\" = ? ;";
-        try (Connection conn = DataBase.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement =DataBase.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, pn);
             preparedStatement.executeUpdate();
 
