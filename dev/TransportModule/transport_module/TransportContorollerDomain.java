@@ -29,6 +29,10 @@ public class TransportContorollerDomain implements ITransportController {
 
     }
 
+    public void addDriverFromDto(DriverDto dto) throws Exception {
+        driverControllerDomain.addDriverFromDto(dto);
+    }
+
     public String getLicenceRequiredByTransportID(int Tid)throws Exception{
         Transport t = transportRepo.getTransportByid(Tid);
         if(t == null )return null;

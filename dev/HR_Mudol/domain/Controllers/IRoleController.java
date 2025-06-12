@@ -2,6 +2,7 @@ package HR_Mudol.domain.Controllers;
 
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
 
@@ -39,7 +40,7 @@ public interface IRoleController {
      *
      * @param theCaller The user who is assigning the employee to the role (typically an HR manager).
      */
-    void assignEmployeeToRole(UserDTO theCaller) throws SQLException;
+    void assignEmployeeToRole(UserDTO theCaller, HRService hr) throws SQLException;
 
     /**
      * Assigns an employee to be a shift manager.

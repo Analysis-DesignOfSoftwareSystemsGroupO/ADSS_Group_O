@@ -9,6 +9,7 @@ import HR_Mudol.DTO.BranchDTO;
 import HR_Mudol.DTO.EmployeeDTO;
 import HR_Mudol.DTO.RoleDTO;
 import HR_Mudol.DTO.UserDTO;
+import HR_Mudol.Service.ManagerService.HRService;
 import HR_Mudol.domain.Objects.Branch;
 import HR_Mudol.domain.Objects.Employee;
 import HR_Mudol.domain.Objects.Role;
@@ -125,8 +126,8 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    public void assignEmployeeToRole(UserDTO theCaller) throws SQLException {
-        User caller = mapper.fromDTO(theCaller);
+    public void assignEmployeeToRole(UserDTO theCaller, HRService hr) throws SQLException {
+        User caller = DTOToDomainMapper.fromDTO(theCaller);
 
         if (!caller.isManager()) throw new SecurityException("Access denied.");
         // הדפסת כל ת"ז של העובדים
@@ -160,41 +161,32 @@ public class RoleController implements IRoleController {
 
         curBranch.getRoleRepo().assignEmployeeToRole(employee, chosenRole); // updates RAM and DB
         curBranch.getEmployeeRepo().getById(empId).addNewRole(caller,chosenRole);
-        System.out.println("Employee assigned to role.");
+
 
         List<String> driverList = new ArrayList<>();
+
+        //if it's a driver so-
         if (chosenRole.getDescription().toLowerCase().contains("driver")) {
 
             for (Role r : employee.getRelevantRoles()) {
-                if (r.getDescription().toLowerCase().contains("Driver")) {
-                    System.out.println("this employee already have a this licence.");
+
+                if (r.getDescription().equalsIgnoreCase(chosenRole.getDescription())) {
+                    System.out.println("This employee already have a this licence.");
                     return;
                 }
-                else{
-                    driverList.add(chosenRole.getDescription());
+                if (r.getDescription().toLowerCase().contains("driver")) {
+                    driverList.add(r.getDescription());
                 }
             }
-        }
+            driverList.add(chosenRole.getDescription());
 
 
-        DriverDto dto = new DriverDto(Integer.toString((int)employee.getEmpId()),driverList);
-        DriverControllerDomain driverControllerDomain;
-        try {
-            driverControllerDomain = new DriverControllerDomain();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            return;
+            //process for saving at their DB
+            DriverDto dto = new DriverDto(Integer.toString((int)employee.getEmpId()),driverList);
+            hr.addDriverFromDto(dto);
+
         }
 
-
-        try {
-            driverControllerDomain.addDriverFromDto(dto);
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            return;
-        }
 
 
     }
@@ -259,6 +251,7 @@ public class RoleController implements IRoleController {
             role.removeEmployee(mapper.fromDTO(employee)); // RAM
             curBranch.getRoleRepo().removeEmployeeFromRole(mapper.fromDTO(employee), role); // DB
             System.out.println("Employee removed from role: " + role.getDescription());
+
         } catch (SecurityException e) {
             System.out.println(e.getMessage());
         }

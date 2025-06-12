@@ -17,6 +17,7 @@ public class RoleRepository {
     private final List<Role> roles = new LinkedList<>();
     private final RoleDAOImpl roleDAO;
 
+
     public RoleRepository(RoleDAOImpl roleDAO) {
         this.roleDAO = roleDAO;
     }
@@ -44,6 +45,8 @@ public class RoleRepository {
     }
 
     public void assignEmployeeToRole(Employee employee, Role role) {
+
+
         //RAM
         role.addNewEmployee(employee);
 
@@ -62,10 +65,9 @@ public class RoleRepository {
     }
 
     public void removeEmployeeFromRole(Employee employee, Role role) {
-        if (role.getRelevantEmployees().contains(employee)) {
+
             role.removeEmployee(employee); // remove from memory
             roleDAO.removeEmployeeFromRole(employee.getEmpId(), role.getRoleNumber()); // DB
-        }
     }
 
     public List<Employee> getAllRelevantEmployees(Role role, Branch branch) {

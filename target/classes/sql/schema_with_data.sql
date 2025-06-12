@@ -1,14 +1,3 @@
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empID BIGINT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empName VARCHAR(255);
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empPassword VARCHAR(255);
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empBankAccount VARCHAR(255);
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empSalary INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS empStartDate DATE;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS minDayShift INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS minEveningShift INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS sickDays INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS daysOff INT;
-ALTER TABLE Employees ADD COLUMN IF NOT EXISTS branchID INT;
 
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
@@ -49,17 +38,16 @@ CREATE TABLE IF NOT EXISTS Employees (
     daysOff INT,
     branchID INT REFERENCES Branches(branchID)
 );
+
 
 CREATE TABLE IF NOT EXISTS Roles(
     roleNumber SERIAL PRIMARY KEY,
     description TEXT UNIQUE NOT NULL
 );
 
-ALTER TABLE roles ADD CONSTRAINT unique_description UNIQUE (description);
-
 CREATE TABLE IF NOT EXISTS EmployeeRole (
     empID BIGINT REFERENCES Employees(empID),
-    roleNumber INT REFERENCES Roles(roleNumber),
+    roleNumber INT,
     PRIMARY KEY (empID, roleNumber)
 );
 
@@ -120,22 +108,21 @@ CREATE TABLE IF NOT EXISTS Archived_Employees (
 
 -- Insert data into Branches
 INSERT INTO Branches (branchID, name, district) VALUES
-(0, 'Branch 0', 'North'),
-(1, 'Branch 1', 'Center'),
-(2, 'Branch 2', 'South'),
-(3, 'Branch 3', 'North'),
-(4, 'Branch 4', 'Center'),
-(5, 'Branch 5', 'South'),
-(6, 'Branch 6', 'North'),
-(7, 'Branch 7', 'Center'),
-(8, 'Branch 8', 'South')
+(0, 'Branch 1', 'North'),
+(1, 'Branch 2', 'Center'),
+(2, 'Branch 3', 'South'),
+(3, 'Branch 4', 'North'),
+(4, 'Branch 5', 'Center'),
+(5, 'Branch 6', 'South'),
+(6, 'Branch 7', 'North'),
+(7, 'Branch 8', 'Center'),
+(8, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (description) VALUES
 ('Shift Manager'),
-('Cashier'),
 ('Warehouse'),
-('Butcher'),
+('Cashier'),
 ('Baker'),
 ('Security Guard'),
 ('Customer Service Representative'),
@@ -186,73 +173,72 @@ ON CONFLICT (empID) DO NOTHING;
 
 
 INSERT INTO EmployeeRole (empID, roleNumber) VALUES
-(100000002, 2),  -- Alice Cohen - Cashier
-(100000002, 1),
-(100000002, 7),  -- Customer Service Representative
-(100000002, 15), -- Florist
-(100000003, 9),  -- David Levi - Shelf Replenisher
-(100000003, 10), -- Inventory Manager
-(100000003, 11), -- Dairy Section Worker
-(100000004, 12), -- Rina Azulay - Frozen Goods Worker
-(100000004, 13), -- Produce Section Worker
-(100000004, 21), -- Store Manager
-(200000002, 1),  -- Boaz - Shift Manager
-(200000002, 20), -- Assistant Store Manager
-(200000002, 7),  -- Customer Service Representative
-(200000003, 2),  -- Itay Bar - Cashier
-(200000003, 6),  -- Security Guard
-(200000003, 19), -- HR Representative
-(200000004, 8),  -- Noa Kimchi - Cleaning Staff
-(200000004, 13), -- Produce Section Worker
-(200000004, 3),  -- Warehouse
-(200000005, 3),  -- Gil Peretz - Warehouse
-(200000005, 14), -- Fishmonger
-(200000005, 16), -- Delivery Coordinator
-(300000003, 3),  -- Dana - Warehouse
-(300000003, 17), -- Online Orders Picker
-(300000003, 6),  -- Security Guard
-(300000004, 2),  -- Shir Ben-David - Cashier
-(300000004, 15), -- Florist
-(300000004, 7),  -- Customer Service Representative
-(300000005, 5),  -- Lior Mor - Baker
-(300000005, 10), -- Inventory Manager
-(300000005, 18), -- Maintenance Technician
-(300000006, 18), -- Tamar Green - Maintenance Technician
-(300000006, 19), -- HR Representative
-(300000006, 4),  -- Butcher
-(400000000, 20),
-(400000000, 9),
-(400000000, 8),
+(100000002, 3),
+(100000002, 1), --hr1
+(100000002, 7),
+(100000002, 15),
+(100000003, 9),
+(100000003, 10),
+(100000003, 11),
+(100000004, 3),
+(100000004, 13),
+(100000004, 21),
+(200000002, 1),  --hr2
+(200000002, 20),
+(200000002, 7),
+(200000003, 2),
+(200000003, 6),
+(200000003, 19),
+(200000004, 8),
+(200000004, 13),
+(200000004, 3),
+(200000005, 3),
+(200000005, 14),
+(200000005, 16),
+(300000003, 1),  --hr3
+(300000004, 17),
+(300000004, 6),
+(300000004, 2),
+(300000004, 15),
+(300000004, 7),
+(300000005, 5),
+(300000005, 18),
+(300000006, 18),
+(300000006, 19),
+(300000006, 4),
+(400000000, 1),--hr4
+(400000001, 9),
+(400000001, 8),
 (400000001, 18),
 (400000001, 10),
 (400000001, 5),
-(400000002, 9),
-(400000002, 8),
-(400000002, 16),
+(400000002, 1), --hr5
+(400000003, 8),
+(400000003, 16),
 (400000003, 17),
 (400000003, 22),
 (400000003, 11),
-(400000004, 16),
-(400000004, 3),
-(400000004, 5),
+(400000004, 1), --hr6
+(400000005, 3),
+(400000005, 5),
 (400000005, 18),
 (400000005, 9),
 (400000005, 12),
-(400000006, 5),
-(400000006, 14),
-(400000006, 19),
+(400000006, 6), --hr6
+(400000007, 14),
+(400000007, 19),
 (400000007, 18),
 (400000007, 10),
 (400000007, 16),
-(400000008, 16),
-(400000008, 17),
-(400000008, 21),
+(400000008, 1), --hr7
+(400000009, 17),
+(400000009, 21),
 (400000009, 11),
 (400000009, 9),
 (400000009, 15),
-(400000010, 20),
-(400000010, 3),
-(400000010, 13),
+(400000010, 1), --hr8
+(400000011, 3),
+(400000011, 13),
 (400000011, 17),
 (400000011, 1),
 (400000011, 15)
@@ -279,20 +265,20 @@ INSERT INTO Users (userID, level) VALUES
 (200000004, 'regularEmp'),
 (200000005, 'regularEmp'),
 (300000003, 'HRManager'),
-(300000004, 'HRManager'),
+(300000004, 'regularEmp'),
 (300000005, 'regularEmp'),
 (300000006, 'regularEmp'),
-(400000000, 'regularEmp'),
+(400000000, 'HRManager'),
 (400000001, 'regularEmp'),
-(400000002, 'regularEmp'),
+(400000002, 'HRManager'),
 (400000003, 'regularEmp'),
-(400000004, 'regularEmp'),
+(400000004, 'HRManager'),
 (400000005, 'regularEmp'),
 (400000006, 'regularEmp'),
 (400000007, 'regularEmp'),
-(400000008, 'regularEmp'),
+(400000008, 'HRManager'),
 (400000009, 'regularEmp'),
-(400000010, 'regularEmp'),
+(400000010, 'HRManager'),
 (400000011, 'regularEmp')
 ON CONFLICT (userID) DO NOTHING;
 

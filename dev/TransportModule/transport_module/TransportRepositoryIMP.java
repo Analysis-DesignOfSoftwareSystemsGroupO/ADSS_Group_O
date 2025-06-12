@@ -178,9 +178,12 @@ public class TransportRepositoryIMP implements ITransportRepository {
             Transport t = new Transport(-1,"31/12/9999","23:59",null);
             transports.put(-1,t);
         }
+        /*
         for (TransportDTO dto : transportDTOS){ //for each transport dto
             Transport t = TransportDTOtoTransport(dto); // convert dto to Transport Instance , also put on the mapper and list
         }
+
+         */
 
     }
 
@@ -221,10 +224,10 @@ public class TransportRepositoryIMP implements ITransportRepository {
         }
         if(Tdto.getDriverID() != null){ //update driver field
             if(t.getDriver() == null){
-                setDriver(t.getId(), Tdto.getDriverID());
+                 setDriver(t.getId(), Tdto.getDriverID());
             }
             else { //t has a driver
-                if(!t.getDriver().getId().equals(Tdto.getDriverID())){ //if driver id in dto and in driver are diffrent
+                if(t.getDriver().getId().equals(Tdto.getDriverID())){ //if driver id in dto and in driver are diffrent
                     setDriver(t.getId(), Tdto.getDriverID());
                 }
             }

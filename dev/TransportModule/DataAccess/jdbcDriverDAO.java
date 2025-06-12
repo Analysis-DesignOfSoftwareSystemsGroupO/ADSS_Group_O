@@ -15,16 +15,17 @@ public class jdbcDriverDAO implements IDriverDAO{
 
     @Override
     public DriverDto getDriverByID(String id) throws SQLException {
-        log.info("jdblcDriverDAO::getDriverByID( "+ id + " )");
+       log.info("jdblcDriverDAO::getDriverByID( "+ id + " )");
         List<String > licences = new ArrayList<>();
-        String sql = "SELECT \"DriverID\" , \"Licence\" FROM \"Driveres_Licenece\" WHERE \"DriverID\" = ? ;";
+        String sql = "SELECT TRIM(\"DriverID\") AS \"DriverID\", TRIM(\"Licence\") AS \"Licence\" FROM \"Driveres_Licenece\" WHERE TRIM(\"DriverID\") = ?;";
+
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             boolean found = false;
             while (rs.next()){
                 found = true;
-                licences.add(rs.getString("Driveres_Licenece"));
+                licences.add(rs.getString("Licence"));
             }
             if(!found)return null;
         }
@@ -38,8 +39,35 @@ public class jdbcDriverDAO implements IDriverDAO{
 
     @Override
     public void deleteDriver(String id) throws SQLException {
+        log.info("jdbcDriverDAO::deleteDriver(" + id + ")");
+
+        // קודם מוחקים מהטבלה השנייה
+        String deleteLicencesSql = "DELETE FROM \"Driveres_Licenece\" WHERE TRIM(\"DriverID\") = ?;";
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(deleteLicencesSql)) {
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to delete from Driveres_Licenece: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+
+        // ואז מוחקים מהטבלה הראשית
+        String deleteDriverSql = "DELETE FROM \"Drivers\" WHERE TRIM(\"id\") = ?;";
+        try (PreparedStatement ps = DataBase.getConnection().prepareStatement(deleteDriverSql)) {
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to delete from Drivers: %s\n%s", e.getSQLState(), e.getMessage());
+            throw e;
+        }
+    }
+
+    /*
+    @Override
+    public void deleteDriver(String id) throws SQLException {
         log.info("jdbcDriverDAO::deleteDriver( "+ id + " )");
-        String sql = "DELETE FROM \"Drivers\" WHERE \"DriverID\" = ? ;";
+        String deleteLicencesSql = "DELETE FROM \"Driveres_Licenece\" WHERE TRIM(\"DriverID\") = ?;";
+        String sql = "DELETE FROM \"Drivers\" WHERE \"id\" = ? ;";
         try (PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1,id);
             ps.executeUpdate();
@@ -49,6 +77,8 @@ public class jdbcDriverDAO implements IDriverDAO{
             throw e;
         }
     }
+
+     */
 
     @Override
     public void save(DriverDto dto) throws SQLException {
@@ -85,7 +115,6 @@ public class jdbcDriverDAO implements IDriverDAO{
         } finally {
             try {
                 conn.setAutoCommit(true);
-                conn.close();
             } catch (SQLException closeEx) {
                 log.error("Connection close failed: {}\n{}", closeEx.getSQLState(), closeEx.getMessage());
             }
