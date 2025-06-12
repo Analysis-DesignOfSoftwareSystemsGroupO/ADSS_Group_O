@@ -1,0 +1,156 @@
+2025-06-12 21:13:57.021 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1; 
+2025-06-12 21:13:57.062 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getHieghestTransportID(jdbcTransportDAO.java:92)
+1. SELECT "id" FROM "Transports" ORDER BY "id" DESC LIMIT 1;  {executed in 18 msec}
+2025-06-12 21:13:57.074 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC; 
+2025-06-12 21:13:57.076 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTruckDAO.findAllTrucks(jdbcTruckDAO.java:61)
+1. SELECT * FROM "Trucks" ORDER BY "PlateNumber" ASC;  {executed in 2 msec}
+2025-06-12 21:13:57.081 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ; 
+2025-06-12 21:13:57.084 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcDriverDAO.getAllDriversID(jdbcDriverDAO.java:130)
+1. SELECT * FROM "Drivers" ;  {executed in 2 msec}
+2025-06-12 21:13:57.089 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getHieghestPLDID(jdbcPLDDAO.java:92)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument" ORDER BY "ProductListDocumentID" 
+DESC LIMIT 1 
+2025-06-12 21:13:57.091 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getHieghestPLDID(jdbcPLDDAO.java:92)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument" ORDER BY "ProductListDocumentID" 
+DESC LIMIT 1  {executed in 2 msec}
+2025-06-12 21:13:57.091 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
+2025-06-12 21:13:57.092 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
+2025-06-12 21:13:57.092 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
+2025-06-12 21:13:57.093 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
+2025-06-12 21:13:57.104 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
+1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
+"Source_site_name" FROM "Transports" WHERE "id" = -1 
+2025-06-12 21:13:57.106 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
+1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
+"Source_site_name" FROM "Transports" WHERE "id" = -1  {executed in 2 msec}
+2025-06-12 21:13:57.128 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
+1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
+-1 ; 
+2025-06-12 21:13:57.130 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
+1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
+-1 ;  {executed in 2 msec}
+2025-06-12 21:13:57.142 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
+2025-06-12 21:13:57.143 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
+2025-06-12 21:13:57.143 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
+2025-06-12 21:13:57.144 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
+2025-06-12 21:13:57.145 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
+2025-06-12 21:13:57.146 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
+2025-06-12 21:13:57.146 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
+2025-06-12 21:13:57.148 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
+2025-06-12 21:13:57.151 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
+2025-06-12 21:13:57.152 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 1 msec}
+2025-06-12 21:13:57.153 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
+2025-06-12 21:13:57.154 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
+2025-06-12 21:13:57.156 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
+2025-06-12 21:13:57.156 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 0 msec}
+2025-06-12 21:13:57.158 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
+2025-06-12 21:13:57.159 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 0 msec}
+2025-06-12 21:13:57.160 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument"; 
+2025-06-12 21:13:57.161 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getPLDsID(jdbcPLDDAO.java:213)
+1. SELECT "ProductListDocumentID" FROM "ProductListDocument";  {executed in 0 msec}
+2025-06-12 21:13:57.161 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC; 
+2025-06-12 21:13:57.162 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransports(jdbcTransportDAO.java:62)
+1. SELECT * FROM "Transports" ORDER BY "id" ASC;  {executed in 1 msec}
+2025-06-12 21:15:11.811 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
+1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
+(-1, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+
+2025-06-12 21:15:11.883 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
+1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
+(-1, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+ {executed in 72 msec}
+2025-06-12 21:15:11.884 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
+1. UPDATE "ProductListDocument" SET "TransportID" = -1 WHERE "ProductListDocumentID" = 1 
+2025-06-12 21:15:11.888 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
+1. UPDATE "ProductListDocument" SET "TransportID" = -1 WHERE "ProductListDocumentID" = 1  {executed in 3 msec}
+2025-06-12 21:15:11.897 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:36)
+1. INSERT INTO "ProductListDocument" ("ProductListDocumentID", "TransportID", "totalweight", "aproximatedArrivaleTime","DestinationSiteName" 
+, "Date") VALUES (1,-1,5,'01/01/1970 12:00:00.000','Branch 1','06/17/2025 00:00:00.000') 
+2025-06-12 21:15:11.900 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:36)
+1. INSERT INTO "ProductListDocument" ("ProductListDocumentID", "TransportID", "totalweight", "aproximatedArrivaleTime","DestinationSiteName" 
+, "Date") VALUES (1,-1,5,'01/01/1970 12:00:00.000','Branch 1','06/17/2025 00:00:00.000')  {executed in 3 msec}
+2025-06-12 21:15:11.903 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:47)
+1. batching 1 statements: 0: INSERT INTO "ProductListdocument_Products" ("ProductListDocumentId" 
+, "ProductQuantety" , "WeightPerUnit" , "ProductSerialNumber") VALUES(1,1,5,'111') ; 
+2025-06-12 21:15:11.911 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.save(jdbcPLDDAO.java:47)
+1. batching 1 statements: 0: INSERT INTO "ProductListdocument_Products" ("ProductListDocumentId" 
+, "ProductQuantety" , "WeightPerUnit" , "ProductSerialNumber") VALUES(1,1,5,'111') ;  {executed in 8 msec}
+2025-06-12 21:15:11.913 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
+1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
+WHERE "ProductListDocumentId" = 1 ; 
+2025-06-12 21:15:11.914 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
+1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
+WHERE "ProductListDocumentId" = 1 ;  {executed in 1 msec}
+2025-06-12 21:15:11.915 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.findByPLDID(jdbcPLDDAO.java:119)
+1. SELECT * FROM "ProductListDocument" WHERE "ProductListDocumentID"= 1 
+2025-06-12 21:15:11.916 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.findByPLDID(jdbcPLDDAO.java:119)
+1. SELECT * FROM "ProductListDocument" WHERE "ProductListDocumentID"= 1  {executed in 1 msec}
+2025-06-12 21:15:11.921 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
+1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
+WHERE "ProductListDocumentId" = 1 ; 
+2025-06-12 21:15:11.923 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.getListOfProductsByPLDID(jdbcPLDDAO.java:143)
+1. SELECT "ProductQuantety", "WeightPerUnit", "ProductSerialNumber" FROM "ProductListdocument_Products" 
+WHERE "ProductListDocumentId" = 1 ;  {executed in 2 msec}
+2025-06-12 21:15:18.838 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
+1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
+"Source_site_name" FROM "Transports" WHERE "id" = 0 
+2025-06-12 21:15:18.840 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
+1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
+"Source_site_name" FROM "Transports" WHERE "id" = 0  {executed in 2 msec}
+2025-06-12 21:15:18.842 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.save(jdbcTransportDAO.java:162)
+1. INSERT INTO "Transports" ("id", "Date", "maximum_weight", "TruckPN", "DriverID", "departure_time", 
+"Source_site_name" ,"is_sent" ) VALUES (0,'06/17/2025 00:00:00.000',5,NULL,NULL,'01/01/1970 
+08:00:00.000','Branch 1',0) ; 
+2025-06-12 21:15:18.900 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.save(jdbcTransportDAO.java:162)
+1. INSERT INTO "Transports" ("id", "Date", "maximum_weight", "TruckPN", "DriverID", "departure_time", 
+"Source_site_name" ,"is_sent" ) VALUES (0,'06/17/2025 00:00:00.000',5,NULL,NULL,'01/01/1970 
+08:00:00.000','Branch 1',0) ;  {executed in 58 msec}
+2025-06-12 21:15:18.901 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
+1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
+"Source_site_name" FROM "Transports" WHERE "id" = 0 
+2025-06-12 21:15:18.904 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcTransportDAO.getTransportByid(jdbcTransportDAO.java:23)
+1. SELECT "id", "Date" , "is_sent" , "maximum_weight" , "TruckPN" , "DriverID", "departure_time", 
+"Source_site_name" FROM "Transports" WHERE "id" = 0  {executed in 2 msec}
+2025-06-12 21:15:18.905 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
+1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
+0 ; 
+2025-06-12 21:15:18.908 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.findByTransport(jdbcPLDDAO.java:175)
+1. SELECT "ProductListDocumentId" FROM "Transports_ProductListdocument" WHERE "TransportId" = 
+0 ;  {executed in 2 msec}
+2025-06-12 21:15:18.909 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
+1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
+(0, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+
+2025-06-12 21:15:18.912 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:256)
+1. INSERT INTO "Transports_ProductListdocument" ("TransportId", "ProductListDocumentId") VALUES 
+(0, 1) ON CONFLICT ("ProductListDocumentId") DO UPDATE SET "TransportId" = EXCLUDED."TransportId"; 
+ {executed in 2 msec}
+2025-06-12 21:15:18.912 [main] DEBUG jdbc.sqlonly -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
+1. UPDATE "ProductListDocument" SET "TransportID" = 0 WHERE "ProductListDocumentID" = 1 
+2025-06-12 21:15:18.914 [main] DEBUG jdbc.sqltiming -  TransportModule.DataAccess.jdbcPLDDAO.attachTransport(jdbcPLDDAO.java:262)
+1. UPDATE "ProductListDocument" SET "TransportID" = 0 WHERE "ProductListDocumentID" = 1  {executed in 2 msec}

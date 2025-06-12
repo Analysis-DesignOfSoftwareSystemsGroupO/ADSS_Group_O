@@ -26,8 +26,7 @@
         <Logger name="jdbc.sqltiming" level="debug" additivity="false">
             <AppenderRef ref="SQLFile"/>
         </Logger>
-        <Root level="info">
-            <AppenderRef ref="STDOUT" />
+        <Root >
             <AppenderRef ref="File"/>
             <AppenderRef ref="ErrorFile"
                          level="error"/>
