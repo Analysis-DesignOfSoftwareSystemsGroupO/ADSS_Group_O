@@ -36,7 +36,7 @@ public class TransportShiftIntegrator implements ITransportShiftIntegrator {
 
         for (TransportDTO transport : transports) {
             String licence = transportController.getLicenceRequiredByTransportID(transport.getId());
-            licence="Driver "+licence;
+            licence="Driver "+licence+" :"+transport.getId(); //DO NOT TOUCH THIS LINE!!!!!!
             WeekDay day = WeekDay.valueOf(transport.getDate().getDayOfWeek().name());
             ShiftType type = determineShiftType(transport.getDepartureTime());
             shiftDTOs = hrService.getNextWeekDTO().getShifts();

@@ -76,7 +76,7 @@ public class ShiftController implements IShiftController {
                 transportContorollerDomain.assignDriverTransport(Integer.toString((int)theEmployee.getEmployeeId()),transportId);
             }
             catch (Exception e){
-                System.out.println("The dreiver wasn't saved at \"Driveres_Licenece\" table");
+                System.out.println("The driver wasn't saved at \"Driveres_Licenece\" table");
             }
         }
         // save at RAM

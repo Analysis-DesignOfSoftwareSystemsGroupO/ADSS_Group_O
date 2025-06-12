@@ -107,7 +107,7 @@ public class Truck {
         if (d == null)
             throw new InvalidInputException();
         for (DrivingLicence dl : d.getLicencs()) {
-            if (dl.equals(liceenceReq)) { // using the equal function of Driving licence
+            if (dl.getCode().contains(liceenceReq.getCode())) { // using the equal function of Driving licence
                 return true;
             }
         }

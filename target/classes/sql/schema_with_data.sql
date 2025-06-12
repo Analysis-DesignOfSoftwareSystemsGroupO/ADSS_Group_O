@@ -1,5 +1,3 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
@@ -123,9 +121,8 @@ ON CONFLICT (branchID) DO NOTHING;
 
 INSERT INTO Roles (description) VALUES
 ('Shift Manager'),
-('Cashier'),
 ('Warehouse'),
-('Butcher'),
+('Cashier'),
 ('Baker'),
 ('Security Guard'),
 ('Customer Service Representative'),
@@ -176,14 +173,14 @@ ON CONFLICT (empID) DO NOTHING;
 
 
 INSERT INTO EmployeeRole (empID, roleNumber) VALUES
-(100000002, 2),
+(100000002, 3),
 (100000002, 1), --hr1
 (100000002, 7),
 (100000002, 15),
 (100000003, 9),
 (100000003, 10),
 (100000003, 11),
-(100000004, 12),
+(100000004, 3),
 (100000004, 13),
 (100000004, 21),
 (200000002, 1),  --hr2
