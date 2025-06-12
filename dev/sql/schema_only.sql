@@ -123,10 +123,10 @@ INSERT INTO Branches (branchID, name, district) VALUES
 (8, 'Branch 9', 'South')
 ON CONFLICT (branchID) DO NOTHING;
 
-INSERT INTO Roles (roleNumber, description) VALUES
-    (101, 'Shift Manager'),
-    (102, 'Warehouse')
-ON CONFLICT (roleNumber) DO NOTHING;
+INSERT INTO Roles (description) VALUES
+('Shift Manager'),
+('Warehouse')
+ON CONFLICT (description) DO NOTHING;
 
 INSERT INTO Employees (empID, empName, empPassword, empBankAccount, empSalary, empStartDate, minDayShift, minEveningShift, sickDays, daysOff, branchID) VALUES
 (100000001, 'The HR', 'pass123', 'IL001', 12000, '2022-01-10', 4, 2, 10, 12, 0);

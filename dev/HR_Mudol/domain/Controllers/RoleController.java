@@ -251,6 +251,7 @@ public class RoleController implements IRoleController {
             role.removeEmployee(mapper.fromDTO(employee)); // RAM
             curBranch.getRoleRepo().removeEmployeeFromRole(mapper.fromDTO(employee), role); // DB
             System.out.println("Employee removed from role: " + role.getDescription());
+
         } catch (SecurityException e) {
             System.out.println(e.getMessage());
         }

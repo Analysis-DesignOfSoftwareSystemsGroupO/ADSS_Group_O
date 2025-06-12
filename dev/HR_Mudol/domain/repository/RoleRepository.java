@@ -65,10 +65,9 @@ public class RoleRepository {
     }
 
     public void removeEmployeeFromRole(Employee employee, Role role) {
-        if (role.getRelevantEmployees().contains(employee)) {
+
             role.removeEmployee(employee); // remove from memory
             roleDAO.removeEmployeeFromRole(employee.getEmpId(), role.getRoleNumber()); // DB
-        }
     }
 
     public List<Employee> getAllRelevantEmployees(Role role, Branch branch) {

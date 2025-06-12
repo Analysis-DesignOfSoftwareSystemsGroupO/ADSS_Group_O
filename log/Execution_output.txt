@@ -26055,3 +26055,956 @@ Batch entry 1 INSERT INTO "Driveres_Licenece" ("DriverID" , "Licence" ) VALUES (
 2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
 2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
 2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 3)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 3)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 3)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 0) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 4)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 4)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 4)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO ::assignTruckToTransport( 1 , 12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO::setMaxWeight( 1 , 200 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO::assignTruckToDate ( 12345 , 2025-06-16 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345 , 2025-06-16 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 3)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 3)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 3)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 4)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 4)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 4)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 0) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 12345
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 12345
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO ::assignTruckToTransport( 1 , 12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO::setMaxWeight( 1 , 200 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO::assignTruckToDate ( 12345 , 2025-06-15 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345 , 2025-06-15 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 12345
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO ::assignTruckToTransport( 1 , 12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO::setMaxWeight( 1 , 30 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO::assignTruckToDate ( 12345 , 2025-06-15 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345 , 2025-06-15 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to load all licences of the driver 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000003 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to load all licences of the driver 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000002 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to load all licences of the driver 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000003 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:SQL State: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000003)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000002)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to load all licences of the driver 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000003)
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to delete from Driveres_Licenece: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to delete from Driveres_Licenece: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to delete from Driveres_Licenece: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 2)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 12345
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO ::assignTruckToTransport( 1 , 12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO::setMaxWeight( 1 , 60 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO::assignTruckToDate ( 12345 , 2025-06-16 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345 , 2025-06-16 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(123 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 123  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 123
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to load all licences of the driver 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to delete from Driveres_Licenece: %s
+%s
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-ERROR-TransportModule.DataAccess.jdbcDriverDAO:Failed to load all licences of the driver 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::deleteDriver(100000004)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 0) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 12345
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO ::assignTruckToTransport( 0 , 12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO::setMaxWeight( 0 , 50 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO::assignTruckToDate ( 12345 , 2025-06-17 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345 , 2025-06-17 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::save()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdblcDriverDAO::getDriverByID( 100000004 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( -1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 0 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345        )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 0) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connecting to SQL Server... 
+2025-06-12-main-[]-INFO -TransportModule.DataLayer.DataBase:Connected to SQL jdbc:log4jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Sansa1234&connectTimeout=10&sslmode=prefer
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findAllTrucks()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcDriverDAO:jdbcDriverDAO::getALlDriversID()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO :: getHieghestTransportID ()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( -1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::savePLD(DTO)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc:: findByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbc::getListOfProductsByPLDID( 1)
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportsDAO :: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO ::findByTransport( 1) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::attachTransport
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTrucakDAO:: save() 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: findByTruckPN(12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345  ) 
+2025-06-12-main-[]-INFO -TransportModule.transport_module.TruckRepositoryIMP:Added Succesfuly Truck : 12345
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-15 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-16 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportByid( 1 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-17 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-18 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-19 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-20 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransportsByDate( 2025-06-21 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO ::assignTruckToTransport( 1 , 12345 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO::setMaxWeight( 1 , 60 )
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO::assignTruckToDate ( 12345 , 2025-06-16 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTruckDAO:jdbcTruckDAO :: checkAvailabilityOfTruck( 12345 , 2025-06-16 ) 
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcPLDDAO:jdbcPLDDAO::getPLDs()
+2025-06-12-main-[]-INFO -TransportModule.DataAccess.jdbcTransportDAO:jdbcTransportDAO :: getTransports

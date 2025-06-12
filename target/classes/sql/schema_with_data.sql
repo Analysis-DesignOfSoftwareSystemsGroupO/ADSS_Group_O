@@ -1,4 +1,5 @@
-
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
