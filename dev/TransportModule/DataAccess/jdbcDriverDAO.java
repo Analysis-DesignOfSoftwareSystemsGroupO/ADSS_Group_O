@@ -17,14 +17,16 @@ public class jdbcDriverDAO implements IDriverDAO{
     public DriverDto getDriverByID(String id) throws SQLException {
         log.info("jdblcDriverDAO::getDriverByID( "+ id + " )");
         List<String > licences = new ArrayList<>();
-        String sql = "SELECT \"DriverID\" , \"Licence\" FROM \"Driveres_Licenece\" WHERE \"DriverID\" = ? ;";
+        String sql = "SELECT \"DriverID\", \"Licence\" FROM \"Driveres_Licenece\" WHERE TRIM(\"DriverID\" )= ?;";
+
+        //String sql = "SELECT \"DriverID\" , \"Licence\" FROM \"Driveres_Licenece\" WHERE \"DriverID\" = ? ;";
         try(PreparedStatement ps = DataBase.getConnection().prepareStatement(sql)){
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             boolean found = false;
             while (rs.next()){
                 found = true;
-                licences.add(rs.getString("Driveres_Licenece"));
+                licences.add(rs.getString("Licence"));
             }
             if(!found)return null;
         }
