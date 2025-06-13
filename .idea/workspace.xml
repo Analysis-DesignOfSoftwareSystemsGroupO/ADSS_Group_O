@@ -9,11 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dev/sql/schema_with_data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/GroupId's.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/GroupId's.txt" afterDir="false" />
-    </list>
+    <list default="true" id="0f588304-09c3-4dda-a530-26b7ccd258c8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -110,6 +106,7 @@
       <recent name="C:\Users\user\Desktop\school\2\b\Nituz\project\ADSS_Group_O\src\main\resources\META-INF" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\shaya\IdeaProjects\ADSS_Group_O\docs" />
       <recent name="C:\Users\user\Desktop\school\2\b\Nituz\project\ADSS_Group_O\lib" />
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\HR_Mudol\Service" />
       <recent name="C:\Users\dekel\IdeaProjects\ADSS_Group_O\dev\sql" />
