@@ -118,25 +118,10 @@
       <recent name="TransportModule.transport_module" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JAR Application.ADSS_Group_O.jar">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="ADSS_Group_O" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TransportControllerDomainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ADSS_Group_O" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="TransportModule.transport_module.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="TransportModule.transport_module" />
-      <option name="MAIN_CLASS_NAME" value="TransportModule.transport_module.TransportControllerDomainTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -204,9 +189,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ADSS_Group_O.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/ADSS_Group_O_jar2/ADSS_Group_O.jar" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
-      <item itemvalue="JUnit.TransportControllerDomainTest" />
+      <item itemvalue="JAR Application.ADSS_Group_O.jar" />
       <item itemvalue="JUnit.TransportControllerDomainTest.createTransport_shouldSaveTransportInRepository" />
       <item itemvalue="JUnit.TruckControllerDomainTest" />
       <item itemvalue="JUnit.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck" />
@@ -214,11 +203,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JAR Application.ADSS_Group_O.jar" />
         <item itemvalue="JUnit.TruckControllerDomainTest.getAllTrucks_shouldReturnCorrectDTOs" />
         <item itemvalue="JUnit.TruckControllerDomainTest.deleteTruck_validPlate_shouldRemoveTruck" />
         <item itemvalue="JUnit.TruckControllerDomainTest" />
         <item itemvalue="JUnit.TransportControllerDomainTest.createTransport_shouldSaveTransportInRepository" />
-        <item itemvalue="JUnit.TransportControllerDomainTest" />
       </list>
     </recent_temporary>
   </component>
