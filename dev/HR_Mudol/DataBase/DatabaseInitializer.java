@@ -1,5 +1,8 @@
     package HR_Mudol.DataBase;
 
+    import java.io.FileNotFoundException;
+    import java.io.InputStream;
+    import java.nio.charset.StandardCharsets;
     import java.nio.file.Files;
     import java.nio.file.Paths;
     import java.sql.Connection;
@@ -14,22 +17,26 @@
 
         public static void initialize(boolean loadFromDatabase) {
             if (loadFromDatabase) {
-                executeSQLFile("dev/sql/schema_with_data.sql");
-                executeSQLFile("dev/sql/TRS_schema.sql");
+                executeSQLFile("sql/schema_with_data.sql");
+                executeSQLFile("sql/TRS_schema.sql");
 
             } else {
                 System.out.println("⚠️ Initializing fresh system...");
-                executeSQLFile("dev/sql/schema_only.sql");
-                executeSQLFile("dev/sql/TRS_schema.sql");
+                executeSQLFile("sql/schema_only.sql");
+                executeSQLFile("sql/TRS_schema.sql");
             }
         }
         public static void initializeForTests() {
             System.out.println("🧪 Initializing test DB from test_schema.sql...");
             executeSQLFile("dev/sql/test_schema.sql");
         }
-        private static void executeSQLFile(String filePath) {
-            try {
-                String sql = new String(Files.readAllBytes(Paths.get(filePath)));
+        private static void executeSQLFile(String resourcePath) {
+            try (InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(resourcePath)) {
+                if (inputStream == null) {
+                    throw new FileNotFoundException("Resource not found: " + resourcePath);
+                }
+
+                String sql = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
                 Class.forName("org.postgresql.Driver");
 
@@ -47,12 +54,13 @@
                         }
                     }
 
-                    System.out.println("✅ SQL script executed successfully: " + filePath);
+                    System.out.println("✅ SQL script executed successfully: " + resourcePath);
                 }
 
             } catch (Exception e) {
-                System.err.println("❌ Failed to execute SQL script: " + filePath);
+                System.err.println("❌ Failed to execute SQL script: " + resourcePath);
                 e.printStackTrace();
             }
         }
+
     }
