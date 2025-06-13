@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS Branches (
     branchID INT PRIMARY KEY,
     name VARCHAR(255),
